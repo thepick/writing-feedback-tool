@@ -55,11 +55,22 @@
         overscroll-behavior: none;
         touch-action: pan-y;
     }
+    /* Scrollable sub-panels only - do NOT set overflow on body/html as it
+       turns body into a scroll container and blocks programmatic file input .click()
+       on desktop browsers (Chrome security restriction on clipped elements). */
     .left-col, .right-col, .ocr-preview-list,
     .settings-drawer-body, .two-col-layout {
         overscroll-behavior: contain;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
+    }
+    /* Buttons and interactive elements must always respond to taps */
+    button, a, input, select, textarea, label,
+    [role="button"], [role="link"],
+    .ocr-btn-secondary, .primary-btn, .secondary-btn, .stop-btn,
+    .nav-tab, .diff-toggle-btn, .ocr-preview-remove, .ocr-preview-move,
+    .mobile-entry-action-btn, .camera-fab, .settings-gear-btn {
+        touch-action: manipulation;
     }
     @media (max-width: 900px) {
         html, body {
@@ -71,6 +82,76 @@
         }
     }
     /* === END MOBILE SCROLL FIXES === */
+
+    /* === IMAGE LIGHTBOX === */
+    #imgLightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.88);
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        cursor: zoom-out;
+    }
+    #imgLightbox.open {
+        display: flex;
+    }
+    #imgLightboxImg {
+        max-width: 100%;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+        cursor: default;
+        touch-action: pinch-zoom;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    #imgLightboxClose {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        transition: background 0.15s;
+    }
+    #imgLightboxClose:hover,
+    #imgLightboxClose:active {
+        background: rgba(255,255,255,0.3);
+    }
+    #imgLightboxCaption {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255,255,255,0.75);
+        font-size: 13px;
+        background: rgba(0,0,0,0.4);
+        padding: 4px 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+    /* Make preview images show a zoom cursor so users know they're clickable */
+    .ocr-preview {
+        cursor: zoom-in !important;
+    }
+    /* === END IMAGE LIGHTBOX === */
+
     body {
         margin: 0;
         padding: 0;
@@ -1207,7 +1288,9 @@
         grid-template-columns: 1fr 1fr;
         gap: 4px;
     }
-    .ocr-preview-move {
+    .ocr-preview-move,
+    .ocr-preview-crop,
+    .ocr-preview-reset {
         border: 1px solid #d3ddea;
         background: #f8fbff;
         color: #163e73;
@@ -1216,10 +1299,18 @@
         font: inherit;
         cursor: pointer;
         font-size: 11px;
+        font-weight: 600;
         min-height: 28px;
+        text-align: center;
     }
-    .ocr-preview-move:hover:not(:disabled) { background: #eef4ff; }
-    .ocr-preview-move:disabled { opacity: 0.45; cursor: default; }
+    .ocr-preview-move:hover:not(:disabled),
+    .ocr-preview-reset:hover:not(:disabled) { background: #eef4ff; }
+    .ocr-preview-crop { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+    .ocr-preview-crop:hover { background: #dcfce7; }
+    .ocr-preview-reset { background: #fff7ed; color: #92400e; border-color: #fde68a; }
+    .ocr-preview-reset:hover:not(:disabled) { background: #fef3c7; }
+    .ocr-preview-move:disabled,
+    .ocr-preview-reset:disabled { opacity: 0.45; cursor: default; }
 
     /* ── Crop Modal ── */
     #cropModal {
@@ -1305,37 +1396,7 @@
         text-align: center;
         margin: 0;
     }
-    /* ── Re-extract / Crop buttons ── */
-    .ocr-reextract-row {
-        display: none;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
-    .ocr-reextract-row button {
-        flex: 1;
-        min-width: 130px;
-        padding: 7px 12px;
-        border-radius: 8px;
-        font: inherit;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        border: 1px solid #d3ddea;
-        transition: background 0.15s;
-    }
-    #reExtractBtn {
-        background: #eef4ff;
-        color: #163e73;
-    }
-    #reExtractBtn:hover:not(:disabled) { background: #dce9ff; }
-    #cropImageBtn {
-        background: #f0fdf4;
-        color: #166534;
-        border-color: #bbf7d0 !important;
-    }
-    #cropImageBtn:hover:not(:disabled) { background: #dcfce7; }
-    .ocr-reextract-row button:disabled { opacity: 0.45; cursor: default; }
+
 
     .ocr-preview-grip {
         margin-top: 6px;
@@ -2214,7 +2275,7 @@
             padding: 16px;
         }
         .zen-toggle-btn { min-height: 36px !important; }
-        .ocr-preview-remove, .ocr-preview-move { min-height: 36px !important; }
+        .ocr-preview-remove, .ocr-preview-move, .ocr-preview-crop, .ocr-preview-reset { min-height: 36px !important; }
 
         .camera-fab {
             display: block !important;
@@ -2501,11 +2562,8 @@
                                 <div id="ocrPreviewWrap" class="ocr-preview-wrap" aria-live="polite">
                                     <div id="ocrPreviewList" class="ocr-preview-list"></div>
                                 </div>
-                                <button id="extractTextBtn" type="button" class="ocr-btn-secondary ocr-extract-after" disabled="disabled">Extract Text into Box</button>
-                                <div id="ocrReextractRow" class="ocr-reextract-row">
-                                    <button id="reExtractBtn" type="button" disabled="disabled">&#x21BA; Re-extract Text</button>
-                                    <button id="cropImageBtn" type="button" disabled="disabled">&#x2702; Crop Image</button>
-                                </div>
+                                <button id="extractTextBtn" type="button" class="ocr-btn-secondary ocr-extract-after" disabled="disabled">Extract Text for Analysis</button>
+
                             </div>
                         </details>
 
@@ -6308,14 +6366,16 @@ function updateSelectedImagePreview() {
         for (var i = 0; i < selectedImages.length; i++) {
             var item = selectedImages[i];
             html += '<div class="ocr-preview-card' + (i === 0 ? ' primary' : '') + '" draggable="true" data-index="' + i + '">' +
-                '<img class="ocr-preview" draggable="false" src="' + item.dataUrl + '" alt="' + escapeHtml((i === 0 ? "First selected writing sample preview" : "Selected writing sample preview " + (i + 1))) + '">' +
+                '<img class="ocr-preview" draggable="false" src="' + item.dataUrl + '" alt="' + escapeHtml((i === 0 ? "First selected writing sample preview" : "Selected writing sample preview " + (i + 1))) + '" data-caption="' + escapeHtml(item.name || ("Image " + (i + 1))) + '" onclick="openImageLightbox(this)" title="Click to enlarge">' +
                 '<div class="ocr-preview-details">' +
                 '<div class="ocr-preview-meta"><div class="ocr-preview-order">Image ' + (i + 1) + ' of ' + selectedImages.length + '</div>' +
                 '<div>' + escapeHtml(item.name || ("image " + (i + 1))) + '</div></div>' +
                 '<div class="ocr-preview-grip">Drag to reorder</div>' +
                 '<div class="ocr-preview-actions">' +
-                '<button type="button" class="ocr-preview-move" data-direction="earlier" data-index="' + i + '"' + (i === 0 ? ' disabled="disabled"' : '') + '>Move earlier</button>' +
-                '<button type="button" class="ocr-preview-move" data-direction="later" data-index="' + i + '"' + (i === selectedImages.length - 1 ? ' disabled="disabled"' : '') + '>Move later</button>' +
+                '<button type="button" class="ocr-preview-move" data-direction="earlier" data-index="' + i + '"' + (i === 0 ? ' disabled="disabled"' : '') + '>Move Earlier</button>' +
+                '<button type="button" class="ocr-preview-move" data-direction="later" data-index="' + i + '"' + (i === selectedImages.length - 1 ? ' disabled="disabled"' : '') + '>Move Later</button>' +
+                '<button type="button" class="ocr-preview-crop" data-index="' + i + '">&#x2702; Crop</button>' +
+                '<button type="button" class="ocr-preview-reset" data-index="' + i + '"' + (!selectedImages[i].originalDataUrl ? ' disabled="disabled"' : '') + '>&#x21BA; Reset Crop</button>' +
                 '</div>' +
                 '<button type="button" class="ocr-preview-remove" data-index="' + i + '">Remove</button>' +
                 '</div>' +
@@ -6327,9 +6387,9 @@ function updateSelectedImagePreview() {
         if (panelBody) panelBody.classList.add("has-photos");
         bindPreviewReorderHandlers();
         if (selectedImages.length === 1) {
-            setOcrStatus('1 image ready. Click Extract Text into Box to run OCR with ' + OCR_MODEL + '.', '');
+            setOcrStatus('1 image ready. Click Extract Text for Analysis to run OCR with ' + OCR_MODEL + '.', '');
         } else {
-            setOcrStatus(String(selectedImages.length) + ' images ready. They will be extracted in the order shown when you click Extract Text into Box.', '');
+            setOcrStatus(String(selectedImages.length) + ' images ready. They will be extracted in the order shown when you click Extract Text for Analysis.', '');
         }
     } else {
         list.innerHTML = "";
@@ -6415,7 +6475,7 @@ async function handleSelectedImages(files) {
         updateSelectedImagePreview();
         syncUiState();
         if (prepared.length === 1) {
-            setOcrStatus("Image added. Review the queue, then click Extract Text into Box when you are ready.", "");
+            setOcrStatus("Image added. Review the queue, then click Extract Text for Analysis when you are ready.", "");
         } else {
             setOcrStatus(String(prepared.length) + " images added. " + String(selectedImages.length) + " images are now queued in the order shown.", "");
         }
@@ -6529,6 +6589,25 @@ function bindPreviewReorderHandlers() {
     });
 
     list.addEventListener("click", function(event) {
+        var cropBtn2 = event.target.closest(".ocr-preview-crop");
+        if (cropBtn2) {
+            var cidx = parseInt(cropBtn2.getAttribute("data-index"), 10);
+            if (!isNaN(cidx)) openCropModal(cidx);
+            return;
+        }
+        var resetBtn2 = event.target.closest(".ocr-preview-reset");
+        if (resetBtn2) {
+            var ridx = parseInt(resetBtn2.getAttribute("data-index"), 10);
+            if (!isNaN(ridx) && selectedImages[ridx] && selectedImages[ridx].originalDataUrl) {
+                selectedImages[ridx].dataUrl = selectedImages[ridx].originalDataUrl;
+                selectedImages[ridx].originalDataUrl = null;
+                selectedImages[ridx].extractedText = "";
+                selectedImages[ridx].extractionPromise = null;
+                updateSelectedImagePreview();
+                setOcrStatus("Crop reset for image " + (ridx + 1) + ". Click \"Extract Text for Analysis\" to re-run OCR.", "success");
+            }
+            return;
+        }
         var btn = event.target.closest(".ocr-preview-remove");
         if (!btn) return;
         var index = parseInt(btn.getAttribute("data-index"), 10);
@@ -8211,11 +8290,17 @@ if (toggleApiKeyBtn && apiKeyInput) {
         toggleApiKeyBtn.textContent = show ? "Hide API Key" : "Show API Key";
     });
 }
+function openImagePicker() {
+    var existingInput = document.getElementById("imageUploadInput");
+    if (!existingInput) return;
+    existingInput.click();
+}
+
 document.getElementById("takePhotoBtn").addEventListener("click", function() {
     document.getElementById("cameraInput").click();
 });
 document.getElementById("uploadImageBtn").addEventListener("click", function() {
-    document.getElementById("imageUploadInput").click();
+    openImagePicker();
 });
 document.getElementById("cameraInput").addEventListener("change", async function(e) {
     await handleSelectedImages(Array.prototype.slice.call(e.target.files || []));
@@ -8243,6 +8328,7 @@ bindDesktopImageDrop();
     var photoBtn  = document.getElementById("mobileEntryPhotoBtn");
     var uploadBtn = document.getElementById("mobileEntryUploadBtn");
     var textBtn   = document.getElementById("mobileEntryTextBtn");
+
     if (photoBtn) photoBtn.addEventListener("click", function() {
         dismissMobileEntryScreen();
         setTimeout(function() {
@@ -8254,7 +8340,7 @@ bindDesktopImageDrop();
         dismissMobileEntryScreen();
         setTimeout(function() {
             var p = document.getElementById("ocrPanel"); if (p) p.open = true;
-            document.getElementById("imageUploadInput").click();
+            openImagePicker();
         }, 150);
     });
     if (textBtn) textBtn.addEventListener("click", function() {
@@ -8479,52 +8565,7 @@ updateSyncPortfolioButtonState();
 /* Also update the status bar once on load */
 updateMeter();
 
-// ══════════════════════════════════════════════════
-// RE-EXTRACT & CROP FEATURES
-// ══════════════════════════════════════════════════
-
-function updateReextractRow() {
-    var row = document.getElementById("ocrReextractRow");
-    var reBtn = document.getElementById("reExtractBtn");
-    var cropBtn = document.getElementById("cropImageBtn");
-    if (!row || !reBtn || !cropBtn) return;
-    if (selectedImages.length > 0) {
-        row.style.display = "flex";
-        reBtn.disabled = isAnalyzing;
-        cropBtn.disabled = isAnalyzing || selectedImages.length !== 1;
-    } else {
-        row.style.display = "none";
-        reBtn.disabled = true;
-        cropBtn.disabled = true;
-    }
-}
-
-// Wrap updateSelectedImagePreview to also refresh re-extract row
-var _origUpdatePreview = updateSelectedImagePreview;
-updateSelectedImagePreview = function() {
-    _origUpdatePreview.apply(this, arguments);
-    updateReextractRow();
-};
-
-// Wrap syncUiState to also refresh re-extract row
-var _origSyncUiState = syncUiState;
-syncUiState = function() {
-    _origSyncUiState.apply(this, arguments);
-    updateReextractRow();
-};
-
-// Re-extract: clear cached text and re-run OCR
-function reExtractText() {
-    if (!selectedImages.length) return;
-    for (var i = 0; i < selectedImages.length; i++) {
-        selectedImages[i].extractedText = "";
-        selectedImages[i].extractionPromise = null;
-    }
-    selectedImageExtractedText = "";
-    selectedImageExtractionPromise = null;
-    setOcrStatus("Re-extracting text...", "");
-    extractTextFromSelectedImage(false);
-}
+// ── CROP FEATURES ──
 
 // ── Crop logic ──────────────────────────────────
 var _cropSourceDataUrl = "";
@@ -8546,6 +8587,10 @@ function openCropModal(imgIndex) {
     if (!modal || !canvas || !overlay || !wrap) return;
 
     modal.classList.add("open");
+    var titleEl = document.getElementById("cropModalTitle");
+    if (titleEl) titleEl.textContent = (selectedImages.length > 1)
+        ? "Crop Image " + (imgIndex + 1) + " of " + selectedImages.length + " — drag to select the writing area"
+        : "Crop Image — drag to select the writing area";
 
     var img = new Image();
     img.onload = function() {
@@ -8599,9 +8644,11 @@ function getCropPos(e, el) {
     var clientY = e.touches ? e.touches[0].clientY : e.clientY;
     var scaleX = el.width / rect.width;
     var scaleY = el.height / rect.height;
+    var x = Math.round((clientX - rect.left) * scaleX);
+    var y = Math.round((clientY - rect.top) * scaleY);
     return {
-        x: Math.round((clientX - rect.left) * scaleX),
-        y: Math.round((clientY - rect.top) * scaleY)
+        x: Math.max(0, Math.min(x, el.width)),
+        y: Math.max(0, Math.min(y, el.height))
     };
 }
 
@@ -8643,8 +8690,7 @@ function applyCrop() {
         selectedImageExtractionPromise = null;
         closeCropModal();
         updateSelectedImagePreview();
-        setOcrStatus("Image cropped. Re-extracting text...", "success");
-        reExtractText();
+        setOcrStatus("Image cropped. Click \"Extract Text for Analysis\" to re-run OCR.", "success");
     };
     sourceImg.src = _cropSourceDataUrl;
 }
@@ -8697,16 +8743,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     function onUp(e) {
         if (!_cropDragStart) return;
-        e.preventDefault();
         _cropDragStart = null;
     }
 
     overlay2.addEventListener("mousedown", onDown);
-    overlay2.addEventListener("mousemove", onMove);
-    overlay2.addEventListener("mouseup", onUp);
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
     overlay2.addEventListener("touchstart", onDown, { passive: false });
-    overlay2.addEventListener("touchmove", onMove, { passive: false });
-    overlay2.addEventListener("touchend", onUp, { passive: false });
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onUp, { passive: false });
 
     document.getElementById("cropApplyBtn").addEventListener("click", applyCrop);
     document.getElementById("cropResetBtn").addEventListener("click", resetCrop);
@@ -8717,10 +8762,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("keydown", function(e) {
         if (e.key === "Escape") closeCropModal();
     });
-    document.getElementById("cropImageBtn").addEventListener("click", function() {
-        if (selectedImages.length === 1) openCropModal(0);
-    });
-    document.getElementById("reExtractBtn").addEventListener("click", reExtractText);
 });
 // ── END Re-extract & Crop ──────────────────
 
@@ -8740,8 +8781,47 @@ document.addEventListener("DOMContentLoaded", function() {
         <div id="cropModalActions">
             <button id="cropResetBtn" type="button">Reset</button>
             <button id="cropCancelBtn" type="button">Cancel</button>
-            <button id="cropApplyBtn" type="button">Apply Crop &amp; Re-extract</button>
+            <button id="cropApplyBtn" type="button">Apply Crop</button>
         </div>
     </div>
 </div>
+
+<!-- Image Lightbox -->
+<div id="imgLightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+    <button id="imgLightboxClose" aria-label="Close image preview" onclick="closeImageLightbox()">&#x2715;</button>
+    <img id="imgLightboxImg" src="" alt="Enlarged writing sample preview">
+    <div id="imgLightboxCaption"></div>
+
+<script>
+/* === IMAGE LIGHTBOX === */
+function openImageLightbox(imgEl) {
+    var lb = document.getElementById('imgLightbox');
+    var lbImg = document.getElementById('imgLightboxImg');
+    var lbCap = document.getElementById('imgLightboxCaption');
+    if (!lb || !lbImg) return;
+    lbImg.src = imgEl.src;
+    lbImg.alt = imgEl.alt || 'Writing sample preview';
+    if (lbCap) lbCap.textContent = imgEl.getAttribute('data-caption') || '';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Close on backdrop click (but not on image click)
+    lb.onclick = function(e) {
+        if (e.target === lb) closeImageLightbox();
+    };
+}
+function closeImageLightbox() {
+    var lb = document.getElementById('imgLightbox');
+    if (!lb) return;
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    var lbImg = document.getElementById('imgLightboxImg');
+    if (lbImg) lbImg.src = '';
+}
+// Close with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeImageLightbox();
+});
+/* === END IMAGE LIGHTBOX === */
+</script>
+
 </body></html>
