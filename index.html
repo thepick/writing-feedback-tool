@@ -45,6 +45,32 @@
     }
 
     * { box-sizing: border-box; }
+
+    /* === MOBILE SCROLL STABILITY FIXES === */
+    html {
+        overscroll-behavior: none;
+        scroll-behavior: auto;
+    }
+    body {
+        overscroll-behavior: none;
+        touch-action: pan-y;
+    }
+    .left-col, .right-col, .ocr-preview-list,
+    .settings-drawer-body, .two-col-layout {
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
+    }
+    @media (max-width: 900px) {
+        html, body {
+            overscroll-behavior-y: none;
+        }
+        .two-col-layout {
+            touch-action: pan-y;
+            overscroll-behavior: contain;
+        }
+    }
+    /* === END MOBILE SCROLL FIXES === */
     body {
         margin: 0;
         padding: 0;
@@ -1194,6 +1220,123 @@
     }
     .ocr-preview-move:hover:not(:disabled) { background: #eef4ff; }
     .ocr-preview-move:disabled { opacity: 0.45; cursor: default; }
+
+    /* ── Crop Modal ── */
+    #cropModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        background: rgba(0,0,0,0.72);
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+    }
+    #cropModal.open { display: flex; }
+    #cropModalCard {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        width: 100%;
+        max-width: 680px;
+        max-height: 92vh;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.35);
+    }
+    #cropModalTitle {
+        font-size: 15px;
+        font-weight: 700;
+        color: #163e73;
+        margin: 0;
+    }
+    #cropCanvasWrap {
+        position: relative;
+        overflow: hidden;
+        background: #111;
+        border-radius: 10px;
+        flex: 1;
+        min-height: 200px;
+        max-height: 56vh;
+        cursor: crosshair;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    #cropCanvas {
+        display: block;
+        max-width: 100%;
+    }
+    #cropOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: crosshair;
+    }
+    #cropModalActions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    #cropModalActions button {
+        padding: 8px 18px;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid #d3ddea;
+        transition: background 0.15s;
+    }
+    #cropApplyBtn {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb !important;
+    }
+    #cropApplyBtn:hover { background: #1d50c8; }
+    #cropResetBtn { background: #f1f5f9; color: #334155; }
+    #cropResetBtn:hover { background: #e2e8f0; }
+    #cropCancelBtn { background: #f1f5f9; color: #334155; }
+    #cropCancelBtn:hover { background: #e2e8f0; }
+    #cropHint {
+        font-size: 11px;
+        color: #5b6f86;
+        text-align: center;
+        margin: 0;
+    }
+    /* ── Re-extract / Crop buttons ── */
+    .ocr-reextract-row {
+        display: none;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+    .ocr-reextract-row button {
+        flex: 1;
+        min-width: 130px;
+        padding: 7px 12px;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid #d3ddea;
+        transition: background 0.15s;
+    }
+    #reExtractBtn {
+        background: #eef4ff;
+        color: #163e73;
+    }
+    #reExtractBtn:hover:not(:disabled) { background: #dce9ff; }
+    #cropImageBtn {
+        background: #f0fdf4;
+        color: #166534;
+        border-color: #bbf7d0 !important;
+    }
+    #cropImageBtn:hover:not(:disabled) { background: #dcfce7; }
+    .ocr-reextract-row button:disabled { opacity: 0.45; cursor: default; }
+
     .ocr-preview-grip {
         margin-top: 6px;
         font-size: 10px;
@@ -2359,6 +2502,10 @@
                                     <div id="ocrPreviewList" class="ocr-preview-list"></div>
                                 </div>
                                 <button id="extractTextBtn" type="button" class="ocr-btn-secondary ocr-extract-after" disabled="disabled">Extract Text into Box</button>
+                                <div id="ocrReextractRow" class="ocr-reextract-row">
+                                    <button id="reExtractBtn" type="button" disabled="disabled">&#x21BA; Re-extract Text</button>
+                                    <button id="cropImageBtn" type="button" disabled="disabled">&#x2702; Crop Image</button>
+                                </div>
                             </div>
                         </details>
 
@@ -3482,7 +3629,7 @@ function openStudentPortfolio(name) {
     renderStudentPortfolio();
     var section = document.getElementById('portfolioSection');
     if (section && section.scrollIntoView) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!window.matchMedia('(max-width: 900px)').matches) { section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     }
 }
 
@@ -7701,7 +7848,7 @@ function showTeacherReview() {
     if (!details) return;
     details.open = true;
     setTimeout(function() {
-        details.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (!window.matchMedia('(max-width: 900px)').matches) { details.scrollIntoView({ behavior: "smooth", block: "start" }); }
     }, 60);
 }
 
@@ -8331,7 +8478,270 @@ updateSyncPortfolioButtonState();
 
 /* Also update the status bar once on load */
 updateMeter();
+
+// ══════════════════════════════════════════════════
+// RE-EXTRACT & CROP FEATURES
+// ══════════════════════════════════════════════════
+
+function updateReextractRow() {
+    var row = document.getElementById("ocrReextractRow");
+    var reBtn = document.getElementById("reExtractBtn");
+    var cropBtn = document.getElementById("cropImageBtn");
+    if (!row || !reBtn || !cropBtn) return;
+    if (selectedImages.length > 0) {
+        row.style.display = "flex";
+        reBtn.disabled = isAnalyzing;
+        cropBtn.disabled = isAnalyzing || selectedImages.length !== 1;
+    } else {
+        row.style.display = "none";
+        reBtn.disabled = true;
+        cropBtn.disabled = true;
+    }
+}
+
+// Wrap updateSelectedImagePreview to also refresh re-extract row
+var _origUpdatePreview = updateSelectedImagePreview;
+updateSelectedImagePreview = function() {
+    _origUpdatePreview.apply(this, arguments);
+    updateReextractRow();
+};
+
+// Wrap syncUiState to also refresh re-extract row
+var _origSyncUiState = syncUiState;
+syncUiState = function() {
+    _origSyncUiState.apply(this, arguments);
+    updateReextractRow();
+};
+
+// Re-extract: clear cached text and re-run OCR
+function reExtractText() {
+    if (!selectedImages.length) return;
+    for (var i = 0; i < selectedImages.length; i++) {
+        selectedImages[i].extractedText = "";
+        selectedImages[i].extractionPromise = null;
+    }
+    selectedImageExtractedText = "";
+    selectedImageExtractionPromise = null;
+    setOcrStatus("Re-extracting text...", "");
+    extractTextFromSelectedImage(false);
+}
+
+// ── Crop logic ──────────────────────────────────
+var _cropSourceDataUrl = "";
+var _cropImageIndex = 0;
+var _cropDragStart = null;
+var _cropRect = null;
+
+function openCropModal(imgIndex) {
+    if (!selectedImages[imgIndex]) return;
+    _cropImageIndex = imgIndex;
+    _cropSourceDataUrl = selectedImages[imgIndex].originalDataUrl || selectedImages[imgIndex].dataUrl;
+    _cropRect = null;
+    _cropDragStart = null;
+
+    var modal = document.getElementById("cropModal");
+    var canvas = document.getElementById("cropCanvas");
+    var overlay = document.getElementById("cropOverlay");
+    var wrap = document.getElementById("cropCanvasWrap");
+    if (!modal || !canvas || !overlay || !wrap) return;
+
+    modal.classList.add("open");
+
+    var img = new Image();
+    img.onload = function() {
+        var maxW = wrap.clientWidth || 600;
+        var scale = Math.min(1, maxW / img.naturalWidth);
+        var w = Math.round(img.naturalWidth * scale);
+        var h = Math.round(img.naturalHeight * scale);
+        canvas.width = w;
+        canvas.height = h;
+        overlay.width = w;
+        overlay.height = h;
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        overlay.style.width = w + "px";
+        overlay.style.height = h + "px";
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        drawCropOverlay();
+    };
+    img.src = _cropSourceDataUrl;
+}
+
+function drawCropOverlay() {
+    var overlay = document.getElementById("cropOverlay");
+    if (!overlay) return;
+    var ctx = overlay.getContext("2d");
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
+    if (!_cropRect || Math.abs(_cropRect.w) < 2 || Math.abs(_cropRect.h) < 2) return;
+
+    var x = Math.min(_cropRect.x, _cropRect.x + _cropRect.w);
+    var y = Math.min(_cropRect.y, _cropRect.y + _cropRect.h);
+    var w = Math.abs(_cropRect.w);
+    var h = Math.abs(_cropRect.h);
+
+    ctx.fillStyle = "rgba(0,0,0,0.5)";
+    ctx.fillRect(0, 0, overlay.width, overlay.height);
+    ctx.clearRect(x, y, w, h);
+    ctx.strokeStyle = "#2563eb";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, w, h);
+    var hs = 8;
+    ctx.fillStyle = "#2563eb";
+    [[x, y], [x + w, y], [x, y + h], [x + w, y + h]].forEach(function(pt) {
+        ctx.fillRect(pt[0] - hs / 2, pt[1] - hs / 2, hs, hs);
+    });
+}
+
+function getCropPos(e, el) {
+    var rect = el.getBoundingClientRect();
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    var scaleX = el.width / rect.width;
+    var scaleY = el.height / rect.height;
+    return {
+        x: Math.round((clientX - rect.left) * scaleX),
+        y: Math.round((clientY - rect.top) * scaleY)
+    };
+}
+
+function applyCrop() {
+    var canvas = document.getElementById("cropCanvas");
+    if (!canvas || !_cropRect || Math.abs(_cropRect.w) < 5 || Math.abs(_cropRect.h) < 5) {
+        setOcrStatus("Please draw a crop region on the image first.", "error");
+        return;
+    }
+    var x = Math.max(0, Math.min(_cropRect.x, _cropRect.x + _cropRect.w));
+    var y = Math.max(0, Math.min(_cropRect.y, _cropRect.y + _cropRect.h));
+    var w = Math.min(Math.abs(_cropRect.w), canvas.width - x);
+    var h = Math.min(Math.abs(_cropRect.h), canvas.height - y);
+    if (w < 5 || h < 5) {
+        setOcrStatus("Crop region too small. Please draw a larger area.", "error");
+        return;
+    }
+    var sourceImg = new Image();
+    sourceImg.onload = function() {
+        var scaleX = sourceImg.naturalWidth / canvas.width;
+        var scaleY = sourceImg.naturalHeight / canvas.height;
+        var out = document.createElement("canvas");
+        out.width = Math.round(w * scaleX);
+        out.height = Math.round(h * scaleY);
+        out.getContext("2d").drawImage(
+            sourceImg,
+            Math.round(x * scaleX), Math.round(y * scaleY),
+            out.width, out.height,
+            0, 0, out.width, out.height
+        );
+        var croppedUrl = out.toDataURL("image/jpeg", 0.92);
+        if (!selectedImages[_cropImageIndex].originalDataUrl) {
+            selectedImages[_cropImageIndex].originalDataUrl = selectedImages[_cropImageIndex].dataUrl;
+        }
+        selectedImages[_cropImageIndex].dataUrl = croppedUrl;
+        selectedImages[_cropImageIndex].extractedText = "";
+        selectedImages[_cropImageIndex].extractionPromise = null;
+        selectedImageExtractedText = "";
+        selectedImageExtractionPromise = null;
+        closeCropModal();
+        updateSelectedImagePreview();
+        setOcrStatus("Image cropped. Re-extracting text...", "success");
+        reExtractText();
+    };
+    sourceImg.src = _cropSourceDataUrl;
+}
+
+function closeCropModal() {
+    var modal = document.getElementById("cropModal");
+    if (modal) modal.classList.remove("open");
+    _cropRect = null;
+    _cropDragStart = null;
+}
+
+function resetCrop() {
+    if (selectedImages[_cropImageIndex] && selectedImages[_cropImageIndex].originalDataUrl) {
+        selectedImages[_cropImageIndex].dataUrl = selectedImages[_cropImageIndex].originalDataUrl;
+        selectedImages[_cropImageIndex].originalDataUrl = null;
+        selectedImages[_cropImageIndex].extractedText = "";
+        _cropSourceDataUrl = selectedImages[_cropImageIndex].dataUrl;
+    }
+    _cropRect = null;
+    _cropDragStart = null;
+    var canvas = document.getElementById("cropCanvas");
+    var overlay = document.getElementById("cropOverlay");
+    if (canvas && overlay) {
+        var img = new Image();
+        img.onload = function() {
+            canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+            drawCropOverlay();
+        };
+        img.src = _cropSourceDataUrl;
+    }
+}
+
+// Wire crop modal — deferred so DOM is ready
+document.addEventListener("DOMContentLoaded", function() {
+    var overlay2 = document.getElementById("cropOverlay");
+    if (!overlay2) return;
+
+    function onDown(e) {
+        e.preventDefault();
+        var pos = getCropPos(e, overlay2);
+        _cropDragStart = pos;
+        _cropRect = { x: pos.x, y: pos.y, w: 0, h: 0 };
+    }
+    function onMove(e) {
+        if (!_cropDragStart) return;
+        e.preventDefault();
+        var pos = getCropPos(e, overlay2);
+        _cropRect = { x: _cropDragStart.x, y: _cropDragStart.y, w: pos.x - _cropDragStart.x, h: pos.y - _cropDragStart.y };
+        drawCropOverlay();
+    }
+    function onUp(e) {
+        if (!_cropDragStart) return;
+        e.preventDefault();
+        _cropDragStart = null;
+    }
+
+    overlay2.addEventListener("mousedown", onDown);
+    overlay2.addEventListener("mousemove", onMove);
+    overlay2.addEventListener("mouseup", onUp);
+    overlay2.addEventListener("touchstart", onDown, { passive: false });
+    overlay2.addEventListener("touchmove", onMove, { passive: false });
+    overlay2.addEventListener("touchend", onUp, { passive: false });
+
+    document.getElementById("cropApplyBtn").addEventListener("click", applyCrop);
+    document.getElementById("cropResetBtn").addEventListener("click", resetCrop);
+    document.getElementById("cropCancelBtn").addEventListener("click", closeCropModal);
+    document.getElementById("cropModal").addEventListener("click", function(e) {
+        if (e.target === this) closeCropModal();
+    });
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeCropModal();
+    });
+    document.getElementById("cropImageBtn").addEventListener("click", function() {
+        if (selectedImages.length === 1) openCropModal(0);
+    });
+    document.getElementById("reExtractBtn").addEventListener("click", reExtractText);
+});
+// ── END Re-extract & Crop ──────────────────
+
 </script>
 
 
+
+<!-- ── CROP MODAL ── -->
+<div id="cropModal" role="dialog" aria-modal="true" aria-label="Crop image">
+    <div id="cropModalCard">
+        <p id="cropModalTitle">Crop Image &mdash; drag to select the writing area</p>
+        <div id="cropCanvasWrap">
+            <canvas id="cropCanvas"></canvas>
+            <canvas id="cropOverlay"></canvas>
+        </div>
+        <p id="cropHint">Click and drag on the image to draw a crop region. Use Reset to start over.</p>
+        <div id="cropModalActions">
+            <button id="cropResetBtn" type="button">Reset</button>
+            <button id="cropCancelBtn" type="button">Cancel</button>
+            <button id="cropApplyBtn" type="button">Apply Crop &amp; Re-extract</button>
+        </div>
+    </div>
+</div>
 </body></html>
