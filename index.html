@@ -1041,6 +1041,10 @@
         border-radius: 50%;
         animation: sync-spin 0.8s linear infinite;
     }
+    button.ocr-btn-secondary.is-loading::before {
+        border-color: rgba(30, 41, 59, 0.2);
+        border-top-color: #1e293b;
+    }
     #analyzeBtn.btn-ready,
     .sync-action-btn.btn-ready {
         animation: pulse-glow 2s ease-in-out infinite;
@@ -6714,6 +6718,8 @@ async function extractTextFromSelectedImage(isAutomatic) {
 
     isAnalyzing = true;
     syncUiState();
+    var extractBtn = document.getElementById("extractTextBtn");
+    setLoadingButtonState(extractBtn, true, "Extracting...");
     setOcrStatus(isAutomatic ? "Extracting text from image automatically..." : (selectedImages.length > 1 ? "Extracting text from " + selectedImages.length + " images..." : "Extracting text from image..."), "");
 
     var prompt = [
@@ -6770,6 +6776,7 @@ async function extractTextFromSelectedImage(isAutomatic) {
         } finally {
             selectedImageExtractionPromise = null;
             isAnalyzing = false;
+            setLoadingButtonState(document.getElementById("extractTextBtn"), false);
             syncUiState();
         }
     })();
