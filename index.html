@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool - v66.1-portfolio-no-ocr -->
+<!-- Writing Feedback Tool - v66.2-portfolio-remove-ocr-card -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -3824,12 +3824,6 @@ function normalizePortfolioData(portfolio) {
             safe.date = safe.date || (safe.createdAt ? new Date(safe.createdAt).toLocaleDateString('en-GB') : 'Unknown date');
             safe.title = safe.title || 'Untitled';
             safe.categoryScores = safe.categoryScores || {};
-            if ((!safe.originalText || !String(safe.originalText).trim()) && safe.ocrText) {
-                safe.originalText = String(safe.ocrText || '');
-            }
-            if (Object.prototype.hasOwnProperty.call(safe, 'ocrText')) {
-                delete safe.ocrText;
-            }
             safe.images = Array.isArray(safe.images) ? safe.images : [];
             for (var i = 0; i < safe.images.length; i++) {
                 safe.images[i].pendingDriveUpload = !safe.images[i].driveFileId;
@@ -4326,7 +4320,7 @@ function saveCurrentSessionToPortfolio(analysisData) {
         ) || 'Untitled',
         overall: analysisData.overall,
         categoryScores: analysisData.categoryScores || {},
-        originalText: String((document.getElementById('studentWriting') || {}).value || selectedImageExtractedText || ''),
+        originalText: String((document.getElementById('studentWriting') || {}).value || ''),
         correctedHtml: correctedHtmlForDiff || '',
         correctedMarkup: analysisData.correctedStory || '',
         correctedPlainText: getSessionPlainCorrectedText(),
