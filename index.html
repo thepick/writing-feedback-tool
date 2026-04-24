@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool - v66.1 -->
+<!-- Writing Feedback Tool - v66.1-portfolio-no-ocr -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -3824,6 +3824,12 @@ function normalizePortfolioData(portfolio) {
             safe.date = safe.date || (safe.createdAt ? new Date(safe.createdAt).toLocaleDateString('en-GB') : 'Unknown date');
             safe.title = safe.title || 'Untitled';
             safe.categoryScores = safe.categoryScores || {};
+            if ((!safe.originalText || !String(safe.originalText).trim()) && safe.ocrText) {
+                safe.originalText = String(safe.ocrText || '');
+            }
+            if (Object.prototype.hasOwnProperty.call(safe, 'ocrText')) {
+                delete safe.ocrText;
+            }
             safe.images = Array.isArray(safe.images) ? safe.images : [];
             for (var i = 0; i < safe.images.length; i++) {
                 safe.images[i].pendingDriveUpload = !safe.images[i].driveFileId;
@@ -4235,10 +4241,9 @@ function renderStudentPortfolio() {
             + '<div class="session-meta">' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'
             + '<div class="session-artifact-grid">'
-            + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || sess.ocrText || '') + '</pre></div>'
+            + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
             + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + getPortfolioCorrectedHtml(sess) + '</div></div>'
             + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.') + '</div></div>'
-            + '<div class="session-artifact-box"><h5>OCR / Scan Text</h5><pre>' + escapeHtml(sess.ocrText || 'No scan text saved for this submission.') + '</pre></div>'
             + '</div>'
             + imageStripHtml
             + '<div class="session-card-actions"><button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button></div>'
@@ -4321,12 +4326,11 @@ function saveCurrentSessionToPortfolio(analysisData) {
         ) || 'Untitled',
         overall: analysisData.overall,
         categoryScores: analysisData.categoryScores || {},
-        originalText: String((document.getElementById('studentWriting') || {}).value || ''),
+        originalText: String((document.getElementById('studentWriting') || {}).value || selectedImageExtractedText || ''),
         correctedHtml: correctedHtmlForDiff || '',
         correctedMarkup: analysisData.correctedStory || '',
         correctedPlainText: getSessionPlainCorrectedText(),
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
-        ocrText: selectedImageExtractedText || '',
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
         images: getSessionImagePayloads()
     };
