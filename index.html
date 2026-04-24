@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Writing Feedback Tool - v66 -->
 <!-- Writing Feedback Tool v65 -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
@@ -2911,7 +2912,7 @@
                                 <div id="notebookDetailedAssessment" class="assessment-grid"></div>
                             </div>
 
-                            <div class="page">
+                            <div class="page" id="notebookPage2">
                                 <div class="page2-header">
                                     <div>
                                         <div class="page2-meta">Writing Notebook Summary - Page 2</div>
@@ -3041,6 +3042,16 @@
                 <label for="assessScriptQuality" class="checkbox-label">Assess handwriting neatness (only applies if a photo of the writing is provided)</label>
             </div>
         </div>
+
+        <!-- Print Options Section -->
+        <div class="settings-section">
+            <div class="settings-section-title">Print Options</div>
+
+            <div class="checkbox-row" id="includeCorrectedWritingRow">
+                <input id="includeCorrectedWriting" type="checkbox" checked>
+                <label for="includeCorrectedWriting" class="checkbox-label">Include Corrected Writing (Pg 2) in Notebook Summary print</label>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -3088,7 +3099,8 @@ function saveSettingsToLocalStorage() {
             targetWordCount: (document.getElementById('targetWordCount') || {}).value || '200',
             useWordCountTarget: document.getElementById('useWordCountTarget') ? document.getElementById('useWordCountTarget').checked : true,
             grammarStrictness: getGrammarStrictness(),
-            assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false
+            assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false,
+            includeCorrectedWriting: document.getElementById('includeCorrectedWriting') ? document.getElementById('includeCorrectedWriting').checked : true
         };
         GOOGLE_CLIENT_ID = String(settings.googleClientId || '').trim();
         refreshApiKeyRuntimeValue();
@@ -3127,6 +3139,9 @@ function loadSettingsFromLocalStorage() {
             }
             if (s.assessScriptQuality != null && document.getElementById('assessScriptQuality')) {
                 document.getElementById('assessScriptQuality').checked = s.assessScriptQuality;
+            }
+            if (s.includeCorrectedWriting != null && document.getElementById('includeCorrectedWriting')) {
+                document.getElementById('includeCorrectedWriting').checked = s.includeCorrectedWriting;
             }
             // Update script quality toggle visibility based on whether photos exist
             updateScriptQualityToggleVisibility();
@@ -8535,8 +8550,13 @@ function buildNotebookPrintDocument(printContentHtml, studentName, writingTitle)
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
         '<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">' +
         '<style>' + getNotebookPrintCss() + '</style></head><body>' +
-        '<div class="screen-controls">Writing Notebook Summary - A5 (2 pages) &nbsp;|&nbsp; <button class="btn-print" onclick="window.print()">Print / Save as PDF</button></div>' +
+        '<div class="screen-controls">Writing Notebook Summary - A5 (' + ((printContentHtml.indexOf('id="notebookPage2"') !== -1) ? '2 pages' : '1 page') + ') &nbsp;|&nbsp; <button class="btn-print" onclick="window.print()">Print / Save as PDF</button></div>' +
         printContentHtml + getNotebookPrintFitScript() + '</body></html>';
+}
+
+function shouldIncludeCorrectedWriting() {
+    var el = document.getElementById('includeCorrectedWriting');
+    return el ? el.checked : true;
 }
 
 function printNotebookSummary() {
@@ -8548,8 +8568,17 @@ function printNotebookSummary() {
         return;
     }
 
+    // Temporarily hide page 2 if the setting is unchecked
+    var page2El = document.getElementById("notebookPage2");
+    var page2WasHidden = false;
+    if (page2El && !shouldIncludeCorrectedWriting()) {
+        page2El.style.display = "none";
+        page2WasHidden = true;
+    }
+
     var printWindow = window.open("", "_blank", "width=1200,height=900");
     if (!printWindow) {
+        if (page2WasHidden && page2El) page2El.style.display = "";
         alert("Please allow pop-ups for this page to print the notebook summary.");
         return;
     }
@@ -8557,6 +8586,10 @@ function printNotebookSummary() {
     var studentName = (document.getElementById("notebookStudentName") || {}).textContent || "";
     var writingTitle = (document.getElementById("notebookTitle") || {}).textContent || "";
     var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle);
+
+    // Restore page 2 visibility in the source document
+    if (page2WasHidden && page2El) page2El.style.display = "";
+
     printWindow.document.open();
     printWindow.document.write(printHtml);
     printWindow.document.close();
