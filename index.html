@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool - v66.2-portfolio-remove-ocr-card -->
+<!-- Writing Feedback Tool - v66.3-portfolio-add-lightbox -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -104,6 +104,8 @@
         touch-action: pinch-zoom;
         user-select: none;
         -webkit-user-select: none;
+        transition: transform 0.18s ease;
+        transform-origin: center center;
     }
     #imgLightboxClose {
         position: absolute;
@@ -141,6 +143,43 @@
         border-radius: 20px;
         white-space: nowrap;
         pointer-events: none;
+    }
+    #imgLightboxControls {
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    }
+    .img-lightbox-rotate-btn {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.35);
+        color: #fff;
+        border-radius: 999px;
+        padding: 8px 14px;
+        min-height: 36px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    .img-lightbox-rotate-btn:hover,
+    .img-lightbox-rotate-btn:active {
+        background: rgba(255,255,255,0.28);
+    }
+    @media (max-width: 640px) {
+        #imgLightboxControls {
+            bottom: 54px;
+        }
+        .img-lightbox-rotate-btn {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
     }
     /* Make preview images show a zoom cursor so users know they're clickable */
     .ocr-preview {
@@ -631,6 +670,7 @@
         height: 84px;
         object-fit: cover;
         background: #e5e7eb;
+        cursor: zoom-in;
     }
     .session-photo-thumb .thumb-caption {
         padding: 6px 8px;
@@ -4222,7 +4262,7 @@ function renderStudentPortfolio() {
         if (sess.images && sess.images.length) {
             imageStripHtml = '<div class="session-photo-strip">' + sess.images.map(function(image) {
                 return '<div class="session-photo-thumb">'
-                    + (image.dataUrl ? '<img src="' + image.dataUrl + '" alt="' + escapeHtml(image.name || 'Student work image') + '">' : '<div class="thumb-caption">Image not available offline.</div>')
+                    + (image.dataUrl ? '<img src="' + image.dataUrl + '" alt="' + escapeHtml(image.name || 'Student work image') + '" data-caption="' + escapeHtml(image.name || 'Student work image') + '" onclick="openImageLightbox(this)" title="Click to enlarge">' : '<div class="thumb-caption">Image not available offline.</div>')
                     + '<div class="thumb-caption">' + escapeHtml(image.name || 'Image') + (image.pendingDriveUpload ? '<br>Waiting to sync to Drive' : '') + '</div>'
                     + '</div>';
             }).join('') + '</div>';
@@ -9525,36 +9565,110 @@ document.addEventListener("DOMContentLoaded", function() {
 <div id="imgLightbox" role="dialog" aria-modal="true" aria-label="Image preview">
     <button id="imgLightboxClose" aria-label="Close image preview" onclick="closeImageLightbox()">&#x2715;</button>
     <img id="imgLightboxImg" src="" alt="Enlarged writing sample preview">
+    <div id="imgLightboxControls" aria-label="Image rotation controls">
+        <button id="imgLightboxRotateLeft" class="img-lightbox-rotate-btn" type="button" aria-label="Rotate image left">Rotate Left</button>
+        <button id="imgLightboxRotateRight" class="img-lightbox-rotate-btn" type="button" aria-label="Rotate image right">Rotate Right</button>
+    </div>
     <div id="imgLightboxCaption"></div>
+</div>
 
 <script>
 /* === IMAGE LIGHTBOX === */
-function openImageLightbox(imgEl) {
+var lightboxRotation = 0;
+
+function setLightboxRotation(degrees) {
+    var lbImg = document.getElementById('imgLightboxImg');
+    if (!lbImg) return;
+    lightboxRotation = ((degrees % 360) + 360) % 360;
+    lbImg.style.transform = 'rotate(' + lightboxRotation + 'deg)';
+}
+
+function rotateLightboxImage(degrees) {
+    setLightboxRotation(lightboxRotation + degrees);
+}
+
+function openImageLightbox(imgOrSrc, caption) {
     var lb = document.getElementById('imgLightbox');
     var lbImg = document.getElementById('imgLightboxImg');
     var lbCap = document.getElementById('imgLightboxCaption');
+    var src = '';
+    var alt = 'Writing sample preview';
+    var cap = caption || '';
+
     if (!lb || !lbImg) return;
-    lbImg.src = imgEl.src;
-    lbImg.alt = imgEl.alt || 'Writing sample preview';
-    if (lbCap) lbCap.textContent = imgEl.getAttribute('data-caption') || '';
+
+    if (typeof imgOrSrc === 'string') {
+        src = imgOrSrc;
+    } else if (imgOrSrc) {
+        src = imgOrSrc.src || '';
+        alt = imgOrSrc.alt || alt;
+        cap = cap || imgOrSrc.getAttribute('data-caption') || '';
+    }
+
+    if (!src) return;
+
+    lbImg.src = src;
+    lbImg.alt = alt;
+    setLightboxRotation(0);
+    if (lbCap) lbCap.textContent = cap;
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Close on backdrop click (but not on image click)
+
     lb.onclick = function(e) {
         if (e.target === lb) closeImageLightbox();
     };
 }
+
 function closeImageLightbox() {
     var lb = document.getElementById('imgLightbox');
     if (!lb) return;
     lb.classList.remove('open');
     document.body.style.overflow = '';
     var lbImg = document.getElementById('imgLightboxImg');
-    if (lbImg) lbImg.src = '';
+    if (lbImg) {
+        lbImg.src = '';
+        lbImg.style.transform = 'rotate(0deg)';
+    }
+    lightboxRotation = 0;
 }
-// Close with Escape key
+
+function setupImageLightboxControls() {
+    var rotateLeft = document.getElementById('imgLightboxRotateLeft');
+    var rotateRight = document.getElementById('imgLightboxRotateRight');
+    var lbImg = document.getElementById('imgLightboxImg');
+
+    if (rotateLeft) {
+        rotateLeft.addEventListener('click', function(e) {
+            e.stopPropagation();
+            rotateLightboxImage(-90);
+        });
+    }
+    if (rotateRight) {
+        rotateRight.addEventListener('click', function(e) {
+            e.stopPropagation();
+            rotateLightboxImage(90);
+        });
+    }
+    if (lbImg) {
+        lbImg.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupImageLightboxControls);
+} else {
+    setupImageLightboxControls();
+}
+
 document.addEventListener('keydown', function(e) {
+    var lb = document.getElementById('imgLightbox');
+    var isOpen = lb && lb.classList.contains('open');
     if (e.key === 'Escape') closeImageLightbox();
+    if (!isOpen) return;
+    if (e.key === 'ArrowLeft') rotateLightboxImage(-90);
+    if (e.key === 'ArrowRight') rotateLightboxImage(90);
 });
 /* === END IMAGE LIGHTBOX === */
 </script>
