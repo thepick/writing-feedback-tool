@@ -821,6 +821,7 @@
     var DRIVE_TOKEN_CACHE_KEY = 'factflow-drive-token';
     var DRIVE_TOKEN_EXPIRY_KEY  = 'factflow-drive-token-expiry';
     var syncDebounceTimer       = null;
+    var localProgressDirty = false; // Only upload progress after this tab changes it
     var sessionQuizCount = 0;    // Resets each page load
     var startBtnCooldown = null; // Post-round delay interval
 
@@ -957,6 +958,7 @@
       if (!uid) return;
       progress.updatedAt = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY + uid, JSON.stringify(progress));
+      localProgressDirty = true;
 
       if (state.googleUser) {
         clearTimeout(syncDebounceTimer);
@@ -1467,8 +1469,7 @@
         if (el.personalBestValue) el.personalBestValue.textContent = String(round.bestStreak);
       }
       recordSessionComplete(progress);
-      sessionQuizCount++;
-      if (el.quizCountValue) el.quizCountValue.textContent = String(sessionQuizCount);
+      if (el.quizCountValue) el.quizCountValue.textContent = String(progress.sessionsCompleted || 0);
       var msg = 'Done! ' + round.correct + ' correct. ';
       if (graduated) {
         graduate(progress);
@@ -1913,14 +1914,18 @@
       el.signInPanel.classList.add('hidden');
       el.startBtn.disabled = !signedIn;
       if (signedIn) {
+        var uiProgress = loadProgress();
         setStatus(el.roundStatus, 'Ready. Press Start when you\'re ready.', '');
         updatePracticeHeader();
         renderProgressGrid();
         renderProgressGraph();
         updateStreakMeter(round ? round.streak : 0);
         if (el.personalBestValue) {
-          var authPb = loadProgress().allTimeBestStreak || 0;
+          var authPb = uiProgress.allTimeBestStreak || 0;
           el.personalBestValue.textContent = authPb > 0 ? String(authPb) : '-';
+        }
+        if (el.quizCountValue) {
+          el.quizCountValue.textContent = String(uiProgress.sessionsCompleted || 0);
         }
       }
     }
@@ -2202,8 +2207,9 @@
       );
     }
 
-    function syncProgressToDrive() {
+    function syncProgressToDrive(force) {
       if (!state.googleUser || !driveAccessToken) return;
+      if (!force && !localProgressDirty) return;
       if (syncPending) return;
       syncPending = true;
       showSyncStatus('&#8635; Syncing...', false);
@@ -2211,6 +2217,13 @@
       var uid = STORAGE_KEY + state.googleUser.sub;
       var progressJson = localStorage.getItem(uid);
       if (!progressJson) { syncPending = false; hideSyncStatus(); return; }
+      var uploadedUpdatedAt = 0;
+      try {
+        var uploadProgress = JSON.parse(progressJson);
+        uploadedUpdatedAt = uploadProgress && uploadProgress.updatedAt ? Date.parse(uploadProgress.updatedAt) : 0;
+      } catch (e) {
+        uploadedUpdatedAt = 0;
+      }
 
       var boundary = 'factflow_boundary_' + Date.now();
       var body = driveMultipartBody(boundary, { name: 'factflow-progress.json', parents: ['appDataFolder'] }, progressJson);
@@ -2240,6 +2253,21 @@
           syncPending = false;
           if (data.id) {
             driveFileId = data.id;
+            var currentRaw = localStorage.getItem(uid);
+            var currentUpdatedAt = 0;
+            try {
+              var currentProgress = currentRaw ? JSON.parse(currentRaw) : null;
+              currentUpdatedAt = currentProgress && currentProgress.updatedAt ? Date.parse(currentProgress.updatedAt) : 0;
+            } catch (e) {
+              currentUpdatedAt = uploadedUpdatedAt;
+            }
+            if (currentUpdatedAt <= uploadedUpdatedAt) {
+              localProgressDirty = false;
+            } else {
+              localProgressDirty = true;
+              clearTimeout(syncDebounceTimer);
+              syncDebounceTimer = setTimeout(function () { triggerDriveSync(); }, 800);
+            }
             showSyncStatus('&#10003; Synced', false);
             setTimeout(hideSyncStatus, 2500);
           } else {
@@ -2302,7 +2330,7 @@
       .then(function(data) {
         if (!data.files || data.files.length === 0) {
           hideSyncStatus();
-          syncProgressToDrive();
+          syncProgressToDrive(true);
           return null;
         }
         driveFileId = data.files[0].id;
@@ -2332,6 +2360,7 @@
           localStorage.setItem(uid, JSON.stringify(driveProgress));
         }
         hideSyncStatus();
+        localProgressDirty = false;
         renderProgressGrid();
         renderProgressGraph();
         renderAuthUI();
@@ -2381,7 +2410,7 @@
           loadProgressFromDrive();          // PULL latest from Drive immediately
         } else {
           initDriveTokenClient();
-          getOrRefreshDriveToken('load', loadProgressFromDrive, true);
+          getOrRefreshDriveToken('load', loadProgressFromDrive, false);
         }
       }
 
