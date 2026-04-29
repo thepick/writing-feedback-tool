@@ -1185,7 +1185,11 @@
     }
 
     // ═══════════════════════════ GOOGLE SIGN-IN ═══════════════════════════
+    var googleSignInInitialized = false;  // Prevent duplicate initialization
+    
     function initGoogleSignIn() {
+      if (googleSignInInitialized) return;  // Only initialize once
+      
       var btn = el.googleSignInBtn;
       if (!btn) return;
       if (GOOGLE_CLIENT_ID.indexOf('YOUR_CLIENT_ID') === 0) {
@@ -1199,9 +1203,21 @@
         setTimeout(function () { waitForGis(cb, n + 1); }, 200);
       }
       waitForGis(function () {
-        google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleSignIn, auto_select: true, cancel_on_tap_outside: false });
-        if (!state.googleUser) { google.accounts.id.prompt(); }
+        // Initialize with auto_select - let Google handle silent sign-in for existing sessions
+        var options = {
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+          auto_select: true,
+          cancel_on_tap_outside: false
+        };
+        google.accounts.id.initialize(options);
+        
+        // Don't call prompt() here - it causes the unwanted account picker on page reload
+        // Instead, only show the rendered button, which user can click if needed
+        // Google's auto_select will handle silent sign-in if a valid session exists
+        
         google.accounts.id.renderButton(btn, { theme: 'outline', size: 'large', type: 'standard', text: 'signin_with' });
+        googleSignInInitialized = true;
       });
     }
 
@@ -1223,6 +1239,7 @@
           }
         } catch(e) {}
         initDriveTokenClient();
+        startPeriodicSync();
         getOrRefreshDriveToken('load', loadProgressFromDrive, true);
         renderAuthUI();
       } catch (e) {
@@ -1259,6 +1276,7 @@
       if (window.google && google.accounts && google.accounts.id) {
         google.accounts.id.disableAutoSelect();
       }
+      stopPeriodicSync();
       stopRound(false);
       renderAuthUI();
     }
@@ -2313,6 +2331,97 @@
       }
     }
 
+    // ═══════════════════════════ SMART MERGE ═══════════════════════════
+    function smartMergeProgress(driveProgress, localProgress) {
+      // Smart three-way merge: compare fact-by-fact, not just session counts
+      if (!localProgress) return driveProgress;
+      
+      var merged = JSON.parse(JSON.stringify(driveProgress)); // Clone drive data
+      
+      // Merge factStats individually - never discard local stats
+      if (localProgress.factStats && merged.factStats) {
+        for (var key in localProgress.factStats) {
+          if (!merged.factStats[key]) {
+            // Fact only exists locally, keep it
+            merged.factStats[key] = localProgress.factStats[key];
+          } else {
+            // Fact exists on both - merge intelligently
+            var driveStats = merged.factStats[key];
+            var localStats = localProgress.factStats[key];
+            
+            // Combine shown/correct/incorrect counts (sum them)
+            driveStats.shown = Math.max(driveStats.shown || 0, localStats.shown || 0);
+            driveStats.correct = (driveStats.correct || 0) + (localStats.correct || 0);
+            driveStats.incorrect = (driveStats.incorrect || 0) + (localStats.incorrect || 0);
+            driveStats.timeouts = (driveStats.timeouts || 0) + (localStats.timeouts || 0);
+            
+            // Recalculate average response time weighted by attempts
+            var driveAttempts = (driveStats.shown || 0);
+            var localAttempts = (localStats.shown || 0);
+            var totalAttempts = driveAttempts + localAttempts;
+            if (totalAttempts > 0) {
+              var driveAvg = driveStats.avgMs || 0;
+              var localAvg = localStats.avgMs || 0;
+              driveStats.avgMs = Math.round(
+                ((driveAvg * driveAttempts) + (localAvg * localAttempts)) / totalAttempts
+              );
+            }
+            
+            // Merge recent attempts - keep most recent 12
+            driveStats.recent = (driveStats.recent || []).concat(localStats.recent || []);
+            driveStats.recent = driveStats.recent.sort(function(a, b) { 
+              return (b.at || 0) - (a.at || 0); 
+            }).slice(0, 12);
+            
+            // Use the most recent timestamp
+            if ((localStats.lastSeenTs || 0) > (driveStats.lastSeenTs || 0)) {
+              driveStats.lastSeen = localStats.lastSeen;
+              driveStats.lastSeenTs = localStats.lastSeenTs;
+            }
+          }
+        }
+      }
+      
+      // For session-level stats, take the higher values
+      merged.sessionsCompleted = Math.max(
+        (merged.sessionsCompleted || 0),
+        (localProgress.sessionsCompleted || 0)
+      );
+      merged.allTimeBestStreak = Math.max(
+        (merged.allTimeBestStreak || 0),
+        (localProgress.allTimeBestStreak || 0)
+      );
+      
+      // Merge session history - deduplicate by session number and keep newest
+      var sessionMap = {};
+      (merged.sessionHistory || []).forEach(function(s) {
+        sessionMap[s.session] = s;
+      });
+      (localProgress.sessionHistory || []).forEach(function(s) {
+        if (!sessionMap[s.session] || (s.at && (!sessionMap[s.session].at || s.at > sessionMap[s.session].at))) {
+          sessionMap[s.session] = s;
+        }
+      });
+      merged.sessionHistory = Object.keys(sessionMap).map(function(k) { 
+        return sessionMap[k]; 
+      }).sort(function(a, b) { 
+        return (a.session || 0) - (b.session || 0); 
+      });
+      
+      // Table progression - take the higher table
+      merged.currentTable = Math.max(
+        (merged.currentTable || STARTING_TABLE),
+        (localProgress.currentTable || STARTING_TABLE)
+      );
+      
+      // Always use the most recent update timestamp
+      if ((localProgress.updatedAt || '0') > (merged.updatedAt || '0')) {
+        merged.updatedAt = localProgress.updatedAt;
+      }
+      
+      return merged;
+    }
+
     function loadProgressFromDrive() {
       if (!state.googleUser || !driveAccessToken) return;
       showSyncStatus('&#8635; Loading...', false);
@@ -2352,13 +2461,10 @@
         var uid = STORAGE_KEY + state.googleUser.sub;
         var localRaw = localStorage.getItem(uid);
         var localProgress = localRaw ? JSON.parse(localRaw) : null;
-        var localCount = localProgress ? (localProgress.sessionsCompleted || 0) : 0;
-        var driveCount = driveProgress.sessionsCompleted || 0;
-        var localUpdated = localProgress && localProgress.updatedAt ? Date.parse(localProgress.updatedAt) : 0;
-        var driveUpdated = driveProgress.updatedAt ? Date.parse(driveProgress.updatedAt) : 0;
-        if (!localProgress || driveCount > localCount || (driveCount === localCount && driveUpdated >= localUpdated)) {
-          localStorage.setItem(uid, JSON.stringify(driveProgress));
-        }
+        
+        // Use smart merge instead of simple comparison
+        var mergedProgress = smartMergeProgress(driveProgress, localProgress);
+        localStorage.setItem(uid, JSON.stringify(mergedProgress));
         hideSyncStatus();
         localProgressDirty = false;
         renderProgressGrid();
@@ -2383,6 +2489,28 @@
       }
     }
 
+    // ═══════════════════════════ PERIODIC SYNC ═══════════════════════════
+    var syncCheckInterval = null;
+    var SYNC_CHECK_INTERVAL_MS = 8000; // Check every 8 seconds during active practice
+    
+    function startPeriodicSync() {
+      if (syncCheckInterval) return; // Already running
+      if (!state.googleUser || !driveAccessToken) return;
+      syncCheckInterval = setInterval(function() {
+        if (state.googleUser && driveAccessToken && !round) {
+          // Only sync when NOT actively in a round to avoid UI jank
+          getOrRefreshDriveToken('periodic', loadProgressFromDrive, false);
+        }
+      }, SYNC_CHECK_INTERVAL_MS);
+    }
+    
+    function stopPeriodicSync() {
+      if (syncCheckInterval) {
+        clearInterval(syncCheckInterval);
+        syncCheckInterval = null;
+      }
+    }
+
     function init() {
       cacheDom();
       initTheme();
@@ -2400,6 +2528,9 @@
         }
       } catch (e) {}
 
+      // Initialize Google Sign-In UI (but don't prompt yet)
+      initGoogleSignIn();
+      
       // If we already know the user, restore Drive token from storage and pull latest data
       if (state.googleUser) {
         renderAuthUI();
@@ -2408,14 +2539,14 @@
           driveAccessToken = storedToken;
           initDriveTokenClient();           // ready for future refreshes
           loadProgressFromDrive();          // PULL latest from Drive immediately
+          startPeriodicSync();              // Resume periodic sync
         } else {
           initDriveTokenClient();
           getOrRefreshDriveToken('load', loadProgressFromDrive, false);
         }
+      } else {
+        renderAuthUI();
       }
-
-      initGoogleSignIn();
-      renderAuthUI();
     }
 
     init();
@@ -2430,9 +2561,11 @@
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'hidden' && state.googleUser && driveAccessToken && !syncPending) {
         syncProgressToDrive();
+        stopPeriodicSync();
       }
-      // Optional: when user returns to the tab, refresh from Drive to catch other-device changes
+      // When user returns to the tab, ALWAYS refresh from Drive
       if (document.visibilityState === 'visible' && state.googleUser) {
+        startPeriodicSync();
         getOrRefreshDriveToken('refresh', loadProgressFromDrive, false);
       }
     });
