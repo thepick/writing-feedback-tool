@@ -4473,10 +4473,25 @@ function downloadAndMergeDuplicateSettings(files, localSettings) {
 }
 
 // ── WFT Sync Engine V2 settings merge and sync ──
+function getWftStudentName(student) {
+    if (student == null) return "";
+    if (typeof student === "string") return String(student).trim();
+    if (typeof student === "object" && student.name != null) return String(student.name).trim();
+    return String(student).trim();
+}
+
 function normalizeStudentKey(student) {
+    var name;
+
     if (!student) return "";
-    if (student.id) return "id:" + String(student.id);
-    if (student.name) return "name:" + String(student.name).trim().toLowerCase();
+
+    if (typeof student === "object" && student.id) {
+        return "id:" + String(student.id);
+    }
+
+    name = getWftStudentName(student);
+    if (name) return "name:" + name.toLowerCase();
+
     return "";
 }
 
@@ -4487,22 +4502,18 @@ function mergeWftStudents(localStudents, cloudStudents) {
     var i;
     var key;
     var student;
-    var field;
+    var name;
 
     for (i = 0; i < all.length; i += 1) {
         student = all[i];
+        name = getWftStudentName(student);
         key = normalizeStudentKey(student);
-        if (!key) continue;
+        if (!key || !name) continue;
 
-        if (!byKey[key]) {
-            byKey[key] = cloneWftJson(student);
-        } else {
-            for (field in student) {
-                if (Object.prototype.hasOwnProperty.call(student, field)) {
-                    byKey[key][field] = student[field];
-                }
-            }
-        }
+        // Keep the roster shape used by the rest of the app: an array of name strings.
+        // Cloud entries are processed first, then local entries, so a just-added local
+        // name is preserved and its casing wins during an in-flight Drive pull.
+        byKey[key] = name;
     }
 
     for (key in byKey) {
@@ -4511,6 +4522,7 @@ function mergeWftStudents(localStudents, cloudStudents) {
         }
     }
 
+    result.sort(function(a, b) { return a.localeCompare(b); });
     return result;
 }
 
