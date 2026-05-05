@@ -5256,11 +5256,32 @@ function applyLoadedSettings(settings) {
         document.getElementById("assessScriptQuality").checked = settings.assessScriptQuality;
     }
     if (settings.students && Array.isArray(settings.students)) {
-        students = settings.students;
-        saveStudents();
+        var incomingStudents = cloneWftJson(settings.students);
+        var localStudents = Array.isArray(students) ? cloneWftJson(students) : [];
+        var mergedStudents = mergeWftStudents(localStudents, incomingStudents);
+        var incomingHash = getSettingsFingerprint({ students: incomingStudents });
+        var mergedHash = getSettingsFingerprint({ students: mergedStudents });
+        var previousSuppress = wftSuppressDirtyMarks;
+
+        students = mergedStudents;
+
+        try {
+            wftSuppressDirtyMarks = true;
+            saveStudents();
+        } catch (e) {
+            console.warn("[WFT Sync] Could not save merged roster locally:", e);
+        } finally {
+            wftSuppressDirtyMarks = previousSuppress;
+        }
+
         renderStudentList();
         populateStudentDropdown();
         refreshPortfolioDropdown();
+
+        if (!previousSuppress && incomingHash !== mergedHash) {
+            markWftSettingsDirty("roster-merge-preserved-local");
+            scheduleWftCloudSync("roster-merge-preserved-local");
+        }
     }
     refreshScoreWeightingDescription();
 }
