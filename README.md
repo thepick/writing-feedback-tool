@@ -18,8 +18,6 @@ Before using the tool, you will need:
 - An OpenRouter API key
 - A static host such as GitHub Pages
 
-Google Sign-In and Drive syncing are already configured in the code. Teachers do not need to enter a Google OAuth Client ID in Settings.
-
 ## Setup
 
 ### 1. OpenRouter API key
@@ -45,7 +43,7 @@ Notes:
 
 ### 2. Google Sign-In, grading records, and portfolios
 
-Google Sign-In is used for optional Google Drive syncing. Teachers do not need to enter a Google OAuth Client ID in Settings because Google Sign-In is already configured in the tool.
+Google Sign-In is used for optional Google Drive syncing.
 
 When Google Drive syncing is used, the tool can help save and organize student writing records over time. This makes it easier to review progress, compare earlier and later writing, and keep portfolio evidence in one place.
 
@@ -88,14 +86,6 @@ If you do not sign in with Google, the tool can still be used for writing analys
 
 This version is intended to work with the included Google Sign-In configuration.
 
-For the current GitHub Pages setup, the OAuth client should allow:
-
-- Authorized JavaScript origins:
-  - `https://thepick.github.io`
-
-- Authorized redirect URIs:
-  - `https://thepick.github.io/writing-feedback-tool`
-
 If the tool is hosted somewhere else, the built-in Google Sign-In configuration may not work unless that new deployed URL is also added to the OAuth client's authorized origins and redirect URIs in Google Cloud Console.
 
 ## GitHub Pages notes
@@ -117,9 +107,7 @@ The Settings panel includes:
 - AI model selection
 - Grammar strictness
 - Target word count
-- Script quality options
-
-The Settings panel no longer includes a Google OAuth Client ID field.
+- The option to assess script quality
 
 Important:
 
@@ -149,8 +137,6 @@ Check the following:
 - The required Google APIs are enabled
 - Pop-ups or redirects are not being blocked by the browser
 - You are using the updated version of the tool with Google Sign-In configured in the code
-
-Teachers should not look for a Google OAuth Client ID field in Settings. That field has been removed.
 
 ### Google Drive sync does not work
 
