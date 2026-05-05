@@ -4554,6 +4554,8 @@ function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
 }
 
 function saveSettingsLocalOnly(settings, reason) {
+    var previousSuppress = wftSuppressDirtyMarks;
+
     try {
         var existing = {};
         var raw = localStorage.getItem("wft_settings");
@@ -4566,6 +4568,8 @@ function saveSettingsLocalOnly(settings, reason) {
             merged.apiKey = existing.apiKey;
         }
 
+        wftSuppressDirtyMarks = true;
+
         if (typeof applyLoadedSettings === "function") {
             applyLoadedSettings(merged);
         }
@@ -4574,6 +4578,8 @@ function saveSettingsLocalOnly(settings, reason) {
         refreshApiKeyRuntimeValue();
     } catch (e2) {
         console.warn("[WFT Sync] Could not save merged settings locally:", e2);
+    } finally {
+        wftSuppressDirtyMarks = previousSuppress;
     }
 }
 
@@ -4614,6 +4620,18 @@ function syncWftSettingsIfNeeded(reason) {
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudSettings) {
                     cloudHash = getSettingsFingerprint(cloudSettings || {});
                     merged = mergeWftSettings(mergedFromDuplicates || localSettings, cloudSettings || {}, !!hadPending);
+
+                    // If the roster/settings changed while this Drive read was in flight,
+                    // refresh the local snapshot before applying anything from the cloud.
+                    // This prevents an older cloud copy from briefly overwriting a just-added student.
+                    if (wftSyncState.localSettingsCounter !== counterSnapshot) {
+                        localSettings = getLocalSettingsSnapshot();
+                        localHash = getSettingsFingerprint(localSettings);
+                        counterSnapshot = wftSyncState.localSettingsCounter;
+                        hadPending = true;
+                        merged = mergeWftSettings(localSettings, merged, true);
+                    }
+
                     mergedHash = getSettingsFingerprint(merged);
 
                     if (mergedHash !== localHash) {
@@ -6124,9 +6142,11 @@ function loadStudents() {
 
 function saveStudents() {
     localStorage.setItem("wft_students", JSON.stringify(students));
-    // ── WFT Sync V2: roster change marks settings dirty ──
-    markWftSettingsDirty("roster-change");
-    scheduleWftCloudSync("roster-change");
+    // ── WFT Sync V2: roster change marks settings dirty unless we are applying cloud data locally ──
+    if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks) {
+        markWftSettingsDirty("roster-change");
+        scheduleWftCloudSync("roster-change");
+    }
 }
 
 function switchTab(tab) {
