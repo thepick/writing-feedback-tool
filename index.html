@@ -3176,7 +3176,7 @@ function saveSettingsToLocalStorage() {
         localStorage.setItem('wft_settings', JSON.stringify(settings));
     } catch(e) {}
     // ── WFT Sync V2: mark settings dirty for background sync ──
-    if (WFT_SYNC_ENGINE_V2) {
+    if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks) {
         markWftSettingsDirty("settings-change");
         scheduleWftCloudSync("settings-change");
     }
@@ -3542,6 +3542,7 @@ var WFT_SYNC_DEBOUNCE_MS = 2500;
 var WFT_POLL_INTERVAL_MS = 60000;
 var WFT_SAVE_FILE_TIMEOUT_MS = 30000;
 var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session";
+var wftSuppressDirtyMarks = false;
 
 function wftSyncLog() {
     if (!WFT_SYNC_DEBUG) return;
@@ -3763,6 +3764,7 @@ function showSignedOutState() {
     googleUser = null;
     driveAccessToken = null;
     driveFolderId = null;
+    resetWftSyncStateAfterSignOut();
     var signInBtn = document.getElementById("googleSignInBtn");
     var userInfo = document.getElementById("googleUserInfo");
     var signInBtnHeader = document.getElementById("googleSignInBtnHeader");
@@ -3893,6 +3895,11 @@ function showSignedInState(info) {
 
 // ── WFT Sync V2: reset sync state on sign-out ──
 function resetWftSyncStateAfterSignOut() {
+    if (wftSyncState.syncDebounceTimer) {
+        clearTimeout(wftSyncState.syncDebounceTimer);
+        wftSyncState.syncDebounceTimer = null;
+    }
+    stopWftSyncPolling();
     wftSyncState.signedIn = false;
     wftSyncState.accessToken = null;
     wftSyncState.tokenExpiresAt = 0;
@@ -3906,6 +3913,13 @@ function resetWftSyncStateAfterSignOut() {
     wftSyncState.pendingSettingsPush = false;
     wftSyncState.pendingPortfolioPush = false;
     wftSyncState.needsSyncAfterCurrent = false;
+    wftSyncState.lastSyncedSettingsHash = "";
+    wftSyncState.lastSyncedPortfolioHash = "";
+    wftSyncState.localSettingsCounter = 0;
+    wftSyncState.localPortfolioCounter = 0;
+    wftSyncState.lastSyncedSettingsCounter = 0;
+    wftSyncState.lastSyncedPortfolioCounter = 0;
+    wftSyncState.lastPollAt = 0;
     clearWftSyncBlockState();
 }
 
@@ -3922,7 +3936,6 @@ function handleGoogleSignOut() {
         clearWftTokenSession();
         stopDriveAutoSync();
         stopWftSyncPolling();
-        resetWftSyncStateAfterSignOut();
         showSignedOutState();
     }
 
@@ -4098,17 +4111,24 @@ function saveFileToDrive(filename, content, mimeType, callback) {
 
 // ── WFT Sync Engine V2 Promise wrappers ──
 function ensureDriveFolderPromise() {
+    syncStateFromLegacyGoogleGlobals();
     if (driveFolderId) {
         wftSyncState.folderId = driveFolderId;
         return Promise.resolve(driveFolderId);
     }
 
-    return wftDriveFetch(
-        "https://www.googleapis.com/drive/v3/files?q=name%3D%27"
-        + encodeURIComponent(DRIVE_FOLDER_NAME)
-        + "%27+and+mimeType%3D%27application%2Fvnd.google-apps.folder%27+and+trashed%3Dfalse&fields=files(id,name)"
-    ).then(function (data) {
-        if (data && data.files && data.files.length > 0) {
+    var query = "name='" + escapeDriveQueryValue(DRIVE_FOLDER_NAME) + "'"
+        + " and mimeType='application/vnd.google-apps.folder'"
+        + " and trashed=false";
+    var searchUrl = "https://www.googleapis.com/drive/v3/files"
+        + "?q=" + encodeURIComponent(query)
+        + "&fields=files(id,name,modifiedTime)"
+        + "&orderBy=modifiedTime desc";
+
+    return wftDriveFetch(searchUrl).then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        if (data && data.files && data.files.length) {
             driveFolderId = data.files[0].id;
             wftSyncState.folderId = driveFolderId;
             return driveFolderId;
@@ -4121,16 +4141,19 @@ function ensureDriveFolderPromise() {
                 name: DRIVE_FOLDER_NAME,
                 mimeType: "application/vnd.google-apps.folder"
             })
-        }).then(function (folder) {
+        }).then(function(createResponse) {
+            return createResponse.json();
+        }).then(function(folder) {
+            if (!folder || !folder.id) {
+                throw new Error("NO_DRIVE_FOLDER");
+            }
             driveFolderId = folder.id;
-            wftSyncState.folderId = driveFolderId;
-            return driveFolderId;
+            wftSyncState.folderId = folder.id;
+            return folder.id;
         });
     });
 }
 
-// Temporary bridge: wraps old callback-based saveFileToDrive with timeout.
-// TODO: Replace with direct wftDriveFetch upload in a follow-up patch.
 function saveFileToDrivePromise(filename, content, mimeType) {
     return new Promise(function (resolve, reject) {
         var settled = false;
@@ -4212,6 +4235,8 @@ function normalizeSettingsForFingerprint(settings) {
     delete copy.lastSyncStatus;
     delete copy.syncMeta;
     delete copy.uiState;
+    delete copy.updatedAt;
+    delete copy.apiKey;
 
     return copy;
 }
@@ -4222,6 +4247,7 @@ function normalizePortfolioForFingerprint(portfolio) {
     delete copy.lastSyncedAt;
     delete copy.lastSyncStatus;
     delete copy.syncMeta;
+    delete copy.uiState;
     delete copy.updatedAt;
     delete copy.__syncMeta;
 
@@ -4438,7 +4464,7 @@ function downloadAndMergeDuplicateSettings(files, localSettings) {
     files.forEach(function (file) {
         chain = chain.then(function (current) {
             return downloadWftJsonFilePromise(file.id).then(function (data) {
-                return mergeWftSettings(current, data || {});
+                return mergeWftSettings(current, data || {}, true);
             });
         });
     });
@@ -4491,17 +4517,30 @@ function mergeWftStudents(localStudents, cloudStudents) {
 function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
     var localCopy = cloneWftJson(localSettings || {});
     var cloudCopy = cloneWftJson(cloudSettings || {});
-
-    // When preferLocal is true, start from cloud and overlay local (dirty local wins).
-    // When false, start from cloud and only overlay local fields that don't exist in cloud
-    // (cloud wins for shared keys — good for cross-device pull).
-    var merged = cloudCopy || {};
+    var merged = {};
     var key;
 
-    for (key in localCopy) {
-        if (!Object.prototype.hasOwnProperty.call(localCopy, key)) continue;
-        if (preferLocal || !(key in merged) || merged[key] === undefined || merged[key] === null) {
-            merged[key] = localCopy[key];
+    if (preferLocal) {
+        for (key in cloudCopy) {
+            if (Object.prototype.hasOwnProperty.call(cloudCopy, key)) {
+                merged[key] = cloudCopy[key];
+            }
+        }
+        for (key in localCopy) {
+            if (Object.prototype.hasOwnProperty.call(localCopy, key)) {
+                merged[key] = localCopy[key];
+            }
+        }
+    } else {
+        for (key in localCopy) {
+            if (Object.prototype.hasOwnProperty.call(localCopy, key)) {
+                merged[key] = localCopy[key];
+            }
+        }
+        for (key in cloudCopy) {
+            if (Object.prototype.hasOwnProperty.call(cloudCopy, key)) {
+                merged[key] = cloudCopy[key];
+            }
         }
     }
 
@@ -4509,32 +4548,32 @@ function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
         merged.students = mergeWftStudents(localCopy.students, cloudCopy.students);
     }
 
-    // DO NOT add root-level metadata (updatedAt) to settings — it becomes a spurious key
+    // Never upload apiKey to Drive — it is a per-device credential
+    delete merged.apiKey;
     return merged;
 }
 
 function saveSettingsLocalOnly(settings, reason) {
     try {
-        // Preserve existing local apiKey if cloud settings don't include one
         var existing = {};
-        try {
-            var raw = localStorage.getItem("wft_settings");
-            if (raw) existing = JSON.parse(raw);
-        } catch (e) { }
+        var raw = localStorage.getItem("wft_settings");
+        if (raw) {
+            try { existing = JSON.parse(raw) || {}; } catch (e) { existing = {}; }
+        }
 
-        var merged = settings || {};
+        var merged = cloneWftJson(settings || {});
         if (existing.apiKey && !merged.apiKey) {
             merged.apiKey = existing.apiKey;
         }
 
-        // Use WFT's existing applyLoadedSettings to apply to UI
         if (typeof applyLoadedSettings === "function") {
             applyLoadedSettings(merged);
         }
-        // Also persist locally
-        localStorage.setItem("wft_settings", JSON.stringify(merged));
-    } catch (e) {
-        console.warn("[WFT Sync] Could not save merged settings locally:", e);
+
+        localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
+        refreshApiKeyRuntimeValue();
+    } catch (e2) {
+        console.warn("[WFT Sync] Could not save merged settings locally:", e2);
     }
 }
 
@@ -4970,13 +5009,16 @@ function stopWftSyncPolling() {
 function saveWftLocalSnapshotsBeforeHide() {
     try {
         if (typeof saveSettingsToLocalStorage === "function") {
+            wftSuppressDirtyMarks = true;
             saveSettingsToLocalStorage();
+            wftSuppressDirtyMarks = false;
         }
-    } catch (e) { }
+    } catch (e) {
+        wftSuppressDirtyMarks = false;
+    }
 
     try {
-        if (typeof savePortfolioData === "function") {
-            // Save locally without Drive upload
+        if (typeof getPortfolioData === "function") {
             var portfolio = getPortfolioData();
             localStorage.setItem("wft_portfolio", JSON.stringify(portfolio || {}));
         }
@@ -4986,15 +5028,21 @@ function saveWftLocalSnapshotsBeforeHide() {
 function initWftSyncLifecycleHandlers() {
     window.addEventListener("online", function () {
         clearWftSyncBlockState();
+        if (!WFT_SYNC_ENGINE_V2) return;
+        syncStateFromLegacyGoogleGlobals();
+        if (!wftSyncState.signedIn && !driveAccessToken) return;
         setDriveSyncStatus("syncing", "Back online - syncing...");
         syncWftNow("online", { immediate: false });
     });
 
     window.addEventListener("offline", function () {
-        setDriveSyncStatus("error", "Offline - will sync later");
+        if (WFT_SYNC_ENGINE_V2 && (wftSyncState.signedIn || driveAccessToken)) {
+            setDriveSyncStatus("error", "Offline - will sync later");
+        }
     });
 
     document.addEventListener("visibilitychange", function () {
+        if (!WFT_SYNC_ENGINE_V2) return;
         if (document.visibilityState === "hidden") {
             saveWftLocalSnapshotsBeforeHide();
             return;
@@ -5006,7 +5054,9 @@ function initWftSyncLifecycleHandlers() {
     });
 
     window.addEventListener("beforeunload", function () {
-        saveWftLocalSnapshotsBeforeHide();
+        if (WFT_SYNC_ENGINE_V2) {
+            saveWftLocalSnapshotsBeforeHide();
+        }
     });
 }
 
@@ -5227,20 +5277,19 @@ function stopDriveAutoSync() {
 /* --- Student Portfolio Data --- */
 
 function normalizePortfolioData(portfolio) {
-    var normalized = portfolio && typeof portfolio === 'object' ? portfolio : {};
-    Object.keys(normalized).forEach(function(studentName) {
-        // Skip sync metadata keys — they are not students
-        if (studentName === '__syncMeta' || studentName === 'updatedAt' || studentName === 'lastSyncedAt' || studentName === 'lastSyncStatus' || studentName === 'syncMeta') {
-            delete normalized[studentName];
+    var source = portfolio && typeof portfolio === 'object' ? portfolio : {};
+    var normalized = {};
+    Object.keys(source).forEach(function(studentName) {
+        if (studentName === 'updatedAt' || studentName === '__syncMeta' || studentName === 'syncMeta' || studentName === 'lastSyncedAt' || studentName === 'lastSyncStatus') {
             return;
         }
-        var studentData = normalized[studentName];
+        var studentData = source[studentName];
         if (!studentData || !Array.isArray(studentData.sessions)) {
             normalized[studentName] = { sessions: [] };
             return;
         }
-        studentData.sessions = studentData.sessions.map(function(session, index) {
-            var safe = session && typeof session === 'object' ? session : {};
+        normalized[studentName] = { sessions: studentData.sessions.map(function(session, index) {
+            var safe = session && typeof session === 'object' ? cloneWftJson(session) : {};
             safe.id = safe.id || ('sess_' + studentName.replace(/\s+/g, '_') + '_' + index + '_' + Date.now());
             safe.date = safe.date || (safe.createdAt ? new Date(safe.createdAt).toLocaleDateString('en-GB') : 'Unknown date');
             safe.title = safe.title || 'Untitled';
@@ -5249,12 +5298,13 @@ function normalizePortfolioData(portfolio) {
             safe.images = Array.isArray(safe.images) ? safe.images : [];
             for (var i = 0; i < safe.images.length; i++) {
                 if (safe.images[i]) {
+                    safe.images[i] = cloneWftJson(safe.images[i]);
                     delete safe.images[i].extractedText;
                     safe.images[i].pendingDriveUpload = !safe.images[i].driveFileId;
                 }
             }
             return safe;
-        });
+        }) };
     });
     return normalized;
 }
@@ -5278,6 +5328,7 @@ function savePortfolioData(data) {
 }
 
 function loadPortfolioFromDrive() {
+    if (WFT_SYNC_ENGINE_V2) return;
     if (!driveAccessToken) return;
     readJsonFileFromDrive('wft-portfolio.json', function(data) {
         if (!data) return;
@@ -5460,7 +5511,10 @@ function syncAllToDrive(callback) {
         markWftSettingsDirty("sync-all");
         markWftPortfolioDirty("sync-all");
         syncPendingPortfolioMedia(function() {
-            savePortfolioData(getPortfolioData());
+            try {
+                var normalized = normalizePortfolioData(getPortfolioData());
+                localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
+            } catch (e) { }
             flushWftCloudSyncNow("sync-all").then(function(result) {
                 if (callback) callback(!!result);
             });
