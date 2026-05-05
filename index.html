@@ -3010,18 +3010,6 @@
             <button type="button" class="secondary-btn settings-inline-btn" id="toggleApiKeyBtn">Show API Key</button>
             <div class="settings-help-text">This key is saved in this browser only so each teacher can use their own key without editing the code.</div>
 
-            <label for="googleClientIdInput">Google OAuth Client ID</label>
-            <input
-              id="googleClientIdInput"
-              type="text"
-              placeholder="Paste your Google OAuth Client ID here"
-              autocomplete="off"
-            />
-            <div class="settings-help-text">
-              Get this from Google Cloud Console &rsaquo; APIs &amp; Services
-              &rsaquo; Credentials &rsaquo; OAuth 2.0 Client IDs (Web
-              application type). Saved in this browser only.
-            </div>
 
             <label for="modelSelect">AI Model</label>
             <select id="modelSelect">
@@ -3110,14 +3098,12 @@ function saveSettingsToLocalStorage() {
     try {
         var settings = {
             apiKey: getApiKeyInputValue(),
-            googleClientId: (document.getElementById('googleClientIdInput') || {}).value || '',
             model: (document.getElementById('modelSelect') || {}).value || '',
             targetWordCount: (document.getElementById('targetWordCount') || {}).value || '200',
             useWordCountTarget: document.getElementById('useWordCountTarget') ? document.getElementById('useWordCountTarget').checked : true,
             grammarStrictness: getGrammarStrictness(),
             assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false
         };
-        GOOGLE_CLIENT_ID = String(settings.googleClientId || '').trim();
         refreshApiKeyRuntimeValue();
         localStorage.setItem('wft_settings', JSON.stringify(settings));
     } catch(e) {}
@@ -3131,10 +3117,6 @@ function loadSettingsFromLocalStorage() {
             if (document.getElementById('apiKeyInput')) {
                 document.getElementById('apiKeyInput').value = s.apiKey || '';
             }
-            if (document.getElementById('googleClientIdInput')) {
-                document.getElementById('googleClientIdInput').value = s.googleClientId || '';
-            }
-            GOOGLE_CLIENT_ID = String(s.googleClientId || '').trim();
             if (s.model && document.getElementById('modelSelect')) {
                 document.getElementById('modelSelect').value = s.model;
             }
@@ -3184,6 +3166,15 @@ function shouldAssessNeatness() {
     return toggleOn && hasPhotos;
 }
 
+// Check if the neatness weighting note should be displayed in the report preview
+function shouldShowNeatnessWeighting() {
+    var checkbox = document.getElementById("assessScriptQuality");
+    if (checkbox) return checkbox.checked === true;
+
+    var settings = getRawSettings();
+    return settings.assessScriptQuality === true;
+}
+
 // Script quality toggle is always visible in settings
 function updateScriptQualityToggleVisibility() {
     var row = document.getElementById('scriptQualityRow');
@@ -3214,7 +3205,7 @@ function getActiveCategoryKeys() {
 function getCategoryWeight(key) {
     // When Neatness is assessed (5%), the other six categories must each shrink proportionally
     // so the total stays at 100% (0.95 / 6 ≈ 0.15833 per category)
-    var neatnessActive = (key === "Neatness" && shouldAssessNeatness());
+    var neatnessActive = shouldAssessNeatness();
     var nonNeatScale = neatnessActive ? 0.95 : 1.0;
 
     var baseWeights = {
@@ -3448,10 +3439,10 @@ Example:
  *   - Google Drive API
  *   - Google People API (or Google OAuth2 API for userinfo)
  *
- * The Google OAuth Client ID must be entered by the user
- * in the Settings panel. It is not hardcoded in this file.
+ * The Google OAuth Client ID is embedded below so users do not need
+ * to enter it in the Settings panel.
  */
-var GOOGLE_CLIENT_ID = "";
+var GOOGLE_CLIENT_ID = "546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com";
 var DRIVE_FOLDER_NAME = "WritingFeedbackTool";
 var GOOGLE_USER_CACHE_KEY = "wft_google_user";
 var DRIVE_TOKEN_CACHE_KEY = "wft_drive_access_token";
@@ -3560,11 +3551,7 @@ function requestDriveAccess(onSuccess, options) {
 
 function handleGoogleSignIn() {
     if (!GOOGLE_CLIENT_ID) {
-      alert(
-        "Please enter your Google OAuth Client ID in Settings " +
-        "before connecting to Google Drive."
-      );
-      openSettingsDrawer();
+      alert("Google OAuth Client ID is missing from the app configuration.");
       return;
     }
     requestDriveAccess();
@@ -3895,6 +3882,7 @@ function applyLoadedSettings(settings) {
         populateStudentDropdown();
         refreshPortfolioDropdown();
     }
+    refreshScoreWeightingDescription();
 }
 
 function saveSettingsToDrive() {
@@ -5171,9 +5159,9 @@ function updateScoreDisplay(data) {
     var statusData = data && data.sampleStatus ? data.sampleStatus : null;
     if (!overallScoreEl || !noteEl || !statusEl) return;
 
-    // Determine which weighting text to show based on whether neatness is assessed
+    // Determine which weighting text to show based on the neatness setting
     // Without neatness: 30+20+15+15+10+10=100. With neatness: Ideas 29, Org 19, Grammar 14, Flow 14, Word Choice 10, Spelling 9, Neatness 5 = 100.
-    var weightingText = shouldAssessNeatness()
+    var weightingText = shouldShowNeatnessWeighting()
         ? "Weighted by category importance: Ideas & Details (29%), Organization (19%), Grammar (14%), Flow (14%), Word Choice (10%), Spelling & Punctuation (9%), Neatness (5%)."
         : "Weighted by category importance: Ideas & Details (30%), Organization (20%), Grammar (15%), Flow (15%), Word Choice (10%), Spelling & Punctuation (10%).";
 
@@ -5191,6 +5179,10 @@ function updateScoreDisplay(data) {
         noteEl.textContent = weightingText;
     }
     statusEl.textContent = "Sample status: " + (statusData ? statusData.label + ". " + statusData.reason : "Scorable sample.");
+}
+
+function refreshScoreWeightingDescription() {
+    updateScoreDisplay(latestAnalysisData || null);
 }
 
 function renderMarkdownBold(s) {
@@ -7112,6 +7104,7 @@ async function handleSelectedImages(files) {
         syncSelectedImageState();
         updateSelectedImagePreview();
         syncUiState();
+        refreshScoreWeightingDescription();
         if (prepared.length === 1) {
             setOcrStatus("Image added. Review the queue, then click Extract Text for Analysis when you are ready.", "");
         } else {
@@ -7173,6 +7166,7 @@ function removeSelectedImageAt(index) {
     syncSelectedImageState();
     updateSelectedImagePreview();
     syncUiState();
+    refreshScoreWeightingDescription();
     if (selectedImages.length) {
         setOcrStatus(String(selectedImages.length) + ' images remain in the queue. They will be extracted in the order shown.', '');
     } else {
@@ -7192,6 +7186,7 @@ function moveSelectedImage(index, direction) {
     }
     syncSelectedImageState();
     updateSelectedImagePreview();
+    refreshScoreWeightingDescription();
     setOcrStatus('Queue order updated. Images will be extracted in the order shown.', '');
 }
 
@@ -7362,6 +7357,7 @@ function bindPreviewReorderHandlers() {
         previewDragIndex = -1;
         syncSelectedImageState();
         updateSelectedImagePreview();
+        refreshScoreWeightingDescription();
         setOcrStatus("Queue order updated. Images will be extracted in the order shown.", "");
     });
 }
@@ -7389,7 +7385,7 @@ function bindDesktopImageDrop() {
         });
     });
 
-    app.addEventListener("drop", function(event) {
+    app.addEventListener("drop", async function(event) {
         if (isPreviewReorderDrag(event)) {
             preventDragDefaults(event);
             setDropActiveState(false);
@@ -7404,7 +7400,8 @@ function bindDesktopImageDrop() {
         }
         var panel = document.getElementById("ocrPanel");
         if (panel) panel.open = true;
-        handleSelectedImages(files);
+        await handleSelectedImages(files);
+        refreshScoreWeightingDescription();
     });
 }
 
@@ -9090,6 +9087,7 @@ refreshApiKeyRuntimeValue();    // restore all saved settings including strictne
 loadStudents();
 renderStudentList();
 populateStudentDropdown();
+refreshScoreWeightingDescription();
 
 studentWriting.addEventListener("input", syncUiState);
 studentWriting.addEventListener("input", checkExpandBtnVisibility);
@@ -9107,17 +9105,17 @@ if (useWordCountTargetInput) {
     targetWordCountInput.disabled = !useWordCountTargetInput.checked;
 }
 modelSelect.addEventListener("change", function() { updateMeter(); saveSettingsToLocalStorage(); });
+var assessScriptQualityInput = document.getElementById("assessScriptQuality");
+if (assessScriptQualityInput) {
+    assessScriptQualityInput.addEventListener("change", function() {
+        saveSettingsToLocalStorage();
+        refreshScoreWeightingDescription();
+    });
+}
 var apiKeyInput = document.getElementById("apiKeyInput");
-var googleClientIdInput = document.getElementById("googleClientIdInput");
 var toggleApiKeyBtn = document.getElementById("toggleApiKeyBtn");
 if (apiKeyInput) {
     apiKeyInput.addEventListener("input", function() { refreshApiKeyRuntimeValue(); saveSettingsToLocalStorage(); });
-}
-if (googleClientIdInput) {
-    googleClientIdInput.addEventListener("input", function() {
-        GOOGLE_CLIENT_ID = String(googleClientIdInput.value || '').trim();
-        saveSettingsToLocalStorage();
-    });
 }
 if (toggleApiKeyBtn && apiKeyInput) {
     toggleApiKeyBtn.addEventListener("click", function() {
@@ -9140,10 +9138,12 @@ document.getElementById("uploadImageBtn").addEventListener("click", function() {
 });
 document.getElementById("cameraInput").addEventListener("change", async function(e) {
     await handleSelectedImages(Array.prototype.slice.call(e.target.files || []));
+    refreshScoreWeightingDescription();
     e.target.value = "";
 });
 document.getElementById("imageUploadInput").addEventListener("change", async function(e) {
     await handleSelectedImages(Array.prototype.slice.call(e.target.files || []));
+    refreshScoreWeightingDescription();
     e.target.value = "";
 });
 document.getElementById("extractTextBtn").addEventListener("click", extractTextFromSelectedImage);
