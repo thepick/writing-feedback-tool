@@ -3243,98 +3243,169 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
         ? selectedImages[0].originalDataUrl
         : imageDataUrl;
 
-    var prompt = `Look at the handwriting in this student writing sample and score it for neatness using the five sub-criteria below.
+    function parseNeatnessSubScore(label, responseText) {
+        var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5', 'i');
+        var m = responseText.match(rx);
+        if (!m) return null;
+        return /missing/i.test(m[1]) ? null : Number(m[1]);
+    }
 
-Score each sub-criterion using only these values: 10, 9, 8, 7, 6, 5, 4 (or "Missing" if you cannot tell from the image).
+    function calculateWeightedNeatnessFive(subScores) {
+        if (!subScores) return null;
+        var values = [
+            subScores.letterFormation,
+            subScores.spacing,
+            subScores.stayingOnLine,
+            subScores.sizeConsistency,
+            subScores.penControl
+        ];
+        for (var i = 0; i < values.length; i++) {
+            if (!isFinite(Number(values[i]))) return null;
+        }
+        return (Number(subScores.letterFormation) * 0.25) +
+               (Number(subScores.spacing) * 0.20) +
+               (Number(subScores.stayingOnLine) * 0.20) +
+               (Number(subScores.sizeConsistency) * 0.15) +
+               (Number(subScores.penControl) * 0.20);
+    }
 
-SUB-CRITERIA AND WEIGHTS:
-1. Letter Formation (25%) — Are the individual letters clearly shaped and easy to tell apart? Look for whether letters like "a/o", "n/m", "i/l" are distinct and properly formed.
-2. Spacing (20%) — Is there a clear gap between words? Are letters within each word not too cramped or too spread apart?
-3. Staying on the Line (20%) — Does the writing follow along the line without drifting up or sliding down across the page?
-4. Size Consistency (15%) — Do letters stay a similar size throughout? Are capital letters noticeably bigger than lowercase ones? Are tall letters (b, d, h) consistently taller than short ones (a, e, o)?
-5. Pen Control and Marks (20%) — Are the strokes steady and clear? Are there heavy cross-outs, smudges, or writing over writing that makes it harder to read?
+    function convertNeatnessFiveToTen(scoreFive) {
+        var n = Number(scoreFive);
+        if (!isFinite(n)) return null;
+        if (n < 1) n = 1;
+        if (n > 5) n = 5;
+        return Math.round(n) * 2;
+    }
 
-Once you have scored all five, calculate the final Neatness score using the weights above:
-Final = (LetterFormation × 0.25) + (Spacing × 0.20) + (StayingOnLine × 0.20) + (SizeConsistency × 0.15) + (PenControl × 0.20)
-Round the result to the nearest whole number. The final score must be one of: 10, 9, 8, 7, 6, 5, 4.
+    var prompt = `Look at the handwriting in this student writing sample and score the neatness of the writing using the exact 1-5 rubric below.
 
-IMPORTANT — Write in plain, friendly words that a 10–12 year old student will understand.
-Do NOT use technical handwriting terms like: baseline, alignment, legibility, ascender, descender, grapheme, letterform, or consistency of form.
-Instead use everyday words like: "your letters", "easy to read", "spaces between words", "staying on the line", "cross-outs", "messy marks", "shaky lines", etc.
+Score each sub-criterion using only these values: 5, 4, 3, 2, 1 (or "Missing" if you cannot tell from the image). Do not give a score based on effort, writing quality, spelling, punctuation, or story content. Only judge what is visible in the handwriting image.
+
+RUBRIC LEVELS:
+5 = Exceptional
+4 = Proficient
+3 = Developing
+2 = Emerging
+1 = Beginning
+
+SUB-CRITERIA, WEIGHTS, AND SCORE DESCRIPTORS:
+
+1. Letter Formation (25%)
+5 - All letters are formed correctly according to standard strokes.
+4 - 1-2 minor errors in formation; still very easy to read.
+3 - Several letters are formed incorrectly or are "lazy" (for example, o not closed).
+2 - Many letters are unrecognizable or formed with non-standard strokes.
+1 - Formation is illegible or letters are consistently malformed.
+
+2. Spacing (20%)
+5 - Uniform finger-space between words; letters within words are perfectly snug.
+4 - Spacing is mostly consistent with only a few crowded or wide spots.
+3 - Spacing is inconsistent; some words run together or have gaps.
+2 - Frequent crowding makes it difficult to tell where one word ends and the next begins.
+1 - No visible spacing between words or random, erratic gaps throughout.
+
+3. Staying on the Line (20%)
+5 - All letters sit perfectly on the writing line; tails such as g, p, and y cross exactly where they should.
+4 - Occasional floating or sinking in less than 10% of the text.
+3 - Letters frequently drift above or below the line, but the sentence is still linear.
+2 - Writing slants significantly or ignores the lines for most of the page.
+1 - Writing ignores lines entirely; text may be crooked or overlap other lines.
+
+4. Size Consistency (15%)
+5 - Capitals, tall letters such as t, l, and h, and short letters such as a, e, and n are perfectly proportioned.
+4 - Minor inconsistencies in size, but tall letters are clearly taller than short ones.
+3 - Size varies noticeably; some short letters are as tall as tall ones.
+2 - Letters change size mid-word; capitals are often the same size as lowercase letters.
+1 - Letter sizes are random and chaotic; no distinction between tall and short letters.
+
+5. Pen Control and Marks (20%)
+5 - Clean, crisp lines. No unnecessary smudges, stray marks, or heavy digging into the paper.
+4 - Very few stray marks; eraser marks are clean and not distracting.
+3 - Visible smudges or several scribble-outs instead of clean erasing.
+2 - Heavy pressure causes tearing or ghosting; many messy corrections or stray lines.
+1 - Page is messy with significant smudges, tears, or scribbles that obscure the text.
+
+After scoring the five sub-criteria, calculate the weighted final neatness score on a 1-5 scale:
+Final 1-5 = (Letter Formation x 0.25) + (Spacing x 0.20) + (Staying on the Line x 0.20) + (Size Consistency x 0.15) + (Pen Control and Marks x 0.20)
+Round the weighted 1-5 score to the nearest whole number, then convert it to the app's 10-point scale by multiplying by 2.
+Examples: 5/5 = 10/10, 4/5 = 8/10, 3/5 = 6/10, 2/5 = 4/10, 1/5 = 2/10.
+
+IMPORTANT - Write in plain, friendly words that a 10-12 year old student will understand.
+Avoid technical handwriting terms. Use everyday words like: "your letters", "easy to read", "spaces between words", "staying on the line", "cross-outs", "messy marks", "shaky lines", etc.
+If the photo is blurry, cropped, too dark, or does not show enough handwriting to score fairly, use "Missing" rather than guessing.
 
 Use exactly this format:
 **Sub-scores:**
-- Letter Formation: [score]/10
-- Spacing: [score]/10
-- Staying on the Line: [score]/10
-- Size Consistency: [score]/10
-- Pen Control and Marks: [score]/10
+- Letter Formation: [score]/5 - [level name]
+- Spacing: [score]/5 - [level name]
+- Staying on the Line: [score]/5 - [level name]
+- Size Consistency: [score]/5 - [level name]
+- Pen Control and Marks: [score]/5 - [level name]
 
 **Quick Rubric:**
-- Neatness: [final score]/10 - [one sentence describing the most noticeable thing you see in this student's handwriting overall]
+- Neatness: [converted final score]/10 ([rounded final score]/5 - [level name]) - [one sentence describing the most noticeable thing you see in this student's handwriting overall]
 
 **Neatness Growth Tip:** [one short, specific tip written directly to the student about the single most important thing to work on]
 
 Example:
 **Sub-scores:**
-- Letter Formation: 8/10
-- Spacing: 6/10
-- Staying on the Line: 9/10
-- Size Consistency: 7/10
-- Pen Control and Marks: 8/10
+- Letter Formation: 4/5 - Proficient
+- Spacing: 3/5 - Developing
+- Staying on the Line: 4/5 - Proficient
+- Size Consistency: 3/5 - Developing
+- Pen Control and Marks: 4/5 - Proficient
 
 **Quick Rubric:**
-- Neatness: 7/10 - Most of your letters are clear and easy to read, but some words run together without enough space between them.
-**Neatness Growth Tip:** Try leaving a finger-width gap between each word so they are easier to tell apart.`;
+- Neatness: 8/10 (4/5 - Proficient) - Most of your letters are easy to read, but some words need clearer spaces between them.
+**Neatness Growth Tip:** Try leaving a finger-width gap between each word so your writing is easier to read.`;
 
     try {
         var response = await callOpenRouterImage(model, prompt, originalImageUrl);
         var rubric = {};
 
-        // Parse the response — primary pattern expects: - Neatness: [score]/10 - [observation]
-        var match = response.match(/-\s*Neatness:\s*((?:10|9|8|7|6|5|4)|Missing)\s*\/10\s*-\s*([^\n]+)/i);
-        // Growth tip is on its own line regardless of which branch parses the score
+        // Parse the 1-5 sub-scores from the image rubric.
+        var subScores = {
+            letterFormation:  parseNeatnessSubScore('Letter Formation', response),
+            spacing:          parseNeatnessSubScore('Spacing', response),
+            stayingOnLine:    parseNeatnessSubScore('Staying on the Line', response),
+            sizeConsistency:  parseNeatnessSubScore('Size Consistency', response),
+            penControl:       parseNeatnessSubScore('Pen Control and Marks', response)
+        };
+
+        var weightedFive = calculateWeightedNeatnessFive(subScores);
+        var roundedFive = weightedFive != null ? Math.round(weightedFive) : null;
+        var computedTen = roundedFive != null ? convertNeatnessFiveToTen(roundedFive) : null;
+
+        // Parse the response - expected pattern: - Neatness: [score]/10 ([score]/5 - [level]) - [observation]
+        var match = response.match(/-\s*Neatness:\s*((?:10|8|6|4|2)|Missing)\s*\/10(?:\s*\([^)]*\))?\s*-\s*([^\n]+)/i);
         var growthTipMatch = response.match(/\*\*Neatness Growth Tip:\*\*\s*([^\n]+)/i);
         var parsedGrowthTip = growthTipMatch ? growthTipMatch[1].trim() : null;
 
-        // Parse sub-scores
-        function parseSubScore(label) {
-            var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:10|9|8|7|6|5|4)|Missing)\\s*\/10', 'i');
-            var m = response.match(rx);
-            if (!m) return null;
-            return /missing/i.test(m[1]) ? null : parseRubricScore(m[1]);
-        }
-        var subScores = {
-            letterFormation:  parseSubScore('Letter Formation'),
-            spacing:          parseSubScore('Spacing'),
-            stayingOnLine:    parseSubScore('Staying on the Line'),
-            sizeConsistency:  parseSubScore('Size Consistency'),
-            penControl:       parseSubScore('Pen Control and Marks')
-        };
-
         if (match) {
+            var parsedTen = /missing/i.test(match[1]) ? null : Number(match[1]);
             rubric = {
-                score: /missing/i.test(match[1]) ? null : parseRubricScore(match[1]),
+                score: computedTen != null ? computedTen : parsedTen,
                 reason: (match[2] || "").trim(),
                 growthTip: parsedGrowthTip,
-                subScores: subScores
+                subScores: subScores,
+                neatnessScoreFive: roundedFive,
+                neatnessWeightedFive: weightedFive
             };
         } else {
-            // Fallback: score present but observation wasn't in the expected format.
-            // Extract the AI's actual sentence rather than substituting a canned phrase.
-            var scoreMatch = response.match(/(?:10|9|8|7|6|5|4)\s*\/10/i);
-            if (scoreMatch) {
-                var score = parseRubricScore(scoreMatch[0]);
-                // Grab the sentence that contains the score — strip any bullet/numbering prefix
-                var sentenceMatch = response.match(/([^.\n]*(?:10|9|8|7|6|5|4)\s*\/10[^.\n]*\.?)/i);
+            // Fallback: score present but observation was not in the expected format.
+            var scoreMatch = response.match(/(?:10|8|6|4|2)\s*\/10/i);
+            if (scoreMatch || computedTen != null) {
+                var score = computedTen != null ? computedTen : Number(scoreMatch[0].match(/(?:10|8|6|4|2)/)[0]);
+                var sentenceMatch = response.match(/([^.\n]*(?:10|8|6|4|2)\s*\/10[^.\n]*\.?)/i);
                 var extractedReason = sentenceMatch ? sentenceMatch[0].replace(/^\s*[-*\d.]+\s*/, "").trim() : "";
-                // Only use the extracted sentence if it reads like genuine feedback (> 10 chars)
                 var reason = extractedReason.length > 10 ? extractedReason : null;
                 rubric = {
                     score: score,
                     reason: reason,
                     growthTip: parsedGrowthTip,
-                    subScores: subScores
+                    subScores: subScores,
+                    neatnessScoreFive: roundedFive,
+                    neatnessWeightedFive: weightedFive
                 };
             }
         }
@@ -4809,7 +4880,8 @@ var SCORE_MAP = {
     "7": 70,
     "6": 60,
     "5": 50,
-    "4": 40
+    "4": 40,
+    "2": 20
 };
 var CATEGORY_KEYS = [
     "Ideas & Details",
@@ -4938,9 +5010,31 @@ function getCategoryEligibility(statusData) {
     };
 }
 
+
 function getEvidenceLabel(score) {
     if (score == null || score === "") return "Missing";
     return String(score) + "/" + RUBRIC_MAX;
+}
+
+function getNeatnessLevelLabel(score) {
+    var n = Number(score);
+    if (n === 5) return "Exceptional";
+    if (n === 4) return "Proficient";
+    if (n === 3) return "Developing";
+    if (n === 2) return "Emerging";
+    if (n === 1) return "Beginning";
+    return "Missing";
+}
+
+function getNeatnessSubScorePill(score) {
+    var n = Number(score);
+    if (!isFinite(n)) return '<span class="assessment-score-pill score-missing">Missing</span>';
+    var converted = Math.max(2, Math.min(10, Math.round(n) * 2));
+    var cls = "score-4";
+    if (converted >= 9) cls = "score-10";
+    else if (converted >= 7) cls = "score-8";
+    else if (converted >= 5) cls = "score-6";
+    return '<span class="assessment-score-pill ' + cls + '">' + escapeHtml(String(n)) + '/5 - ' + escapeHtml(getNeatnessLevelLabel(n)) + '</span>';
 }
 
 function getEvidenceNote(category) {
@@ -7639,7 +7733,7 @@ function renderDetailedAssessment(detailed) {
                     var subLabel = subRows[si][0];
                     var subScore = subRows[si][1];
                     var subWeight = subRows[si][2];
-                    var subPill = subScore != null ? getAssessmentScorePill(subScore) : '<span class="assessment-score-pill score-missing">—</span>';
+                    var subPill = subScore != null ? getNeatnessSubScorePill(subScore) : '<span class="assessment-score-pill score-missing">Missing</span>';
                     html += '<tr><td>' + subLabel + '</td><td class="neatness-weight">' + subWeight + '</td><td>' + subPill + '</td></tr>';
                 }
                 html += '</tbody></table>';
