@@ -2442,6 +2442,93 @@
         .app-inner { padding: 0 10px 24px; }
         .app-header-left h1 { font-size: 1.4rem; }
 
+
+        /* Compact signed-in header layout on mobile.
+           Keeps the auth status, sync status, sign-out button, and settings button
+           on the same row instead of wrapping into tall empty space. */
+        .app-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 10px 8px;
+        }
+        .app-header-left {
+            grid-column: 1 / -1;
+            min-width: 0;
+        }
+        #googleAuthBarHeader {
+            grid-column: 1;
+            min-width: 0;
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        #googleUserInfoHeader {
+            width: 100%;
+            min-width: 0;
+            flex-wrap: nowrap !important;
+            gap: 7px !important;
+            align-items: center !important;
+        }
+        #googleUserAvatarHeader {
+            width: 28px !important;
+            height: 28px !important;
+            flex: 0 0 28px;
+        }
+        #googleUserInfoHeader .auth-status {
+            flex: 1 1 auto;
+            min-width: 0;
+            max-width: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+        #googleUserInfoHeader .auth-status strong {
+            display: inline;
+            white-space: nowrap;
+        }
+        #googleUserInfoHeader .drive-sync-status {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            font-size: 12px;
+            min-width: auto;
+        }
+        #googleUserInfoHeader .btn-google-signout {
+            flex: 0 0 auto;
+            min-height: 34px;
+            padding: 5px 9px;
+            font-size: 12px;
+            border-radius: 7px;
+            white-space: nowrap;
+        }
+        .settings-gear-btn {
+            grid-column: 2;
+            grid-row: 2;
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #googleSignInBtnHeader .btn-google-signin {
+            min-height: 40px;
+            padding: 8px 12px;
+        }
+        @media (max-width: 430px) {
+            #googleUserInfoHeader .auth-status {
+                font-size: 12px !important;
+            }
+            #googleUserInfoHeader .drive-sync-status {
+                font-size: 11px;
+            }
+            #googleUserInfoHeader .btn-google-signout {
+                padding: 5px 8px;
+            }
+        }
+
         button, .nav-tab, .diff-toggle-btn {
             min-height: 48px;
         }
