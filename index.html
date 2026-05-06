@@ -5856,15 +5856,44 @@ function getPortfolioData() {
     try { return normalizePortfolioData(JSON.parse(raw)); } catch (e) { return {}; }
 }
 
+function stripPortfolioImageDataUrls(data) {
+    var normalized = normalizePortfolioData(data || {});
+    Object.keys(normalized).forEach(function(studentName) {
+        var sessions = normalized[studentName] && normalized[studentName].sessions ? normalized[studentName].sessions : [];
+        sessions.forEach(function(session) {
+            if (!session || !Array.isArray(session.images)) return;
+            session.images.forEach(function(image) {
+                if (!image) return;
+                if (image.dataUrl) {
+                    image.dataUrl = '';
+                    image.dataUrlRemovedForStorage = true;
+                }
+                if (image.originalDataUrl) delete image.originalDataUrl;
+                if (image.extractedText) delete image.extractedText;
+            });
+        });
+    });
+    return normalized;
+}
+
 function savePortfolioData(data) {
     var normalized = normalizePortfolioData(data || {});
-    localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
+    var savedData = normalized;
+    try {
+        localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
+    } catch (e) {
+        // Large photo data URLs can exceed the browser's localStorage quota.
+        // Keep the portfolio session, scores, and notes by retrying without embedded image data.
+        console.warn('Portfolio localStorage save failed; retrying without embedded image data.', e);
+        savedData = stripPortfolioImageDataUrls(normalized);
+        localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
+    }
     // ── WFT Sync V2: use dirty flags + debounced sync instead of direct upload ──
     if (WFT_SYNC_ENGINE_V2) {
         markWftPortfolioDirty("portfolio-change");
         scheduleWftCloudSync("portfolio-change");
     } else if (driveAccessToken) {
-        saveFileToDrive('wft-portfolio.json', JSON.stringify(normalized, null, 2), 'application/json');
+        saveFileToDrive('wft-portfolio.json', JSON.stringify(savedData, null, 2), 'application/json');
     }
 }
 
@@ -6500,6 +6529,7 @@ function manualSaveToDrive() {
         committedPending = commitPendingPortfolioSync();
         wftSyncLog("[WFT Sync] manualSaveToDrive committed pending portfolio", committedPending);
     } catch (e) {
+        console.error('Portfolio commit failed before Drive sync:', e);
         manualSyncInProgress = false;
         setSyncButtonsBusy(false);
         setDriveSyncStatus('error', 'Portfolio sync failed');
@@ -6647,9 +6677,32 @@ function loadPendingPortfolioSyncFromStorage() {
     }
 }
 
+function stripPendingPortfolioImageDataUrls(pending) {
+    if (!pending || !pending.sessionData) return pending;
+    var cleaned = cloneWftJson(pending);
+    if (cleaned.sessionData && Array.isArray(cleaned.sessionData.images)) {
+        cleaned.sessionData.images.forEach(function(image) {
+            if (!image) return;
+            if (image.dataUrl) {
+                image.dataUrl = '';
+                image.dataUrlRemovedForStorage = true;
+            }
+            if (image.originalDataUrl) delete image.originalDataUrl;
+            if (image.extractedText) delete image.extractedText;
+        });
+    }
+    return cleaned;
+}
+
 function persistPendingPortfolioSync() {
     if (pendingPortfolioSync && pendingPortfolioSync.studentName && pendingPortfolioSync.sessionData) {
-        localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(pendingPortfolioSync));
+        try {
+            localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(pendingPortfolioSync));
+        } catch (e) {
+            console.warn('Pending portfolio save exceeded localStorage; saving without embedded image data.', e);
+            pendingPortfolioSync = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
+            localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(pendingPortfolioSync));
+        }
     } else {
         localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
     }
