@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v9 -->
+<!-- Writing Feedback Tool v10 -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -2811,16 +2811,19 @@
 
         <div class="student-portfolio-section" id="dataManagementSection">
             <h3 style="display:flex;align-items:center;">Data Management</h3>
-            <p class="helper-text">Archive the current school year, reset the active class, or clean up duplicate sync files after you have saved what you need.</p>
+            <p class="helper-text">Archive the current school year or reset the active class after you have saved what you need.</p>
             <div class="roster-controls" style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items:center;">
                 <button type="button" class="secondary-btn" onclick="archiveCurrentSchoolYear()">Archive Current School Year</button>
                 <button type="button" class="secondary-btn" onclick="resetCurrentClassData()">Reset Current Class</button>
-                <button type="button" class="secondary-btn" onclick="moveDuplicateSyncFilesToBackup()">Backup Duplicate Sync Files</button>
             </div>
             <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:#475569;">
                 <input type="checkbox" id="archiveIncludeImages">
                 Include available images/photos in archive exports. This can make the zip much larger.
             </label>
+            <div id="duplicateSyncMaintenance" style="margin-top:12px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;">
+                <div id="duplicateSyncStatus" class="helper-text" style="margin:0;" aria-live="polite">Google Drive sync file check will run after Drive connects.</div>
+                <button type="button" class="secondary-btn" id="duplicateSyncCleanupBtn" onclick="moveDuplicateSyncFilesToBackup()" style="display:none;margin-top:8px;">Move Older Duplicate Sync Files to Backup</button>
+            </div>
             <div id="archiveStatus" class="helper-text" style="margin-top:10px;min-height:20px;" aria-live="polite"></div>
         </div>
 
@@ -3395,7 +3398,7 @@
    │    • If multiple files with the same name exist in the app folder,      │
    │      the newest is chosen as canonical                                  │
    │    • All others are merged INTO the canonical copy before upload        │
-   │    • "Backup Duplicate Sync Files" action moves extras to subfolder     │
+   │    • Conditional duplicate cleanup action moves extras to subfolder     │
    │                                                                          │
    └──────────────────────────────────────────────────────────────────────────┘
                                       │
@@ -4312,6 +4315,7 @@ function showSignedOutState() {
     if (signInBtnHeader) signInBtnHeader.style.display = "flex";
     if (userInfoHeader) userInfoHeader.style.display = "none";
     setDriveSyncStatus("", "Not synced");
+    setDuplicateSyncMaintenanceStatus("Sign in with Google Drive to check for duplicate sync files.", 0, false);
 }
 
 function showDriveDisconnectedState(message) {
@@ -4408,6 +4412,7 @@ function showSignedInState(info) {
     var photoUrl = (info && (info.picture || info.photoURL)) ? (info.picture || info.photoURL) : "";
     var nameEl = document.getElementById("googleUserName");
     if (nameEl) nameEl.textContent = displayName;
+    setDuplicateSyncMaintenanceStatus("Checking for duplicate sync files after Drive connects...", 0, true);
     var nameElHeader = document.getElementById("googleUserNameHeader");
     if (nameElHeader) nameElHeader.textContent = displayName;
     var avatar = document.getElementById("googleUserAvatar");
@@ -5507,9 +5512,11 @@ function uploadWftJsonFilePromise(filename, data) {
 
 // ── WFT Sync Engine V2 duplicate detection ──
 function noteDuplicateWftFiles(filename, files) {
-    if (!files || files.length <= 1) return;
+    var duplicateCount = files && files.length > 1 ? files.length - 1 : 0;
+    if (!duplicateCount) return;
 
     console.warn("[WFT Sync] Duplicate Drive files detected for " + filename, files);
+    setDuplicateSyncMaintenanceStatus("Duplicate Google Drive sync files found. The tool is using the newest copy. Older duplicate files can be moved to Backup.", duplicateCount, false);
 
     if (WFT_DUPLICATE_DETECTION_V2) {
         setDriveSyncStatus("error", "Duplicate Drive files detected - using newest copy safely.");
@@ -6207,6 +6214,7 @@ function syncWftNow(reason, options) {
 
             if (result) {
                 setDriveSyncStatus("synced", "Synced");
+                checkDuplicateSyncFilesStatus();
             }
 
             return result;
@@ -10856,6 +10864,73 @@ function exportSelectedStudentPortfolio() {
 }
 
 
+
+function setDuplicateSyncMaintenanceStatus(message, duplicateCount, checking) {
+    var status = document.getElementById("duplicateSyncStatus");
+    var button = document.getElementById("duplicateSyncCleanupBtn");
+    var count = Number(duplicateCount || 0);
+
+    if (status) {
+        status.textContent = message || "Google Drive sync file status is not available.";
+    }
+
+    if (button) {
+        button.style.display = count > 0 ? "inline-block" : "none";
+        button.disabled = !!checking;
+    }
+}
+
+function summarizeDuplicateSyncFilesPromise() {
+    return findAllWftFilesByNameInRootPromise(WFT_SETTINGS_FILENAME).then(function(settingsFiles) {
+        return findAllWftFilesByNameInRootPromise(WFT_PORTFOLIO_FILENAME).then(function(portfolioFiles) {
+            return findAllWftFilesByNameInRootPromise(WFT_DELETIONS_FILENAME).then(function(deletionsFiles) {
+                var details = [];
+                var totalDuplicates = 0;
+
+                function addDetail(label, files) {
+                    var count = files && files.length ? files.length : 0;
+                    var duplicates = count > 1 ? count - 1 : 0;
+                    if (duplicates > 0) {
+                        details.push(label + ": " + duplicates);
+                        totalDuplicates += duplicates;
+                    }
+                }
+
+                addDetail("settings", settingsFiles);
+                addDetail("portfolio", portfolioFiles);
+                addDetail("deletions", deletionsFiles);
+
+                return {
+                    totalDuplicates: totalDuplicates,
+                    details: details
+                };
+            });
+        });
+    });
+}
+
+function checkDuplicateSyncFilesStatus() {
+    if (!driveAccessToken) {
+        setDuplicateSyncMaintenanceStatus("Sign in with Google Drive to check for duplicate sync files.", 0, false);
+        return Promise.resolve(null);
+    }
+
+    setDuplicateSyncMaintenanceStatus("Checking Google Drive sync files...", 0, true);
+
+    return summarizeDuplicateSyncFilesPromise().then(function(summary) {
+        if (summary.totalDuplicates > 0) {
+            setDuplicateSyncMaintenanceStatus("Duplicate Google Drive sync files found. The tool is using the newest copy. Older duplicate files can be moved to Backup. Details: " + summary.details.join(", ") + ".", summary.totalDuplicates, false);
+        } else {
+            setDuplicateSyncMaintenanceStatus("No duplicate sync files found.", 0, false);
+        }
+        return summary;
+    }).catch(function(e) {
+        console.error("[WFT Duplicate Check] Failed:", e);
+        setDuplicateSyncMaintenanceStatus("Could not check duplicate sync files right now.", 0, false);
+        return null;
+    });
+}
+
 function findAllWftFilesByNameInRootPromise(filename) {
     return ensureDriveFolderPromise().then(function(folderId) {
         var query = "name='" + escapeDriveQueryValue(filename) + "'"
@@ -10937,6 +11012,7 @@ function moveDuplicateSyncFilesToBackup() {
         });
     }).then(function(totalMoved) {
         setWftArchiveStatus("Duplicate cleanup complete. Moved " + totalMoved + " duplicate file(s) to Duplicate Backups.");
+        checkDuplicateSyncFilesStatus();
         alert("Duplicate cleanup complete. Moved " + totalMoved + " duplicate file(s) to Duplicate Backups.");
     }).catch(function(e) {
         console.error("[WFT Duplicate Cleanup] Failed:", e);
