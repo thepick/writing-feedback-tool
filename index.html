@@ -5157,7 +5157,7 @@ function rebuildWftPortfolioDerivedStats(portfolio) {
     return portfolio;
 }
 
-function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
+function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative) {
     // WFT portfolio is keyed by student name; use WFT's existing merge logic as base
     var localNorm = normalizePortfolioShape(localPortfolio);
     var cloudNorm = normalizePortfolioShape(cloudPortfolio);
@@ -5178,6 +5178,17 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
         if (!Object.prototype.hasOwnProperty.call(localNorm, studentName)) continue;
 
         if (!merged[studentName]) {
+            merged[studentName] = cloneWftJson(localNorm[studentName]);
+            continue;
+        }
+
+        if (localIsAuthoritative) {
+            wftSyncLog("[WFT Sync][PORTFOLIO] merge local-authoritative", {
+                studentName: studentName,
+                localSessions: (localNorm[studentName].sessions || []).length,
+                cloudSessions: (merged[studentName].sessions || []).length
+            });
+
             merged[studentName] = cloneWftJson(localNorm[studentName]);
             continue;
         }
@@ -5219,7 +5230,7 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
         merged[studentName].sessions = resultSessions;
     }
 
-    // DO NOT add root-level metadata keys (like updatedAt) — normalizePortfolioData
+    // DO NOT add root-level metadata keys (like updatedAt) - normalizePortfolioData
     // treats every top-level key as a student name, so metadata would become a fake student.
     return rebuildWftPortfolioDerivedStats(merged);
 }
@@ -5285,7 +5296,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudPortfolio) {
                     cloudNormalized = normalizePortfolioShape(cloudPortfolio || {});
                     cloudHash = getPortfolioFingerprint(cloudNormalized);
-                    merged = mergeWftPortfolios(mergedFromDuplicates || localPortfolio, cloudNormalized);
+                    merged = mergeWftPortfolios(mergedFromDuplicates || localPortfolio, cloudNormalized, hadPending);
                     mergedHash = getPortfolioFingerprint(merged);
 
                     if (mergedHash !== localHash) {
