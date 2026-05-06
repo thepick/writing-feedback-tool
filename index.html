@@ -3675,6 +3675,8 @@ var wftSyncState = {
 
     isSyncing: false,
     currentSyncPromise: null,
+    folderResolutionPromise: null,
+    folderResolutionRunId: 0,
     syncRunId: 0,
     explicitSaveInProgress: false,
     imageUploadInProgress: false,
@@ -4419,12 +4421,19 @@ function saveFileToDrive(filename, content, mimeType, callback) {
 // ── WFT Sync Engine V2 Promise wrappers ──
 function ensureDriveFolderPromise() {
     syncStateFromLegacyGoogleGlobals();
-    wftSyncLog("[WFT Sync][FOLDER] ensureDriveFolderPromise start", { memoryFolderId: driveFolderId || "", cachedFolderId: getCachedWftDriveFolderId() || "" });
+    wftSyncLog("[WFT Sync][FOLDER] ensureDriveFolderPromise start", { memoryFolderId: driveFolderId || "", cachedFolderId: getCachedWftDriveFolderId() || "", runId: wftSyncState.syncRunId || 0 });
+
+    if (wftSyncState.isSyncing &&
+        wftSyncState.folderResolutionPromise &&
+        wftSyncState.folderResolutionRunId === wftSyncState.syncRunId) {
+        wftSyncLog("[WFT Sync][FOLDER] reusing run folder resolution", { runId: wftSyncState.syncRunId, folderId: wftSyncState.folderId || driveFolderId || "" });
+        return wftSyncState.folderResolutionPromise;
+    }
 
     var memoryFolderId = driveFolderId || wftSyncState.folderId || "";
     var cachedFolderId = memoryFolderId || getCachedWftDriveFolderId();
 
-    return validateCachedDriveFolderPromise(cachedFolderId).then(function (valid) {
+    var resolutionPromise = validateCachedDriveFolderPromise(cachedFolderId).then(function (valid) {
         if (valid) {
             setCachedWftDriveFolderId(cachedFolderId);
             return cachedFolderId;
@@ -4469,7 +4478,25 @@ function ensureDriveFolderPromise() {
                 });
             });
         });
+    }).then(function (folderId) {
+        if (folderId) {
+            setCachedWftDriveFolderId(folderId);
+        }
+        return folderId;
+    }).catch(function (e) {
+        if (wftSyncState.folderResolutionPromise === resolutionPromise) {
+            wftSyncState.folderResolutionPromise = null;
+            wftSyncState.folderResolutionRunId = 0;
+        }
+        throw e;
     });
+
+    if (wftSyncState.isSyncing) {
+        wftSyncState.folderResolutionRunId = wftSyncState.syncRunId;
+        wftSyncState.folderResolutionPromise = resolutionPromise;
+    }
+
+    return resolutionPromise;
 }
 
 function saveFileToDrivePromise(filename, content, mimeType) {
@@ -5371,6 +5398,8 @@ function syncWftNow(reason, options) {
     wftSyncState.isSyncing = true;
     wftSyncState.syncRunId += 1;
     var runId = wftSyncState.syncRunId;
+    wftSyncState.folderResolutionPromise = null;
+    wftSyncState.folderResolutionRunId = 0;
 
     if (options.immediate) {
         wftSyncState.explicitSaveInProgress = true;
@@ -5406,6 +5435,8 @@ function syncWftNow(reason, options) {
             wftSyncState.isSyncing = false;
             wftSyncState.explicitSaveInProgress = false;
             wftSyncState.needsSyncAfterCurrent = false;
+            wftSyncState.folderResolutionPromise = null;
+            wftSyncState.folderResolutionRunId = 0;
             wftSyncState.currentSyncPromise = null;
 
             if (shouldRunAgain) {
