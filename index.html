@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v10 -->
+<!-- Writing Feedback Tool v11 -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -4467,6 +4467,126 @@ function resetWftSyncStateAfterSignOut() {
     wftSyncState.lastPollAt = 0;
     clearWftSyncBlockState();
 }
+function resetWftLocalWorkAfterSignOut() {
+    var previousSuppress = typeof wftSuppressDirtyMarks !== "undefined" ? wftSuppressDirtyMarks : false;
+    var keysToRemove = [
+        "wft_settings",
+        "wft_students",
+        "wft_selectedStudent",
+        "wft_portfolio",
+        "wft_oauth_pending_action",
+        WFT_DELETIONS_STORAGE_KEY,
+        WFT_DRIVE_FOLDER_ID_CACHE_KEY,
+        WFT_SETTINGS_FILE_ID_CACHE_KEY,
+        WFT_PORTFOLIO_FILE_ID_CACHE_KEY,
+        WFT_DELETIONS_FILE_ID_CACHE_KEY,
+        PENDING_PORTFOLIO_SYNC_KEY
+    ];
+    var i;
+
+    if (typeof wftSuppressDirtyMarks !== "undefined") {
+        wftSuppressDirtyMarks = true;
+    }
+
+    for (i = 0; i < keysToRemove.length; i += 1) {
+        try {
+            if (keysToRemove[i]) {
+                localStorage.removeItem(keysToRemove[i]);
+            }
+        } catch (e) { }
+    }
+
+    students = [];
+    selectedStudent = "";
+    pendingPortfolioSync = null;
+    selectedImages = [];
+    selectedImageDataUrl = "";
+    selectedImageName = "";
+    selectedImageExtractedText = "";
+    selectedImageExtractionPromise = null;
+    latestAnalysisData = null;
+    originalTextForDiff = "";
+    correctedHtmlForDiff = "";
+    manualSyncInProgress = false;
+    cancelAnalysis = false;
+
+    var ta = document.getElementById("studentWriting");
+    if (ta) ta.value = "";
+
+    var studentSelect = document.getElementById("studentSelect");
+    if (studentSelect) studentSelect.value = "";
+
+    var studentNameInput = document.getElementById("studentNameInput");
+    if (studentNameInput) studentNameInput.value = "";
+
+    var portfolioSelect = document.getElementById("portfolioStudentSelect");
+    if (portfolioSelect) portfolioSelect.value = "";
+
+    var modelSelectEl = document.getElementById("modelSelect");
+    if (modelSelectEl) modelSelectEl.value = DEFAULT_MODEL;
+
+    var targetWordCountEl = document.getElementById("targetWordCount");
+    if (targetWordCountEl) targetWordCountEl.value = "200";
+
+    var useWordCountTargetEl = document.getElementById("useWordCountTarget");
+    if (useWordCountTargetEl) useWordCountTargetEl.checked = true;
+    if (targetWordCountEl) targetWordCountEl.disabled = false;
+
+    var grammarStrictnessEl = document.getElementById("grammarStrictness");
+    if (grammarStrictnessEl) grammarStrictnessEl.value = "3";
+
+    var grammarStrictnessValEl = document.getElementById("grammarStrictnessVal");
+    if (grammarStrictnessValEl) grammarStrictnessValEl.textContent = "3";
+
+    var assessScriptQualityEl = document.getElementById("assessScriptQuality");
+    if (assessScriptQualityEl) assessScriptQualityEl.checked = false;
+
+    var apiKeyInputEl = document.getElementById("apiKeyInput");
+    if (apiKeyInputEl) apiKeyInputEl.value = "";
+    refreshApiKeyRuntimeValue();
+
+    var correctedStoryEl = document.getElementById("correctedStory");
+    if (correctedStoryEl) correctedStoryEl.innerHTML = "No corrected story yet.";
+
+    var detailedAssessmentEl = document.getElementById("detailedAssessment");
+    if (detailedAssessmentEl) detailedAssessmentEl.innerHTML = '<div class="assessment-item">No detailed assessment data.</div>';
+
+    var step1RawEl = document.getElementById("step1Raw");
+    if (step1RawEl) step1RawEl.textContent = "";
+
+    var step3RawEl = document.getElementById("step3Raw");
+    if (step3RawEl) step3RawEl.textContent = "";
+
+    var debugRawEl = document.getElementById("debugRaw");
+    if (debugRawEl) debugRawEl.textContent = "";
+
+    var grammarCalcEl = document.getElementById("grammarCalc");
+    if (grammarCalcEl) grammarCalcEl.innerHTML = "";
+
+    try { renderStudentList(); } catch (e2) { }
+    try { populateStudentDropdown(); } catch (e3) { }
+    try { refreshPortfolioDropdown(); } catch (e4) { }
+    try { renderStudentPortfolio(); } catch (e5) { }
+    try { updateExportSelectedStudentButton(); } catch (e6) { }
+    try { updateSelectedImagePreview(); } catch (e7) { }
+    try { updateScoreDisplay(null); } catch (e8) { }
+    try { syncUiState(); } catch (e9) { }
+    try { updateSyncPortfolioButtonState(); } catch (e10) { }
+    try { refreshScoreWeightingDescription(); } catch (e11) { }
+    try { updateScriptQualityToggleVisibility(); } catch (e12) { }
+    try {
+        var settingsDrawerEl = document.getElementById("settingsDrawer");
+        var settingsDrawerOverlayEl = document.getElementById("settingsDrawerOverlay");
+        if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
+        if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
+    } catch (e13) { }
+    try { restoreActiveTab(); } catch (e14) { }
+
+    if (typeof wftSuppressDirtyMarks !== "undefined") {
+        wftSuppressDirtyMarks = previousSuppress;
+    }
+}
+
 
 function handleGoogleSignOut() {
     function finishSignOut() {
@@ -4481,7 +4601,9 @@ function handleGoogleSignOut() {
         clearWftTokenSession();
         stopDriveAutoSync();
         stopWftSyncPolling();
+        resetWftLocalWorkAfterSignOut();
         showSignedOutState();
+        setDriveSyncStatus("", "Signed out - local work cleared");
     }
 
     if (driveAccessToken) {
