@@ -3529,7 +3529,7 @@ var GOOGLE_CONNECTED_CACHE_KEY = "wft_google_connected";
 
 // ── WFT Sync Engine V2 feature flags ──
 var WFT_SYNC_ENGINE_V2 = true;
-var WFT_SYNC_DEBUG = false;
+var WFT_SYNC_DEBUG = true;
 var WFT_DUPLICATE_DETECTION_V2 = true;
 var WFT_DUPLICATE_CLEANUP_V2 = false;
 var WFT_IMAGE_IDEMPOTENCY_V2 = true;
@@ -3547,7 +3547,53 @@ var wftSuppressDirtyMarks = false;
 function wftSyncLog() {
     if (!WFT_SYNC_DEBUG) return;
     if (!window.console || !console.log) return;
-    console.log.apply(console, arguments);
+
+    try {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(new Date().toISOString());
+        console.log.apply(console, args);
+    } catch (e) { }
+}
+
+function wftSyncWarn() {
+    if (!WFT_SYNC_DEBUG) return;
+    if (!window.console || !console.warn) return;
+
+    try {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(new Date().toISOString());
+        console.warn.apply(console, args);
+    } catch (e) { }
+}
+
+function wftSyncErrorLog() {
+    if (!WFT_SYNC_DEBUG) return;
+    if (!window.console || !console.error) return;
+
+    try {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(new Date().toISOString());
+        console.error.apply(console, args);
+    } catch (e) { }
+}
+
+function getWftSyncDebugSnapshot() {
+    return {
+        signedIn: !!wftSyncState.signedIn,
+        hasAccessToken: !!wftSyncState.accessToken,
+        tokenExpiresAt: wftSyncState.tokenExpiresAt || 0,
+        folderId: wftSyncState.folderId || driveFolderId || '',
+        isSyncing: !!wftSyncState.isSyncing,
+        explicitSaveInProgress: !!wftSyncState.explicitSaveInProgress,
+        pendingSettingsPush: !!wftSyncState.pendingSettingsPush,
+        pendingPortfolioPush: !!wftSyncState.pendingPortfolioPush,
+        needsSyncAfterCurrent: !!wftSyncState.needsSyncAfterCurrent,
+        settingsCounter: wftSyncState.localSettingsCounter,
+        portfolioCounter: wftSyncState.localPortfolioCounter,
+        quotaBlocked: !!wftSyncState.quotaBlocked,
+        permissionBlocked: !!wftSyncState.permissionBlocked,
+        authBlocked: !!wftSyncState.authBlocked
+    };
 }
 
 var googleUser = null;
@@ -3567,6 +3613,8 @@ var wftSyncState = {
     portfolioFileId: null,
 
     isSyncing: false,
+    currentSyncPromise: null,
+    syncRunId: 0,
     explicitSaveInProgress: false,
     imageUploadInProgress: false,
 
@@ -3908,6 +3956,8 @@ function resetWftSyncStateAfterSignOut() {
     wftSyncState.settingsFileId = null;
     wftSyncState.portfolioFileId = null;
     wftSyncState.isSyncing = false;
+    wftSyncState.currentSyncPromise = null;
+    wftSyncState.syncRunId = 0;
     wftSyncState.explicitSaveInProgress = false;
     wftSyncState.imageUploadInProgress = false;
     wftSyncState.pendingSettingsPush = false;
@@ -3951,6 +4001,7 @@ function handleGoogleSignOut() {
 }
 
 function setDriveSyncStatus(state, text) {
+    wftSyncLog("[WFT Sync] status", state || "", text || "", getWftSyncDebugSnapshot());
     var dot = document.getElementById("driveSyncDot");
     var txt = document.getElementById("driveSyncText");
     var dotHeader = document.getElementById("driveSyncDotHeader");
@@ -3991,6 +4042,7 @@ function parseWftGoogleApiErrorText(text) {
 
 function wftDriveFetch(url, options) {
     options = options || {};
+    wftSyncLog("[WFT Sync] Drive fetch start", (options.method || "GET"), url);
 
     if (url.indexOf("https://www.googleapis.com/") !== 0 &&
         url.indexOf("https://www.googleapis.com/upload/") !== 0) {
@@ -4014,10 +4066,12 @@ function wftDriveFetch(url, options) {
     options.headers.Authorization = "Bearer " + wftSyncState.accessToken;
 
     return fetch(url, options).then(function (response) {
+        wftSyncLog("[WFT Sync] Drive fetch response", response.status, (options.method || "GET"), url);
         if (response.ok) return response;
 
         return response.text().then(function (text) {
             var parsed = parseWftGoogleApiErrorText(text);
+            wftSyncErrorLog("[WFT Sync] Drive fetch error body", response.status, parsed);
             var err = new Error(parsed.message || "Google Drive error");
             err.status = response.status;
             err.reason = parsed.reason;
@@ -4112,6 +4166,7 @@ function saveFileToDrive(filename, content, mimeType, callback) {
 // ── WFT Sync Engine V2 Promise wrappers ──
 function ensureDriveFolderPromise() {
     syncStateFromLegacyGoogleGlobals();
+    wftSyncLog("[WFT Sync] ensureDriveFolderPromise start", { cachedFolderId: driveFolderId || "" });
     if (driveFolderId) {
         wftSyncState.folderId = driveFolderId;
         return Promise.resolve(driveFolderId);
@@ -4128,6 +4183,7 @@ function ensureDriveFolderPromise() {
     return wftDriveFetch(searchUrl).then(function(response) {
         return response.json();
     }).then(function(data) {
+        wftSyncLog("[WFT Sync] folder search result", data && data.files ? data.files.length : 0, data && data.files ? data.files : []);
         if (data && data.files && data.files.length) {
             driveFolderId = data.files[0].id;
             wftSyncState.folderId = driveFolderId;
@@ -4147,6 +4203,7 @@ function ensureDriveFolderPromise() {
             if (!folder || !folder.id) {
                 throw new Error("NO_DRIVE_FOLDER");
             }
+            wftSyncLog("[WFT Sync] created Drive folder", folder);
             driveFolderId = folder.id;
             wftSyncState.folderId = folder.id;
             return folder.id;
@@ -4351,6 +4408,7 @@ function escapeDriveQueryValue(value) {
 }
 
 function findWftFilesByNamePromise(filename) {
+    wftSyncLog("[WFT Sync] find files start", filename);
     return ensureDriveFolderPromise().then(function (folderId) {
         var query = "name='" + escapeDriveQueryValue(filename) + "'"
             + " and '" + escapeDriveQueryValue(folderId) + "' in parents"
@@ -4364,7 +4422,9 @@ function findWftFilesByNamePromise(filename) {
         return wftDriveFetch(url).then(function (response) {
             return response.json();
         }).then(function (data) {
-            return data && data.files ? data.files : [];
+            var files = data && data.files ? data.files : [];
+            wftSyncLog("[WFT Sync] find files result", filename, files.length, files);
+            return files;
         });
     });
 }
@@ -4375,6 +4435,7 @@ function chooseCanonicalWftFile(files) {
 }
 
 function downloadWftJsonFilePromise(fileId) {
+    wftSyncLog("[WFT Sync] download JSON start", fileId);
     var url = "https://www.googleapis.com/drive/v3/files/"
         + encodeURIComponent(fileId)
         + "?alt=media";
@@ -4385,14 +4446,18 @@ function downloadWftJsonFilePromise(fileId) {
         if (!text) return null;
 
         try {
-            return JSON.parse(text);
+            var parsed = JSON.parse(text);
+            wftSyncLog("[WFT Sync] download JSON parsed", fileId, getWftHash(parsed));
+            return parsed;
         } catch (e) {
+            wftSyncWarn("[WFT Sync] download JSON parse failed", fileId, e);
             return null;
         }
     });
 }
 
 function uploadWftJsonFilePromise(filename, data) {
+    wftSyncLog("[WFT Sync] upload JSON start", filename);
     var content = JSON.stringify(data || {}, null, 2);
     var intendedHash = filename === WFT_SETTINGS_FILENAME
         ? getSettingsFingerprint(data)
@@ -4400,6 +4465,7 @@ function uploadWftJsonFilePromise(filename, data) {
 
     return saveFileToDrivePromise(filename, content, "application/json")
         .then(function () {
+            wftSyncLog("[WFT Sync] upload JSON saved", filename, intendedHash);
             return findWftFilesByNamePromise(filename);
         })
         .catch(function (e) {
@@ -4596,10 +4662,12 @@ function saveSettingsLocalOnly(settings, reason) {
 }
 
 function syncWftSettingsIfNeeded(reason) {
+    wftSyncLog("[WFT Sync] settings sync start", reason);
     var localSettings = getLocalSettingsSnapshot();
     var localHash = getSettingsFingerprint(localSettings);
     var counterSnapshot = wftSyncState.localSettingsCounter;
     var hadPending = wftSyncState.pendingSettingsPush;
+    wftSyncLog("[WFT Sync] settings local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: localSettings && localSettings.students ? localSettings.students.length : 0 });
 
     return findWftFilesByNamePromise(WFT_SETTINGS_FILENAME)
         .then(function (files) {
@@ -4825,10 +4893,12 @@ function refreshPortfolioUiAfterCloudMerge() {
 }
 
 function syncWftPortfolioIfNeeded(reason) {
+    wftSyncLog("[WFT Sync] portfolio sync start", reason);
     var localPortfolio = getLocalPortfolioSnapshot();
     var localHash = getPortfolioFingerprint(localPortfolio);
     var counterSnapshot = wftSyncState.localPortfolioCounter;
     var hadPending = wftSyncState.pendingPortfolioPush;
+    wftSyncLog("[WFT Sync] portfolio local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: Object.keys(localPortfolio || {}).length });
 
     return findWftFilesByNamePromise(WFT_PORTFOLIO_FILENAME)
         .then(function (files) {
@@ -4890,6 +4960,7 @@ function syncWftPortfolioIfNeeded(reason) {
 
 // ── WFT Sync Engine V2 main orchestrator ──
 function handleWftSyncError(e) {
+    wftSyncErrorLog("[WFT Sync] sync error", e && e.message ? e.message : e, e || null, getWftSyncDebugSnapshot());
     if (!e) {
         setDriveSyncStatus("error", "Drive sync needs attention.");
         return;
@@ -4923,25 +4994,30 @@ function syncWftNow(reason, options) {
 
     syncStateFromLegacyGoogleGlobals();
 
-    wftSyncLog("[WFT Sync] syncWftNow start", reason, options);
+    wftSyncLog("[WFT Sync] syncWftNow requested", reason, options, getWftSyncDebugSnapshot());
 
     if (!WFT_SYNC_ENGINE_V2) {
+        wftSyncLog("[WFT Sync] sync skipped - V2 disabled", reason);
         return Promise.resolve(false);
     }
 
     if (!wftSyncState.signedIn && !wftSyncState.accessToken) {
+        wftSyncLog("[WFT Sync] sync skipped - not signed in", reason);
         setDriveSyncStatus("", "Not synced");
         return Promise.resolve(false);
     }
 
     if (!navigator.onLine) {
+        wftSyncLog("[WFT Sync] sync skipped - offline", reason);
         setDriveSyncStatus("error", "Offline - will sync later");
         return Promise.resolve(false);
     }
 
     if (wftSyncState.quotaBlocked || wftSyncState.permissionBlocked || wftSyncState.authBlocked) {
-        if (reason === "manual" || reason === "explicit-sync-to-portfolio") {
+        wftSyncWarn("[WFT Sync] sync blocked state", reason, getWftSyncDebugSnapshot());
+        if (reason === "manual" || reason === "explicit-sync-to-portfolio" || options.immediate) {
             clearWftSyncBlockState();
+            wftSyncLog("[WFT Sync] block state cleared for explicit sync", reason);
         } else {
             return Promise.resolve(false);
         }
@@ -4949,25 +5025,43 @@ function syncWftNow(reason, options) {
 
     if (wftSyncState.isSyncing) {
         wftSyncState.needsSyncAfterCurrent = true;
+        wftSyncLog("[WFT Sync] sync already running - queued behind active run", reason, getWftSyncDebugSnapshot());
+
+        if (wftSyncState.currentSyncPromise) {
+            return wftSyncState.currentSyncPromise.then(function (result) {
+                wftSyncLog("[WFT Sync] queued request completed after active run", reason, result, getWftSyncDebugSnapshot());
+                return result !== false;
+            }).catch(function (e) {
+                wftSyncErrorLog("[WFT Sync] queued request saw active-run failure", reason, e);
+                return false;
+            });
+        }
+
         return Promise.resolve(false);
     }
 
     wftSyncState.isSyncing = true;
+    wftSyncState.syncRunId += 1;
+    var runId = wftSyncState.syncRunId;
 
     if (options.immediate) {
         wftSyncState.explicitSaveInProgress = true;
     }
 
     setDriveSyncStatus("syncing", "Syncing...");
+    wftSyncLog("[WFT Sync] run start", runId, reason, getWftSyncDebugSnapshot());
 
-    return ensureDriveFolderPromise()
+    wftSyncState.currentSyncPromise = ensureDriveFolderPromise()
         .then(function () {
+            wftSyncLog("[WFT Sync] run folder ready", runId, wftSyncState.folderId || driveFolderId || "");
             return syncWftSettingsIfNeeded(reason);
         })
-        .then(function () {
+        .then(function (settingsChanged) {
+            wftSyncLog("[WFT Sync] run settings done", runId, settingsChanged, getWftSyncDebugSnapshot());
             return syncWftPortfolioIfNeeded(reason);
         })
-        .then(function () {
+        .then(function (portfolioChanged) {
+            wftSyncLog("[WFT Sync] run portfolio done", runId, portfolioChanged, getWftSyncDebugSnapshot());
             wftSyncState.lastPollAt = Date.now();
             setDriveSyncStatus("synced", "Synced");
             return true;
@@ -4980,16 +5074,22 @@ function syncWftNow(reason, options) {
         .then(function (result) {
             var shouldRunAgain = wftSyncState.needsSyncAfterCurrent;
 
+            wftSyncLog("[WFT Sync] run finishing", runId, { result: result, shouldRunAgain: shouldRunAgain }, getWftSyncDebugSnapshot());
+
             wftSyncState.isSyncing = false;
             wftSyncState.explicitSaveInProgress = false;
             wftSyncState.needsSyncAfterCurrent = false;
+            wftSyncState.currentSyncPromise = null;
 
             if (shouldRunAgain) {
+                wftSyncLog("[WFT Sync] starting queued follow-up run", runId, reason);
                 return syncWftNow("queued-after-current", { immediate: false });
             }
 
             return result;
         });
+
+    return wftSyncState.currentSyncPromise;
 }
 
 // ── WFT Sync Engine V2 polling and lifecycle ──
@@ -5948,9 +6048,14 @@ function setSyncButtonsBusy(isBusy, busyLabel) {
 }
 
 function manualSaveToDrive() {
-    if (manualSyncInProgress) return;
+    wftSyncLog("[WFT Sync] manualSaveToDrive requested", getWftSyncDebugSnapshot());
+    if (manualSyncInProgress) {
+        wftSyncLog("[WFT Sync] manualSaveToDrive ignored - already in progress");
+        return;
+    }
     getPendingPortfolioSync();
     if (!driveAccessToken) {
+        wftSyncLog("[WFT Sync] manualSaveToDrive needs Drive access");
         setDriveSyncStatus('syncing', 'Connecting to Drive...');
         requestDriveAccess(function() {
             manualSaveToDrive();
@@ -5963,6 +6068,7 @@ function manualSaveToDrive() {
     var committedPending = false;
     try {
         committedPending = commitPendingPortfolioSync();
+        wftSyncLog("[WFT Sync] manualSaveToDrive committed pending portfolio", committedPending);
     } catch (e) {
         manualSyncInProgress = false;
         setSyncButtonsBusy(false);
@@ -5974,6 +6080,7 @@ function manualSaveToDrive() {
     if (WFT_SYNC_ENGINE_V2) {
         markWftPortfolioDirty("explicit-sync-to-portfolio");
         flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
+            wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
             manualSyncInProgress = false;
             setSyncButtonsBusy(false);
             if (!result) {
