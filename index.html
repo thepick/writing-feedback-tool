@@ -3538,18 +3538,76 @@ var WFT_GIS_AUTH_V2 = false;
 
 var WFT_SETTINGS_FILENAME = "wft-settings.json";
 var WFT_PORTFOLIO_FILENAME = "wft-portfolio.json";
+var WFT_DRIVE_FOLDER_ID_CACHE_KEY = "wft_drive_folder_id";
+var WFT_SETTINGS_FILE_ID_CACHE_KEY = "wft_drive_settings_file_id";
+var WFT_PORTFOLIO_FILE_ID_CACHE_KEY = "wft_drive_portfolio_file_id";
 var WFT_SYNC_DEBOUNCE_MS = 2500;
 var WFT_POLL_INTERVAL_MS = 60000;
 var WFT_SAVE_FILE_TIMEOUT_MS = 30000;
 var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session";
 var wftSuppressDirtyMarks = false;
 
+function redactWftSyncLogValue(value, depth) {
+    var key;
+    var copy;
+
+    depth = depth || 0;
+
+    if (value == null) return value;
+
+    if (typeof value === "string") {
+        return value
+            .replace(/access_token=([^&\s#]+)/g, "access_token=[REDACTED]")
+            .replace(/Authorization:\s*Bearer\s+[A-Za-z0-9._\-]+/gi, "Authorization: Bearer [REDACTED]")
+            .replace(/Bearer\s+ya29\.[A-Za-z0-9._\-]+/g, "Bearer [REDACTED]")
+            .replace(/ya29\.[A-Za-z0-9._\-]+/g, "[REDACTED_TOKEN]");
+    }
+
+    if (typeof value !== "object") return value;
+
+    if (value instanceof Error) {
+        return {
+            name: value.name,
+            message: redactWftSyncLogValue(value.message || "", depth + 1),
+            status: value.status || null,
+            reason: redactWftSyncLogValue(value.reason || "", depth + 1)
+        };
+    }
+
+    if (depth > 2) return "[Object]";
+
+    if (Array.isArray(value)) {
+        return value.map(function (item) {
+            return redactWftSyncLogValue(item, depth + 1);
+        });
+    }
+
+    copy = {};
+    for (key in value) {
+        if (!Object.prototype.hasOwnProperty.call(value, key)) continue;
+        if (/token|authorization/i.test(key)) {
+            copy[key] = value[key] ? "[REDACTED]" : value[key];
+        } else {
+            copy[key] = redactWftSyncLogValue(value[key], depth + 1);
+        }
+    }
+
+    return copy;
+}
+
+function getRedactedWftSyncLogArgs(argsLike) {
+    var args = Array.prototype.slice.call(argsLike);
+    return args.map(function (arg) {
+        return redactWftSyncLogValue(arg, 0);
+    });
+}
+
 function wftSyncLog() {
     if (!WFT_SYNC_DEBUG) return;
     if (!window.console || !console.log) return;
 
     try {
-        var args = Array.prototype.slice.call(arguments);
+        var args = getRedactedWftSyncLogArgs(arguments);
         args.unshift(new Date().toISOString());
         console.log.apply(console, args);
     } catch (e) { }
@@ -3560,7 +3618,7 @@ function wftSyncWarn() {
     if (!window.console || !console.warn) return;
 
     try {
-        var args = Array.prototype.slice.call(arguments);
+        var args = getRedactedWftSyncLogArgs(arguments);
         args.unshift(new Date().toISOString());
         console.warn.apply(console, args);
     } catch (e) { }
@@ -3571,7 +3629,7 @@ function wftSyncErrorLog() {
     if (!window.console || !console.error) return;
 
     try {
-        var args = Array.prototype.slice.call(arguments);
+        var args = getRedactedWftSyncLogArgs(arguments);
         args.unshift(new Date().toISOString());
         console.error.apply(console, args);
     } catch (e) { }
@@ -3583,6 +3641,8 @@ function getWftSyncDebugSnapshot() {
         hasAccessToken: !!wftSyncState.accessToken,
         tokenExpiresAt: wftSyncState.tokenExpiresAt || 0,
         folderId: wftSyncState.folderId || driveFolderId || '',
+        settingsFileId: wftSyncState.settingsFileId || getCachedWftDriveFileId(WFT_SETTINGS_FILENAME) || '',
+        portfolioFileId: wftSyncState.portfolioFileId || getCachedWftDriveFileId(WFT_PORTFOLIO_FILENAME) || '',
         isSyncing: !!wftSyncState.isSyncing,
         explicitSaveInProgress: !!wftSyncState.explicitSaveInProgress,
         pendingSettingsPush: !!wftSyncState.pendingSettingsPush,
@@ -3592,7 +3652,8 @@ function getWftSyncDebugSnapshot() {
         portfolioCounter: wftSyncState.localPortfolioCounter,
         quotaBlocked: !!wftSyncState.quotaBlocked,
         permissionBlocked: !!wftSyncState.permissionBlocked,
-        authBlocked: !!wftSyncState.authBlocked
+        authBlocked: !!wftSyncState.authBlocked,
+        lastError: wftSyncState.lastError ? String(wftSyncState.lastError.message || wftSyncState.lastError) : null
     };
 }
 
@@ -3649,7 +3710,16 @@ function syncLegacyGoogleGlobalsFromState() {
 function syncStateFromLegacyGoogleGlobals() {
     wftSyncState.googleUser = googleUser;
     wftSyncState.accessToken = driveAccessToken;
+    if (!driveFolderId) {
+        driveFolderId = getCachedWftDriveFolderId();
+    }
     wftSyncState.folderId = driveFolderId;
+    if (!wftSyncState.settingsFileId) {
+        wftSyncState.settingsFileId = getCachedWftDriveFileId(WFT_SETTINGS_FILENAME);
+    }
+    if (!wftSyncState.portfolioFileId) {
+        wftSyncState.portfolioFileId = getCachedWftDriveFileId(WFT_PORTFOLIO_FILENAME);
+    }
     wftSyncState.signedIn = !!driveAccessToken;
 
     if (!wftSyncState.tokenExpiresAt) {
@@ -3709,9 +3779,10 @@ function checkHashForOAuthTokens() {
         // ── WFT Sync V2: save token to sessionStorage ──
         if (WFT_SYNC_ENGINE_V2) {
             saveWftTokenSession(accessToken, expiresAt);
+            wftSyncLog("[WFT Sync][AUTH] OAuth token received", { hasAccessToken: true, expiresIn: expiresIn, scope: params.get("scope") || "" });
         }
 
-        history.replaceState(null, '', window.location.pathname + window.location.search);
+        history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
         return true;
     } catch (e) {
         console.error('[WFT Auth] Error reading OAuth tokens from hash:', e);
@@ -4104,38 +4175,209 @@ function clearWftSyncBlockState() {
 
 /* --- Drive Folder Management --- */
 
-function ensureDriveFolder(callback) {
-    if (driveFolderId) { callback(driveFolderId); return; }
-    fetch("https://www.googleapis.com/drive/v3/files?q=name%3D%27" + encodeURIComponent(DRIVE_FOLDER_NAME) + "%27+and+mimeType%3D%27application%2Fvnd.google-apps.folder%27+and+trashed%3Dfalse&fields=files(id,name)", {
-        headers: { Authorization: "Bearer " + driveAccessToken }
-    }).then(function(r) { return r.json(); }).then(function(data) {
-        if (data.files && data.files.length > 0) {
-            driveFolderId = data.files[0].id;
-            callback(driveFolderId);
-        } else {
-            fetch("https://www.googleapis.com/drive/v3/files", {
-                method: "POST",
-                headers: { Authorization: "Bearer " + driveAccessToken, "Content-Type": "application/json" },
-                body: JSON.stringify({ name: DRIVE_FOLDER_NAME, mimeType: "application/vnd.google-apps.folder" })
-            }).then(function(r) { return r.json(); }).then(function(f) {
-                driveFolderId = f.id;
-                callback(driveFolderId);
-            });
-        }
-    }).catch(function(e) {
-        console.error("Drive folder error:", e);
-        setDriveSyncStatus("error", "Sync error");
+function getCachedWftDriveFolderId() {
+    try {
+        return localStorage.getItem(WFT_DRIVE_FOLDER_ID_CACHE_KEY) || "";
+    } catch (e) {
+        return "";
+    }
+}
+
+function setCachedWftDriveFolderId(folderId) {
+    if (!folderId) return;
+    driveFolderId = folderId;
+    wftSyncState.folderId = folderId;
+    try {
+        localStorage.setItem(WFT_DRIVE_FOLDER_ID_CACHE_KEY, folderId);
+    } catch (e) { }
+    syncLegacyGoogleGlobalsFromState();
+}
+
+function getCachedWftDriveFileId(filename) {
+    var key = filename === WFT_SETTINGS_FILENAME ? WFT_SETTINGS_FILE_ID_CACHE_KEY : WFT_PORTFOLIO_FILE_ID_CACHE_KEY;
+    try {
+        return localStorage.getItem(key) || "";
+    } catch (e) {
+        return "";
+    }
+}
+
+function setCachedWftDriveFileId(filename, fileId) {
+    var key = filename === WFT_SETTINGS_FILENAME ? WFT_SETTINGS_FILE_ID_CACHE_KEY : WFT_PORTFOLIO_FILE_ID_CACHE_KEY;
+    if (!fileId) return;
+    if (filename === WFT_SETTINGS_FILENAME) {
+        wftSyncState.settingsFileId = fileId;
+    } else if (filename === WFT_PORTFOLIO_FILENAME) {
+        wftSyncState.portfolioFileId = fileId;
+    }
+    try {
+        localStorage.setItem(key, fileId);
+    } catch (e) { }
+}
+
+function clearCachedWftDriveFileId(filename) {
+    var key = filename === WFT_SETTINGS_FILENAME ? WFT_SETTINGS_FILE_ID_CACHE_KEY : WFT_PORTFOLIO_FILE_ID_CACHE_KEY;
+    if (filename === WFT_SETTINGS_FILENAME) {
+        wftSyncState.settingsFileId = null;
+    } else if (filename === WFT_PORTFOLIO_FILENAME) {
+        wftSyncState.portfolioFileId = null;
+    }
+    try {
+        localStorage.removeItem(key);
+    } catch (e) { }
+}
+
+function validateCachedDriveFolderPromise(folderId) {
+    if (!folderId) return Promise.resolve(false);
+
+    var url = "https://www.googleapis.com/drive/v3/files/"
+        + encodeURIComponent(folderId)
+        + "?fields=id,name,mimeType,trashed";
+
+    if (!isWftTokenValid()) return Promise.resolve(false);
+
+    wftSyncLog("[WFT Sync][FOLDER] cached folder validation start", folderId);
+    return fetch(url, {
+        headers: { Authorization: "Bearer " + wftSyncState.accessToken }
+    }).then(function (response) {
+        wftSyncLog("[WFT Sync][FOLDER] cached folder validation response", response.status, folderId);
+        if (!response.ok) return false;
+        return response.json();
+    }).then(function (folder) {
+        var valid = !!(folder &&
+            folder.id === folderId &&
+            folder.name === DRIVE_FOLDER_NAME &&
+            folder.mimeType === "application/vnd.google-apps.folder" &&
+            folder.trashed === false);
+
+        wftSyncLog("[WFT Sync][FOLDER] cached folder validation", { folderId: folderId, valid: valid });
+        return valid;
+    }).catch(function (e) {
+        wftSyncWarn("[WFT Sync][FOLDER] cached folder validation failed", { folderId: folderId, error: e });
+        return false;
     });
+}
+
+function getWftFolderSyncFileSummary(folderId) {
+    var query = "'" + escapeDriveQueryValue(folderId) + "' in parents"
+        + " and trashed=false"
+        + " and (name='" + escapeDriveQueryValue(WFT_SETTINGS_FILENAME) + "'"
+        + " or name='" + escapeDriveQueryValue(WFT_PORTFOLIO_FILENAME) + "')";
+    var url = "https://www.googleapis.com/drive/v3/files"
+        + "?q=" + encodeURIComponent(query)
+        + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType)"
+        + "&orderBy=modifiedTime desc";
+
+    return wftDriveFetch(url).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+        var files = data && data.files ? data.files : [];
+        var summary = {
+            folderId: folderId,
+            hasSettings: false,
+            hasPortfolio: false,
+            newestTime: "",
+            settingsFileId: "",
+            portfolioFileId: "",
+            fileCount: files.length
+        };
+        var i;
+        var file;
+        var time;
+
+        for (i = 0; i < files.length; i += 1) {
+            file = files[i];
+            time = file.modifiedTime || file.createdTime || "";
+            if (!summary.newestTime || time > summary.newestTime) {
+                summary.newestTime = time;
+            }
+            if (file.name === WFT_SETTINGS_FILENAME && !summary.settingsFileId) {
+                summary.hasSettings = true;
+                summary.settingsFileId = file.id;
+            }
+            if (file.name === WFT_PORTFOLIO_FILENAME && !summary.portfolioFileId) {
+                summary.hasPortfolio = true;
+                summary.portfolioFileId = file.id;
+            }
+        }
+
+        return summary;
+    }).catch(function (e) {
+        wftSyncWarn("[WFT Sync][FOLDER] sync file summary failed", { folderId: folderId, error: e });
+        return { folderId: folderId, hasSettings: false, hasPortfolio: false, newestTime: "", settingsFileId: "", portfolioFileId: "", fileCount: 0 };
+    });
+}
+
+function chooseCanonicalDriveFolderPromise(folders) {
+    if (!folders || !folders.length) return Promise.resolve(null);
+    if (folders.length === 1) return Promise.resolve(folders[0]);
+
+    wftSyncWarn("[WFT Sync][FOLDER] duplicate WritingFeedbackTool folders detected", { count: folders.length, folders: folders });
+
+    var chain = Promise.resolve([]);
+    folders.forEach(function (folder) {
+        chain = chain.then(function (summaries) {
+            return getWftFolderSyncFileSummary(folder.id).then(function (summary) {
+                summary.folder = folder;
+                summaries.push(summary);
+                return summaries;
+            });
+        });
+    });
+
+    return chain.then(function (summaries) {
+        var best = null;
+        var i;
+        var score;
+        var bestScore = -1;
+
+        for (i = 0; i < summaries.length; i += 1) {
+            score = 0;
+            if (summaries[i].hasSettings) score += 10;
+            if (summaries[i].hasPortfolio) score += 10;
+            if (summaries[i].newestTime) score += 1;
+
+            if (!best || score > bestScore || (score === bestScore && String(summaries[i].newestTime || summaries[i].folder.modifiedTime || "") > String(best.newestTime || best.folder.modifiedTime || ""))) {
+                best = summaries[i];
+                bestScore = score;
+            }
+        }
+
+        if (!best) return folders[0];
+
+        if (best.settingsFileId) setCachedWftDriveFileId(WFT_SETTINGS_FILENAME, best.settingsFileId);
+        if (best.portfolioFileId) setCachedWftDriveFileId(WFT_PORTFOLIO_FILENAME, best.portfolioFileId);
+
+        wftSyncWarn("[WFT Sync][FOLDER] selected canonical folder", {
+            selectedFolderId: best.folderId,
+            duplicateCount: folders.length,
+            reason: best.hasSettings && best.hasPortfolio ? "contains both sync files" : (best.hasSettings || best.hasPortfolio ? "contains one sync file" : "newest folder fallback"),
+            hasSettings: best.hasSettings,
+            hasPortfolio: best.hasPortfolio
+        });
+
+        return best.folder;
+    });
+}
+
+function ensureDriveFolder(callback) {
+    ensureDriveFolderPromise()
+        .then(function (folderId) {
+            callback(folderId);
+        })
+        .catch(function (e) {
+            wftSyncErrorLog("[WFT Sync][FOLDER] legacy folder resolver failed", e);
+            console.error("Drive folder error:", e);
+            setDriveSyncStatus("error", "Sync error");
+        });
 }
 
 function saveFileToDrive(filename, content, mimeType, callback) {
     if (!driveAccessToken) return;
     setDriveSyncStatus("syncing", "Syncing...");
     ensureDriveFolder(function(folderId) {
-        fetch("https://www.googleapis.com/drive/v3/files?q=name%3D%27" + encodeURIComponent(filename) + "%27+and+%27" + folderId + "%27+in+parents+and+trashed%3Dfalse&fields=files(id)", {
-            headers: { Authorization: "Bearer " + driveAccessToken }
-        }).then(function(r) { return r.json(); }).then(function(data) {
-            var existing = data.files && data.files.length > 0 ? data.files[0].id : null;
+        findWftFilesByNamePromise(filename).then(function(data) {
+            var existing = data && data.length > 0 ? data[0].id : null;
             var url, method, body;
             if (existing) {
                 url = "https://www.googleapis.com/upload/drive/v3/files/" + existing + "?uploadType=multipart";
@@ -4147,12 +4389,23 @@ function saveFileToDrive(filename, content, mimeType, callback) {
             var boundary = "----WFTBoundary" + Date.now();
             var meta = existing ? "{}" : JSON.stringify({ name: filename, parents: [folderId] });
             body = "--" + boundary + "\r\nContent-Type: application/json\r\n\r\n" + meta + "\r\n--" + boundary + "\r\nContent-Type: " + mimeType + "\r\n\r\n" + content + "\r\n--" + boundary + "--";
-            return fetch(url, {
+            return wftDriveFetch(url, {
                 method: method,
-                headers: { Authorization: "Bearer " + driveAccessToken, "Content-Type": "multipart/related; boundary=" + boundary },
+                headers: { "Content-Type": "multipart/related; boundary=" + boundary },
                 body: body
+            }).then(function (r) {
+                return r.json();
+            }).then(function (fileData) {
+                if (fileData && fileData.id) {
+                    if (filename === WFT_SETTINGS_FILENAME || filename === WFT_PORTFOLIO_FILENAME) {
+                        setCachedWftDriveFileId(filename, fileData.id);
+                    }
+                } else if (existing && (filename === WFT_SETTINGS_FILENAME || filename === WFT_PORTFOLIO_FILENAME)) {
+                    setCachedWftDriveFileId(filename, existing);
+                }
+                return fileData;
             });
-        }).then(function(r) { return r.json(); }).then(function() {
+        }).then(function() {
             var now = new Date();
             setDriveSyncStatus("synced", "Synced " + now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
             if (callback) callback();
@@ -4166,47 +4419,55 @@ function saveFileToDrive(filename, content, mimeType, callback) {
 // ── WFT Sync Engine V2 Promise wrappers ──
 function ensureDriveFolderPromise() {
     syncStateFromLegacyGoogleGlobals();
-    wftSyncLog("[WFT Sync] ensureDriveFolderPromise start", { cachedFolderId: driveFolderId || "" });
-    if (driveFolderId) {
-        wftSyncState.folderId = driveFolderId;
-        return Promise.resolve(driveFolderId);
-    }
+    wftSyncLog("[WFT Sync][FOLDER] ensureDriveFolderPromise start", { memoryFolderId: driveFolderId || "", cachedFolderId: getCachedWftDriveFolderId() || "" });
 
-    var query = "name='" + escapeDriveQueryValue(DRIVE_FOLDER_NAME) + "'"
-        + " and mimeType='application/vnd.google-apps.folder'"
-        + " and trashed=false";
-    var searchUrl = "https://www.googleapis.com/drive/v3/files"
-        + "?q=" + encodeURIComponent(query)
-        + "&fields=files(id,name,modifiedTime)"
-        + "&orderBy=modifiedTime desc";
+    var memoryFolderId = driveFolderId || wftSyncState.folderId || "";
+    var cachedFolderId = memoryFolderId || getCachedWftDriveFolderId();
 
-    return wftDriveFetch(searchUrl).then(function(response) {
-        return response.json();
-    }).then(function(data) {
-        wftSyncLog("[WFT Sync] folder search result", data && data.files ? data.files.length : 0, data && data.files ? data.files : []);
-        if (data && data.files && data.files.length) {
-            driveFolderId = data.files[0].id;
-            wftSyncState.folderId = driveFolderId;
-            return driveFolderId;
+    return validateCachedDriveFolderPromise(cachedFolderId).then(function (valid) {
+        if (valid) {
+            setCachedWftDriveFolderId(cachedFolderId);
+            return cachedFolderId;
         }
 
-        return wftDriveFetch("https://www.googleapis.com/drive/v3/files", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name: DRIVE_FOLDER_NAME,
-                mimeType: "application/vnd.google-apps.folder"
-            })
-        }).then(function(createResponse) {
-            return createResponse.json();
-        }).then(function(folder) {
-            if (!folder || !folder.id) {
-                throw new Error("NO_DRIVE_FOLDER");
-            }
-            wftSyncLog("[WFT Sync] created Drive folder", folder);
-            driveFolderId = folder.id;
-            wftSyncState.folderId = folder.id;
-            return folder.id;
+        var query = "name='" + escapeDriveQueryValue(DRIVE_FOLDER_NAME) + "'"
+            + " and mimeType='application/vnd.google-apps.folder'"
+            + " and trashed=false";
+        var searchUrl = "https://www.googleapis.com/drive/v3/files"
+            + "?q=" + encodeURIComponent(query)
+            + "&fields=files(id,name,modifiedTime)"
+            + "&orderBy=modifiedTime desc";
+
+        return wftDriveFetch(searchUrl).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            var files = data && data.files ? data.files : [];
+            wftSyncLog("[WFT Sync][FOLDER] folder search result", files.length, files);
+
+            return chooseCanonicalDriveFolderPromise(files).then(function (selected) {
+                if (selected && selected.id) {
+                    setCachedWftDriveFolderId(selected.id);
+                    return selected.id;
+                }
+
+                return wftDriveFetch("https://www.googleapis.com/drive/v3/files", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: DRIVE_FOLDER_NAME,
+                        mimeType: "application/vnd.google-apps.folder"
+                    })
+                }).then(function(createResponse) {
+                    return createResponse.json();
+                }).then(function(folder) {
+                    if (!folder || !folder.id) {
+                        throw new Error("NO_DRIVE_FOLDER");
+                    }
+                    wftSyncLog("[WFT Sync][FOLDER] created Drive folder", folder);
+                    setCachedWftDriveFolderId(folder.id);
+                    return folder.id;
+                });
+            });
         });
     });
 }
@@ -4407,24 +4668,69 @@ function escapeDriveQueryValue(value) {
     return String(value || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 }
 
+function validateCachedDriveFilePromise(fileId, filename, folderId) {
+    if (!fileId || !folderId) return Promise.resolve(false);
+
+    var url = "https://www.googleapis.com/drive/v3/files/"
+        + encodeURIComponent(fileId)
+        + "?fields=id,name,parents,trashed,modifiedTime,createdTime,size,mimeType";
+
+    if (!isWftTokenValid()) return Promise.resolve(false);
+
+    wftSyncLog("[WFT Sync][FILE] cached file validation start", { filename: filename, fileId: fileId });
+    return fetch(url, {
+        headers: { Authorization: "Bearer " + wftSyncState.accessToken }
+    }).then(function (response) {
+        wftSyncLog("[WFT Sync][FILE] cached file validation response", response.status, { filename: filename, fileId: fileId });
+        if (!response.ok) return false;
+        return response.json();
+    }).then(function (file) {
+        var parents = file && file.parents ? file.parents : [];
+        var valid = !!(file && file.id === fileId && file.name === filename && file.trashed === false && parents.indexOf(folderId) !== -1);
+        wftSyncLog("[WFT Sync][FILE] cached file validation", { filename: filename, fileId: fileId, valid: valid });
+        if (!valid) clearCachedWftDriveFileId(filename);
+        return valid ? file : false;
+    }).catch(function (e) {
+        wftSyncWarn("[WFT Sync][FILE] cached file validation failed", { filename: filename, fileId: fileId, error: e });
+        clearCachedWftDriveFileId(filename);
+        return false;
+    });
+}
+
 function findWftFilesByNamePromise(filename) {
-    wftSyncLog("[WFT Sync] find files start", filename);
+    wftSyncLog("[WFT Sync][FILE] find files start", filename);
     return ensureDriveFolderPromise().then(function (folderId) {
-        var query = "name='" + escapeDriveQueryValue(filename) + "'"
-            + " and '" + escapeDriveQueryValue(folderId) + "' in parents"
-            + " and trashed=false";
+        var cachedFileId = filename === WFT_SETTINGS_FILENAME ? wftSyncState.settingsFileId : wftSyncState.portfolioFileId;
+        cachedFileId = cachedFileId || getCachedWftDriveFileId(filename);
 
-        var url = "https://www.googleapis.com/drive/v3/files"
-            + "?q=" + encodeURIComponent(query)
-            + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType)"
-            + "&orderBy=modifiedTime desc";
+        return validateCachedDriveFilePromise(cachedFileId, filename, folderId).then(function (cachedFile) {
+            var query;
+            var url;
 
-        return wftDriveFetch(url).then(function (response) {
-            return response.json();
-        }).then(function (data) {
-            var files = data && data.files ? data.files : [];
-            wftSyncLog("[WFT Sync] find files result", filename, files.length, files);
-            return files;
+            if (cachedFile) {
+                wftSyncLog("[WFT Sync][FILE] using cached file", filename, cachedFile.id);
+                return [cachedFile];
+            }
+
+            query = "name='" + escapeDriveQueryValue(filename) + "'"
+                + " and '" + escapeDriveQueryValue(folderId) + "' in parents"
+                + " and trashed=false";
+
+            url = "https://www.googleapis.com/drive/v3/files"
+                + "?q=" + encodeURIComponent(query)
+                + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType)"
+                + "&orderBy=modifiedTime desc";
+
+            return wftDriveFetch(url).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var files = data && data.files ? data.files : [];
+                wftSyncLog("[WFT Sync][FILE] find files result", filename, files.length, files);
+                if (files.length) {
+                    setCachedWftDriveFileId(filename, files[0].id);
+                }
+                return files;
+            });
         });
     });
 }
@@ -4435,7 +4741,7 @@ function chooseCanonicalWftFile(files) {
 }
 
 function downloadWftJsonFilePromise(fileId) {
-    wftSyncLog("[WFT Sync] download JSON start", fileId);
+    wftSyncLog("[WFT Sync][FILE] download JSON start", fileId);
     var url = "https://www.googleapis.com/drive/v3/files/"
         + encodeURIComponent(fileId)
         + "?alt=media";
@@ -4447,7 +4753,7 @@ function downloadWftJsonFilePromise(fileId) {
 
         try {
             var parsed = JSON.parse(text);
-            wftSyncLog("[WFT Sync] download JSON parsed", fileId, getWftHash(parsed));
+            wftSyncLog("[WFT Sync][FILE] download JSON parsed", fileId, getWftHash(parsed));
             return parsed;
         } catch (e) {
             wftSyncWarn("[WFT Sync] download JSON parse failed", fileId, e);
@@ -4457,7 +4763,7 @@ function downloadWftJsonFilePromise(fileId) {
 }
 
 function uploadWftJsonFilePromise(filename, data) {
-    wftSyncLog("[WFT Sync] upload JSON start", filename);
+    wftSyncLog("[WFT Sync][FILE] upload JSON start", filename);
     var content = JSON.stringify(data || {}, null, 2);
     var intendedHash = filename === WFT_SETTINGS_FILENAME
         ? getSettingsFingerprint(data)
@@ -4465,8 +4771,14 @@ function uploadWftJsonFilePromise(filename, data) {
 
     return saveFileToDrivePromise(filename, content, "application/json")
         .then(function () {
-            wftSyncLog("[WFT Sync] upload JSON saved", filename, intendedHash);
-            return findWftFilesByNamePromise(filename);
+            wftSyncLog("[WFT Sync][FILE] upload JSON saved", filename, intendedHash);
+            return findWftFilesByNamePromise(filename).then(function (files) {
+                var canonical = chooseCanonicalWftFile(files);
+                if (canonical && canonical.id) {
+                    setCachedWftDriveFileId(filename, canonical.id);
+                }
+                return canonical && canonical.id ? canonical.id : files;
+            });
         })
         .catch(function (e) {
             if (String(e.message || "").indexOf("SAVE_FILE_TIMEOUT:") !== 0) {
@@ -4486,6 +4798,10 @@ function uploadWftJsonFilePromise(filename, data) {
                         : getPortfolioFingerprint(cloudData || {});
 
                     if (cloudHash === intendedHash) {
+                        if (canonical && canonical.id) {
+                            setCachedWftDriveFileId(filename, canonical.id);
+                            return canonical.id;
+                        }
                         return files;
                     }
 
@@ -4677,12 +4993,16 @@ function syncWftSettingsIfNeeded(reason) {
             canonical = chooseCanonicalWftFile(files);
 
             if (canonical) {
-                wftSyncState.settingsFileId = canonical.id;
+                setCachedWftDriveFileId(WFT_SETTINGS_FILENAME, canonical.id);
             }
 
             if (!canonical) {
-                if (!hadPending) return false;
+                if (!hadPending) {
+                    wftSyncLog("[WFT Sync][SETTINGS] decision", "skip-no-cloud-no-local-pending", { localHash: localHash });
+                    return false;
+                }
 
+                wftSyncLog("[WFT Sync][SETTINGS] decision", "create-remote", { localHash: localHash });
                 return uploadWftJsonFilePromise(WFT_SETTINGS_FILENAME, localSettings).then(function (fileId) {
                     wftSyncState.settingsFileId = fileId || wftSyncState.settingsFileId;
                     wftSyncState.lastSyncedSettingsHash = localHash;
@@ -4719,6 +5039,7 @@ function syncWftSettingsIfNeeded(reason) {
                     }
 
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
+                        wftSyncLog("[WFT Sync][SETTINGS] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
                         return uploadWftJsonFilePromise(WFT_SETTINGS_FILENAME, merged).then(function () {
                             wftSyncState.lastSyncedSettingsHash = mergedHash;
                             wftSyncState.lastSyncedSettingsCounter = counterSnapshot;
@@ -4727,6 +5048,7 @@ function syncWftSettingsIfNeeded(reason) {
                         });
                     }
 
+                    wftSyncLog("[WFT Sync][SETTINGS] decision", mergedHash !== localHash ? "pull-remote" : "skip-same-hash", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending });
                     wftSyncState.lastSyncedSettingsHash = mergedHash;
                     wftSyncState.lastSyncedSettingsCounter = counterSnapshot;
                     wftSyncState.pendingSettingsPush = false;
@@ -4908,12 +5230,16 @@ function syncWftPortfolioIfNeeded(reason) {
             canonical = chooseCanonicalWftFile(files);
 
             if (canonical) {
-                wftSyncState.portfolioFileId = canonical.id;
+                setCachedWftDriveFileId(WFT_PORTFOLIO_FILENAME, canonical.id);
             }
 
             if (!canonical) {
-                if (!hadPending) return false;
+                if (!hadPending) {
+                    wftSyncLog("[WFT Sync][PORTFOLIO] decision", "skip-no-cloud-no-local-pending", { localHash: localHash });
+                    return false;
+                }
 
+                wftSyncLog("[WFT Sync][PORTFOLIO] decision", "create-remote", { localHash: localHash });
                 return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, localPortfolio).then(function (fileId) {
                     wftSyncState.portfolioFileId = fileId || wftSyncState.portfolioFileId;
                     wftSyncState.lastSyncedPortfolioHash = localHash;
@@ -4941,6 +5267,7 @@ function syncWftPortfolioIfNeeded(reason) {
                     }
 
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
+                        wftSyncLog("[WFT Sync][PORTFOLIO] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
                         return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, merged).then(function () {
                             wftSyncState.lastSyncedPortfolioHash = mergedHash;
                             wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
@@ -4949,6 +5276,7 @@ function syncWftPortfolioIfNeeded(reason) {
                         });
                     }
 
+                    wftSyncLog("[WFT Sync][PORTFOLIO] decision", mergedHash !== localHash ? "pull-remote" : "skip-same-hash", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending });
                     wftSyncState.lastSyncedPortfolioHash = mergedHash;
                     wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
                     wftSyncState.pendingPortfolioPush = false;
@@ -5063,7 +5391,6 @@ function syncWftNow(reason, options) {
         .then(function (portfolioChanged) {
             wftSyncLog("[WFT Sync] run portfolio done", runId, portfolioChanged, getWftSyncDebugSnapshot());
             wftSyncState.lastPollAt = Date.now();
-            setDriveSyncStatus("synced", "Synced");
             return true;
         })
         .catch(function (e) {
@@ -5086,11 +5413,43 @@ function syncWftNow(reason, options) {
                 return syncWftNow("queued-after-current", { immediate: false });
             }
 
+            if (result) {
+                setDriveSyncStatus("synced", "Synced");
+            }
+
             return result;
         });
 
     return wftSyncState.currentSyncPromise;
 }
+
+
+function getWftSyncDiagnostics() {
+    syncStateFromLegacyGoogleGlobals();
+    return {
+        signedIn: !!wftSyncState.signedIn,
+        hasAccessToken: !!wftSyncState.accessToken,
+        tokenExpiresAt: wftSyncState.tokenExpiresAt || 0,
+        folderId: wftSyncState.folderId || driveFolderId || getCachedWftDriveFolderId() || "",
+        settingsFileId: wftSyncState.settingsFileId || getCachedWftDriveFileId(WFT_SETTINGS_FILENAME) || "",
+        portfolioFileId: wftSyncState.portfolioFileId || getCachedWftDriveFileId(WFT_PORTFOLIO_FILENAME) || "",
+        isSyncing: !!wftSyncState.isSyncing,
+        explicitSaveInProgress: !!wftSyncState.explicitSaveInProgress,
+        pendingSettingsPush: !!wftSyncState.pendingSettingsPush,
+        pendingPortfolioPush: !!wftSyncState.pendingPortfolioPush,
+        needsSyncAfterCurrent: !!wftSyncState.needsSyncAfterCurrent,
+        lastSyncedSettingsHash: wftSyncState.lastSyncedSettingsHash || "",
+        lastSyncedPortfolioHash: wftSyncState.lastSyncedPortfolioHash || "",
+        quotaBlocked: !!wftSyncState.quotaBlocked,
+        permissionBlocked: !!wftSyncState.permissionBlocked,
+        authBlocked: !!wftSyncState.authBlocked,
+        lastError: wftSyncState.lastError ? String(wftSyncState.lastError.message || wftSyncState.lastError) : null
+    };
+}
+
+try {
+    window.WFT_SYNC_DIAGNOSTICS = getWftSyncDiagnostics;
+} catch (e) { }
 
 // ── WFT Sync Engine V2 polling and lifecycle ──
 function shouldPollWftCloudNow() {
