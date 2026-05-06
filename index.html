@@ -6160,7 +6160,7 @@ function ensureWftImageId(image, sessionId, index) {
     return image;
 }
 
-function uploadSessionImagesToDrive(studentName, sessionData, callback) {
+function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPortfolioSave) {
     if (!driveAccessToken || !studentName || !sessionData || !sessionData.images || !sessionData.images.length) {
         if (callback) callback();
         return;
@@ -6188,7 +6188,7 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback) {
     var index = 0;
     function nextUpload() {
         if (index >= remaining.length) {
-            savePortfolioData(getPortfolioData());
+            if (!skipPortfolioSave) savePortfolioData(getPortfolioData());
             if (callback) callback();
             return;
         }
@@ -6199,8 +6199,17 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback) {
         uploadBlobToDrive(filename, blob, image.mimeType, function(result) {
             if (result && result.id) {
                 image.driveFileId = result.id;
+                image.driveName = result.name || image.driveName || filename;
                 image.driveUploadedAt = new Date().toISOString();
                 image.pendingDriveUpload = false;
+                image.dataUrl = '';
+                image.dataUrlRemovedForStorage = true;
+                if (image.originalDataUrl) delete image.originalDataUrl;
+                if (image.extractedText) delete image.extractedText;
+                wftSyncLog("[WFT Media] image uploaded", { imageId: image.imageId || image.id || '', driveFileId: image.driveFileId });
+            } else {
+                image.pendingDriveUpload = true;
+                wftSyncLog("[WFT Media] image upload skipped or failed", { imageId: image.imageId || image.id || '', name: image.name || '' });
             }
             nextUpload();
         });
@@ -6311,6 +6320,48 @@ function getCategoryAverageMap(sessions) {
     return averages;
 }
 
+
+function hydratePortfolioDriveImages(root) {
+    if (!root || !driveAccessToken) return;
+    var imgs = root.querySelectorAll ? root.querySelectorAll('img[data-drive-file-id]') : [];
+    for (var i = 0; i < imgs.length; i += 1) {
+        (function(img) {
+            var fileId = img.getAttribute('data-drive-file-id');
+            if (!fileId) return;
+            img.alt = img.getAttribute('alt') || 'Student work image';
+            fetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?alt=media', {
+                headers: { Authorization: 'Bearer ' + driveAccessToken }
+            }).then(function(r) {
+                if (!r.ok) throw new Error('Drive image fetch failed: ' + r.status);
+                return r.blob();
+            }).then(function(blob) {
+                var url = URL.createObjectURL(blob);
+                img.src = url;
+                img.removeAttribute('data-drive-file-id');
+                img.setAttribute('data-drive-loaded', 'true');
+                var status = img.parentNode ? img.parentNode.querySelector('.drive-image-status') : null;
+                if (status) status.textContent = 'Loaded from Drive';
+            }).catch(function(e) {
+                console.warn('Could not load portfolio image from Drive:', e);
+                var status = img.parentNode ? img.parentNode.querySelector('.drive-image-status') : null;
+                if (status) status.textContent = 'Image stored in Drive, but preview could not load.';
+            });
+        })(imgs[i]);
+    }
+}
+
+function renderPortfolioSessionImageHtml(image) {
+    image = image || {};
+    var name = escapeHtml(image.name || 'Student work image');
+    if (image.dataUrl) {
+        return '<img src="' + image.dataUrl + '" alt="' + name + '">';
+    }
+    if (image.driveFileId) {
+        return '<img data-drive-file-id="' + escapeHtml(image.driveFileId) + '" alt="' + name + '"><div class="thumb-caption drive-image-status">Loading from Drive...</div>';
+    }
+    return '<div class="thumb-caption">Image not available offline.</div>';
+}
+
 function renderStudentPortfolio() {
     var sel = document.getElementById('portfolioStudentSelect');
     var contentEl = document.getElementById('portfolioContent');
@@ -6400,8 +6451,8 @@ function renderStudentPortfolio() {
         if (sess.images && sess.images.length) {
             imageStripHtml = '<div class="session-photo-strip">' + sess.images.map(function(image) {
                 return '<div class="session-photo-thumb">'
-                    + (image.dataUrl ? '<img src="' + image.dataUrl + '" alt="' + escapeHtml(image.name || 'Student work image') + '">' : '<div class="thumb-caption">Image not available offline.</div>')
-                    + '<div class="thumb-caption">' + escapeHtml(image.name || 'Image') + (image.pendingDriveUpload ? '<br>Waiting to sync to Drive' : '') + '</div>'
+                    + renderPortfolioSessionImageHtml(image)
+                    + '<div class="thumb-caption">' + escapeHtml(image.name || 'Image') + (image.pendingDriveUpload ? '<br>Waiting to sync to Drive' : (image.driveFileId ? '<br>Stored in Drive' : '')) + '</div>'
                     + '</div>';
             }).join('') + '</div>';
         }
@@ -6428,6 +6479,8 @@ function renderStudentPortfolio() {
         + '<div class="portfolio-chart-wrap"><h4>Category Scores Over Time</h4><canvas id="' + catChartId + '" class="portfolio-chart-canvas"></canvas></div>'
         + '</div>'
         + '<div class="portfolio-sessions-list"><h4>Saved Work</h4>' + sessionCardsHtml + '</div>';
+
+    hydratePortfolioDriveImages(contentEl);
 
     setTimeout(function() {
         if (typeof Chart === 'undefined') return;
@@ -6575,6 +6628,49 @@ function setSyncButtonsFailure(failureLabel) {
     }
 }
 
+
+function pendingPortfolioSessionHasUploadableImages(pending) {
+    var images = pending && pending.sessionData && pending.sessionData.images;
+    if (!images || !images.length) return false;
+    for (var i = 0; i < images.length; i += 1) {
+        if (images[i] && images[i].dataUrl && !images[i].driveFileId) return true;
+    }
+    return false;
+}
+
+function uploadPendingPortfolioMediaBeforeCommit(callback) {
+    var pending = getPendingPortfolioSync();
+    if (!pending || !pending.studentName || !pending.sessionData) {
+        if (callback) callback(false);
+        return;
+    }
+    if (!driveAccessToken) {
+        if (callback) callback(false);
+        return;
+    }
+    if (!pendingPortfolioSessionHasUploadableImages(pending)) {
+        if (callback) callback(false);
+        return;
+    }
+
+    wftSyncLog("[WFT Media] pending image upload before portfolio commit", {
+        studentName: pending.studentName,
+        sessionId: pending.sessionData.id || pending.sessionData.createdAt || '',
+        imageCount: pending.sessionData.images ? pending.sessionData.images.length : 0
+    });
+    setDriveSyncStatus('syncing', 'Uploading portfolio image...');
+    uploadSessionImagesToDrive(pending.studentName, pending.sessionData, function() {
+        // Persist the updated pending session after successful media upload metadata is added.
+        // At this point uploaded images have driveFileId values and their dataUrl values have been cleared.
+        try {
+            persistPendingPortfolioSync();
+        } catch (e) {
+            console.warn('Could not persist pending portfolio after media upload; continuing with in-memory data.', e);
+        }
+        if (callback) callback(true);
+    }, true);
+}
+
 function manualSaveToDrive() {
     wftSyncLog("[WFT Sync] manualSaveToDrive requested", getWftSyncDebugSnapshot());
     if (manualSyncInProgress) {
@@ -6590,70 +6686,84 @@ function manualSaveToDrive() {
         });
         return;
     }
+
     manualSyncInProgress = true;
     setSyncButtonsBusy(true, 'Syncing...');
     setDriveSyncStatus('syncing', 'Syncing saved work...');
+
     var hadPendingBeforeCommit = !!getPendingPortfolioSync();
     var committedPending = false;
-    try {
-        committedPending = commitPendingPortfolioSync();
-        wftSyncLog("[WFT Sync] manualSaveToDrive committed pending portfolio", committedPending);
-    } catch (e) {
-        console.error('Portfolio commit failed before Drive sync:', e);
-        wftSyncLog("[WFT Sync] portfolio commit failed before Drive sync", {
-            name: e && e.name ? e.name : '',
-            message: e && e.message ? e.message : String(e),
-            stack: e && e.stack ? e.stack : ''
-        });
-        manualSyncInProgress = false;
-        setSyncButtonsFailure('Retry Sync to Portfolio');
-        setDriveSyncStatus('error', 'Portfolio save failed before Drive sync');
-        return;
-    }
-    if (hadPendingBeforeCommit && !committedPending) {
-        manualSyncInProgress = false;
-        setSyncButtonsFailure('Retry Sync to Portfolio');
-        setDriveSyncStatus('error', 'Portfolio save failed before Drive sync');
-        return;
-    }
 
-    // ── WFT Sync V2: use immediate flush for explicit Sync to Portfolio ──
-    if (WFT_SYNC_ENGINE_V2) {
-        markWftPortfolioDirty("explicit-sync-to-portfolio");
-        flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
-            wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
-            manualSyncInProgress = false;
-            if (!result) {
-                setSyncButtonsFailure('Retry Sync to Portfolio');
-                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
-            } else {
-                setSyncButtonsBusy(false);
-                setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
-            }
-        }).catch(function (e) {
-            console.error('Manual Drive flush failed:', e);
-            wftSyncLog("[WFT Sync] manualSaveToDrive flush threw", {
+    function finishManualSaveToDrive() {
+        try {
+            committedPending = commitPendingPortfolioSync();
+            wftSyncLog("[WFT Sync] manualSaveToDrive committed pending portfolio", committedPending);
+        } catch (e) {
+            console.error('Portfolio commit failed before Drive sync:', e);
+            wftSyncLog("[WFT Sync] portfolio commit failed before Drive sync", {
                 name: e && e.name ? e.name : '',
                 message: e && e.message ? e.message : String(e),
                 stack: e && e.stack ? e.stack : ''
             });
             manualSyncInProgress = false;
             setSyncButtonsFailure('Retry Sync to Portfolio');
-            setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
-        });
-        return;
-    }
-
-    syncAllToDrive(function(success) {
-        manualSyncInProgress = false;
-        if (success === false) {
-            setSyncButtonsFailure('Retry Sync to Portfolio');
-            setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+            setDriveSyncStatus('error', 'Portfolio save failed before Drive sync');
             return;
         }
-        setSyncButtonsBusy(false);
-        setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
-    });
+
+        if (hadPendingBeforeCommit && !committedPending) {
+            manualSyncInProgress = false;
+            setSyncButtonsFailure('Retry Sync to Portfolio');
+            setDriveSyncStatus('error', 'Portfolio save failed before Drive sync');
+            return;
+        }
+
+        // ── WFT Sync V2: use immediate flush for explicit Sync to Portfolio ──
+        if (WFT_SYNC_ENGINE_V2) {
+            markWftPortfolioDirty("explicit-sync-to-portfolio");
+            flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
+                wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
+                manualSyncInProgress = false;
+                if (!result) {
+                    setSyncButtonsFailure('Retry Sync to Portfolio');
+                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                } else {
+                    setSyncButtonsBusy(false);
+                    setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
+                }
+            }).catch(function (e) {
+                console.error('Manual Drive flush failed:', e);
+                wftSyncLog("[WFT Sync] manualSaveToDrive flush threw", {
+                    name: e && e.name ? e.name : '',
+                    message: e && e.message ? e.message : String(e),
+                    stack: e && e.stack ? e.stack : ''
+                }, getWftSyncDebugSnapshot());
+                manualSyncInProgress = false;
+                setSyncButtonsFailure('Retry Sync to Portfolio');
+                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+            });
+            return;
+        }
+
+        syncAllToDrive(function(success) {
+            manualSyncInProgress = false;
+            if (success === false) {
+                setSyncButtonsFailure('Retry Sync to Portfolio');
+                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                return;
+            }
+            setSyncButtonsBusy(false);
+            setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
+        });
+    }
+
+    if (hadPendingBeforeCommit && pendingPortfolioSessionHasUploadableImages(getPendingPortfolioSync())) {
+        uploadPendingPortfolioMediaBeforeCommit(function() {
+            finishManualSaveToDrive();
+        });
+    } else {
+        finishManualSaveToDrive();
+    }
 }
 
 /* =============================================
