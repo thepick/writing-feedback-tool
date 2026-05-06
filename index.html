@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v13 -->
+<!-- Writing Feedback Tool v14 -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -10575,6 +10575,202 @@ function buildStudentSummaryHtml(studentName, studentData, schoolYear) {
     return buildExportHtmlDocument(studentName + " - Portfolio Summary", html);
 }
 
+function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
+    var sessions = getStudentSessions(studentData).slice().sort(function(a, b) {
+        var aTime = a && a.createdAt ? Date.parse(a.createdAt) : 0;
+        var bTime = b && b.createdAt ? Date.parse(b.createdAt) : 0;
+        return bTime - aTime;
+    });
+    if (!sessions.length) {
+        return buildExportHtmlDocument(studentName + " - Portfolio", '<div class="empty">No writing sessions recorded yet.</div>');
+    }
+
+    var latestSession = sessions[0];
+    var prevSession = sessions.length >= 2 ? sessions[1] : null;
+    var overalls = sessions.map(function(s) { return s.overall != null ? Number(s.overall) : null; }).filter(function(v) { return v != null && !isNaN(v); });
+    var avgOverall = overalls.length ? Math.round(overalls.reduce(function(a, b) { return a + b; }, 0) / overalls.length) : null;
+    var latestOverall = latestSession.overall != null ? Number(latestSession.overall) : null;
+    var prevOverall = prevSession && prevSession.overall != null ? Number(prevSession.overall) : null;
+    var trend = latestOverall != null && prevOverall != null ? latestOverall - prevOverall : null;
+    var bestOverall = overalls.length ? Math.max.apply(null, overalls) : null;
+    var categoryAverages = getCategoryAverageMap(sessions);
+    var portfolioCategoryKeys = getPortfolioCategoryKeys(sessions);
+    var weakestCategory = null;
+    var strongestCategory = null;
+    portfolioCategoryKeys.forEach(function(key) {
+        if (categoryAverages[key] == null) return;
+        if (strongestCategory == null || categoryAverages[key] > categoryAverages[strongestCategory]) strongestCategory = key;
+        if (weakestCategory == null || categoryAverages[key] < categoryAverages[weakestCategory]) weakestCategory = key;
+    });
+
+    var trendText = '';
+    if (trend != null) {
+        if (trend > 0) trendText = '&#9650; +' + trend + '% vs previous';
+        else if (trend < 0) trendText = '&#9660; ' + trend + '% vs previous';
+        else trendText = 'Same as previous';
+    }
+
+    var html = '';
+    html += '<div class="portfolio-page">';
+
+    // Header
+    html += '<div class="portfolio-header">';
+    html += '<h1>' + escapeHtml(studentName) + ' &mdash; Writing Portfolio</h1>';
+    html += '<p class="muted">School Year: ' + escapeHtml(schoolYear) + ' &bull; ' + sessions.length + ' submission' + (sessions.length !== 1 ? 's' : '') + '</p>';
+    html += '</div>';
+
+    // Stats grid
+    html += '<div class="stats-grid">';
+    html += '<div class="stat-card"><div class="stat-label">Latest Score</div><div class="stat-value">' + (latestOverall != null ? latestOverall + '%' : '-') + '</div><div class="stat-trend">' + trendText + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Average Score</div><div class="stat-value">' + (avgOverall != null ? avgOverall + '%' : '-') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Best Score</div><div class="stat-value">' + (bestOverall != null ? bestOverall + '%' : '-') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Submissions</div><div class="stat-value">' + sessions.length + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Strongest Area</div><div class="stat-value area-name">' + escapeHtml(strongestCategory || '-') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Focus Area</div><div class="stat-value area-name">' + escapeHtml(weakestCategory || '-') + '</div></div>';
+    html += '</div>';
+
+    // Session cards (newest first)
+    html += '<h2 class="section-title">Saved Work</h2>';
+    for (var si = 0; si < sessions.length; si += 1) {
+        var sess = sessions[si];
+        var scoreColor = scoreBadgeColor(sess.overall);
+
+        // Category chips
+        var chipsHtml = '';
+        var sessCategoryKeys = typeof getSessionCategoryKeys === 'function' ? getSessionCategoryKeys(sess) : Object.keys(sess.categoryScores || {});
+        sessCategoryKeys.forEach(function(key) {
+            var value = sess.categoryScores && sess.categoryScores[key] != null ? sess.categoryScores[key] : '-';
+            var chipClass = getRubricScoreColorClass(value);
+            chipsHtml += '<span class="chip ' + chipClass + '"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</span>';
+        });
+
+        // Feedback notes
+        var feedbackText = buildSessionExportFeedbackText(sess);
+        var notesContent = feedbackText ? renderSimpleMarkdown(feedbackText) : '<em>No notes saved.</em>';
+
+        // Corrected HTML (use the same helper as the in-app portfolio when available)
+        var correctedDisplayHtml = '';
+        if (typeof getPortfolioCorrectedHtml === 'function') {
+            correctedDisplayHtml = getPortfolioCorrectedHtml(sess);
+        } else if (sess.correctedMarkup) {
+            correctedDisplayHtml = renderCorrectionMarkdown(sess.correctedMarkup);
+        } else if (sess.correctedHtml) {
+            correctedDisplayHtml = sess.correctedHtml;
+        } else {
+            correctedDisplayHtml = '<pre>' + escapeHtml(getSessionCorrectedText(sess)) + '</pre>';
+        }
+
+        html += '<div class="session-card">';
+        // Header row
+        html += '<div class="session-card-header">';
+        html += '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(getSessionDate(sess) || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(getSessionTitle(sess) || 'Untitled') + '</span></div>';
+        html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>';
+        html += '</div>';
+        // Meta
+        html += '<div class="session-meta">' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>';
+        // Chips
+        html += '<div class="chip-row">' + chipsHtml + '</div>';
+        // Artifact grid: Original | Corrected | Notes
+        html += '<div class="artifact-grid">';
+        html += '<div class="artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(getSessionOriginalText(sess)) + '</pre></div>';
+        html += '<div class="artifact-box"><h5>Corrected Writing</h5><div class="rich-html">' + correctedDisplayHtml + '</div></div>';
+        html += '<div class="artifact-box"><h5>Teacher Notes</h5><div class="rich-html">' + notesContent + '</div></div>';
+        html += '</div>';
+
+        // Image strip
+        if (sess.images && sess.images.length) {
+            html += '<div class="photo-strip">';
+            for (var imi = 0; imi < sess.images.length; imi++) {
+                var img = sess.images[imi];
+                if (img.dataUrl) {
+                    html += '<div class="photo-thumb"><img src="' + img.dataUrl + '" alt="' + escapeHtml(img.name || 'Image') + '" class="export-image"><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
+                } else {
+                    html += '<div class="photo-thumb"><div class="photo-placeholder">&#128247; Image not available in export</div><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
+                }
+            }
+            html += '</div>';
+        }
+
+        html += '</div>'; // .session-card
+    }
+
+    html += '</div>'; // .portfolio-page
+
+    // Inline CSS matching in-app portfolio look
+    var css = ''
+        + '*{box-sizing:border-box;margin:0;padding:0;}'
+        + 'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;color:#1e293b;background:#f1f5f9;padding:24px;}'
+        + '.portfolio-page{max-width:960px;margin:0 auto;}'
+        + '.portfolio-header{margin-bottom:24px;}'
+        + '.portfolio-header h1{font-size:1.6rem;color:#0f172a;margin-bottom:4px;}'
+        + '.muted{color:#64748b;font-size:0.9rem;}'
+        + '.empty{text-align:center;color:#94a3b8;padding:60px 0;}'
+
+        // Stats grid
+        + '.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px;}'
+        + '.stat-card{background:white;border:1px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center;}'
+        + '.stat-card .stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;margin-bottom:6px;}'
+        + '.stat-card .stat-value{font-size:1.5rem;font-weight:700;color:#0f172a;}'
+        + '.stat-card .stat-value.area-name{font-size:0.85rem;}'
+        + '.stat-card .stat-trend{font-size:12px;color:#64748b;margin-top:4px;}'
+
+        // Section title
+        + '.section-title{font-size:1.1rem;color:#334155;margin-bottom:14px;}'
+
+        // Session cards
+        + '.session-card{border:1px solid #e2e8f0;border-radius:10px;background:white;padding:18px;margin-bottom:16px;}'
+        + '.session-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;}'
+        + '.session-card-title-wrap{flex:1;min-width:180px;}'
+        + '.session-date{color:#64748b;font-size:12px;}'
+        + '.session-title{font-weight:700;color:#0f172a;display:block;margin-top:2px;}'
+        + '.session-score{font-weight:700;font-size:1rem;padding:6px 12px;border-radius:999px;background:#f8fafc;border:1px solid;white-space:nowrap;}'
+        + '.session-meta{font-size:12px;color:#64748b;margin-bottom:10px;}'
+
+        // Chips
+        + '.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}'
+        + '.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:12px;background:#f8fafc;border:1px solid #cbd5e1;color:#475569;}'
+        + '.chip strong{color:inherit;}'
+        + '.chip.score-green{background:#ecfdf5;border-color:#86efac;color:#166534;}'
+        + '.chip.score-blue{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;}'
+        + '.chip.score-amber{background:#fffbeb;border-color:#fcd34d;color:#b45309;}'
+        + '.chip.score-red{background:#fef2f2;border-color:#fca5a5;color:#b91c1c;}'
+        + '.chip.score-gray{background:#f8fafc;border-color:#cbd5e1;color:#475569;}'
+
+        // Artifact grid
+        + '.artifact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:4px;}'
+        + '.artifact-box{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fafafa;}'
+        + '.artifact-box h5{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;}'
+        + '.artifact-box pre,.artifact-box .rich-html{margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:13px;line-height:1.5;color:#1e293b;}'
+
+        // Rich HTML (for corrected text with highlights)
+        + '.rich-html .corrected-highlight{background:#fde68a;color:#78350f;font-weight:600;padding:0 2px;border-radius:3px;}'
+        + '.rich-html .story-title-line{display:block;font-weight:700;margin-bottom:10px;color:#0f172a;}'
+        + '.rich-html strong{font-weight:700;}'
+        + '.rich-html br{display:block;content:"";margin-top:4px;}'
+
+        // Photo strip
+        + '.photo-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}'
+        + '.photo-thumb{border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:white;max-width:200px;}'
+        + '.photo-thumb .export-image{width:100%;height:auto;display:block;}'
+        + '.photo-placeholder{width:200px;height:100px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;color:#94a3b8;font-size:12px;text-align:center;padding:12px;}'
+        + '.thumb-caption{font-size:11px;color:#64748b;padding:6px 8px;text-align:center;background:#f8fafc;}'
+
+        // Print styles
+        + '@media print{body{background:white;padding:0;}.session-card{break-inside:avoid;border:1px solid #ddd;}.artifact-grid{grid-template-columns:repeat(3,1fr);}}'
+        + '@media(max-width:640px){.artifact-grid{grid-template-columns:1fr;}.stats-grid{grid-template-columns:repeat(2,1fr);}}'
+        ;
+
+    return '<!DOCTYPE html>'
+        + '<html lang="en">'
+        + '<head>'
+        + '<meta charset="UTF-8">'
+        + '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+        + '<title>' + escapeHtml(studentName) + ' - Writing Portfolio</title>'
+        + '<style>' + css + '</style>'
+        + '</head>'
+        + '<body>' + html + '</body></html>';
+}
+
 function buildStudentSessionsCsv(studentName, studentData) {
     var sessions = getStudentSessions(studentData);
     var rows = [];
@@ -10827,6 +11023,9 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
 
 function addStudentExportFiles(folder, studentName, studentData, schoolYear, options) {
     var safeStudentName = sanitizeFileName(studentName);
+    var richPortfolioHtml = buildStudentPortfolioHtml(studentName, studentData, schoolYear);
+    folder.file("Portfolio.html", richPortfolioHtml);
+    folder.file(safeStudentName + " - Portfolio.html", richPortfolioHtml);
     folder.file(safeStudentName + " - Portfolio Summary.html", buildStudentSummaryHtml(studentName, studentData, schoolYear));
     folder.file(safeStudentName + " - All Writing.json", JSON.stringify(studentData || { sessions: [] }, null, 2));
     folder.file(safeStudentName + " - Writing Sessions.csv", buildStudentSessionsCsv(studentName, studentData));
@@ -11138,7 +11337,7 @@ function exportSelectedStudentPortfolio() {
                 throw new Error("Student export appears to be empty or invalid.");
             }
             downloadBlob(result.blob, result.fileName);
-            setWftArchiveStatus("Student export complete: " + studentName);
+            setWftArchiveStatus("Student export complete: " + studentName + ". Open the downloaded zip, then open Portfolio.html.");
         })
         .catch(function(e) {
             console.error("[WFT Archive] Student export failed:", e);
