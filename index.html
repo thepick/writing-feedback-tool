@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v14 -->
+<!-- Writing Feedback Tool v15 -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -11128,7 +11128,8 @@ function createSingleStudentArchiveZip(studentName, options) {
             var portfolio = getActivePortfolioForExport();
             var studentData = portfolio[studentName];
             var zip = new JSZip();
-            var root;
+            var safeStudentName = sanitizeFileName(studentName);
+            var portfolioFileName = safeStudentName + " - Portfolio.html";
             var fileName;
 
             if (!studentData) {
@@ -11136,18 +11137,17 @@ function createSingleStudentArchiveZip(studentName, options) {
                 return;
             }
 
-            root = zip.folder(sanitizeFileName(studentName));
-            setWftArchiveStatus("Creating export for " + studentName + "...");
+            setWftArchiveStatus("Creating portfolio export for " + studentName + "...");
 
-            addStudentExportFiles(root, studentName, studentData, suggestSchoolYear(), options || {}).then(function() {
-                return zip.generateAsync({
-                    type: "blob",
-                    compression: "DEFLATE",
-                    compressionOptions: { level: 6 }
-                });
+            zip.file(portfolioFileName, buildStudentPortfolioHtml(studentName, studentData, suggestSchoolYear()));
+
+            zip.generateAsync({
+                type: "blob",
+                compression: "DEFLATE",
+                compressionOptions: { level: 6 }
             }).then(function(blob) {
-                fileName = sanitizeFileName(studentName) + " - Writing Portfolio.zip";
-                resolve({ blob: blob, fileName: fileName });
+                fileName = safeStudentName + " - Writing Portfolio.zip";
+                resolve({ blob: blob, fileName: fileName, portfolioFileName: portfolioFileName });
             }).catch(function(e) {
                 reject(e);
             });
@@ -11337,7 +11337,7 @@ function exportSelectedStudentPortfolio() {
                 throw new Error("Student export appears to be empty or invalid.");
             }
             downloadBlob(result.blob, result.fileName);
-            setWftArchiveStatus("Student export complete: " + studentName + ". Open the downloaded zip, then open Portfolio.html.");
+            setWftArchiveStatus("Student export complete: " + studentName + ". Open the downloaded zip, then open " + (result.portfolioFileName || (studentName + " - Portfolio.html")) + ".");
         })
         .catch(function(e) {
             console.error("[WFT Archive] Student export failed:", e);
