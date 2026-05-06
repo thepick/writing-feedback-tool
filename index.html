@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v11 -->
+<!-- Writing Feedback Tool v13 -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -4467,9 +4467,8 @@ function resetWftSyncStateAfterSignOut() {
     wftSyncState.lastPollAt = 0;
     clearWftSyncBlockState();
 }
-function resetWftLocalWorkAfterSignOut() {
-    var previousSuppress = typeof wftSuppressDirtyMarks !== "undefined" ? wftSuppressDirtyMarks : false;
-    var keysToRemove = [
+function clearWftLocalStorageAfterSignOut() {
+    var exactKeys = [
         "wft_settings",
         "wft_students",
         "wft_selectedStudent",
@@ -4480,36 +4479,94 @@ function resetWftLocalWorkAfterSignOut() {
         WFT_SETTINGS_FILE_ID_CACHE_KEY,
         WFT_PORTFOLIO_FILE_ID_CACHE_KEY,
         WFT_DELETIONS_FILE_ID_CACHE_KEY,
-        PENDING_PORTFOLIO_SYNC_KEY
+        PENDING_PORTFOLIO_SYNC_KEY,
+        DRIVE_TOKEN_CACHE_KEY,
+        DRIVE_TOKEN_EXPIRY_CACHE_KEY,
+        GOOGLE_USER_CACHE_KEY,
+        GOOGLE_CONNECTED_CACHE_KEY
     ];
     var i;
+    var key;
+    var keysToRemove = [];
 
-    if (typeof wftSuppressDirtyMarks !== "undefined") {
-        wftSuppressDirtyMarks = true;
+    for (i = 0; i < exactKeys.length; i += 1) {
+        if (exactKeys[i] && keysToRemove.indexOf(exactKeys[i]) === -1) {
+            keysToRemove.push(exactKeys[i]);
+        }
     }
+
+    try {
+        for (i = 0; i < localStorage.length; i += 1) {
+            key = localStorage.key(i);
+            if (key && (key.indexOf("wft_") === 0 || key.indexOf("WFT_") === 0)) {
+                if (keysToRemove.indexOf(key) === -1) keysToRemove.push(key);
+            }
+        }
+    } catch (e) { }
 
     for (i = 0; i < keysToRemove.length; i += 1) {
         try {
-            if (keysToRemove[i]) {
-                localStorage.removeItem(keysToRemove[i]);
-            }
-        } catch (e) { }
+            localStorage.removeItem(keysToRemove[i]);
+        } catch (e2) { }
     }
+}
 
-    students = [];
-    selectedStudent = "";
-    pendingPortfolioSync = null;
-    selectedImages = [];
-    selectedImageDataUrl = "";
-    selectedImageName = "";
-    selectedImageExtractedText = "";
-    selectedImageExtractionPromise = null;
-    latestAnalysisData = null;
-    originalTextForDiff = "";
-    correctedHtmlForDiff = "";
-    manualSyncInProgress = false;
-    cancelAnalysis = false;
+function resetWftResultUiToFreshSlate() {
+    var correctedStoryEl = document.getElementById("correctedStory");
+    if (correctedStoryEl) correctedStoryEl.innerHTML = "No corrected story yet.";
 
+    var detailedAssessmentEl = document.getElementById("detailedAssessment");
+    if (detailedAssessmentEl) detailedAssessmentEl.innerHTML = '<div class="assessment-item">No detailed assessment data.</div>';
+
+    var growGoalBoxEl = document.getElementById("growGoalBox");
+    if (growGoalBoxEl) growGoalBoxEl.innerHTML = "No grow goal yet.";
+
+    var diffControlsEl = document.getElementById("diffControls");
+    if (diffControlsEl) diffControlsEl.style.display = "none";
+
+    var step1RawEl = document.getElementById("step1Raw");
+    if (step1RawEl) step1RawEl.textContent = "";
+
+    var step3RawEl = document.getElementById("step3Raw");
+    if (step3RawEl) step3RawEl.textContent = "";
+
+    var debugRawEl = document.getElementById("debugRaw");
+    if (debugRawEl) debugRawEl.textContent = "";
+
+    var grammarCalcEl = document.getElementById("grammarCalc");
+    if (grammarCalcEl) grammarCalcEl.innerHTML = "";
+
+    var teacherReviewDetailsEl = document.getElementById("teacherReviewDetails");
+    if (teacherReviewDetailsEl) teacherReviewDetailsEl.open = false;
+
+    var notebookDefaults = {
+        notebookTitle: "Untitled Writing",
+        notebookOverallScore: "--%",
+        notebookStudentName: "No student selected",
+        notebookDate: "",
+        notebookWordCount: "0 / 0",
+        notebookStrength: "-",
+        notebookGrowGoal: "-",
+        notebookTeacherComment: "-",
+        notebookPage2Title: "Untitled Writing",
+        notebookPage2Date: ""
+    };
+    Object.keys(notebookDefaults).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = notebookDefaults[id];
+    });
+
+    var notebookDetailedAssessmentEl = document.getElementById("notebookDetailedAssessment");
+    if (notebookDetailedAssessmentEl) notebookDetailedAssessmentEl.innerHTML = "";
+
+    var notebookCorrectedTextEl = document.getElementById("notebookCorrectedText");
+    if (notebookCorrectedTextEl) notebookCorrectedTextEl.innerHTML = "-";
+
+    var portfolioContentEl = document.getElementById("portfolioContent");
+    if (portfolioContentEl) portfolioContentEl.innerHTML = '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>';
+}
+
+function resetWftInputUiToFreshSlate() {
     var ta = document.getElementById("studentWriting");
     if (ta) ta.value = "";
 
@@ -4521,6 +4578,15 @@ function resetWftLocalWorkAfterSignOut() {
 
     var portfolioSelect = document.getElementById("portfolioStudentSelect");
     if (portfolioSelect) portfolioSelect.value = "";
+
+    var importFileEl = document.getElementById("importFile");
+    if (importFileEl) importFileEl.value = "";
+
+    var cameraInputEl = document.getElementById("cameraInput");
+    if (cameraInputEl) cameraInputEl.value = "";
+
+    var imageUploadInputEl = document.getElementById("imageUploadInput");
+    if (imageUploadInputEl) imageUploadInputEl.value = "";
 
     var modelSelectEl = document.getElementById("modelSelect");
     if (modelSelectEl) modelSelectEl.value = DEFAULT_MODEL;
@@ -4543,25 +4609,57 @@ function resetWftLocalWorkAfterSignOut() {
 
     var apiKeyInputEl = document.getElementById("apiKeyInput");
     if (apiKeyInputEl) apiKeyInputEl.value = "";
+
+    var ocrPanelEl = document.getElementById("ocrPanel");
+    if (ocrPanelEl) ocrPanelEl.open = false;
+
+    var cropModalEl = document.getElementById("cropModal");
+    if (cropModalEl) cropModalEl.style.display = "none";
+
+    var imgLightboxEl = document.getElementById("imgLightbox");
+    if (imgLightboxEl) imgLightboxEl.style.display = "none";
+
+    var imgLightboxImgEl = document.getElementById("imgLightboxImg");
+    if (imgLightboxImgEl) imgLightboxImgEl.removeAttribute("src");
+
+    var imgLightboxCaptionEl = document.getElementById("imgLightboxCaption");
+    if (imgLightboxCaptionEl) imgLightboxCaptionEl.textContent = "";
+}
+
+function resetWftRuntimeWorkAfterSignOut() {
+    try {
+        if (analysisAbortController) analysisAbortController.abort();
+    } catch (e) { }
+    students = [];
+    selectedStudent = "";
+    pendingPortfolioSync = null;
+    selectedImages = [];
+    selectedImageDataUrl = "";
+    selectedImageName = "";
+    selectedImageExtractedText = "";
+    selectedImageExtractionPromise = null;
+    latestAnalysisData = null;
+    originalTextForDiff = "";
+    correctedHtmlForDiff = "";
+    manualSyncInProgress = false;
+    cancelAnalysis = false;
+    isAnalyzing = false;
+    analysisAbortController = null;
+    lastSyncedPortfolioSessionSignature = "";
+}
+
+function resetWftLocalWorkAfterSignOut() {
+    var previousSuppress = typeof wftSuppressDirtyMarks !== "undefined" ? wftSuppressDirtyMarks : false;
+
+    if (typeof wftSuppressDirtyMarks !== "undefined") {
+        wftSuppressDirtyMarks = true;
+    }
+
+    clearWftLocalStorageAfterSignOut();
+    resetWftRuntimeWorkAfterSignOut();
+    resetWftInputUiToFreshSlate();
     refreshApiKeyRuntimeValue();
-
-    var correctedStoryEl = document.getElementById("correctedStory");
-    if (correctedStoryEl) correctedStoryEl.innerHTML = "No corrected story yet.";
-
-    var detailedAssessmentEl = document.getElementById("detailedAssessment");
-    if (detailedAssessmentEl) detailedAssessmentEl.innerHTML = '<div class="assessment-item">No detailed assessment data.</div>';
-
-    var step1RawEl = document.getElementById("step1Raw");
-    if (step1RawEl) step1RawEl.textContent = "";
-
-    var step3RawEl = document.getElementById("step3Raw");
-    if (step3RawEl) step3RawEl.textContent = "";
-
-    var debugRawEl = document.getElementById("debugRaw");
-    if (debugRawEl) debugRawEl.textContent = "";
-
-    var grammarCalcEl = document.getElementById("grammarCalc");
-    if (grammarCalcEl) grammarCalcEl.innerHTML = "";
+    resetWftResultUiToFreshSlate();
 
     try { renderStudentList(); } catch (e2) { }
     try { populateStudentDropdown(); } catch (e3) { }
@@ -4580,12 +4678,13 @@ function resetWftLocalWorkAfterSignOut() {
         if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
         if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
     } catch (e13) { }
-    try { restoreActiveTab(); } catch (e14) { }
+    try { switchTab("tool"); } catch (e14) { }
 
     if (typeof wftSuppressDirtyMarks !== "undefined") {
         wftSuppressDirtyMarks = previousSuppress;
     }
 }
+
 
 
 function handleGoogleSignOut() {
@@ -7443,7 +7542,7 @@ function renderStudentPortfolio() {
 
 function saveCurrentSessionToPortfolio(analysisData) {
     if (!analysisData) return;
-    var student = selectedStudent || null;
+    var student = getActivePortfolioStudentName() || null;
     if (!student) {
         clearPendingPortfolioSync();
         if (driveAccessToken) {
@@ -7476,7 +7575,8 @@ function saveCurrentSessionToPortfolio(analysisData) {
     };
     pendingPortfolioSync = {
         studentName: student,
-        sessionData: sessionData
+        sessionData: sessionData,
+        signature: getCurrentPortfolioSessionSignature()
     };
     persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
@@ -7588,7 +7688,14 @@ function manualSaveToDrive() {
         wftSyncLog("[WFT Sync] manualSaveToDrive ignored - already in progress");
         return;
     }
-    getPendingPortfolioSync();
+    try {
+        prepareCurrentAnalysisForPortfolioSync();
+    } catch (ePrepareBeforeDrive) {
+        console.error('Could not prepare portfolio sync:', ePrepareBeforeDrive);
+        setSyncButtonsFailure('Retry Sync to Portfolio');
+        setDriveSyncStatus('error', 'Could not prepare portfolio sync');
+        return;
+    }
     if (!driveAccessToken) {
         wftSyncLog("[WFT Sync] manualSaveToDrive needs Drive access");
         setDriveSyncStatus('syncing', 'Connecting to Drive...');
@@ -7778,6 +7885,43 @@ function triggerResultsSlideIn() {
 
 var PENDING_PORTFOLIO_SYNC_KEY = 'wft_pending_portfolio_sync_v1';
 var pendingPortfolioSync = null;
+var lastSyncedPortfolioSessionSignature = "";
+
+function getActivePortfolioStudentName() {
+    var select = document.getElementById("studentSelect");
+    var selectValue = select ? String(select.value || "").trim() : "";
+    var storedValue = String(selectedStudent || "").trim();
+    if (selectValue) {
+        selectedStudent = selectValue;
+        try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) {}
+        return selectValue;
+    }
+    return storedValue;
+}
+
+function getCurrentPortfolioSessionSignature() {
+    var student = getActivePortfolioStudentName();
+    if (!latestAnalysisData || !student) return "";
+    var writingEl = document.getElementById("studentWriting");
+    var writingText = writingEl ? String(writingEl.value || "") : "";
+    var createdFrom = {
+        studentName: student,
+        writingText: writingText,
+        overall: latestAnalysisData.overall,
+        categoryScores: latestAnalysisData.categoryScores || {},
+        correctedStory: latestAnalysisData.correctedStory || ""
+    };
+    return getWftHash(createdFrom);
+}
+
+function prepareCurrentAnalysisForPortfolioSync() {
+    if (getPendingPortfolioSync()) return true;
+    if (!latestAnalysisData) return false;
+    var signature = getCurrentPortfolioSessionSignature();
+    if (signature && lastSyncedPortfolioSessionSignature === signature) return false;
+    saveCurrentSessionToPortfolio(latestAnalysisData);
+    return !!getPendingPortfolioSync();
+}
 
 function loadPendingPortfolioSyncFromStorage() {
     var raw = localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY);
@@ -7842,6 +7986,9 @@ function clearPendingPortfolioSync() {
 
 function updateSyncPortfolioButtonState() {
     var pending = getPendingPortfolioSync();
+    var hasAnalysis = !!latestAnalysisData;
+    var activeStudent = getActivePortfolioStudentName();
+    var currentSignature = getCurrentPortfolioSessionSignature();
     var ids = ['syncPortfolioBtnTop', 'syncPortfolioBtnBottom'];
     for (var i = 0; i < ids.length; i++) {
         var btn = document.getElementById(ids[i]);
@@ -7857,11 +8004,24 @@ function updateSyncPortfolioButtonState() {
             btn.classList.add('is-syncing');
             btn.disabled = true;
             if (label) label.textContent = 'Syncing...';
-        } else {
+        } else if (hasAnalysis && activeStudent && currentSignature && lastSyncedPortfolioSessionSignature !== currentSignature) {
+            btn.classList.remove('synced-done', 'is-syncing');
+            btn.classList.add('btn-ready');
+            btn.disabled = false;
+            if (label) label.textContent = 'Sync to Portfolio';
+        } else if (hasAnalysis && !activeStudent) {
+            btn.classList.remove('btn-ready', 'is-syncing', 'synced-done');
+            btn.disabled = true;
+            if (label) label.textContent = 'Select Student First';
+        } else if (hasAnalysis && currentSignature && lastSyncedPortfolioSessionSignature === currentSignature) {
             btn.classList.remove('btn-ready', 'is-syncing');
             btn.classList.add('synced-done');
             btn.disabled = true;
             if (label) label.textContent = 'Synced';
+        } else {
+            btn.classList.remove('btn-ready', 'is-syncing', 'synced-done');
+            btn.disabled = true;
+            if (label) label.textContent = 'Analyze First';
         }
     }
 }
@@ -7871,6 +8031,7 @@ function commitPendingPortfolioSync() {
     if (!pending || !pending.studentName || !pending.sessionData) return false;
     try {
         saveStudentSession(pending.studentName, pending.sessionData);
+        lastSyncedPortfolioSessionSignature = pending.signature || getCurrentPortfolioSessionSignature();
         clearPendingPortfolioSync();
         return true;
     } catch (e) {
@@ -7995,6 +8156,7 @@ function updateSelectedStudent() {
     var select = document.getElementById("studentSelect");
     selectedStudent = select ? select.value : "";
     localStorage.setItem("wft_selectedStudent", selectedStudent);
+    try { updateSyncPortfolioButtonState(); } catch (e) {}
 }
 
 function addStudent() {
@@ -13016,6 +13178,11 @@ async function analyzeWriting() {
                 "Target words: " + (targetWords > 0 ? targetWords : "Off") + " | Actual words: " + actualWords + "\n" +
                 "Sentences: " + sampleStatus.sentenceCount + "\n\n" +
                 "Low-sample analysis:\n" + JSON.stringify(lowSample, null, 2);
+            try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolioLowSample) {
+                console.error('Could not prepare low-sample portfolio sync:', ePortfolioLowSample);
+                setDriveSyncStatus('error', 'Could not prepare portfolio sync');
+                updateSyncPortfolioButtonState();
+            }
             return;
         }
 
@@ -13208,7 +13375,11 @@ async function analyzeWriting() {
         document.getElementById("correctedStory").innerHTML = renderCorrected(text, parsed1.correctedStory || text);
             // quickRubric display removed
         renderDetailedAssessment(detailed);
-        try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch(ePortfolio) {}
+        try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolio) {
+            console.error('Could not prepare portfolio sync:', ePortfolio);
+            setDriveSyncStatus('error', 'Could not prepare portfolio sync');
+            updateSyncPortfolioButtonState();
+        }
 
         var bandText = "18.1 or higher = 1";
         if (grammarScore === 7) bandText = "0 - 2 = 7";
