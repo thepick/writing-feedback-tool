@@ -665,6 +665,25 @@
         min-height: 36px;
     }
     .btn-delete:hover { background: #fee2e2; }
+    .session-card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-top: 12px;
+    }
+    .btn-reprint {
+        background: #eef6ff;
+        border: 1px solid #bfdbfe;
+        color: #1d4ed8;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        min-height: 36px;
+        font-weight: 600;
+    }
+    .btn-reprint:hover { background: #dbeafe; }
 
     /* =============================================
        SETTINGS GEAR BUTTON
@@ -2943,6 +2962,7 @@
                             <div class="score-box">
                                 <div class="score-label">Overall score</div>
                                 <div id="overallScore" class="score-number">--</div>
+                                <div id="gradeLevelResultNote" class="score-note" style="margin-bottom:4px; font-weight:500; color:var(--primary-color);">Scoring with Grade 5 expectations.</div>
                                 <div id="overallScoreNote" class="score-note">Weighted by category importance: Ideas &amp; Details (30%), Organization (20%), Grammar (15%), Flow (15%), Word Choice (10%), Spelling &amp; Punctuation (10%).</div>
                                 <div id="sampleStatusLine" class="muted" style="margin-top:10px; display:none;">Sample status: No analysis yet.</div>
                             </div>
@@ -3116,6 +3136,37 @@
         </div>
 
         <!-- Grammar & Writing Section -->
+        <div class="settings-section">
+            <div class="settings-section-title">Grade Level</div>
+            <label for="gradeLevelSelect">Student Grade Level</label>
+            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('settings')">
+                <option value="4">Grade 4</option>
+                <option value="5" selected>Grade 5</option>
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+            </select>
+            <div id="gradeProfileDescription" class="settings-help-text">Sets scoring expectations, category weights, word count targets, and grammar thresholds for the selected grade level.</div>
+            <label for="classGradeLevelSelect">Class Grade Level</label>
+            <select id="classGradeLevelSelect" onchange="onGradeLevelChanged('class')">
+                <option value="">Use default grade level</option>
+                <option value="4">Grade 4</option>
+                <option value="5">Grade 5</option>
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+            </select>
+            <div id="classGradeProfileDescription" class="settings-help-text">If set, this class grade level will be used for scoring.</div>
+        </div>
+
         <div class="settings-section">
             <div class="settings-section-title">Grammar & Writing</div>
 
@@ -3575,7 +3626,9 @@ function saveSettingsToLocalStorage() {
             targetWordCount: (document.getElementById('targetWordCount') || {}).value || '200',
             useWordCountTarget: document.getElementById('useWordCountTarget') ? document.getElementById('useWordCountTarget').checked : true,
             grammarStrictness: getGrammarStrictness(),
-            assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false
+            assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false,
+            gradeLevel: getSelectedGradeLevel(),
+            classGradeLevel: getClassGradeLevel()
         };
         refreshApiKeyRuntimeValue();
         localStorage.setItem('wft_settings', JSON.stringify(settings));
@@ -3615,6 +3668,16 @@ function loadSettingsFromLocalStorage() {
             if (s.assessScriptQuality != null && document.getElementById('assessScriptQuality')) {
                 document.getElementById('assessScriptQuality').checked = s.assessScriptQuality;
             }
+            if (s.gradeLevel != null && document.getElementById('gradeLevelSelect')) {
+                document.getElementById('gradeLevelSelect').value = String(parseGradeLevelValue(s.gradeLevel) || 5);
+            }
+            if (document.getElementById('classGradeLevelSelect')) {
+                var savedClassGrade = parseGradeLevelValue(s.classGradeLevel);
+                document.getElementById('classGradeLevelSelect').value = savedClassGrade ? String(savedClassGrade) : '';
+            }
+            applyGradeWordCountRange();
+            refreshGradeProfileDescription();
+            if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
             // Update script quality toggle visibility based on whether photos exist
             updateScriptQualityToggleVisibility();
         }
@@ -3680,32 +3743,37 @@ function getActiveCategoryKeys() {
 }
 
 // Get weight for a specific category
-function getCategoryWeight(key) {
-    // When Neatness is assessed (5%), the other six categories must each shrink proportionally
-    // so the total stays at 100% (0.95 / 6 ≈ 0.15833 per category)
-    var neatnessActive = shouldAssessNeatness();
-    var nonNeatScale = neatnessActive ? 0.95 : 1.0;
-
-    var baseWeights = {
-        "Ideas & Details":       0.30 * nonNeatScale,
-        "Organization":          0.20 * nonNeatScale,
-        "Grammar":               0.15 * nonNeatScale,
-        "Flow":                  0.15 * nonNeatScale,
-        "Word Choice":            0.10 * nonNeatScale,
-        "Spelling & Punctuation":0.10 * nonNeatScale
-    };
-
-    var base = baseWeights[key];
-    if (base) return base;
-
-    // Neatness itself carries 5% of the overall weight
-    if (key === "Neatness" && shouldAssessNeatness()) {
-        return 0.05;
+// FIX E6+O7+A4: getCategoryWeight now uses grade-aware weights.
+// Optional optProfile parameter lets callers pass an explicit grade profile.
+function getNeatnessWeight(optProfile) {
+    var profile = optProfile || getGradeProfile();
+    if (typeof profile.neatnessWeight === "number") return profile.neatnessWeight;
+    return 0.05;
+}
+function formatPercentFromWeight(weight) {
+    return Math.round(Number(weight || 0) * 100) + "%";
+}
+function getCategoryWeight(key, optProfile) {
+    var profile = optProfile || getGradeProfile();
+    var gradeWeights = profile.weights || GRADE_PROFILES[5].weights;
+    if (key === "Neatness") return shouldAssessNeatness() ? getNeatnessWeight(profile) : 0;
+    if (gradeWeights[key] == null) return 0;
+    return gradeWeights[key];
+}
+function getWeightDescriptionText(optProfile) {
+    var profile = optProfile || getGradeProfile();
+    var weights = profile.weights || GRADE_PROFILES[5].weights;
+    var neatnessActive = shouldShowNeatnessWeighting ? shouldShowNeatnessWeighting() : shouldAssessNeatness();
+    var neatnessWeight = neatnessActive ? getNeatnessWeight(profile) : 0;
+    var nonNeatScale = 1 - neatnessWeight;
+    var order = ["Ideas & Details", "Organization", "Grammar", "Flow", "Word Choice", "Spelling & Punctuation"];
+    var parts = [];
+    for (var i = 0; i < order.length; i++) {
+        var k = order[i];
+        if (weights[k] != null) parts.push(k + " (" + formatPercentFromWeight(weights[k] * nonNeatScale) + ")");
     }
-
-    // Fallback: calculate dynamically based on active categories
-    var keys = getActiveCategoryKeys();
-    return 1 / keys.length;
+    if (neatnessActive && neatnessWeight > 0) parts.push("Neatness (" + formatPercentFromWeight(neatnessWeight) + ")");
+    return "Weighted by category importance: " + parts.join(", ") + ".";
 }
 
 // Assess handwriting neatness from an image
@@ -5296,6 +5364,8 @@ function getLocalSettingsSnapshot() {
             useWordCountTarget: document.getElementById('useWordCountTarget') ? document.getElementById('useWordCountTarget').checked : true,
             grammarStrictness: getGrammarStrictness(),
             assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false,
+            gradeLevel: getSelectedGradeLevel(),
+            classGradeLevel: getClassGradeLevel(),
             students: applyDeletionsToStudents(students, getDeletionsData())
         };
         return settings;
@@ -6751,6 +6821,16 @@ function applyLoadedSettings(settings) {
     if (settings.assessScriptQuality != null && document.getElementById("assessScriptQuality")) {
         document.getElementById("assessScriptQuality").checked = settings.assessScriptQuality;
     }
+    if (settings.gradeLevel != null && document.getElementById("gradeLevelSelect")) {
+        document.getElementById("gradeLevelSelect").value = String(parseGradeLevelValue(settings.gradeLevel) || 5);
+    }
+    if (document.getElementById("classGradeLevelSelect")) {
+        var loadedClassGrade = parseGradeLevelValue(settings.classGradeLevel);
+        document.getElementById("classGradeLevelSelect").value = loadedClassGrade ? String(loadedClassGrade) : "";
+    }
+    applyGradeWordCountRange();
+    refreshGradeProfileDescription();
+    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
     if (settings.students && Array.isArray(settings.students)) {
         var incomingStudents = cloneWftJson(settings.students);
         var localStudents = Array.isArray(students) ? cloneWftJson(students) : [];
@@ -6790,6 +6870,10 @@ function saveSettingsToDrive() {
         useWordCountTarget: (document.getElementById("useWordCountTarget") || {}).checked !== false,
         grammarStrictness: getGrammarStrictness(),
         assessScriptQuality: (document.getElementById("assessScriptQuality") || {}).checked === true,
+        gradeLevel: (function() {
+            var sel = document.getElementById('gradeLevelSelect');
+            return sel ? parseInt(sel.value, 10) || 5 : 5;
+        })(),
         students: students
     };
     saveFileToDrive("wft-settings.json", JSON.stringify(settings, null, 2), "application/json");
@@ -7471,7 +7555,7 @@ function renderStudentPortfolio() {
             + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
             + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>'
             + '</div>'
-            + '<div class="session-meta">' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>'
+            + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'
             + '<div class="session-artifact-grid">'
             + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
@@ -7479,7 +7563,10 @@ function renderStudentPortfolio() {
             + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.') + '</div></div>'
             + '</div>'
             + imageStripHtml
-            + '<div class="session-card-actions"><button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button></div>'
+            + '<div class="session-card-actions">'
+            + '<button type="button" class="btn-reprint" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="printPortfolioNotebookSummary(this.dataset.student, this.dataset.session)">Re-print Notebook Summary</button>'
+            + '<button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button>'
+            + '</div>'
             + '</div>';
     }
 
@@ -7562,6 +7649,10 @@ function saveCurrentSessionToPortfolio(analysisData) {
             analysisData.detailed && analysisData.detailed.titleSuggestion
         ) || 'Untitled',
         overall: analysisData.overall,
+        gradeLevel: analysisData.gradeLevel || getActiveGradeLevel(),
+        gradeLabel: analysisData.gradeLabel || (getGradeProfile().gradeLabel || getGradeProfile().label),
+        gradeTier: analysisData.gradeTier || getGradeProfile().tier,
+        gradeProfileVersion: analysisData.gradeProfileVersion || GRADE_PROFILE_VERSION,
         categoryScores: savedCategoryScores,
         assessScriptQuality: neatnessAssessed,
         neatnessAssessed: neatnessAssessed,
@@ -7571,7 +7662,8 @@ function saveCurrentSessionToPortfolio(analysisData) {
         correctedPlainText: getSessionPlainCorrectedText(),
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
-        images: getSessionImagePayloads()
+        images: getSessionImagePayloads(),
+        notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
     };
     pendingPortfolioSync = {
         studentName: student,
@@ -8332,74 +8424,291 @@ var SAMPLE_STATUS_CONFIG = {
     }
 };
 
-function isWordCountTargetEnabled() {
-    var checkbox = document.getElementById("useWordCountTarget");
-    return !checkbox || !!checkbox.checked;
+// ── GRADE PROFILES ───────────────────────────────────────────────
+// Grades 4-5 are defined directly. Grades 6-12 are built via makeGradeProfile()
+// using tiered base blocks (Middle School 6-8, High School 9-12).
+
+function parseGradeLevelValue(value) {
+    var n = parseInt(value, 10);
+    if (!isFinite(n) || n < 4 || n > 12) return null;
+    return n;
 }
 
-function getTargetWordCountValue() {
+function mergeObjects(base, override) {
+    var out = {};
+    var k;
+    base = base || {};
+    override = override || {};
+    for (k in base) {
+        if (Object.prototype.hasOwnProperty.call(base, k)) {
+            if (base[k] && typeof base[k] === "object" && !Array.isArray(base[k])) {
+                out[k] = mergeObjects(base[k], {});
+            } else if (Array.isArray(base[k])) {
+                out[k] = base[k].slice();
+            } else {
+                out[k] = base[k];
+            }
+        }
+    }
+    for (k in override) {
+        if (Object.prototype.hasOwnProperty.call(override, k)) {
+            if (override[k] && typeof override[k] === "object" && !Array.isArray(override[k]) && out[k] && typeof out[k] === "object" && !Array.isArray(out[k])) {
+                out[k] = mergeObjects(out[k], override[k]);
+            } else if (Array.isArray(override[k])) {
+                out[k] = override[k].slice();
+            } else {
+                out[k] = override[k];
+            }
+        }
+    }
+    return out;
+}
+
+var GRADE_PROFILE_VERSION = "2026-05-07-v1";
+var GRADE_PROFILES = {};
+
+GRADE_PROFILES[4] = {
+    grade: 4,
+    label: "Grade 4",
+    gradeLabel: "Grade 4",
+    audience: "4th-grade student",
+    tier: "upper-elementary",
+    feedbackTone: "simple, warm, concrete, and encouraging",
+    expectedWriting: "short paragraphs with a clear topic, basic details, and mostly complete sentences",
+    bilingualGuidance: "The student may be learning in a bilingual school. Correct unclear grammar, spelling, punctuation, and word choice, but do not over-penalize minor second-language phrasing if the meaning is clear. Do not translate the student's writing.",
+    grammarStrictnessDefault: 2,
+    grammarDensityTables: {1:[8,14,20,27,34,42],2:[6,11,17,23,29,36],3:[4,8,13,18,24,30],4:[3,6,10,14,19,24],5:[2,4,7,10,14,18]},
+    targetWordCountBase: 120,
+    targetWordCount: 120,
+    targetWordCountRange: [40,500],
+    sampleStatusMinWords: {limited:8, scorable:30},
+    sampleStatusMinSentences: {scorable:2},
+    wordRules: {insufficient:8, limited:8, scorable:30},
+    strongWordFallbackMultiplier: 1.5,
+    shortfallPenaltyFactor: 0.85,
+    shortfallFloor: 0.50,
+    goingBeyondMultiplier: 1.05,
+    slightExceedRatio: 1.10,
+    meaningfulExceedRatio: 1.20,
+    neatnessWeight: 0.10,
+    neatnessDefaultEnabled: true,
+    weights: {"Ideas & Details":0.25,"Grammar":0.15,"Word Choice":0.10,"Organization":0.15,"Flow":0.10,"Spelling & Punctuation":0.25},
+    categoryExpectations: {
+        "Ideas & Details":"Look for a clear main idea and a few simple supporting details.",
+        "Grammar":"Expect mostly complete sentences, but be lenient with developing sentence control.",
+        "Word Choice":"Reward clear and specific words more than advanced vocabulary.",
+        "Organization":"Look for a beginning, middle, and ending or a clear order of ideas.",
+        "Flow":"Expect some repeated sentence starters; only lower the score if the writing is hard to follow.",
+        "Spelling & Punctuation":"Focus on capitals, ending punctuation, and common grade-level spelling."
+    },
+    growGoalOptions:["Add More Details","Check My Verbs","Use Stronger Words","Mix Up My Sentences","Add Transition Words","Proofread for Spelling & Punctuation","Practice Handwriting"]
+};
+
+GRADE_PROFILES[5] = {
+    grade: 5,
+    label: "Grade 5",
+    gradeLabel: "Grade 5",
+    audience: "5th-grade student",
+    tier: "upper-elementary",
+    feedbackTone: "clear, warm, specific, and encouraging",
+    expectedWriting: "a developed paragraph or short multi-paragraph response with clear details",
+    bilingualGuidance: "The student may be learning in a bilingual school. Be supportive with English-language development. Correct unclear grammar, spelling, punctuation, and word choice, but do not over-penalize minor second-language phrasing if the meaning is clear. Do not translate the student's writing.",
+    grammarStrictnessDefault: 3,
+    grammarDensityTables: {1:[6,11,17,23,28,35],2:[4,8,13,18,22,27],3:[3,6,10,14,17,20],4:[2,4,7,10,13,16],5:[1,3,5,7,9,12]},
+    targetWordCountBase: 200,
+    targetWordCount: 200,
+    targetWordCountRange: [50,800],
+    sampleStatusMinWords: {limited:10, scorable:40},
+    sampleStatusMinSentences: {scorable:3},
+    wordRules: {insufficient:10, limited:10, scorable:40},
+    strongWordFallbackMultiplier: 1.5,
+    shortfallPenaltyFactor: 0.80,
+    shortfallFloor: 0.48,
+    goingBeyondMultiplier: 1.06,
+    slightExceedRatio: 1.08,
+    meaningfulExceedRatio: 1.18,
+    neatnessWeight: 0.075,
+    neatnessDefaultEnabled: true,
+    weights: {"Ideas & Details":0.25,"Grammar":0.15,"Word Choice":0.12,"Organization":0.18,"Flow":0.10,"Spelling & Punctuation":0.20},
+    categoryExpectations: {
+        "Ideas & Details":"Look for a clear topic, relevant details, and enough development.",
+        "Grammar":"Expect mostly correct sentences with reasonable control of verb tense and sentence structure.",
+        "Word Choice":"Reward precise words and topic-specific vocabulary.",
+        "Organization":"Look for logical order, grouping of ideas, and a clear beginning, middle, and end when appropriate.",
+        "Flow":"Look for sentence variety, transitions, and smooth rhythm.",
+        "Spelling & Punctuation":"Expect grade-appropriate spelling, capitals, commas when needed, and ending punctuation."
+    },
+    growGoalOptions:["Add More Details","Check My Verbs","Use Stronger Words","Mix Up My Sentences","Add Transition Words","Proofread for Spelling & Punctuation","Practice Handwriting"]
+};
+
+function makeGradeProfile(override) {
+    if (!override || !override.grade) throw new Error("makeGradeProfile requires an override object with a grade value.");
+    var grade = parseGradeLevelValue(override.grade);
+    if (!grade) throw new Error("Invalid grade level for grade profile: " + override.grade);
+    if (grade < 6) throw new Error("Grades 4 and 5 must be defined directly, not with makeGradeProfile.");
+    var base;
+    if (grade <= 8) {
+        base = {
+            grade: grade, label: "Grade " + grade, gradeLabel: "Grade " + grade, audience: grade + "th-grade student", tier: "middle-school",
+            feedbackTone: "supportive, specific, and slightly more academic",
+            expectedWriting: "organized paragraphs with clear development, logical structure, and more precise language",
+            bilingualGuidance: "The student may be learning in a bilingual school. Correct grammar, spelling, punctuation, and word choice that affect clarity, but distinguish serious errors from minor second-language phrasing. Do not translate the student's writing.",
+            grammarStrictnessDefault: 3,
+            grammarDensityTables: {1:[5,10,15,20,25,31],2:[4,7,12,16,20,25],3:[3,5,8,12,15,18],4:[2,4,6,9,12,15],5:[1,2,4,6,8,11]},
+            targetWordCountBase: 300, targetWordCount: 300, targetWordCountRange: [80,1200],
+            sampleStatusMinWords: {limited:12, scorable:55}, sampleStatusMinSentences: {scorable:4}, wordRules: {insufficient:12, limited:12, scorable:55}, strongWordFallbackMultiplier: 1.5,
+            shortfallPenaltyFactor: 0.70, shortfallFloor: 0.45, goingBeyondMultiplier: 1.08, slightExceedRatio: 1.05, meaningfulExceedRatio: 1.15,
+            neatnessWeight: 0.05, neatnessDefaultEnabled: false,
+            weights: {"Ideas & Details":0.25,"Grammar":0.15,"Word Choice":0.15,"Organization":0.20,"Flow":0.10,"Spelling & Punctuation":0.15},
+            categoryExpectations: {"Ideas & Details":"Look for developed ideas with relevant examples or evidence.","Grammar":"Expect sentence boundaries, consistent tense, and mostly accurate sentence structure.","Word Choice":"Reward precise vocabulary and reduce credit for vague or repeated wording.","Organization":"Look for paragraph structure, logical sequencing, and transitions.","Flow":"Expect varied sentence openings and lengths.","Spelling & Punctuation":"Expect control of common punctuation and grade-level spelling."},
+            growGoalOptions:["Add More Specific Evidence","Strengthen Topic Sentences","Improve Paragraph Organization","Use More Precise Vocabulary","Vary Sentence Openings","Add Stronger Transitions","Proofread for Grammar and Punctuation"]
+        };
+    } else {
+        base = {
+            grade: grade, label: "Grade " + grade, gradeLabel: "Grade " + grade, audience: grade + "th-grade student", tier: "high-school",
+            feedbackTone: "constructive, direct, academic, and respectful",
+            expectedWriting: "clear, organized writing with developed claims, relevant evidence, precise language, and control of conventions",
+            bilingualGuidance: "The student may be learning in a bilingual school. Hold the student to grade-appropriate clarity and academic English expectations, but avoid punishing harmless second-language phrasing when meaning and structure are clear. Do not translate the student's writing.",
+            grammarStrictnessDefault: 4,
+            grammarDensityTables: {1:[4,8,12,16,20,25],2:[3,6,10,13,17,21],3:[2,5,8,11,14,17],4:[1,3,6,8,11,14],5:[1,2,4,6,8,11]},
+            targetWordCountBase: 500, targetWordCount: 500, targetWordCountRange: [120,2000],
+            sampleStatusMinWords: {limited:15, scorable:75}, sampleStatusMinSentences: {scorable:5}, wordRules: {insufficient:15, limited:15, scorable:75}, strongWordFallbackMultiplier: 1.4,
+            shortfallPenaltyFactor: 0.55, shortfallFloor: 0.40, goingBeyondMultiplier: 1.10, slightExceedRatio: 1.03, meaningfulExceedRatio: 1.10,
+            neatnessWeight: 0.00, neatnessDefaultEnabled: false,
+            weights: {"Ideas & Details":0.30,"Grammar":0.15,"Word Choice":0.15,"Organization":0.20,"Flow":0.10,"Spelling & Punctuation":0.10},
+            categoryExpectations: {"Ideas & Details":"Look for a clear claim or central idea, developed support, and relevant evidence.","Grammar":"Expect control of sentence structure, tense, agreement, and sentence boundaries.","Word Choice":"Reward precise, academic, and context-appropriate language.","Organization":"Look for strong paragraphing, logical progression, and effective transitions.","Flow":"Expect sentence variety, cohesion, and mature rhythm.","Spelling & Punctuation":"Expect accurate spelling, punctuation, and formatting suitable for academic writing."},
+            growGoalOptions:["Strengthen Thesis / Central Claim","Integrate Text Evidence","Improve Paragraph Cohesion","Refine Tone & Voice","Develop Counterarguments","Use More Precise Academic Vocabulary","Improve Sentence Variety","Proofread for Grammar and Mechanics"]
+        };
+    }
+    return mergeObjects(base, override || {});
+}
+
+GRADE_PROFILES[6] = makeGradeProfile({grade:6,label:"Grade 6",gradeLabel:"Grade 6",audience:"6th-grade student",targetWordCountBase:250,targetWordCount:250,targetWordCountRange:[80,1000],sampleStatusMinWords:{limited:10,scorable:50},sampleStatusMinSentences:{scorable:3},wordRules:{insufficient:10,limited:10,scorable:50}});
+GRADE_PROFILES[7] = makeGradeProfile({grade:7,label:"Grade 7",gradeLabel:"Grade 7",audience:"7th-grade student",targetWordCountBase:300,targetWordCount:300,targetWordCountRange:[100,1200],sampleStatusMinWords:{limited:12,scorable:55},sampleStatusMinSentences:{scorable:4},wordRules:{insufficient:12,limited:12,scorable:55}});
+GRADE_PROFILES[8] = makeGradeProfile({grade:8,label:"Grade 8",gradeLabel:"Grade 8",audience:"8th-grade student",targetWordCountBase:350,targetWordCount:350,targetWordCountRange:[100,1400],sampleStatusMinWords:{limited:12,scorable:60},sampleStatusMinSentences:{scorable:4},wordRules:{insufficient:12,limited:12,scorable:60}});
+GRADE_PROFILES[9] = makeGradeProfile({grade:9,label:"Grade 9",gradeLabel:"Grade 9",audience:"9th-grade student",targetWordCountBase:400,targetWordCount:400,targetWordCountRange:[120,1600],sampleStatusMinWords:{limited:15,scorable:70},sampleStatusMinSentences:{scorable:5},wordRules:{insufficient:15,limited:15,scorable:70}});
+GRADE_PROFILES[10] = makeGradeProfile({grade:10,label:"Grade 10",gradeLabel:"Grade 10",audience:"10th-grade student",targetWordCountBase:500,targetWordCount:500,targetWordCountRange:[150,1800],sampleStatusMinWords:{limited:15,scorable:75},sampleStatusMinSentences:{scorable:5},wordRules:{insufficient:15,limited:15,scorable:75}});
+GRADE_PROFILES[11] = makeGradeProfile({grade:11,label:"Grade 11",gradeLabel:"Grade 11",audience:"11th-grade student",targetWordCountBase:600,targetWordCount:600,targetWordCountRange:[150,2200],sampleStatusMinWords:{limited:18,scorable:85},sampleStatusMinSentences:{scorable:6},wordRules:{insufficient:18,limited:18,scorable:85}});
+GRADE_PROFILES[12] = makeGradeProfile({grade:12,label:"Grade 12",gradeLabel:"Grade 12",audience:"12th-grade student",targetWordCountBase:700,targetWordCount:700,targetWordCountRange:[150,2500],sampleStatusMinWords:{limited:18,scorable:90},sampleStatusMinSentences:{scorable:6},wordRules:{insufficient:18,limited:18,scorable:90}});
+
+function getSelectedGradeLevel() {
+    var el = document.getElementById("gradeLevelSelect");
+    var n = el ? parseGradeLevelValue(el.value) : null;
+    return n || 5;
+}
+function getClassGradeLevel() {
+    var el = document.getElementById("classGradeLevelSelect");
+    if (!el || !el.value) return null;
+    return parseGradeLevelValue(el.value);
+}
+function getActiveGradeLevel() { return getClassGradeLevel() || getSelectedGradeLevel() || 5; }
+function getGradeProfile(optGrade) {
+    var grade = optGrade != null ? parseGradeLevelValue(optGrade) : getActiveGradeLevel();
+    return GRADE_PROFILES[grade] || GRADE_PROFILES[5];
+}
+function getGradeCategoryExpectation(category, optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
+    if (profile.categoryExpectations && profile.categoryExpectations[category]) return profile.categoryExpectations[category];
+    return "Score based on grade-level expectations for " + (profile.gradeLabel || profile.label || "Grade 5") + ".";
+}
+function getGradeGrowGoalListText(optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
+    var goals = profile.growGoalOptions || GRADE_PROFILES[5].growGoalOptions;
+    return goals.map(function(goal) { return "- " + goal; }).join("\n");
+}
+function getGradeProfileDescriptionText(profile) {
+    return (profile.gradeLabel || profile.label) + " expectations are active. Default target: " + (profile.targetWordCountBase || profile.targetWordCount) + " words. Grammar default: " + profile.grammarStrictnessDefault + "/5.";
+}
+function refreshGradeProfileDescription() {
+    var profile = getGradeProfile();
+    var settingsDesc = document.getElementById("gradeProfileDescription");
+    var classDesc = document.getElementById("classGradeProfileDescription");
+    var text = getGradeProfileDescriptionText(profile);
+    if (settingsDesc) settingsDesc.textContent = text;
+    if (classDesc) classDesc.textContent = (getClassGradeLevel() ? "Class setting active. " : "Using default grade setting. ") + text;
+}
+function applyGradeWordCountRange() {
+    var profile = getGradeProfile();
     var input = document.getElementById("targetWordCount");
-    if (!input) return 0;
-    var value = Number(input.value);
-    if (!isFinite(value) || value <= 0) return 0;
-    return Math.round(value);
+    if (!input || !profile.targetWordCountRange) return;
+    input.min = String(profile.targetWordCountRange[0]);
+    input.max = String(profile.targetWordCountRange[1]);
 }
-
-function getEffectiveTargetWordCount() {
-    return isWordCountTargetEnabled() ? getTargetWordCountValue() : 0;
+function applyGradeDefaultTargetWordCount() {
+    var profile = getGradeProfile();
+    var input = document.getElementById("targetWordCount");
+    if (input) input.value = String(profile.targetWordCountBase || profile.targetWordCount || 200);
+    applyGradeWordCountRange();
 }
-
-function getGrammarStrictness() {
+function applyGradeDefaultStrictness() {
+    var profile = getGradeProfile();
     var el = document.getElementById("grammarStrictness");
-    if (!el) return 3;
-    return parseInt(el.value, 10) || 3;
+    var valEl = document.getElementById("grammarStrictnessVal");
+    if (el && profile.grammarStrictnessDefault) {
+        el.value = String(profile.grammarStrictnessDefault);
+        if (valEl) valEl.textContent = String(profile.grammarStrictnessDefault);
+    }
+}
+function applyGradeDefaultNeatness() {
+    var profile = getGradeProfile();
+    var el = document.getElementById("assessScriptQuality");
+    if (!el || typeof profile.neatnessDefaultEnabled !== "boolean") return;
+    el.checked = profile.neatnessDefaultEnabled;
+    try { el.dispatchEvent(new Event("change", { bubbles: true })); } catch (e) {}
+}
+function applyGradeDefaults() {
+    applyGradeDefaultStrictness();
+    applyGradeDefaultTargetWordCount();
+    applyGradeDefaultNeatness();
+    refreshGradeProfileDescription();
+    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
+    if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
+    if (typeof syncUiState === "function") syncUiState();
+    if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-defaults");
+}
+function onGradeLevelChanged(source) {
+    applyGradeWordCountRange();
+    refreshGradeProfileDescription();
+    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
+    if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
+    if (typeof syncUiState === "function") syncUiState();
+    if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-change-" + source);
+}
+function initializeGradeLevelFeature() {
+    applyGradeWordCountRange();
+    refreshGradeProfileDescription();
+    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
+    if (typeof syncUiState === "function") syncUiState();
 }
 
-function hasSentenceEndingPunctuation(text) {
-    return /[.!?]/.test(String(text || ""));
-}
-
-function hasCompleteClause(text) {
-    var value = " " + String(text || "").toLowerCase().replace(/[^a-z\s']/g, " ") + " ";
-    var subjectPattern = /\b(i|we|you|he|she|it|they|my|our|the|a|an|this|that|these|those|someone|somebody|everyone|everybody|there)\b/;
-    var verbPattern = /\b(am|is|are|was|were|be|being|been|have|has|had|do|does|did|can|could|will|would|shall|should|may|might|must|go|goes|went|play|plays|played|like|likes|liked|want|wants|wanted|see|sees|saw|look|looks|looked|went|make|makes|made|camp|camps|camped)\b/;
-    return subjectPattern.test(value) && verbPattern.test(value);
-}
-
-function getSampleStatusData(text) {
+function getSampleStatusData(text, optGradeProfile) {
     var raw = String(text || "").trim();
+    var profile = optGradeProfile || getGradeProfile();
+    var wordRules = profile.sampleStatusMinWords || GRADE_PROFILES[5].sampleStatusMinWords;
+    var sentenceRules = profile.sampleStatusMinSentences || GRADE_PROFILES[5].sampleStatusMinSentences;
     var wordCount = countWords(raw);
-    var lines = raw ? raw.split(/\r?\n/).map(function(line) {
-        return line.trim();
-    }).filter(function(line) {
-        return line.length > 0;
-    }) : [];
+    var lines = raw ? raw.split(/\r?\n/).map(function(line) { return line.trim(); }).filter(function(line) { return line.length > 0; }) : [];
     var sentences = splitSentences(raw);
     var sentenceCount = sentences.length;
+    if (sentenceCount === 0 && wordCount >= 8 && hasCompleteClause(raw) && hasSentenceEndingPunctuation(raw)) sentenceCount = 1;
     var hasEnding = hasSentenceEndingPunctuation(raw);
     var completeClause = hasCompleteClause(raw);
     var isListLike = /^[^.!?]*[,;:\-][^.!?]*$/.test(raw) && sentenceCount <= 1;
+    var limitedMinWords = typeof wordRules.limited === "number" ? wordRules.limited : 10;
+    var scorableMinWords = typeof wordRules.scorable === "number" ? wordRules.scorable : 40;
+    var scorableMinSentences = typeof sentenceRules.scorable === "number" ? sentenceRules.scorable : 3;
+    var strongFallbackMultiplier = typeof profile.strongWordFallbackMultiplier === "number" ? profile.strongWordFallbackMultiplier : 1.5;
+    var strongWordFallback = wordCount >= Math.round(scorableMinWords * strongFallbackMultiplier);
     var status = "scorable";
     var reason = "Enough writing is present for a normal rubric score.";
-
-    if (!raw || wordCount < 8 || (!hasEnding && !completeClause) || (wordCount <= 12 && sentenceCount === 0) || isListLike) {
+    if (!raw || wordCount < limitedMinWords || (!hasEnding && !completeClause) || isListLike) {
         status = "insufficient";
         reason = "There is not enough connected writing yet for a fair full-rubric score.";
-    } else if (wordCount < 30 || sentenceCount < 2) {
+    } else if (wordCount < scorableMinWords || (sentenceCount < scorableMinSentences && !strongWordFallback)) {
         status = "limited";
-        reason = "This sample shows an early writing attempt, but there is still only limited evidence for several rubric categories.";
+        reason = "This sample shows a writing attempt, but there is still limited evidence for several rubric categories.";
     }
-
-    return {
-        status: status,
-        label: SAMPLE_STATUS_CONFIG[status].label,
-        reason: reason,
-        wordCount: wordCount,
-        sentenceCount: sentenceCount,
-        hasSentenceEnding: hasEnding,
-        hasCompleteClause: completeClause,
-        lines: lines
-    };
+    return { status: status, label: SAMPLE_STATUS_CONFIG[status].label, reason: reason, wordCount: wordCount, sentenceCount: sentenceCount, hasSentenceEnding: hasEnding, hasCompleteClause: completeClause, lines: lines };
 }
 
 function getCategoryEligibility(statusData) {
@@ -8568,6 +8877,16 @@ function applyEligibilityToDetailed(detailed, eligibility) {
     }
 }
 
+
+// ── Grade level result note ──
+// FIX O5: Display "Grade X" not "Grade: Grade X"
+function updateGradeLevelResultNote() {
+    var el = document.getElementById("gradeLevelResultNote");
+    if (!el) return;
+    var profile = getGradeProfile();
+    el.textContent = "Scored using " + (profile.gradeLabel || profile.label) + " expectations. " + getWeightDescriptionText(profile);
+}
+
 function updateScoreDisplay(data) {
     var overallScoreEl = document.getElementById("overallScore");
     var noteEl = document.getElementById("overallScoreNote");
@@ -8575,16 +8894,15 @@ function updateScoreDisplay(data) {
     var statusData = data && data.sampleStatus ? data.sampleStatus : null;
     if (!overallScoreEl || !noteEl || !statusEl) return;
 
-    // Determine which weighting text to show based on the neatness setting
-    // Without neatness: 30+20+15+15+10+10=100. With neatness: Ideas 29, Org 19, Grammar 14, Flow 14, Word Choice 10, Spelling 9, Neatness 5 = 100.
-    var weightingText = shouldShowNeatnessWeighting()
-        ? "Weighted by category importance: Ideas & Details (29%), Organization (19%), Grammar (14%), Flow (14%), Word Choice (10%), Spelling & Punctuation (9%), Neatness (5%)."
-        : "Weighted by category importance: Ideas & Details (30%), Organization (20%), Grammar (15%), Flow (15%), Word Choice (10%), Spelling & Punctuation (10%).";
+    var profile = getGradeProfile();
+    var weightingText = getWeightDescriptionText(profile);
 
     if (!data) {
         overallScoreEl.textContent = "--";
         noteEl.textContent = weightingText;
         statusEl.textContent = "Sample status: No analysis yet.";
+        // FIX O1: updateGradeLevelResultNote() guard
+        if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
         return;
     }
     if (data.overall == null) {
@@ -8595,8 +8913,8 @@ function updateScoreDisplay(data) {
         noteEl.textContent = weightingText;
     }
     statusEl.textContent = "Sample status: " + (statusData ? statusData.label + ". " + statusData.reason : "Scorable sample.");
+    if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
 }
-
 function refreshScoreWeightingDescription() {
     updateScoreDisplay(latestAnalysisData || null);
 }
@@ -9190,104 +9508,50 @@ function roundToNearestRubric(value) {
     return clampRubricScore(best);
 }
 
-function calculateWordCountAdjustment(baseScore, actualWords, targetWords) {
-    // Going Beyond thresholds
-    var SLIGHT_EXCEED_RATIO = 1.05;      // 5%+ over
-    var MEANINGFUL_EXCEED_RATIO = 1.15; // 15%+ over
-    var SLIGHT_BONUS = 1.03;         // 3% bonus for slight exceed
-    var MEANINGFUL_BONUS = 1.08;       // 8% bonus for meaningful exceed
+function calculateWordCountAdjustment(baseScore, actualWords, targetWords, optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
+    var slightExceedRatio = typeof profile.slightExceedRatio === "number" ? profile.slightExceedRatio : 1.05;
+    var meaningfulExceedRatio = typeof profile.meaningfulExceedRatio === "number" ? profile.meaningfulExceedRatio : 1.15;
+    var slightBonus = 1.03;
+    var meaningfulBonus = typeof profile.goingBeyondMultiplier === "number" ? profile.goingBeyondMultiplier : 1.08;
+    var shortfallPenaltyFactor = typeof profile.shortfallPenaltyFactor === "number" ? profile.shortfallPenaltyFactor : 0.7;
+    var shortfallFloor = typeof profile.shortfallFloor === "number" ? profile.shortfallFloor : 0.45;
 
     if (!targetWords || targetWords <= 0) {
-        return {
-            adjustedScore: baseScore,
-            shortfallRatio: 0,
-            multiplier: 1,
-            bonusMultiplier: 1,
-            goingBeyond: false,
-            goingBeyondNote: "",
-            penaltyRubricPoints: 0,
-            note: "No target word count was set."
-        };
+        return { adjustedScore: baseScore, shortfallRatio: 0, multiplier: 1, bonusMultiplier: 1, goingBeyond: false, goingBeyondNote: "", penaltyRubricPoints: 0, note: "No target word count was set." };
     }
-
-    // Going Beyond: Handle exceeding or meeting target
     if (actualWords >= targetWords) {
         var exceedRatio = actualWords / targetWords;
-        var goingBeyond = exceedRatio >= SLIGHT_EXCEED_RATIO;
-        var goingBeyondMeaningful = exceedRatio >= MEANINGFUL_EXCEED_RATIO;
+        var goingBeyond = exceedRatio >= slightExceedRatio;
+        var goingBeyondMeaningful = exceedRatio >= meaningfulExceedRatio;
         var bonusMultiplier = 1;
         var goingBeyondNote = "";
-
-        if (goingBeyondMeaningful) {
-            bonusMultiplier = MEANINGFUL_BONUS;
-            goingBeyondNote = "You went well beyond the target word count — real dedication!";
-        } else if (goingBeyond) {
-            bonusMultiplier = SLIGHT_BONUS;
-            goingBeyondNote = "You exceeded the target word count — nice extra effort.";
-        }
-
+        if (goingBeyondMeaningful) { bonusMultiplier = meaningfulBonus; goingBeyondNote = "You went well beyond the target word count - real dedication!"; }
+        else if (goingBeyond) { bonusMultiplier = slightBonus; goingBeyondNote = "You exceeded the target word count - nice extra effort."; }
         var adjustedRaw = baseScore * bonusMultiplier;
         var adjustedScore = clampRubricScore(roundToNearestRubric(adjustedRaw));
-
-        return {
-            adjustedScore: adjustedScore,
-            shortfallRatio: 0,
-            multiplier: 1,
-            bonusMultiplier: bonusMultiplier,
-            goingBeyond: goingBeyond,
-            goingBeyondNote: goingBeyondNote,
-            penaltyRubricPoints: 0,
-            note: goingBeyond ? "Target word count exceeded. Going Beyond bonus applied." : "Target word count met. No adjustments applied."
-        };
+        return { adjustedScore: adjustedScore, shortfallRatio: 0, multiplier: 1, bonusMultiplier: bonusMultiplier, goingBeyond: goingBeyond, goingBeyondNote: goingBeyondNote, penaltyRubricPoints: 0, note: goingBeyond ? "Target word count exceeded. Going Beyond bonus applied." : "Target word count met. No adjustments applied." };
     }
-
-    // Below target: existing penalty logic
     var shortfallRatio = (targetWords - actualWords) / targetWords;
-    var multiplier = 1 - (0.7 * Math.pow(shortfallRatio, 0.9));
-    if (multiplier < 0.45) multiplier = 0.45;
-    var adjustedRaw = baseScore * multiplier;
-    var adjustedScore = clampRubricScore(roundToNearestRubric(adjustedRaw));
-    var penaltyRubricPoints = Math.max(0, baseScore - adjustedScore);
-
-    var note = "Writing is under the target word count, so Ideas and Details was softened by a decaying multiplier.";
-    if (shortfallRatio < 0.1) {
-        note = "Writing is very close to the target word count, so the Ideas and Details adjustment is very small.";
-    } else if (shortfallRatio < 0.25) {
-        note = "Writing is somewhat below the target word count, so Ideas and Details received a small adjustment.";
-    } else if (shortfallRatio < 0.4) {
-        note = "Writing is clearly below the target word count, so Ideas and Details received a moderate adjustment.";
-    } else {
-        note = "Writing is far below the target word count, so Ideas and Details received a stronger adjustment.";
-    }
-
-    return {
-        adjustedScore: adjustedScore,
-        shortfallRatio: shortfallRatio,
-        multiplier: multiplier,
-        bonusMultiplier: 1,
-        goingBeyond: false,
-        goingBeyondNote: "",
-        penaltyRubricPoints: penaltyRubricPoints,
-        note: note
-    };
+    var multiplier = 1 - (shortfallPenaltyFactor * Math.pow(shortfallRatio, 0.9));
+    if (multiplier < shortfallFloor) multiplier = shortfallFloor;
+    var adjustedRaw2 = baseScore * multiplier;
+    var adjustedScore2 = clampRubricScore(roundToNearestRubric(adjustedRaw2));
+    var penaltyRubricPoints = Math.max(0, baseScore - adjustedScore2);
+    var note = "Writing is under the target word count, so Ideas and Details was softened by a grade-aware multiplier.";
+    if (shortfallRatio < 0.1) note = "Writing is very close to the target word count, so the Ideas and Details adjustment is very small.";
+    else if (shortfallRatio < 0.25) note = "Writing is somewhat below the target word count, so Ideas and Details received a small adjustment.";
+    else if (shortfallRatio < 0.4) note = "Writing is clearly below the target word count, so Ideas and Details received a moderate adjustment.";
+    else note = "Writing is far below the target word count, so Ideas and Details received a stronger adjustment.";
+    return { adjustedScore: adjustedScore2, shortfallRatio: shortfallRatio, multiplier: multiplier, bonusMultiplier: 1, goingBeyond: false, goingBeyondNote: "", penaltyRubricPoints: penaltyRubricPoints, note: note };
 }
 
-function grammarDensityBand(density) {
-    // Each strictness level has its own explicit threshold table.
-    // Level 3 = original thresholds exactly.
-    // Levels 1-2 = more lenient (thresholds are higher, so more errors needed to drop score).
-    // Levels 4-5 = stricter (thresholds are lower, so fewer errors cause a score drop).
-    //
-    // Table format: [max density for 10, 9, 8, 7, 6, 5] - above 5 = score 4
+function grammarDensityBand(density, optGradeProfile) {
     var s = parseInt(getGrammarStrictness(), 10) || 3;
-    var tables = {
-        1: [6,  11, 17, 23, 28, 35],
-        2: [4,  8,  13, 18, 22, 27],
-        3: [3,  6,  10, 14, 17, 20],
-        4: [2,  4,  7,  10, 13, 16],
-        5: [1,  3,  5,  7,  9,  12]
-    };
-    var t = tables[s] || tables[3];
+    var profile = optGradeProfile || getGradeProfile();
+    var fallbackTables = GRADE_PROFILES[5].grammarDensityTables;
+    var tables = profile.grammarDensityTables || fallbackTables;
+    var t = tables[s] || tables[3] || fallbackTables[3];
     if (density <= t[0]) return 10;
     if (density <= t[1]) return 9;
     if (density <= t[2]) return 8;
@@ -9297,14 +9561,18 @@ function grammarDensityBand(density) {
     return 4;
 }
 
-function computeOverallScore(categoryScores) {
+function computeOverallScore(categoryScores, optGradeProfile) {
     var weightedSum = 0;
     var totalWeight = 0;
+    var gradeProfile = optGradeProfile || getGradeProfile();
+    var neatnessActive = categoryScores && categoryScores["Neatness"] != null && shouldAssessNeatness();
+    var neatnessWeight = neatnessActive ? getNeatnessWeight(gradeProfile) : 0;
+    var nonNeatScale = 1 - neatnessWeight;
     for (var key in categoryScores) {
-        if (categoryScores.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(categoryScores, key)) {
             var rubric = String(categoryScores[key]);
             if (SCORE_MAP.hasOwnProperty(rubric)) {
-                var weight = getCategoryWeight(key);
+                var weight = key === "Neatness" ? neatnessWeight : getCategoryWeight(key, gradeProfile) * nonNeatScale;
                 weightedSum += SCORE_MAP[rubric] * weight;
                 totalWeight += weight;
             }
@@ -10667,7 +10935,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>';
         html += '</div>';
         // Meta
-        html += '<div class="session-meta">' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>';
+        html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>';
         // Chips
         html += '<div class="chip-row">' + chipsHtml + '</div>';
         // Artifact grid: Original | Corrected | Notes
@@ -12077,28 +12345,34 @@ async function extractTextFromSelectedImage(isAutomatic) {
 }
 
 
-function buildStep1Prompt(text) {
+
+function getStrictnessRuleForPrompt(strictness, optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
+    var base;
+    if (strictness <= 1) base = "Be very lenient. Focus only on errors that make the writing confusing or clearly incorrect.";
+    else if (strictness === 2) base = "Be somewhat lenient. Focus on important grammar problems, not every awkward phrase.";
+    else if (strictness === 3) base = "Use balanced grammar checking. Correct clear errors while allowing age-appropriate developing style.";
+    else if (strictness === 4) base = "Be fairly strict. Mark most grammar and sentence structure errors.";
+    else base = "Be very strict. Mark grammar, sentence structure, punctuation, and usage issues carefully.";
+    return base;
+}
+
+function buildStep1Prompt(text, optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
     var strictness = getGrammarStrictness();
-    var strictnessRule = "Use balanced grammar checking. Correct clear grammar errors, but do not rewrite for style.";
-
-    if (strictness === 1) {
-        strictnessRule = "Be very lenient. Correct only obvious grammar errors that clearly make the writing incorrect or hard to understand.";
-    } else if (strictness === 2) {
-        strictnessRule = "Be somewhat lenient. Correct clear grammar errors, but avoid over-editing small or debatable issues.";
-    } else if (strictness === 4) {
-        strictnessRule = "Be fairly strict. Correct grammar issues consistently, but do not rewrite for style or change the meaning.";
-    } else if (strictness >= 5) {
-        strictnessRule = "Be very strict about grammar correctness. Correct grammar issues thoroughly, but do not rewrite for style or change the meaning.";
-    }
-
+    var strictnessRule = getStrictnessRuleForPrompt(strictness, profile);
     return [
-        "You are checking a 5th-grade student's writing for grammar accuracy.",
+        "You are checking a " + profile.audience + "'s writing for grammar accuracy.",
+        "",
+        "Student grade level: " + (profile.gradeLabel || profile.label),
+        "Grade-level expectation: " + profile.expectedWriting,
+        "Bilingual-school guidance: " + profile.bilingualGuidance,
         "",
         strictnessRule,
         "",
         "Act as a careful grammar checker, not a creative editor.",
         "",
-        "1. Correct the writing by making only the smallest grammatical changes needed. Do not change the meaning, reword sentences, or add punctuation unless the correction requires it.",
+        "1. Correct the writing by making only the smallest grammatical changes needed. Do not change the meaning, reword sentences, translate the writing, or add punctuation unless the correction requires it.",
         "2. Bold every changed or added word in full.",
         "3. When a single correction includes two or more adjacent changed or added words, bold them together as one continuous bold span.",
         "4. Do not split one correction into multiple adjacent bold spans.",
@@ -12123,7 +12397,7 @@ function buildStep1Prompt(text) {
         "**--- GENERAL RULES ---**",
         "11. Do not leave a sentence partially corrected. Fix all grammatical errors in a sentence so the whole sentence is correct.",
         "12. Keep verb tense, pronouns, and sentence structure consistent.",
-        "13. Return ONLY the corrected writing. Do not add headings, explanations, notes, labels, or commentary.",
+        "13. Return ONLY the corrected writing. Do not add headings, explanations, notes, labels, commentary, or translations.",
         "",
         "Student writing:",
         text,
@@ -12131,12 +12405,31 @@ function buildStep1Prompt(text) {
     ].join("\n");
 }
 
-function buildStep2Prompt(originalText, correctedText, targetWords, actualWords) {
+function buildStep2Prompt(originalText, correctedText, targetWords, actualWords, optGradeProfile) {
     // Note: Neatness is assessed separately via image-based call in assessNeatnessFromImage()
     // so step 2 only needs to handle the 6 core writing categories
+    //
+    // FIX E5: Accept optional gradeProfile parameter for explicit grade control.
+
+    var profile = optGradeProfile || getGradeProfile();
+    var audience = profile.audience || "a 5th grader";
+    var bilingualGuide = profile.bilingualGuidance || "";
+
+    // FIX O6: bilingualGuidance is injected ONCE here (not duplicated in buildStep3Prompt).
+    var gradeContext = "Important: " + audience + " writing. " + bilingualGuide;
 
     return [
-        "Analyze this writing and provide a quick rubric snapshot with one kind, supportive feedback sentence per category. Write like a real teacher talking to a 5th grader: clear, warm, specific, and not robotic.",
+        "Analyze this writing and provide a quick rubric snapshot with one kind, supportive feedback sentence per category. Write like a real teacher talking to " + audience + ": clear, warm, specific, and not robotic.",
+        "",
+        gradeContext,
+        "",
+        "Grade-level expectations for scoring:",
+        "- Ideas & Details: " + getGradeCategoryExpectation("Ideas & Details", profile),
+        "- Organization: " + getGradeCategoryExpectation("Organization", profile),
+        "- Grammar: " + getGradeCategoryExpectation("Grammar", profile),
+        "- Flow: " + getGradeCategoryExpectation("Flow", profile),
+        "- Word Choice: " + getGradeCategoryExpectation("Word Choice", profile),
+        "- Spelling & Punctuation: " + getGradeCategoryExpectation("Spelling & Punctuation", profile),
         "",
         "Original student writing:",
         originalText,
@@ -12169,12 +12462,21 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords)
     ].join("\n");
 }
 
-function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords) {
+function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
+    var audience = profile.audience || "5th-grade student";
+    var bilingualGuide = profile.bilingualGuidance || "";
     // Note: Neatness is assessed separately via image-based call in assessNeatnessFromImage()
     // so step 3 only needs to handle the 6 core writing categories
 
     return [
         "Explain the scores from the Quick Rubric Snapshot and expand them into a detailed writing assessment for this student.",
+        "",
+        "Student grade level: " + (profile.gradeLabel || profile.label),
+        "Write the detailed assessment for a " + audience + ".",
+        "Feedback tone: " + profile.feedbackTone,
+        "Grade-level expectation: " + profile.expectedWriting,
+        "Bilingual-school guidance: " + bilingualGuide,
         "",
         "Input text:",
         correctedText,
@@ -12209,13 +12511,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "13. Keep the final encouragement line to one warm sentence.",
         "",
         "Grow Goal options:",
-        "- Add More Details - I will add 2-3 specific details (what I saw, heard, or felt).",
-        "- Check My Verbs - I will make sure all my verbs are in the right time (past, present, future).",
-        "- Use Wow Words - I will replace 2 simple words with stronger ones.",
-        "- Mix Up My Sentences - I will mix short and long sentences for better flow.",
-        "- Add Transition Words - I will use 1-2 words like First, Later, or Because.",
-        "- Proofread for Spelling & Punctuation - I will read my work aloud to check for missing periods, capitals, and spelling.",
-        "- Practice Handwriting - I will focus on forming letters carefully and using neat spacing.",
+        getGradeGrowGoalListText(profile),
         "",
         "Use exactly this format:",
         "## Detailed Writing Assessment",
@@ -13259,6 +13555,119 @@ function printNotebookSummary() {
     }, 700);
 }
 
+function captureNotebookPrintSnapshotForCurrentAnalysis() {
+    try {
+        if (!latestAnalysisData) return "";
+        if (!fillNotebookSummary()) return "";
+        var printDoc = document.getElementById("notebookPrintDocument");
+        return printDoc ? printDoc.innerHTML : "";
+    } catch (e) {
+        console.warn("Could not capture notebook print snapshot for portfolio.", e);
+        return "";
+    }
+}
+
+function findPortfolioSession(studentName, sessionId) {
+    if (!studentName || !sessionId) return null;
+    var portfolio = getPortfolioData();
+    var studentData = portfolio && portfolio[studentName];
+    var sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
+    for (var i = 0; i < sessions.length; i++) {
+        var session = sessions[i];
+        if (!session) continue;
+        if (String(session.id || "") === String(sessionId) || String(session.createdAt || "") === String(sessionId) || String(i) === String(sessionId)) {
+            return session;
+        }
+    }
+    return null;
+}
+
+function renderNotebookDetailedAssessmentFromSavedSession(session) {
+    session = session || {};
+    var scores = session.categoryScores || {};
+    var order = [
+        ["Ideas & Details", "Ideas & Details"],
+        ["Flow", "Flow"],
+        ["Grammar", "Grammar"],
+        ["Spelling & Punctuation", "Spelling & Punctuation"],
+        ["Organization", "Organization"],
+        ["Neatness", "Neatness"],
+        ["Word Choice", "Vocabulary"]
+    ];
+    var html = "";
+    var renderedCount = 0;
+    for (var i = 0; i < order.length; i++) {
+        var key = order[i][0];
+        var label = order[i][1];
+        if (scores[key] == null || scores[key] === "") continue;
+        var score = Number(scores[key]);
+        var hasScore = !isNaN(score);
+        var scoreLabel = hasScore ? (escapeHtml(String(scores[key])) + " / " + RUBRIC_MAX) : escapeHtml(String(scores[key]));
+        var width = hasScore ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
+        html += '<div class="category">';
+        html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
+        html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
+        html += '<div class="evidence-block"><strong>Evidence:</strong> This saved portfolio entry was created before printable notebook snapshots were stored.</div>';
+        html += '<div class="tip-block"><strong>Tip:</strong> Use the saved teacher notes and corrected writing from this entry.</div>';
+        html += '</div>';
+        renderedCount += 1;
+    }
+    if (!html) {
+        html = '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Evidence:</strong> No saved assessment data.</div><div class="tip-block"><strong>Tip:</strong> Review the saved corrected writing and teacher notes.</div></div>';
+        renderedCount = 1;
+    }
+    if (renderedCount % 2 === 1) html += '<div></div>';
+    return html;
+}
+
+function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
+    session = session || {};
+    var title = session.title || "Untitled Writing";
+    var dateText = session.date || (session.createdAt ? new Date(session.createdAt).toLocaleDateString("en-GB") : "");
+    var originalText = String(session.originalText || "");
+    var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml(session.correctedPlainText || originalText || "-");
+    var feedback = session.feedbackSummary || {};
+    var strength = feedback.strength || "Saved portfolio entry.";
+    var growGoal = feedback.growGoal || feedback.nextTime || "Review the corrected writing and improve one focus area.";
+    var teacherComment = feedback.closing || feedback.nextTime || "Review the saved feedback from this portfolio entry.";
+    var wordCountText = countWords(originalText) + " words";
+    var scoreText = session.overall == null ? "Not scored" : (session.overall + "%");
+
+    return ''
+        + '<div class="page page-1 auto-fit-page">'
+        + '<div class="page-header"><div><div class="page-label">Writing Notebook Summary</div><div class="page-title">' + escapeHtml(title) + '</div></div><div class="overall-score"><div class="overall-label">Overall</div><div class="overall-value">' + escapeHtml(scoreText) + '</div></div></div>'
+        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordCountText) + '</span></span></div>'
+        + '<div class="top-boxes"><div class="info-box"><div class="box-label">My Strength</div><p>' + escapeHtml(strength) + '</p></div><div class="info-box"><div class="box-label">My Grow Goal</div><p>' + escapeHtml(growGoal) + '</p></div></div>'
+        + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
+        + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
+        + '</div>'
+        + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
+        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
+}
+
+function printPortfolioNotebookSummary(studentName, sessionId) {
+    var session = findPortfolioSession(studentName, sessionId);
+    if (!session) {
+        alert("Could not find that saved portfolio entry.");
+        return;
+    }
+    var printContentHtml = session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
+    var printWindow = window.open("", "_blank", "width=1200,height=900");
+    if (!printWindow) {
+        alert("Please allow pop-ups for this page to re-print the notebook summary.");
+        return;
+    }
+    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary");
+    printWindow.document.open();
+    printWindow.document.write(printHtml);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function() {
+        if (printWindow.fitNotebookPageOne) printWindow.fitNotebookPageOne();
+        printWindow.print();
+    }, 700);
+}
+
 function buildQuickRubricText(quickRubric) {
     var lines = [];
     for (var i = 0; i < CATEGORY_KEYS.length; i++) {
@@ -13324,6 +13733,8 @@ async function analyzeWriting() {
     var text = document.getElementById("studentWriting").value.trim();
     var targetWords = getEffectiveTargetWordCount();
     var model = document.getElementById("modelSelect").value;
+    // FIX O2: Resolve grade profile right at the start, before any early exits.
+    var gradeProfile = getGradeProfile();
     if (!text && selectedImageDataUrl) {
         try {
             text = String(await extractTextFromSelectedImage(true) || "").trim();
@@ -13348,12 +13759,16 @@ async function analyzeWriting() {
 
     try {
         var actualWords = countWords(text);
-        var sampleStatus = getSampleStatusData(text);
+        var sampleStatus = getSampleStatusData(text, gradeProfile);
 
         if (sampleStatus.status !== "scorable") {
             var lowSample = buildLowSampleAnalysis(text, sampleStatus);
             latestAnalysisData = {
                 overall: null,
+                gradeLevel: gradeProfile.grade,
+                gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
+                gradeTier: gradeProfile.tier,
+                gradeProfileVersion: GRADE_PROFILE_VERSION,
                 actualWords: actualWords,
                 targetWords: targetWords,
                 categoryScores: lowSample.categoryScores,
@@ -13385,7 +13800,7 @@ async function analyzeWriting() {
             return;
         }
 
-        var step1Prompt = buildStep1Prompt(text);
+        var step1Prompt = buildStep1Prompt(text, gradeProfile);
         var step1 = await callOpenRouter(model, step1Prompt);
         var parsed1 = parseStep1(step1, text, targetWords);
 
@@ -13402,7 +13817,7 @@ async function analyzeWriting() {
         parsed1.flowRating = flowData.flowRating;
         parsed1.flowTip = buildComputedFlowTip(flowData);
 
-        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords);
+        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile);
         var step2 = await callOpenRouter(model, step2Prompt);
         parsed1.quickRubric = parseStep2QuickRubric(step2, text, targetWords);
         var eligibility = getCategoryEligibility(sampleStatus);
@@ -13427,7 +13842,7 @@ async function analyzeWriting() {
         }
 
         var quickRubricText = buildQuickRubricText(parsed1.quickRubric);
-        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords);
+        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile);
         var step3 = await callOpenRouter(model, step3Prompt);
         var detailed = parseDetailedAssessment(step3);
 
@@ -13439,7 +13854,7 @@ async function analyzeWriting() {
         if (!correctedWordCount) correctedWordCount = countWords(text);
         var totalErrors = parsed1.errorCounts.grammar + parsed1.errorCounts.punctuation + parsed1.errorCounts.spelling;
         var errorDensity = correctedWordCount ? (totalErrors / correctedWordCount) * 100 : 0;
-        var grammarScore = grammarDensityBand(errorDensity);
+        var grammarScore = grammarDensityBand(errorDensity, gradeProfile);
 
         parsed1.quickRubric["Grammar"] = parsed1.quickRubric["Grammar"] || { score: grammarScore, reason: softFallback("Grammar", grammarScore, text, actualWords, targetWords) };
         parsed1.quickRubric["Grammar"].score = eligibility["Grammar"] ? grammarScore : null;
@@ -13553,13 +13968,17 @@ async function analyzeWriting() {
         if (shouldAssessNeatness()) {
             categoryScores["Neatness"] = detailed.categories["Neatness"] ? detailed.categories["Neatness"].score : (parsed1.quickRubric["Neatness"] ? parsed1.quickRubric["Neatness"].score : null);
         }
-        var overall = computeOverallScore(categoryScores);
+        var overall = computeOverallScore(categoryScores, gradeProfile);
         var goalPlan = getGoalPlan({ categoryScores: categoryScores, detailed: detailed });
         detailed.growGoal = goalPlan.growGoal;
         detailed.nextTime = goalPlan.nextTime;
 
         latestAnalysisData = {
             overall: overall,
+            gradeLevel: gradeProfile.grade,
+            gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
+            gradeTier: gradeProfile.tier,
+            gradeProfileVersion: GRADE_PROFILE_VERSION,
             actualWords: actualWords,
             targetWords: targetWords,
             categoryScores: categoryScores,
@@ -13685,6 +14104,8 @@ var modelSelect = document.getElementById("modelSelect");
 modelSelect.value = DEFAULT_MODEL; // default, overwritten below by saved settings
 loadSettingsFromLocalStorage();
 refreshApiKeyRuntimeValue();    // restore all saved settings including strictness
+// Initialize grade level feature (sets up select, applies defaults)
+try { initializeGradeLevelFeature(); } catch (e) { console.warn('Grade init:', e); }
 loadStudents();
 renderStudentList();
 populateStudentDropdown();
