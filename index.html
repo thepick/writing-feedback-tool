@@ -2634,7 +2634,10 @@
             text-align: left;
         }
         .ocr-panel-body.has-photos .ocr-intro {
-            display: none;
+            /* Keep the mobile action buttons visible after one photo is added.
+               This lets users take/upload page 2, page 3, etc. */
+            display: block;
+            margin-top: 10px;
         }
         .ocr-extract-after {
             margin-top: 14px;
@@ -10637,11 +10640,24 @@ function syncOcrPanelTitle() {
 
 function updateOcrControls() {
     var extractBtn = document.getElementById("extractTextBtn");
+    var takePhotoBtn = document.getElementById("takePhotoBtn");
+    var uploadImageBtn = document.getElementById("uploadImageBtn");
     var studentWriting = document.getElementById("studentWriting");
     if (!extractBtn) return;
     var hasImages = selectedImages && selectedImages.length > 0;
     var hasText = studentWriting && studentWriting.value.trim().length > 0;
     extractBtn.disabled = isAnalyzing || !hasImages;
+
+    // Keep the photo/upload controls useful after the first page is queued.
+    // On mobile, users usually take one page at a time, so the buttons must remain visible.
+    if (takePhotoBtn) {
+        takePhotoBtn.innerHTML = hasImages
+            ? '<span aria-hidden="true" style="font-size:18px;vertical-align:text-bottom;margin-right:6px;">📷</span>Add Another Photo'
+            : '<span aria-hidden="true" style="font-size:18px;vertical-align:text-bottom;margin-right:6px;">📷</span>Take Photo';
+    }
+    if (uploadImageBtn) {
+        uploadImageBtn.textContent = hasImages ? '⬆️ Add More Images' : '⬆️ Upload Image';
+    }
 
     // Add pulse animation when button becomes ready but text hasn't been extracted yet
     // Pulse when: has images, not analyzing, AND no text in the box yet
