@@ -3141,8 +3141,8 @@
         <!-- Grammar & Writing Section -->
         <div class="settings-section">
             <div class="settings-section-title">Grade Level</div>
-            <label for="gradeLevelSelect">Student Grade Level</label>
-            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('settings')">
+            <label for="classGradeLevelSelect">Class Grade Level</label>
+            <select id="classGradeLevelSelect" onchange="onGradeLevelChanged('class')">
                 <option value="4">Grade 4</option>
                 <option value="5" selected>Grade 5</option>
                 <option value="6">Grade 6</option>
@@ -3153,12 +3153,11 @@
                 <option value="11">Grade 11</option>
                 <option value="12">Grade 12</option>
             </select>
-            <div id="gradeProfileDescription" class="settings-help-text">Sets scoring expectations, category weights, word count targets, and grammar thresholds for the selected grade level.</div>
-            <label for="classGradeLevelSelect">Class Grade Level</label>
-            <select id="classGradeLevelSelect" onchange="onGradeLevelChanged('class')">
-                <option value="">Use default grade level</option>
+            <div id="classGradeProfileDescription" class="settings-help-text">Sets the default grade level for the class.</div>
+            <label for="gradeLevelSelect">Student Grade Level</label>
+            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('student')">
                 <option value="4">Grade 4</option>
-                <option value="5">Grade 5</option>
+                <option value="5" selected>Grade 5</option>
                 <option value="6">Grade 6</option>
                 <option value="7">Grade 7</option>
                 <option value="8">Grade 8</option>
@@ -3167,7 +3166,7 @@
                 <option value="11">Grade 11</option>
                 <option value="12">Grade 12</option>
             </select>
-            <div id="classGradeProfileDescription" class="settings-help-text">If set, this class grade level will be used for scoring.</div>
+            <div id="gradeProfileDescription" class="settings-help-text">Uses the class grade level unless this student is changed deliberately.</div>
         </div>
 
         <div class="settings-section">
@@ -3631,7 +3630,8 @@ function saveSettingsToLocalStorage() {
             grammarStrictness: getGrammarStrictness(),
             assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false,
             gradeLevel: getSelectedGradeLevel(),
-            classGradeLevel: getClassGradeLevel()
+            classGradeLevel: getClassGradeLevel(),
+            studentGradeLevelOverride: wftStudentGradeLevelOverride === true
         };
         refreshApiKeyRuntimeValue();
         localStorage.setItem('wft_settings', JSON.stringify(settings));
@@ -3671,12 +3671,18 @@ function loadSettingsFromLocalStorage() {
             if (s.assessScriptQuality != null && document.getElementById('assessScriptQuality')) {
                 document.getElementById('assessScriptQuality').checked = s.assessScriptQuality;
             }
-            if (s.gradeLevel != null && document.getElementById('gradeLevelSelect')) {
-                document.getElementById('gradeLevelSelect').value = String(parseGradeLevelValue(s.gradeLevel) || 5);
-            }
             if (document.getElementById('classGradeLevelSelect')) {
-                var savedClassGrade = parseGradeLevelValue(s.classGradeLevel);
-                document.getElementById('classGradeLevelSelect').value = savedClassGrade ? String(savedClassGrade) : '';
+                var savedClassGrade = parseGradeLevelValue(s.classGradeLevel) || 5;
+                document.getElementById('classGradeLevelSelect').value = String(savedClassGrade);
+            }
+            wftStudentGradeLevelOverride = s.studentGradeLevelOverride === true;
+            if (s.studentGradeLevelOverride == null && s.gradeLevel != null && s.classGradeLevel != null) {
+                wftStudentGradeLevelOverride = (parseGradeLevelValue(s.gradeLevel) !== (parseGradeLevelValue(s.classGradeLevel) || 5));
+            }
+            if (document.getElementById('gradeLevelSelect')) {
+                var savedStudentGrade = parseGradeLevelValue(s.gradeLevel);
+                var effectiveStudentGrade = wftStudentGradeLevelOverride && savedStudentGrade ? savedStudentGrade : getClassGradeLevel();
+                document.getElementById('gradeLevelSelect').value = String(effectiveStudentGrade || 5);
             }
             applyGradeWordCountRange();
             refreshGradeProfileDescription();
@@ -5369,6 +5375,7 @@ function getLocalSettingsSnapshot() {
             assessScriptQuality: document.getElementById('assessScriptQuality') ? document.getElementById('assessScriptQuality').checked : false,
             gradeLevel: getSelectedGradeLevel(),
             classGradeLevel: getClassGradeLevel(),
+            studentGradeLevelOverride: wftStudentGradeLevelOverride === true,
             students: applyDeletionsToStudents(students, getDeletionsData())
         };
         return settings;
@@ -6824,12 +6831,18 @@ function applyLoadedSettings(settings) {
     if (settings.assessScriptQuality != null && document.getElementById("assessScriptQuality")) {
         document.getElementById("assessScriptQuality").checked = settings.assessScriptQuality;
     }
-    if (settings.gradeLevel != null && document.getElementById("gradeLevelSelect")) {
-        document.getElementById("gradeLevelSelect").value = String(parseGradeLevelValue(settings.gradeLevel) || 5);
-    }
     if (document.getElementById("classGradeLevelSelect")) {
-        var loadedClassGrade = parseGradeLevelValue(settings.classGradeLevel);
-        document.getElementById("classGradeLevelSelect").value = loadedClassGrade ? String(loadedClassGrade) : "";
+        var loadedClassGrade = parseGradeLevelValue(settings.classGradeLevel) || 5;
+        document.getElementById("classGradeLevelSelect").value = String(loadedClassGrade);
+    }
+    wftStudentGradeLevelOverride = settings.studentGradeLevelOverride === true;
+    if (settings.studentGradeLevelOverride == null && settings.gradeLevel != null && settings.classGradeLevel != null) {
+        wftStudentGradeLevelOverride = (parseGradeLevelValue(settings.gradeLevel) !== (parseGradeLevelValue(settings.classGradeLevel) || 5));
+    }
+    if (document.getElementById("gradeLevelSelect")) {
+        var loadedStudentGrade = parseGradeLevelValue(settings.gradeLevel);
+        var effectiveLoadedStudentGrade = wftStudentGradeLevelOverride && loadedStudentGrade ? loadedStudentGrade : getClassGradeLevel();
+        document.getElementById("gradeLevelSelect").value = String(effectiveLoadedStudentGrade || 5);
     }
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
@@ -6877,6 +6890,8 @@ function saveSettingsToDrive() {
             var sel = document.getElementById('gradeLevelSelect');
             return sel ? parseInt(sel.value, 10) || 5 : 5;
         })(),
+        classGradeLevel: getClassGradeLevel(),
+        studentGradeLevelOverride: wftStudentGradeLevelOverride === true,
         students: students
     };
     saveFileToDrive("wft-settings.json", JSON.stringify(settings, null, 2), "application/json");
@@ -8594,17 +8609,27 @@ GRADE_PROFILES[10] = makeGradeProfile({grade:10,label:"Grade 10",gradeLabel:"Gra
 GRADE_PROFILES[11] = makeGradeProfile({grade:11,label:"Grade 11",gradeLabel:"Grade 11",audience:"11th-grade student",targetWordCountBase:600,targetWordCount:600,targetWordCountRange:[150,2200],sampleStatusMinWords:{limited:18,scorable:85},sampleStatusMinSentences:{scorable:6},wordRules:{insufficient:18,limited:18,scorable:85}});
 GRADE_PROFILES[12] = makeGradeProfile({grade:12,label:"Grade 12",gradeLabel:"Grade 12",audience:"12th-grade student",targetWordCountBase:700,targetWordCount:700,targetWordCountRange:[150,2500],sampleStatusMinWords:{limited:18,scorable:90},sampleStatusMinSentences:{scorable:6},wordRules:{insufficient:18,limited:18,scorable:90}});
 
+var wftStudentGradeLevelOverride = false;
+
 function getSelectedGradeLevel() {
     var el = document.getElementById("gradeLevelSelect");
     var n = el ? parseGradeLevelValue(el.value) : null;
-    return n || 5;
+    return n || getClassGradeLevel() || 5;
 }
 function getClassGradeLevel() {
     var el = document.getElementById("classGradeLevelSelect");
-    if (!el || !el.value) return null;
-    return parseGradeLevelValue(el.value);
+    var n = el ? parseGradeLevelValue(el.value) : null;
+    return n || 5;
 }
-function getActiveGradeLevel() { return getClassGradeLevel() || getSelectedGradeLevel() || 5; }
+function syncStudentGradeToClassIfNeeded() {
+    var classSelect = document.getElementById("classGradeLevelSelect");
+    var studentSelect = document.getElementById("gradeLevelSelect");
+    if (!classSelect || !studentSelect) return;
+    if (!wftStudentGradeLevelOverride) {
+        studentSelect.value = String(getClassGradeLevel());
+    }
+}
+function getActiveGradeLevel() { return getSelectedGradeLevel() || getClassGradeLevel() || 5; }
 function getGradeProfile(optGrade) {
     var grade = optGrade != null ? parseGradeLevelValue(optGrade) : getActiveGradeLevel();
     return GRADE_PROFILES[grade] || GRADE_PROFILES[5];
@@ -8623,12 +8648,15 @@ function getGradeProfileDescriptionText(profile) {
     return (profile.gradeLabel || profile.label) + " expectations are active. Default target: " + (profile.targetWordCountBase || profile.targetWordCount) + " words. Grammar default: " + profile.grammarStrictnessDefault + "/5.";
 }
 function refreshGradeProfileDescription() {
-    var profile = getGradeProfile();
+    var classProfile = getGradeProfile(getClassGradeLevel());
+    var studentProfile = getGradeProfile(getSelectedGradeLevel());
     var settingsDesc = document.getElementById("gradeProfileDescription");
     var classDesc = document.getElementById("classGradeProfileDescription");
-    var text = getGradeProfileDescriptionText(profile);
-    if (settingsDesc) settingsDesc.textContent = text;
-    if (classDesc) classDesc.textContent = (getClassGradeLevel() ? "Class setting active. " : "Using default grade setting. ") + text;
+    if (classDesc) classDesc.textContent = "Class default: " + getGradeProfileDescriptionText(classProfile);
+    if (settingsDesc) {
+        var prefix = wftStudentGradeLevelOverride ? "Student override active. " : "Following class grade level. ";
+        settingsDesc.textContent = prefix + getGradeProfileDescriptionText(studentProfile);
+    }
 }
 function applyGradeWordCountRange() {
     var profile = getGradeProfile();
@@ -8670,6 +8698,11 @@ function applyGradeDefaults() {
     if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-defaults");
 }
 function onGradeLevelChanged(source) {
+    if (source === "class") {
+        syncStudentGradeToClassIfNeeded();
+    } else if (source === "student" || source === "settings") {
+        wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
+    }
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
@@ -8678,10 +8711,32 @@ function onGradeLevelChanged(source) {
     if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-change-" + source);
 }
 function initializeGradeLevelFeature() {
+    syncStudentGradeToClassIfNeeded();
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
     if (typeof syncUiState === "function") syncUiState();
+}
+
+
+function hasSentenceEndingPunctuation(text) {
+    var cleaned = stripCorrectionMarkdown(text || "").trim();
+    if (!cleaned) return false;
+    cleaned = cleaned.replace(/[\s"')\]}]+$/g, "");
+    return /[.!?]$/.test(cleaned);
+}
+
+function hasCompleteClause(text) {
+    var cleaned = stripCorrectionMarkdown(text || "").replace(/\r\n?|\n/g, " ").trim().toLowerCase();
+    if (!cleaned) return false;
+    var words = cleaned.match(/\b[a-z][a-z'\-]*\b/g);
+    if (!words || words.length < 4) return false;
+
+    var subjectPattern = /\b(i|you|he|she|it|we|they|my|our|the|a|an|this|that|these|those|there|students?|children|child|teacher|person|people|friend|family|boy|girl|dog|cat|animal|character|story)\b/;
+    var verbPattern = /\b(am|is|are|was|were|be|being|been|have|has|had|do|does|did|can|could|will|would|shall|should|may|might|must|go|goes|went|make|makes|made|get|gets|got|see|sees|saw|look|looks|looked|think|thinks|thought|feel|feels|felt|say|says|said|write|writes|wrote|read|reads|run|runs|ran|walk|walks|walked|play|plays|played|learn|learns|learned|use|uses|used|want|wants|wanted|need|needs|needed|like|likes|liked|know|knows|knew)\b/;
+    if (subjectPattern.test(cleaned) && verbPattern.test(cleaned)) return true;
+    if (subjectPattern.test(cleaned) && /\b[a-z]+(ed|ing|s)\b/.test(cleaned)) return true;
+    return words.length >= 12 && /\b[a-z]+(ed|ing)\b/.test(cleaned);
 }
 
 function getSampleStatusData(text, optGradeProfile) {
@@ -12281,8 +12336,19 @@ function bindDesktopImageDrop() {
 }
 
 async function extractTextFromSelectedImage(isAutomatic) {
+    // When this function is used directly as a click handler, the browser passes
+    // a MouseEvent as the first argument. Treat only a literal true as automatic.
+    // This keeps the OCR path independent from button events and Google Drive sign-in.
+    isAutomatic = isAutomatic === true;
+
     if (!selectedImages.length) {
         setOcrStatus("Choose an image first.", "error");
+        return "";
+    }
+
+    refreshApiKeyRuntimeValue();
+    if (!API_KEY) {
+        setOcrStatus("Open Settings and paste your OpenRouter API key before extracting text.", "error");
         return "";
     }
 
@@ -12361,6 +12427,41 @@ async function extractTextFromSelectedImage(isAutomatic) {
 }
 
 
+
+
+function getGrammarStrictness() {
+    var fallback = 3;
+
+    try {
+        var profile = typeof getGradeProfile === "function" ? getGradeProfile() : null;
+        if (profile && profile.grammarStrictnessDefault != null) {
+            fallback = parseInt(profile.grammarStrictnessDefault, 10) || fallback;
+        }
+    } catch (e) { }
+
+    var value = null;
+    var el = document.getElementById("grammarStrictness");
+    if (el && el.value !== "") {
+        value = parseInt(el.value, 10);
+    }
+
+    if ((value == null || isNaN(value)) && typeof localStorage !== "undefined") {
+        try {
+            var raw = localStorage.getItem("wft_settings");
+            if (raw) {
+                var settings = JSON.parse(raw);
+                if (settings && settings.grammarStrictness != null) {
+                    value = parseInt(settings.grammarStrictness, 10);
+                }
+            }
+        } catch (e2) { }
+    }
+
+    if (value == null || isNaN(value)) value = fallback;
+    if (value < 1) value = 1;
+    if (value > 5) value = 5;
+    return value;
+}
 
 function getStrictnessRuleForPrompt(strictness, optGradeProfile) {
     var profile = optGradeProfile || getGradeProfile();
@@ -12687,6 +12788,23 @@ function formatGrammarCalc(calc) {
             '<tr><td>Ideas decaying multiplier</td><td>' + calc.multiplier.toFixed(3) + '</td></tr>' +
             '<tr><td>Ideas adjustment note</td><td>' + escapeHtml(calc.ideasNote) + '</td></tr>' +
         '</table>';
+}
+
+
+function isWordCountTargetEnabled() {
+    var checkbox = document.getElementById("useWordCountTarget");
+    return checkbox ? checkbox.checked !== false : true;
+}
+
+function getTargetWordCountValue() {
+    var input = document.getElementById("targetWordCount");
+    var value = input ? parseInt(input.value, 10) : 200;
+    if (!isFinite(value) || value <= 0) value = 200;
+    return value;
+}
+
+function getEffectiveTargetWordCount() {
+    return isWordCountTargetEnabled() ? getTargetWordCountValue() : 0;
 }
 
 function updateMeter() {
@@ -13751,10 +13869,12 @@ async function analyzeWriting() {
     var model = document.getElementById("modelSelect").value;
     // FIX O2: Resolve grade profile right at the start, before any early exits.
     var gradeProfile = getGradeProfile();
-    if (!text && selectedImageDataUrl) {
+    if (!text && selectedImages && selectedImages.length) {
         try {
             text = String(await extractTextFromSelectedImage(true) || "").trim();
-        } catch (e) {}
+        } catch (e) {
+            console.error("Automatic text extraction before analysis failed:", e);
+        }
     }
     if (!text) {
         alert("Please paste student writing first.");
@@ -14184,7 +14304,12 @@ document.getElementById("imageUploadInput").addEventListener("change", async fun
     refreshScoreWeightingDescription();
     e.target.value = "";
 });
-document.getElementById("extractTextBtn").addEventListener("click", extractTextFromSelectedImage);
+document.getElementById("extractTextBtn").addEventListener("click", function() {
+    extractTextFromSelectedImage(false).catch(function(e) {
+        console.error("Text extraction failed:", e);
+        setOcrStatus(e && e.message ? e.message : "Text extraction failed.", "error");
+    });
+});
 document.getElementById("analyzeBtn").addEventListener("click", analyzeWriting);
 document.getElementById("stopAnalysisBtn").addEventListener("click", requestStopAnalysis);
 var printNotebookBtnTopEl = document.getElementById("printNotebookBtnTop");
