@@ -15349,8 +15349,8 @@ function reassessPortfolioSession(studentName, sessionId) {
     }
 
     var message = "Reassess this saved writing?\n\n"
-        + "This will load the original writing back into the analysis tool and run a new assessment using the current rubrics.\n\n"
-        + "The saved portfolio entry will not be changed unless you sync the new results to the portfolio.";
+        + "This will load the original writing back into the analysis tool so you can review it before reassessing.\n\n"
+        + "Press Analyze Writing when you are ready to run the new assessment. The saved portfolio entry will not be changed unless you sync the new results to the portfolio.";
     if (getPendingPortfolioSync && getPendingPortfolioSync()) {
         message += "\n\nNote: there is already an unsynced portfolio result. Reassessing will replace the current pending result.";
     }
@@ -15377,36 +15377,21 @@ function reassessPortfolioSession(studentName, sessionId) {
         var shouldUseNeatness = !!(result && result.restored > 0 && (session.neatnessAssessed || session.assessScriptQuality || session.sourceType === "typed+photo"));
         setNeatnessForPortfolioReassessment(shouldUseNeatness);
         if (result && result.total > 0 && result.restored === 0) {
-            setOcrStatus("Saved writing loaded. The original photo could not be restored, so reassessment will run without photo-based neatness.", "error");
-            alert("The saved writing was loaded, but the original photo could not be restored. The reassessment will run without photo-based neatness.");
+            setOcrStatus("Saved writing loaded. The original photo could not be restored, so reassessment will run without photo-based neatness. Press Analyze Writing when ready.", "error");
+            alert("The saved writing was loaded, but the original photo could not be restored. You can press Analyze Writing when ready; the reassessment will run without photo-based neatness.");
         } else if (result && result.restored > 0 && result.restored < result.total) {
-            setOcrStatus("Saved writing loaded. Some photos were restored, but not all saved photos were available.", "error");
+            setOcrStatus("Saved writing loaded. Some photos were restored, but not all saved photos were available. Press Analyze Writing when ready.", "error");
         } else if (result && result.restored > 0) {
-            setOcrStatus("Saved writing and photo restored. Reassessing now...", "success");
+            setOcrStatus("Saved writing and photo restored. Press Analyze Writing when ready.", "success");
         } else {
-            setOcrStatus("Saved writing loaded. Reassessing now...", "");
+            setOcrStatus("Saved writing loaded. Press Analyze Writing when ready.", "");
         }
         syncUiState();
-        var analysisRun = analyzeWriting();
-        if (analysisRun && typeof analysisRun.then === "function") {
-            analysisRun.catch(function(e) {
-                activePortfolioReassessmentSource = null;
-                console.error("Portfolio reassessment failed:", e);
-                alert("The saved writing was loaded, but reassessment could not be completed.");
-            });
-        }
     }).catch(function(e) {
         console.error("Could not restore saved portfolio entry for reassessment:", e);
         setNeatnessForPortfolioReassessment(false);
-        setOcrStatus("Saved writing loaded, but photos could not be restored. Reassessing without photo-based neatness.", "error");
+        setOcrStatus("Saved writing loaded, but photos could not be restored. Press Analyze Writing when ready; photo-based neatness will be off.", "error");
         syncUiState();
-        var analysisRun = analyzeWriting();
-        if (analysisRun && typeof analysisRun.then === "function") {
-            analysisRun.catch(function(err) {
-                console.error("Portfolio reassessment failed:", err);
-                alert("The saved writing was loaded, but reassessment could not be completed.");
-            });
-        }
     });
 }
 
@@ -15587,6 +15572,7 @@ async function analyzeWriting() {
         var ideasData = analyzeIdeasDetailsFromText(text, targetWords, gradeProfile);
         var conventionData = analyzeSpellingPunctuationFromText(text, correctedText);
         var flowRubricData = analyzeFlowRubricFromData(flowData, correctedPlainText);
+        var neatnessQuickRubricForDetailed = null;
 
         var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, organizationData);
         var step2 = await callOpenRouter(model, step2Prompt);
@@ -15595,21 +15581,13 @@ async function analyzeWriting() {
         applyEligibilityToQuickRubric(parsed1.quickRubric, eligibility);
         applyComputedOrganizationToOrganization(parsed1, null, organizationData, eligibility);
 
-        // If neatness is enabled and we have an image, do image-based neatness assessment
+        // If neatness is enabled and we have an image, do image-based neatness assessment.
+        // Keep the quick rubric object so the separate detailed parser cannot drop the image-based sub-scores.
         if (shouldAssessNeatness() && selectedImageDataUrl) {
             var neatnessResult = await assessNeatnessFromImage(selectedImageDataUrl, model);
             if (neatnessResult) {
                 parsed1.quickRubric["Neatness"] = neatnessResult.quickRubric;
-                // Carry sub-scores + evidence + growthTip into detailed categories
-                if (!detailed) detailed = { categories: {} };
-                if (!detailed.categories) detailed.categories = {};
-                if (!detailed.categories["Neatness"]) detailed.categories["Neatness"] = {};
-                var nqr = neatnessResult.quickRubric || {};
-                detailed.categories["Neatness"].subScores  = nqr.subScores  || null;
-                // Only fill evidence/growthTip if the detailed parser didn't already provide them
-                if (!detailed.categories["Neatness"].evidence)   detailed.categories["Neatness"].evidence   = nqr.reason    || null;
-                if (!detailed.categories["Neatness"].growthTip)  detailed.categories["Neatness"].growthTip  = nqr.growthTip || null;
-                if (!detailed.categories["Neatness"].score && nqr.score != null) detailed.categories["Neatness"].score = nqr.score;
+                neatnessQuickRubricForDetailed = neatnessResult.quickRubric || null;
             }
         }
 
@@ -15617,6 +15595,18 @@ async function analyzeWriting() {
         var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, organizationData);
         var step3 = await callOpenRouter(model, step3Prompt);
         var detailed = parseDetailedAssessment(step3);
+        if (neatnessQuickRubricForDetailed) {
+            if (!detailed) detailed = { categories: {} };
+            if (!detailed.categories) detailed.categories = {};
+            if (!detailed.categories["Neatness"]) detailed.categories["Neatness"] = {};
+            detailed.categories["Neatness"].score = neatnessQuickRubricForDetailed.score != null ? neatnessQuickRubricForDetailed.score : detailed.categories["Neatness"].score;
+            detailed.categories["Neatness"].subScores = neatnessQuickRubricForDetailed.subScores || detailed.categories["Neatness"].subScores || null;
+            detailed.categories["Neatness"].evidence = neatnessQuickRubricForDetailed.reason || detailed.categories["Neatness"].evidence || null;
+            detailed.categories["Neatness"].growthTip = neatnessQuickRubricForDetailed.growthTip || detailed.categories["Neatness"].growthTip || null;
+            detailed.categories["Neatness"].contentOrganization = detailed.categories["Neatness"].contentOrganization || "";
+            detailed.categories["Neatness"].sentenceVariety = detailed.categories["Neatness"].sentenceVariety || "";
+            detailed.categories["Neatness"].rawBody = detailed.categories["Neatness"].rawBody || "";
+        }
 
         var adjustment = applyWordCountToIdeas(parsed1, detailed, actualWords, targetWords);
         applyComputedIdeasToIdeas(parsed1, detailed, ideasData, eligibility);
@@ -15668,6 +15658,7 @@ async function analyzeWriting() {
                         score: qr.score,
                         evidence: qr.reason || "",
                         growthTip: qr.growthTip || "",
+                        subScores: qr.subScores || null,
                         contentOrganization: "",
                         sentenceVariety: "",
                         rawBody: ""
