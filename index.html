@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v15 -->
+<!-- Writing Feedback Tool v15 - neatness rubric upgraded -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -3806,16 +3806,18 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
             subScores.spacing,
             subScores.stayingOnLine,
             subScores.sizeConsistency,
-            subScores.penControl
+            subScores.penControl,
+            subScores.pageLayoutParagraphs
         ];
         for (var i = 0; i < values.length; i++) {
             if (!isFinite(Number(values[i]))) return null;
         }
-        return (Number(subScores.letterFormation) * 0.25) +
-               (Number(subScores.spacing) * 0.20) +
-               (Number(subScores.stayingOnLine) * 0.20) +
+        return (Number(subScores.letterFormation) * 0.20) +
+               (Number(subScores.spacing) * 0.15) +
+               (Number(subScores.stayingOnLine) * 0.15) +
                (Number(subScores.sizeConsistency) * 0.15) +
-               (Number(subScores.penControl) * 0.20);
+               (Number(subScores.penControl) * 0.15) +
+               (Number(subScores.pageLayoutParagraphs) * 0.20);
     }
 
     function convertNeatnessFiveToTen(scoreFive) {
@@ -3839,48 +3841,55 @@ RUBRIC LEVELS:
 
 SUB-CRITERIA, WEIGHTS, AND SCORE DESCRIPTORS:
 
-1. Letter Formation (25%)
-5 - All letters are formed correctly according to standard strokes.
-4 - 1-2 minor errors in formation; still very easy to read.
-3 - Several letters are formed incorrectly or are "lazy" (for example, o not closed).
-2 - Many letters are unrecognizable or formed with non-standard strokes.
-1 - Formation is illegible or letters are consistently malformed.
+1. Letter Formation (20%)
+5 - Letters are clear, complete, and easy to recognize. Most letters are formed carefully.
+4 - Most letters are clear and easy to read, with only a few unclear or rushed letters.
+3 - Some letters are clear, but several are hard to recognize or are not fully formed.
+2 - Many letters are hard to read because they are incomplete, rushed, or poorly shaped.
+1 - Most letters are very hard to recognize, making the writing difficult to read.
 
-2. Spacing (20%)
-5 - Uniform finger-space between words; letters within words are perfectly snug.
-4 - Spacing is mostly consistent with only a few crowded or wide spots.
-3 - Spacing is inconsistent; some words run together or have gaps.
-2 - Frequent crowding makes it difficult to tell where one word ends and the next begins.
-1 - No visible spacing between words or random, erratic gaps throughout.
+2. Spacing (15%)
+5 - Spaces between words and letters are clear and consistent. The writing is easy to follow.
+4 - Most spacing is clear, with only a few places where words or letters are too close together.
+3 - Spacing is uneven. Some words are crowded or too far apart.
+2 - Many words or letters are crowded together, making the writing harder to read.
+1 - Spacing is very unclear, and it is hard to tell where words begin and end.
 
-3. Staying on the Line (20%)
-5 - All letters sit perfectly on the writing line; tails such as g, p, and y cross exactly where they should.
-4 - Occasional floating or sinking in less than 10% of the text.
-3 - Letters frequently drift above or below the line, but the sentence is still linear.
-2 - Writing slants significantly or ignores the lines for most of the page.
-1 - Writing ignores lines entirely; text may be crooked or overlap other lines.
+3. Staying on the Line (15%)
+5 - Writing stays neatly on the lines throughout the page.
+4 - Writing mostly stays on the lines, with only a few small slips.
+3 - Writing sometimes drifts above or below the lines.
+2 - Writing often moves off the lines, making the page look messy.
+1 - Writing does not follow the lines well and is difficult to read.
 
 4. Size Consistency (15%)
-5 - Capitals, tall letters such as t, l, and h, and short letters such as a, e, and n are perfectly proportioned.
-4 - Minor inconsistencies in size, but tall letters are clearly taller than short ones.
-3 - Size varies noticeably; some short letters are as tall as tall ones.
-2 - Letters change size mid-word; capitals are often the same size as lowercase letters.
-1 - Letter sizes are random and chaotic; no distinction between tall and short letters.
+5 - Letter size is consistent and fits the notebook lines well.
+4 - Letter size is mostly consistent, with only a few letters that are much bigger or smaller.
+3 - Letter size changes noticeably in some places.
+2 - Letter size changes often, making the writing harder to read.
+1 - Letter size is very uneven and makes the writing difficult to follow.
 
-5. Pen Control and Marks (20%)
-5 - Clean, crisp lines. No unnecessary smudges, stray marks, or heavy digging into the paper.
-4 - Very few stray marks; eraser marks are clean and not distracting.
-3 - Visible smudges or several scribble-outs instead of clean erasing.
-2 - Heavy pressure causes tearing or ghosting; many messy corrections or stray lines.
-1 - Page is messy with significant smudges, tears, or scribbles that obscure the text.
+5. Pen Control and Marks (15%)
+5 - Lines are clean and controlled. There are no distracting smudges, scribbles, or messy marks.
+4 - There are only a few small smudges, eraser marks, or stray marks.
+3 - There are some smudges, cross-outs, or messy corrections that distract from the writing.
+2 - There are many messy marks, heavy pressure marks, or corrections that make the page harder to read.
+1 - Smudges, scribbles, tears, or messy marks make the writing very difficult to read.
 
-After scoring the five sub-criteria, calculate the weighted final neatness score on a 1-5 scale:
-Final 1-5 = (Letter Formation x 0.25) + (Spacing x 0.20) + (Staying on the Line x 0.20) + (Size Consistency x 0.15) + (Pen Control and Marks x 0.20)
+6. Page Layout and Paragraphs (20%)
+5 - The page is well organized. Paragraphs are clear, writing starts near the margin, and the student uses the lines and space neatly.
+4 - The page is mostly organized. Paragraphs are mostly clear, writing usually lines up with the margin, and most lines are used well.
+3 - Page layout is uneven. Paragraphs may be unclear, some writing may not line up with the margin, or some lines may leave awkward empty space.
+2 - Page layout makes the writing harder to follow. Paragraphs are missing or confusing, many lines do not line up well, or the space on the page is not used well.
+1 - The page is very disorganized. It is hard to tell where paragraphs start or end, the writing does not follow the margin or lines well, or the layout makes the story difficult to read.
+
+After scoring the six sub-criteria, calculate the weighted final neatness score on a 1-5 scale:
+Final 1-5 = (Letter Formation x 0.20) + (Spacing x 0.15) + (Staying on the Line x 0.15) + (Size Consistency x 0.15) + (Pen Control and Marks x 0.15) + (Page Layout and Paragraphs x 0.20)
 Round the weighted 1-5 score to the nearest whole number, then convert it to the app's 10-point scale by multiplying by 2.
 Examples: 5/5 = 10/10, 4/5 = 8/10, 3/5 = 6/10, 2/5 = 4/10, 1/5 = 2/10.
 
 IMPORTANT - Write in plain, friendly words that a 10-12 year old student will understand.
-Avoid technical handwriting terms. Use everyday words like: "your letters", "easy to read", "spaces between words", "staying on the line", "cross-outs", "messy marks", "shaky lines", etc.
+Avoid technical handwriting terms. Use everyday words like: "your letters", "easy to read", "spaces between words", "staying on the line", "paragraphs", "margin", "using the space on each line", "cross-outs", "messy marks", "shaky lines", etc.
 If the photo is blurry, cropped, too dark, or does not show enough handwriting to score fairly, use "Missing" rather than guessing.
 
 Use exactly this format:
@@ -3890,6 +3899,7 @@ Use exactly this format:
 - Staying on the Line: [score]/5 - [level name]
 - Size Consistency: [score]/5 - [level name]
 - Pen Control and Marks: [score]/5 - [level name]
+- Page Layout and Paragraphs: [score]/5 - [level name]
 
 **Quick Rubric:**
 - Neatness: [converted final score]/10 ([rounded final score]/5 - [level name]) - [one sentence describing the most noticeable thing you see in this student's handwriting overall]
@@ -3903,6 +3913,7 @@ Example:
 - Staying on the Line: 4/5 - Proficient
 - Size Consistency: 3/5 - Developing
 - Pen Control and Marks: 4/5 - Proficient
+- Page Layout and Paragraphs: 3/5 - Developing
 
 **Quick Rubric:**
 - Neatness: 8/10 (4/5 - Proficient) - Most of your letters are easy to read, but some words need clearer spaces between them.
@@ -3918,7 +3929,8 @@ Example:
             spacing:          parseNeatnessSubScore('Spacing', response),
             stayingOnLine:    parseNeatnessSubScore('Staying on the Line', response),
             sizeConsistency:  parseNeatnessSubScore('Size Consistency', response),
-            penControl:       parseNeatnessSubScore('Pen Control and Marks', response)
+            penControl:       parseNeatnessSubScore('Pen Control and Marks', response),
+            pageLayoutParagraphs: parseNeatnessSubScore('Page Layout and Paragraphs', response)
         };
 
         var weightedFive = calculateWeightedNeatnessFive(subScores);
@@ -12724,11 +12736,12 @@ function renderDetailedAssessment(detailed) {
             if (item.subScores) {
                 var ss = item.subScores;
                 var subRows = [
-                    ["Letter Formation", ss.letterFormation, "25%"],
-                    ["Spacing", ss.spacing, "20%"],
-                    ["Staying on the Line", ss.stayingOnLine, "20%"],
+                    ["Letter Formation", ss.letterFormation, "20%"],
+                    ["Spacing", ss.spacing, "15%"],
+                    ["Staying on the Line", ss.stayingOnLine, "15%"],
                     ["Size Consistency", ss.sizeConsistency, "15%"],
-                    ["Pen Control &amp; Marks", ss.penControl, "20%"]
+                    ["Pen Control &amp; Marks", ss.penControl, "15%"],
+                    ["Page Layout and Paragraphs", ss.pageLayoutParagraphs, "20%"]
                 ];
                 html += '<div class="assessment-sub neatness-sub-wrap">';
                 html += '<table class="neatness-sub-table">';
