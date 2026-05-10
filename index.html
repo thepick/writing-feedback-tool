@@ -7711,8 +7711,10 @@ function saveCurrentSessionToPortfolio(analysisData) {
     pendingPortfolioSync = {
         studentName: student,
         sessionData: sessionData,
-        signature: getCurrentPortfolioSessionSignature()
+        signature: getCurrentPortfolioSessionSignature(),
+        replaceSource: activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null
     };
+    activePortfolioReassessmentSource = null;
     persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
     setDriveSyncStatus('syncing', 'Ready to sync to portfolio');
@@ -8020,6 +8022,7 @@ function triggerResultsSlideIn() {
 
 var PENDING_PORTFOLIO_SYNC_KEY = 'wft_pending_portfolio_sync_v1';
 var pendingPortfolioSync = null;
+var activePortfolioReassessmentSource = null;
 var lastSyncedPortfolioSessionSignature = "";
 
 function getActivePortfolioStudentName() {
@@ -8161,11 +8164,74 @@ function updateSyncPortfolioButtonState() {
     }
 }
 
+function commitPendingPortfolioReplacement(pending) {
+    if (!pending || !pending.studentName || !pending.sessionData || !pending.replaceSource) return false;
+    var source = pending.replaceSource || {};
+    var sourceStudent = source.sourceStudentName || source.studentName || "";
+    var sourceSessionId = source.sourceSessionId || source.sessionId || "";
+    var targetStudent = pending.studentName;
+    var newSession = pending.sessionData;
+    if (!sourceStudent || !sourceSessionId || !targetStudent || !newSession) return false;
+
+    var portfolio = getPortfolioData();
+    if (!portfolio[sourceStudent]) portfolio[sourceStudent] = { sessions: [] };
+    if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
+
+    var sourceSessions = Array.isArray(portfolio[sourceStudent].sessions) ? portfolio[sourceStudent].sessions : [];
+    var removed = false;
+    var replaceIndex = -1;
+    for (var i = 0; i < sourceSessions.length; i++) {
+        var session = sourceSessions[i] || {};
+        if (String(session.id || "") === String(sourceSessionId) || String(session.createdAt || "") === String(sourceSessionId) || String(i) === String(sourceSessionId)) {
+            replaceIndex = i;
+            break;
+        }
+    }
+
+    if (sourceStudent === targetStudent && replaceIndex >= 0) {
+        var oldSession = sourceSessions[replaceIndex] || {};
+        if ((oldSession.id || oldSession.createdAt) && (oldSession.id || oldSession.createdAt) !== newSession.id) {
+            recordSessionDeletion(sourceStudent, oldSession.id || oldSession.createdAt);
+        }
+        sourceSessions[replaceIndex] = newSession;
+        removed = true;
+    } else {
+        var filtered = [];
+        for (var j = 0; j < sourceSessions.length; j++) {
+            var old = sourceSessions[j] || {};
+            var isMatch = (String(old.id || "") === String(sourceSessionId) || String(old.createdAt || "") === String(sourceSessionId) || String(j) === String(sourceSessionId));
+            if (isMatch) {
+                removed = true;
+                recordSessionDeletion(sourceStudent, old.id || old.createdAt || sourceSessionId);
+            } else {
+                filtered.push(old);
+            }
+        }
+        portfolio[sourceStudent].sessions = filtered;
+        portfolio[targetStudent].sessions.push(newSession);
+        if (portfolio[targetStudent].sessions.length > 50) {
+            portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
+        }
+    }
+
+    if (!removed && sourceStudent !== targetStudent) {
+        portfolio[targetStudent].sessions.push(newSession);
+    }
+
+    savePortfolioData(portfolio);
+    try { renderStudentPortfolio(); } catch (e) { console.error('Portfolio saved, but portfolio rendering failed:', e); }
+    return true;
+}
+
 function commitPendingPortfolioSync() {
     var pending = getPendingPortfolioSync();
     if (!pending || !pending.studentName || !pending.sessionData) return false;
     try {
-        saveStudentSession(pending.studentName, pending.sessionData);
+        if (pending.replaceSource) {
+            if (!commitPendingPortfolioReplacement(pending)) return false;
+        } else {
+            saveStudentSession(pending.studentName, pending.sessionData);
+        }
         lastSyncedPortfolioSessionSignature = pending.signature || getCurrentPortfolioSessionSignature();
         clearPendingPortfolioSync();
         return true;
@@ -9918,144 +9984,6 @@ function buildGrammarEvidenceFromData(score, originalText, correctedText) {
     return "";
 }
 
-
-function getGrammarFeedbackData(score, originalText, correctedText) {
-    var plainCorrected = stripCorrectionMarkdown(correctedText || originalText || "");
-    var wordCount = countWords(plainCorrected);
-    var totalErrors = countBoldedSegments(correctedText || "");
-    var errorDensity = wordCount ? (totalErrors / wordCount) * 100 : 0;
-    var summary = analyzeGrammarChanges(originalText || "", correctedText || "");
-    var sentenceLengths = getSentenceLengths(plainCorrected);
-    var longSentenceCount = 0;
-    var veryLongSentenceCount = 0;
-    var longestSentence = 0;
-    for (var i = 0; i < sentenceLengths.length; i++) {
-        if (sentenceLengths[i] > longestSentence) longestSentence = sentenceLengths[i];
-        if (sentenceLengths[i] >= 30) longSentenceCount += 1;
-        if (sentenceLengths[i] >= 45) veryLongSentenceCount += 1;
-    }
-
-    var boundaryCount = Math.max(summary.punctuationIssues || 0, longSentenceCount + veryLongSentenceCount);
-    var verbCount = summary.verbIssues || 0;
-    var smallWordCount = (summary.articleIssues || 0) + (summary.helperVerbIssues || 0);
-    var wordingCount = Math.max(0, (summary.totalEdits || 0) - (summary.punctuationIssues || 0) - (summary.verbIssues || 0) - (summary.articleIssues || 0) - (summary.capitalizationIssues || 0) - (summary.contractionIssues || 0));
-
-    function levelFor(count, mainCount) {
-        if (count <= 0) return "Mostly clear";
-        if (count === mainCount && count >= 2) return "Main issue";
-        if (count >= 3) return "Main issue";
-        if (count >= 2) return "Moderate issue";
-        return "Minor issue";
-    }
-
-    var mainCount = Math.max(boundaryCount, verbCount, smallWordCount, wordingCount);
-    var patternNotes = [];
-    patternNotes.push({
-        pattern: "Sentence boundaries / run-ons",
-        level: levelFor(boundaryCount, mainCount),
-        count: boundaryCount,
-        comment: boundaryCount > 0 ? "Some long sentence parts need clearer breaks or punctuation." : "Sentence boundaries are mostly under control."
-    });
-    patternNotes.push({
-        pattern: "Verb tense and agreement",
-        level: levelFor(verbCount, mainCount),
-        count: verbCount,
-        comment: verbCount > 0 ? "Some verbs need to stay in a clearer tense or match the subject." : "Verb tense and agreement are mostly clear."
-    });
-    patternNotes.push({
-        pattern: "Small grammar words / missing words",
-        level: levelFor(smallWordCount, mainCount),
-        count: smallWordCount,
-        comment: smallWordCount > 0 ? "A few small words or helping words need attention." : "Small grammar words are mostly used clearly."
-    });
-    patternNotes.push({
-        pattern: "Word order / phrasing",
-        level: levelFor(wordingCount, mainCount),
-        count: wordingCount,
-        comment: wordingCount > 0 ? "A few phrases sound awkward or need clearer wording." : "The wording is mostly understandable."
-    });
-    patternNotes.push({
-        pattern: "Grammar clarity",
-        level: Number(score) >= 8 ? "Mostly clear" : (Number(score) >= 7 ? "Mostly clear" : "Needs attention"),
-        count: summary.totalEdits || 0,
-        comment: Number(score) >= 7 ? "The reader can still understand the writing most of the time." : "Grammar issues sometimes make the meaning harder to follow."
-    });
-
-    return {
-        score: score,
-        totalErrors: totalErrors,
-        wordCount: wordCount,
-        errorDensity: errorDensity,
-        summary: summary,
-        longSentenceCount: longSentenceCount,
-        veryLongSentenceCount: veryLongSentenceCount,
-        longestSentence: longestSentence,
-        patternNotes: patternNotes,
-        mainPattern: getMainGrammarPattern(patternNotes)
-    };
-}
-
-function getMainGrammarPattern(patternNotes) {
-    if (!patternNotes || !patternNotes.length) return null;
-    var best = patternNotes[0];
-    var bestRank = -1;
-    var ranks = { "Main issue": 3, "Moderate issue": 2, "Minor issue": 1, "Needs attention": 1, "Mostly clear": 0 };
-    for (var i = 0; i < patternNotes.length; i++) {
-        var note = patternNotes[i];
-        var rank = ranks[note.level] || 0;
-        if (rank > bestRank || (rank === bestRank && (note.count || 0) > (best.count || 0))) {
-            best = note;
-            bestRank = rank;
-        }
-    }
-    return best;
-}
-
-function buildGrammarScoreBasisText(data) {
-    if (!data) return "Grammar score is based mainly on error density: correction segments compared with the total word count.";
-    return "Grammar score is based mainly on error density: " + data.totalErrors + " correction segment" + (data.totalErrors === 1 ? "" : "s") + " in " + data.wordCount + " words, about " + data.errorDensity.toFixed(1) + " per 100 words.";
-}
-
-function buildGrammarPatternEvidence(data) {
-    if (!data || !data.mainPattern) return "Grammar was reviewed by looking at the correction patterns in the writing.";
-    var main = data.mainPattern;
-    if (main.level === "Mostly clear") {
-        return "The grammar is mostly understandable, with only small corrections needed.";
-    }
-    return "The main grammar pattern is " + main.pattern.toLowerCase() + ": " + main.comment;
-}
-
-function buildGrammarPatternGrowthTip(data) {
-    if (!data || !data.mainPattern) return "Reread one sentence at a time and fix the clearest grammar pattern first.";
-    var pattern = data.mainPattern.pattern;
-    if (/sentence boundaries/i.test(pattern)) {
-        return "Read each long sentence aloud and add a period where one complete thought ends before the next one begins.";
-    }
-    if (/verb/i.test(pattern)) {
-        return "Choose the time of the story, then check that each verb matches that time and its subject.";
-    }
-    if (/small grammar/i.test(pattern)) {
-        return "Reread slowly and check for small missing words such as a, the, is, was, or had.";
-    }
-    if (/word order/i.test(pattern)) {
-        return "Reread the sentence aloud and move words only where the meaning sounds unclear.";
-    }
-    return "Reread one sentence at a time and fix the grammar pattern that appears most often.";
-}
-
-function renderGrammarPatternNotesTable(patternNotes) {
-    if (!patternNotes || !patternNotes.length) return "";
-    var html = '<div class="assessment-sub neatness-sub-wrap">';
-    html += '<table class="neatness-sub-table grammar-pattern-table">';
-    html += '<thead><tr><th>Pattern</th><th>Level</th><th>Comment</th></tr></thead><tbody>';
-    for (var i = 0; i < patternNotes.length; i++) {
-        var note = patternNotes[i];
-        html += '<tr><td>' + escapeHtml(note.pattern) + '</td><td class="neatness-weight">' + escapeHtml(note.level) + '</td><td>' + escapeHtml(note.comment) + '</td></tr>';
-    }
-    html += '</tbody></table></div>';
-    return html;
-}
-
 function buildFlowReasonFromData(score, flowData) {
     var n = Number(score);
     if (!flowData) return "";
@@ -10134,6 +10062,42 @@ function buildFlowEvidenceFromData(score, flowData) {
     return "";
 }
 
+
+function buildGrammarScoreBasis(totalErrors, wordCount, errorDensity) {
+    var words = Number(wordCount) || 0;
+    var errors = Number(totalErrors) || 0;
+    var density = Number(errorDensity) || 0;
+    return "Grammar score is based mainly on error density: " + errors + " grammar issue" + (errors === 1 ? "" : "s") + " in " + words + " words, about " + density.toFixed(1) + " issue" + (Math.abs(density - 1) < 0.05 ? "" : "s") + " per 100 words.";
+}
+
+function buildGrammarPatternNotes(score, originalText, correctedText) {
+    var summary = analyzeGrammarChanges(originalText, correctedText);
+    var notes = [];
+    var total = summary.totalEdits || 0;
+    var sentenceLevel = total >= 8 ? "Main issue" : (total >= 4 ? "Moderate issue" : "Minor issue");
+    var verbLevel = summary.verbIssues >= 4 ? "Main issue" : (summary.verbIssues > 0 ? "Minor to moderate issue" : "Mostly correct");
+    var wordOrderLevel = total >= 6 ? "Moderate issue" : (total >= 3 ? "Minor issue" : "Mostly clear");
+    var pronounLevel = /\b(he|she|they|it|him|her|them)\b/i.test(originalText || "") ? "Mostly clear" : "Not a major issue";
+    var clarityLevel = Number(score) >= 7 ? "Mostly clear" : (Number(score) >= 5 ? "Developing" : "Needs support");
+    notes.push({ pattern: "Sentence boundaries / run-ons", level: sentenceLevel, comment: total >= 4 ? "Some sentences need clearer breaks or punctuation." : "Sentence boundaries are mostly manageable." });
+    notes.push({ pattern: "Verb tense and agreement", level: verbLevel, comment: summary.verbIssues > 0 ? "Some verb forms or tense choices need checking." : "Verb tense is not the main issue." });
+    notes.push({ pattern: "Word order / phrasing", level: wordOrderLevel, comment: total >= 3 ? "A few phrases could be clearer or more natural." : "Word order is mostly clear." });
+    notes.push({ pattern: "Pronouns and references", level: pronounLevel, comment: "Pronouns do not appear to be the main reason for the grammar score." });
+    notes.push({ pattern: "Grammar clarity", level: clarityLevel, comment: Number(score) >= 7 ? "The reader can understand the writing most of the time." : "Grammar sometimes interrupts the reader's understanding." });
+    return notes;
+}
+
+function renderGrammarPatternNotesTable(notes) {
+    if (!notes || !notes.length) return "";
+    var html = '<div class="assessment-sub"><strong>Grammar Pattern Notes:</strong></div>';
+    html += '<table class="neatness-sub-table"><thead><tr><th>Pattern</th><th>Level</th><th>Comment</th></tr></thead><tbody>';
+    for (var i = 0; i < notes.length; i++) {
+        html += '<tr><td>' + escapeHtml(notes[i].pattern) + '</td><td>' + escapeHtml(notes[i].level) + '</td><td>' + escapeHtml(notes[i].comment) + '</td></tr>';
+    }
+    html += '</tbody></table>';
+    return html;
+}
+
 function polishFeedback(quickRubric, detailed, originalText, correctedText, flowData) {
     var conventionSource = (correctedText && correctedText.trim()) ? correctedText : originalText;
     var issues = detectConventionIssues(conventionSource);
@@ -10161,19 +10125,13 @@ function polishFeedback(quickRubric, detailed, originalText, correctedText, flow
     }
 
     var grammarQuick = quickRubric["Grammar"];
-    var grammarScoreForData = grammarQuick && grammarQuick.score != null ? grammarQuick.score : (detailed.categories["Grammar"] ? detailed.categories["Grammar"].score : null);
-    var grammarData = grammarScoreForData != null ? getGrammarFeedbackData(grammarScoreForData, originalText, correctedText) : null;
     if (grammarQuick && grammarQuick.score != null) {
-        grammarQuick.reason = toOneSentence(teacherizeWording(buildGrammarPatternEvidence(grammarData), "Grammar", grammarQuick.score));
+        var grammarReason = buildGrammarReasonFromData(grammarQuick.score, originalText, correctedText);
+        if (grammarReason) grammarQuick.reason = toOneSentence(teacherizeWording(grammarReason, "Grammar", grammarQuick.score));
     }
     if (detailed.categories["Grammar"] && detailed.categories["Grammar"].score != null) {
-        grammarData = getGrammarFeedbackData(detailed.categories["Grammar"].score, originalText, correctedText);
-        detailed.categories["Grammar"].grammarData = grammarData;
-        detailed.categories["Grammar"].patternNotes = grammarData.patternNotes;
-        detailed.categories["Grammar"].scoreBasis = buildGrammarScoreBasisText(grammarData);
-        detailed.categories["Grammar"].evidence = toOneSentence(teacherizeWording(buildGrammarPatternEvidence(grammarData), "Grammar", detailed.categories["Grammar"].score));
-        detailed.categories["Grammar"].growthTip = teacherizeWording(buildGrammarPatternGrowthTip(grammarData), "Grammar", detailed.categories["Grammar"].score);
-        if (detailed.categories["Grammar"].subScores) detailed.categories["Grammar"].subScores = null;
+        var grammarEvidence = buildGrammarEvidenceFromData(detailed.categories["Grammar"].score, originalText, correctedText);
+        if (grammarEvidence) detailed.categories["Grammar"].evidence = toOneSentence(teacherizeWording(grammarEvidence, "Grammar", detailed.categories["Grammar"].score));
     }
 
     var flowQuick = quickRubric["Flow"];
@@ -10337,7 +10295,10 @@ function parseDetailedAssessment(step3Text) {
             var c = body.match(/-\s*(?:\*\*)?Content Organization:?(?:\*\*)?\s*([^\n]+)/i);
             if (c) contentOrg = c[1].trim();
         }
+        var flowPattern = "";
         if (label === "5. Flow") {
+            var fp = body.match(/-\s*(?:\*\*)?Flow Pattern:?(?:\*\*)?\s*([^\n]+)/i);
+            if (fp) flowPattern = fp[1].trim();
             var s = body.match(/-\s*(?:\*\*)?Sentence Variety:?(?:\*\*)?\s*([^\n]+)/i);
             if (s) sentenceVariety = s[1].trim();
         }
@@ -10348,6 +10309,7 @@ function parseDetailedAssessment(step3Text) {
             growthTip: growthTip,
             contentOrganization: contentOrg,
             sentenceVariety: sentenceVariety,
+            flowPattern: flowPattern,
             rawBody: body
         };
     }
@@ -10693,6 +10655,64 @@ function buildFlowSentenceVarietyLabel(flowData) {
 }
 
 
+
+function buildFlowPatternSummary(flowData) {
+    if (!flowData || !flowData.sentenceCount) return "The writing needs more sentence evidence before a clear flow pattern can be described.";
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterWord = starterInfo.mostCommonStarter || "";
+    var starterBad = starterWord && starterInfo.ratio > 0.25;
+    var counts = "short: " + flowData.shortCount + ", medium: " + flowData.mediumCount + ", long: " + flowData.longCount;
+    if (starterBad && (flowData.shortCount || 0) === 0) {
+        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '". The sentence lengths are mostly medium and long (' + counts + '), so adding a few shorter sentences could also improve rhythm.';
+    }
+    if (starterBad) {
+        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '". The sentence length pattern is ' + counts + '.';
+    }
+    if ((flowData.shortCount || 0) === 0) {
+        return 'Your writing uses mostly medium and long sentences (' + counts + '), so adding a few shorter sentences could create more rhythm and contrast.';
+    }
+    if ((flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0) {
+        return 'Some short sentences appear close together (' + counts + '), so combining a few ideas could make the rhythm smoother.';
+    }
+    return 'Your sentence rhythm is based on this pattern: ' + counts + '. Keep varying sentence lengths and openings so the writing reads smoothly.';
+}
+
+function buildFlowPatternNotes(flowData) {
+    if (!flowData || !flowData.sentenceCount) return [];
+    var notes = [];
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterWord = starterInfo.mostCommonStarter || "";
+    var lengthNote;
+    if ((flowData.shortCount || 0) === 0) {
+        lengthNote = "0 short, " + flowData.mediumCount + " medium, " + flowData.longCount + " long sentences. A few shorter sentences could add contrast.";
+    } else if ((flowData.longCount || 0) === 0) {
+        lengthNote = flowData.shortCount + " short, " + flowData.mediumCount + " medium, 0 long sentences. A longer sentence or two could smooth the rhythm.";
+    } else {
+        lengthNote = flowData.shortCount + " short, " + flowData.mediumCount + " medium, " + flowData.longCount + " long sentences.";
+    }
+    notes.push({ area: "Sentence Length", note: lengthNote });
+
+    var starterNote = starterWord ? ((flowData.starterInfo.count || 0) + " out of " + flowData.sentenceCount + " sentences begin with \"" + starterWord + "\"" + (starterPct ? " (" + starterPct + "%)." : ".")) : "Sentence starters do not show a clear repeated pattern.";
+    notes.push({ area: "Sentence Starters", note: starterNote });
+
+    var connectionNote = "The events mostly connect from one moment to the next; use transition words or sentence openings to make jumps even smoother.";
+    notes.push({ area: "Connections", note: connectionNote });
+    return notes;
+}
+
+function renderPatternNotesTable(notes) {
+    if (!notes || !notes.length) return "";
+    var html = '<div class="assessment-sub"><strong>Pattern Notes:</strong></div>';
+    html += '<table class="neatness-sub-table"><thead><tr><th>Area</th><th>What the tool noticed</th></tr></thead><tbody>';
+    for (var i = 0; i < notes.length; i++) {
+        html += '<tr><td>' + escapeHtml(notes[i].area) + '</td><td>' + escapeHtml(notes[i].note) + '</td></tr>';
+    }
+    html += '</tbody></table>';
+    return html;
+}
+
 function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
     var key = "Flow";
     var cap = flowScoreCap(flowData);
@@ -10723,7 +10743,9 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
             evidence: "The sentence patterns in this writing contribute to the overall rhythm.",
             growthTip: buildComputedFlowTip(flowData),
             contentOrganization: "",
-            sentenceVariety: flowData ? (svMap[flowData.flowRating] || flowData.varietyLabel) : "",
+            sentenceVariety: "",
+            flowPattern: flowData ? buildFlowPatternSummary(flowData) : "",
+            patternNotes: flowData ? buildFlowPatternNotes(flowData) : [],
             rawBody: ""
         };
         detailedParsed.categories[key] = detailedItem;
@@ -10733,9 +10755,11 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
     if (flowData) {
         detailedItem.evidence = sanitizeFlowCommentForData(detailedItem.evidence, flowData);
         detailedItem.growthTip = sanitizeFlowCommentForData(detailedItem.growthTip, flowData);
-        detailedItem.sentenceVariety = svMap[flowData.flowRating] || buildFlowSentenceVarietyLabel(flowData) || "Try varying sentence lengths to create a smoother, more engaging flow.";
+        detailedItem.sentenceVariety = "";
+        detailedItem.flowPattern = buildFlowPatternSummary(flowData);
+        detailedItem.patternNotes = buildFlowPatternNotes(flowData);
         if (!detailedItem.evidence) {
-            detailedItem.evidence = buildFlowEvidenceFromData(detailedItem.score, flowData) || detailedItem.sentenceVariety;
+            detailedItem.evidence = buildFlowEvidenceFromData(detailedItem.score, flowData) || detailedItem.flowPattern;
         }
         if (!detailedItem.growthTip || detailedItem.growthTip === "No growth tip extracted.") {
             detailedItem.growthTip = buildComputedFlowTip(flowData);
@@ -12888,10 +12912,10 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "1. Use only these rubric scores: 10, 9, 8, 7, 6, 5, 4.",
         "2. Keep feedback honest but warm and encouraging.",
         "3. Make the evidence actually match the category. For Spelling & Punctuation, evidence must focus on spelling, punctuation, and capitalization accuracy - not content.",
-        "4. For Grammar, focus on grammar evidence such as verb tense, subject-verb agreement, sentence correctness, or punctuation affecting grammar. The final Grammar score will be calculated by error density, so do not invent weighted grammar sub-scores.",
+        "4. For Grammar, focus on grammar evidence such as verb tense, subject-verb agreement, sentence correctness, or punctuation affecting grammar.",
         "5. For Word Choice, focus on repeated or precise vocabulary choices.",
         "6. For Organization, focus only on content order: structure, beginning/middle/end, and logical sequencing of ideas.",
-        "7. For Flow, focus only on sentence rhythm: transitions, sentence variety, and smoothness of reading. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
+        "7. For Flow, focus only on sentence rhythm: transitions, sentence starters, sentence variety, and smoothness of reading. Use Flow Pattern instead of Sentence Variety. Make the Evidence match the main flow issue. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
         "8. Mention the target word count only if the actual word count is below the target word count.",
         "9. Choose ONE grow goal only.",
         "10. Keep the same rubric scores from the Quick Rubric Snapshot unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the quick rubric.",
@@ -12926,9 +12950,9 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "- Growth Tip: [one suggestion about structure, order, or sequencing]",
         "",
         "**5. Flow:** [score]/10",
-        "- Sentence Variety: [assessment of rhythm, transitions, and sentence-length variety]",
-        "- Evidence: [matching example from the writing]",
-        "- Growth Tip: [one suggestion about sentence rhythm, transitions, or variety]",
+        "- Flow Pattern: [overall pattern in rhythm, sentence starters, transitions, and sentence-length variety]",
+        "- Evidence: [evidence that matches the main flow issue]",
+        "- Growth Tip: [one suggestion that targets the main flow issue first]",
         "",
         "**6. Spelling & Punctuation:** [score]/10",
         "- Evidence: [matching example]",
@@ -12979,24 +13003,26 @@ function renderDetailedAssessment(detailed) {
         if (!item) continue;
         html += '<div class="assessment-item">';
         html += '<div class="assessment-head">' + escapeHtml(title) + ': ' + getAssessmentScorePill(item.score) + '</div>';
-        if (key === "Grammar") {
-            if (item.scoreBasis) {
-                html += '<div class="assessment-sub"><strong>Score Basis:</strong> ' + escapeHtml(item.scoreBasis) + '</div>';
-            } else if (item.grammarData) {
-                html += '<div class="assessment-sub"><strong>Score Basis:</strong> ' + escapeHtml(buildGrammarScoreBasisText(item.grammarData)) + '</div>';
-            }
-            html += renderGrammarPatternNotesTable(item.patternNotes || (item.grammarData ? item.grammarData.patternNotes : null));
-            html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
-            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
-        } else if (key === "Organization") {
+        if (key === "Organization") {
             if (item.contentOrganization) {
                 html += '<div class="assessment-sub"><strong>Content Organization:</strong> ' + escapeHtml(item.contentOrganization) + '</div>';
             }
             html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
             html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
+        } else if (key === "Grammar") {
+            if (item.scoreBasis) {
+                html += '<div class="assessment-sub"><strong>Score Basis:</strong> ' + escapeHtml(item.scoreBasis) + '</div>';
+            }
+            if (item.patternNotes && item.patternNotes.length) {
+                html += renderGrammarPatternNotesTable(item.patternNotes);
+            }
+            html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
+            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
         } else if (key === "Flow") {
-            if (item.sentenceVariety) {
-                html += '<div class="assessment-sub"><strong>Sentence Variety:</strong> ' + escapeHtml(item.sentenceVariety) + '</div>';
+            var flowPatternText = item.flowPattern || item.sentenceVariety || "No flow pattern extracted.";
+            html += '<div class="assessment-sub"><strong>Flow Pattern:</strong> ' + escapeHtml(flowPatternText) + '</div>';
+            if (item.patternNotes && item.patternNotes.length) {
+                html += renderPatternNotesTable(item.patternNotes);
             }
             html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
             html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
@@ -14193,12 +14219,17 @@ function reassessPortfolioSession(studentName, sessionId) {
     }
 
     var message = "Reassess this saved writing?\n\n"
-        + "This will load the original writing back into the analysis tool and run a new assessment using the current rubrics.\n\n"
+        + "This will load the original writing back into the analysis tool. You will press Analyze Writing manually when you are ready.\n\n"
         + "The saved portfolio entry will not be changed unless you sync the new results to the portfolio.";
     if (getPendingPortfolioSync && getPendingPortfolioSync()) {
         message += "\n\nNote: there is already an unsynced portfolio result. Reassessing will replace the current pending result.";
     }
     if (!window.confirm(message)) return;
+
+    activePortfolioReassessmentSource = {
+        sourceStudentName: studentName,
+        sourceSessionId: sessionId
+    };
 
     switchTab("tool");
     setActiveStudentForPortfolioReassessment(studentName);
@@ -14222,30 +14253,16 @@ function reassessPortfolioSession(studentName, sessionId) {
         } else if (result && result.restored > 0 && result.restored < result.total) {
             setOcrStatus("Saved writing loaded. Some photos were restored, but not all saved photos were available.", "error");
         } else if (result && result.restored > 0) {
-            setOcrStatus("Saved writing and photo restored. Reassessing now...", "success");
+            setOcrStatus("Saved writing and photo restored. Press Analyze Writing when you are ready.", "success");
         } else {
-            setOcrStatus("Saved writing loaded. Reassessing now...", "");
+            setOcrStatus("Saved writing loaded. Press Analyze Writing when you are ready.", "");
         }
         syncUiState();
-        var analysisRun = analyzeWriting();
-        if (analysisRun && typeof analysisRun.then === "function") {
-            analysisRun.catch(function(e) {
-                console.error("Portfolio reassessment failed:", e);
-                alert("The saved writing was loaded, but reassessment could not be completed.");
-            });
-        }
     }).catch(function(e) {
         console.error("Could not restore saved portfolio entry for reassessment:", e);
         setNeatnessForPortfolioReassessment(false);
-        setOcrStatus("Saved writing loaded, but photos could not be restored. Reassessing without photo-based neatness.", "error");
+        setOcrStatus("Saved writing loaded, but photos could not be restored. Press Analyze Writing when you are ready.", "error");
         syncUiState();
-        var analysisRun = analyzeWriting();
-        if (analysisRun && typeof analysisRun.then === "function") {
-            analysisRun.catch(function(err) {
-                console.error("Portfolio reassessment failed:", err);
-                alert("The saved writing was loaded, but reassessment could not be completed.");
-            });
-        }
     });
 }
 
@@ -14429,21 +14446,23 @@ async function analyzeWriting() {
         var eligibility = getCategoryEligibility(sampleStatus);
         applyEligibilityToQuickRubric(parsed1.quickRubric, eligibility);
 
-        // If neatness is enabled and we have an image, do image-based neatness assessment
+        // If neatness is enabled and we have an image, do image-based neatness assessment.
+        // Store it separately until after Step 3 parsing so the parser cannot overwrite the sub-scores.
+        var pendingNeatnessDetail = null;
         if (shouldAssessNeatness() && selectedImageDataUrl) {
             var neatnessResult = await assessNeatnessFromImage(selectedImageDataUrl, model);
             if (neatnessResult) {
                 parsed1.quickRubric["Neatness"] = neatnessResult.quickRubric;
-                // Carry sub-scores + evidence + growthTip into detailed categories
-                if (!detailed) detailed = { categories: {} };
-                if (!detailed.categories) detailed.categories = {};
-                if (!detailed.categories["Neatness"]) detailed.categories["Neatness"] = {};
                 var nqr = neatnessResult.quickRubric || {};
-                detailed.categories["Neatness"].subScores  = nqr.subScores  || null;
-                // Only fill evidence/growthTip if the detailed parser didn't already provide them
-                if (!detailed.categories["Neatness"].evidence)   detailed.categories["Neatness"].evidence   = nqr.reason    || null;
-                if (!detailed.categories["Neatness"].growthTip)  detailed.categories["Neatness"].growthTip  = nqr.growthTip || null;
-                if (!detailed.categories["Neatness"].score && nqr.score != null) detailed.categories["Neatness"].score = nqr.score;
+                pendingNeatnessDetail = {
+                    score: nqr.score,
+                    evidence: nqr.reason || "",
+                    growthTip: nqr.growthTip || "",
+                    subScores: nqr.subScores || null,
+                    contentOrganization: "",
+                    sentenceVariety: "",
+                    rawBody: ""
+                };
             }
         }
 
@@ -14451,6 +14470,9 @@ async function analyzeWriting() {
         var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile);
         var step3 = await callOpenRouter(model, step3Prompt);
         var detailed = parseDetailedAssessment(step3);
+        if (pendingNeatnessDetail) {
+            detailed.categories["Neatness"] = pendingNeatnessDetail;
+        }
 
         var adjustment = applyWordCountToIdeas(parsed1, detailed, actualWords, targetWords);
         applyComputedFlowToFlow(parsed1, detailed, flowData);
@@ -14476,6 +14498,10 @@ async function analyzeWriting() {
         } else {
             detailed.categories["Grammar"].score = eligibility["Grammar"] ? grammarScore : null;
         }
+        if (detailed.categories["Grammar"]) {
+            detailed.categories["Grammar"].scoreBasis = buildGrammarScoreBasis(totalErrors, correctedWordCount, errorDensity);
+            detailed.categories["Grammar"].patternNotes = buildGrammarPatternNotes(grammarScore, text, parsed1.correctedStory || correctedText || text);
+        }
 
         applyEligibilityToDetailed(detailed, eligibility);
         polishFeedback(parsed1.quickRubric, detailed, text, parsed1.correctedStory, flowData);
@@ -14495,7 +14521,8 @@ async function analyzeWriting() {
                         growthTip: qr.growthTip || "",
                         contentOrganization: "",
                         sentenceVariety: "",
-                        rawBody: ""
+                        rawBody: "",
+                        subScores: qr.subScores || null
                     };
                 } else {
                     detailed.categories[inheritKey] = {
@@ -14555,11 +14582,15 @@ async function analyzeWriting() {
                 evidence: "The sentence patterns in this writing contribute to the overall rhythm.",
                 growthTip: parsed1.flowTip || "Try mixing short and longer sentences for smoother flow.",
                 contentOrganization: "",
-                sentenceVariety: flowData.varietyLabel,
+                sentenceVariety: "",
+                flowPattern: buildFlowPatternSummary(flowData),
+                patternNotes: buildFlowPatternNotes(flowData),
                 rawBody: ""
             };
         } else {
-            detailed.categories["Flow"].sentenceVariety = detailed.categories["Flow"].sentenceVariety || flowData.varietyLabel;
+            detailed.categories["Flow"].sentenceVariety = "";
+            detailed.categories["Flow"].flowPattern = detailed.categories["Flow"].flowPattern || buildFlowPatternSummary(flowData);
+            detailed.categories["Flow"].patternNotes = detailed.categories["Flow"].patternNotes || buildFlowPatternNotes(flowData);
             if (!detailed.categories["Flow"].growthTip) detailed.categories["Flow"].growthTip = parsed1.flowTip;
         }
 
@@ -14636,7 +14667,7 @@ async function analyzeWriting() {
         if (parsed1.sentenceCount != null) overviewLines.push("Sentences: " + parsed1.sentenceCount + (parsed1.wordsPerSentence ? " | Avg length: " + parsed1.wordsPerSentence : ""));
         overviewLines.push("Errors found: " + totalErrors + " bolded correction segments");
         if (flowData && flowData.sentenceCount) {
-            overviewLines.push("Flow: " + flowData.flowRating + " | Sentence Variety: " + flowData.varietyLabel + " (" + flowData.varietyScore + "/100)");
+            overviewLines.push("Flow: " + flowData.flowRating + " | Flow Pattern: " + flowData.varietyLabel + " (" + flowData.varietyScore + "/100)");
             overviewLines.push("Sentence pattern: " + flowData.bandSummary + " | Shortest: " + flowData.shortest + " | Longest: " + flowData.longest);
             overviewLines.push(flowData.starterSummary + " | Longest short-sentence run: " + flowData.shortRun);
         }
@@ -14825,11 +14856,9 @@ window.addEventListener("load", function() {
         restoreGoogleSessionOnce();
     }
 
-    // If OAuth was started by a manual portfolio sync, resume that sync only.
-    // A normal sign-in already runs the sign-in sync flow, so it should not
-    // also trigger manualSaveToDrive().
+    // If we just came back from OAuth, trigger a sync
     var pendingAction = localStorage.getItem("wft_oauth_pending_action");
-    if (pendingAction === "sync") {
+    if (pendingAction === "sync" || fromOAuth) {
         localStorage.removeItem("wft_oauth_pending_action");
         // Small delay to let the token restore finish
         setTimeout(function() {
@@ -14837,8 +14866,6 @@ window.addEventListener("load", function() {
                 manualSaveToDrive();
             }
         }, 1500);
-    } else if (fromOAuth) {
-        localStorage.removeItem("wft_oauth_pending_action");
     }
 });
 
