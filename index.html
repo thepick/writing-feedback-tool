@@ -684,6 +684,18 @@
         font-weight: 600;
     }
     .btn-reprint:hover { background: #dbeafe; }
+    .btn-reassess {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        min-height: 36px;
+        font-weight: 600;
+    }
+    .btn-reassess:hover { background: #dcfce7; }
 
     /* =============================================
        SETTINGS GEAR BUTTON
@@ -7595,6 +7607,7 @@ function renderStudentPortfolio() {
             + imageStripHtml
             + '<div class="session-card-actions">'
             + '<button type="button" class="btn-reprint" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="printPortfolioNotebookSummary(this.dataset.student, this.dataset.session)">Re-print Notebook Summary</button>'
+            + '<button type="button" class="btn-reassess" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="reassessPortfolioSession(this.dataset.student, this.dataset.session)">Reassess Writing</button>'
             + '<button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button>'
             + '</div>'
             + '</div>';
@@ -10417,6 +10430,125 @@ function flowScoreCap(flowData) {
     return 10;
 }
 
+function getDominantSentenceBand(flowData) {
+    if (!flowData || !flowData.sentenceCount) return { label: "", count: 0, ratio: 0 };
+    var total = flowData.sentenceCount || 1;
+    var label = "short";
+    var count = flowData.shortCount || 0;
+    if ((flowData.mediumCount || 0) > count) {
+        label = "medium";
+        count = flowData.mediumCount || 0;
+    }
+    if ((flowData.longCount || 0) > count) {
+        label = "long";
+        count = flowData.longCount || 0;
+    }
+    return { label: label, count: count, ratio: count / total };
+}
+
+function flowCommentMentionsFalseShortProblem(text, flowData) {
+    var s = String(text || "");
+    if (!s || !flowData) return false;
+    var mentionsShortSentences = /\bshort\s+sentences?\b/i.test(s) || /\bshorter\s+sentences?\b/i.test(s);
+    var framesAsProblem = /\b(choppy|problem|issue|too\s+short|many|lots|several|most|relies|cluster|stack|stacked|row|balance\s+the\s+shorter)\b/i.test(s);
+    if (!mentionsShortSentences || !framesAsProblem) return false;
+    if ((flowData.shortCount || 0) === 0) return true;
+    if ((flowData.shortRun || 0) < 3 && /\b(row|cluster|stack|stacked)\b/i.test(s)) return true;
+    return false;
+}
+
+function sanitizeFlowCommentForData(text, flowData) {
+    if (!text) return text;
+    if (flowCommentMentionsFalseShortProblem(text, flowData)) return "";
+    return text;
+}
+
+function buildComputedFlowQuickNote(flowData) {
+    if (!flowData || !flowData.sentenceCount) {
+        return "Try mixing short, medium, and longer sentences for smoother flow.";
+    }
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterWord = starterInfo.mostCommonStarter || "";
+    var starterBad = starterInfo.ratio > 0.25 && starterWord;
+    var shortRunBad = (flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0;
+    var dominant = getDominantSentenceBand(flowData);
+
+    if (starterBad && shortRunBad) {
+        return 'Try varying sentence starters and combining some short sentences - about ' + starterPct + '% of sentences start with "' + starterWord + '", and some short sentences sit close together.';
+    }
+    if (starterBad) {
+        return 'Try varying sentence starters - about ' + starterPct + '% of sentences start with "' + starterWord + '", which can make the rhythm sound repetitive.';
+    }
+    if (shortRunBad) {
+        return "Try combining some short sentences that are next to each other so the rhythm feels less choppy.";
+    }
+    if ((flowData.shortCount || 0) === 0) {
+        return "The writing uses mostly medium and long sentences, so adding a few shorter sentences could create more rhythm and contrast.";
+    }
+    if ((flowData.longCount || 0) === 0) {
+        return "Adding one or two longer sentences would help balance the shorter sentences and make the rhythm smoother.";
+    }
+    if ((flowData.mediumCount || 0) === 0) {
+        return "Adding some medium-length sentences would help the writing move more naturally between short and long sentences.";
+    }
+    if (dominant.label === "short" && dominant.ratio >= 0.60) {
+        return "Many sentences are short, so combining a few ideas into longer sentences would help the rhythm feel smoother.";
+    }
+    if (dominant.label === "long" && dominant.ratio >= 0.60) {
+        return "Many sentences are long, so adding a few shorter sentences would create clearer rhythm and contrast.";
+    }
+    if (dominant.label === "medium" && dominant.ratio >= 0.75) {
+        return "Most sentences are medium length, so adding a few short and long sentences would create more variety.";
+    }
+    return "A bit more sentence variety would help the writing sound smoother and more polished.";
+}
+
+function buildFlowSentenceVarietyLabel(flowData) {
+    if (!flowData) return "";
+    var counts = "(short: " + flowData.shortCount + ", medium: " + flowData.mediumCount + ", long: " + flowData.longCount + ")";
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterWord = starterInfo.mostCommonStarter || "";
+    var starterBad = starterInfo.ratio > 0.25 && starterWord;
+    var starterNote = starterBad ? ' Also, "' + starterWord + '" opens ' + starterPct + '% of sentences, which creates some repetition.' : "";
+    var shortRunBad = (flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0;
+    var dominant = getDominantSentenceBand(flowData);
+
+    if (flowData.flowRating === "Very Good") {
+        return "Sentence lengths are well varied " + counts + ", which gives the writing a natural rhythm." + starterNote;
+    }
+    if ((flowData.shortCount || 0) === 0) {
+        return "The writing uses medium and long sentences " + counts + ". Adding a few shorter sentences would create more rhythm and contrast." + starterNote;
+    }
+    if ((flowData.longCount || 0) === 0) {
+        return "The writing uses short and medium sentences " + counts + ". Adding one or two longer sentences would make the rhythm smoother." + starterNote;
+    }
+    if ((flowData.mediumCount || 0) === 0) {
+        return "The writing jumps between short and long sentences " + counts + ". Adding some medium-length sentences would make the rhythm more natural." + starterNote;
+    }
+    if (shortRunBad) {
+        return "Several short sentences occur in a row " + counts + ", which can make the rhythm choppy. Combining a few of them would help." + starterNote;
+    }
+    if (dominant.label === "short" && dominant.ratio >= 0.60) {
+        return "Many sentences are short " + counts + ", which can make the rhythm feel choppy. Combining a few ideas into longer sentences would help." + starterNote;
+    }
+    if (dominant.label === "long" && dominant.ratio >= 0.60) {
+        return "Many sentences are long " + counts + ", so adding a few shorter sentences would create clearer rhythm and contrast." + starterNote;
+    }
+    if (dominant.label === "medium" && dominant.ratio >= 0.75) {
+        return "Most sentences are medium length " + counts + ", so adding a few short and long sentences would create more variety." + starterNote;
+    }
+    if (starterBad) {
+        return "Sentence lengths have some variety " + counts + ", but repeated sentence starters make the rhythm sound repetitive." + starterNote;
+    }
+    if (flowData.flowRating === "Good") {
+        return "There is a reasonable mix of sentence lengths " + counts + ". A little more variety would make the rhythm even smoother." + starterNote;
+    }
+    return "The writing has some sentence variety " + counts + ", but the rhythm would be smoother with a wider mix of sentence lengths." + starterNote;
+}
+
+
 function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
     var key = "Flow";
     var cap = flowScoreCap(flowData);
@@ -10425,33 +10557,14 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
 
     if (quickItem.score != null) quickItem.score = Math.max(RUBRIC_MIN, Math.min(Number(quickItem.score), cap));
     if (flowData && flowData.flowRating && flowData.flowRating !== "Very Good") {
-        quickItem.reason = quickItem.reason.replace(/\s*Flow:.*$/i, "");
-        var flowNotes = {
-            "Needs Improvement": "Try mixing in some longer sentences - most sentences are quite short, which can make the writing feel a little choppy.",
-            "Developing": "Adding a few longer sentences to balance the shorter ones would help the writing feel more natural and polished.",
-            "Good": "The writing flows fairly well - a bit more sentence variety would push this score even higher."
-        };
-        quickItem.reason += " " + (flowNotes[flowData.flowRating] || "Working on sentence variety and flow will help this score grow.");
+        var baseFlowReason = sanitizeFlowCommentForData(quickItem.reason.replace(/\s*Flow:.*$/i, "").trim(), flowData);
+        var computedFlowNote = buildComputedFlowQuickNote(flowData);
+        quickItem.reason = baseFlowReason ? baseFlowReason + " " + computedFlowNote : computedFlowNote;
     }
     step1Parsed.quickRubric[key] = quickItem;
 
     function buildSvLabel(fd) {
-        if (!fd) return "";
-        var pct = fd.starterInfo ? Math.round(fd.starterInfo.ratio * 100) : 0;
-        var word = fd.starterInfo ? fd.starterInfo.mostCommonStarter : "";
-        var starterNote = (fd.starterInfo && fd.starterInfo.ratio > 0.25)
-            ? ' Also, "' + word + '" opens ' + pct + '% of sentences, which creates some repetition.'
-            : "";
-        if (fd.flowRating === "Very Good") {
-            return "Sentence lengths are well varied (short: " + fd.shortCount + ", medium: " + fd.mediumCount + ", long: " + fd.longCount + "), which gives the writing a natural rhythm." + starterNote;
-        }
-        if (fd.flowRating === "Good") {
-            return "There is a reasonable mix of sentence lengths (short: " + fd.shortCount + ", medium: " + fd.mediumCount + ", long: " + fd.longCount + "). A few more longer sentences would make the rhythm even smoother." + starterNote;
-        }
-        if (fd.flowRating === "Developing") {
-            return "Most sentences are short (short: " + fd.shortCount + ", medium: " + fd.mediumCount + ", long: " + fd.longCount + "), which makes the writing feel a little repetitive. Mixing in some longer sentences would improve the flow." + starterNote;
-        }
-        return "The writing relies heavily on short sentences (short: " + fd.shortCount + ", medium: " + fd.mediumCount + ", long: " + fd.longCount + "), which creates a choppy rhythm. Combining some ideas into longer sentences would help." + starterNote;
+        return buildFlowSentenceVarietyLabel(fd);
     }
     var svMap = {
         "Very Good": buildSvLabel(flowData),
@@ -10474,7 +10587,12 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
 
     detailedItem.score = Math.min(Number(detailedItem.score) || quickItem.score, cap);
     if (flowData) {
-        detailedItem.sentenceVariety = svMap[flowData.flowRating] || "Try varying sentence lengths to create a smoother, more engaging flow.";
+        detailedItem.evidence = sanitizeFlowCommentForData(detailedItem.evidence, flowData);
+        detailedItem.growthTip = sanitizeFlowCommentForData(detailedItem.growthTip, flowData);
+        detailedItem.sentenceVariety = svMap[flowData.flowRating] || buildFlowSentenceVarietyLabel(flowData) || "Try varying sentence lengths to create a smoother, more engaging flow.";
+        if (!detailedItem.evidence) {
+            detailedItem.evidence = buildFlowEvidenceFromData(detailedItem.score, flowData) || detailedItem.sentenceVariety;
+        }
         if (!detailedItem.growthTip || detailedItem.growthTip === "No growth tip extracted.") {
             detailedItem.growthTip = buildComputedFlowTip(flowData);
         }
@@ -12377,14 +12495,15 @@ async function extractTextFromSelectedImage(isAutomatic) {
     setOcrStatus(isAutomatic ? "Extracting text from image automatically..." : (selectedImages.length > 1 ? "Extracting text from " + selectedImages.length + " images..." : "Extracting text from image..."), "");
 
     var prompt = [
-        "Transcribe all visible student writing from this image exactly as it appears on the page.",
+        "Transcribe only the student writing from the main page in focus. If parts of neighboring pages are visible on the left or right side of the photo, ignore those partial pages completely. Do not include stray words, sentence fragments, or handwriting from outside the main page being photographed.",
         "Important rules:",
         "1. Preserve spelling, capitalization, punctuation, paragraph breaks, and line breaks as closely as possible.",
         "2. Do not correct grammar or rewrite anything.",
         "3. Do not add labels, explanations, quotation marks, markdown, or extra text.",
         "4. If part of one word is truly unreadable, use [unclear] only for that unreadable part.",
         "5. Return only the transcription.",
-        "6. If the page contains a fill-in-the-blank or sentence-completion worksheet, transcribe the full sentence as written, including any pre-printed prompt words and the student's handwritten answer together as one complete line. Do not list only the answers. Do not skip the printed parts of each sentence."
+        "6. If the page contains a fill-in-the-blank or sentence-completion worksheet, transcribe the full sentence as written, including any pre-printed prompt words and the student's handwritten answer together as one complete line. Do not list only the answers. Do not skip the printed parts of each sentence.",
+        "7. Focus only on the main page centered in the image. Ignore partial pages, page edges, or neighboring writing visible to the left or right of the page in focus."
     ].join("\n");
 
     selectedImageExtractionPromise = (async function() {
@@ -12628,7 +12747,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "4. For Grammar, focus on grammar evidence such as verb tense, subject-verb agreement, sentence correctness, or punctuation affecting grammar.",
         "5. For Word Choice, focus on repeated or precise vocabulary choices.",
         "6. For Organization, focus only on content order: structure, beginning/middle/end, and logical sequencing of ideas.",
-        "7. For Flow, focus only on sentence rhythm: transitions, sentence variety, and smoothness of reading. Do NOT blend Organization and Flow into the same section.",
+        "7. For Flow, focus only on sentence rhythm: transitions, sentence variety, and smoothness of reading. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
         "8. Mention the target word count only if the actual word count is below the target word count.",
         "9. Choose ONE grow goal only.",
         "10. Keep the same rubric scores from the Quick Rubric Snapshot unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the quick rubric.",
@@ -13790,6 +13909,191 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         + '</div>'
         + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
         + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
+}
+
+
+function getPortfolioSessionReassessText(session) {
+    if (!session) return "";
+    var text = String(session.originalText || "").trim();
+    if (text) return text;
+    text = String(session.correctedPlainText || "").trim();
+    if (text) return text;
+    return stripCorrectionMarkdown(session.correctedMarkup || "").trim();
+}
+
+function setActiveStudentForPortfolioReassessment(studentName) {
+    if (!studentName) return;
+    selectedStudent = studentName;
+    try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) { }
+    var select = document.getElementById("studentSelect");
+    if (select) {
+        var exists = false;
+        for (var i = 0; i < select.options.length; i++) {
+            if (select.options[i].value === studentName) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists && students && students.indexOf(studentName) === -1) {
+            var option = document.createElement("option");
+            option.value = studentName;
+            option.textContent = studentName;
+            select.appendChild(option);
+        }
+        select.value = studentName;
+    }
+}
+
+function setGradeLevelForPortfolioReassessment(session) {
+    var grade = session && session.gradeLevel ? parseGradeLevelValue(session.gradeLevel) : null;
+    var gradeSelect = document.getElementById("gradeLevelSelect");
+    if (!grade || !gradeSelect) return;
+    gradeSelect.value = String(grade);
+    wftStudentGradeLevelOverride = grade !== getClassGradeLevel();
+    try { onGradeLevelChanged("student"); } catch (e) { }
+}
+
+function setNeatnessForPortfolioReassessment(enabled) {
+    var el = document.getElementById("assessScriptQuality");
+    if (el) el.checked = !!enabled;
+    try { saveSettingsToLocalStorage(); } catch (e) { }
+    try { refreshScoreWeightingDescription(); } catch (e2) { }
+}
+
+function dataUrlFromBlobForReassessment(blob) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve(reader.result); };
+        reader.onerror = function() { reject(new Error("Could not read restored portfolio image.")); };
+        reader.readAsDataURL(blob);
+    });
+}
+
+function getPortfolioImageDataUrlForReassessment(image) {
+    image = image || {};
+    if (image.dataUrl || image.originalDataUrl) {
+        return Promise.resolve(image.dataUrl || image.originalDataUrl);
+    }
+    if (image.driveFileId && driveAccessToken && typeof downloadDriveFileAsBlobPromise === "function") {
+        return downloadDriveFileAsBlobPromise(image.driveFileId).then(function(blob) {
+            return dataUrlFromBlobForReassessment(blob);
+        });
+    }
+    return Promise.resolve("");
+}
+
+function restorePortfolioSessionImagesForReassessment(session) {
+    var images = session && Array.isArray(session.images) ? session.images : [];
+    selectedImages = [];
+    if (!images.length) {
+        syncSelectedImageState();
+        updateSelectedImagePreview();
+        return Promise.resolve({ restored: 0, total: 0, driveSkipped: 0 });
+    }
+
+    var restored = [];
+    var driveSkipped = 0;
+    var chain = Promise.resolve();
+    for (var i = 0; i < images.length; i++) {
+        (function(image, index) {
+            chain = chain.then(function() {
+                if (image && image.driveFileId && !driveAccessToken && !image.dataUrl && !image.originalDataUrl) {
+                    driveSkipped += 1;
+                }
+                return getPortfolioImageDataUrlForReassessment(image).then(function(dataUrl) {
+                    if (!dataUrl) return;
+                    restored.push({
+                        dataUrl: dataUrl,
+                        originalDataUrl: image.originalDataUrl || "",
+                        name: image.name || ("portfolio-image-" + (index + 1) + ".jpg"),
+                        mimeType: image.mimeType || "image/jpeg",
+                        extractedText: "",
+                        extractionPromise: null,
+                        driveFileId: image.driveFileId || ""
+                    });
+                }).catch(function(e) {
+                    console.warn("Could not restore portfolio image for reassessment:", e);
+                });
+            });
+        }(images[i], i));
+    }
+
+    return chain.then(function() {
+        selectedImages = restored;
+        syncSelectedImageState();
+        updateSelectedImagePreview();
+        return { restored: restored.length, total: images.length, driveSkipped: driveSkipped };
+    });
+}
+
+function reassessPortfolioSession(studentName, sessionId) {
+    var session = findPortfolioSession(studentName, sessionId);
+    if (!session) {
+        alert("Could not find that saved portfolio entry.");
+        return;
+    }
+
+    var reassessText = getPortfolioSessionReassessText(session);
+    if (!reassessText) {
+        alert("This saved portfolio entry does not include writing that can be reassessed.");
+        return;
+    }
+
+    var message = "Reassess this saved writing?\n\n"
+        + "This will load the original writing back into the analysis tool and run a new assessment using the current rubrics.\n\n"
+        + "The saved portfolio entry will not be changed unless you sync the new results to the portfolio.";
+    if (getPendingPortfolioSync && getPendingPortfolioSync()) {
+        message += "\n\nNote: there is already an unsynced portfolio result. Reassessing will replace the current pending result.";
+    }
+    if (!window.confirm(message)) return;
+
+    switchTab("tool");
+    setActiveStudentForPortfolioReassessment(studentName);
+    setGradeLevelForPortfolioReassessment(session);
+
+    var writingEl = document.getElementById("studentWriting");
+    if (writingEl) writingEl.value = reassessText;
+    correctedHtmlForDiff = "";
+    latestAnalysisData = null;
+    clearPendingPortfolioSync();
+
+    setOcrStatus("Restoring saved writing for reassessment...", "");
+    syncUiState();
+
+    restorePortfolioSessionImagesForReassessment(session).then(function(result) {
+        var shouldUseNeatness = !!(result && result.restored > 0 && (session.neatnessAssessed || session.assessScriptQuality || session.sourceType === "typed+photo"));
+        setNeatnessForPortfolioReassessment(shouldUseNeatness);
+        if (result && result.total > 0 && result.restored === 0) {
+            setOcrStatus("Saved writing loaded. The original photo could not be restored, so reassessment will run without photo-based neatness.", "error");
+            alert("The saved writing was loaded, but the original photo could not be restored. The reassessment will run without photo-based neatness.");
+        } else if (result && result.restored > 0 && result.restored < result.total) {
+            setOcrStatus("Saved writing loaded. Some photos were restored, but not all saved photos were available.", "error");
+        } else if (result && result.restored > 0) {
+            setOcrStatus("Saved writing and photo restored. Reassessing now...", "success");
+        } else {
+            setOcrStatus("Saved writing loaded. Reassessing now...", "");
+        }
+        syncUiState();
+        var analysisRun = analyzeWriting();
+        if (analysisRun && typeof analysisRun.then === "function") {
+            analysisRun.catch(function(e) {
+                console.error("Portfolio reassessment failed:", e);
+                alert("The saved writing was loaded, but reassessment could not be completed.");
+            });
+        }
+    }).catch(function(e) {
+        console.error("Could not restore saved portfolio entry for reassessment:", e);
+        setNeatnessForPortfolioReassessment(false);
+        setOcrStatus("Saved writing loaded, but photos could not be restored. Reassessing without photo-based neatness.", "error");
+        syncUiState();
+        var analysisRun = analyzeWriting();
+        if (analysisRun && typeof analysisRun.then === "function") {
+            analysisRun.catch(function(err) {
+                console.error("Portfolio reassessment failed:", err);
+                alert("The saved writing was loaded, but reassessment could not be completed.");
+            });
+        }
+    });
 }
 
 function printPortfolioNotebookSummary(studentName, sessionId) {
