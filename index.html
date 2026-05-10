@@ -4734,6 +4734,7 @@ function resetWftRuntimeWorkAfterSignOut() {
     students = [];
     selectedStudent = "";
     pendingPortfolioSync = null;
+    activePortfolioReassessmentSource = null;
     selectedImages = [];
     selectedImageDataUrl = "";
     selectedImageName = "";
@@ -7713,6 +7714,10 @@ function saveCurrentSessionToPortfolio(analysisData) {
         sessionData: sessionData,
         signature: getCurrentPortfolioSessionSignature()
     };
+    if (activePortfolioReassessmentSource) {
+        pendingPortfolioSync.replaceSource = cloneWftJson(activePortfolioReassessmentSource);
+        activePortfolioReassessmentSource = null;
+    }
     persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
     setDriveSyncStatus('syncing', 'Ready to sync to portfolio');
@@ -7825,6 +7830,7 @@ function manualSaveToDrive() {
     }
     try {
         prepareCurrentAnalysisForPortfolioSync();
+        syncPendingPortfolioReassessmentTarget();
     } catch (ePrepareBeforeDrive) {
         console.error('Could not prepare portfolio sync:', ePrepareBeforeDrive);
         setSyncButtonsFailure('Retry Sync to Portfolio');
@@ -8020,6 +8026,7 @@ function triggerResultsSlideIn() {
 
 var PENDING_PORTFOLIO_SYNC_KEY = 'wft_pending_portfolio_sync_v1';
 var pendingPortfolioSync = null;
+var activePortfolioReassessmentSource = null;
 var lastSyncedPortfolioSessionSignature = "";
 
 function getActivePortfolioStudentName() {
@@ -8113,8 +8120,21 @@ function getPendingPortfolioSync() {
     return pendingPortfolioSync;
 }
 
+function syncPendingPortfolioReassessmentTarget() {
+    var pending = getPendingPortfolioSync();
+    var activeTarget;
+    if (!pending || !pending.replaceSource) return pending;
+    activeTarget = getActivePortfolioStudentName();
+    if (activeTarget && activeTarget !== pending.studentName) {
+        pending.studentName = activeTarget;
+        persistPendingPortfolioSync();
+    }
+    return pending;
+}
+
 function clearPendingPortfolioSync() {
     pendingPortfolioSync = null;
+    activePortfolioReassessmentSource = null;
     localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
     updateSyncPortfolioButtonState();
 }
@@ -8161,11 +8181,97 @@ function updateSyncPortfolioButtonState() {
     }
 }
 
+function findPortfolioSessionIndexForReplacement(sessions, sessionId) {
+    if (!Array.isArray(sessions) || !sessionId) return -1;
+    for (var i = 0; i < sessions.length; i += 1) {
+        var session = sessions[i];
+        if (!session) continue;
+        if (String(session.id || "") === String(sessionId) || String(session.createdAt || "") === String(sessionId) || String(i) === String(sessionId)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function capPortfolioSessionsForStudent(studentData) {
+    if (!studentData || !Array.isArray(studentData.sessions)) return;
+    if (studentData.sessions.length > 50) {
+        studentData.sessions = studentData.sessions.slice(-50);
+    }
+}
+
+function refreshPortfolioAfterReplacement(sourceStudentName, targetStudentName) {
+    try {
+        var portfolioSelect = document.getElementById('portfolioStudentSelect');
+        if (portfolioSelect && (portfolioSelect.value === sourceStudentName || portfolioSelect.value === targetStudentName)) {
+            renderStudentPortfolio();
+        }
+    } catch (e) {
+        console.error('Portfolio saved, but portfolio rendering failed:', e);
+    }
+}
+
+function commitPendingPortfolioReplacement(pending) {
+    var source = pending && pending.replaceSource ? pending.replaceSource : null;
+    if (!pending || !pending.studentName || !pending.sessionData || !source || !source.sourceStudentName || !source.sourceSessionId) return false;
+
+    var activeTarget = getActivePortfolioStudentName();
+    var targetStudentName = activeTarget || pending.studentName;
+    var sourceStudentName = source.sourceStudentName;
+    var sourceSessionId = source.sourceSessionId;
+    var portfolio = getPortfolioData();
+    var sourceData;
+    var sourceSessions;
+    var sourceIndex;
+    var replacementSession = cloneWftJson(pending.sessionData);
+
+    replacementSession.updatedAt = new Date().toISOString();
+
+    if (!portfolio[targetStudentName]) portfolio[targetStudentName] = { sessions: [] };
+    if (!Array.isArray(portfolio[targetStudentName].sessions)) portfolio[targetStudentName].sessions = [];
+
+    if (targetStudentName === sourceStudentName) {
+        sourceData = portfolio[sourceStudentName];
+        if (!sourceData) sourceData = portfolio[sourceStudentName] = { sessions: [] };
+        if (!Array.isArray(sourceData.sessions)) sourceData.sessions = [];
+        sourceIndex = findPortfolioSessionIndexForReplacement(sourceData.sessions, sourceSessionId);
+
+        // Keep the original session id when replacing under the same student.
+        // This lets Drive merges treat the reassessment as an update, not a duplicate.
+        replacementSession.id = sourceSessionId;
+        if (sourceIndex >= 0) {
+            sourceData.sessions[sourceIndex] = replacementSession;
+        } else {
+            sourceData.sessions.push(replacementSession);
+        }
+        capPortfolioSessionsForStudent(sourceData);
+    } else {
+        sourceData = portfolio[sourceStudentName];
+        sourceSessions = sourceData && Array.isArray(sourceData.sessions) ? sourceData.sessions : [];
+        sourceIndex = findPortfolioSessionIndexForReplacement(sourceSessions, sourceSessionId);
+        if (sourceIndex >= 0) {
+            sourceSessions.splice(sourceIndex, 1);
+            sourceData.sessions = sourceSessions;
+            recordSessionDeletion(sourceStudentName, sourceSessionId);
+        }
+        portfolio[targetStudentName].sessions.push(replacementSession);
+        capPortfolioSessionsForStudent(portfolio[targetStudentName]);
+    }
+
+    savePortfolioData(portfolio);
+    refreshPortfolioAfterReplacement(sourceStudentName, targetStudentName);
+    return true;
+}
+
 function commitPendingPortfolioSync() {
-    var pending = getPendingPortfolioSync();
+    var pending = syncPendingPortfolioReassessmentTarget();
     if (!pending || !pending.studentName || !pending.sessionData) return false;
     try {
-        saveStudentSession(pending.studentName, pending.sessionData);
+        if (pending.replaceSource) {
+            if (!commitPendingPortfolioReplacement(pending)) return false;
+        } else {
+            saveStudentSession(pending.studentName, pending.sessionData);
+        }
         lastSyncedPortfolioSessionSignature = pending.signature || getCurrentPortfolioSessionSignature();
         clearPendingPortfolioSync();
         return true;
@@ -8537,12 +8643,12 @@ GRADE_PROFILES[4] = {
     neatnessDefaultEnabled: true,
     weights: {"Ideas & Details":0.25,"Grammar":0.15,"Word Choice":0.10,"Organization":0.15,"Flow":0.10,"Spelling & Punctuation":0.25},
     categoryExpectations: {
-        "Ideas & Details":"Look for a clear main idea and a few simple supporting details.",
-        "Grammar":"Expect mostly complete sentences, but be lenient with developing sentence control.",
+        "Ideas & Details":"Use the Ideas & Details sub-rubric: main idea, relevant details, elaboration, reader understanding, and development toward the assignment goal.",
+        "Grammar":"Keep the grammar-density score, but use the Grammar comment rubric: sentence completeness, verb tense/agreement, word order, pronouns, and clarity.",
         "Word Choice":"Reward clear and specific words more than advanced vocabulary.",
-        "Organization":"Look for a beginning, middle, and ending or a clear order of ideas.",
-        "Flow":"Expect some repeated sentence starters; only lower the score if the writing is hard to follow.",
-        "Spelling & Punctuation":"Focus on capitals, ending punctuation, and common grade-level spelling."
+        "Organization":"Use the Organization sub-rubric: beginning/set-up, logical sequence, ending/completeness, paragraphing/grouping, transitions, and focus.",
+        "Flow":"Keep the computed sentence-variety score, but use the Flow comment rubric: length variety, starter variety, connections, rhythm, and repetition.",
+        "Spelling & Punctuation":"Use the Spelling & Punctuation sub-rubric: spelling, ending punctuation, capitalization, internal punctuation, and readability impact."
     },
     growGoalOptions:["Add More Details","Check My Verbs","Use Stronger Words","Mix Up My Sentences","Add Transition Words","Proofread for Spelling & Punctuation","Practice Handwriting"]
 };
@@ -8574,12 +8680,12 @@ GRADE_PROFILES[5] = {
     neatnessDefaultEnabled: true,
     weights: {"Ideas & Details":0.25,"Grammar":0.15,"Word Choice":0.12,"Organization":0.18,"Flow":0.10,"Spelling & Punctuation":0.20},
     categoryExpectations: {
-        "Ideas & Details":"Look for a clear topic, relevant details, and enough development.",
-        "Grammar":"Expect mostly correct sentences with reasonable control of verb tense and sentence structure.",
+        "Ideas & Details":"Use the Ideas & Details sub-rubric: main idea, relevant details, elaboration, reader understanding, and development toward the assignment goal.",
+        "Grammar":"Keep the grammar-density score, but use the Grammar comment rubric: sentence completeness, verb tense/agreement, word order, pronouns, and clarity.",
         "Word Choice":"Reward precise words and topic-specific vocabulary.",
-        "Organization":"Look for logical order, grouping of ideas, and a clear beginning, middle, and end when appropriate.",
-        "Flow":"Look for sentence variety, transitions, and smooth rhythm.",
-        "Spelling & Punctuation":"Expect grade-appropriate spelling, capitals, commas when needed, and ending punctuation."
+        "Organization":"Use the Organization sub-rubric: beginning/set-up, logical sequence, ending/completeness, paragraphing/grouping, transitions, and focus.",
+        "Flow":"Keep the computed sentence-variety score, but use the Flow comment rubric: length variety, starter variety, connections, rhythm, and repetition.",
+        "Spelling & Punctuation":"Use the Spelling & Punctuation sub-rubric: spelling, ending punctuation, capitalization, internal punctuation, and readability impact."
     },
     growGoalOptions:["Add More Details","Check My Verbs","Use Stronger Words","Mix Up My Sentences","Add Transition Words","Proofread for Spelling & Punctuation","Practice Handwriting"]
 };
@@ -8603,7 +8709,7 @@ function makeGradeProfile(override) {
             shortfallPenaltyFactor: 0.70, shortfallFloor: 0.45, goingBeyondMultiplier: 1.08, slightExceedRatio: 1.05, meaningfulExceedRatio: 1.15,
             neatnessWeight: 0.05, neatnessDefaultEnabled: false,
             weights: {"Ideas & Details":0.25,"Grammar":0.15,"Word Choice":0.15,"Organization":0.20,"Flow":0.10,"Spelling & Punctuation":0.15},
-            categoryExpectations: {"Ideas & Details":"Look for developed ideas with relevant examples or evidence.","Grammar":"Expect sentence boundaries, consistent tense, and mostly accurate sentence structure.","Word Choice":"Reward precise vocabulary and reduce credit for vague or repeated wording.","Organization":"Look for paragraph structure, logical sequencing, and transitions.","Flow":"Expect varied sentence openings and lengths.","Spelling & Punctuation":"Expect control of common punctuation and grade-level spelling."},
+            categoryExpectations: {"Ideas & Details":"Use the Ideas & Details sub-rubric: main idea, relevant details, elaboration, reader understanding, and development toward the assignment goal.","Grammar":"Keep the grammar-density score, but use the Grammar comment rubric: sentence completeness, verb tense/agreement, word order, pronouns, and clarity.","Word Choice":"Reward precise vocabulary and reduce credit for vague or repeated wording.","Organization":"Look for paragraph structure, logical sequencing, and transitions.","Flow":"Keep the computed sentence-variety score, but use the Flow comment rubric: length variety, starter variety, connections, rhythm, and repetition.","Spelling & Punctuation":"Use the Spelling & Punctuation sub-rubric: spelling, ending punctuation, capitalization, internal punctuation, and readability impact."},
             growGoalOptions:["Add More Specific Evidence","Strengthen Topic Sentences","Improve Paragraph Organization","Use More Precise Vocabulary","Vary Sentence Openings","Add Stronger Transitions","Proofread for Grammar and Punctuation"]
         };
     } else {
@@ -8619,7 +8725,7 @@ function makeGradeProfile(override) {
             shortfallPenaltyFactor: 0.55, shortfallFloor: 0.40, goingBeyondMultiplier: 1.10, slightExceedRatio: 1.03, meaningfulExceedRatio: 1.10,
             neatnessWeight: 0.00, neatnessDefaultEnabled: false,
             weights: {"Ideas & Details":0.30,"Grammar":0.15,"Word Choice":0.15,"Organization":0.20,"Flow":0.10,"Spelling & Punctuation":0.10},
-            categoryExpectations: {"Ideas & Details":"Look for a clear claim or central idea, developed support, and relevant evidence.","Grammar":"Expect control of sentence structure, tense, agreement, and sentence boundaries.","Word Choice":"Reward precise, academic, and context-appropriate language.","Organization":"Look for strong paragraphing, logical progression, and effective transitions.","Flow":"Expect sentence variety, cohesion, and mature rhythm.","Spelling & Punctuation":"Expect accurate spelling, punctuation, and formatting suitable for academic writing."},
+            categoryExpectations: {"Ideas & Details":"Use the Ideas & Details sub-rubric: main idea, relevant details, elaboration, reader understanding, and development toward the assignment goal.","Grammar":"Keep the grammar-density score, but use the Grammar comment rubric: sentence completeness, verb tense/agreement, word order, pronouns, and clarity.","Word Choice":"Reward precise, academic, and context-appropriate language.","Organization":"Look for strong paragraphing, logical progression, and effective transitions.","Flow":"Keep the computed sentence-variety score, but use the Flow comment rubric: length variety, starter variety, connections, rhythm, and repetition.","Spelling & Punctuation":"Use the Spelling & Punctuation sub-rubric: spelling, ending punctuation, capitalization, internal punctuation, and readability impact."},
             growGoalOptions:["Strengthen Thesis / Central Claim","Integrate Text Evidence","Improve Paragraph Cohesion","Refine Tone & Voice","Develop Counterarguments","Use More Precise Academic Vocabulary","Improve Sentence Variety","Proofread for Grammar and Mechanics"]
         };
     }
@@ -9577,6 +9683,1117 @@ function buildComputedFlowTip(flowData) {
     return tips.slice(0, 2).join(" ");
 }
 
+
+function getOrganizationRubricPromptText() {
+    return [
+        "Use this Organization sub-rubric and weights:",
+        "1. Beginning and Set-Up (15%): 5 = clear opening that introduces the situation, setting, character, or main idea; 3 = present but rushed or unclear; 1 = no clear beginning.",
+        "2. Logical Sequence of Events or Ideas (25%): 5 = clear logical order from start to finish; 3 = somewhat clear but some rushed, skipped, or confusing parts; 1 = very hard to follow.",
+        "3. Ending and Completeness (25%): 5 = clear ending or resolution; 3 = attempted ending but rushed or partly complete; 1 = no clear ending or the writing ends mid-thought.",
+        "4. Paragraphing and Grouping of Ideas (15%): 5 = paragraphs or sections clearly group related events or ideas; 3 = uneven grouping; 1 = no clear grouping.",
+        "5. Transitions Between Events or Ideas (10%): 5 = transitions clearly connect events or ideas; 3 = a few transitions but some sudden jumps; 1 = little or no transition support.",
+        "6. Staying Focused on the Main Story or Topic (10%): 5 = focused throughout; 3 = sometimes loses focus; 1 = mostly unfocused.",
+        "Safety rules: Do not say the writing has a clear beginning, middle, and end unless the ending is actually present. A clear timeline alone does not mean the story is complete. If the writing stops suddenly, ends mid-thought, lacks ending punctuation, or has no real resolution, lower Organization and say the ending needs work. Do not mention target word count in Organization feedback."
+    ].join("\n");
+}
+
+function getOrganizationLevelLabel(score) {
+    var n = Number(score);
+    if (n >= 5) return "Strong";
+    if (n >= 4) return "Proficient";
+    if (n >= 3) return "Developing";
+    if (n >= 2) return "Needs Support";
+    return "Not Yet";
+}
+
+function getOrganizationSubScorePill(score) {
+    var n = Number(score);
+    if (!isFinite(n)) return '<span class="assessment-score-pill score-missing">Missing</span>';
+    var cls = n >= 5 ? "score-10" : (n >= 4 ? "score-8" : (n >= 3 ? "score-6" : "score-4"));
+    return '<span class="assessment-score-pill ' + cls + '">' + escapeHtml(String(n)) + '/5 - ' + escapeHtml(getOrganizationLevelLabel(n)) + '</span>';
+}
+
+function getOrganizationBodyText(text) {
+    var clean = stripCorrectionMarkdown(text || "").replace(/\r\n?/g, "\n").trim();
+    if (!clean) return "";
+    try {
+        if (typeof extractWritingTitleParts === "function") {
+            var parts = extractWritingTitleParts(clean);
+            if (parts && parts.body) return String(parts.body || "").trim();
+        }
+    } catch (e) { }
+    return clean;
+}
+
+function getOrganizationParagraphs(text) {
+    var body = getOrganizationBodyText(text);
+    if (!body) return [];
+    return body.split(/\n\s*\n+/).map(function(p) { return p.trim(); }).filter(function(p) { return p.length > 0; });
+}
+
+function getOrganizationLines(text) {
+    var body = getOrganizationBodyText(text);
+    if (!body) return [];
+    return body.split(/\n+/).map(function(line) { return line.trim(); }).filter(function(line) { return line.length > 0; });
+}
+
+function getUniqueMatchCount(text, regex) {
+    var matches = String(text || "").toLowerCase().match(regex) || [];
+    var seen = {};
+    for (var i = 0; i < matches.length; i++) {
+        seen[matches[i].toLowerCase()] = true;
+    }
+    var count = 0;
+    for (var key in seen) {
+        if (Object.prototype.hasOwnProperty.call(seen, key)) count += 1;
+    }
+    return count;
+}
+
+function countRegexMatches(text, regex) {
+    var matches = String(text || "").match(regex);
+    return matches ? matches.length : 0;
+}
+
+function getLastWords(text, limit) {
+    var words = String(text || "").match(/\b[\w'-]+\b/g) || [];
+    return words.slice(Math.max(0, words.length - limit)).join(" ").toLowerCase();
+}
+
+function calculateWeightedOrganizationFive(subScores) {
+    if (!subScores) return null;
+    var vals = [
+        subScores.beginningSetup,
+        subScores.logicalSequence,
+        subScores.endingCompleteness,
+        subScores.paragraphingGrouping,
+        subScores.transitions,
+        subScores.focus
+    ];
+    for (var i = 0; i < vals.length; i++) {
+        if (vals[i] == null || !isFinite(Number(vals[i]))) return null;
+    }
+    return (Number(subScores.beginningSetup) * 0.15) +
+           (Number(subScores.logicalSequence) * 0.25) +
+           (Number(subScores.endingCompleteness) * 0.25) +
+           (Number(subScores.paragraphingGrouping) * 0.15) +
+           (Number(subScores.transitions) * 0.10) +
+           (Number(subScores.focus) * 0.10);
+}
+
+function convertOrganizationFiveToTen(scoreFive) {
+    var n = Number(scoreFive);
+    if (!isFinite(n)) return null;
+    return clampRubricScore(roundToNearestRubric(n * 2));
+}
+
+function scoreOrganizationBeginning(body, wordCount) {
+    if (!body || wordCount < 8) return 1;
+    var firstWords = String(body).trim().split(/\s+/).slice(0, 35).join(" ").toLowerCase();
+    var hasSetup = /\b(i|we|he|she|they|my|our|the|a|an|one day|once|today|yesterday|at|in|on|during|when|where|school|home|city|class|room|friend|teacher|family|character|topic|reason)\b/.test(firstWords);
+    var startsAbruptly = /^(and|but|so|then|because)\b/i.test(String(body).trim());
+    if (startsAbruptly) return hasSetup ? 3 : 2;
+    if (wordCount >= 25 && hasSetup) return 4;
+    if (hasSetup) return 3;
+    return 2;
+}
+
+function scoreOrganizationSequence(body, sentenceCount, wordCount, transitionCount, transitionUnique) {
+    if (wordCount < 15) return 1;
+    if (sentenceCount < 2 && wordCount < 40) return 2;
+    if (transitionUnique >= 4 && sentenceCount >= 4) return 5;
+    if ((transitionUnique >= 2 || transitionCount >= 3) && sentenceCount >= 3) return 4;
+    if (sentenceCount >= 3 || transitionCount >= 2) return 3;
+    return 2;
+}
+
+function scoreOrganizationEnding(body, wordCount, sentenceCount) {
+    if (!body || wordCount < 15) return 1;
+    var hasEndingPunctuation = hasSentenceEndingPunctuation(body);
+    var lastWords = getLastWords(body, 40);
+    var hasClosure = /\b(finally|in the end|at last|eventually|after all|from then on|the end|went home|got home|came home|returned|escaped|solved|saved|finished|learned|decided|realized|never again)\b/.test(lastWords);
+    var endsWithDanglingWord = /\b(and|but|so|because|then|when|while|after|before|if|to|with|into|near|from|by|for|about|that|who|which|where)\s*$/i.test(String(body).trim());
+    if (endsWithDanglingWord) return 1;
+    if (!hasEndingPunctuation) return sentenceCount >= 3 || wordCount >= 50 ? 1 : 2;
+    if (hasClosure && sentenceCount >= 3) return 5;
+    if (hasClosure) return 4;
+    if (sentenceCount >= 4) return 3;
+    return 2;
+}
+
+function scoreOrganizationParagraphing(body, wordCount, sentenceCount, paragraphCount, lineCount) {
+    if (!body || wordCount < 15) return 1;
+    if (paragraphCount >= 4) return 5;
+    if (paragraphCount >= 2) return 4;
+    if (wordCount <= 80 && sentenceCount <= 4) return 4;
+    if (lineCount >= 7 || sentenceCount >= 5 || wordCount >= 130) return 2;
+    return 3;
+}
+
+function scoreOrganizationTransitions(sentenceCount, transitionCount, transitionUnique) {
+    if (sentenceCount < 2) return 1;
+    if (transitionUnique >= 4 && transitionCount >= 4) return 5;
+    if (transitionUnique >= 3 || transitionCount >= 4) return 4;
+    if (transitionCount >= 2) return 3;
+    if (transitionCount === 1) return 2;
+    return 1;
+}
+
+function scoreOrganizationFocus(body, wordCount) {
+    if (!body || wordCount < 15) return 1;
+    var lower = String(body || "").toLowerCase();
+    var abruptMarkers = countRegexMatches(lower, /\b(random|anyway|chapter\s*\d+|bad diction|ignore this)\b/g);
+    var topicWords = countRegexMatches(lower, /\b(time|travel|portal|school|city|friend|topic|reason|because|problem|solution|character|story)\b/g);
+    if (abruptMarkers >= 2) return 2;
+    if (abruptMarkers === 1) return 3;
+    if (wordCount >= 40 && topicWords >= 3) return 4;
+    if (wordCount >= 25) return 3;
+    return 2;
+}
+
+function analyzeOrganizationFromText(text) {
+    var body = getOrganizationBodyText(text);
+    var wordCount = countWords(body);
+    var sentences = splitSentences(body);
+    var sentenceCount = sentences.length;
+    var paragraphs = getOrganizationParagraphs(body);
+    var lines = getOrganizationLines(body);
+    var transitionRegex = /\b(first|second|third|next|then|after|afterward|afterwards|before|later|finally|lastly|in the end|at last|eventually|suddenly|soon|meanwhile|when|while|because|so|therefore|however|also|another|for example)\b/gi;
+    var transitionCount = countRegexMatches(body, transitionRegex);
+    var transitionUnique = getUniqueMatchCount(body, transitionRegex);
+
+    var subScores = {
+        beginningSetup: scoreOrganizationBeginning(body, wordCount),
+        logicalSequence: scoreOrganizationSequence(body, sentenceCount, wordCount, transitionCount, transitionUnique),
+        endingCompleteness: scoreOrganizationEnding(body, wordCount, sentenceCount),
+        paragraphingGrouping: scoreOrganizationParagraphing(body, wordCount, sentenceCount, paragraphs.length, lines.length),
+        transitions: scoreOrganizationTransitions(sentenceCount, transitionCount, transitionUnique),
+        focus: scoreOrganizationFocus(body, wordCount)
+    };
+
+    var weightedFive = calculateWeightedOrganizationFive(subScores);
+    var roundedFive = weightedFive == null ? null : Math.max(1, Math.min(5, Math.round(weightedFive)));
+    var scoreTen = weightedFive == null ? null : convertOrganizationFiveToTen(weightedFive);
+    var endingCap = null;
+    var hasEndingPunctuation = hasSentenceEndingPunctuation(body);
+    if (subScores.endingCompleteness <= 1 || !hasEndingPunctuation) endingCap = 6;
+    else if (subScores.endingCompleteness <= 2) endingCap = 7;
+    if (scoreTen != null && endingCap != null && scoreTen > endingCap) scoreTen = endingCap;
+
+    return {
+        body: body,
+        wordCount: wordCount,
+        sentenceCount: sentenceCount,
+        paragraphCount: paragraphs.length,
+        lineCount: lines.length,
+        transitionCount: transitionCount,
+        transitionUnique: transitionUnique,
+        hasEndingPunctuation: hasEndingPunctuation,
+        subScores: subScores,
+        weightedFive: weightedFive,
+        roundedFive: roundedFive,
+        score: scoreTen,
+        endingCap: endingCap
+    };
+}
+
+function getOrganizationPromptSummary(data) {
+    if (!data) return "No computed organization check is available.";
+    var ss = data.subScores || {};
+    return [
+        "Computed Organization score: " + (data.score == null ? "Missing" : data.score + "/10") + ".",
+        "Organization sub-scores: Beginning and Set-Up " + (ss.beginningSetup || "?") + "/5; Logical Sequence " + (ss.logicalSequence || "?") + "/5; Ending and Completeness " + (ss.endingCompleteness || "?") + "/5; Paragraphing and Grouping " + (ss.paragraphingGrouping || "?") + "/5; Transitions " + (ss.transitions || "?") + "/5; Focus " + (ss.focus || "?") + "/5.",
+        "Ending punctuation present: " + (data.hasEndingPunctuation ? "yes" : "no") + ". Paragraph groups detected: " + data.paragraphCount + ". Transitions detected: " + data.transitionCount + ".",
+        data.endingCap ? "Safety cap applied: Organization should not score above " + data.endingCap + "/10 because the ending is missing, incomplete, or not clearly punctuated." : "No ending safety cap needed."
+    ].join("\n");
+}
+
+function buildOrganizationContentSummary(data) {
+    if (!data || !data.subScores) return "The organization needs more evidence before it can be judged fairly.";
+    var ss = data.subScores;
+    if (ss.endingCompleteness <= 2) {
+        if (ss.logicalSequence >= 4) return "The events mostly follow a clear order, but the writing does not yet have a complete ending.";
+        return "The writing has some connected events or ideas, but it needs a clearer order and a complete ending.";
+    }
+    if (ss.paragraphingGrouping <= 2) return "The order is mostly understandable, but the ideas need clearer grouping into paragraphs or sections.";
+    if (ss.transitions <= 2) return "The structure is mostly clear, but stronger transitions would help the reader follow each step.";
+    if (ss.logicalSequence >= 4) return "The writing follows a clear order from one event or idea to the next.";
+    return "The writing has an overall structure, but some parts need clearer sequencing.";
+}
+
+function buildOrganizationEvidenceFromData(data) {
+    if (!data || !data.subScores) return "The writing was checked for beginning, sequence, ending, grouping, transitions, and focus.";
+    var ss = data.subScores;
+    if (ss.endingCompleteness <= 2 && ss.logicalSequence >= 4) {
+        return "The events move in order, but the final part stops before the story feels resolved.";
+    }
+    if (ss.endingCompleteness <= 2) {
+        return "The writing starts an idea, but the ending is missing or unfinished.";
+    }
+    if (ss.paragraphingGrouping <= 2) {
+        return "Several events or ideas are placed together without clear paragraph breaks or grouping.";
+    }
+    if (ss.transitions <= 2) {
+        return "Some events or ideas connect, but there are not enough transition words to guide the reader smoothly.";
+    }
+    if (ss.logicalSequence >= 4) {
+        return "The events or ideas are presented in an order that the reader can follow.";
+    }
+    return "Some parts are in order, but a few events or ideas feel rushed or skipped.";
+}
+
+function buildOrganizationGrowthTipFromData(data) {
+    if (!data || !data.subScores) return "Add a clear beginning, middle, and ending so the structure is easier to follow.";
+    var ss = data.subScores;
+    if (ss.endingCompleteness <= 2) {
+        return "Add a clear ending that shows what happens last, so the writing feels complete.";
+    }
+    if (ss.paragraphingGrouping <= 2) {
+        return "Group related events or ideas into paragraphs so each part is easier to follow.";
+    }
+    if (ss.transitions <= 2) {
+        return "Add transition words such as first, next, after that, or finally to show how each part connects.";
+    }
+    if (ss.beginningSetup <= 2) {
+        return "Start by introducing the situation, setting, character, or main idea before moving into the details.";
+    }
+    if (ss.logicalSequence <= 3) {
+        return "Check the order of your events or ideas and move any confusing part to where it belongs.";
+    }
+    return "Keep using a clear beginning, middle, and ending, and make sure each paragraph has one main part of the writing.";
+}
+
+function buildOrganizationQuickReason(data) {
+    return buildOrganizationContentSummary(data);
+}
+
+function applyComputedOrganizationToOrganization(step1Parsed, detailedParsed, organizationData, eligibility) {
+    if (!organizationData) return;
+    var key = "Organization";
+    var canScore = !eligibility || eligibility[key];
+    var score = canScore ? organizationData.score : null;
+    var reason = canScore ? buildOrganizationQuickReason(organizationData) : getEvidenceNote(key);
+
+    if (step1Parsed && step1Parsed.quickRubric) {
+        step1Parsed.quickRubric[key] = {
+            score: score,
+            reason: reason
+        };
+    }
+
+    if (detailedParsed && detailedParsed.categories) {
+        if (!detailedParsed.categories[key]) detailedParsed.categories[key] = {};
+        var item = detailedParsed.categories[key];
+        item.score = score;
+        item.contentOrganization = canScore ? buildOrganizationContentSummary(organizationData) : "Need at least two connected sentences before this category can be scored fairly.";
+        item.evidence = canScore ? buildOrganizationEvidenceFromData(organizationData) : getEvidenceNote(key);
+        item.growthTip = canScore ? buildOrganizationGrowthTipFromData(organizationData) : getCategoryGrowthForLowSample(key, { status: "limited" }, "");
+        item.subScores = canScore ? organizationData.subScores : null;
+        item.organizationAnalysis = canScore ? {
+            weightedFive: organizationData.weightedFive,
+            roundedFive: organizationData.roundedFive,
+            paragraphCount: organizationData.paragraphCount,
+            transitionCount: organizationData.transitionCount,
+            hasEndingPunctuation: organizationData.hasEndingPunctuation,
+            endingCap: organizationData.endingCap
+        } : null;
+        item.rawBody = item.rawBody || "";
+    }
+}
+
+
+
+
+function clampFiveScore(value) {
+    var n = Number(value);
+    if (!isFinite(n)) return null;
+    n = Math.round(n);
+    if (n < 1) n = 1;
+    if (n > 5) n = 5;
+    return n;
+}
+
+function getGenericRubricLevelLabel(score) {
+    var n = Number(score);
+    if (n >= 5) return "Strong";
+    if (n >= 4) return "Proficient";
+    if (n >= 3) return "Developing";
+    if (n >= 2) return "Needs Support";
+    return "Not Yet";
+}
+
+function getGenericSubScorePill(score) {
+    var n = Number(score);
+    if (!isFinite(n)) return '<span class="assessment-score-pill score-missing">Missing</span>';
+    var cls = n >= 5 ? "score-10" : (n >= 4 ? "score-8" : (n >= 3 ? "score-6" : "score-4"));
+    return '<span class="assessment-score-pill ' + cls + '">' + escapeHtml(String(n)) + '/5 - ' + escapeHtml(getGenericRubricLevelLabel(n)) + '</span>';
+}
+
+function calculateWeightedFiveFromParts(parts) {
+    var total = 0;
+    var weightTotal = 0;
+    for (var i = 0; i < parts.length; i++) {
+        var score = Number(parts[i][0]);
+        var weight = Number(parts[i][1]);
+        if (!isFinite(score) || !isFinite(weight)) return null;
+        total += score * weight;
+        weightTotal += weight;
+    }
+    if (!weightTotal) return null;
+    return total / weightTotal;
+}
+
+function convertFiveScoreToTen(scoreFive) {
+    var n = Number(scoreFive);
+    if (!isFinite(n)) return null;
+    return clampRubricScore(roundToNearestRubric(n * 2));
+}
+
+function getRubricPromptText(category) {
+    if (category === "Ideas & Details") return getIdeasDetailsRubricPromptText();
+    if (category === "Grammar") return getGrammarRubricPromptText();
+    if (category === "Flow") return getFlowRubricPromptText();
+    if (category === "Spelling & Punctuation") return getSpellingPunctuationRubricPromptText();
+    return "";
+}
+
+function getIdeasDetailsRubricPromptText() {
+    return [
+        "Use this Ideas & Details sub-rubric and weights:",
+        "1. Clear Main Idea or Story Idea (20%): 5 = clear and easy to understand; 3 = present but rushed, vague, or uneven; 1 = no clear main idea.",
+        "2. Relevant Details (25%): 5 = strong, relevant details support the idea or story; 3 = some details but limited or general; 1 = details are mostly missing or unrelated.",
+        "3. Elaboration and Description (25%): 5 = ideas/events are explained or described clearly with enough development; 3 = some development but parts feel rushed; 1 = almost no elaboration.",
+        "4. Reader Understanding (15%): 5 = reader can easily understand what is happening or what the writer means; 3 = basic idea is understandable but some parts are confusing; 1 = very difficult to understand.",
+        "5. Development Toward the Assignment Goal (15%): 5 = well developed for the assignment and feels complete; 3 = partially meets the assignment goal but needs more content; 1 = does not meaningfully develop the assignment.",
+        "Word count rule: target word count belongs mainly in Ideas & Details. Do not simply say 'write more'; say what kind of content to add."
+    ].join("\n");
+}
+
+function getGrammarRubricPromptText() {
+    return [
+        "Use this Grammar comment rubric while keeping the computed grammar-density score as the scoring anchor:",
+        "1. Sentence Completeness (25%): 5 = sentences are complete and make sense; 3 = some fragments, run-ons, or unclear sentences; 1 = sentence structure often blocks meaning.",
+        "2. Verb Tense and Agreement (20%): 5 = verb tense and agreement are mostly correct; 3 = several verb errors but meaning is usually clear; 1 = verb errors make the writing very difficult to follow.",
+        "3. Word Order and Sentence Structure (20%): 5 = word order is clear and natural; 3 = some awkward or confusing word order; 1 = word order often prevents understanding.",
+        "4. Pronouns and References (15%): 5 = pronouns and references are clear; 3 = some pronouns or references are unclear; 1 = pronouns or references are very unclear throughout.",
+        "5. Grammar Clarity (20%): 5 = grammar supports clear meaning; 3 = grammar errors sometimes interrupt meaning; 1 = grammar errors make the writing very difficult to understand.",
+        "Grammar scoring rule: use the computed grammar-density score for the category score, but make the comments match the strongest grammar pattern."
+    ].join("\n");
+}
+
+function getFlowRubricPromptText() {
+    return [
+        "Use this Flow comment rubric while keeping the computed sentence-variety math as the scoring anchor:",
+        "1. Sentence Length Variety (25%): 5 = strong mix of short, medium, and longer sentences; 3 = limited variety; 1 = sentence length patterns make the writing hard to read smoothly.",
+        "2. Sentence Starter Variety (20%): 5 = sentences begin in varied ways; 3 = some starters repeat noticeably; 1 = repeated starters make the writing very choppy or repetitive.",
+        "3. Smooth Connections (20%): 5 = ideas/events connect smoothly; 3 = several transitions feel abrupt; 1 = ideas do not connect smoothly.",
+        "4. Rhythm and Readability (20%): 5 = smooth rhythm and easy to read aloud; 3 = sometimes choppy or awkward; 1 = very difficult to read smoothly.",
+        "5. Avoiding Repetition (15%): 5 = avoids unnecessary repetition; 3 = some repeated words, phrases, or sentence patterns; 1 = repetition makes the writing hard to follow.",
+        "Flow safety rule: only mention short sentences if the sentence counts show many short sentences or a run of short sentences. If shortCount is 0, do not blame short sentences."
+    ].join("\n");
+}
+
+function getSpellingPunctuationRubricPromptText() {
+    return [
+        "Use this Spelling & Punctuation sub-rubric and weights:",
+        "1. Spelling Accuracy (30%): 5 = most words are spelled correctly; 3 = several spelling mistakes but meaning is usually clear; 1 = spelling makes the writing very difficult to read.",
+        "2. Ending Punctuation (20%): 5 = sentences consistently end with correct punctuation; 3 = some sentences are missing ending punctuation; 1 = ending punctuation is mostly missing or unclear.",
+        "3. Capitalization (20%): 5 = capitalization is correct for sentence beginnings and proper nouns; 3 = several capitalization errors; 1 = capitalization is mostly missing or incorrect.",
+        "4. Commas and Internal Punctuation (15%): 5 = commas/internal punctuation are used correctly when needed; 3 = some are missing or incorrect; 1 = internal punctuation is mostly missing or confusing.",
+        "5. Readability Impact (15%): 5 = spelling and punctuation do not interfere with understanding; 3 = errors sometimes interrupt understanding; 1 = errors make the writing very difficult to understand.",
+        "Comment rule: identify the biggest issue rather than giving a generic spelling and punctuation comment."
+    ].join("\n");
+}
+
+function getRubricSubScoreRows(category, subScores) {
+    if (!subScores) return [];
+    if (category === "Ideas & Details") {
+        return [
+            ["Clear Main Idea or Story Idea", subScores.clearMainIdea, "20%"],
+            ["Relevant Details", subScores.relevantDetails, "25%"],
+            ["Elaboration and Description", subScores.elaborationDescription, "25%"],
+            ["Reader Understanding", subScores.readerUnderstanding, "15%"],
+            ["Development Toward Assignment Goal", subScores.developmentTowardGoal, "15%"]
+        ];
+    }
+    if (category === "Grammar") {
+        return [
+            ["Sentence Completeness", subScores.sentenceCompleteness, "25%"],
+            ["Verb Tense and Agreement", subScores.verbTenseAgreement, "20%"],
+            ["Word Order and Sentence Structure", subScores.wordOrderSentenceStructure, "20%"],
+            ["Pronouns and References", subScores.pronounsReferences, "15%"],
+            ["Grammar Clarity", subScores.grammarClarity, "20%"]
+        ];
+    }
+    if (category === "Flow") {
+        return [
+            ["Sentence Length Variety", subScores.sentenceLengthVariety, "25%"],
+            ["Sentence Starter Variety", subScores.sentenceStarterVariety, "20%"],
+            ["Smooth Connections", subScores.smoothConnections, "20%"],
+            ["Rhythm and Readability", subScores.rhythmReadability, "20%"],
+            ["Avoiding Repetition", subScores.avoidingRepetition, "15%"]
+        ];
+    }
+    if (category === "Spelling & Punctuation") {
+        return [
+            ["Spelling Accuracy", subScores.spellingAccuracy, "30%"],
+            ["Ending Punctuation", subScores.endingPunctuation, "20%"],
+            ["Capitalization", subScores.capitalization, "20%"],
+            ["Commas and Internal Punctuation", subScores.internalPunctuation, "15%"],
+            ["Readability Impact", subScores.readabilityImpact, "15%"]
+        ];
+    }
+    return [];
+}
+
+function renderCategorySubScoreTable(category, subScores) {
+    var rows = getRubricSubScoreRows(category, subScores);
+    if (!rows.length) return "";
+    var html = '<div class="assessment-sub neatness-sub-wrap">';
+    html += '<table class="neatness-sub-table">';
+    html += '<thead><tr><th>Criterion</th><th>Weight</th><th>Score</th></tr></thead><tbody>';
+    for (var i = 0; i < rows.length; i++) {
+        var label = rows[i][0];
+        var score = rows[i][1];
+        var weight = rows[i][2];
+        var pill = score != null ? getGenericSubScorePill(score) : '<span class="assessment-score-pill score-missing">Missing</span>';
+        html += '<tr><td>' + escapeHtml(label) + '</td><td class="neatness-weight">' + escapeHtml(weight) + '</td><td>' + pill + '</td></tr>';
+    }
+    html += '</tbody></table></div>';
+    return html;
+}
+
+function capSubScoreForLength(score, wordCount) {
+    var s = clampFiveScore(score);
+    if (s == null) return null;
+    if (wordCount < 15 && s > 2) s = 2;
+    else if (wordCount < 35 && s > 3) s = 3;
+    return s;
+}
+
+function getMeaningfulContentWords(text) {
+    var stop = { the:1, a:1, an:1, and:1, or:1, but:1, so:1, to:1, of:1, in:1, on:1, at:1, for:1, with:1, from:1, by:1, is:1, are:1, was:1, were:1, be:1, been:1, am:1, i:1, me:1, my:1, you:1, he:1, she:1, it:1, they:1, we:1, this:1, that:1, then:1 };
+    var words = String(text || "").toLowerCase().match(/\b[a-z][a-z'\-]{2,}\b/g) || [];
+    var out = [];
+    for (var i = 0; i < words.length; i++) {
+        if (!stop[words[i]]) out.push(words[i]);
+    }
+    return out;
+}
+
+function scoreIdeasMainIdea(body, wordCount, sentenceCount) {
+    if (!body || wordCount < 8) return 1;
+    if (wordCount < 20) return 2;
+    var firstChunk = String(body).trim().split(/\s+/).slice(0, 35).join(" ");
+    var hasFocus = /\b(i|we|he|she|they|my|our|one day|today|because|think|believe|first|the|a|an)\b/i.test(firstChunk);
+    if (wordCount >= 60 && sentenceCount >= 3 && hasFocus) return 5;
+    if (wordCount >= 35 && hasFocus) return 4;
+    return hasFocus ? 3 : 2;
+}
+
+function scoreIdeasRelevantDetails(body, wordCount, sentenceCount) {
+    if (!body || wordCount < 8) return 1;
+    var details = countRegexMatches(body.toLowerCase(), /\b(when|where|because|after|before|then|next|suddenly|finally|saw|heard|felt|looked|said|went|found|opened|called|thought|friend|city|school|room|portal|door|truck|road|food|rice)\b/g);
+    var contentWords = getMeaningfulContentWords(body);
+    var unique = getUniqueMatchCount(contentWords.join(" "), /\b[a-z][a-z'\-]{2,}\b/g);
+    if (details >= 10 && unique >= 20 && sentenceCount >= 4) return 5;
+    if (details >= 5 && unique >= 12 && sentenceCount >= 3) return 4;
+    if (details >= 2 || sentenceCount >= 2 || wordCount >= 35) return 3;
+    if (wordCount >= 15) return 2;
+    return 1;
+}
+
+function scoreIdeasElaboration(body, wordCount, sentenceCount, targetWords) {
+    if (!body || wordCount < 8) return 1;
+    var ratio = targetWords && targetWords > 0 ? wordCount / targetWords : 1;
+    var avg = sentenceCount ? wordCount / sentenceCount : wordCount;
+    if (ratio >= 0.95 && wordCount >= 80 && avg >= 8) return 5;
+    if (ratio >= 0.70 && wordCount >= 55) return 4;
+    if (ratio >= 0.45 || wordCount >= 40) return 3;
+    if (wordCount >= 18) return 2;
+    return 1;
+}
+
+function scoreIdeasReaderUnderstanding(body, wordCount, sentenceCount) {
+    if (!body || wordCount < 8) return 1;
+    var lower = String(body).toLowerCase();
+    var confusingMarkers = countRegexMatches(lower, /\b(thing|stuff|something|someone|it chapter|bad diction|unclear)\b/g);
+    var hasAnyPunctuation = /[.!?]/.test(body);
+    var score = 5;
+    if (wordCount < 35) score -= 2;
+    if (sentenceCount < 2 && wordCount >= 35) score -= 1;
+    if (!hasAnyPunctuation && wordCount >= 50) score -= 1;
+    if (confusingMarkers >= 2) score -= 2;
+    else if (confusingMarkers === 1) score -= 1;
+    return clampFiveScore(score);
+}
+
+function scoreIdeasDevelopmentGoal(body, wordCount, sentenceCount, targetWords) {
+    if (!body || wordCount < 8) return 1;
+    if (!targetWords || targetWords <= 0) {
+        if (wordCount >= 120 && sentenceCount >= 5) return 5;
+        if (wordCount >= 80) return 4;
+        if (wordCount >= 40) return 3;
+        if (wordCount >= 18) return 2;
+        return 1;
+    }
+    var ratio = wordCount / targetWords;
+    if (ratio >= 0.95) return 5;
+    if (ratio >= 0.75) return 4;
+    if (ratio >= 0.50) return 3;
+    if (ratio >= 0.25) return 2;
+    return 1;
+}
+
+function analyzeIdeasDetailsFromText(text, targetWords, optGradeProfile) {
+    var body = getOrganizationBodyText(text);
+    var wordCount = countWords(body);
+    var sentences = splitSentences(body);
+    var sentenceCount = sentences.length;
+    var subScores = {
+        clearMainIdea: scoreIdeasMainIdea(body, wordCount, sentenceCount),
+        relevantDetails: scoreIdeasRelevantDetails(body, wordCount, sentenceCount),
+        elaborationDescription: scoreIdeasElaboration(body, wordCount, sentenceCount, targetWords),
+        readerUnderstanding: scoreIdeasReaderUnderstanding(body, wordCount, sentenceCount),
+        developmentTowardGoal: scoreIdeasDevelopmentGoal(body, wordCount, sentenceCount, targetWords)
+    };
+    var weightedFive = calculateWeightedFiveFromParts([
+        [subScores.clearMainIdea, 0.20],
+        [subScores.relevantDetails, 0.25],
+        [subScores.elaborationDescription, 0.25],
+        [subScores.readerUnderstanding, 0.15],
+        [subScores.developmentTowardGoal, 0.15]
+    ]);
+    var score = convertFiveScoreToTen(weightedFive);
+    var shortfallRatio = targetWords && targetWords > 0 && wordCount < targetWords ? (targetWords - wordCount) / targetWords : 0;
+    var adjustment = {
+        adjustedScore: score,
+        shortfallRatio: shortfallRatio,
+        multiplier: 1,
+        bonusMultiplier: 1,
+        goingBeyond: !!(targetWords && wordCount >= targetWords),
+        goingBeyondNote: targetWords && wordCount >= targetWords ? "You met the target word count." : "",
+        penaltyRubricPoints: 0,
+        note: "Ideas & Details now uses the weighted Ideas rubric. Word count is included in Development Toward the Assignment Goal instead of being applied as a separate penalty."
+    };
+    return {
+        body: body,
+        wordCount: wordCount,
+        sentenceCount: sentenceCount,
+        targetWords: targetWords,
+        subScores: subScores,
+        weightedFive: weightedFive,
+        score: score,
+        adjustment: adjustment
+    };
+}
+
+function buildIdeasQuickReason(data) {
+    if (!data || !data.subScores) return "The writing needs more development before Ideas & Details can be judged fairly.";
+    var ss = data.subScores;
+    if (ss.developmentTowardGoal <= 2 || ss.elaborationDescription <= 2) return "Your main idea is started, but the writing needs more developed details to help the reader picture and understand it.";
+    if (ss.readerUnderstanding <= 2) return "Your idea is present, but some parts need clearer explanation so the reader can follow what you mean.";
+    if (ss.relevantDetails >= 4 && ss.clearMainIdea >= 4) return "Your main idea is clear and supported with relevant details.";
+    return "Your idea is understandable, and adding more specific details would make it stronger.";
+}
+
+function buildIdeasEvidenceFromData(data) {
+    if (!data || !data.subScores) return "The writing was checked for a main idea, details, elaboration, reader understanding, and development.";
+    var ss = data.subScores;
+    if (ss.relevantDetails >= 4) return "The writing includes several events or details that show what is happening.";
+    if (ss.clearMainIdea >= 4) return "The main idea is clear, but the support still needs more detail and description.";
+    if (ss.developmentTowardGoal <= 2) return "The writing is much shorter than the assignment goal, so there is not enough developed content yet.";
+    return "The writing gives the reader a basic idea, but some details are still general or rushed.";
+}
+
+function buildIdeasGrowthTipFromData(data) {
+    if (!data || !data.subScores) return "Add a clear main idea and two supporting details.";
+    var ss = data.subScores;
+    if (ss.developmentTowardGoal <= 2) return "Add more content by describing what happens next, what the character sees, and how the character feels.";
+    if (ss.elaborationDescription <= 2) return "Choose one important moment and add 2-3 sentences that describe it more clearly.";
+    if (ss.relevantDetails <= 2) return "Add specific details that connect directly to the main idea instead of only naming events.";
+    if (ss.readerUnderstanding <= 2) return "Reread the confusing part and add a sentence that explains what happened in clearer words.";
+    return "Add one more vivid detail or explanation to make the strongest part even clearer.";
+}
+
+function applyComputedIdeasToIdeas(step1Parsed, detailedParsed, ideasData, eligibility) {
+    if (!ideasData) return;
+    var key = "Ideas & Details";
+    var canScore = !eligibility || eligibility[key];
+    var score = canScore ? ideasData.score : null;
+    if (step1Parsed && step1Parsed.quickRubric) {
+        step1Parsed.quickRubric[key] = {
+            score: score,
+            reason: canScore ? buildIdeasQuickReason(ideasData) : getEvidenceNote(key)
+        };
+    }
+    if (detailedParsed && detailedParsed.categories) {
+        if (!detailedParsed.categories[key]) detailedParsed.categories[key] = {};
+        var item = detailedParsed.categories[key];
+        item.score = score;
+        item.evidence = canScore ? buildIdeasEvidenceFromData(ideasData) : getEvidenceNote(key);
+        item.growthTip = canScore ? buildIdeasGrowthTipFromData(ideasData) : getCategoryGrowthForLowSample(key, { status: "limited" }, "");
+        item.subScores = canScore ? ideasData.subScores : null;
+        item.ideasAnalysis = canScore ? {
+            weightedFive: ideasData.weightedFive,
+            wordCount: ideasData.wordCount,
+            targetWords: ideasData.targetWords
+        } : null;
+        item.contentOrganization = item.contentOrganization || "";
+        item.sentenceVariety = item.sentenceVariety || "";
+        item.rawBody = item.rawBody || "";
+    }
+}
+
+function getMaxSentenceWordCount(text) {
+    var sentences = splitSentences(text || "");
+    var max = 0;
+    for (var i = 0; i < sentences.length; i++) {
+        var wc = countWords(sentences[i]);
+        if (wc > max) max = wc;
+    }
+    return max;
+}
+
+function estimateRunOnCount(text) {
+    var sentences = splitSentences(text || "");
+    var count = 0;
+    for (var i = 0; i < sentences.length; i++) {
+        var wc = countWords(sentences[i]);
+        if (wc >= 35) count += 1;
+    }
+    return count;
+}
+
+function analyzeGrammarRubricFromText(originalText, correctedText, grammarScore, errorDensity, totalErrors) {
+    var summary = analyzeGrammarChanges(originalText, correctedText);
+    var wordCount = countWords(originalText);
+    var runOns = estimateRunOnCount(originalText);
+    var maxSentenceWords = getMaxSentenceWordCount(originalText);
+    var baseFromScore = 5;
+    var n = Number(grammarScore);
+    if (n <= 4) baseFromScore = 1;
+    else if (n <= 6) baseFromScore = 2;
+    else if (n <= 8) baseFromScore = 3;
+    else if (n === 9) baseFromScore = 4;
+    else baseFromScore = 5;
+    var subScores = {
+        sentenceCompleteness: clampFiveScore(baseFromScore - (runOns >= 2 ? 1 : 0)),
+        verbTenseAgreement: clampFiveScore(5 - Math.min(4, summary.verbIssues)),
+        wordOrderSentenceStructure: clampFiveScore(baseFromScore - (summary.totalEdits >= 6 ? 1 : 0)),
+        pronounsReferences: clampFiveScore(5 - (/\b(he|she|they|it|him|her|them)\b[\s\S]{0,12}\b(he|she|they|it|him|her|them)\b/i.test(originalText) && summary.totalEdits >= 4 ? 1 : 0)),
+        grammarClarity: baseFromScore
+    };
+    if (maxSentenceWords >= 45) subScores.sentenceCompleteness = Math.min(subScores.sentenceCompleteness, 2);
+    var weightedFive = calculateWeightedFiveFromParts([
+        [subScores.sentenceCompleteness, 0.25],
+        [subScores.verbTenseAgreement, 0.20],
+        [subScores.wordOrderSentenceStructure, 0.20],
+        [subScores.pronounsReferences, 0.15],
+        [subScores.grammarClarity, 0.20]
+    ]);
+    return {
+        subScores: subScores,
+        weightedFive: weightedFive,
+        grammarScore: grammarScore,
+        errorDensity: errorDensity,
+        totalErrors: totalErrors,
+        grammarChanges: summary,
+        runOns: runOns,
+        wordCount: wordCount
+    };
+}
+
+function buildGrammarRubricReason(data) {
+    if (!data) return "Grammar patterns were checked using the grammar-density score.";
+    var ss = data.subScores || {};
+    var changes = data.grammarChanges || {};
+    if (ss.sentenceCompleteness <= 2) return "The grammar score is affected mostly by sentence boundaries, run-ons, or incomplete sentence structure.";
+    if (ss.verbTenseAgreement <= 2) return "The grammar score is affected mostly by verb tense or agreement changes.";
+    if (ss.wordOrderSentenceStructure <= 2) return "The grammar score is affected mostly by sentence structure and word order.";
+    if (data.grammarScore >= 9) return "Grammar is mostly controlled, with only small edits needed.";
+    if ((changes.totalEdits || 0) >= 4) return "Several grammar edits were needed, but the meaning still comes through.";
+    return "A few grammar details need proofreading so the sentences sound clearer.";
+}
+
+function buildGrammarRubricEvidence(data) {
+    if (!data) return "The grammar was checked for sentence completeness, verb forms, word order, pronouns, and clarity.";
+    if (data.runOns >= 1) return "At least one long sentence or run-on pattern needs clearer sentence breaks.";
+    if (data.grammarChanges && data.grammarChanges.verbIssues > 0) return "The corrections show verb form or tense changes that affect grammar accuracy.";
+    if (data.totalErrors >= 4) return "The corrected version needed several grammar edits before the sentences were fully clear.";
+    return "The sentence structure is mostly understandable, with only a few grammar edits needed.";
+}
+
+function buildGrammarRubricGrowthTip(data) {
+    if (!data || !data.subScores) return "Reread each sentence and check that it has a clear subject, verb, and complete thought.";
+    var ss = data.subScores;
+    if (ss.sentenceCompleteness <= 2) return "Read the writing one sentence at a time and add periods where one complete thought ends.";
+    if (ss.verbTenseAgreement <= 2) return "Choose one tense, such as past tense, and check that each verb matches it.";
+    if (ss.wordOrderSentenceStructure <= 2) return "Reread each sentence aloud and move words around if the sentence does not sound natural.";
+    if (ss.pronounsReferences <= 2) return "Check each pronoun and make sure the reader can tell who or what it refers to.";
+    return "Do one careful reread for small grammar fixes before submitting.";
+}
+
+function applyGrammarRubricToGrammar(step1Parsed, detailedParsed, grammarData, eligibility) {
+    var key = "Grammar";
+    if (!grammarData) return;
+    var canScore = !eligibility || eligibility[key];
+    var score = canScore ? grammarData.grammarScore : null;
+    if (step1Parsed && step1Parsed.quickRubric) {
+        step1Parsed.quickRubric[key] = {
+            score: score,
+            reason: canScore ? buildGrammarRubricReason(grammarData) : getEvidenceNote(key)
+        };
+    }
+    if (detailedParsed && detailedParsed.categories) {
+        if (!detailedParsed.categories[key]) detailedParsed.categories[key] = {};
+        var item = detailedParsed.categories[key];
+        item.score = score;
+        item.evidence = canScore ? buildGrammarRubricEvidence(grammarData) : getEvidenceNote(key);
+        item.growthTip = canScore ? buildGrammarRubricGrowthTip(grammarData) : getCategoryGrowthForLowSample(key, { status: "limited" }, "");
+        item.subScores = canScore ? grammarData.subScores : null;
+        item.grammarAnalysis = canScore ? {
+            grammarScore: grammarData.grammarScore,
+            errorDensity: grammarData.errorDensity,
+            totalErrors: grammarData.totalErrors,
+            weightedFive: grammarData.weightedFive
+        } : null;
+        item.contentOrganization = item.contentOrganization || "";
+        item.sentenceVariety = item.sentenceVariety || "";
+        item.rawBody = item.rawBody || "";
+    }
+}
+
+function scoreFromRatioGoodToBad(goodRatio) {
+    if (goodRatio >= 0.85) return 5;
+    if (goodRatio >= 0.70) return 4;
+    if (goodRatio >= 0.50) return 3;
+    if (goodRatio >= 0.30) return 2;
+    return 1;
+}
+
+function getFlowTransitionCount(text) {
+    return countRegexMatches(String(text || ""), /\b(first|second|third|next|then|after|afterward|afterwards|before|later|finally|lastly|in the end|at last|eventually|suddenly|soon|meanwhile|when|while|because|so|therefore|however|also|another|for example)\b/gi);
+}
+
+function analyzeFlowRubricFromData(flowData, text) {
+    flowData = flowData || { sentenceCount: 0, varietyScore: 0, starterInfo: { ratio: 0 }, shortRun: 0, flowRating: "No data" };
+    var sentenceCount = flowData.sentenceCount || 0;
+    var starterRatio = flowData.starterInfo ? flowData.starterInfo.ratio || 0 : 0;
+    var transitionCount = getFlowTransitionCount(text || "");
+    var lengthScore = 1;
+    if (flowData.varietyScore >= 85) lengthScore = 5;
+    else if (flowData.varietyScore >= 65) lengthScore = 4;
+    else if (flowData.varietyScore >= 45) lengthScore = 3;
+    else if (flowData.varietyScore >= 25) lengthScore = 2;
+    var starterScore = 5;
+    if (starterRatio > 0.60) starterScore = 1;
+    else if (starterRatio > 0.45) starterScore = 2;
+    else if (starterRatio > 0.30) starterScore = 3;
+    else if (starterRatio > 0.20) starterScore = 4;
+    var transitionRatio = sentenceCount ? transitionCount / sentenceCount : 0;
+    var connectionScore = sentenceCount < 2 ? 1 : scoreFromRatioGoodToBad(Math.min(1, transitionRatio * 2.5));
+    if (sentenceCount >= 4 && transitionCount === 0) connectionScore = 2;
+    var rhythmScore = 1;
+    if (flowData.flowRating === "Very Good") rhythmScore = 5;
+    else if (flowData.flowRating === "Good") rhythmScore = 4;
+    else if (flowData.flowRating === "Developing") rhythmScore = 3;
+    else if (flowData.flowRating === "Needs Improvement") rhythmScore = 2;
+    var repetitionScore = starterScore;
+    if ((flowData.shortRun || 0) >= 6 && (flowData.shortCount || 0) > 0) repetitionScore = Math.min(repetitionScore, 2);
+    else if ((flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0) repetitionScore = Math.min(repetitionScore, 3);
+    var subScores = {
+        sentenceLengthVariety: lengthScore,
+        sentenceStarterVariety: starterScore,
+        smoothConnections: connectionScore,
+        rhythmReadability: rhythmScore,
+        avoidingRepetition: repetitionScore
+    };
+    var weightedFive = calculateWeightedFiveFromParts([
+        [subScores.sentenceLengthVariety, 0.25],
+        [subScores.sentenceStarterVariety, 0.20],
+        [subScores.smoothConnections, 0.20],
+        [subScores.rhythmReadability, 0.20],
+        [subScores.avoidingRepetition, 0.15]
+    ]);
+    var score = flowScoreCap(flowData);
+    return {
+        subScores: subScores,
+        weightedFive: weightedFive,
+        score: score,
+        flowData: flowData,
+        transitionCount: transitionCount,
+        sentenceCount: sentenceCount
+    };
+}
+
+function buildFlowRubricReason(data) {
+    if (!data || !data.flowData) return "The writing needs more sentence evidence before flow can be judged fairly.";
+    var fd = data.flowData;
+    var starterInfo = fd.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    if (starterInfo.ratio > 0.30 && starterInfo.mostCommonStarter) return 'The flow is affected mostly by repeated sentence starters, especially "' + starterInfo.mostCommonStarter + '" at the beginning of ' + starterPct + '% of sentences.';
+    if ((fd.shortCount || 0) === 0) return "The writing uses mostly medium and long sentences, so a few shorter sentences could add rhythm and contrast.";
+    if ((fd.longCount || 0) === 0) return "The writing uses mostly short and medium sentences, so one or two longer sentences would make the rhythm smoother.";
+    if ((fd.shortRun || 0) >= 4 && (fd.shortCount || 0) > 0) return "Several short sentences appear close together, which can make the rhythm feel choppy.";
+    if (data.subScores && data.subScores.smoothConnections <= 2) return "The sentence lengths are understandable, but the ideas need smoother transitions between them.";
+    if (fd.varietyScore >= 80) return "The writing has a strong mix of sentence lengths and a smooth rhythm.";
+    return "The writing has some sentence variety, and a wider mix of sentence lengths would make it smoother.";
+}
+
+function buildFlowRubricEvidence(data) {
+    if (!data || !data.flowData) return "Sentence flow was checked for sentence length, starters, transitions, rhythm, and repetition.";
+    var fd = data.flowData;
+    return "Sentence pattern: short " + fd.shortCount + ", medium " + fd.mediumCount + ", long " + fd.longCount + "; most common starter appears " + (fd.starterInfo ? fd.starterInfo.count : 0) + " time(s).";
+}
+
+function buildFlowRubricGrowthTip(data) {
+    if (!data || !data.flowData) return "Try mixing short, medium, and longer sentences for smoother flow.";
+    var fd = data.flowData;
+    var starterInfo = fd.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    if (starterInfo.ratio > 0.30 && starterInfo.mostCommonStarter) return 'Rewrite a few sentences so they do not all begin with "' + starterInfo.mostCommonStarter + '".';
+    if ((fd.shortCount || 0) === 0) return "Add one or two short sentences at important moments to create rhythm and emphasis.";
+    if ((fd.longCount || 0) === 0) return "Combine a few connected ideas into one longer sentence to create smoother rhythm.";
+    if (data.subScores && data.subScores.smoothConnections <= 2) return "Add transition words to show how one event or idea connects to the next.";
+    return "Keep varying sentence lengths and openings so the writing continues to read smoothly.";
+}
+
+function applyFlowRubricToFlow(step1Parsed, detailedParsed, flowRubricData, eligibility) {
+    var key = "Flow";
+    if (!flowRubricData) return;
+    var canScore = !eligibility || eligibility[key];
+    var score = canScore ? flowRubricData.score : null;
+    if (step1Parsed && step1Parsed.quickRubric) {
+        step1Parsed.quickRubric[key] = {
+            score: score,
+            reason: canScore ? buildFlowRubricReason(flowRubricData) : getEvidenceNote(key)
+        };
+    }
+    if (detailedParsed && detailedParsed.categories) {
+        if (!detailedParsed.categories[key]) detailedParsed.categories[key] = {};
+        var item = detailedParsed.categories[key];
+        item.score = score;
+        item.sentenceVariety = canScore ? buildFlowSentenceVarietyLabel(flowRubricData.flowData) : "Not enough evidence yet.";
+        item.evidence = canScore ? buildFlowRubricEvidence(flowRubricData) : getEvidenceNote(key);
+        item.growthTip = canScore ? buildFlowRubricGrowthTip(flowRubricData) : getCategoryGrowthForLowSample(key, { status: "limited" }, "");
+        item.subScores = canScore ? flowRubricData.subScores : null;
+        item.flowAnalysis = canScore ? {
+            weightedFive: flowRubricData.weightedFive,
+            transitionCount: flowRubricData.transitionCount,
+            sentenceCount: flowRubricData.sentenceCount
+        } : null;
+        item.contentOrganization = item.contentOrganization || "";
+        item.rawBody = item.rawBody || "";
+    }
+}
+
+function levenshteinDistance(a, b) {
+    a = String(a || "");
+    b = String(b || "");
+    var m = a.length;
+    var n = b.length;
+    var dp = [];
+    for (var i = 0; i <= m; i++) {
+        dp[i] = [];
+        dp[i][0] = i;
+    }
+    for (var j = 0; j <= n; j++) dp[0][j] = j;
+    for (var r = 1; r <= m; r++) {
+        for (var c = 1; c <= n; c++) {
+            var cost = a.charAt(r - 1) === b.charAt(c - 1) ? 0 : 1;
+            dp[r][c] = Math.min(dp[r - 1][c] + 1, dp[r][c - 1] + 1, dp[r - 1][c - 1] + cost);
+        }
+    }
+    return dp[m][n];
+}
+
+function analyzeConventionEdits(originalText, correctedText) {
+    var ops = getDiffOperations(originalText, correctedText);
+    var summary = {
+        spellingEdits: 0,
+        punctuationEdits: 0,
+        capitalizationEdits: 0,
+        otherEdits: 0
+    };
+    for (var i = 0; i < ops.length; i++) {
+        var removed = ops[i].removed.join("");
+        var added = ops[i].added.join("");
+        var removedWords = ops[i].removed.join(" ").toLowerCase();
+        var addedWords = ops[i].added.join(" ").toLowerCase();
+        var removedAlpha = removed.replace(/[^A-Za-z]/g, "");
+        var addedAlpha = added.replace(/[^A-Za-z]/g, "");
+        if (/[.,!?;:"]/.test(removed + added)) {
+            summary.punctuationEdits += 1;
+        } else if (removedAlpha && addedAlpha && removedAlpha.toLowerCase() === addedAlpha.toLowerCase() && removedAlpha !== addedAlpha) {
+            summary.capitalizationEdits += 1;
+        } else if (/\b(a|an|the|is|are|was|were|am|be|been|being|has|have|had|do|does|did|will|would|can|could|should)\b/.test(removedWords + " " + addedWords)) {
+            summary.otherEdits += 1;
+        } else if (removedAlpha && addedAlpha) {
+            var dist = levenshteinDistance(removedAlpha.toLowerCase(), addedAlpha.toLowerCase());
+            if (dist <= Math.max(2, Math.ceil(Math.max(removedAlpha.length, addedAlpha.length) * 0.35))) summary.spellingEdits += 1;
+            else summary.otherEdits += 1;
+        } else {
+            summary.otherEdits += 1;
+        }
+    }
+    return summary;
+}
+
+function countSentenceCapitalErrors(text) {
+    var source = String(text || "");
+    var matches = source.match(/[.!?]\s+[a-z]/g);
+    return matches ? matches.length : 0;
+}
+
+function countLowercaseIErrors(text) {
+    var matches = String(text || "").match(/(^|[^A-Za-z])i(?=[^A-Za-z]|$)/g);
+    return matches ? matches.length : 0;
+}
+
+function getPunctuationMarkCount(text) {
+    return countRegexMatches(String(text || ""), /[.!?]/g);
+}
+
+function scoreSpellingAccuracy(spellingEdits, wordCount) {
+    var per100 = wordCount ? (spellingEdits / wordCount) * 100 : 0;
+    if (spellingEdits <= 1 || per100 <= 1.5) return 5;
+    if (spellingEdits <= 3 || per100 <= 3.5) return 4;
+    if (spellingEdits <= 6 || per100 <= 6) return 3;
+    if (spellingEdits <= 10 || per100 <= 10) return 2;
+    return 1;
+}
+
+function scoreEndingPunctuationFromText(text, wordCount) {
+    var trimmed = String(text || "").trim();
+    if (!trimmed) return 1;
+    var hasFinal = hasSentenceEndingPunctuation(trimmed);
+    var marks = getPunctuationMarkCount(trimmed);
+    if (wordCount >= 100 && marks <= 2) return hasFinal ? 2 : 1;
+    if (wordCount >= 60 && marks <= 1) return hasFinal ? 2 : 1;
+    if (!hasFinal) return marks >= 3 ? 3 : 2;
+    if (marks >= Math.max(1, Math.floor(wordCount / 40))) return 5;
+    return 4;
+}
+
+function scoreCapitalizationFromText(text, capEdits) {
+    var errors = countSentenceCapitalErrors(text) + countLowercaseIErrors(text) + (capEdits || 0);
+    if (errors === 0) return 5;
+    if (errors <= 2) return 4;
+    if (errors <= 5) return 3;
+    if (errors <= 8) return 2;
+    return 1;
+}
+
+function scoreInternalPunctuationFromText(text, punctuationEdits) {
+    var maxWords = getMaxSentenceWordCount(text);
+    var commas = countRegexMatches(String(text || ""), /,/g);
+    var score = 5;
+    if (maxWords >= 45) score = 1;
+    else if (maxWords >= 35) score = 2;
+    else if (maxWords >= 25) score = 3;
+    else if (maxWords >= 18) score = 4;
+    if ((punctuationEdits || 0) >= 4) score = Math.min(score, 3);
+    if (maxWords >= 25 && commas === 0) score = Math.min(score, 3);
+    return clampFiveScore(score);
+}
+
+function analyzeSpellingPunctuationFromText(originalText, correctedText) {
+    var body = getOrganizationBodyText(originalText);
+    var wordCount = countWords(body);
+    var edits = analyzeConventionEdits(originalText, correctedText || originalText);
+    var punctuationMarks = getPunctuationMarkCount(body);
+    var hasFinal = hasSentenceEndingPunctuation(body);
+    var subScores = {
+        spellingAccuracy: scoreSpellingAccuracy(edits.spellingEdits, wordCount),
+        endingPunctuation: scoreEndingPunctuationFromText(body, wordCount),
+        capitalization: scoreCapitalizationFromText(body, edits.capitalizationEdits),
+        internalPunctuation: scoreInternalPunctuationFromText(body, edits.punctuationEdits),
+        readabilityImpact: 5
+    };
+    var lowest = Math.min(subScores.spellingAccuracy, subScores.endingPunctuation, subScores.capitalization, subScores.internalPunctuation);
+    if (lowest <= 1) subScores.readabilityImpact = 2;
+    else if (lowest <= 2) subScores.readabilityImpact = 3;
+    else if (lowest <= 3) subScores.readabilityImpact = 4;
+    var weightedFive = calculateWeightedFiveFromParts([
+        [subScores.spellingAccuracy, 0.30],
+        [subScores.endingPunctuation, 0.20],
+        [subScores.capitalization, 0.20],
+        [subScores.internalPunctuation, 0.15],
+        [subScores.readabilityImpact, 0.15]
+    ]);
+    return {
+        subScores: subScores,
+        weightedFive: weightedFive,
+        score: convertFiveScoreToTen(weightedFive),
+        edits: edits,
+        wordCount: wordCount,
+        punctuationMarks: punctuationMarks,
+        hasFinal: hasFinal
+    };
+}
+
+function buildSpellingPunctuationReason(data) {
+    if (!data || !data.subScores) return "Spelling and punctuation need a closer proofread.";
+    var ss = data.subScores;
+    if (ss.endingPunctuation <= 2) return "The main convention issue is missing or unclear ending punctuation between sentences.";
+    if (ss.capitalization <= 2) return "The main convention issue is capitalization, especially sentence beginnings or the word I.";
+    if (ss.spellingAccuracy <= 2) return "The main convention issue is spelling accuracy, which makes some words harder to read.";
+    if (ss.internalPunctuation <= 2) return "The main convention issue is internal punctuation, because some long sentences need commas or clearer breaks.";
+    if (data.score >= 9) return "Spelling, capitalization, and punctuation are mostly controlled.";
+    return "Most conventions are understandable, and a careful proofread would clean up the remaining errors.";
+}
+
+function buildSpellingPunctuationEvidence(data) {
+    if (!data || !data.subScores) return "The writing was checked for spelling, ending punctuation, capitalization, commas, and readability.";
+    var ss = data.subScores;
+    if (ss.endingPunctuation <= 2) return "There are not enough clear sentence-ending punctuation marks for the length of the writing.";
+    if (ss.capitalization <= 2) return "Capitalization needs attention in several places.";
+    if (ss.spellingAccuracy <= 2) return "Several spelling changes were needed in the corrected version.";
+    if (ss.internalPunctuation <= 2) return "Some long sentence parts need clearer punctuation inside the sentence.";
+    return "Most words and punctuation marks are readable, with only a few convention details to check.";
+}
+
+function buildSpellingPunctuationGrowthTip(data) {
+    if (!data || !data.subScores) return "Proofread for spelling, capitals, and punctuation before submitting.";
+    var ss = data.subScores;
+    if (ss.endingPunctuation <= 2) return "Read the writing aloud and add a period, question mark, or exclamation point where each complete thought ends.";
+    if (ss.capitalization <= 2) return "Check the first word of each sentence and the word I to make sure they are capitalized.";
+    if (ss.spellingAccuracy <= 2) return "Circle words that look unsure and check their spelling before finishing.";
+    if (ss.internalPunctuation <= 2) return "Look for very long sentences and add punctuation to help the reader pause in the right places.";
+    return "Do one final proofread for spelling, capitals, and punctuation.";
+}
+
+function applySpellingPunctuationRubric(step1Parsed, detailedParsed, conventionData, eligibility) {
+    var key = "Spelling & Punctuation";
+    if (!conventionData) return;
+    var canScore = !eligibility || eligibility[key];
+    var score = canScore ? conventionData.score : null;
+    if (step1Parsed && step1Parsed.quickRubric) {
+        step1Parsed.quickRubric[key] = {
+            score: score,
+            reason: canScore ? buildSpellingPunctuationReason(conventionData) : getEvidenceNote(key)
+        };
+    }
+    if (detailedParsed && detailedParsed.categories) {
+        if (!detailedParsed.categories[key]) detailedParsed.categories[key] = {};
+        var item = detailedParsed.categories[key];
+        item.score = score;
+        item.evidence = canScore ? buildSpellingPunctuationEvidence(conventionData) : getEvidenceNote(key);
+        item.growthTip = canScore ? buildSpellingPunctuationGrowthTip(conventionData) : getCategoryGrowthForLowSample(key, { status: "limited" }, "");
+        item.subScores = canScore ? conventionData.subScores : null;
+        item.conventionAnalysis = canScore ? {
+            weightedFive: conventionData.weightedFive,
+            spellingEdits: conventionData.edits.spellingEdits,
+            punctuationEdits: conventionData.edits.punctuationEdits,
+            capitalizationEdits: conventionData.edits.capitalizationEdits,
+            punctuationMarks: conventionData.punctuationMarks,
+            hasFinal: conventionData.hasFinal
+        } : null;
+        item.contentOrganization = item.contentOrganization || "";
+        item.sentenceVariety = item.sentenceVariety || "";
+        item.rawBody = item.rawBody || "";
+    }
+}
 
 function roundToNearestRubric(value) {
     var best = RUBRIC_OPTIONS[0];
@@ -12653,7 +13870,7 @@ function buildStep1Prompt(text, optGradeProfile) {
     ].join("\n");
 }
 
-function buildStep2Prompt(originalText, correctedText, targetWords, actualWords, optGradeProfile) {
+function buildStep2Prompt(originalText, correctedText, targetWords, actualWords, optGradeProfile, organizationData) {
     // Note: Neatness is assessed separately via image-based call in assessNeatnessFromImage()
     // so step 2 only needs to handle the 6 core writing categories
     //
@@ -12688,6 +13905,24 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
         "Target word count: " + targetWords,
         "Actual word count: " + actualWords,
         "",
+        "Ideas & Details rubric to use:",
+        getIdeasDetailsRubricPromptText(),
+        "",
+        "Grammar comment rubric to use:",
+        getGrammarRubricPromptText(),
+        "",
+        "Organization rubric to use:",
+        getOrganizationRubricPromptText(),
+        "",
+        "Flow comment rubric to use:",
+        getFlowRubricPromptText(),
+        "",
+        "Spelling & Punctuation rubric to use:",
+        getSpellingPunctuationRubricPromptText(),
+        "",
+        "Computed Organization check:",
+        getOrganizationPromptSummary(organizationData),
+        "",
         "Important rules:",
         "1. Use only these rubric scores: 10, 9, 8, 7, 6, 5, 4.",
         "2. Include ALL SIX categories exactly as listed.",
@@ -12696,6 +13931,10 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
         "3b. If the score is below 10, do not use words like perfect, perfectly, flawless, or always correct.",
         "3c. Avoid generic phrases like there is room to improve. Use natural teacher wording. Prefer 'your writing' instead of 'the piece'.",
         "4. Mention target word count only if the actual word count is below target.",
+        "4a. Use the Ideas & Details rubric for idea development. Mention target word count only in Ideas & Details and explain what content should be added.",
+        "4b. Do not mention target word count in Organization feedback. Word count belongs under Ideas & Details unless the missing length directly causes a missing section, such as no ending.",
+        "4c. For Organization, a clear timeline alone does not mean the writing is complete. Do not say the writing has a clear beginning, middle, and end unless a real ending or resolution is present.",
+        "4d. If the writing stops suddenly, ends mid-thought, lacks ending punctuation, or has no real resolution, lower Organization and say it needs a clearer ending.",
         "5. If a category does not have enough clear evidence, write Missing instead of guessing a score.",
         "6. Return only the quick rubric in the exact format below.",
         "",
@@ -12710,7 +13949,7 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
     ].join("\n");
 }
 
-function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile) {
+function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile, organizationData) {
     var profile = optGradeProfile || getGradeProfile();
     var audience = profile.audience || "5th-grade student";
     var bilingualGuide = profile.bilingualGuidance || "";
@@ -12740,14 +13979,37 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "Target word count: " + targetWords,
         "Actual word count: " + actualWords,
         "",
+        "Ideas & Details rubric to use:",
+        getIdeasDetailsRubricPromptText(),
+        "",
+        "Grammar comment rubric to use:",
+        getGrammarRubricPromptText(),
+        "",
+        "Organization rubric to use:",
+        getOrganizationRubricPromptText(),
+        "",
+        "Flow comment rubric to use:",
+        getFlowRubricPromptText(),
+        "",
+        "Spelling & Punctuation rubric to use:",
+        getSpellingPunctuationRubricPromptText(),
+        "",
+        "Computed Organization check:",
+        getOrganizationPromptSummary(organizationData),
+        "",
         "Rules:",
         "1. Use only these rubric scores: 10, 9, 8, 7, 6, 5, 4.",
         "2. Keep feedback honest but warm and encouraging.",
         "3. Make the evidence actually match the category. For Spelling & Punctuation, evidence must focus on spelling, punctuation, and capitalization accuracy - not content.",
-        "4. For Grammar, focus on grammar evidence such as verb tense, subject-verb agreement, sentence correctness, or punctuation affecting grammar.",
+        "3a. Use the Ideas & Details rubric for idea development. If the writing is short, say what content should be added, not just 'write more'.",
+        "4. For Grammar, use the Grammar comment rubric and focus on the strongest grammar pattern such as sentence completeness, verb tense, agreement, word order, pronouns, or clarity.",
         "5. For Word Choice, focus on repeated or precise vocabulary choices.",
-        "6. For Organization, focus only on content order: structure, beginning/middle/end, and logical sequencing of ideas.",
-        "7. For Flow, focus only on sentence rhythm: transitions, sentence variety, and smoothness of reading. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
+        "6. For Organization, use the Organization sub-rubric above: beginning/set-up, logical sequence, ending/completeness, paragraphing/grouping, transitions, and focus.",
+        "6a. Do not say the writing has a clear beginning, middle, and end unless the ending is actually present. A clear timeline alone does not mean the story is complete.",
+        "6b. If the writing stops suddenly, ends mid-thought, lacks ending punctuation, or has no real resolution, say that the writing needs a clearer ending and keep the Organization score consistent with the computed Organization check.",
+        "6c. Do not mention target word count in Organization feedback. Word count belongs under Ideas & Details unless the missing length directly causes a missing section, such as no ending.",
+        "7. For Flow, use the Flow comment rubric and focus only on sentence rhythm: transitions, sentence variety, repeated starters, and smoothness of reading. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
+        "7a. For Spelling & Punctuation, use the Spelling & Punctuation rubric and identify the biggest convention issue instead of giving a generic comment.",
         "8. Mention the target word count only if the actual word count is below the target word count.",
         "9. Choose ONE grow goal only.",
         "10. Keep the same rubric scores from the Quick Rubric Snapshot unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the quick rubric.",
@@ -12839,12 +14101,36 @@ function renderDetailedAssessment(detailed) {
             if (item.contentOrganization) {
                 html += '<div class="assessment-sub"><strong>Content Organization:</strong> ' + escapeHtml(item.contentOrganization) + '</div>';
             }
+            if (item.subScores) {
+                var os = item.subScores;
+                var orgRows = [
+                    ["Beginning and Set-Up", os.beginningSetup, "15%"],
+                    ["Logical Sequence", os.logicalSequence, "25%"],
+                    ["Ending and Completeness", os.endingCompleteness, "25%"],
+                    ["Paragraphing and Grouping", os.paragraphingGrouping, "15%"],
+                    ["Transitions", os.transitions, "10%"],
+                    ["Focus", os.focus, "10%"]
+                ];
+                html += '<div class="assessment-sub neatness-sub-wrap">';
+                html += '<table class="neatness-sub-table">';
+                html += '<thead><tr><th>Criterion</th><th>Weight</th><th>Score</th></tr></thead><tbody>';
+                for (var oi = 0; oi < orgRows.length; oi++) {
+                    var orgLabel = orgRows[oi][0];
+                    var orgScore = orgRows[oi][1];
+                    var orgWeight = orgRows[oi][2];
+                    var orgPill = orgScore != null ? getOrganizationSubScorePill(orgScore) : '<span class="assessment-score-pill score-missing">Missing</span>';
+                    html += '<tr><td>' + orgLabel + '</td><td class="neatness-weight">' + orgWeight + '</td><td>' + orgPill + '</td></tr>';
+                }
+                html += '</tbody></table>';
+                html += '</div>';
+            }
             html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
             html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
         } else if (key === "Flow") {
             if (item.sentenceVariety) {
                 html += '<div class="assessment-sub"><strong>Sentence Variety:</strong> ' + escapeHtml(item.sentenceVariety) + '</div>';
             }
+            if (item.subScores) html += renderCategorySubScoreTable(key, item.subScores);
             html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
             html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
         } else if (key === "Neatness") {
@@ -12882,6 +14168,7 @@ function renderDetailedAssessment(detailed) {
             var neatGrowthTip = item.growthTip || "No growth tip extracted.";
             html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(neatGrowthTip) + '</div>';
         } else {
+            if (item.subScores) html += renderCategorySubScoreTable(key, item.subScores);
             html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
             html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
         }
@@ -14056,6 +15343,10 @@ function reassessPortfolioSession(studentName, sessionId) {
     correctedHtmlForDiff = "";
     latestAnalysisData = null;
     clearPendingPortfolioSync();
+    activePortfolioReassessmentSource = {
+        sourceStudentName: studentName,
+        sourceSessionId: sessionId
+    };
 
     setOcrStatus("Restoring saved writing for reassessment...", "");
     syncUiState();
@@ -14077,6 +15368,7 @@ function reassessPortfolioSession(studentName, sessionId) {
         var analysisRun = analyzeWriting();
         if (analysisRun && typeof analysisRun.then === "function") {
             analysisRun.catch(function(e) {
+                activePortfolioReassessmentSource = null;
                 console.error("Portfolio reassessment failed:", e);
                 alert("The saved writing was loaded, but reassessment could not be completed.");
             });
@@ -14269,12 +15561,17 @@ async function analyzeWriting() {
         parsed1.varietyScore = flowData.varietyScore;
         parsed1.flowRating = flowData.flowRating;
         parsed1.flowTip = buildComputedFlowTip(flowData);
+        var organizationData = analyzeOrganizationFromText(text);
+        var ideasData = analyzeIdeasDetailsFromText(text, targetWords, gradeProfile);
+        var conventionData = analyzeSpellingPunctuationFromText(text, correctedText);
+        var flowRubricData = analyzeFlowRubricFromData(flowData, correctedPlainText);
 
-        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile);
+        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, organizationData);
         var step2 = await callOpenRouter(model, step2Prompt);
         parsed1.quickRubric = parseStep2QuickRubric(step2, text, targetWords);
         var eligibility = getCategoryEligibility(sampleStatus);
         applyEligibilityToQuickRubric(parsed1.quickRubric, eligibility);
+        applyComputedOrganizationToOrganization(parsed1, null, organizationData, eligibility);
 
         // If neatness is enabled and we have an image, do image-based neatness assessment
         if (shouldAssessNeatness() && selectedImageDataUrl) {
@@ -14295,19 +15592,24 @@ async function analyzeWriting() {
         }
 
         var quickRubricText = buildQuickRubricText(parsed1.quickRubric);
-        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile);
+        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, organizationData);
         var step3 = await callOpenRouter(model, step3Prompt);
         var detailed = parseDetailedAssessment(step3);
 
         var adjustment = applyWordCountToIdeas(parsed1, detailed, actualWords, targetWords);
+        applyComputedIdeasToIdeas(parsed1, detailed, ideasData, eligibility);
+        if (ideasData && ideasData.adjustment) adjustment = ideasData.adjustment;
         applyComputedFlowToFlow(parsed1, detailed, flowData);
+        applyFlowRubricToFlow(parsed1, detailed, flowRubricData, eligibility);
         applyOrganizationFallback(parsed1, detailed, eligibility);
+        applyComputedOrganizationToOrganization(parsed1, detailed, organizationData, eligibility);
 
         var correctedWordCount = countWords((parsed1.correctedStory || "").replace(/\*\*/g, ""));
         if (!correctedWordCount) correctedWordCount = countWords(text);
         var totalErrors = parsed1.errorCounts.grammar + parsed1.errorCounts.punctuation + parsed1.errorCounts.spelling;
         var errorDensity = correctedWordCount ? (totalErrors / correctedWordCount) * 100 : 0;
         var grammarScore = grammarDensityBand(errorDensity, gradeProfile);
+        var grammarRubricData = analyzeGrammarRubricFromText(text, parsed1.correctedStory || correctedText, grammarScore, errorDensity, totalErrors);
 
         parsed1.quickRubric["Grammar"] = parsed1.quickRubric["Grammar"] || { score: grammarScore, reason: softFallback("Grammar", grammarScore, text, actualWords, targetWords) };
         parsed1.quickRubric["Grammar"].score = eligibility["Grammar"] ? grammarScore : null;
@@ -14326,6 +15628,10 @@ async function analyzeWriting() {
 
         applyEligibilityToDetailed(detailed, eligibility);
         polishFeedback(parsed1.quickRubric, detailed, text, parsed1.correctedStory, flowData);
+        applyComputedIdeasToIdeas(parsed1, detailed, ideasData, eligibility);
+        applyGrammarRubricToGrammar(parsed1, detailed, grammarRubricData, eligibility);
+        applyFlowRubricToFlow(parsed1, detailed, flowRubricData, eligibility);
+        applySpellingPunctuationRubric(parsed1, detailed, conventionData, eligibility);
 
         // Use dynamic category keys to include Neatness if present
         var activeKeys = getActiveCategoryKeys();
