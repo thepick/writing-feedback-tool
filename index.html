@@ -10107,6 +10107,16 @@ function getSpellingPunctuationRubricPromptText() {
 
 function getRubricSubScoreRows(category, subScores) {
     if (!subScores) return [];
+    if (category === "Neatness") {
+        return [
+            ["Letter Formation", subScores.letterFormation, "20%"],
+            ["Spacing", subScores.spacing, "15%"],
+            ["Staying on the Line", subScores.stayingOnLine, "15%"],
+            ["Size Consistency", subScores.sizeConsistency, "15%"],
+            ["Pen Control and Marks", subScores.penControl, "15%"],
+            ["Page Layout and Paragraphs", subScores.pageLayoutParagraphs, "20%"]
+        ];
+    }
     if (category === "Ideas & Details") {
         return [
             ["Clear Main Idea or Story Idea", subScores.clearMainIdea, "20%"],
@@ -10156,7 +10166,7 @@ function renderCategorySubScoreTable(category, subScores) {
         var label = rows[i][0];
         var score = rows[i][1];
         var weight = rows[i][2];
-        var pill = score != null ? getGenericSubScorePill(score) : '<span class="assessment-score-pill score-missing">Missing</span>';
+        var pill = score != null ? (category === "Neatness" ? getNeatnessSubScorePill(score) : getGenericSubScorePill(score)) : '<span class="assessment-score-pill score-missing">Missing</span>';
         html += '<tr><td>' + escapeHtml(label) + '</td><td class="neatness-weight">' + escapeHtml(weight) + '</td><td>' + pill + '</td></tr>';
     }
     html += '</tbody></table></div>';
@@ -14923,10 +14933,11 @@ function renderNotebookDetailedAssessment(detailed) {
         var score = hasNumericScore ? Number(item.score) : null;
         var scoreLabel = hasNumericScore ? (escapeHtml(String(item.score)) + " / " + RUBRIC_MAX) : "Missing";
         var width = score != null ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
+        var scoreClass = getRubricScoreColorClass(score);
         var printData = getNotebookCategoryPrintData(key, item);
         html += '<div class="category">';
-        html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
-        html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
+        html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge ' + scoreClass + '">' + scoreLabel + '</span></div>';
+        html += '<div class="score-bar-track"><div class="score-bar-fill ' + scoreClass + '" style="width:' + width + '%"></div></div>';
         html += '<div class="evidence-block"><strong>Evidence:</strong> ' + escapeHtml(printData.evidence) + '</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> ' + escapeHtml(printData.tip) + '</div>';
         html += '</div>';
@@ -15023,8 +15034,18 @@ function getNotebookPrintCss() {
         ".category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }",
         ".category-name { font-weight: 700; font-size: 10.3px; color: #111111; letter-spacing: 0.01em; }",
         ".score-badge { font-size: 9.3px; font-weight: 700; background: #ececec; border: 1px solid #888888; border-radius: 99px; padding: 0px 5px; white-space: nowrap; color: #111111; }",
+        ".score-badge.score-green{background:#ecfdf5;border-color:#86efac;color:#166534;}",
+        ".score-badge.score-blue{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;}",
+        ".score-badge.score-amber{background:#fffbeb;border-color:#fcd34d;color:#b45309;}",
+        ".score-badge.score-red{background:#fef2f2;border-color:#fca5a5;color:#b91c1c;}",
+        ".score-badge.score-gray{background:#f8fafc;border-color:#cbd5e1;color:#475569;}",
         ".score-bar-track { height: 3.5px; background: #cccccc; border-radius: 99px; margin-bottom: 4px; overflow: hidden; }",
         ".score-bar-fill { height: 100%; border-radius: 99px; background: #333333; }",
+        ".score-bar-fill.score-green{background:#16a34a;}",
+        ".score-bar-fill.score-blue{background:#2563eb;}",
+        ".score-bar-fill.score-amber{background:#d97706;}",
+        ".score-bar-fill.score-red{background:#dc2626;}",
+        ".score-bar-fill.score-gray{background:#64748b;}",
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
         ".evidence-block strong, .tip-block strong { font-weight: 700; color: #111111; }",
         ".tip-block { font-size: 9.3px; color: #444444; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #cccccc; }",
@@ -15157,9 +15178,10 @@ function renderNotebookDetailedAssessmentFromSavedSession(session) {
         var hasScore = !isNaN(score);
         var scoreLabel = hasScore ? (escapeHtml(String(scores[key])) + " / " + RUBRIC_MAX) : escapeHtml(String(scores[key]));
         var width = hasScore ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
+        var scoreClass = getRubricScoreColorClass(score);
         html += '<div class="category">';
-        html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
-        html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
+        html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge ' + scoreClass + '">' + scoreLabel + '</span></div>';
+        html += '<div class="score-bar-track"><div class="score-bar-fill ' + scoreClass + '" style="width:' + width + '%"></div></div>';
         html += '<div class="evidence-block"><strong>Evidence:</strong> This saved portfolio entry was created before printable notebook snapshots were stored.</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> Use the saved teacher notes and corrected writing from this entry.</div>';
         html += '</div>';
