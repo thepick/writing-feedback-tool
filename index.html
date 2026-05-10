@@ -14825,9 +14825,11 @@ window.addEventListener("load", function() {
         restoreGoogleSessionOnce();
     }
 
-    // If we just came back from OAuth, trigger a sync
+    // If OAuth was started by a manual portfolio sync, resume that sync only.
+    // A normal sign-in already runs the sign-in sync flow, so it should not
+    // also trigger manualSaveToDrive().
     var pendingAction = localStorage.getItem("wft_oauth_pending_action");
-    if (pendingAction === "sync" || fromOAuth) {
+    if (pendingAction === "sync") {
         localStorage.removeItem("wft_oauth_pending_action");
         // Small delay to let the token restore finish
         setTimeout(function() {
@@ -14835,6 +14837,8 @@ window.addEventListener("load", function() {
                 manualSaveToDrive();
             }
         }, 1500);
+    } else if (fromOAuth) {
+        localStorage.removeItem("wft_oauth_pending_action");
     }
 });
 
