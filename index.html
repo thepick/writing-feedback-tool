@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v19.2 - grow goal sentence casing cleanup -->
+<!-- Writing Feedback Tool v19.3 - portfolio detailed feedback lightbox -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -567,6 +567,183 @@
     }
     .session-chip strong {
         color: inherit;
+    }
+
+    .session-chip-btn {
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+    .session-chip-btn:hover {
+        filter: brightness(0.98);
+        transform: translateY(-1px);
+    }
+    .session-chip-btn:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+    .session-feedback-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin: -2px 0 12px;
+    }
+    .btn-view-detailed-feedback {
+        background: #ffffff;
+        border: 1px solid #bfdbfe;
+        color: #1d4ed8;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        min-height: 32px;
+        font-weight: 700;
+    }
+    .btn-view-detailed-feedback:hover { background: #eff6ff; }
+    .btn-view-detailed-feedback:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+    .portfolio-feedback-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 700;
+        background: rgba(15, 23, 42, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .portfolio-feedback-modal {
+        width: min(880px, 96vw);
+        max-height: min(86vh, 900px);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+        border: 1px solid var(--border-color);
+    }
+    .portfolio-feedback-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 18px 20px 14px;
+        border-bottom: 1px solid var(--border-color);
+        background: #f8fafc;
+    }
+    .portfolio-feedback-title {
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 1.15rem;
+        font-weight: 800;
+    }
+    .portfolio-feedback-subtitle {
+        margin-top: 4px;
+        color: var(--text-secondary);
+        font-size: 0.88rem;
+        line-height: 1.35;
+    }
+    .portfolio-feedback-close {
+        border: none;
+        background: #e2e8f0;
+        color: #334155;
+        border-radius: 999px;
+        width: 34px;
+        height: 34px;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        flex: 0 0 auto;
+    }
+    .portfolio-feedback-close:hover { background: #cbd5e1; }
+    .portfolio-feedback-body {
+        padding: 18px 20px 20px;
+        overflow-y: auto;
+    }
+    .portfolio-feedback-category {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background: #ffffff;
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+    .portfolio-feedback-category summary {
+        cursor: pointer;
+        padding: 12px 14px;
+        background: #f8fafc;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+    .portfolio-feedback-category[open] summary {
+        border-bottom: 1px solid var(--border-color);
+    }
+    .portfolio-feedback-category-body {
+        padding: 14px;
+    }
+    .portfolio-feedback-section {
+        margin-bottom: 12px;
+    }
+    .portfolio-feedback-section:last-child { margin-bottom: 0; }
+    .portfolio-feedback-label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 800;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+    }
+    .portfolio-feedback-text {
+        color: var(--text-primary);
+        font-size: 0.92rem;
+        line-height: 1.5;
+    }
+    .portfolio-feedback-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin-top: 6px;
+    }
+    .portfolio-feedback-table th {
+        text-align: left;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .portfolio-feedback-table td {
+        padding: 7px 8px;
+        border-bottom: 1px dashed #e2e8f0;
+        vertical-align: top;
+    }
+    .portfolio-feedback-table tr:last-child td { border-bottom: none; }
+    .portfolio-feedback-goal {
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 16px;
+    }
+    .portfolio-feedback-empty {
+        border: 1px dashed var(--border-color);
+        border-radius: 12px;
+        background: #f8fafc;
+        padding: 18px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+    }
+    @media (max-width: 700px) {
+        .portfolio-feedback-modal-backdrop { padding: 10px; }
+        .portfolio-feedback-modal { width: 100%; max-height: 92vh; }
+        .portfolio-feedback-header { padding: 14px 14px 12px; }
+        .portfolio-feedback-body { padding: 14px; }
+        .portfolio-feedback-table th,
+        .portfolio-feedback-table td { padding: 6px 5px; }
     }
     .session-chip.score-green {
         background: #ecfdf5;
@@ -7206,6 +7383,55 @@ function buildSessionFeedbackSummary(analysisData) {
     };
 }
 
+function buildPortfolioDetailedFeedback(analysisData) {
+    var detailed = analysisData && analysisData.detailed ? analysisData.detailed : {};
+    var sourceCategories = detailed.categories || {};
+    var categoryScores = analysisData && analysisData.categoryScores ? analysisData.categoryScores : {};
+    var keys = getBasePortfolioCategoryKeys().slice();
+    var output = {
+        categories: {},
+        growGoal: {
+            strength: detailed.strength || '',
+            strengthCategory: detailed.strengthCategory || '',
+            growGoal: detailed.growGoal || '',
+            nextTime: normalizeGrowGoalStrategyForSentence(detailed.nextTime || ''),
+            closing: detailed.keepWriting || buildEncouragingClosing(analysisData || { detailed: detailed, categoryScores: categoryScores })
+        }
+    };
+
+    if (categoryScores && categoryScores["Neatness"] != null && keys.indexOf("Neatness") === -1) {
+        keys.push("Neatness");
+    }
+    Object.keys(sourceCategories).forEach(function(key) {
+        if (keys.indexOf(key) === -1) keys.push(key);
+    });
+
+    keys.forEach(function(key) {
+        var source = sourceCategories[key] || {};
+        var savedScore = source.score != null ? source.score : (categoryScores[key] != null ? categoryScores[key] : null);
+        if (!sourceCategories[key] && savedScore == null) return;
+        var displaySource = cloneWftJson(source);
+        if (displaySource.score == null && savedScore != null) displaySource.score = savedScore;
+        var feedback = null;
+        try {
+            if (typeof buildStudentFeedbackForCategory === 'function') {
+                feedback = buildStudentFeedbackForCategory(key, displaySource);
+            }
+        } catch (e) {
+            feedback = null;
+        }
+        output.categories[key] = {
+            score: savedScore,
+            teacherComment: feedback && feedback.teacherComment ? feedback.teacherComment : (source.teacherComment || source.evidence || ''),
+            noticeRows: feedback && feedback.noticeRows ? feedback.noticeRows.slice(0, 8) : (Array.isArray(source.noticeRows) ? source.noticeRows.slice(0, 8) : normalizeNoticeRows(source.noticeRows || source.patternNotes || [])),
+            growthTip: feedback && feedback.growthTip ? feedback.growthTip : (source.growthTip || ''),
+            evidence: source.evidence || ''
+        };
+    });
+
+    return output;
+}
+
 function saveStudentSession(studentName, sessionData) {
     if (!studentName) return;
     var portfolio = getPortfolioData();
@@ -7548,6 +7774,143 @@ function renderPortfolioSessionImageHtml(image) {
     return '<div class="thumb-caption">Image not available offline.</div>';
 }
 
+
+function getPortfolioDetailedFeedbackForSession(session) {
+    if (!session) return null;
+    if (session.detailedFeedback && session.detailedFeedback.categories) return session.detailedFeedback;
+    return null;
+}
+
+function getPortfolioFeedbackCategoryOrder(detailedFeedback, session) {
+    var keys = getSessionCategoryKeys(session || {});
+    var categories = detailedFeedback && detailedFeedback.categories ? detailedFeedback.categories : {};
+    Object.keys(categories).forEach(function(key) {
+        if (keys.indexOf(key) === -1) keys.push(key);
+    });
+    return keys;
+}
+
+function renderPortfolioFeedbackRows(rows) {
+    rows = normalizeNoticeRows(rows || []);
+    if (!rows.length) return '<div class="portfolio-feedback-text">No detailed notes were saved for this part.</div>';
+    var html = '<table class="portfolio-feedback-table"><thead><tr><th>Area</th><th>Comment</th></tr></thead><tbody>';
+    for (var i = 0; i < rows.length; i++) {
+        html += '<tr><td>' + escapeHtml(rows[i].area || 'Overall') + '</td><td>' + renderMarkdownBold(rows[i].comment || 'No detailed note available yet.') + '</td></tr>';
+    }
+    html += '</tbody></table>';
+    return html;
+}
+
+function renderPortfolioFeedbackCategoryBlock(key, item, isOpen) {
+    item = item || {};
+    var scoreText = item.score != null && item.score !== '' ? String(item.score) + '/10' : 'Not scored';
+    var teacherComment = item.teacherComment || item.evidence || 'No teacher comment was saved for this category.';
+    var growthTip = item.growthTip || 'No growth tip was saved for this category.';
+    return ''
+        + '<details class="portfolio-feedback-category"' + (isOpen ? ' open' : '') + '>'
+        + '<summary>' + escapeHtml(key) + ' - ' + escapeHtml(scoreText) + '</summary>'
+        + '<div class="portfolio-feedback-category-body">'
+        + '<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">Teacher Comment</span><div class="portfolio-feedback-text">' + renderMarkdownBold(teacherComment) + '</div></div>'
+        + '<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">What I noticed</span>' + renderPortfolioFeedbackRows(item.noticeRows || []) + '</div>'
+        + '<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">Growth Tip</span><div class="portfolio-feedback-text">' + renderMarkdownBold(growthTip) + '</div></div>'
+        + '</div>'
+        + '</details>';
+}
+
+function renderPortfolioGrowGoalBlock(detailedFeedback, fallbackSummary) {
+    var goal = detailedFeedback && detailedFeedback.growGoal ? detailedFeedback.growGoal : {};
+    fallbackSummary = fallbackSummary || {};
+    var strength = goal.strength || fallbackSummary.strength || '';
+    var growGoal = goal.growGoal || fallbackSummary.growGoal || '';
+    var nextTime = goal.nextTime || fallbackSummary.nextTime || '';
+    var closing = goal.closing || fallbackSummary.closing || '';
+    var parts = [];
+    if (strength) parts.push('<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">Writing Strength</span><div class="portfolio-feedback-text">' + renderMarkdownBold(strength) + '</div></div>');
+    if (growGoal) parts.push('<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">Grow Goal</span><div class="portfolio-feedback-text">' + renderMarkdownBold(growGoal) + '</div></div>');
+    if (nextTime) parts.push('<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">Try This Next Time</span><div class="portfolio-feedback-text">' + renderMarkdownBold(normalizeGrowGoalStrategyForSentence(nextTime)) + '</div></div>');
+    if (closing) parts.push('<div class="portfolio-feedback-section"><span class="portfolio-feedback-label">Keep Writing</span><div class="portfolio-feedback-text">' + renderMarkdownBold(closing) + '</div></div>');
+    if (!parts.length) return '';
+    return '<div class="portfolio-feedback-goal"><h3 class="portfolio-feedback-title" style="font-size:1rem;margin-bottom:10px;">Grow Goal Selection</h3>' + parts.join('') + '</div>';
+}
+
+function buildPortfolioFeedbackModalShell(title, subtitle, bodyHtml) {
+    return ''
+        + '<div class="portfolio-feedback-modal" role="dialog" aria-modal="true" aria-label="Detailed writing feedback">'
+        + '<div class="portfolio-feedback-header">'
+        + '<div><h2 class="portfolio-feedback-title">' + escapeHtml(title || 'Detailed Writing Feedback') + '</h2><div class="portfolio-feedback-subtitle">' + escapeHtml(subtitle || '') + '</div></div>'
+        + '<button type="button" class="portfolio-feedback-close" aria-label="Close detailed feedback" onclick="closePortfolioFeedbackModal()">&times;</button>'
+        + '</div>'
+        + '<div class="portfolio-feedback-body">' + bodyHtml + '</div>'
+        + '</div>';
+}
+
+function showPortfolioFeedbackModal(html) {
+    closePortfolioFeedbackModal();
+    var backdrop = document.createElement('div');
+    backdrop.id = 'portfolioFeedbackModalBackdrop';
+    backdrop.className = 'portfolio-feedback-modal-backdrop';
+    backdrop.innerHTML = html;
+    backdrop.onclick = function(e) {
+        if (e.target === backdrop) closePortfolioFeedbackModal();
+    };
+    document.body.appendChild(backdrop);
+    document.body.style.overflow = 'hidden';
+}
+
+function closePortfolioFeedbackModal() {
+    var existing = document.getElementById('portfolioFeedbackModalBackdrop');
+    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+    var imageLightbox = document.getElementById('imgLightbox');
+    if (!imageLightbox || !imageLightbox.classList || !imageLightbox.classList.contains('open')) {
+        document.body.style.overflow = '';
+    }
+}
+
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePortfolioFeedbackModal();
+});
+
+function openPortfolioDetailedFeedback(studentName, sessionId) {
+    var session = findPortfolioSession(studentName, sessionId);
+    var detailedFeedback = getPortfolioDetailedFeedbackForSession(session);
+    var title = 'Detailed Writing Feedback';
+    var subtitle = (session && session.title ? session.title : 'Saved writing') + (session && session.overall != null ? ' - ' + session.overall + '%' : '');
+    var bodyHtml = '';
+    if (!detailedFeedback) {
+        bodyHtml = '<div class="portfolio-feedback-empty">Detailed feedback was not saved for this older portfolio entry.</div>';
+        showPortfolioFeedbackModal(buildPortfolioFeedbackModalShell(title, subtitle, bodyHtml));
+        return;
+    }
+    var keys = getPortfolioFeedbackCategoryOrder(detailedFeedback, session);
+    var rendered = 0;
+    for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        var item = detailedFeedback.categories && detailedFeedback.categories[key];
+        if (!item) continue;
+        bodyHtml += renderPortfolioFeedbackCategoryBlock(key, item, rendered === 0);
+        rendered += 1;
+    }
+    if (!rendered) bodyHtml += '<div class="portfolio-feedback-empty">No detailed category feedback was saved for this portfolio entry.</div>';
+    bodyHtml += renderPortfolioGrowGoalBlock(detailedFeedback, session ? session.feedbackSummary : null);
+    showPortfolioFeedbackModal(buildPortfolioFeedbackModalShell(title, subtitle, bodyHtml));
+}
+
+function openPortfolioCategoryFeedback(studentName, sessionId, categoryName) {
+    var session = findPortfolioSession(studentName, sessionId);
+    var detailedFeedback = getPortfolioDetailedFeedbackForSession(session);
+    var title = categoryName || 'Category Feedback';
+    var subtitle = (session && session.title ? session.title : 'Saved writing') + (session && session.overall != null ? ' - ' + session.overall + '%' : '');
+    var bodyHtml = '';
+    if (!detailedFeedback || !detailedFeedback.categories || !detailedFeedback.categories[categoryName]) {
+        bodyHtml = '<div class="portfolio-feedback-empty">Detailed feedback was not saved for this category.</div>';
+    } else {
+        bodyHtml = renderPortfolioFeedbackCategoryBlock(categoryName, detailedFeedback.categories[categoryName], true);
+    }
+    bodyHtml += '<div class="session-feedback-actions" style="margin-top:12px;"><button type="button" class="btn-view-detailed-feedback" data-student="' + escapeHtml(studentName) + '" data-session="' + escapeHtml(sessionId) + '" onclick="openPortfolioDetailedFeedback(this.dataset.student, this.dataset.session)">View Detailed Feedback</button></div>';
+    showPortfolioFeedbackModal(buildPortfolioFeedbackModalShell(title, subtitle, bodyHtml));
+}
+
 function renderStudentPortfolio() {
     var sel = document.getElementById('portfolioStudentSelect');
     var contentEl = document.getElementById('portfolioContent');
@@ -7628,11 +7991,13 @@ function renderStudentPortfolio() {
         var sess = sessions[si];
         var scoreColor = scoreBadgeColor(sess.overall);
         var chipsHtml = '';
+        var sessionId = sess.id || sess.createdAt || String(si);
         getSessionCategoryKeys(sess).forEach(function(key) {
             var value = sess.categoryScores && sess.categoryScores[key] != null ? sess.categoryScores[key] : '-';
             var chipClass = getRubricScoreColorClass(value);
-            chipsHtml += '<span class="session-chip ' + chipClass + '"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</span>';
+            chipsHtml += '<button type="button" class="session-chip session-chip-btn ' + chipClass + '" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sessionId) + '" data-category="' + escapeHtml(key) + '" onclick="openPortfolioCategoryFeedback(this.dataset.student, this.dataset.session, this.dataset.category)"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</button>';
         });
+        var detailedFeedbackButtonHtml = '<div class="session-feedback-actions"><button type="button" class="btn-view-detailed-feedback" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sessionId) + '" onclick="openPortfolioDetailedFeedback(this.dataset.student, this.dataset.session)">View Detailed Feedback</button></div>';
         var feedback = sess.feedbackSummary || {};
         var imageStripHtml = '';
         if (sess.images && sess.images.length) {
@@ -7650,6 +8015,7 @@ function renderStudentPortfolio() {
             + '</div>'
             + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'
+            + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
             + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
             + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + getPortfolioCorrectedHtml(sess) + '</div></div>'
@@ -7755,6 +8121,7 @@ function saveCurrentSessionToPortfolio(analysisData) {
         correctedMarkup: analysisData.correctedStory || '',
         correctedPlainText: getSessionPlainCorrectedText(),
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
+        detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
         images: getSessionImagePayloads(),
         notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
