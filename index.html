@@ -793,8 +793,7 @@
         letter-spacing: 0.04em;
         color: var(--text-secondary);
     }
-    .session-artifact-box pre,
-    .session-artifact-box .session-rich-html {
+    .session-artifact-box pre {
         margin: 0;
         white-space: pre-wrap;
         word-break: break-word;
@@ -803,6 +802,18 @@
         line-height: 1.45;
         color: var(--text-primary);
     }
+    .session-artifact-box .session-rich-html {
+        margin: 0;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+        font-family: inherit;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--text-primary);
+    }
+    .session-rich-html p { margin: 0 0 0.85em; }
+    .session-rich-html p:last-child { margin-bottom: 0; }
     .session-rich-html strong { font-weight: 700; }
     .story-title-line {
         display: block;
@@ -2568,7 +2579,7 @@
         align-items: flex-end;
         border-bottom: 2px solid #333333;
         padding-bottom: 4px;
-        margin-bottom: 8mm;
+        margin-bottom: 5mm;
     }
     .notebook-print-doc .page2-meta {
         font-size: 8px;
@@ -2588,15 +2599,15 @@
     .notebook-print-doc .corrected-writing {
         border: 1px solid #cccccc;
         border-radius: 4px;
-        padding: 6mm 7mm;
+        padding: 5mm 6mm;
     }
-    .notebook-print-doc .corrected-writing .section-title { margin-bottom: 5mm; }
+    .notebook-print-doc .corrected-writing .section-title { margin-bottom: 4mm; }
     .notebook-print-doc .corrected-writing p,
     .notebook-print-doc .corrected-writing .notebook-corrected-text {
         font-size: 10px;
         color: #111111;
-        line-height: 1.85;
-        margin-bottom: 5mm;
+        line-height: 1.55;
+        margin-bottom: 3.5mm;
         white-space: normal;
     }
     .notebook-print-doc .corrected-writing p:last-child { margin-bottom: 0; }
@@ -2613,7 +2624,7 @@
     .notebook-print-doc .corrected-writing .story-title-line {
         display: block;
         font-weight: 700;
-        margin-bottom: 5mm;
+        margin-bottom: 3.5mm;
     }
     .notebook-print-doc .auto-fit-page { --fit-scale: 1; }
     .notebook-print-doc .auto-fit-page .page-header {
@@ -8088,7 +8099,7 @@ function renderStudentPortfolio() {
             + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
             + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
-            + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + getPortfolioCorrectedHtml(sess) + '</div></div>'
+            + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + compactCorrectedHtmlForPortfolioDisplay(getPortfolioCorrectedHtml(sess)) + '</div></div>'
             + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.') + '</div></div>'
             + '</div>'
             + imageStripHtml
@@ -11796,7 +11807,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         // Corrected HTML (use the same helper as the in-app portfolio when available)
         var correctedDisplayHtml = '';
         if (typeof getPortfolioCorrectedHtml === 'function') {
-            correctedDisplayHtml = getPortfolioCorrectedHtml(sess);
+            correctedDisplayHtml = compactCorrectedHtmlForPortfolioDisplay(getPortfolioCorrectedHtml(sess));
         } else if (sess.correctedMarkup) {
             correctedDisplayHtml = renderCorrectionMarkdown(sess.correctedMarkup);
         } else if (sess.correctedHtml) {
@@ -11885,9 +11896,11 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         + '.artifact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:4px;}'
         + '.artifact-box{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fafafa;}'
         + '.artifact-box h5{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;}'
-        + '.artifact-box pre,.artifact-box .rich-html{margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:13px;line-height:1.5;color:#1e293b;}'
+        + '.artifact-box pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:13px;line-height:1.5;color:#1e293b;}'
+        + '.artifact-box .rich-html{margin:0;white-space:normal;word-break:normal;overflow-wrap:anywhere;font-family:inherit;font-size:13px;line-height:1.5;color:#1e293b;}'
 
         // Rich HTML (for corrected text with highlights)
+        + '.rich-html p{margin:0 0 .85em;}.rich-html p:last-child{margin-bottom:0;}'
         + '.rich-html .corrected-highlight{background:#fde68a;color:#78350f;font-weight:600;padding:0 2px;border-radius:3px;}'
         + '.rich-html .story-title-line{display:block;font-weight:700;margin-bottom:10px;color:#0f172a;}'
         + '.rich-html strong{font-weight:700;}'
@@ -15102,12 +15115,28 @@ function renderNotebookDetailedAssessment(detailed) {
     return html;
 }
 
-function wrapCorrectedHtmlForNotebookPrint(html) {
+function reflowOcrLineBreaksInHtml(html) {
     var value = String(html || "").trim();
+    if (!value) return "";
+    value = value.replace(/\r\n?/g, "\n");
+    value = value.replace(/(?:\s*<br\s*\/?>\s*){2,}/gi, '</p><p>');
+    value = value.replace(/\s*<br\s*\/?>\s*/gi, ' ');
+    value = value.replace(/[ \t]{2,}/g, ' ');
+    value = value.replace(/\s+([,.!?;:%])/g, '$1');
+    return value.trim();
+}
+
+function wrapCorrectedHtmlForNotebookPrint(html) {
+    var value = reflowOcrLineBreaksInHtml(html);
     if (!value) return '<p>-</p>';
-    value = value.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</p><p>');
-    value = value.replace(/<br\s*\/?>/gi, '<br>');
     if (!/^\s*<p[\s>]/i.test(value)) value = '<p>' + value + '</p>';
+    return value;
+}
+
+function compactCorrectedHtmlForPortfolioDisplay(html) {
+    var value = reflowOcrLineBreaksInHtml(html);
+    if (!value) return "";
+    if (!/^\s*<p[\s>]/i.test(value) && value.indexOf('</p><p>') !== -1) value = '<p>' + value + '</p>';
     return value;
 }
 
@@ -15194,16 +15223,16 @@ function getNotebookPrintCss() {
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
         ".evidence-block strong, .tip-block strong { font-weight: 700; color: #111111; }",
         ".tip-block { font-size: 9.3px; color: #444444; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #cccccc; }",
-        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; padding-bottom: 4px; margin-bottom: 8mm; }",
+        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; padding-bottom: 4px; margin-bottom: 5mm; }",
         ".page2-meta { font-size: 8px; color: #444444; margin-bottom: 2px; }",
         ".page2-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; font-weight: 400; }",
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
-        ".corrected-writing { border: 1px solid #cccccc; border-radius: 4px; padding: 6mm 7mm; }",
-        ".corrected-writing .section-title { margin-bottom: 5mm; }",
-        ".corrected-writing p, .corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.85; margin-bottom: 5mm; white-space: normal; }",
+        ".corrected-writing { border: 1px solid #cccccc; border-radius: 4px; padding: 5mm 6mm; }",
+        ".corrected-writing .section-title { margin-bottom: 4mm; }",
+        ".corrected-writing p, .corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.55; margin-bottom: 3.5mm; white-space: normal; }",
         ".corrected-writing p:last-child { margin-bottom: 0; }",
         ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
-        ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 5mm; }",
+        ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3.5mm; }",
         ".auto-fit-page { --fit-scale: 1; }",
         ".auto-fit-page .page-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
         ".auto-fit-page .page-label { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(2px * var(--fit-scale)); }",
