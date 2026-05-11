@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v19.3 - portfolio detailed feedback lightbox -->
+<!-- Writing Feedback Tool v19.3 - portfolio reflow and corrected color fix -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -793,50 +793,33 @@
         letter-spacing: 0.04em;
         color: var(--text-secondary);
     }
-    .session-artifact-box pre {
+    .session-artifact-box pre,
+    .session-artifact-box .session-rich-html {
         margin: 0;
         white-space: pre-wrap;
         word-break: break-word;
         font-family: inherit;
         font-size: 13px;
         line-height: 1.45;
-        color: var(--text-primary);
+        color: #111111;
     }
-    .session-artifact-box .session-rich-html {
-        margin: 0;
-        white-space: normal;
-        word-break: normal;
-        overflow-wrap: anywhere;
-        font-family: inherit;
-        font-size: 13px;
-        line-height: 1.45;
-        color: var(--text-primary);
+    .session-artifact-box .session-rich-html.corrected-writing-html,
+    .session-artifact-box .session-rich-html.corrected-writing-html * {
+        color: #111111 !important;
     }
-    .session-rich-html p { margin: 0 0 0.85em; }
-    .session-rich-html p:last-child { margin-bottom: 0; }
-    .session-rich-html strong { font-weight: 700; }
-    .session-rich-html .corrected-highlight {
+    .session-artifact-box .session-rich-html.corrected-writing-html .corrected-highlight {
         background: #ffe66b;
-        color: var(--text-primary);
+        color: #111111 !important;
         font-weight: 700;
         padding: 0 2px;
         border-radius: 3px;
     }
-    .session-artifact-box.corrected-artifact-box .session-rich-html,
-    .session-artifact-box.corrected-artifact-box .session-rich-html * {
-        color: var(--text-primary) !important;
-    }
-    .session-artifact-box.corrected-artifact-box .session-rich-html .corrected-highlight {
-        background: #ffe66b !important;
-        color: var(--text-primary) !important;
-        font-weight: 700;
-        padding: 0 2px;
-        border-radius: 3px;
-    }
+    .session-rich-html strong { font-weight: 700; }
     .story-title-line {
         display: block;
         font-weight: 700;
         margin-bottom: 10px;
+        color: #111111;
     }
     .session-photo-strip {
         display: flex;
@@ -2118,7 +2101,7 @@
     }
     .story-box .corrected-highlight {
         background: #ffe66b;
-        color: #2b2100;
+        color: #111111;
         font-weight: bold;
         padding: 0 2px;
         border-radius: 3px;
@@ -2597,7 +2580,7 @@
         align-items: flex-end;
         border-bottom: 2px solid #333333;
         padding-bottom: 4px;
-        margin-bottom: 5mm;
+        margin-bottom: 8mm;
     }
     .notebook-print-doc .page2-meta {
         font-size: 8px;
@@ -2617,22 +2600,15 @@
     .notebook-print-doc .corrected-writing {
         border: 1px solid #cccccc;
         border-radius: 4px;
-        padding: 5mm 6mm;
+        padding: 6mm 7mm;
     }
-    .notebook-print-doc .corrected-writing .section-title { margin-bottom: 4mm; }
-    .notebook-print-doc .corrected-writing .notebook-corrected-text {
-        display: block;
-        width: 100%;
-        max-width: none;
-        word-break: normal;
-        overflow-wrap: break-word;
-    }
+    .notebook-print-doc .corrected-writing .section-title { margin-bottom: 3mm; }
     .notebook-print-doc .corrected-writing p,
     .notebook-print-doc .corrected-writing .notebook-corrected-text {
         font-size: 10px;
         color: #111111;
-        line-height: 1.55;
-        margin-bottom: 3.5mm;
+        line-height: 1.45;
+        margin-bottom: 3mm;
         white-space: normal;
     }
     .notebook-print-doc .corrected-writing p:last-child { margin-bottom: 0; }
@@ -2649,7 +2625,8 @@
     .notebook-print-doc .corrected-writing .story-title-line {
         display: block;
         font-weight: 700;
-        margin-bottom: 3.5mm;
+        margin-bottom: 3mm;
+        color: #111111;
     }
     .notebook-print-doc .auto-fit-page { --fit-scale: 1; }
     .notebook-print-doc .auto-fit-page .page-header {
@@ -7472,11 +7449,66 @@ function getSessionImagePayloads() {
     });
 }
 
+function reflowCorrectedWritingText(text) {
+    var normalized = normalizeCorrectionMarkup(text || "");
+    if (!normalized) return "";
+    var parts = splitStoryTitleAndBody(normalized);
+    function reflowBody(body) {
+        var value = String(body || "").replace(/\r\n?/g, "\n").trim();
+        if (!value) return "";
+        return value.split(/\n{2,}/).map(function(paragraph) {
+            return paragraph.replace(/\n+/g, " ").replace(/[ \t]{2,}/g, " ").trim();
+        }).filter(function(paragraph) {
+            return paragraph.length > 0;
+        }).join("\n\n");
+    }
+    var body = reflowBody(parts.body || (!parts.title ? normalized : ""));
+    if (parts.title) return parts.title + (body ? "\n\n" + body : "");
+    return body;
+}
+
+function stripInlineTextColorStyles(html) {
+    var value = String(html || "");
+    if (!value) return "";
+    if (typeof document === "undefined" || !document.createElement) {
+        return value.replace(/\sstyle=("|')[^"']*\bcolor\s*:[^"']*("|')/gi, "");
+    }
+    var wrapper = document.createElement("div");
+    wrapper.innerHTML = value;
+    var nodes = wrapper.querySelectorAll("[style]");
+    for (var i = 0; i < nodes.length; i++) {
+        var style = nodes[i].getAttribute("style") || "";
+        var kept = style.split(";").map(function(part) {
+            return part.trim();
+        }).filter(function(part) {
+            return part && !/^color\s*:/i.test(part);
+        });
+        if (kept.length) nodes[i].setAttribute("style", kept.join("; "));
+        else nodes[i].removeAttribute("style");
+    }
+    return wrapper.innerHTML;
+}
+
+function reflowCorrectedHtmlForDisplay(html) {
+    var value = stripInlineTextColorStyles(html || "").trim();
+    if (!value) return "";
+    var paragraphMarker = "WFT_PARAGRAPH_MARKER_6E4C2";
+    value = value.replace(/(?:\s*<br\s*\/?>(?:\s|&nbsp;)*){2,}/gi, paragraphMarker);
+    value = value.replace(/\s*<br\s*\/?>(?:\s|&nbsp;)*/gi, " ");
+    value = value.replace(/[ \t\r\n]+/g, " ");
+    value = value.replace(new RegExp("\\s*" + paragraphMarker + "\\s*", "g"), "<br><br>");
+    return value.trim();
+}
+
 function getPortfolioCorrectedHtml(sessionData) {
     if (!sessionData) return '';
-    if (sessionData.correctedMarkup) return renderCorrectionMarkdown(sessionData.correctedMarkup);
-    if (sessionData.correctedPlainText) return buildStoryHtmlWithTitle(sessionData.correctedPlainText);
-    return sessionData.correctedHtml || '';
+    if (sessionData.correctedMarkup) {
+        return reflowCorrectedHtmlForDisplay(renderCorrectionMarkdown(reflowCorrectedWritingText(sessionData.correctedMarkup)));
+    }
+    if (sessionData.correctedPlainText) {
+        return reflowCorrectedHtmlForDisplay(buildStoryHtmlWithTitle(reflowCorrectedWritingText(sessionData.correctedPlainText)));
+    }
+    return reflowCorrectedHtmlForDisplay(sessionData.correctedHtml || '');
 }
 
 function buildSessionFeedbackSummary(analysisData) {
@@ -8124,7 +8156,7 @@ function renderStudentPortfolio() {
             + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
             + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
-            + '<div class="session-artifact-box corrected-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + compactCorrectedHtmlForPortfolioDisplay(getPortfolioCorrectedHtml(sess)) + '</div></div>'
+            + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html corrected-writing-html">' + getPortfolioCorrectedHtml(sess) + '</div></div>'
             + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.') + '</div></div>'
             + '</div>'
             + imageStripHtml
@@ -11832,7 +11864,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         // Corrected HTML (use the same helper as the in-app portfolio when available)
         var correctedDisplayHtml = '';
         if (typeof getPortfolioCorrectedHtml === 'function') {
-            correctedDisplayHtml = compactCorrectedHtmlForPortfolioDisplay(getPortfolioCorrectedHtml(sess));
+            correctedDisplayHtml = getPortfolioCorrectedHtml(sess);
         } else if (sess.correctedMarkup) {
             correctedDisplayHtml = renderCorrectionMarkdown(sess.correctedMarkup);
         } else if (sess.correctedHtml) {
@@ -11854,7 +11886,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         // Artifact grid: Original | Corrected | Notes
         html += '<div class="artifact-grid">';
         html += '<div class="artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(getSessionOriginalText(sess)) + '</pre></div>';
-        html += '<div class="artifact-box"><h5>Corrected Writing</h5><div class="rich-html">' + correctedDisplayHtml + '</div></div>';
+        html += '<div class="artifact-box"><h5>Corrected Writing</h5><div class="rich-html corrected-writing-html">' + correctedDisplayHtml + '</div></div>';
         html += '<div class="artifact-box"><h5>Teacher Notes</h5><div class="rich-html">' + notesContent + '</div></div>';
         html += '</div>';
 
@@ -11921,13 +11953,11 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         + '.artifact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:4px;}'
         + '.artifact-box{border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fafafa;}'
         + '.artifact-box h5{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;}'
-        + '.artifact-box pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:13px;line-height:1.5;color:#1e293b;}'
-        + '.artifact-box .rich-html{margin:0;white-space:normal;word-break:normal;overflow-wrap:anywhere;font-family:inherit;font-size:13px;line-height:1.5;color:#1e293b;}'
+        + '.artifact-box pre,.artifact-box .rich-html{margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:13px;line-height:1.5;color:#111111;}'
 
         // Rich HTML (for corrected text with highlights)
-        + '.rich-html p{margin:0 0 .85em;}.rich-html p:last-child{margin-bottom:0;}'
-        + '.rich-html .corrected-highlight{background:#ffe66b;color:#1e293b;font-weight:600;padding:0 2px;border-radius:3px;}'
-        + '.rich-html .story-title-line{display:block;font-weight:700;margin-bottom:10px;color:#0f172a;}'
+        + '.corrected-writing-html,.corrected-writing-html *{color:#111111!important;} .rich-html .corrected-highlight{background:#fde68a;color:#111111!important;font-weight:700;padding:0 2px;border-radius:3px;}'
+        + '.rich-html .story-title-line{display:block;font-weight:700;margin-bottom:10px;color:#111111;}'
         + '.rich-html strong{font-weight:700;}'
         + '.rich-html br{display:block;content:"";margin-top:4px;}'
 
@@ -15140,30 +15170,12 @@ function renderNotebookDetailedAssessment(detailed) {
     return html;
 }
 
-function reflowOcrLineBreaksInHtml(html) {
-    var value = String(html || "").trim();
-    if (!value) return "";
-    value = value.replace(/\r\n?/g, "\n");
-    value = value.replace(/(?:[ \t]*<br\s*\/?>[ \t]*){2,}/gi, '</p><p>');
-    value = value.replace(/[ \t]*\n[ \t]*\n+/g, '</p><p>');
-    value = value.replace(/[ \t]*<br\s*\/?>[ \t]*/gi, ' ');
-    value = value.replace(/[ \t]*\n[ \t]*/g, ' ');
-    value = value.replace(/[ \t]{2,}/g, ' ');
-    value = value.replace(/\s+([,.!?;:%])/g, '$1');
-    return value.trim();
-}
-
 function wrapCorrectedHtmlForNotebookPrint(html) {
-    var value = reflowOcrLineBreaksInHtml(html);
+    var value = reflowCorrectedHtmlForDisplay(html || "").trim();
     if (!value) return '<p>-</p>';
+    value = value.replace(/(?:\s*<br\s*\/?>(?:\s|&nbsp;)*){2,}/gi, '</p><p>');
+    value = value.replace(/\s*<br\s*\/?>(?:\s|&nbsp;)*/gi, ' ');
     if (!/^\s*<p[\s>]/i.test(value)) value = '<p>' + value + '</p>';
-    return value;
-}
-
-function compactCorrectedHtmlForPortfolioDisplay(html) {
-    var value = reflowOcrLineBreaksInHtml(html);
-    if (!value) return "";
-    if (!/^\s*<p[\s>]/i.test(value) && value.indexOf('</p><p>') !== -1) value = '<p>' + value + '</p>';
     return value;
 }
 
@@ -15250,17 +15262,16 @@ function getNotebookPrintCss() {
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
         ".evidence-block strong, .tip-block strong { font-weight: 700; color: #111111; }",
         ".tip-block { font-size: 9.3px; color: #444444; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #cccccc; }",
-        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; padding-bottom: 4px; margin-bottom: 5mm; }",
+        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; padding-bottom: 4px; margin-bottom: 8mm; }",
         ".page2-meta { font-size: 8px; color: #444444; margin-bottom: 2px; }",
         ".page2-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; font-weight: 400; }",
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
-        ".corrected-writing { border: 1px solid #cccccc; border-radius: 4px; padding: 5mm 6mm; }",
-        ".corrected-writing .section-title { margin-bottom: 4mm; }",
-        ".corrected-writing .notebook-corrected-text { display: block; width: 100%; max-width: none; word-break: normal; overflow-wrap: break-word; }",
-        ".corrected-writing p, .corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.55; margin-bottom: 3.5mm; white-space: normal; }",
+        ".corrected-writing { border: 1px solid #cccccc; border-radius: 4px; padding: 6mm 7mm; }",
+        ".corrected-writing .section-title { margin-bottom: 3mm; }",
+        ".corrected-writing p, .corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; }",
         ".corrected-writing p:last-child { margin-bottom: 0; }",
         ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
-        ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3.5mm; }",
+        ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3mm; color: #111111; }",
         ".auto-fit-page { --fit-scale: 1; }",
         ".auto-fit-page .page-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
         ".auto-fit-page .page-label { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(2px * var(--fit-scale)); }",
@@ -15303,16 +15314,7 @@ function getNotebookPrintFitScript() {
 }
 
 
-function normalizeNotebookPrintContentHtml(printContentHtml) {
-    var html = String(printContentHtml || "");
-    return html.replace(/(<div[^>]*class=["'][^"']*\bnotebook-corrected-text\b[^"']*["'][^>]*>)([\s\S]*?)(<\/div>)/gi, function(match, openTag, innerHtml, closeTag) {
-        return openTag + wrapCorrectedHtmlForNotebookPrint(innerHtml) + closeTag;
-    });
-}
-
-
 function buildNotebookPrintDocument(printContentHtml, studentName, writingTitle) {
-    printContentHtml = normalizeNotebookPrintContentHtml(printContentHtml);
     var safeName = (studentName || "").replace(/[\/\\:*?"<>|]/g, "").trim();
     var safeTitle = (writingTitle || "").replace(/[\/\\:*?"<>|]/g, "").trim();
     var docTitle = safeName && safeTitle
@@ -15624,6 +15626,15 @@ function reassessPortfolioSession(studentName, sessionId) {
     });
 }
 
+function refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session) {
+    var html = String(printContentHtml || "");
+    var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml((session && session.correctedPlainText) || (session && session.originalText) || "-");
+    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
+    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div><div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
+    if (pattern.test(html)) return html.replace(pattern, replacement);
+    return buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
+}
+
 function printPortfolioNotebookSummary(studentName, sessionId) {
     var session = findPortfolioSession(studentName, sessionId);
     if (!session) {
@@ -15631,6 +15642,7 @@ function printPortfolioNotebookSummary(studentName, sessionId) {
         return;
     }
     var printContentHtml = session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
+    printContentHtml = refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session);
     var printWindow = window.open("", "_blank", "width=1200,height=900");
     if (!printWindow) {
         alert("Please allow pop-ups for this page to re-print the notebook summary.");
