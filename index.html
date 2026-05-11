@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v19.1 - housekeeping cleanup for feedback comments -->
+<!-- Writing Feedback Tool v19.2 - grow goal sentence casing cleanup -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -7200,7 +7200,7 @@ function buildSessionFeedbackSummary(analysisData) {
     var detailed = analysisData && analysisData.detailed ? analysisData.detailed : {};
     return {
         strength: detailed.strength || '',
-        nextTime: detailed.nextTime || '',
+        nextTime: normalizeGrowGoalStrategyForSentence(detailed.nextTime || ''),
         growGoal: detailed.growGoal || '',
         closing: buildEncouragingClosing(analysisData || { detailed: detailed, categoryScores: {} })
     };
@@ -10540,7 +10540,7 @@ function parseDetailedAssessment(step3Text) {
     if (g1) result.growGoal = g1[1].trim();
 
     var n1 = step3Text.match(/\*\*Try This Next Time:\*\*\s*([^\n]+)/i);
-    if (n1) result.nextTime = n1[1].trim();
+    if (n1) result.nextTime = normalizeGrowGoalStrategyForSentence(n1[1].trim());
 
     var k1 = step3Text.match(/\*\*Keep Writing!?\*\*\s*([^\n]+)/i);
     if (k1) result.keepWriting = k1[1].trim();
@@ -13001,6 +13001,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "12g. If the score is below 10, the Teacher Comment should mention a strength first and then one improvement area when evidence supports it.",
         "12h. Growth Tips must be specific actions the student can do during revision. Avoid generic tips like improve your writing, add more details, or check your work unless the action says exactly what to check or add.",
         "12i. Use category-specific evidence: Ideas = topic/detail/development; Grammar = sentence correctness/verb tense/agreement; Word Choice = vocabulary precision/variety; Organization = beginning/middle/end/sequence/paragraphing; Flow = rhythm/starters/transitions/sentence variety; Spelling & Punctuation = spelling/capitalization/punctuation.",
+        "12j. For Try This Next Time, write strategy names as natural sentence text, not title-style labels. For example, write 'Mix up your sentences by...' instead of 'Mix Up My Sentences by...'.",
         "13. Keep the final encouragement line to one warm sentence.",
         "",
         "Grow Goal options:",
@@ -13059,7 +13060,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "",
         "**Your Writing Strength:** [highest category and why]",
         "**Your Grow Goal:** [one goal]",
-        "**Try This Next Time:** [one specific tip]",
+        "**Try This Next Time:** [one specific tip written as a natural sentence, not a title-cased strategy label]",
         "",
         "**Keep Writing!** [one warm, natural, specific sentence tied to this student's writing and genre]",
         "",
@@ -13315,7 +13316,8 @@ function growthTipLooksActionable(text) {
 }
 
 function cleanGrowthTipText(text, key, score) {
-    var value = teacherizeWording(softenOverclaim(String(text || ""), score), key, score);
+    var raw = normalizeGrowGoalStrategyForSentence(String(text || ""));
+    var value = teacherizeWording(softenOverclaim(raw, score), key, score);
     value = toOneSentence(value).replace(/\s+/g, " ").trim();
     value = value.replace(/\bthe piece\b/gi, "your writing");
     value = value.replace(/\s+([,.!?])/g, "$1");
@@ -13652,7 +13654,7 @@ function renderDetailedAssessment(detailed) {
     var goalHtml = "";
     if (detailed.strength) goalHtml += '<div style="margin-bottom: 10px;"><strong>Your Writing Strength:</strong> ' + renderMarkdownBold(detailed.strength) + '</div>';
     if (detailed.growGoal) goalHtml += '<div style="margin-bottom: 10px;"><strong>Your Grow Goal:</strong> ' + renderMarkdownBold(detailed.growGoal) + '</div>';
-    if (detailed.nextTime) goalHtml += '<div style="margin-bottom: 10px;"><strong>Try This Next Time:</strong> ' + renderMarkdownBold(detailed.nextTime) + '</div>';
+    if (detailed.nextTime) goalHtml += '<div style="margin-bottom: 10px;"><strong>Try This Next Time:</strong> ' + renderMarkdownBold(normalizeGrowGoalStrategyForSentence(detailed.nextTime)) + '</div>';
     var closingText = detailed.keepWriting;
     if (closingText) closingText = toOneSentence(teacherizeWording(closingText, "Keep Writing", 10));
     if (isGenericKeepWriting(closingText)) {
@@ -14157,6 +14159,53 @@ function cleanNotebookSentence(text) {
     return value;
 }
 
+
+function capitalizeFirstLetter(text) {
+    var value = String(text || "");
+    return value.replace(/^(\s*)([a-z])/, function(match, lead, letter) {
+        return lead + letter.toUpperCase();
+    });
+}
+
+function normalizeGrowGoalStrategyForSentence(text) {
+    var value = String(text || "").trim();
+    if (!value) return value;
+
+    var replacements = [
+        { pattern: /\bAdd\s+More\s+Details\b/gi, replacement: "add more details" },
+        { pattern: /\bCheck\s+My\s+Verbs\b/gi, replacement: "check your verbs" },
+        { pattern: /\bUse\s+Stronger\s+Words\b/gi, replacement: "use stronger words" },
+        { pattern: /\bMix\s+Up\s+My\s+Sentences\b/gi, replacement: "mix up your sentences" },
+        { pattern: /\bAdd\s+Transition\s+Words\b/gi, replacement: "add transition words" },
+        { pattern: /\bProofread\s+for\s+Spelling\s*(?:&|and)\s*Punctuation\b/gi, replacement: "proofread for spelling and punctuation" },
+        { pattern: /\bPractice\s+Handwriting\b/gi, replacement: "practice handwriting" },
+        { pattern: /\bAdd\s+More\s+Specific\s+Evidence\b/gi, replacement: "add more specific evidence" },
+        { pattern: /\bStrengthen\s+Topic\s+Sentences\b/gi, replacement: "strengthen your topic sentences" },
+        { pattern: /\bImprove\s+Paragraph\s+Organization\b/gi, replacement: "improve paragraph organization" },
+        { pattern: /\bUse\s+More\s+Precise\s+Vocabulary\b/gi, replacement: "use more precise vocabulary" },
+        { pattern: /\bVary\s+Sentence\s+Openings\b/gi, replacement: "vary your sentence openings" },
+        { pattern: /\bAdd\s+Stronger\s+Transitions\b/gi, replacement: "add stronger transitions" },
+        { pattern: /\bProofread\s+for\s+Grammar\s+and\s+Punctuation\b/gi, replacement: "proofread for grammar and punctuation" },
+        { pattern: /\bStrengthen\s+Thesis\s*\/\s*Central\s+Claim\b/gi, replacement: "strengthen your thesis or central claim" },
+        { pattern: /\bIntegrate\s+Text\s+Evidence\b/gi, replacement: "integrate text evidence" },
+        { pattern: /\bImprove\s+Paragraph\s+Cohesion\b/gi, replacement: "improve paragraph cohesion" },
+        { pattern: /\bRefine\s+Tone\s*(?:&|and)\s*Voice\b/gi, replacement: "refine your tone and voice" },
+        { pattern: /\bDevelop\s+Counterarguments\b/gi, replacement: "develop counterarguments" },
+        { pattern: /\bUse\s+More\s+Precise\s+Academic\s+Vocabulary\b/gi, replacement: "use more precise academic vocabulary" },
+        { pattern: /\bImprove\s+Sentence\s+Variety\b/gi, replacement: "improve sentence variety" },
+        { pattern: /\bProofread\s+for\s+Grammar\s+and\s+Mechanics\b/gi, replacement: "proofread for grammar and mechanics" }
+    ];
+
+    for (var i = 0; i < replacements.length; i++) {
+        value = value.replace(replacements[i].pattern, replacements[i].replacement);
+    }
+
+    value = value.replace(/\bby\s+by\b/gi, "by");
+    value = value.replace(/\s+([,.!?])/g, "$1");
+    value = value.replace(/\s+/g, " ").trim();
+    return capitalizeFirstLetter(value);
+}
+
 function cleanPrintedStrength(text) {
     var value = cleanNotebookSentence(text);
     value = value.replace(/^Your Writing Strength:\s*/i, "");
@@ -14403,6 +14452,7 @@ function buildNotebookActionChecklist(data, fallbackChecklist, fallbackNextTime,
 
     function pushItemsFromText(text) {
         if (!text) return;
+        text = normalizeGrowGoalStrategyForSentence(text);
         var extracted = extractNotebookActionItems(text);
         for (var i = 0; i < extracted.length; i++) {
             var item = extracted[i];
@@ -14522,7 +14572,7 @@ function getGoalPlan(data) {
     var detailed = data && data.detailed ? data.detailed : null;
     var categories = data && data.detailed && data.detailed.categories ? data.detailed.categories : {};
     var lowestCategory = categories[lowest] || {};
-    var growthTip = cleanNotebookSentence(lowestCategory.growthTip || "");
+    var growthTip = normalizeGrowGoalStrategyForSentence(cleanNotebookSentence(lowestCategory.growthTip || ""));
     var plan = {
         growGoal: "Check my writing carefully before I submit it.",
         nextTime: growthTip || "Read my work carefully and fix one thing before I hand it in.",
@@ -14554,6 +14604,7 @@ function getGoalPlan(data) {
         plan.checklist = buildNotebookActionChecklist(data, plan.checklist, plan.nextTime, plan.growGoal);
     }
 
+    plan.nextTime = normalizeGrowGoalStrategyForSentence(plan.nextTime);
     return plan;
 }
 
