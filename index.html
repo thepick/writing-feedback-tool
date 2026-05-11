@@ -815,6 +815,13 @@
     .session-rich-html p { margin: 0 0 0.85em; }
     .session-rich-html p:last-child { margin-bottom: 0; }
     .session-rich-html strong { font-weight: 700; }
+    .session-rich-html .corrected-highlight {
+        background: #ffe66b;
+        color: var(--text-primary);
+        font-weight: 700;
+        padding: 0 2px;
+        border-radius: 3px;
+    }
     .story-title-line {
         display: block;
         font-weight: 700;
@@ -2602,6 +2609,13 @@
         padding: 5mm 6mm;
     }
     .notebook-print-doc .corrected-writing .section-title { margin-bottom: 4mm; }
+    .notebook-print-doc .corrected-writing .notebook-corrected-text {
+        display: block;
+        width: 100%;
+        max-width: none;
+        word-break: normal;
+        overflow-wrap: break-word;
+    }
     .notebook-print-doc .corrected-writing p,
     .notebook-print-doc .corrected-writing .notebook-corrected-text {
         font-size: 10px;
@@ -11901,7 +11915,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
 
         // Rich HTML (for corrected text with highlights)
         + '.rich-html p{margin:0 0 .85em;}.rich-html p:last-child{margin-bottom:0;}'
-        + '.rich-html .corrected-highlight{background:#fde68a;color:#78350f;font-weight:600;padding:0 2px;border-radius:3px;}'
+        + '.rich-html .corrected-highlight{background:#ffe66b;color:#1e293b;font-weight:600;padding:0 2px;border-radius:3px;}'
         + '.rich-html .story-title-line{display:block;font-weight:700;margin-bottom:10px;color:#0f172a;}'
         + '.rich-html strong{font-weight:700;}'
         + '.rich-html br{display:block;content:"";margin-top:4px;}'
@@ -15119,8 +15133,10 @@ function reflowOcrLineBreaksInHtml(html) {
     var value = String(html || "").trim();
     if (!value) return "";
     value = value.replace(/\r\n?/g, "\n");
-    value = value.replace(/(?:\s*<br\s*\/?>\s*){2,}/gi, '</p><p>');
-    value = value.replace(/\s*<br\s*\/?>\s*/gi, ' ');
+    value = value.replace(/(?:[ \t]*<br\s*\/?>[ \t]*){2,}/gi, '</p><p>');
+    value = value.replace(/[ \t]*\n[ \t]*\n+/g, '</p><p>');
+    value = value.replace(/[ \t]*<br\s*\/?>[ \t]*/gi, ' ');
+    value = value.replace(/[ \t]*\n[ \t]*/g, ' ');
     value = value.replace(/[ \t]{2,}/g, ' ');
     value = value.replace(/\s+([,.!?;:%])/g, '$1');
     return value.trim();
@@ -15229,6 +15245,7 @@ function getNotebookPrintCss() {
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
         ".corrected-writing { border: 1px solid #cccccc; border-radius: 4px; padding: 5mm 6mm; }",
         ".corrected-writing .section-title { margin-bottom: 4mm; }",
+        ".corrected-writing .notebook-corrected-text { display: block; width: 100%; max-width: none; word-break: normal; overflow-wrap: break-word; }",
         ".corrected-writing p, .corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.55; margin-bottom: 3.5mm; white-space: normal; }",
         ".corrected-writing p:last-child { margin-bottom: 0; }",
         ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
@@ -15275,7 +15292,16 @@ function getNotebookPrintFitScript() {
 }
 
 
+function normalizeNotebookPrintContentHtml(printContentHtml) {
+    var html = String(printContentHtml || "");
+    return html.replace(/(<div[^>]*class=["'][^"']*\bnotebook-corrected-text\b[^"']*["'][^>]*>)([\s\S]*?)(<\/div>)/gi, function(match, openTag, innerHtml, closeTag) {
+        return openTag + wrapCorrectedHtmlForNotebookPrint(innerHtml) + closeTag;
+    });
+}
+
+
 function buildNotebookPrintDocument(printContentHtml, studentName, writingTitle) {
+    printContentHtml = normalizeNotebookPrintContentHtml(printContentHtml);
     var safeName = (studentName || "").replace(/[\/\\:*?"<>|]/g, "").trim();
     var safeTitle = (writingTitle || "").replace(/[\/\\:*?"<>|]/g, "").trim();
     var docTitle = safeName && safeTitle
