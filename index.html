@@ -822,6 +822,17 @@
         padding: 0 2px;
         border-radius: 3px;
     }
+    .session-artifact-box.corrected-artifact-box .session-rich-html,
+    .session-artifact-box.corrected-artifact-box .session-rich-html * {
+        color: var(--text-primary) !important;
+    }
+    .session-artifact-box.corrected-artifact-box .session-rich-html .corrected-highlight {
+        background: #ffe66b !important;
+        color: var(--text-primary) !important;
+        font-weight: 700;
+        padding: 0 2px;
+        border-radius: 3px;
+    }
     .story-title-line {
         display: block;
         font-weight: 700;
@@ -8113,7 +8124,7 @@ function renderStudentPortfolio() {
             + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
             + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
-            + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + compactCorrectedHtmlForPortfolioDisplay(getPortfolioCorrectedHtml(sess)) + '</div></div>'
+            + '<div class="session-artifact-box corrected-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html">' + compactCorrectedHtmlForPortfolioDisplay(getPortfolioCorrectedHtml(sess)) + '</div></div>'
             + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.') + '</div></div>'
             + '</div>'
             + imageStripHtml
