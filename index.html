@@ -7540,10 +7540,10 @@ function renderPortfolioSessionImageHtml(image) {
     image = image || {};
     var name = escapeHtml(image.name || 'Student work image');
     if (image.dataUrl) {
-        return '<img src="' + image.dataUrl + '" alt="' + name + '">';
+        return '<img src="' + image.dataUrl + '" alt="' + name + '" data-caption="' + name + '" onclick="openImageLightbox(this)" title="Click to enlarge" style="cursor: zoom-in;">';
     }
     if (image.driveFileId) {
-        return '<img data-drive-file-id="' + escapeHtml(image.driveFileId) + '" alt="' + name + '"><div class="thumb-caption drive-image-status">Loading from Drive...</div>';
+        return '<img data-drive-file-id="' + escapeHtml(image.driveFileId) + '" alt="' + name + '" data-caption="' + name + '" onclick="openImageLightbox(this)" title="Click to enlarge" style="cursor: zoom-in;"><div class="thumb-caption drive-image-status">Loading from Drive...</div>';
     }
     return '<div class="thumb-caption">Image not available offline.</div>';
 }
@@ -16131,13 +16131,17 @@ function openImageLightbox(imgEl) {
     var lb = document.getElementById('imgLightbox');
     var lbImg = document.getElementById('imgLightboxImg');
     var lbCap = document.getElementById('imgLightboxCaption');
-    if (!lb || !lbImg) return;
+    if (!lb || !lbImg || !imgEl || !imgEl.getAttribute('src')) return;
+
     lbImg.src = imgEl.src;
     lbImg.alt = imgEl.alt || 'Writing sample preview';
-    if (lbCap) lbCap.textContent = imgEl.getAttribute('data-caption') || '';
+    if (lbCap) {
+        lbCap.textContent = imgEl.getAttribute('data-caption') || imgEl.alt || '';
+    }
+
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Close on backdrop click (but not on image click)
+
     lb.onclick = function(e) {
         if (e.target === lb) closeImageLightbox();
     };
