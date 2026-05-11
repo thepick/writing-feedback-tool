@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v15 - neatness rubric upgraded -->
+<!-- Writing Feedback Tool v19.1 - housekeeping cleanup for feedback comments -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -1940,10 +1940,10 @@
     ============================================= */
     /* NEATNESS SUB-SCORE TABLE */
     .neatness-sub-wrap { margin-top: 6px; }
-    .neatness-sub-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
-    .neatness-sub-table thead th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 4px 6px; border-bottom: 1px solid var(--border-color); }
-    .neatness-sub-table tbody td { padding: 5px 6px; border-bottom: 1px dashed #e2e8f0; vertical-align: middle; }
-    .neatness-sub-table tbody tr:last-child td { border-bottom: none; }
+    .notice-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .notice-table thead th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 4px 6px; border-bottom: 1px solid var(--border-color); }
+    .notice-table tbody td { padding: 5px 6px; border-bottom: 1px dashed #e2e8f0; vertical-align: middle; }
+    .notice-table tbody tr:last-child td { border-bottom: none; }
     .neatness-weight { color: var(--muted); font-size: 12px; }
     /* NOTEBOOK NEATNESS SUB-ROWS */
     .notebook-neatness-sub .notebook-rubric-head { padding-left: 2px; }
@@ -2139,6 +2139,50 @@
     .calc-table td:first-child {
         color: var(--muted);
         width: 42%;
+    }
+    .teacher-audit-view {
+        font-size: 13px;
+        line-height: 1.45;
+        color: #1b2b3d;
+    }
+    .teacher-audit-intro {
+        color: var(--muted);
+        margin-bottom: 10px;
+    }
+    .teacher-audit-category {
+        border-top: 1px solid #d2dce7;
+        padding-top: 12px;
+        margin-top: 12px;
+    }
+    .teacher-audit-category:first-child {
+        border-top: 0;
+        padding-top: 0;
+        margin-top: 0;
+    }
+    .teacher-audit-category h4 {
+        margin: 0 0 8px;
+        color: #163e73;
+        font-size: 14px;
+    }
+    .teacher-audit-label {
+        font-weight: 700;
+        color: #163e73;
+        margin-top: 8px;
+    }
+    .teacher-audit-list {
+        margin: 6px 0 8px 18px;
+        padding: 0;
+    }
+    .teacher-audit-list li {
+        margin-bottom: 4px;
+    }
+    .audit-pass {
+        color: #116329;
+        font-weight: 700;
+    }
+    .audit-warn {
+        color: #9a6700;
+        font-weight: 700;
     }
 
     /* =============================================
@@ -3101,6 +3145,10 @@
                                 <div class="teacher-box">
                                     <h3>Detailed Assessment and Grow Goal</h3>
                                     <pre id="step3Raw"></pre>
+                                </div>
+                                <div class="teacher-box">
+                                    <h3>Teacher Audit View</h3>
+                                    <div id="teacherAuditView" class="teacher-audit-view">No teacher audit data yet.</div>
                                 </div>
                                 <div class="teacher-box">
                                     <h3>Debug and Extraction</h3>
@@ -4636,6 +4684,9 @@ function resetWftResultUiToFreshSlate() {
 
     var grammarCalcEl = document.getElementById("grammarCalc");
     if (grammarCalcEl) grammarCalcEl.innerHTML = "";
+
+    var teacherAuditViewEl = document.getElementById("teacherAuditView");
+    if (teacherAuditViewEl) teacherAuditViewEl.innerHTML = "No teacher audit data yet.";
 
     var teacherReviewDetailsEl = document.getElementById("teacherReviewDetails");
     if (teacherReviewDetailsEl) teacherReviewDetailsEl.open = false;
@@ -8881,26 +8932,9 @@ function getEvidenceLabel(score) {
     return String(score) + "/" + RUBRIC_MAX;
 }
 
-function getNeatnessLevelLabel(score) {
-    var n = Number(score);
-    if (n === 5) return "Exceptional";
-    if (n === 4) return "Proficient";
-    if (n === 3) return "Developing";
-    if (n === 2) return "Emerging";
-    if (n === 1) return "Beginning";
-    return "Missing";
-}
 
-function getNeatnessSubScorePill(score) {
-    var n = Number(score);
-    if (!isFinite(n)) return '<span class="assessment-score-pill score-missing">Missing</span>';
-    var converted = Math.max(2, Math.min(10, Math.round(n) * 2));
-    var cls = "score-4";
-    if (converted >= 9) cls = "score-10";
-    else if (converted >= 7) cls = "score-8";
-    else if (converted >= 5) cls = "score-6";
-    return '<span class="assessment-score-pill ' + cls + '">' + escapeHtml(String(n)) + '/5 - ' + escapeHtml(getNeatnessLevelLabel(n)) + '</span>';
-}
+
+
 
 function getEvidenceNote(category) {
     if (category === "Organization") return "Not enough evidence yet to judge organization fairly.";
@@ -10087,16 +10121,31 @@ function buildGrammarPatternNotes(score, originalText, correctedText) {
     return notes;
 }
 
-function renderGrammarPatternNotesTable(notes) {
-    if (!notes || !notes.length) return "";
-    var html = '<div class="assessment-sub"><strong>Grammar Pattern Notes:</strong></div>';
-    html += '<table class="neatness-sub-table"><thead><tr><th>Pattern</th><th>Level</th><th>Comment</th></tr></thead><tbody>';
-    for (var i = 0; i < notes.length; i++) {
-        html += '<tr><td>' + escapeHtml(notes[i].pattern) + '</td><td>' + escapeHtml(notes[i].level) + '</td><td>' + escapeHtml(notes[i].comment) + '</td></tr>';
+function renderNoticeTable(rows) {
+    if (!rows || !rows.length) return "";
+    var html = '<div class="assessment-sub"><strong>What I noticed:</strong></div>';
+    html += '<table class="notice-table"><thead><tr><th>Area</th><th>Comment</th></tr></thead><tbody>';
+    for (var i = 0; i < rows.length; i++) {
+        html += '<tr><td>' + escapeHtml(rows[i].area || "Overall") + '</td><td>' + renderMarkdownBold(rows[i].comment || "No detailed note available yet.") + '</td></tr>';
     }
     html += '</tbody></table>';
     return html;
 }
+
+function normalizeNoticeRows(rows) {
+    var output = [];
+    if (!rows || !rows.length) return output;
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i] || {};
+        var area = row.area || row.pattern || row.criterion || row.label || "Overall";
+        var comment = row.comment || row.note || row.evidence || row.reason || "";
+        if (!comment && row.level) comment = row.level;
+        if (area || comment) output.push({ area: area || "Overall", comment: comment || "No detailed note available yet." });
+    }
+    return output;
+}
+
+
 
 function polishFeedback(quickRubric, detailed, originalText, correctedText, flowData) {
     var conventionSource = (correctedText && correctedText.trim()) ? correctedText : originalText;
@@ -10132,6 +10181,10 @@ function polishFeedback(quickRubric, detailed, originalText, correctedText, flow
     if (detailed.categories["Grammar"] && detailed.categories["Grammar"].score != null) {
         var grammarEvidence = buildGrammarEvidenceFromData(detailed.categories["Grammar"].score, originalText, correctedText);
         if (grammarEvidence) detailed.categories["Grammar"].evidence = toOneSentence(teacherizeWording(grammarEvidence, "Grammar", detailed.categories["Grammar"].score));
+        detailed.categories["Grammar"].evidence = alignGrammarWordingWithErrorData(detailed.categories["Grammar"].evidence, detailed.categories["Grammar"]);
+        if (detailed.categories["Grammar"].teacherComment) {
+            detailed.categories["Grammar"].teacherComment = alignGrammarWordingWithErrorData(detailed.categories["Grammar"].teacherComment, detailed.categories["Grammar"]);
+        }
     }
 
     var flowQuick = quickRubric["Flow"];
@@ -10264,6 +10317,28 @@ function extractScoreNearLabel(text, labelVariants) {
     return null;
 }
 
+function parseWhatINoticedRowsFromBody(body) {
+    var rows = [];
+    var text = String(body || "");
+    var blockMatch = text.match(/-\s*(?:\*\*)?What I Noticed:?(?:\*\*)?\s*([\s\S]*?)(?=\n-\s*(?:\*\*)?Growth Tip:?|\n\*\*|$)/i);
+    if (!blockMatch) blockMatch = text.match(/-\s*(?:\*\*)?What I noticed:?(?:\*\*)?\s*([\s\S]*?)(?=\n-\s*(?:\*\*)?Growth Tip:?|\n\*\*|$)/i);
+    if (!blockMatch) return rows;
+    var block = blockMatch[1] || "";
+    var pairRegex = /-\s*Area:\s*([^\n]+)\n\s*Comment:\s*([^\n]+)/gi;
+    var m;
+    while ((m = pairRegex.exec(block)) !== null) {
+        rows.push({ area: (m[1] || "").trim(), comment: (m[2] || "").trim() });
+    }
+    if (rows.length) return rows;
+    var simpleRegex = /-\s*([^:\n]+):\s*([^\n]+)/g;
+    while ((m = simpleRegex.exec(block)) !== null) {
+        var area = (m[1] || "").trim();
+        var comment = (m[2] || "").trim();
+        if (area && comment && !/^comment$/i.test(area)) rows.push({ area: area, comment: comment });
+    }
+    return rows;
+}
+
 function parseDetailedAssessment(step3Text) {
     var result = {
         categories: {},
@@ -10285,10 +10360,16 @@ function parseDetailedAssessment(step3Text) {
         var growthTip = "";
         var contentOrg = "";
         var sentenceVariety = "";
+        var teacherComment = "";
+        var noticeRows = [];
 
+        var t = body.match(/-\s*(?:\*\*)?Teacher Comment:?(?:\*\*)?\s*([^\n]+)\s*(?:\n|$)/i);
+        if (t) teacherComment = t[1].trim();
+        noticeRows = parseWhatINoticedRowsFromBody(body);
         var e = body.match(/-\s*Evidence:\s*"?([^\n]+?)"?\s*(?:\n|$)/i);
         if (e) evidence = e[1].trim();
-        var g = body.match(/-\s*Growth Tip:\s*([^\n]+)\s*(?:\n|$)/i);
+        if (!evidence && noticeRows.length) evidence = noticeRows[0].comment || "";
+        var g = body.match(/-\s*(?:\*\*)?Growth Tip:?(?:\*\*)?\s*([^\n]+)\s*(?:\n|$)/i);
         if (g) growthTip = g[1].trim();
 
         if (label === "4. Organization") {
@@ -10306,6 +10387,8 @@ function parseDetailedAssessment(step3Text) {
         return {
             score: parseRubricScore(m[1]),
             evidence: evidence,
+            teacherComment: teacherComment,
+            noticeRows: noticeRows,
             growthTip: growthTip,
             contentOrganization: contentOrg,
             sentenceVariety: sentenceVariety,
@@ -10659,59 +10742,57 @@ function buildFlowSentenceVarietyLabel(flowData) {
 function buildFlowPatternSummary(flowData) {
     if (!flowData || !flowData.sentenceCount) return "The writing needs more sentence evidence before a clear flow pattern can be described.";
     var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
-    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
     var starterWord = starterInfo.mostCommonStarter || "";
     var starterBad = starterWord && starterInfo.ratio > 0.25;
-    var counts = "short: " + flowData.shortCount + ", medium: " + flowData.mediumCount + ", long: " + flowData.longCount;
     if (starterBad && (flowData.shortCount || 0) === 0) {
-        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '". The sentence lengths are mostly medium and long (' + counts + '), so adding a few shorter sentences could also improve rhythm.';
+        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '". Adding a few shorter sentences could also improve rhythm.';
     }
     if (starterBad) {
-        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '". The sentence length pattern is ' + counts + '.';
+        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '".';
     }
     if ((flowData.shortCount || 0) === 0) {
-        return 'Your writing uses mostly medium and long sentences (' + counts + '), so adding a few shorter sentences could create more rhythm and contrast.';
+        return "Your writing uses mostly medium and long sentences, so adding a few shorter sentences could create more rhythm and contrast.";
     }
     if ((flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0) {
-        return 'Some short sentences appear close together (' + counts + '), so combining a few ideas could make the rhythm smoother.';
+        return "Some short sentences appear close together, so combining a few ideas could make the rhythm smoother.";
     }
-    return 'Your sentence rhythm is based on this pattern: ' + counts + '. Keep varying sentence lengths and openings so the writing reads smoothly.';
+    return "Your sentence rhythm is generally understandable. Keep varying sentence lengths and openings so the writing reads smoothly.";
 }
 
 function buildFlowPatternNotes(flowData) {
     if (!flowData || !flowData.sentenceCount) return [];
     var notes = [];
-    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
-    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "", count: 0 };
     var starterWord = starterInfo.mostCommonStarter || "";
+    var starterBad = starterWord && starterInfo.ratio > 0.25;
     var lengthNote;
     if ((flowData.shortCount || 0) === 0) {
-        lengthNote = "0 short, " + flowData.mediumCount + " medium, " + flowData.longCount + " long sentences. A few shorter sentences could add contrast.";
+        lengthNote = "The writing uses mostly medium and long sentences. Adding a few shorter sentences could add contrast.";
     } else if ((flowData.longCount || 0) === 0) {
-        lengthNote = flowData.shortCount + " short, " + flowData.mediumCount + " medium, 0 long sentences. A longer sentence or two could smooth the rhythm.";
+        lengthNote = "The writing uses shorter and medium sentences. Adding one or two longer sentences could smooth the rhythm.";
+    } else if ((flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0) {
+        lengthNote = "Some short sentences appear close together. Combining a few ideas could make the rhythm smoother.";
     } else {
-        lengthNote = flowData.shortCount + " short, " + flowData.mediumCount + " medium, " + flowData.longCount + " long sentences.";
+        lengthNote = "The writing uses a mix of sentence lengths. Keep varying the rhythm as you revise.";
     }
-    notes.push({ area: "Sentence Length", note: lengthNote });
+    notes.push({ area: "Sentence length", comment: lengthNote });
 
-    var starterNote = starterWord ? ((flowData.starterInfo.count || 0) + " out of " + flowData.sentenceCount + " sentences begin with \"" + starterWord + "\"" + (starterPct ? " (" + starterPct + "%)." : ".")) : "Sentence starters do not show a clear repeated pattern.";
-    notes.push({ area: "Sentence Starters", note: starterNote });
+    var starterNote;
+    if (starterBad) {
+        starterNote = 'Many sentences begin with "' + starterWord + '", which can make the rhythm feel repetitive.';
+    } else if (starterWord) {
+        starterNote = "Sentence starters show some variety and do not create a major repeated pattern.";
+    } else {
+        starterNote = "Sentence starters do not show a clear repeated pattern.";
+    }
+    notes.push({ area: "Sentence starters", comment: starterNote });
 
-    var connectionNote = "The events mostly connect from one moment to the next; use transition words or sentence openings to make jumps even smoother.";
-    notes.push({ area: "Connections", note: connectionNote });
+    var connectionNote = "The events mostly connect from one moment to the next; transition words or stronger sentence openings could make the jumps even smoother.";
+    notes.push({ area: "Connections", comment: connectionNote });
     return notes;
 }
 
-function renderPatternNotesTable(notes) {
-    if (!notes || !notes.length) return "";
-    var html = '<div class="assessment-sub"><strong>Pattern Notes:</strong></div>';
-    html += '<table class="neatness-sub-table"><thead><tr><th>Area</th><th>What the tool noticed</th></tr></thead><tbody>';
-    for (var i = 0; i < notes.length; i++) {
-        html += '<tr><td>' + escapeHtml(notes[i].area) + '</td><td>' + escapeHtml(notes[i].note) + '</td></tr>';
-    }
-    html += '</tbody></table>';
-    return html;
-}
+
 
 function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
     var key = "Flow";
@@ -10726,16 +10807,6 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
         quickItem.reason = baseFlowReason ? baseFlowReason + " " + computedFlowNote : computedFlowNote;
     }
     step1Parsed.quickRubric[key] = quickItem;
-
-    function buildSvLabel(fd) {
-        return buildFlowSentenceVarietyLabel(fd);
-    }
-    var svMap = {
-        "Very Good": buildSvLabel(flowData),
-        "Good": buildSvLabel(flowData),
-        "Developing": buildSvLabel(flowData),
-        "Needs Improvement": buildSvLabel(flowData)
-    };
 
     if (!detailedItem) {
         detailedItem = {
@@ -12911,11 +12982,11 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "Rules:",
         "1. Use only these rubric scores: 10, 9, 8, 7, 6, 5, 4.",
         "2. Keep feedback honest but warm and encouraging.",
-        "3. Make the evidence actually match the category. For Spelling & Punctuation, evidence must focus on spelling, punctuation, and capitalization accuracy - not content.",
-        "4. For Grammar, focus on grammar evidence such as verb tense, subject-verb agreement, sentence correctness, or punctuation affecting grammar.",
+        "3. Make the What I noticed rows actually match the category. For Spelling & Punctuation, comments must focus on spelling, punctuation, and capitalization accuracy - not content.",
+        "4. For Grammar, focus on grammar patterns such as verb tense, subject-verb agreement, sentence correctness, or punctuation affecting grammar.",
         "5. For Word Choice, focus on repeated or precise vocabulary choices.",
         "6. For Organization, focus only on content order: structure, beginning/middle/end, and logical sequencing of ideas.",
-        "7. For Flow, focus only on sentence rhythm: transitions, sentence starters, sentence variety, and smoothness of reading. Use Flow Pattern instead of Sentence Variety. Make the Evidence match the main flow issue. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
+        "7. For Flow, focus only on sentence rhythm: transitions, sentence starters, sentence variety, and smoothness of reading. Make the What I noticed rows match the computed flow data. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
         "8. Mention the target word count only if the actual word count is below the target word count.",
         "9. Choose ONE grow goal only.",
         "10. Keep the same rubric scores from the Quick Rubric Snapshot unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the quick rubric.",
@@ -12924,6 +12995,12 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "12a. Only point out errors that truly exist in the original student writing. Do not use a correct word or capital as your correction example.",
         "12b. If a category score is below 10, avoid overclaiming with words like perfect, perfectly, flawless, or always correct.",
         "12c. Use teacher-natural language (warm and specific). Avoid robotic phrasing like there is room to improve. Prefer 'your writing' over 'the piece'.",
+        "12d. Teacher Comment rules: write exactly one student-friendly sentence, use the score and the What I Noticed evidence, and do not introduce new evidence that is not supported by the row comments.",
+        "12e. Teacher Comment rules: do not mention percentages, issue counts, word counts, sentence counts, weights, calculations, score basis, or internal scoring rules.",
+        "12f. Teacher Comment score bands: 10 = excellent with a small refinement if needed; 8-9 = strong or good with one improvement area; 6-7 = developing and encouraging; 4-5 = needs support with one clear priority.",
+        "12g. If the score is below 10, the Teacher Comment should mention a strength first and then one improvement area when evidence supports it.",
+        "12h. Growth Tips must be specific actions the student can do during revision. Avoid generic tips like improve your writing, add more details, or check your work unless the action says exactly what to check or add.",
+        "12i. Use category-specific evidence: Ideas = topic/detail/development; Grammar = sentence correctness/verb tense/agreement; Word Choice = vocabulary precision/variety; Organization = beginning/middle/end/sequence/paragraphing; Flow = rhythm/starters/transitions/sentence variety; Spelling & Punctuation = spelling/capitalization/punctuation.",
         "13. Keep the final encouragement line to one warm sentence.",
         "",
         "Grow Goal options:",
@@ -12933,29 +13010,49 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "## Detailed Writing Assessment",
         "",
         "**1. Clear Ideas & Details:** [score]/10",
-        "- Evidence: [1-2 matching examples]",
+        "- Teacher Comment: [one student-friendly sentence explaining the score]",
+        "- What I Noticed:",
+        "  - Area: Details",
+        "    Comment: [specific comment based on the rubric and writing]",
         "- Growth Tip: [age-appropriate suggestion]",
         "",
         "**2. Grammar:** [score]/10",
-        "- Evidence: [matching example]",
+        "- Teacher Comment: [one student-friendly sentence explaining the score]",
+        "- What I Noticed:",
+        "  - Area: Grammar patterns",
+        "    Comment: [specific comment about grammar patterns]",
         "- Growth Tip: [suggestion]",
         "",
         "**3. Word Choice:** [score]/10",
-        "- Evidence: [matching example]",
+        "- Teacher Comment: [one student-friendly sentence explaining the score]",
+        "- What I Noticed:",
+        "  - Area: Vocabulary",
+        "    Comment: [specific comment about word choice]",
         "- Growth Tip: [suggestion]",
         "",
         "**4. Organization:** [score]/10",
-        "- Content Organization: [how well the writing is structured and sequenced]",
-        "- Evidence: [matching example from the writing]",
+        "- Teacher Comment: [one student-friendly sentence explaining the score]",
+        "- What I Noticed:",
+        "  - Area: Content organization",
+        "    Comment: [how well the writing is structured and sequenced]",
+        "  - Area: Story structure",
+        "    Comment: [matching example from the writing]",
         "- Growth Tip: [one suggestion about structure, order, or sequencing]",
         "",
         "**5. Flow:** [score]/10",
-        "- Flow Pattern: [overall pattern in rhythm, sentence starters, transitions, and sentence-length variety]",
-        "- Evidence: [evidence that matches the main flow issue]",
+        "- Teacher Comment: [one student-friendly sentence explaining the score]",
+        "- What I Noticed:",
+        "  - Area: Sentence rhythm",
+        "    Comment: [comment that matches the computed flow data]",
+        "  - Area: Sentence starters",
+        "    Comment: [comment that matches the computed flow data]",
         "- Growth Tip: [one suggestion that targets the main flow issue first]",
         "",
         "**6. Spelling & Punctuation:** [score]/10",
-        "- Evidence: [matching example]",
+        "- Teacher Comment: [one student-friendly sentence explaining the score]",
+        "- What I Noticed:",
+        "  - Area: Conventions",
+        "    Comment: [specific comment about spelling, punctuation, or capitalization]",
         "- Growth Tip: [suggestion]",
         "",
         "## Grow Goal Selection",
@@ -12982,6 +13079,548 @@ function getAssessmentScorePill(score) {
     return '<span class="assessment-score-pill ' + cls + '">' + escapeHtml(getEvidenceLabel(score)) + '</span>';
 }
 
+function getStudentFriendlyAreaName(key) {
+    if (key === "Ideas & Details") return "Details";
+    if (key === "Word Choice") return "Vocabulary";
+    if (key === "Spelling & Punctuation") return "Conventions";
+    if (key === "Organization") return "Story structure";
+    if (key === "Grammar") return "Grammar patterns";
+    if (key === "Flow") return "Sentence rhythm";
+    if (key === "Neatness") return "Handwriting";
+    return "Overall";
+}
+
+
+
+function countWordsInComment(text) {
+    var value = String(text || "").trim();
+    if (!value) return 0;
+    var parts = value.split(/\s+/);
+    return parts.length;
+}
+
+function cleanTeacherCommentText(text, key, score) {
+    var value = toOneSentence(teacherizeWording(String(text || "").trim(), key, score));
+    value = value.replace(/\s+/g, " ").trim();
+    value = value.replace(/\bthe piece\b/gi, "your writing");
+    value = value.replace(/\bthere is room to improve\b/gi, "you can keep improving");
+    value = value.replace(/\s+([,.!?])/g, "$1");
+    return value;
+}
+
+function commentHasRawScoringData(text) {
+    var value = String(text || "");
+    if (/\d+\s*(%|\/|out of|issues?|errors?|words?|sentences?|points?|percent|edits?)/i.test(value)) return true;
+    if (/\b(score|rubric|density|weighted|weight|calculation|calculated)\b/i.test(value)) return true;
+    if (/\(\s*short\s*:/i.test(value)) return true;
+    return false;
+}
+
+function categoryMismatchInTeacherComment(key, text) {
+    var value = String(text || "");
+    if (key === "Grammar") {
+        return /\b(spelling|capitalization|handwriting|letter formation|spacing|vocabulary|word choice)\b/i.test(value);
+    }
+    if (key === "Flow") {
+        return /\b(beginning,? middle,? and end|story structure|spelling|capitalization|handwriting|grammar errors?)\b/i.test(value);
+    }
+    if (key === "Organization") {
+        return /\b(sentence rhythm|sentence starters|sentence length|spelling|capitalization|handwriting|grammar errors?)\b/i.test(value);
+    }
+    if (key === "Word Choice") {
+        return /\b(spelling|punctuation|capitalization|handwriting|sentence boundaries|verb tense)\b/i.test(value);
+    }
+    if (key === "Spelling & Punctuation") {
+        return /\b(story structure|sentence rhythm|sentence starters|word choice|vocabulary|handwriting)\b/i.test(value);
+    }
+    if (key === "Neatness") {
+        return /\b(grammar|verb tense|sentence rhythm|story structure|vocabulary|word choice)\b/i.test(value);
+    }
+    return false;
+}
+
+function getEvidenceTokens(rows) {
+    var bag = {};
+    var stop = {
+        your: true, writing: true, the: true, and: true, but: true, with: true, that: true,
+        this: true, from: true, into: true, some: true, most: true, more: true, could: true,
+        would: true, should: true, need: true, needs: true, clear: true, mostly: true,
+        area: true, comment: true, reader: true, makes: true, make: true, time: true
+    };
+    rows = rows || [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i] || {};
+        var text = String((row.area || "") + " " + (row.comment || "")).toLowerCase();
+        var words = text.match(/[a-z]{4,}/g) || [];
+        for (var j = 0; j < words.length; j++) {
+            if (!stop[words[j]]) bag[words[j]] = true;
+        }
+    }
+    return bag;
+}
+
+function commentOverlapsEvidence(text, rows) {
+    if (!rows || !rows.length) return true;
+    var bag = getEvidenceTokens(rows);
+    var value = String(text || "").toLowerCase();
+    var words = value.match(/[a-z]{4,}/g) || [];
+    for (var i = 0; i < words.length; i++) {
+        if (bag[words[i]]) return true;
+    }
+    return false;
+}
+
+function isValidTeacherComment(candidate, key, item, rows) {
+    var text = String(candidate || "").trim();
+    if (!text) return false;
+    if (countWordsInComment(text) > 38) return false;
+    if (commentHasRawScoringData(text)) return false;
+    if (/\b(perfect|perfectly|flawless|always correct)\b/i.test(text) && Number(item.score) < 10) return false;
+    if (Number(item.score) <= 6 && /^your\s+[^.]{0,35}\s+(is|are)\s+(excellent|strong|very strong|polished|very clear)/i.test(text)) return false;
+    if (Number(item.score) >= 8 && /\b(needs support|hard to understand|difficult to follow|very difficult)\b/i.test(text)) return false;
+    if (/\bthere is room to improve\b/i.test(text)) return false;
+    if (categoryMismatchInTeacherComment(key, text)) return false;
+    if (!commentOverlapsEvidence(text, rows)) return false;
+    return true;
+}
+
+function getCategorySkillMeta(key) {
+    if (key === "Ideas & Details") return { subject: "your ideas and details", verb: "are" };
+    if (key === "Grammar") return { subject: "your grammar", verb: "is" };
+    if (key === "Word Choice") return { subject: "your word choice", verb: "is" };
+    if (key === "Organization") return { subject: "your organization", verb: "is" };
+    if (key === "Flow") return { subject: "your sentence flow", verb: "is" };
+    if (key === "Spelling & Punctuation") return { subject: "your spelling and punctuation", verb: "are" };
+    if (key === "Neatness") return { subject: "your handwriting", verb: "is" };
+    return { subject: "your writing", verb: "is" };
+}
+
+function capitalizeFirst(text) {
+    var value = String(text || "");
+    if (!value) return value;
+    return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function isNeutralNoticeComment(text) {
+    var value = String(text || "");
+    if (/\b(not the main issue|not a major issue|not the main reason|do not appear to be the main|does not appear to be the main)\b/i.test(value)) return true;
+    if (/\b(mostly manageable|mostly clear|mostly consistent|mostly organized|mostly stays|only a few small|only a few)\b/i.test(value)) return true;
+    return false;
+}
+
+function isNeedNoticeComment(text) {
+    var value = String(text || "");
+    if (!value || isNeutralNoticeComment(value)) return false;
+    return /\b(need|needs|could|try|add|adding|check|checking|proofread|repetitive|crowded|uneven|harder|difficult|drifts|improve|stronger|clearer|smoother|polish|developing|support|several|many|interrupts|hard|messy|rushed|incomplete|combine|combining|repeat|repeated)\b/i.test(value);
+}
+
+function pickNoticeComment(rows, wantNeed) {
+    rows = rows || [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i] || {};
+        var comment = String(row.comment || "").trim();
+        if (!comment) continue;
+        if (wantNeed && isNeedNoticeComment(comment)) return comment;
+        if (!wantNeed && !isNeedNoticeComment(comment)) return comment;
+    }
+    return "";
+}
+
+function lowerFirstForJoin(text) {
+    var value = String(text || "").trim();
+    if (!value) return value;
+    value = value.replace(/[.?!]+$/g, "");
+    return value.charAt(0).toLowerCase() + value.slice(1);
+}
+
+function makeSentence(text) {
+    var value = String(text || "").replace(/\s+/g, " ").trim();
+    value = value.replace(/\s+([,.!?])/g, "$1");
+    if (!/[.?!]$/.test(value)) value += ".";
+    return value;
+}
+
+function buildEvidenceBasedTeacherComment(key, item, rows) {
+    item = item || {};
+    rows = rows || [];
+    var score = Number(item.score);
+    var hasScore = isFinite(score);
+    var meta = getCategorySkillMeta(key);
+    var subject = meta.subject;
+    var verb = meta.verb;
+    var subjectStart = capitalizeFirst(subject);
+    var need = pickNoticeComment(rows, true);
+    var strength = pickNoticeComment(rows, false);
+    var detail = need || strength || item.evidence || "this area shows developing skill";
+
+    if (hasScore && score >= 9) {
+        if (strength) return makeSentence(subjectStart + " " + verb + " strong, and " + lowerFirstForJoin(strength));
+        return makeSentence(subjectStart + " " + verb + " strong, with one small area to polish next time");
+    }
+    if (hasScore && score >= 7) {
+        if (need) return makeSentence(subjectStart + " " + verb + " mostly clear, but " + lowerFirstForJoin(need));
+        return makeSentence(subjectStart + " " + verb + " mostly clear, and " + lowerFirstForJoin(detail));
+    }
+    if (hasScore) {
+        if (need) return makeSentence(subjectStart + " " + verb + " developing, and " + lowerFirstForJoin(need));
+        return makeSentence(subjectStart + " " + verb + " developing, and this area needs more attention during revision");
+    }
+    return makeSentence("There is not enough evidence to score " + subject + " accurately yet");
+}
+
+function getScoreBandKey(score) {
+    var n = Number(score);
+    if (!isFinite(n)) return "missing";
+    if (n >= 10) return "excellent";
+    if (n >= 8) return "strong";
+    if (n >= 6) return "developing";
+    return "support";
+}
+
+function getFeedbackBuilderName(key) {
+    if (key === "Ideas & Details") return "buildIdeasNoticeRows + buildGrowthTip";
+    if (key === "Grammar") return "buildGrammarNoticeRows + buildGrowthTip";
+    if (key === "Word Choice") return "buildVocabularyNoticeRows + buildGrowthTip";
+    if (key === "Organization") return "buildOrganizationNoticeRows + buildGrowthTip";
+    if (key === "Flow") return "buildFlowNoticeRows + buildGrowthTip";
+    if (key === "Spelling & Punctuation") return "buildConventionsNoticeRows + buildGrowthTip";
+    if (key === "Neatness") return "buildNeatnessNoticeRows + buildGrowthTip";
+    return "buildGeneralFeedback";
+}
+
+function buildTeacherComment(key, item, rows) {
+    item = item || {};
+    rows = rows || buildNoticeRowsForCategory(key, item);
+    if (item.teacherComment) {
+        var candidate = cleanTeacherCommentText(item.teacherComment, key, item.score);
+        if (isValidTeacherComment(candidate, key, item, rows)) return candidate;
+    }
+    return cleanTeacherCommentText(buildEvidenceBasedTeacherComment(key, item, rows), key, item.score);
+}
+
+function isGenericGrowthTip(text) {
+    var value = String(text || "").replace(/\s+/g, " ").trim().toLowerCase();
+    if (!value) return true;
+    if (value === "check your work" || value === "check my work" || value === "improve your writing") return true;
+    if (value === "add more details" || value === "use better words" || value === "fix your grammar") return true;
+    if (/^(try to )?(improve|work on|practice)\s+(it|this|this area|your writing)\.?$/i.test(value)) return true;
+    if (/^(keep )?(checking|working|practicing)\.?$/i.test(value)) return true;
+    return false;
+}
+
+function growthTipLooksActionable(text) {
+    var value = String(text || "");
+    if (!value) return false;
+    return /\b(add|choose|check|circle|underline|reread|rewrite|revise|replace|plan|use|try|combine|split|start|look|leave|space|write|pick|read)\b/i.test(value);
+}
+
+function cleanGrowthTipText(text, key, score) {
+    var value = teacherizeWording(softenOverclaim(String(text || ""), score), key, score);
+    value = toOneSentence(value).replace(/\s+/g, " ").trim();
+    value = value.replace(/\bthe piece\b/gi, "your writing");
+    value = value.replace(/\s+([,.!?])/g, "$1");
+    return value;
+}
+
+function isValidGrowthTip(candidate, key, item, rows) {
+    var text = String(candidate || "").trim();
+    if (!text) return false;
+    if (countWordsInComment(text) > 34) return false;
+    if (commentHasRawScoringData(text)) return false;
+    if (categoryMismatchInTeacherComment(key, text)) return false;
+    if (isGenericGrowthTip(text)) return false;
+    if (!growthTipLooksActionable(text)) return false;
+    return true;
+}
+
+function buildActionGrowthTip(key, item, rows) {
+    item = item || {};
+    rows = rows || [];
+    var score = Number(item.score);
+    var band = getScoreBandKey(score);
+    var need = pickNoticeComment(rows, true);
+
+    if (key === "Ideas & Details") {
+        if (band === "excellent" || band === "strong") return "Choose one important moment and add one extra detail that shows what the character saw, heard, or felt.";
+        return "Pick the most important part and add two clear details so the reader can picture it.";
+    }
+    if (key === "Grammar") {
+        if (/tense|verb/i.test(need)) return "When you revise, underline the action verbs and check that they stay in the same tense.";
+        if (/sentence|break|punctuation|run/i.test(need)) return "Reread each sentence aloud and add a period where one complete idea ends.";
+        return "Reread one paragraph slowly and check each sentence for a clear subject, verb, and ending mark.";
+    }
+    if (key === "Word Choice") {
+        return "Choose two common words and replace them with more exact words that help the reader picture the scene.";
+    }
+    if (key === "Organization") {
+        if (/paragraph/i.test(need)) return "Mark where the beginning, middle, and ending change, then start a new paragraph for one new part.";
+        return "Before revising, number the events in order and add one transition word where the order feels unclear.";
+    }
+    if (key === "Flow") {
+        if (/starter|begin|open|same way/i.test(need)) return "Rewrite three sentence beginnings so they start with a time word, place detail, or different subject.";
+        if (/short|choppy|combine/i.test(need)) return "Choose two short sentences that belong together and combine them into one smoother sentence.";
+        return "Read your writing aloud and revise one sentence that sounds bumpy or too much like the sentence before it.";
+    }
+    if (key === "Spelling & Punctuation") {
+        return "Reread one sentence at a time and check capitals, spelling, commas, and ending punctuation before moving on.";
+    }
+    if (key === "Neatness") {
+        if (/spacing|crowded/i.test(need)) return "Leave a finger-width space between words so each word is easier to read.";
+        if (/line|drifts/i.test(need)) return "Slow down and keep the bottoms of your letters sitting on the notebook line.";
+        if (/formation|letter/i.test(need)) return "Slow down on tricky letters and make each letter shape complete before moving to the next word.";
+        return "Choose one handwriting focus, such as spacing or line use, and check it after each sentence.";
+    }
+    return "Choose one sentence to revise carefully so this part of your writing becomes clearer for the reader.";
+}
+
+function buildGrowthTip(key, item, rows) {
+    item = item || {};
+    rows = rows || [];
+    if (item.growthTip) {
+        var candidate = cleanGrowthTipText(item.growthTip, key, item.score);
+        if (isValidGrowthTip(candidate, key, item, rows)) return candidate;
+    }
+    return cleanGrowthTipText(buildActionGrowthTip(key, item, rows), key, item.score);
+}
+
+function getGrowthTipSource(key, item, rows) {
+    item = item || {};
+    if (item.growthTip) {
+        var candidate = cleanGrowthTipText(item.growthTip, key, item.score);
+        if (isValidGrowthTip(candidate, key, item, rows)) return "AI growth tip passed validation.";
+        return "Fallback action-based growth tip used because the AI growth tip was generic, unsupported, or not actionable.";
+    }
+    return "Fallback action-based growth tip used because no AI growth tip was available.";
+}
+
+function getMainEvidenceSummary(rows) {
+    rows = rows || [];
+    var need = pickNoticeComment(rows, true);
+    if (need) return need;
+    if (rows.length) return (rows[0].area ? rows[0].area + ": " : "") + (rows[0].comment || "Evidence row selected.");
+    return "No main evidence row was available.";
+}
+
+function copyFeedbackItemForDisplay(key, item) {
+    var source = item || {};
+    var copy = {};
+    var prop;
+    for (prop in source) {
+        if (Object.prototype.hasOwnProperty.call(source, prop)) copy[prop] = source[prop];
+    }
+    if (key === "Grammar") {
+        if (copy.evidence) copy.evidence = alignGrammarWordingWithErrorData(copy.evidence, copy);
+        if (copy.teacherComment) copy.teacherComment = alignGrammarWordingWithErrorData(copy.teacherComment, copy);
+    }
+    return copy;
+}
+
+function cleanNoticeRowsForDisplay(key, item, rows) {
+    var output = [];
+    rows = rows || [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i] || {};
+        var comment = row.comment || "";
+        if (key === "Grammar") comment = alignGrammarWordingWithErrorData(comment, item);
+        output.push({ area: row.area || "Overall", comment: comment || "No detailed note available yet." });
+    }
+    return output;
+}
+
+function buildStudentFeedbackForCategory(key, item) {
+    var displayItem = copyFeedbackItemForDisplay(key, item || {});
+    var rows = buildNoticeRowsForCategory(key, displayItem);
+    rows = cleanNoticeRowsForDisplay(key, displayItem, rows);
+    if (!rows.length) rows.push({ area: getStudentFriendlyAreaName(key), comment: "No detailed note available yet." });
+    var teacherComment = buildTeacherComment(key, displayItem, rows);
+    var growthTip = buildGrowthTip(key, displayItem, rows);
+    var audit = {
+        builderName: getFeedbackBuilderName(key),
+        scoreBand: getAuditScoreBandLabel(displayItem.score),
+        mainEvidence: getMainEvidenceSummary(rows),
+        teacherCommentSource: getAuditTeacherCommentSource(key, displayItem, rows),
+        growthTipSource: getGrowthTipSource(key, displayItem, rows)
+    };
+    return {
+        teacherComment: teacherComment,
+        noticeRows: rows,
+        growthTip: growthTip,
+        audit: audit
+    };
+}
+
+function getNeatnessComment(kind, score) {
+    var n = Number(score);
+    if (!isFinite(n)) return "There is not enough clear handwriting evidence to comment on this area.";
+    if (kind === "letterFormation") {
+        if (n >= 5) return "Letters are clear, complete, and easy to recognize.";
+        if (n >= 4) return "Most letters are clear and easy to read.";
+        if (n >= 3) return "Some letters are clear, but several need more careful shaping.";
+        if (n >= 2) return "Many letters are hard to read because they look rushed or incomplete.";
+        return "Letter shapes need much more care so the writing is easier to read.";
+    }
+    if (kind === "spacing") {
+        if (n >= 5) return "Spaces between words are clear and consistent.";
+        if (n >= 4) return "Most spacing is clear, with only a few crowded places.";
+        if (n >= 3) return "Some words are crowded together or spaced unevenly.";
+        if (n >= 2) return "Many words are crowded together, which makes the writing harder to read.";
+        return "Spacing needs much more care so the reader can tell where words begin and end.";
+    }
+    if (kind === "stayingOnLine") {
+        if (n >= 5) return "The writing stays neatly on the lines throughout the page.";
+        if (n >= 4) return "The writing mostly stays on the lines, with only a few small slips.";
+        if (n >= 3) return "The writing sometimes drifts above or below the lines.";
+        if (n >= 2) return "The writing often moves off the lines, which makes the page look less neat.";
+        return "Staying on the lines needs much more attention.";
+    }
+    if (kind === "sizeConsistency") {
+        if (n >= 5) return "Letter size is consistent and fits the notebook lines well.";
+        if (n >= 4) return "Letter size is mostly consistent, with only a few letters that change size.";
+        if (n >= 3) return "Letter size changes noticeably in some places.";
+        if (n >= 2) return "Letter size changes often, making the writing harder to read.";
+        return "Letter size is very uneven and needs more control.";
+    }
+    if (kind === "penControl") {
+        if (n >= 5) return "Lines are clean and controlled, with no distracting marks.";
+        if (n >= 4) return "There are only a few small marks or corrections.";
+        if (n >= 3) return "Some smudges, cross-outs, or messy corrections distract from the writing.";
+        if (n >= 2) return "Many messy marks or heavy corrections make the page harder to read.";
+        return "Marks and corrections make the writing very difficult to read.";
+    }
+    if (kind === "pageLayoutParagraphs") {
+        if (n >= 5) return "The page is well organized, with clear paragraphs and neat use of space.";
+        if (n >= 4) return "The page is mostly organized, and the writing usually lines up well.";
+        if (n >= 3) return "The page layout is uneven in some places.";
+        if (n >= 2) return "The page layout makes the writing harder to follow.";
+        return "The page needs much clearer organization.";
+    }
+    return "This handwriting area was reviewed.";
+}
+
+function buildNeatnessNoticeRows(item) {
+    var rows = [];
+    item = item || {};
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var ss = item.subScores || {};
+    rows.push({ area: "Letter formation", comment: getNeatnessComment("letterFormation", ss.letterFormation) });
+    rows.push({ area: "Spacing", comment: getNeatnessComment("spacing", ss.spacing) });
+    rows.push({ area: "Staying on the line", comment: getNeatnessComment("stayingOnLine", ss.stayingOnLine) });
+    rows.push({ area: "Size consistency", comment: getNeatnessComment("sizeConsistency", ss.sizeConsistency) });
+    rows.push({ area: "Pen control and marks", comment: getNeatnessComment("penControl", ss.penControl) });
+    rows.push({ area: "Page layout and paragraphs", comment: getNeatnessComment("pageLayoutParagraphs", ss.pageLayoutParagraphs) });
+    return rows;
+}
+
+function addNoticeRowIfNew(rows, area, comment) {
+    area = String(area || "Overall").trim();
+    comment = String(comment || "").trim();
+    if (!comment) return;
+    for (var i = 0; i < rows.length; i++) {
+        if (String(rows[i].area || "") === area && String(rows[i].comment || "") === comment) return;
+    }
+    rows.push({ area: area, comment: comment });
+}
+
+function buildIdeasNoticeRows(item) {
+    item = item || {};
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    if (item.evidence) {
+        addNoticeRowIfNew(rows, "Main idea and details", item.evidence);
+    }
+    if (item.score != null && Number(item.score) >= 9 && !rows.length) {
+        addNoticeRowIfNew(rows, "Development", "The writing gives the reader clear ideas and useful details.");
+    }
+    return rows;
+}
+
+function buildGrammarNoticeRows(item) {
+    item = item || {};
+    if (item.patternNotes && item.patternNotes.length) return normalizeNoticeRows(item.patternNotes);
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    addNoticeRowIfNew(rows, "Grammar patterns", item.evidence);
+    return rows;
+}
+
+function buildVocabularyNoticeRows(item) {
+    item = item || {};
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    addNoticeRowIfNew(rows, "Vocabulary", item.evidence);
+    if (item.score != null && Number(item.score) < 8 && rows.length === 1) {
+        addNoticeRowIfNew(rows, "Word variety", "A few more specific words could make the writing easier to picture.");
+    }
+    return rows;
+}
+
+function buildOrganizationNoticeRows(item) {
+    item = item || {};
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    addNoticeRowIfNew(rows, "Content organization", item.contentOrganization);
+    addNoticeRowIfNew(rows, "Beginning, middle, and ending", item.evidence);
+    if (item.score != null && Number(item.score) < 8 && rows.length === 1) {
+        addNoticeRowIfNew(rows, "Sequence", "The order of events or ideas could be made clearer for the reader.");
+    }
+    return rows;
+}
+
+function buildFlowNoticeRows(item) {
+    item = item || {};
+    if (item.patternNotes && item.patternNotes.length) return normalizeNoticeRows(item.patternNotes);
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    addNoticeRowIfNew(rows, "Sentence rhythm", item.flowPattern);
+    addNoticeRowIfNew(rows, "Sentence variety", item.sentenceVariety);
+    addNoticeRowIfNew(rows, "Flow", item.evidence);
+    return rows;
+}
+
+function buildConventionsNoticeRows(item) {
+    item = item || {};
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    addNoticeRowIfNew(rows, "Spelling, capitals, and punctuation", item.evidence);
+    return rows;
+}
+
+function buildNoticeRowsForCategory(key, item) {
+    if (key === "Ideas & Details") return buildIdeasNoticeRows(item);
+    if (key === "Grammar") return buildGrammarNoticeRows(item);
+    if (key === "Word Choice") return buildVocabularyNoticeRows(item);
+    if (key === "Organization") return buildOrganizationNoticeRows(item);
+    if (key === "Flow") return buildFlowNoticeRows(item);
+    if (key === "Spelling & Punctuation") return buildConventionsNoticeRows(item);
+    if (key === "Neatness") return buildNeatnessNoticeRows(item);
+    item = item || {};
+    if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    var rows = [];
+    addNoticeRowIfNew(rows, getStudentFriendlyAreaName(key), item.evidence);
+    return rows;
+}
+
+function alignGrammarWordingWithErrorData(text, item) {
+    if (!text) return text;
+    item = item || {};
+    var errors = Number(item.totalErrors);
+    var density = Number(item.errorDensity);
+    if (!isFinite(errors)) errors = 0;
+    if (!isFinite(density)) density = 0;
+    var output = String(text);
+    if (errors >= 25 || density >= 8) {
+        output = output.replace(/\bonly a few\b/gi, "several");
+        output = output.replace(/\ba few grammar edits\b/gi, "several grammar edits");
+        output = output.replace(/\ba few fixes\b/gi, "several fixes");
+    }
+    if (errors >= 40 || density >= 10) {
+        output = output.replace(/\bseveral small fixes\b/gi, "a number of fixes");
+        output = output.replace(/\bseveral grammar edits\b/gi, "a number of grammar edits");
+        output = output.replace(/\bmostly small fixes\b/gi, "important fixes");
+    }
+    return output;
+}
+
 function renderDetailedAssessment(detailed) {
     var baseOrder = [
         ["Ideas & Details", "1. Clear Ideas & Details"],
@@ -12991,7 +13630,6 @@ function renderDetailedAssessment(detailed) {
         ["Flow", "5. Flow"],
         ["Spelling & Punctuation", "6. Spelling & Punctuation"]
     ];
-    // Add Neatness if enabled
     if (shouldAssessNeatness()) {
         baseOrder.push(["Neatness", "7. Neatness"]);
     }
@@ -13001,69 +13639,12 @@ function renderDetailedAssessment(detailed) {
         var title = baseOrder[i][1];
         var item = detailed.categories[key];
         if (!item) continue;
+        var feedback = buildStudentFeedbackForCategory(key, item);
         html += '<div class="assessment-item">';
         html += '<div class="assessment-head">' + escapeHtml(title) + ': ' + getAssessmentScorePill(item.score) + '</div>';
-        if (key === "Organization") {
-            if (item.contentOrganization) {
-                html += '<div class="assessment-sub"><strong>Content Organization:</strong> ' + escapeHtml(item.contentOrganization) + '</div>';
-            }
-            html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
-            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
-        } else if (key === "Grammar") {
-            if (item.scoreBasis) {
-                html += '<div class="assessment-sub"><strong>Score Basis:</strong> ' + escapeHtml(item.scoreBasis) + '</div>';
-            }
-            if (item.patternNotes && item.patternNotes.length) {
-                html += renderGrammarPatternNotesTable(item.patternNotes);
-            }
-            html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
-            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
-        } else if (key === "Flow") {
-            var flowPatternText = item.flowPattern || item.sentenceVariety || "No flow pattern extracted.";
-            html += '<div class="assessment-sub"><strong>Flow Pattern:</strong> ' + escapeHtml(flowPatternText) + '</div>';
-            if (item.patternNotes && item.patternNotes.length) {
-                html += renderPatternNotesTable(item.patternNotes);
-            }
-            html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
-            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
-        } else if (key === "Neatness") {
-            // Observation sentence — use detailed assessment evidence
-            var neatReason = item.evidence || item.reason || "No observation available.";
-            html += '<div class="assessment-sub"><strong>What the teacher sees:</strong> ' + renderMarkdownBold(neatReason) + '</div>';
-            // Sub-scores breakdown — shown after observation, matching the notebook layout
-            if (item.subScores) {
-                var ss = item.subScores;
-                var subRows = [
-                    ["Letter Formation", ss.letterFormation, "20%"],
-                    ["Spacing", ss.spacing, "15%"],
-                    ["Staying on the Line", ss.stayingOnLine, "15%"],
-                    ["Size Consistency", ss.sizeConsistency, "15%"],
-                    ["Pen Control &amp; Marks", ss.penControl, "15%"],
-                    ["Page Layout and Paragraphs", ss.pageLayoutParagraphs, "20%"]
-                ];
-                html += '<div class="assessment-sub neatness-sub-wrap">';
-                html += '<table class="neatness-sub-table">';
-                html += '<thead><tr><th>Criterion</th><th>Weight</th><th>Score</th></tr></thead><tbody>';
-                for (var si = 0; si < subRows.length; si++) {
-                    var subLabel = subRows[si][0];
-                    var subScore = subRows[si][1];
-                    var subWeight = subRows[si][2];
-                    var subPill = subScore != null ? getNeatnessSubScorePill(subScore) : '<span class="assessment-score-pill score-missing">Missing</span>';
-                    html += '<tr><td>' + subLabel + '</td><td class="neatness-weight">' + subWeight + '</td><td>' + subPill + '</td></tr>';
-                }
-                html += '</tbody></table>';
-                html += '</div>';
-            }
-            if (item.handwriting) {
-                html += '<div class="assessment-sub"><strong>Handwriting:</strong> ' + escapeHtml(item.handwriting) + '</div>';
-            }
-            // Growth tip — use detailed assessment growthTip
-            var neatGrowthTip = item.growthTip || "No growth tip extracted.";
-            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(neatGrowthTip) + '</div>';
-        } else {
-            html += '<div class="assessment-sub"><strong>Evidence:</strong> ' + renderMarkdownBold(item.evidence || "No evidence extracted.") + '</div>';
-            html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(item.growthTip || "No growth tip extracted.") + '</div>';
-        }
+        html += '<div class="assessment-sub"><strong>Teacher Comment:</strong> ' + renderMarkdownBold(feedback.teacherComment) + '</div>';
+        html += renderNoticeTable(feedback.noticeRows);
+        html += '<div class="assessment-sub"><strong>Growth Tip:</strong> ' + renderMarkdownBold(feedback.growthTip) + '</div>';
         html += '</div>';
     }
     document.getElementById("detailedAssessment").innerHTML = html || '<div class="assessment-item">No detailed assessment data.</div>';
@@ -13079,6 +13660,218 @@ function renderDetailedAssessment(detailed) {
     }
     goalHtml += '<div><strong>Keep Writing!</strong> ' + renderMarkdownBold(closingText || buildEncouragingClosing(latestAnalysisData || { detailed: detailed, categoryScores: {} })) + '</div>';
     document.getElementById("growGoalBox").innerHTML = goalHtml;
+}
+
+
+function getAuditScoreBandLabel(score) {
+    var n = Number(score);
+    if (!isFinite(n)) return "Missing or not scorable";
+    if (n >= 10) return "10 - excellent";
+    if (n >= 8) return "8-9 - strong/good with one improvement area";
+    if (n >= 6) return "6-7 - developing and encouraging";
+    return "4-5 - needs support with one clear priority";
+}
+
+function getAuditScoreSource(key, item, data) {
+    if (key === "Grammar") return "Computed error density plus grammar pattern analysis.";
+    if (key === "Flow") return "Computed sentence variety, repeated starters, sentence length pattern, and rhythm notes.";
+    if (key === "Neatness") return "Image-based handwriting sub-scores converted into student-friendly comments.";
+    if (key === "Ideas & Details") return "Rubric evidence plus word-count adjustment when the target is enabled.";
+    if (key === "Organization") return "Rubric evidence for beginning/middle/end, sequencing, and content order.";
+    if (key === "Word Choice") return "Rubric evidence for vocabulary precision, variety, and descriptive language.";
+    if (key === "Spelling & Punctuation") return "Rubric evidence for spelling, punctuation, and capitalization conventions.";
+    return "Rubric evidence and detailed assessment comments.";
+}
+
+function addAuditRawRow(rows, label, value) {
+    if (value === null || value === undefined || value === "") return;
+    rows.push({ label: label, value: String(value) });
+}
+
+function getAuditRawRows(key, item, data) {
+    var rows = [];
+    item = item || {};
+    data = data || {};
+    if (key === "Grammar") {
+        addAuditRawRow(rows, "Score basis", item.scoreBasis);
+        addAuditRawRow(rows, "Grammar issue count", item.totalErrors);
+        addAuditRawRow(rows, "Word count used", item.wordCount);
+        if (isFinite(Number(item.errorDensity))) addAuditRawRow(rows, "Error density", Number(item.errorDensity).toFixed(2) + " per 100 words");
+    } else if (key === "Flow") {
+        var flowData = data.flowData || {};
+        addAuditRawRow(rows, "Computed flow rating", flowData.flowRating || item.flowRating);
+        addAuditRawRow(rows, "Sentence count", flowData.sentenceCount);
+        if (isFinite(Number(flowData.average))) addAuditRawRow(rows, "Average sentence length", Number(flowData.average).toFixed(1) + " words");
+        if (flowData.varietyLabel || isFinite(Number(flowData.varietyScore))) {
+            addAuditRawRow(rows, "Sentence variety", (flowData.varietyLabel || "") + (isFinite(Number(flowData.varietyScore)) ? " (" + flowData.varietyScore + "/100)" : ""));
+        }
+        addAuditRawRow(rows, "Sentence pattern", flowData.bandSummary);
+        addAuditRawRow(rows, "Starter pattern", flowData.starterSummary);
+        addAuditRawRow(rows, "Longest short-sentence run", flowData.shortRun);
+        addAuditRawRow(rows, "Shortest sentence", flowData.shortest);
+        addAuditRawRow(rows, "Longest sentence", flowData.longest);
+    } else if (key === "Neatness") {
+        var ss = item.subScores || {};
+        addAuditRawRow(rows, "Letter formation", ss.letterFormation);
+        addAuditRawRow(rows, "Spacing", ss.spacing);
+        addAuditRawRow(rows, "Staying on the line", ss.stayingOnLine);
+        addAuditRawRow(rows, "Size consistency", ss.sizeConsistency);
+        addAuditRawRow(rows, "Pen control and marks", ss.penControl);
+        addAuditRawRow(rows, "Page layout and paragraphs", ss.pageLayoutParagraphs);
+    } else if (key === "Ideas & Details") {
+        addAuditRawRow(rows, "Target word count", data.targetWords > 0 ? data.targetWords : "Off");
+        addAuditRawRow(rows, "Actual word count", data.actualWords);
+        if (data.wordCountAdjustment) {
+            addAuditRawRow(rows, "Ideas adjustment note", data.wordCountAdjustment.note);
+            if (isFinite(Number(data.wordCountAdjustment.multiplier))) addAuditRawRow(rows, "Ideas multiplier", Number(data.wordCountAdjustment.multiplier).toFixed(3));
+        }
+    } else {
+        if (data.quickRubric && data.quickRubric[key]) {
+            addAuditRawRow(rows, "Quick rubric score", data.quickRubric[key].score);
+            addAuditRawRow(rows, "Quick rubric reason", data.quickRubric[key].reason);
+        }
+        if (data.categoryEligibility && data.categoryEligibility[key] !== undefined) {
+            addAuditRawRow(rows, "Category eligibility", data.categoryEligibility[key] ? "Scored" : "Not scored");
+        }
+    }
+    return rows;
+}
+
+function getAuditTeacherCommentSource(key, item, rows) {
+    item = item || {};
+    rows = rows || [];
+    if (item.teacherComment) {
+        var candidate = cleanTeacherCommentText(item.teacherComment, key, item.score);
+        if (isValidTeacherComment(candidate, key, item, rows)) return "AI teacher comment passed validation.";
+        return "Fallback evidence-based comment used because the AI teacher comment did not pass validation.";
+    }
+    return "Fallback evidence-based comment used because no AI teacher comment was available.";
+}
+
+function addAuditValidation(checks, label, passed, note) {
+    checks.push({ label: label, passed: !!passed, note: note || "" });
+}
+
+function scoreBandLanguageOk(text, score) {
+    var n = Number(score);
+    var value = String(text || "");
+    if (!isFinite(n)) return true;
+    if (n < 10 && /\b(perfect|perfectly|flawless|always correct)\b/i.test(value)) return false;
+    if (n <= 6 && /^your\s+[^.]{0,35}\s+(is|are)\s+(excellent|strong|very strong|polished|very clear)/i.test(value)) return false;
+    if (n >= 8 && /\b(needs support|hard to understand|difficult to follow|very difficult)\b/i.test(value)) return false;
+    return true;
+}
+
+function buildAuditValidationRows(key, item, rows, teacherComment, growthTip, feedback) {
+    var checks = [];
+    addAuditValidation(checks, "Category-specific builder used", feedback && feedback.audit && feedback.audit.builderName === getFeedbackBuilderName(key), "Expected builder: " + getFeedbackBuilderName(key) + ".");
+    addAuditValidation(checks, "Notice rows present", rows && rows.length > 0, "Each student-facing category should have at least one Area/Comment row.");
+    addAuditValidation(checks, "No raw scoring data in Teacher Comment", !commentHasRawScoringData(teacherComment), "Student view should not show percentages, counts, weights, or formulas.");
+    addAuditValidation(checks, "Teacher Comment matches category", !categoryMismatchInTeacherComment(key, teacherComment), "Comment should stay inside " + key + ".");
+    addAuditValidation(checks, "Teacher Comment matches score band", scoreBandLanguageOk(teacherComment, item ? item.score : null), getAuditScoreBandLabel(item ? item.score : null));
+    addAuditValidation(checks, "Teacher Comment matches evidence rows", commentOverlapsEvidence(teacherComment, rows), "Comment should be supported by the What I noticed rows.");
+    addAuditValidation(checks, "Growth Tip present", !!String(growthTip || "").trim(), "Growth Tip should give one next step.");
+    addAuditValidation(checks, "Growth Tip is actionable", growthTipLooksActionable(growthTip) && !isGenericGrowthTip(growthTip), "Growth tip should tell the student exactly what to do during revision.");
+    addAuditValidation(checks, "Growth Tip matches category", !categoryMismatchInTeacherComment(key, growthTip), "Growth tip should stay inside " + key + ".");
+    if (key === "Grammar") {
+        addAuditValidation(checks, "Grammar wording aligned with error data", !/\bonly a few\b/i.test(teacherComment) || Number(item.totalErrors) < 25, "Avoid saying 'only a few' when the error count is high.");
+    }
+    if (key === "Flow") {
+        addAuditValidation(checks, "Flow comment avoids unsupported category mixing", !categoryMismatchInTeacherComment("Flow", teacherComment), "Flow should focus on rhythm, starters, transitions, and sentence variety.");
+    }
+    return checks;
+}
+
+function getAuditBuilderRows(key, item, feedback) {
+    var rows = [];
+    feedback = feedback || {};
+    var audit = feedback.audit || {};
+    addAuditRawRow(rows, "Builder used", audit.builderName || getFeedbackBuilderName(key));
+    addAuditRawRow(rows, "Score band", audit.scoreBand || getAuditScoreBandLabel(item ? item.score : null));
+    addAuditRawRow(rows, "Main evidence selected", audit.mainEvidence || getMainEvidenceSummary(feedback.noticeRows || []));
+    addAuditRawRow(rows, "Teacher Comment source", audit.teacherCommentSource || "Not recorded.");
+    addAuditRawRow(rows, "Growth Tip source", audit.growthTipSource || "Not recorded.");
+    return rows;
+}
+
+function renderAuditRowsTable(rows) {
+    if (!rows || !rows.length) return '<div class="teacher-audit-intro">No raw data was available for this category.</div>';
+    var html = '<table class="calc-table">';
+    for (var i = 0; i < rows.length; i++) {
+        html += '<tr><td>' + escapeHtml(rows[i].label || "Data") + '</td><td>' + escapeHtml(rows[i].value || "") + '</td></tr>';
+    }
+    html += '</table>';
+    return html;
+}
+
+function renderAuditValidationTable(checks) {
+    var html = '<table class="calc-table">';
+    for (var i = 0; i < checks.length; i++) {
+        html += '<tr><td>' + escapeHtml(checks[i].label || "Check") + '</td><td><span class="' + (checks[i].passed ? "audit-pass" : "audit-warn") + '">' + (checks[i].passed ? "Passed" : "Needs review") + '</span>';
+        if (checks[i].note) html += '<br>' + escapeHtml(checks[i].note);
+        html += '</td></tr>';
+    }
+    html += '</table>';
+    return html;
+}
+
+function renderAuditEvidenceList(rows) {
+    if (!rows || !rows.length) return '<div class="teacher-audit-intro">No evidence rows were available.</div>';
+    var html = '<ul class="teacher-audit-list">';
+    for (var i = 0; i < rows.length; i++) {
+        html += '<li><strong>' + escapeHtml(rows[i].area || "Evidence") + ':</strong> ' + escapeHtml(rows[i].comment || "No comment available.") + '</li>';
+    }
+    html += '</ul>';
+    return html;
+}
+
+function getTeacherAuditOrder(data) {
+    var order = [
+        ["Ideas & Details", "1. Clear Ideas & Details"],
+        ["Grammar", "2. Grammar"],
+        ["Word Choice", "3. Vocabulary"],
+        ["Organization", "4. Organization"],
+        ["Flow", "5. Flow"],
+        ["Spelling & Punctuation", "6. Spelling & Punctuation"]
+    ];
+    if (data && data.detailed && data.detailed.categories && data.detailed.categories["Neatness"]) {
+        order.push(["Neatness", "7. Neatness"]);
+    }
+    return order;
+}
+
+function renderTeacherAuditView(data) {
+    var container = document.getElementById("teacherAuditView");
+    if (!container) return;
+    if (!data || !data.detailed || !data.detailed.categories) {
+        container.innerHTML = "No teacher audit data yet.";
+        return;
+    }
+    var order = getTeacherAuditOrder(data);
+    var html = '<div class="teacher-audit-intro">Teacher-only check of score source, category-specific builder, score calibration, evidence used, displayed feedback, and validation results. This does not appear in the student report.</div>';
+    for (var i = 0; i < order.length; i++) {
+        var key = order[i][0];
+        var title = order[i][1];
+        var item = data.detailed.categories[key];
+        if (!item) continue;
+        var feedback = buildStudentFeedbackForCategory(key, item);
+        var rows = feedback.noticeRows;
+        var teacherComment = feedback.teacherComment;
+        var growthTip = feedback.growthTip;
+        var checks = buildAuditValidationRows(key, item, rows, teacherComment, growthTip, feedback);
+        html += '<div class="teacher-audit-category">';
+        html += '<h4>' + escapeHtml(title) + '</h4>';
+        html += '<div><strong>Final Score:</strong> ' + escapeHtml(getEvidenceLabel(item.score)) + ' (' + escapeHtml(getAuditScoreBandLabel(item.score)) + ')</div>';
+        html += '<div><strong>Score Source:</strong> ' + escapeHtml(getAuditScoreSource(key, item, data)) + '</div>';
+        html += '<div class="teacher-audit-label">Feedback Builder</div>' + renderAuditRowsTable(getAuditBuilderRows(key, item, feedback));
+        html += '<div class="teacher-audit-label">Evidence Rows Used</div>' + renderAuditEvidenceList(rows);
+        html += '<div class="teacher-audit-label">Scoring Data</div>' + renderAuditRowsTable(getAuditRawRows(key, item, data));
+        html += '<div class="teacher-audit-label">Displayed Teacher Comment</div><div>' + escapeHtml(teacherComment) + '</div>';
+        html += '<div class="teacher-audit-label">Displayed Growth Tip</div><div>' + escapeHtml(growthTip) + '</div>';
+        html += '<div class="teacher-audit-label">Validation</div>' + renderAuditValidationTable(checks);
+        html += '</div>';
+    }
+    container.innerHTML = html;
 }
 
 function formatGrammarCalc(calc) {
@@ -13767,30 +14560,22 @@ function getGoalPlan(data) {
 
 function getNotebookCategoryPrintData(key, item) {
     item = item || {};
-    var evidence = "";
-    var tip = "";
-    if (key === "Neatness") {
-        evidence = item.evidence || item.reason || "";
-        tip = item.growthTip || "";
-    } else if (key === "Organization") {
-        evidence = item.evidence || item.contentOrganization || "";
-        tip = item.growthTip || "";
-    } else if (key === "Flow") {
-        evidence = item.evidence || item.sentenceVariety || "";
-        tip = item.growthTip || "";
-    } else {
-        evidence = item.evidence || "";
-        tip = item.growthTip || "";
+    var feedback = buildStudentFeedbackForCategory(key, item);
+    var rows = feedback.noticeRows || [];
+    var noticed = "No assessment note available yet.";
+    if (rows && rows.length) {
+        noticed = (rows[0].area ? rows[0].area + ": " : "") + (rows[0].comment || "No assessment note available yet.");
     }
     return {
-        evidence: evidence || "No assessment note available yet.",
-        tip: tip || "Keep building this skill in your next piece of writing."
+        teacherComment: feedback.teacherComment,
+        noticed: noticed,
+        tip: feedback.growthTip || "Choose one part to revise carefully in your next piece of writing."
     };
 }
 
 function renderNotebookDetailedAssessment(detailed) {
     if (!detailed || !detailed.categories) {
-        return '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Evidence:</strong> No assessment data.</div><div class="tip-block"><strong>Tip:</strong> Analyze the writing first to create a notebook summary.</div></div>';
+        return '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Teacher Comment:</strong> No assessment data.</div><div class="tip-block"><strong>Tip:</strong> Analyze the writing first to create a notebook summary.</div></div>';
     }
     var baseOrder = [
         ["Ideas & Details", "Ideas & Details"],
@@ -13819,7 +14604,8 @@ function renderNotebookDetailedAssessment(detailed) {
         html += '<div class="category">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
-        html += '<div class="evidence-block"><strong>Evidence:</strong> ' + escapeHtml(printData.evidence) + '</div>';
+        html += '<div class="evidence-block"><strong>Teacher Comment:</strong> ' + escapeHtml(printData.teacherComment) + '</div>';
+        html += '<div class="evidence-block"><strong>What I noticed:</strong> ' + escapeHtml(printData.noticed) + '</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> ' + escapeHtml(printData.tip) + '</div>';
         html += '</div>';
         renderedCount += 1;
@@ -14052,13 +14838,13 @@ function renderNotebookDetailedAssessmentFromSavedSession(session) {
         html += '<div class="category">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
-        html += '<div class="evidence-block"><strong>Evidence:</strong> This saved portfolio entry was created before printable notebook snapshots were stored.</div>';
+        html += '<div class="evidence-block"><strong>Teacher Comment:</strong> This saved portfolio entry was created before printable notebook snapshots were stored.</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> Use the saved teacher notes and corrected writing from this entry.</div>';
         html += '</div>';
         renderedCount += 1;
     }
     if (!html) {
-        html = '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Evidence:</strong> No saved assessment data.</div><div class="tip-block"><strong>Tip:</strong> Review the saved corrected writing and teacher notes.</div></div>';
+        html = '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Teacher Comment:</strong> No saved assessment data.</div><div class="tip-block"><strong>Tip:</strong> Review the saved corrected writing and teacher notes.</div></div>';
         renderedCount = 1;
     }
     if (renderedCount % 2 === 1) html += '<div></div>';
@@ -14398,13 +15184,17 @@ async function analyzeWriting() {
                 quickRubric: lowSample.quickRubric,
                 detailed: lowSample.detailed,
                 correctedStory: text,
-                sampleStatus: sampleStatus
+                sampleStatus: sampleStatus,
+                flowData: null,
+                wordCountAdjustment: null,
+                categoryEligibility: null
             };
 
             updateScoreDisplay(latestAnalysisData);
             document.getElementById("correctedStory").innerHTML = renderCorrected(text, text);
             // quickRubric display removed
             renderDetailedAssessment(lowSample.detailed);
+            renderTeacherAuditView(latestAnalysisData);
             document.getElementById("step1Raw").textContent = "Low-sample coaching mode used. Full AI rubric scoring was skipped because the sample was too short for a fair score.";
             document.getElementById("step3Raw").textContent = JSON.stringify({ sampleStatus: sampleStatus, mode: "low-sample-coaching" }, null, 2);
             document.getElementById("grammarCalc").innerHTML = '<div class="assessment-item">Full grammar density scoring is hidden until there is enough writing to score fairly.</div>';
@@ -14500,6 +15290,9 @@ async function analyzeWriting() {
         }
         if (detailed.categories["Grammar"]) {
             detailed.categories["Grammar"].scoreBasis = buildGrammarScoreBasis(totalErrors, correctedWordCount, errorDensity);
+            detailed.categories["Grammar"].totalErrors = totalErrors;
+            detailed.categories["Grammar"].wordCount = correctedWordCount;
+            detailed.categories["Grammar"].errorDensity = errorDensity;
             detailed.categories["Grammar"].patternNotes = buildGrammarPatternNotes(grammarScore, text, parsed1.correctedStory || correctedText || text);
         }
 
@@ -14622,7 +15415,16 @@ async function analyzeWriting() {
             quickRubric: parsed1.quickRubric,
             detailed: detailed,
             correctedStory: parsed1.correctedStory || text,
-            sampleStatus: sampleStatus
+            sampleStatus: sampleStatus,
+            flowData: flowData,
+            wordCountAdjustment: adjustment,
+            categoryEligibility: eligibility,
+            grammarAudit: {
+                totalErrors: totalErrors,
+                correctedWordCount: correctedWordCount,
+                errorDensity: errorDensity,
+                grammarScore: grammarScore
+            }
         };
 
         updateScoreDisplay(latestAnalysisData);
@@ -14630,6 +15432,7 @@ async function analyzeWriting() {
         document.getElementById("correctedStory").innerHTML = renderCorrected(text, parsed1.correctedStory || text);
             // quickRubric display removed
         renderDetailedAssessment(detailed);
+        renderTeacherAuditView(latestAnalysisData);
         try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolio) {
             console.error('Could not prepare portfolio sync:', ePortfolio);
             setDriveSyncStatus('error', 'Could not prepare portfolio sync');
@@ -14667,7 +15470,7 @@ async function analyzeWriting() {
         if (parsed1.sentenceCount != null) overviewLines.push("Sentences: " + parsed1.sentenceCount + (parsed1.wordsPerSentence ? " | Avg length: " + parsed1.wordsPerSentence : ""));
         overviewLines.push("Errors found: " + totalErrors + " bolded correction segments");
         if (flowData && flowData.sentenceCount) {
-            overviewLines.push("Flow: " + flowData.flowRating + " | Flow Pattern: " + flowData.varietyLabel + " (" + flowData.varietyScore + "/100)");
+            overviewLines.push("Flow: " + flowData.flowRating + " | Sentence Variety Pattern: " + flowData.varietyLabel + " (" + flowData.varietyScore + "/100)");
             overviewLines.push("Sentence pattern: " + flowData.bandSummary + " | Shortest: " + flowData.shortest + " | Longest: " + flowData.longest);
             overviewLines.push(flowData.starterSummary + " | Longest short-sentence run: " + flowData.shortRun);
         }
@@ -14688,6 +15491,7 @@ async function analyzeWriting() {
     } catch (e) {
         if (e.message === "Analysis cancelled by user.") {
             document.getElementById("debugRaw").textContent = "Analysis stopped by user.";
+            renderTeacherAuditView(null);
         } else {
             document.getElementById("debugRaw").textContent = "Error:\n" + e.message;
             alert("Analysis failed. See Debug for details.");
