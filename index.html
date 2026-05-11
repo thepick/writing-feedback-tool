@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Writing Feedback Tool v19.3 - portfolio reflow and corrected color fix -->
+<!-- Writing Feedback Tool v19.4 - genre detection included -->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
@@ -1330,6 +1330,43 @@
         font-family: inherit;
     }
     .writing-status-bar .zen-toggle-btn:hover { background: #dce9f7; }
+
+    .genre-review-box {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: #f8fafc;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .genre-review-box.active { display: flex; }
+    .genre-review-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+        white-space: nowrap;
+    }
+    .genre-review-select {
+        flex: 1 1 210px;
+        min-width: 180px;
+        padding: 7px 9px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: #ffffff;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 13px;
+    }
+    .genre-review-summary {
+        flex: 1 1 100%;
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.35;
+    }
+    .genre-review-summary strong { color: var(--text-primary); }
 
     /* =============================================
        ANALYZE BUTTON PULSE ANIMATION
@@ -3071,8 +3108,9 @@
         .control-panel label[for="studentWriting"] { order: 4; }
         .control-panel .writing-box-wrap  { order: 5; }
         .control-panel .writing-status-bar{ order: 6; }
-        .control-panel .workflow-status   { order: 7; }
-        .control-panel .small-note        { order: 8; }
+        .control-panel .genre-review-box  { order: 7; }
+        .control-panel .workflow-status   { order: 8; }
+        .control-panel .small-note        { order: 9; }
 
     }
 
@@ -3248,6 +3286,15 @@
                                 <span id="statusBarMeterFill" style="display:block;height:100%;width:0%;background:linear-gradient(90deg,#d29922,#3fb950);transition:width 0.2s ease;border-radius:999px;"></span>
                             </div>
                             <span class="wc-status" id="statusBarStatus">Start typing...</span>
+                        </div>
+
+                        <!-- GENRE REVIEW -->
+                        <div class="genre-review-box" id="genreReviewBox" aria-live="polite">
+                            <span class="genre-review-label">Writing type</span>
+                            <select id="writingGenreSelect" class="genre-review-select" aria-label="Writing type for feedback">
+                                <option value="__auto__">Auto-detect writing type</option>
+                            </select>
+                            <div class="genre-review-summary" id="genreReviewSummary">Detected genre will appear here.</div>
                         </div>
 
                         <!-- ANALYZE BUTTON -->
@@ -7513,11 +7560,13 @@ function getPortfolioCorrectedHtml(sessionData) {
 
 function buildSessionFeedbackSummary(analysisData) {
     var detailed = analysisData && analysisData.detailed ? analysisData.detailed : {};
+    var genreInfo = normalizeWritingGenreInfo((analysisData && analysisData.writingGenre) || detailed.writingGenre || currentWritingGenreInfo || {});
     return {
-        strength: detailed.strength || '',
-        nextTime: normalizeGrowGoalStrategyForSentence(detailed.nextTime || ''),
-        growGoal: detailed.growGoal || '',
-        closing: buildEncouragingClosing(analysisData || { detailed: detailed, categoryScores: {} })
+        strength: sanitizeGenreReferenceInFeedback(detailed.strength || '', genreInfo),
+        nextTime: sanitizeGenreReferenceInFeedback(normalizeGrowGoalStrategyForSentence(detailed.nextTime || ''), genreInfo),
+        growGoal: sanitizeGenreReferenceInFeedback(detailed.growGoal || '', genreInfo),
+        closing: sanitizeGenreReferenceInFeedback(buildEncouragingClosing(analysisData || { detailed: detailed, categoryScores: {} }), genreInfo),
+        writingGenre: genreInfo
     };
 }
 
@@ -7526,14 +7575,16 @@ function buildPortfolioDetailedFeedback(analysisData) {
     var sourceCategories = detailed.categories || {};
     var categoryScores = analysisData && analysisData.categoryScores ? analysisData.categoryScores : {};
     var keys = getBasePortfolioCategoryKeys().slice();
+    var genreInfo = normalizeWritingGenreInfo((analysisData && analysisData.writingGenre) || detailed.writingGenre || currentWritingGenreInfo || {});
     var output = {
+        writingGenre: genreInfo,
         categories: {},
         growGoal: {
-            strength: detailed.strength || '',
+            strength: sanitizeGenreReferenceInFeedback(detailed.strength || '', genreInfo),
             strengthCategory: detailed.strengthCategory || '',
-            growGoal: detailed.growGoal || '',
-            nextTime: normalizeGrowGoalStrategyForSentence(detailed.nextTime || ''),
-            closing: detailed.keepWriting || buildEncouragingClosing(analysisData || { detailed: detailed, categoryScores: categoryScores })
+            growGoal: sanitizeGenreReferenceInFeedback(detailed.growGoal || '', genreInfo),
+            nextTime: sanitizeGenreReferenceInFeedback(normalizeGrowGoalStrategyForSentence(detailed.nextTime || ''), genreInfo),
+            closing: sanitizeGenreReferenceInFeedback(detailed.keepWriting || buildEncouragingClosing(analysisData || { detailed: detailed, categoryScores: categoryScores }), genreInfo)
         }
     };
 
@@ -7560,10 +7611,13 @@ function buildPortfolioDetailedFeedback(analysisData) {
         }
         output.categories[key] = {
             score: savedScore,
-            teacherComment: feedback && feedback.teacherComment ? feedback.teacherComment : (source.teacherComment || source.evidence || ''),
-            noticeRows: feedback && feedback.noticeRows ? feedback.noticeRows.slice(0, 8) : (Array.isArray(source.noticeRows) ? source.noticeRows.slice(0, 8) : normalizeNoticeRows(source.noticeRows || source.patternNotes || [])),
-            growthTip: feedback && feedback.growthTip ? feedback.growthTip : (source.growthTip || ''),
-            evidence: source.evidence || ''
+            teacherComment: sanitizeGenreReferenceInFeedback(feedback && feedback.teacherComment ? feedback.teacherComment : (source.teacherComment || source.evidence || ''), genreInfo),
+            noticeRows: (feedback && feedback.noticeRows ? feedback.noticeRows.slice(0, 8) : (Array.isArray(source.noticeRows) ? source.noticeRows.slice(0, 8) : normalizeNoticeRows(source.noticeRows || source.patternNotes || []))).map(function(row) {
+                row = row || {};
+                return { area: row.area || '', comment: sanitizeGenreReferenceInFeedback(row.comment || '', genreInfo) };
+            }),
+            growthTip: sanitizeGenreReferenceInFeedback(feedback && feedback.growthTip ? feedback.growthTip : (source.growthTip || ''), genreInfo),
+            evidence: sanitizeGenreReferenceInFeedback(source.evidence || '', genreInfo)
         };
     });
 
@@ -8151,7 +8205,7 @@ function renderStudentPortfolio() {
             + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
             + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>'
             + '</div>'
-            + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>'
+            + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'
             + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
@@ -8258,6 +8312,11 @@ function saveCurrentSessionToPortfolio(analysisData) {
         correctedHtml: correctedHtmlForDiff || '',
         correctedMarkup: analysisData.correctedStory || '',
         correctedPlainText: getSessionPlainCorrectedText(),
+        writingGenreInfo: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || detectWritingGenreInfo(String((document.getElementById('studentWriting') || {}).value || ''))),
+        writingGenre: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).mainGenre,
+        writingSubtype: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).subtype,
+        writingSafeReference: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).safeReference,
+        genreConfidence: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).confidence,
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
@@ -11727,6 +11786,13 @@ function buildSessionExportFeedbackText(session) {
     var scores;
     if (!session) return "";
 
+    if (session.feedbackSummary && typeof session.feedbackSummary === "object") {
+        if (session.feedbackSummary.strength) parts.push("Strength: " + session.feedbackSummary.strength);
+        if (session.feedbackSummary.nextTime) parts.push("Next step: " + session.feedbackSummary.nextTime);
+        if (session.feedbackSummary.growGoal) parts.push("Growth goal: " + session.feedbackSummary.growGoal);
+        if (session.feedbackSummary.closing) parts.push("Encouragement: " + session.feedbackSummary.closing);
+    }
+
     if (session.feedback && typeof session.feedback === "object") {
         if (session.feedback.strength) parts.push("Strength: " + session.feedback.strength);
         if (session.feedback.nextTime) parts.push("Next step: " + session.feedback.nextTime);
@@ -11880,7 +11946,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>';
         html += '</div>';
         // Meta
-        html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + '</div>';
+        html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
         // Chips
         html += '<div class="chip-row">' + chipsHtml + '</div>';
         // Artifact grid: Original | Corrected | Notes
@@ -13397,7 +13463,7 @@ function buildStep1Prompt(text, optGradeProfile) {
     ].join("\n");
 }
 
-function buildStep2Prompt(originalText, correctedText, targetWords, actualWords, optGradeProfile) {
+function buildStep2Prompt(originalText, correctedText, targetWords, actualWords, optGradeProfile, optGenreInfo) {
     // Note: Neatness is assessed separately via image-based call in assessNeatnessFromImage()
     // so step 2 only needs to handle the 6 core writing categories
     //
@@ -13409,11 +13475,15 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
 
     // FIX O6: bilingualGuidance is injected ONCE here (not duplicated in buildStep3Prompt).
     var gradeContext = "Important: " + audience + " writing. " + bilingualGuide;
+    var genreInfo = normalizeWritingGenreInfo(optGenreInfo || detectWritingGenreInfo(originalText || correctedText || ""));
 
     return [
         "Analyze this writing and provide a quick rubric snapshot with one kind, supportive feedback sentence per category. Write like a real teacher talking to " + audience + ": clear, warm, specific, and not robotic.",
         "",
         gradeContext,
+        "",
+        "Writing genre for feedback:",
+        buildWritingGenrePromptText(genreInfo),
         "",
         "Grade-level expectations for scoring:",
         "- Ideas & Details: " + getGradeCategoryExpectation("Ideas & Details", profile),
@@ -13439,6 +13509,7 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
         "3a. Only mention mistakes that actually appear in the original student writing. Do not tell the student to fix a capital, name, punctuation mark, or spelling that is already correct.",
         "3b. If the score is below 10, do not use words like perfect, perfectly, flawless, or always correct.",
         "3c. Avoid generic phrases like there is room to improve. Use natural teacher wording. Prefer 'your writing' instead of 'the piece'.",
+        "3d. Use the genre information above. Never call this work a letter unless the writing type is Letter / Email. Never call it a poem unless the subtype is Poem. If unsure, use piece of writing.",
         "4. Mention target word count only if the actual word count is below target.",
         "5. If a category does not have enough clear evidence, write Missing instead of guessing a score.",
         "6. Return only the quick rubric in the exact format below.",
@@ -13454,10 +13525,11 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
     ].join("\n");
 }
 
-function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile) {
+function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile, optGenreInfo) {
     var profile = optGradeProfile || getGradeProfile();
     var audience = profile.audience || "5th-grade student";
     var bilingualGuide = profile.bilingualGuidance || "";
+    var genreInfo = normalizeWritingGenreInfo(optGenreInfo || detectWritingGenreInfo(correctedText || ""));
     // Note: Neatness is assessed separately via image-based call in assessNeatnessFromImage()
     // so step 3 only needs to handle the 6 core writing categories
 
@@ -13469,6 +13541,9 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "Feedback tone: " + profile.feedbackTone,
         "Grade-level expectation: " + profile.expectedWriting,
         "Bilingual-school guidance: " + bilingualGuide,
+        "",
+        "Writing genre for feedback:",
+        buildWritingGenrePromptText(genreInfo),
         "",
         "Input text:",
         correctedText,
@@ -13496,7 +13571,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "9. Choose ONE grow goal only.",
         "10. Keep the same rubric scores from the Quick Rubric Snapshot unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the quick rubric.",
         "11. If a category does not have enough clear evidence, leave it as Missing instead of guessing a score.",
-        "12. Make the final encouragement line sound like a real teacher speaking to the student. It must be specific to the submitted writing, mention the type of piece when possible (story, opinion, informational, how-to, letter, etc.), and avoid generic lines like 'Every story makes you a better writer.'",
+        "12. Make the final encouragement line sound like a real teacher speaking to the student. It must be specific to the submitted writing and use the safe reference word from the genre information above. Do not use letter, poem, story, or another genre word unless that genre is clearly identified above.",
         "12a. Only point out errors that truly exist in the original student writing. Do not use a correct word or capital as your correction example.",
         "12b. If a category score is below 10, avoid overclaiming with words like perfect, perfectly, flawless, or always correct.",
         "12c. Use teacher-natural language (warm and specific). Avoid robotic phrasing like there is room to improve. Prefer 'your writing' over 'the piece'.",
@@ -14161,7 +14236,8 @@ function renderDetailedAssessment(detailed) {
     if (detailed.growGoal) goalHtml += '<div style="margin-bottom: 10px;"><strong>Your Grow Goal:</strong> ' + renderMarkdownBold(detailed.growGoal) + '</div>';
     if (detailed.nextTime) goalHtml += '<div style="margin-bottom: 10px;"><strong>Try This Next Time:</strong> ' + renderMarkdownBold(normalizeGrowGoalStrategyForSentence(detailed.nextTime)) + '</div>';
     var closingText = detailed.keepWriting;
-    if (closingText) closingText = toOneSentence(teacherizeWording(closingText, "Keep Writing", 10));
+    var renderGenreInfo = normalizeWritingGenreInfo((latestAnalysisData && latestAnalysisData.writingGenre) || detailed.writingGenre || currentWritingGenreInfo || {});
+    if (closingText) closingText = sanitizeGenreReferenceInFeedback(toOneSentence(teacherizeWording(closingText, "Keep Writing", 10)), renderGenreInfo);
     if (isGenericKeepWriting(closingText)) {
         closingText = buildEncouragingClosing(latestAnalysisData || { detailed: detailed, categoryScores: {} });
     }
@@ -14721,15 +14797,311 @@ function cleanPrintedStrength(text) {
     return value || "-";
 }
 
+var currentWritingGenreInfo = null;
+var manualGenreOverrideValue = "__auto__";
+
+function getWritingGenreChoices() {
+    return [
+        { value: "narrative", mainGenre: "Narrative / Story", defaultSubtype: "Story", safeReference: "story" },
+        { value: "informational", mainGenre: "Informational / Explanatory", defaultSubtype: "Informational Writing", safeReference: "explanation" },
+        { value: "opinion", mainGenre: "Opinion / Argument", defaultSubtype: "Opinion Writing", safeReference: "opinion piece" },
+        { value: "literary", mainGenre: "Literary Analysis / Text Response", defaultSubtype: "Text Response", safeReference: "response" },
+        { value: "creative", mainGenre: "Poem / Creative Writing", defaultSubtype: "Creative Piece", safeReference: "creative piece" },
+        { value: "letter", mainGenre: "Letter / Email", defaultSubtype: "Letter", safeReference: "letter" },
+        { value: "journal", mainGenre: "Journal / Reflection", defaultSubtype: "Reflection", safeReference: "reflection" },
+        { value: "procedural", mainGenre: "Procedural / How-To", defaultSubtype: "How-To", safeReference: "how-to piece" },
+        { value: "academic", mainGenre: "Academic Short Response", defaultSubtype: "Short Response", safeReference: "response" },
+        { value: "speech", mainGenre: "Speech / Presentation", defaultSubtype: "Speech", safeReference: "speech" },
+        { value: "other", mainGenre: "Other / Unsure", defaultSubtype: "Writing", safeReference: "piece of writing" }
+    ];
+}
+
+function getGenreChoiceByValue(value) {
+    var choices = getWritingGenreChoices();
+    for (var i = 0; i < choices.length; i++) {
+        if (choices[i].value === value) return choices[i];
+    }
+    return null;
+}
+
+function makeWritingGenreInfo(mainGenre, subtype, safeReference, confidence, source) {
+    return normalizeWritingGenreInfo({
+        mainGenre: mainGenre,
+        subtype: subtype,
+        safeReference: safeReference,
+        confidence: confidence,
+        source: source || "auto"
+    });
+}
+
+function normalizeWritingGenreInfo(info) {
+    info = info || {};
+    var mainGenre = info.mainGenre || info.genre || "Other / Unsure";
+    var subtype = info.subtype || "Writing";
+    var safeReference = info.safeReference || info.referenceWord || info.safeRef || "piece of writing";
+    var confidence = info.confidence || "low";
+    var source = info.source || "auto";
+
+    if (mainGenre === "Narrative" || mainGenre === "Story") mainGenre = "Narrative / Story";
+    if (mainGenre === "Informational" || mainGenre === "Explanatory") mainGenre = "Informational / Explanatory";
+    if (mainGenre === "Opinion" || mainGenre === "Argument") mainGenre = "Opinion / Argument";
+    if (mainGenre === "Letter") mainGenre = "Letter / Email";
+
+    if (mainGenre !== "Letter / Email" && safeReference === "letter") safeReference = "piece of writing";
+    if (mainGenre !== "Narrative / Story" && safeReference === "story") safeReference = "piece of writing";
+    if (mainGenre === "Poem / Creative Writing" && !/poem/i.test(subtype)) safeReference = "creative piece";
+    if (mainGenre === "Other / Unsure") safeReference = "piece of writing";
+
+    return {
+        mainGenre: mainGenre,
+        subtype: subtype,
+        safeReference: safeReference,
+        confidence: confidence,
+        source: source
+    };
+}
+
+function getWritingGenreInfoFromSession(session) {
+    session = session || {};
+    if (session.writingGenreInfo) return normalizeWritingGenreInfo(session.writingGenreInfo);
+    if (session.writingGenre || session.writingSubtype || session.writingSafeReference) {
+        return normalizeWritingGenreInfo({
+            mainGenre: session.writingGenre || session.writingGenreMain || "Other / Unsure",
+            subtype: session.writingSubtype || "Writing",
+            safeReference: session.writingSafeReference || "piece of writing",
+            confidence: session.genreConfidence || "low",
+            source: "saved"
+        });
+    }
+    return detectWritingGenreInfo(session.originalText || session.correctedPlainText || session.correctedMarkup || "");
+}
+
+function countGenreRegexMatches(value, patterns) {
+    var count = 0;
+    for (var i = 0; i < patterns.length; i++) {
+        if (patterns[i].test(value)) count += 1;
+    }
+    return count;
+}
+
+function hasLetterFeatures(text) {
+    var raw = String(text || "");
+    var lines = raw.replace(/\r\n?/g, "\n").split("\n").map(function(line) {
+        return line.trim();
+    }).filter(function(line) {
+        return line.length > 0;
+    });
+    if (!lines.length) return false;
+
+    var firstFive = lines.slice(0, 5).join("\n");
+    var lastFive = lines.slice(Math.max(0, lines.length - 5)).join("\n");
+    var hasGreeting = /^\s*(dear|hello|hi|to)\s+[^\n,;:.!?]{1,60}[,:]?\s*$/im.test(firstFive);
+    var hasClosing = /^\s*(sincerely|from|love|your friend|best|regards|thank you|thanks)[,\s]*$/im.test(lastFive);
+    var hasSignatureAfterClosing = false;
+    for (var i = Math.max(0, lines.length - 6); i < lines.length - 1; i++) {
+        if (/^(sincerely|from|love|your friend|best|regards|thank you|thanks)[,\s]*$/i.test(lines[i]) && /^[A-Z][A-Za-z .'-]{1,40}$/.test(lines[i + 1])) {
+            hasSignatureAfterClosing = true;
+            break;
+        }
+    }
+    var directRecipient = /^\s*(dear|to)\s+/im.test(firstFive);
+    var emailClues = /^\s*(subject|to|from|cc):\s+/im.test(firstFive) || /@/.test(firstFive);
+    var featureCount = 0;
+    if (hasGreeting) featureCount += 1;
+    if (hasClosing) featureCount += 1;
+    if (hasSignatureAfterClosing) featureCount += 1;
+    if (directRecipient || emailClues) featureCount += 1;
+    return featureCount >= 2;
+}
+
+function looksLikePoem(text) {
+    var parts = extractWritingTitleParts(text || "");
+    var body = String(parts.body || text || "").replace(/\r\n?/g, "\n").trim();
+    var lines = body.split("\n").map(function(line) { return line.trim(); }).filter(function(line) { return line.length > 0; });
+    if (lines.length < 4) return false;
+    var shortLines = 0;
+    var noEndPunct = 0;
+    var totalWords = 0;
+    for (var i = 0; i < lines.length; i++) {
+        var wc = countWords(lines[i]);
+        totalWords += wc;
+        if (wc > 0 && wc <= 8) shortLines += 1;
+        if (!/[.!?]$/.test(lines[i])) noEndPunct += 1;
+    }
+    var avgWords = totalWords / lines.length;
+    var hasStanzaBreak = /\n\s*\n/.test(body);
+    return (shortLines >= Math.ceil(lines.length * 0.65) && avgWords <= 9 && noEndPunct >= Math.ceil(lines.length * 0.45)) || (hasStanzaBreak && avgWords <= 10);
+}
+
+function detectNarrativeSubtype(value) {
+    if (/\b(magic|magical|dragon|dragons|dimension|portal|kingdom|castle|witch|wizard|fairy|monster|mysterious|galaxy|galasteria|superpower|spell)\b/i.test(value)) return "Fantasy";
+    if (/\bspaceship|alien|robot|future|time machine|time travel|planet|laser\b/i.test(value)) return "Science Fiction";
+    if (/\bmystery|detective|clue|suspect|secret|missing|case\b/i.test(value)) return "Mystery";
+    if (/\badventure|quest|journey|explore|treasure|escaped?\b/i.test(value)) return "Adventure";
+    if (/\bi remember\b|\bwhen i was\b|\bmy family\b|\bmy friend\b/i.test(value)) return "Personal Narrative";
+    return "Story";
+}
+
+function detectWritingGenreInfo(text) {
+    var raw = String(text || "").trim();
+    var value = raw.toLowerCase();
+    if (!value) return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
+
+    if (hasLetterFeatures(raw)) {
+        return makeWritingGenreInfo("Letter / Email", "Letter", "letter", "high", "auto");
+    }
+
+    if (/\b(materials|ingredients|directions|procedure|steps|method)\b/i.test(value) || /\bhow to\b/i.test(value) || /\bfirst\b[\s\S]{0,120}\bnext\b[\s\S]{0,160}\bfinally\b/i.test(value)) {
+        return makeWritingGenreInfo("Procedural / How-To", "How-To", "how-to piece", "high", "auto");
+    }
+
+    if (/\b(good morning|today i will|my presentation|i am here to talk|ladies and gentlemen|fellow students)\b/i.test(value)) {
+        return makeWritingGenreInfo("Speech / Presentation", "Speech", "speech", "medium", "auto");
+    }
+
+    if (/\bdear diary\b|\btoday i learned\b|\bi learned that\b|\bthis taught me\b|\bmy goal is\b|\bi feel\b/i.test(value)) {
+        return makeWritingGenreInfo("Journal / Reflection", "Reflection", "reflection", "medium", "auto");
+    }
+
+    var opinionScore = countGenreRegexMatches(value, [
+        /\bi think\b/i,
+        /\bi believe\b/i,
+        /\bin my opinion\b/i,
+        /\bshould\b/i,
+        /\bmust\b/i,
+        /\bbetter than\b/i,
+        /\bbest\b/i,
+        /\breason\b/i,
+        /\bconvince\b/i
+    ]);
+    if (opinionScore >= 2 || (/\bshould\b/i.test(value) && /\bbecause\b/i.test(value))) {
+        return makeWritingGenreInfo("Opinion / Argument", "Opinion Writing", "opinion piece", opinionScore >= 3 ? "high" : "medium", "auto");
+    }
+
+    if (/\b(theme|character|author|text evidence|quote|chapter|book|poem shows|story shows|the passage|according to the text)\b/i.test(value)) {
+        return makeWritingGenreInfo("Literary Analysis / Text Response", "Text Response", "response", "medium", "auto");
+    }
+
+    if (looksLikePoem(raw)) {
+        return makeWritingGenreInfo("Poem / Creative Writing", "Poem", "poem", "high", "auto");
+    }
+
+    var narrativeScore = countGenreRegexMatches(value, [
+        /\bonce\b/i,
+        /\bone day\b/i,
+        /\bsuddenly\b/i,
+        /\bfinally\b/i,
+        /\bafter\b/i,
+        /\bthen\b/i,
+        /\bsaid\b/i,
+        /\basked\b/i,
+        /\blooked\b/i,
+        /\bwalked\b/i,
+        /\bran\b/i,
+        /\bopened\b/i,
+        /\bdoor\b/i,
+        /\bcharacter\b/i
+    ]);
+    if (narrativeScore >= 2 || /\b(i|he|she|they)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped)\b/i.test(value)) {
+        var nSubtype = detectNarrativeSubtype(raw);
+        return makeWritingGenreInfo("Narrative / Story", nSubtype, "story", narrativeScore >= 4 ? "high" : "medium", "auto");
+    }
+
+    if (/\bfacts?\b|\bfor example\b|\baccording to\b|\bexplains?\b|\bis called\b|\bare called\b|\bbecause\b|\bthis means\b|\breport\b|\bresearch\b/i.test(value)) {
+        return makeWritingGenreInfo("Informational / Explanatory", "Informational Writing", "explanation", "medium", "auto");
+    }
+
+    if (looksLikeProseLine(raw) && countWords(raw) < 140) {
+        return makeWritingGenreInfo("Academic Short Response", "Short Response", "response", "low", "auto");
+    }
+
+    return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
+}
+
+function getManualGenreInfo(value) {
+    var choice = getGenreChoiceByValue(value);
+    if (!choice) return null;
+    return makeWritingGenreInfo(choice.mainGenre, choice.defaultSubtype, choice.safeReference, "teacher-selected", "manual");
+}
+
+function getWritingGenreInfoFromUi(text) {
+    var select = typeof document !== "undefined" ? document.getElementById("writingGenreSelect") : null;
+    var selected = select ? select.value : manualGenreOverrideValue;
+    if (selected && selected !== "__auto__") return getManualGenreInfo(selected) || detectWritingGenreInfo(text);
+    return detectWritingGenreInfo(text);
+}
+
+function buildWritingGenrePromptText(genreInfo) {
+    var info = normalizeWritingGenreInfo(genreInfo);
+    return [
+        "Writing Type: " + info.mainGenre,
+        "Subtype: " + info.subtype,
+        "Safe reference word: " + info.safeReference,
+        "Confidence: " + info.confidence,
+        "Use the safe reference word when referring to the student's work.",
+        "Do not call the writing a letter unless the writing type is Letter / Email.",
+        "Do not call the writing a poem unless the subtype is Poem.",
+        "If the genre is uncertain, use piece of writing."
+    ].join("\n");
+}
+
+function sanitizeGenreReferenceInFeedback(text, genreInfo) {
+    var value = String(text || "");
+    if (!value) return value;
+    var info = normalizeWritingGenreInfo(genreInfo || currentWritingGenreInfo || {});
+    var ref = info.safeReference || "piece of writing";
+    function replaceNoun(noun) {
+        var escaped = noun.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        value = value.replace(new RegExp("\\byour\\s+next\\s+" + escaped + "\\b", "gi"), "your next " + ref);
+        value = value.replace(new RegExp("\\bthis\\s+" + escaped + "\\b", "gi"), "this " + ref);
+        value = value.replace(new RegExp("\\byour\\s+" + escaped + "\\b", "gi"), "your " + ref);
+        value = value.replace(new RegExp("\\bthe\\s+" + escaped + "\\b", "gi"), "the " + ref);
+    }
+    if (info.mainGenre !== "Letter / Email") replaceNoun("letter");
+    if (info.mainGenre !== "Narrative / Story") replaceNoun("story");
+    if (!(info.mainGenre === "Poem / Creative Writing" && /poem/i.test(info.subtype))) replaceNoun("poem");
+    return value.replace(/\s+/g, " ").trim();
+}
+
 function inferWritingGenre(text) {
-    var value = String(text || "").toLowerCase();
-    if (!value.trim()) return "piece";
-    if (/\bi think\b|\bi believe\b|\bin my opinion\b|\bshould\b|\bmust\b|\bbest\b/.test(value)) return "opinion piece";
-    if (/\bmaterials\b|\bstep\b|\bdirections\b|\bhow to\b|\bfirst\b[\s\S]{0,80}\bnext\b/.test(value)) return "how-to piece";
-    if (/\bdear\b|\bsincerely\b|\bfrom,?\b/.test(value)) return "letter";
-    if (/\bfacts?\b|\bfor example\b|\baccording\b|\bexplains?\b|\bis called\b/.test(value)) return "informational piece";
-    if (/\bonce\b|\bone day\b|\bsuddenly\b|\bfinally\b|\bsaid\b|\bwent\b|\bwas\b|\bwere\b/.test(value)) return "story";
-    return "piece";
+    return detectWritingGenreInfo(text).safeReference;
+}
+
+function populateWritingGenreSelect() {
+    var select = document.getElementById("writingGenreSelect");
+    if (!select || select.getAttribute("data-populated") === "true") return;
+    var choices = getWritingGenreChoices();
+    for (var i = 0; i < choices.length; i++) {
+        var opt = document.createElement("option");
+        opt.value = choices[i].value;
+        opt.textContent = choices[i].mainGenre;
+        select.appendChild(opt);
+    }
+    select.setAttribute("data-populated", "true");
+}
+
+function updateGenreReviewBox() {
+    var box = document.getElementById("genreReviewBox");
+    var summary = document.getElementById("genreReviewSummary");
+    var select = document.getElementById("writingGenreSelect");
+    var ta = document.getElementById("studentWriting");
+    if (!box || !summary || !select || !ta) return;
+    populateWritingGenreSelect();
+    var text = ta.value || "";
+    if (!text.trim()) {
+        box.classList.remove("active");
+        currentWritingGenreInfo = null;
+        return;
+    }
+    box.classList.add("active");
+    var autoInfo = detectWritingGenreInfo(text);
+    var activeInfo = getWritingGenreInfoFromUi(text);
+    currentWritingGenreInfo = activeInfo;
+    var sourceText = select.value === "__auto__" ? "Auto-detected" : "Teacher-selected";
+    summary.innerHTML = sourceText + ": <strong>" + escapeHtml(activeInfo.mainGenre) + "</strong>"
+        + (activeInfo.subtype ? " - " + escapeHtml(activeInfo.subtype) : "")
+        + " | Feedback will call it: <strong>" + escapeHtml(activeInfo.safeReference) + "</strong>."
+        + (select.value === "__auto__" && autoInfo.confidence ? " Confidence: " + escapeHtml(autoInfo.confidence) + "." : "");
 }
 
 function isGenericKeepWriting(text) {
@@ -14758,24 +15130,33 @@ function summarizeStrengthForClosing(text) {
 }
 
 function buildEncouragingClosing(data) {
-    var text = document.getElementById("studentWriting").value || "";
-    var genre = inferWritingGenre(text);
+    var text = document.getElementById("studentWriting") ? (document.getElementById("studentWriting").value || "") : "";
+    var genreInfo = normalizeWritingGenreInfo((data && data.writingGenre) || (data && data.detailed && data.detailed.writingGenre) || currentWritingGenreInfo || detectWritingGenreInfo(text));
+    var genre = genreInfo.safeReference || "piece of writing";
     var plan = getGoalPlan(data || {});
     var lowest = getLowestNotebookCategory(data ? data.categoryScores : null);
     var strength = cleanPrintedStrength(data && data.detailed ? data.detailed.strength || "" : "");
     var nextStep = cleanNotebookSentence(plan.nextTime || "revise one part carefully").replace(/[.!?]+$/, "");
     var closing = "You are building strong writing habits, and your next " + genre + " will be even better when you " + nextStep.toLowerCase() + ".";
 
-    if (genre === "story") {
+    if (genreInfo.mainGenre === "Narrative / Story") {
         closing = "You have the start of an engaging story here, and it will be even stronger next time when you " + nextStep.toLowerCase() + ".";
-    } else if (genre === "opinion piece") {
+    } else if (genreInfo.mainGenre === "Opinion / Argument") {
         closing = "You shared your opinion clearly, and your next opinion piece will be even stronger when you " + nextStep.toLowerCase() + ".";
-    } else if (genre === "informational piece") {
-        closing = "You are teaching the reader about your topic, and this informational piece will become even clearer when you " + nextStep.toLowerCase() + ".";
-    } else if (genre === "how-to piece") {
+    } else if (genreInfo.mainGenre === "Informational / Explanatory") {
+        closing = "You are teaching the reader about your topic, and this explanation will become even clearer when you " + nextStep.toLowerCase() + ".";
+    } else if (genreInfo.mainGenre === "Procedural / How-To") {
         closing = "Your how-to piece already helps the reader follow your thinking, and it will be even clearer when you " + nextStep.toLowerCase() + ".";
-    } else if (genre === "letter") {
+    } else if (genreInfo.mainGenre === "Letter / Email") {
         closing = "Your letter already has a clear message, and it will sound even stronger when you " + nextStep.toLowerCase() + ".";
+    } else if (genreInfo.mainGenre === "Poem / Creative Writing") {
+        closing = "Your " + genre + " shows creative thinking, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+    } else if (genreInfo.mainGenre === "Literary Analysis / Text Response" || genreInfo.mainGenre === "Academic Short Response") {
+        closing = "Your response shows your thinking, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+    } else if (genreInfo.mainGenre === "Journal / Reflection") {
+        closing = "Your reflection shares your thinking clearly, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+    } else if (genreInfo.mainGenre === "Speech / Presentation") {
+        closing = "Your speech has a clear message, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
     }
 
     if (lowest === "Grammar") {
@@ -14799,7 +15180,7 @@ function buildEncouragingClosing(data) {
         }
     }
 
-    return closing.replace(/\s+/g, " ").trim();
+    return sanitizeGenreReferenceInFeedback(closing.replace(/\s+/g, " ").trim(), genreInfo);
 }
 
 function trimToWholeWords(text, maxLength) {
@@ -14867,7 +15248,8 @@ function pickTeacherComment(data) {
     }
 
     var text = document.getElementById("studentWriting").value || "";
-    var genre = inferWritingGenre(text);
+    var genreInfo = normalizeWritingGenreInfo((data && data.writingGenre) || (data && data.detailed && data.detailed.writingGenre) || currentWritingGenreInfo || detectWritingGenreInfo(text));
+    var genre = genreInfo.safeReference;
     var categories = data.detailed.categories;
     var lowest = getLowestNotebookCategory(data.categoryScores);
     var highest = getHighestNotebookCategory(data.categoryScores);
@@ -14892,7 +15274,7 @@ function pickTeacherComment(data) {
         coaching = cleanNotebookSentence(goalPlan.nextTime);
     }
 
-    return (opening + " " + praise + " " + coaching).replace(/\s+/g, " ").trim();
+    return sanitizeGenreReferenceInFeedback((opening + " " + praise + " " + coaching).replace(/\s+/g, " ").trim(), genreInfo);
 }
 
 function isGenericNotebookGuidance(text) {
@@ -15432,9 +15814,10 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
     var originalText = String(session.originalText || "");
     var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml(session.correctedPlainText || originalText || "-");
     var feedback = session.feedbackSummary || {};
-    var strength = feedback.strength || "Saved portfolio entry.";
-    var growGoal = feedback.growGoal || feedback.nextTime || "Review the corrected writing and improve one focus area.";
-    var teacherComment = feedback.closing || feedback.nextTime || "Review the saved feedback from this portfolio entry.";
+    var genreInfo = getWritingGenreInfoFromSession(session);
+    var strength = sanitizeGenreReferenceInFeedback(feedback.strength || "Saved portfolio entry.", genreInfo);
+    var growGoal = sanitizeGenreReferenceInFeedback(feedback.growGoal || feedback.nextTime || "Review the corrected writing and improve one focus area.", genreInfo);
+    var teacherComment = sanitizeGenreReferenceInFeedback(feedback.closing || feedback.nextTime || "Review the saved feedback from this portfolio entry.", genreInfo);
     var wordCountText = countWords(originalText) + " words";
     var scoreText = session.overall == null ? "Not scored" : (session.overall + "%");
 
@@ -15597,6 +15980,11 @@ function reassessPortfolioSession(studentName, sessionId) {
 
     var writingEl = document.getElementById("studentWriting");
     if (writingEl) writingEl.value = reassessText;
+    var reassessGenre = getWritingGenreInfoFromSession(session);
+    currentWritingGenreInfo = reassessGenre;
+    manualGenreOverrideValue = "__auto__";
+    var reassessGenreSelect = document.getElementById("writingGenreSelect");
+    if (reassessGenreSelect) reassessGenreSelect.value = "__auto__";
     correctedHtmlForDiff = "";
     latestAnalysisData = null;
     clearPendingPortfolioSync();
@@ -15689,6 +16077,7 @@ function syncUiState() {
     autoResizeStudentWriting();
     updateOcrControls();
     updateScriptQualityToggleVisibility();
+    updateGenreReviewBox();
     // Also update analyze button pulse animation
     updateAnalyzeBtnState();
 }
@@ -15752,6 +16141,9 @@ async function analyzeWriting() {
 
     try {
         var actualWords = countWords(text);
+        var writingGenreInfo = getWritingGenreInfoFromUi(text);
+        currentWritingGenreInfo = writingGenreInfo;
+        updateGenreReviewBox();
         var sampleStatus = getSampleStatusData(text, gradeProfile);
 
         if (sampleStatus.status !== "scorable") {
@@ -15768,6 +16160,7 @@ async function analyzeWriting() {
                 quickRubric: lowSample.quickRubric,
                 detailed: lowSample.detailed,
                 correctedStory: text,
+                writingGenre: writingGenreInfo,
                 sampleStatus: sampleStatus,
                 flowData: null,
                 wordCountAdjustment: null,
@@ -15814,7 +16207,7 @@ async function analyzeWriting() {
         parsed1.flowRating = flowData.flowRating;
         parsed1.flowTip = buildComputedFlowTip(flowData);
 
-        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile);
+        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, writingGenreInfo);
         var step2 = await callOpenRouter(model, step2Prompt);
         parsed1.quickRubric = parseStep2QuickRubric(step2, text, targetWords);
         var eligibility = getCategoryEligibility(sampleStatus);
@@ -15841,9 +16234,11 @@ async function analyzeWriting() {
         }
 
         var quickRubricText = buildQuickRubricText(parsed1.quickRubric);
-        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile);
+        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo);
         var step3 = await callOpenRouter(model, step3Prompt);
         var detailed = parseDetailedAssessment(step3);
+        detailed.writingGenre = writingGenreInfo;
+        if (detailed.keepWriting) detailed.keepWriting = sanitizeGenreReferenceInFeedback(detailed.keepWriting, writingGenreInfo);
         if (pendingNeatnessDetail) {
             detailed.categories["Neatness"] = pendingNeatnessDetail;
         }
@@ -15999,6 +16394,7 @@ async function analyzeWriting() {
             quickRubric: parsed1.quickRubric,
             detailed: detailed,
             correctedStory: parsed1.correctedStory || text,
+            writingGenre: writingGenreInfo,
             sampleStatus: sampleStatus,
             flowData: flowData,
             wordCountAdjustment: adjustment,
@@ -16118,6 +16514,9 @@ function clearWritingArea() {
         ta.value = '';
         ta.focus();
     }
+    manualGenreOverrideValue = "__auto__";
+    var genreSelectClear = document.getElementById("writingGenreSelect");
+    if (genreSelectClear) genreSelectClear.value = "__auto__";
     syncUiState();
     checkExpandBtnVisibility();
 }
@@ -16137,6 +16536,7 @@ populateStudentDropdown();
 refreshScoreWeightingDescription();
 
 studentWriting.addEventListener("input", syncUiState);
+studentWriting.addEventListener("input", updateGenreReviewBox);
 studentWriting.addEventListener("input", checkExpandBtnVisibility);
 studentWriting.addEventListener("keydown", function(e) {
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !document.getElementById("analyzeBtn").disabled) {
@@ -16164,6 +16564,15 @@ var toggleApiKeyBtn = document.getElementById("toggleApiKeyBtn");
 if (apiKeyInput) {
     apiKeyInput.addEventListener("input", function() { refreshApiKeyRuntimeValue(); saveSettingsToLocalStorage(); });
 }
+var writingGenreSelect = document.getElementById("writingGenreSelect");
+if (writingGenreSelect) {
+    populateWritingGenreSelect();
+    writingGenreSelect.addEventListener("change", function() {
+        manualGenreOverrideValue = writingGenreSelect.value || "__auto__";
+        updateGenreReviewBox();
+    });
+}
+
 if (toggleApiKeyBtn && apiKeyInput) {
     toggleApiKeyBtn.addEventListener("click", function() {
         var show = apiKeyInput.type === "password";
