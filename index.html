@@ -1111,6 +1111,51 @@
         border-bottom: 2px solid var(--primary-color);
         display: inline-block;
     }
+    .sync-maintenance-card {
+        margin-top: 12px;
+        padding: 12px;
+        border: 1px solid #dbe4ef;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .sync-maintenance-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .sync-maintenance-title {
+        color: #0f172a;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+    .sync-maintenance-status {
+        margin-top: 4px;
+        color: #475569;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+    .sync-maintenance-status strong {
+        color: #0f172a;
+    }
+    .sync-maintenance-card .settings-help-text {
+        margin: 9px 0 0;
+        font-style: normal;
+    }
+    .sync-maintenance-check-btn {
+        flex: 0 0 auto;
+        min-height: 32px;
+        padding: 6px 10px;
+        font-size: 12px;
+        margin: 0;
+        white-space: nowrap;
+    }
+    .sync-cleanup-btn {
+        margin-top: 10px;
+        width: 100%;
+    }
     .advanced-recovery-panel {
         border: 1px solid #dbe4ef;
         border-radius: 14px;
@@ -3843,9 +3888,16 @@
         <div class="settings-section" id="syncMaintenanceSection">
             <div class="settings-section-title">Sync</div>
             <p class="settings-help-text">Use these controls for Google Drive sync status and cleanup. Class archiving and reset tools are in Manage Class.</p>
-            <div id="duplicateSyncMaintenance" style="margin-top:12px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;">
-                <div id="duplicateSyncStatus" class="helper-text" style="margin:0;" aria-live="polite">Google Drive sync file check will run after Drive connects.</div>
-                <button type="button" class="secondary-btn" id="duplicateSyncCleanupBtn" onclick="moveDuplicateSyncFilesToBackup()" style="display:none;margin-top:8px;">Move Older Duplicate Sync Files to Backup</button>
+            <div id="duplicateSyncMaintenance" class="sync-maintenance-card">
+                <div class="sync-maintenance-header">
+                    <div>
+                        <div class="sync-maintenance-title">Duplicate sync files</div>
+                        <div id="duplicateSyncStatus" class="sync-maintenance-status" aria-live="polite">Ready after Google Drive connects.</div>
+                    </div>
+                    <button type="button" class="secondary-btn sync-maintenance-check-btn" id="duplicateSyncCheckBtn" onclick="checkDuplicateSyncFilesStatus()">Check now</button>
+                </div>
+                <p class="settings-help-text">This only checks whether Google Drive has extra older sync files. It will not change saved class data unless you choose the cleanup action below.</p>
+                <button type="button" class="secondary-btn sync-cleanup-btn" id="duplicateSyncCleanupBtn" onclick="moveDuplicateSyncFilesToBackup()" style="display:none;">Move Older Duplicate Sync Files to Backup</button>
             </div>
         </div>
 

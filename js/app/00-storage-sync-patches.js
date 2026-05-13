@@ -3823,7 +3823,7 @@ function showSignedInState(info) {
     if (userInfoHeader) userInfoHeader.style.display = "flex";
     var displayName = (info && (info.name || info.email)) ? (info.name || info.email) : "Connected";
     var photoUrl = (info && (info.picture || info.photoURL)) ? (info.picture || info.photoURL) : "";
-    setDuplicateSyncMaintenanceStatus("Checking for duplicate sync files after Drive connects...", 0, true);
+    setDuplicateSyncMaintenanceStatus("Google Drive is connected. Use Check now if you want to look for older duplicate sync files.", 0, false);
     var nameElHeader = document.getElementById("googleUserNameHeader");
     if (nameElHeader) nameElHeader.textContent = displayName;
     var avatarHeader = document.getElementById("googleUserAvatarHeader");
