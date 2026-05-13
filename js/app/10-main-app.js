@@ -4788,6 +4788,75 @@ function reconstructParagraphsFromOcrPages(pageTexts) {
     return paragraphs.join("\n\n").trim();
 }
 
+function stripAiCodeFence(text) {
+    var value = String(text || "").trim();
+    value = value.replace(/^```[a-zA-Z]*\s*/i, "");
+    value = value.replace(/```$/i, "");
+    return value.trim();
+}
+
+function parseFirstJsonObject(text) {
+    var value = stripAiCodeFence(text);
+    try {
+        return JSON.parse(value);
+    } catch (e) { }
+
+    var start = value.indexOf("{");
+    var end = value.lastIndexOf("}");
+    if (start !== -1 && end !== -1 && end > start) {
+        try {
+            return JSON.parse(value.slice(start, end + 1));
+        } catch (e2) { }
+    }
+    return null;
+}
+
+function buildOcrPageMarkedText(pageTexts) {
+    var pages = Array.isArray(pageTexts) ? pageTexts : [String(pageTexts || "")];
+    var parts = [];
+    for (var i = 0; i < pages.length; i++) {
+        var pageText = String(pages[i] || "").trim();
+        if (pageText) {
+            parts.push("[PAGE " + (i + 1) + "]\n" + pageText);
+        }
+    }
+    return parts.join("\n\n");
+}
+
+async function reconstructStudentWritingFromOcrPages(pageTexts, model) {
+    var fallback = reconstructParagraphsFromOcrPages(pageTexts);
+    var markedText = buildOcrPageMarkedText(pageTexts);
+    if (!markedText || countWords(markedText) < 20) return fallback;
+
+    try {
+        var prompt = [
+            "You are reconstructing student writing after OCR from one or more photos.",
+            "The OCR text below includes page markers such as [PAGE 1].",
+            "Your job is only to reconstruct the student's intended spacing, line wrapping, and paragraph breaks.",
+            "Do not correct spelling, grammar, punctuation, capitalization, word choice, or sentence structure.",
+            "Do not rewrite the student's wording.",
+            "Do not add new words or remove student words unless they are only page markers.",
+            "Do not treat a new page or new photo as a paragraph break by itself.",
+            "Join across page breaks when the previous page ends mid-sentence, mid-phrase, or on a full line that continues on the next page.",
+            "Join ordinary wrapped handwriting lines into sentences and paragraphs.",
+            "Preserve a paragraph break only when there is strong evidence, such as a blank line, clear indentation, a completed thought followed by a new thought, a new speaker, or a heading/title.",
+            "If unsure, keep the text in the same paragraph instead of inventing a new paragraph.",
+            "Return only the reconstructed student writing. Do not include explanations, markdown, labels, or page markers.",
+            "",
+            markedText
+        ].join("\n");
+        var response = await callOpenRouter(model || OCR_MODEL, prompt);
+        var cleaned = stripAiCodeFence(response).replace(/^Reconstructed student writing:\s*/i, "").trim();
+        if (countWords(cleaned) >= Math.max(10, Math.round(countWords(fallback) * 0.75))) {
+            return cleaned;
+        }
+    } catch (e) {
+        wftDebugWarn("AI paragraph reconstruction failed; using local OCR reconstruction.", e);
+    }
+
+    return fallback;
+}
+
 
 async function extractTextFromSelectedImage(isAutomatic) {
     // When this function is used directly as a click handler, the browser passes
@@ -4854,15 +4923,32 @@ async function extractTextFromSelectedImage(isAutomatic) {
                 }
             }
 
-            var combinedText = reconstructParagraphsFromOcrPages(combinedParts);
+            setOcrStatus(
+                selectedImages.length > 1
+                    ? "Reconstructing paragraphs across " + selectedImages.length + " pages..."
+                    : "Reconstructing paragraphs...",
+                ""
+            );
+            var combinedText = await reconstructStudentWritingFromOcrPages(combinedParts, OCR_MODEL);
             syncSelectedImageState();
             selectedImageExtractedText = selectedImages.length === 1 ? combinedText : "";
             document.getElementById("studentWriting").value = combinedText;
             syncUiState();
+
+            if (isAutoGenreSelected()) {
+                setOcrStatus("Checking writing type from the whole passage...", "");
+                try {
+                    await classifyWritingGenreWithAi(combinedText, OCR_MODEL, { updateUi: true, reason: "ocr" });
+                } catch (eGenre) {
+                    wftDebugWarn("AI writing type check after OCR failed; using local fallback.", eGenre);
+                    updateGenreReviewBox();
+                }
+            }
+
             setOcrStatus(
                 selectedImages.length > 1
-                    ? "Text from " + selectedImages.length + " images was extracted and inserted into the writing box using " + OCR_MODEL + "."
-                    : "Text extracted and inserted into the writing box using " + OCR_MODEL + ".",
+                    ? "Text from " + selectedImages.length + " images was extracted, reconstructed, and inserted into the writing box using " + OCR_MODEL + "."
+                    : "Text extracted, reconstructed, and inserted into the writing box using " + OCR_MODEL + ".",
                 "success"
             );
             document.getElementById("studentWriting").focus();
@@ -6280,6 +6366,11 @@ function cleanPrintedStrength(text) {
 
 var currentWritingGenreInfo = null;
 var manualGenreOverrideValue = "__auto__";
+var aiWritingGenreCacheText = "";
+var aiWritingGenreCacheInfo = null;
+var aiWritingGenrePendingText = "";
+var aiWritingGenrePendingPromise = null;
+var aiWritingGenreStatus = "";
 
 function getWritingGenreChoices() {
     return [
@@ -6317,28 +6408,48 @@ function makeWritingGenreInfo(mainGenre, subtype, safeReference, confidence, sou
 
 function normalizeWritingGenreInfo(info) {
     info = info || {};
-    var mainGenre = info.mainGenre || info.genre || "Other / Unsure";
-    var subtype = info.subtype || "Writing";
+    var mainGenre = info.mainGenre || info.genre || info.writingType || "Other / Unsure";
+    var subtype = info.subtype || info.subGenre || "Writing";
     var safeReference = info.safeReference || info.referenceWord || info.safeRef || "piece of writing";
     var confidence = info.confidence || "low";
     var source = info.source || "auto";
+    var summary = info.oneSentenceSummary || info.summary || "";
+    var reason = info.reason || "";
+    var notProceduralReason = info.notProceduralReason || "";
 
-    if (mainGenre === "Narrative" || mainGenre === "Story") mainGenre = "Narrative / Story";
-    if (mainGenre === "Informational" || mainGenre === "Explanatory") mainGenre = "Informational / Explanatory";
-    if (mainGenre === "Opinion" || mainGenre === "Argument") mainGenre = "Opinion / Argument";
-    if (mainGenre === "Letter") mainGenre = "Letter / Email";
+    if (mainGenre === "Narrative" || mainGenre === "Story" || mainGenre === "Narrative / Story") mainGenre = "Narrative / Story";
+    else if (mainGenre === "Informational" || mainGenre === "Explanatory" || mainGenre === "Informational / Explanatory") mainGenre = "Informational / Explanatory";
+    else if (mainGenre === "Opinion" || mainGenre === "Argument" || mainGenre === "Opinion / Argument") mainGenre = "Opinion / Argument";
+    else if (mainGenre === "Letter" || mainGenre === "Email" || mainGenre === "Letter / Email") mainGenre = "Letter / Email";
+    else if (mainGenre === "Procedural" || mainGenre === "How-To" || mainGenre === "How To" || mainGenre === "Procedural / How-To") mainGenre = "Procedural / How-To";
+    else if (mainGenre === "Poem" || mainGenre === "Creative Writing" || mainGenre === "Poem / Creative Writing") mainGenre = "Poem / Creative Writing";
+    else if (mainGenre === "Text Response" || mainGenre === "Literary Analysis" || mainGenre === "Literary Analysis / Text Response") mainGenre = "Literary Analysis / Text Response";
+    else if (mainGenre === "Academic Short Response" || mainGenre === "Short Response") mainGenre = "Academic Short Response";
+    else if (mainGenre === "Journal" || mainGenre === "Reflection" || mainGenre === "Journal / Reflection") mainGenre = "Journal / Reflection";
+    else if (mainGenre === "Speech" || mainGenre === "Presentation" || mainGenre === "Speech / Presentation") mainGenre = "Speech / Presentation";
+    else mainGenre = "Other / Unsure";
 
-    if (mainGenre !== "Letter / Email" && safeReference === "letter") safeReference = "piece of writing";
-    if (mainGenre !== "Narrative / Story" && safeReference === "story") safeReference = "piece of writing";
-    if (mainGenre === "Poem / Creative Writing" && !/poem/i.test(subtype)) safeReference = "creative piece";
-    if (mainGenre === "Other / Unsure") safeReference = "piece of writing";
+    if (mainGenre === "Narrative / Story") safeReference = "story";
+    else if (mainGenre === "Informational / Explanatory") safeReference = "explanation";
+    else if (mainGenre === "Opinion / Argument") safeReference = "opinion piece";
+    else if (mainGenre === "Letter / Email") safeReference = "letter";
+    else if (mainGenre === "Procedural / How-To") safeReference = "how-to piece";
+    else if (mainGenre === "Poem / Creative Writing") safeReference = /poem/i.test(subtype) ? "poem" : "creative piece";
+    else if (mainGenre === "Literary Analysis / Text Response") safeReference = "response";
+    else if (mainGenre === "Academic Short Response") safeReference = "response";
+    else if (mainGenre === "Journal / Reflection") safeReference = "reflection";
+    else if (mainGenre === "Speech / Presentation") safeReference = "speech";
+    else safeReference = "piece of writing";
 
     return {
         mainGenre: mainGenre,
         subtype: subtype,
         safeReference: safeReference,
         confidence: confidence,
-        source: source
+        source: source,
+        oneSentenceSummary: summary,
+        reason: reason,
+        notProceduralReason: notProceduralReason
     };
 }
 
@@ -6423,28 +6534,39 @@ function detectNarrativeSubtype(value) {
     return "Story";
 }
 
-function looksLikeProceduralWriting(text) {
-    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
-    var value = raw.toLowerCase();
+function startsWithCommandVerbForProcedural(line) {
+    var value = String(line || "").trim().toLowerCase();
     if (!value) return false;
+    return /^(add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write)\b/.test(value);
+}
 
+function getProceduralSignalData(text) {
+    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
     var parts = extractWritingTitleParts(raw);
     var title = String(parts.title || "").trim();
     var body = String(parts.body || raw).trim();
     var bodyLower = body.toLowerCase();
-
     var lines = body.split("\n").map(function(line) {
         return line.trim();
     }).filter(function(line) {
         return line.length > 0;
     });
+    var firstLines = lines.slice(0, 8).join("\n");
+    var sentences = splitSentences(body);
+    var imperativeCount = 0;
+    var numberedOrBulletedInstructionCount = 0;
 
-    var firstLines = lines.slice(0, 6).join("\n");
-    var hasHowToTitle = /^\s*how\s+to\s+\w+/i.test(title) || /^\s*how\s+to\s+\w+/i.test(lines[0] || "");
-    var hasProcedureHeading = /(^|\n)\s*(materials|ingredients|supplies|tools|directions|instructions|procedure|method|steps)\s*:?\s*($|\n)/i.test("\n" + firstLines + "\n");
-    var hasMaterialsWithDirections = /(^|\n)\s*(materials|ingredients|supplies|tools)\s*:/i.test("\n" + body + "\n") && /(^|\n)\s*(directions|instructions|procedure|method|steps)\s*:/i.test("\n" + body + "\n");
-    var hasTeacherHowToPhrase = /\b(i will explain|i will show|this will show|this explains|this tells)\s+you\s+how\s+to\b/i.test(bodyLower);
-    var hasNeedList = /\byou\s+(will\s+)?need\b|\bwhat\s+you\s+need\b/i.test(bodyLower);
+    for (var i = 0; i < lines.length; i++) {
+        if (/^(\d+[.)]|[-*])\s+/.test(lines[i])) {
+            numberedOrBulletedInstructionCount += 1;
+            if (startsWithCommandVerbForProcedural(lines[i].replace(/^(\d+[.)]|[-*])\s+/, ""))) imperativeCount += 1;
+        }
+    }
+    for (var j = 0; j < sentences.length; j++) {
+        var sentence = String(sentences[j] || "").trim();
+        sentence = sentence.replace(/^(first|next|then|after that|finally|last)\s*[,;]?\s+/i, "");
+        if (startsWithCommandVerbForProcedural(sentence)) imperativeCount += 1;
+    }
 
     var sequenceCount = countGenreRegexMatches(bodyLower, [
         /(^|[.!?]\s+)first\b\s*[,;]?/i,
@@ -6455,26 +6577,62 @@ function looksLikeProceduralWriting(text) {
         /(^|[.!?]\s+)last\b\s*[,;]?/i
     ]);
 
-    var instructionVerbPattern = "add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write";
-    var imperativeCount = countGenreRegexMatches(bodyLower, [
-        new RegExp("(^|[.!?]\\s+)(" + instructionVerbPattern + ")\\b", "i"),
-        new RegExp("(^|\\n)\\s*\\d+[.)]\\s*(" + instructionVerbPattern + ")\\b", "i"),
-        new RegExp("(^|\\n)\\s*[-*]\\s*(" + instructionVerbPattern + ")\\b", "i"),
-        new RegExp("(^|[.!?]\\s+)(first|next|then|after that|finally|last)\\s*[,;]?\\s*(" + instructionVerbPattern + ")\\b", "i")
-    ]);
+    return {
+        title: title,
+        body: body,
+        hasHowToTitle: /^\s*how\s+to\s+\w+/i.test(title) || /^\s*how\s+to\s+\w+/i.test(lines[0] || ""),
+        hasProcedureHeading: /(^|\n)\s*(materials|ingredients|supplies|tools|directions|instructions|procedure|method|steps)\s*:?\s*($|\n)/i.test("\n" + firstLines + "\n"),
+        hasMaterialsWithDirections: /(^|\n)\s*(materials|ingredients|supplies|tools)\s*:/i.test("\n" + body + "\n") && /(^|\n)\s*(directions|instructions|procedure|method|steps)\s*:/i.test("\n" + body + "\n"),
+        hasTeacherHowToPhrase: /\b(i will explain|i will show|this will show|this explains|this tells)\s+you\s+how\s+to\b/i.test(bodyLower),
+        hasNeedList: /\byou\s+(will\s+)?need\b|\bwhat\s+you\s+need\b/i.test(bodyLower),
+        hasDirectReaderInstruction: /\byou\s+(should|must|need to|have to|will|can)\s+(add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write)\b/i.test(bodyLower),
+        sequenceCount: sequenceCount,
+        imperativeCount: imperativeCount,
+        numberedOrBulletedInstructionCount: numberedOrBulletedInstructionCount
+    };
+}
 
-    var numberedOrBulletedInstructionCount = 0;
-    for (var i = 0; i < lines.length; i++) {
-        if (/^(\d+[.)]|[-*])\s+/.test(lines[i])) numberedOrBulletedInstructionCount += 1;
+function hasClearProceduralTeachingPurpose(text) {
+    var signals = getProceduralSignalData(text);
+    if (signals.hasHowToTitle || signals.hasMaterialsWithDirections) return true;
+    if (signals.hasProcedureHeading && (signals.hasNeedList || signals.hasDirectReaderInstruction || signals.imperativeCount >= 1 || signals.numberedOrBulletedInstructionCount >= 2)) return true;
+    if (signals.hasTeacherHowToPhrase && (signals.sequenceCount >= 1 || signals.imperativeCount >= 1 || signals.hasDirectReaderInstruction)) return true;
+    if (signals.hasNeedList && (signals.imperativeCount >= 2 || signals.numberedOrBulletedInstructionCount >= 2)) return true;
+    if (signals.hasDirectReaderInstruction && (signals.sequenceCount >= 2 || signals.imperativeCount >= 2)) return true;
+    if (signals.numberedOrBulletedInstructionCount >= 3 && signals.imperativeCount >= 2) return true;
+    return false;
+}
+
+function hasStrongNarrativeSignals(text) {
+    var raw = String(text || "");
+    var value = raw.toLowerCase();
+    var score = 0;
+    if (/\b(i|he|she|they|we)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped|wanted|tried|knew|asked|realized|realised|laid|lay|closed|entered|found)\b/i.test(value)) score += 2;
+    if (/\b(door|dimension|world|city|school|room|house|bed|window|sky)\b/i.test(value)) score += 1;
+    if (/\b(magic|magical|dragon|dragons|dimension|portal|kingdom|castle|witch|wizard|fairy|monster|mysterious|galasteria|superpower|spell|bunny|bunnies|foxes)\b/i.test(value)) score += 2;
+    if (/\b(once|one day|suddenly|finally|after|then|when|while)\b/i.test(value)) score += 1;
+    if (/\b(said|asked|told|waking me up|woke up|dream|dreaming)\b/i.test(value)) score += 1;
+    if (/\b(myself|my mom|teacher|teachers|kids|guard|bunny|mom|children|student)\b/i.test(value)) score += 1;
+    if (/\b(how to|materials|ingredients|directions|instructions|procedure)\b/i.test(value)) score -= 2;
+    return score >= 4;
+}
+
+function getLocalNarrativeGenreInfo(text) {
+    var nSubtype = detectNarrativeSubtype(text);
+    return makeWritingGenreInfo("Narrative / Story", nSubtype, "story", hasStrongNarrativeSignals(text) ? "high" : "medium", "auto");
+}
+
+function looksLikeProceduralWriting(text) {
+    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
+    if (!raw) return false;
+
+    var signals = getProceduralSignalData(raw);
+
+    if (hasStrongNarrativeSignals(raw) && !signals.hasHowToTitle && !signals.hasMaterialsWithDirections && !signals.hasTeacherHowToPhrase) {
+        return false;
     }
 
-    if (hasHowToTitle || hasMaterialsWithDirections) return true;
-    if (hasProcedureHeading && (hasNeedList || sequenceCount >= 1 || imperativeCount >= 1 || numberedOrBulletedInstructionCount >= 2)) return true;
-    if (hasTeacherHowToPhrase && (sequenceCount >= 1 || imperativeCount >= 1)) return true;
-    if (sequenceCount >= 2 && (imperativeCount >= 1 || hasNeedList)) return true;
-    if (numberedOrBulletedInstructionCount >= 2 && (imperativeCount >= 1 || hasNeedList || hasProcedureHeading)) return true;
-
-    return false;
+    return hasClearProceduralTeachingPurpose(raw);
 }
 
 function detectWritingGenreInfo(text) {
@@ -6486,8 +6644,12 @@ function detectWritingGenreInfo(text) {
         return makeWritingGenreInfo("Letter / Email", "Letter", "letter", "high", "auto");
     }
 
+    if (hasStrongNarrativeSignals(raw)) {
+        return getLocalNarrativeGenreInfo(raw);
+    }
+
     if (looksLikeProceduralWriting(raw)) {
-        return makeWritingGenreInfo("Procedural / How-To", "How-To", "how-to piece", "high", "auto");
+        return makeWritingGenreInfo("Procedural / How-To", "How-To", "how-to piece", "medium", "auto");
     }
 
     if (/\b(good morning|today i will|my presentation|i am here to talk|ladies and gentlemen|fellow students)\b/i.test(value)) {
@@ -6537,9 +6699,8 @@ function detectWritingGenreInfo(text) {
         /\bdoor\b/i,
         /\bcharacter\b/i
     ]);
-    if (narrativeScore >= 2 || /\b(i|he|she|they)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped)\b/i.test(value)) {
-        var nSubtype = detectNarrativeSubtype(raw);
-        return makeWritingGenreInfo("Narrative / Story", nSubtype, "story", narrativeScore >= 4 ? "high" : "medium", "auto");
+    if (narrativeScore >= 2 || /\b(i|he|she|they)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped|wanted|tried|knew|asked|realized|realised)\b/i.test(value)) {
+        return getLocalNarrativeGenreInfo(raw);
     }
 
     if (/\bfacts?\b|\bfor example\b|\baccording to\b|\bexplains?\b|\bis called\b|\bare called\b|\bbecause\b|\bthis means\b|\breport\b|\bresearch\b/i.test(value)) {
@@ -6553,6 +6714,145 @@ function detectWritingGenreInfo(text) {
     return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
 }
 
+function isAutoGenreSelected() {
+    var select = typeof document !== "undefined" ? document.getElementById("writingGenreSelect") : null;
+    var selected = select ? select.value : manualGenreOverrideValue;
+    return !selected || selected === "__auto__";
+}
+
+function getGenreClassificationModel(fallbackModel) {
+    if (fallbackModel) return fallbackModel;
+    var modelEl = typeof document !== "undefined" ? document.getElementById("modelSelect") : null;
+    if (modelEl && modelEl.value) return modelEl.value;
+    return DEFAULT_MODEL;
+}
+
+function getCachedAiGenreInfo(text) {
+    var raw = String(text || "").trim();
+    if (raw && aiWritingGenreCacheInfo && aiWritingGenreCacheText === raw) {
+        return aiWritingGenreCacheInfo;
+    }
+    return null;
+}
+
+function getAutoWritingGenreInfo(text) {
+    var cached = getCachedAiGenreInfo(text);
+    if (cached) return cached;
+    return detectWritingGenreInfo(text);
+}
+
+function buildWritingGenreClassificationPrompt(text) {
+    return [
+        "Classify the student's writing type by understanding the whole passage, not by matching isolated keywords.",
+        "First make a one-sentence summary of what the passage is about. Then classify the genre from that summary and the overall purpose.",
+        "Return JSON only, with no markdown.",
+        "Allowed mainGenre values: Narrative / Story, Informational / Explanatory, Opinion / Argument, Literary Analysis / Text Response, Poem / Creative Writing, Letter / Email, Journal / Reflection, Procedural / How-To, Academic Short Response, Speech / Presentation, Other / Unsure.",
+        "Use Procedural / How-To only if the main purpose is to teach the reader how to do, make, cook, build, use, play, or complete something with instructions.",
+        "Do not classify a story as Procedural / How-To just because it contains sequence words such as first, next, after, finally, steps, open, or turn.",
+        "Narrative / Story should be used when the passage has a narrator or characters, setting, events over time, a problem/discovery/adventure, dialogue, thoughts, or fictional/fantasy elements.",
+        "If the passage enters another world, has magic, dragons, animals acting like people, a portal, a mystery door, or a fictional place, it is probably Narrative / Story with subtype Fantasy.",
+        "JSON schema:",
+        "{",
+        "  \"oneSentenceSummary\": \"short summary of the passage\",",
+        "  \"mainGenre\": \"one allowed value\",",
+        "  \"subtype\": \"specific subtype, such as Fantasy, Personal Narrative, How-To, Opinion Writing, Informational Writing, Poem, Letter, or Short Response\",",
+        "  \"safeReference\": \"story, explanation, opinion piece, response, creative piece, letter, reflection, how-to piece, speech, poem, or piece of writing\",",
+        "  \"confidence\": \"high, medium, or low\",",
+        "  \"reason\": \"brief reason based on the whole passage\",",
+        "  \"notProceduralReason\": \"briefly explain why it is or is not a how-to piece\"",
+        "}",
+        "",
+        "Student writing:",
+        String(text || "").trim()
+    ].join("\n");
+}
+
+function sanitizeAiGenreAgainstText(info, text) {
+    var normalized = normalizeWritingGenreInfo(info);
+    var raw = String(text || "");
+
+    if (normalized.mainGenre === "Procedural / How-To" && !hasClearProceduralTeachingPurpose(raw)) {
+        if (hasStrongNarrativeSignals(raw)) {
+            return normalizeWritingGenreInfo({
+                mainGenre: "Narrative / Story",
+                subtype: detectNarrativeSubtype(raw),
+                safeReference: "story",
+                confidence: "high",
+                source: "ai-safety",
+                oneSentenceSummary: normalized.oneSentenceSummary,
+                reason: "The passage has story features, so it should not be treated as a how-to piece.",
+                notProceduralReason: "It follows a narrator through events instead of teaching the reader a procedure."
+            });
+        }
+        return normalizeWritingGenreInfo({
+            mainGenre: "Other / Unsure",
+            subtype: "Writing",
+            safeReference: "piece of writing",
+            confidence: "low",
+            source: "ai-safety",
+            oneSentenceSummary: normalized.oneSentenceSummary,
+            reason: "The AI suggested procedural, but the writing does not clearly teach a process.",
+            notProceduralReason: "Procedural labels require clear reader instructions, not just sequence words."
+        });
+    }
+
+    if (hasStrongNarrativeSignals(raw) && normalized.mainGenre !== "Narrative / Story" && normalized.mainGenre !== "Letter / Email" && normalized.mainGenre !== "Poem / Creative Writing") {
+        var localNarrative = getLocalNarrativeGenreInfo(raw);
+        localNarrative.source = normalized.source === "ai" ? "ai-safety" : localNarrative.source;
+        localNarrative.oneSentenceSummary = normalized.oneSentenceSummary;
+        localNarrative.reason = "Strong story signals were detected in the whole passage.";
+        localNarrative.notProceduralReason = "The passage follows events in a story rather than giving directions.";
+        return normalizeWritingGenreInfo(localNarrative);
+    }
+
+    normalized.source = normalized.source || "ai";
+    return normalized;
+}
+
+async function classifyWritingGenreWithAi(text, model, options) {
+    options = options || {};
+    var raw = String(text || "").trim();
+    if (!raw) return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
+
+    var cached = getCachedAiGenreInfo(raw);
+    if (cached) return cached;
+
+    if (aiWritingGenrePendingPromise && aiWritingGenrePendingText === raw) {
+        return aiWritingGenrePendingPromise;
+    }
+
+    aiWritingGenreStatus = "checking";
+    if (options.updateUi) updateGenreReviewBox();
+
+    aiWritingGenrePendingText = raw;
+    aiWritingGenrePendingPromise = (async function() {
+        try {
+            var prompt = buildWritingGenreClassificationPrompt(raw);
+            var response = await callOpenRouter(getGenreClassificationModel(model), prompt);
+            var parsed = parseFirstJsonObject(response);
+            if (!parsed) throw new Error("The writing type classifier did not return valid JSON.");
+            parsed.source = "ai";
+            var info = sanitizeAiGenreAgainstText(parsed, raw);
+            aiWritingGenreCacheText = raw;
+            aiWritingGenreCacheInfo = info;
+            aiWritingGenreStatus = "ready";
+            if (options.updateUi && isAutoGenreSelected()) {
+                currentWritingGenreInfo = info;
+                updateGenreReviewBox();
+            }
+            return info;
+        } catch (e) {
+            aiWritingGenreStatus = "failed";
+            throw e;
+        } finally {
+            aiWritingGenrePendingText = "";
+            aiWritingGenrePendingPromise = null;
+        }
+    })();
+
+    return aiWritingGenrePendingPromise;
+}
+
 function getManualGenreInfo(value) {
     var choice = getGenreChoiceByValue(value);
     if (!choice) return null;
@@ -6562,8 +6862,8 @@ function getManualGenreInfo(value) {
 function getWritingGenreInfoFromUi(text) {
     var select = typeof document !== "undefined" ? document.getElementById("writingGenreSelect") : null;
     var selected = select ? select.value : manualGenreOverrideValue;
-    if (selected && selected !== "__auto__") return getManualGenreInfo(selected) || detectWritingGenreInfo(text);
-    return detectWritingGenreInfo(text);
+    if (selected && selected !== "__auto__") return getManualGenreInfo(selected) || getAutoWritingGenreInfo(text);
+    return getAutoWritingGenreInfo(text);
 }
 
 function buildWritingGenrePromptText(genreInfo) {
@@ -6629,14 +6929,23 @@ function updateGenreReviewBox() {
         return;
     }
     box.classList.add("active");
-    var autoInfo = detectWritingGenreInfo(text);
+    var autoInfo = getAutoWritingGenreInfo(text);
     var activeInfo = getWritingGenreInfoFromUi(text);
     currentWritingGenreInfo = activeInfo;
-    var sourceText = select.value === "__auto__" ? "Auto-detected" : "Teacher-selected";
+    var sourceText = select.value === "__auto__" ? (activeInfo.source === "ai" || activeInfo.source === "ai-safety" ? "AI-detected" : "Auto-detected") : "Teacher-selected";
+    var extraText = "";
+    if (select.value === "__auto__" && aiWritingGenreStatus === "checking" && !getCachedAiGenreInfo(text)) {
+        extraText = " Checking with AI...";
+    } else if (select.value === "__auto__" && autoInfo.confidence) {
+        extraText = " Confidence: " + escapeHtml(autoInfo.confidence) + ".";
+    }
+    if (select.value === "__auto__" && activeInfo.oneSentenceSummary) {
+        extraText += " Summary: " + escapeHtml(activeInfo.oneSentenceSummary);
+    }
     setWftSanitizedInnerHtml(summary, sourceText + ": <strong>" + escapeHtml(activeInfo.mainGenre) + "</strong>"
         + (activeInfo.subtype ? " - " + escapeHtml(activeInfo.subtype) : "")
         + " | Feedback will call it: <strong>" + escapeHtml(activeInfo.safeReference) + "</strong>."
-        + (select.value === "__auto__" && autoInfo.confidence ? " Confidence: " + escapeHtml(autoInfo.confidence) + "." : ""));
+        + extraText);
 }
 
 function isGenericKeepWriting(text) {
@@ -7152,6 +7461,60 @@ function getNotebookAssessmentSettings(data) {
     };
 }
 
+
+function getNotebookRevisionFocusItems(data) {
+    data = data || {};
+    var scoreMap = data.categoryScores || {};
+    var labels = typeof getActiveCategoryKeys === "function" ? getActiveCategoryKeys() : CATEGORY_KEYS.slice();
+    var focusLabels = {
+        "Grammar": "Verb tense and sentence breaks",
+        "Flow": "Sentence flow",
+        "Spelling & Punctuation": "Spelling and punctuation",
+        "Organization": "Paragraph organization and transitions",
+        "Ideas & Details": "Specific details",
+        "Word Choice": "Precise word choices",
+        "Neatness": "Spacing and handwriting"
+    };
+    var ranked = [];
+    for (var i = 0; i < labels.length; i += 1) {
+        var key = labels[i];
+        var score = scoreMap && scoreMap[key] != null ? Number(scoreMap[key]) : null;
+        if (!isFinite(score)) continue;
+        ranked.push({ key: key, score: score });
+    }
+    ranked.sort(function(a, b) {
+        if (a.score !== b.score) return a.score - b.score;
+        return labels.indexOf(a.key) - labels.indexOf(b.key);
+    });
+
+    var items = [];
+    function addItem(text) {
+        text = String(text || "").replace(/\s+/g, " ").trim();
+        if (!text || items.indexOf(text) !== -1) return;
+        items.push(text);
+    }
+
+    for (var j = 0; j < ranked.length && items.length < 3; j += 1) {
+        if (ranked[j].score >= 9 && items.length >= 2) continue;
+        addItem(focusLabels[ranked[j].key] || categoryDisplayLabel(ranked[j].key));
+    }
+
+    var plan = getGoalPlan(data);
+    if (items.length < 2 && plan && plan.growGoal) addItem(cleanNotebookSentence(plan.growGoal));
+    if (items.length < 2) addItem("Read the corrected version aloud");
+    if (items.length < 2) addItem("Notice one change you can use next time");
+    return items.slice(0, 3);
+}
+
+function renderNotebookRevisionFocusList(data) {
+    var items = getNotebookRevisionFocusItems(data);
+    var html = "";
+    for (var i = 0; i < items.length; i += 1) {
+        html += "<li>" + escapeHtml(items[i]) + "</li>";
+    }
+    return html || "<li>Read the corrected version aloud.</li>";
+}
+
 function fillNotebookSummary() {
     if (!latestAnalysisData) {
         alert("Please analyze the writing first.");
@@ -7202,6 +7565,7 @@ function fillNotebookSummary() {
         setWftSanitizedInnerHtml(nbDetailed, renderNotebookDetailedAssessment(latestAnalysisData.detailed));
     }
     document.getElementById("notebookTeacherComment").textContent = pickTeacherComment(latestAnalysisData);
+    setWftSanitizedInnerHtml("notebookRevisionFocusList", renderNotebookRevisionFocusList(latestAnalysisData));
     setWftSanitizedInnerHtml("notebookCorrectedText", wrapCorrectedHtmlForNotebookPrint(renderCorrected(text, latestAnalysisData.correctedStory || text)));
     return true;
 }
@@ -7217,25 +7581,25 @@ function getNotebookPrintCss() {
         ".btn-print:hover { background: #000; }",
         ".page { width: 148mm; min-height: 210mm; background: #ffffff; margin: 8mm auto; padding: 8mm 9mm 9mm; box-shadow: 0 2px 12px rgba(0,0,0,0.18); page-break-after: always; }",
         ".page:last-child { page-break-after: auto; }",
-        ".page-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #bfdbfe; padding-bottom: 4px; margin-bottom: 5px; }",
+        ".page-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #3b2f45; padding-bottom: 4px; margin-bottom: 5px; }",
         ".page-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 2px; }",
         ".page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 18.5px; font-weight: 400; color: #111111; line-height: 1.1; }",
         ".overall-score { text-align: right; flex-shrink: 0; margin-left: 8px; }",
         ".overall-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 1px; }",
-        ".overall-value { font-family: 'DM Serif Display', Georgia, serif; font-size: 26.5px; font-weight: 400; color: #111111; line-height: 1; }",
-        ".overall-value.score-excellent { color: #166534; }",
-        ".overall-value.score-good { color: #1d4ed8; }",
-        ".overall-value.score-developing { color: #b45309; }",
-        ".overall-value.score-needs-support { color: #c2410c; }",
+        ".overall-value { display: inline-block; font-family: 'DM Serif Display', Georgia, serif; font-size: 24.5px; font-weight: 400; color: #111111; line-height: 1; border: 1px solid #999999; border-radius: 7px; padding: 1px 6px 3px; background: #ffffff; }",
+        ".overall-value.score-excellent { color: #0f766e; border-color: #0f766e; background: #f0fdfa; }",
+        ".overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }",
+        ".overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }",
+        ".overall-value.score-needs-support { color: #c2410c; border-color: #fb923c; background: #fff7ed; }",
         ".meta-row { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
         ".meta-row strong { color: #111111; font-weight: 600; }",
-        ".writing-type-chip { display: inline-block; border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; border-radius: 99px; padding: 0 6px; font-weight: 700; line-height: 1.35; }",
+        ".writing-type-chip { display: inline; border: 0; background: transparent; color: #444444; border-radius: 0; padding: 0; font-weight: 400; line-height: inherit; }",
         ".top-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 5px; }",
         ".info-box { background: #f8fafc; border: 1px solid #cccccc; border-radius: 4px; padding: 4px 5px; }",
-        ".strength-box { border-left: 3px solid #22c55e; }",
-        ".strength-box .box-label { color: #166534; }",
-        ".grow-goal-box { border-left: 3px solid #3b82f6; }",
-        ".grow-goal-box .box-label { color: #1d4ed8; }",
+        ".strength-box { background: #f0fdfa; border-left: 3px solid #0f766e; }",
+        ".strength-box .box-label { color: #0f766e; }",
+        ".grow-goal-box { background: #fffbeb; border-left: 3px solid #d97706; }",
+        ".grow-goal-box .box-label { color: #92400e; }",
         ".box-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #444444; margin-bottom: 2px; }",
         ".info-box p { font-size: 9.9px; color: #111111; line-height: 1.45; }",
         ".teacher-comment { background: #f8fafc; border: 1px solid #cccccc; border-left: 3px solid #64748b; border-radius: 4px; padding: 4px 5px; margin-bottom: 6px; }",
@@ -7246,26 +7610,31 @@ function getNotebookPrintCss() {
         ".category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; width: 100%; min-width: 0; }",
         ".category-name { font-weight: 700; font-size: 10.3px; color: #111111; letter-spacing: 0.01em; min-width: 0; }",
         ".score-badge { font-size: 9.3px; font-weight: 700; background: #f3f4f6; border: 1px solid #9ca3af; border-radius: 99px; padding: 0px 5px; white-space: nowrap; color: #111111; }",
-        ".score-excellent .score-badge { background: #f0fdf4; border-color: #22c55e; color: #166534; }",
-        ".score-good .score-badge { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }",
-        ".score-developing .score-badge { background: #fffbeb; border-color: #f59e0b; color: #b45309; }",
+        ".score-excellent .score-badge { background: #f0fdfa; border-color: #0f766e; color: #0f766e; }",
+        ".score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }",
+        ".score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }",
         ".score-needs-support .score-badge { background: #fff7ed; border-color: #fb923c; color: #c2410c; }",
         ".score-bar-track { display: block; width: 100%; min-width: 0; height: 3.5px; min-height: 3.5px; background: #cccccc; border-radius: 99px; margin-bottom: 4px; overflow: hidden; }",
         ".score-bar-fill { display: block; height: 100%; min-height: 100%; border-radius: 99px; background: #333333; }",
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
-        ".evidence-block strong, .tip-block strong { font-weight: 700; color: #111111; }",
-        ".tip-block { font-size: 9.3px; color: #444444; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #cccccc; }",
-        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #bfdbfe; padding-bottom: 4px; margin-bottom: 8mm; }",
+        ".evidence-block strong { font-weight: 700; color: #111111; }",
+        ".tip-block strong { font-weight: 700; color: #92400e; }",
+        ".tip-block { font-size: 9.3px; color: #7c2d12; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #f3d08a; }",
+        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #3b2f45; padding-bottom: 4px; margin-bottom: 8mm; }",
         ".page2-meta { font-size: 8px; color: #444444; margin-bottom: 2px; }",
         ".page2-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; font-weight: 400; }",
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
-        ".corrected-writing { border: 1px solid #cccccc; border-left: 3px solid #60a5fa; border-radius: 4px; padding: 6mm 7mm; }",
-        ".corrected-writing .section-title { color: #1d4ed8; border-bottom-color: #bfdbfe; margin-bottom: 2mm; }",
-        ".corrected-note { font-size: 8.8px; color: #374151; background: #f8fbff; border-left: 2px solid #bfdbfe; padding: 2mm 2.5mm; margin-bottom: 3mm; line-height: 1.35; }",
+        ".corrected-writing { border: 1px solid #cccccc; border-top: 3px solid #3b2f45; border-radius: 4px; padding: 6mm 7mm; }",
+        ".corrected-writing .section-title { color: #3b2f45; border-bottom-color: #d6d3d1; margin-bottom: 2mm; }",
+        ".revision-focus { font-size: 8.8px; color: #374151; background: #fafaf9; border-left: 2px solid #d97706; padding: 2mm 2.5mm; margin-bottom: 3mm; line-height: 1.35; }",
+        ".revision-focus-title { font-size: 8.2px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #92400e; margin-bottom: 1mm; }",
+        ".revision-focus ul { margin: 0; padding-left: 3.8mm; }",
+        ".revision-focus li { margin: 0 0 0.5mm; }",
+        ".revision-focus li:last-child { margin-bottom: 0; }",
         ".corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; }",
-        ".corrected-writing .notebook-corrected-text p { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; border-left: 2px solid #dbeafe; padding-left: 3mm; }",
+        ".corrected-writing .notebook-corrected-text p { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; border-left: 0; padding-left: 0; }",
         ".corrected-writing .notebook-corrected-text p:last-child { margin-bottom: 0; }",
-        ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
+        ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: inherit; text-decoration: none; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
         ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3mm; color: #111111; }",
         ".auto-fit-page { --fit-scale: 1; }",
         ".auto-fit-page .page-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
@@ -7463,7 +7832,7 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
         + '</div>'
         + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
-        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="corrected-note">Read this version to see how your writing sounds with corrections.</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
+        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="revision-focus"><div class="revision-focus-title">Revision Focus</div><ul>' + renderNotebookRevisionFocusList(session) + '</ul></div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
 }
 
 
@@ -7650,8 +8019,9 @@ function reassessPortfolioSession(studentName, sessionId) {
 function refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session) {
     var html = String(printContentHtml || "");
     var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml((session && session.correctedPlainText) || (session && session.originalText) || "-");
-    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="corrected-note">Read this version to see how your writing sounds with corrections.</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
-    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div>(?:<div class="corrected-note">[\s\S]*?<\/div>)?<div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
+    var revisionFocusHtml = '<div class="revision-focus"><div class="revision-focus-title">Revision Focus</div><ul>' + renderNotebookRevisionFocusList(session || {}) + '</ul></div>';
+    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div>' + revisionFocusHtml + '<div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
+    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div>(?:<div class="corrected-note">[\s\S]*?<\/div>|<div class="revision-focus">[\s\S]*?<\/ul><\/div>)?<div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
     if (pattern.test(html)) return html.replace(pattern, replacement);
     return buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
 }
@@ -7770,6 +8140,14 @@ async function analyzeWriting() {
     try {
         var actualWords = countWords(text);
         var writingGenreInfo = getWritingGenreInfoFromUi(text);
+        if (isAutoGenreSelected()) {
+            try {
+                writingGenreInfo = await classifyWritingGenreWithAi(text, model, { updateUi: true, reason: "analysis" });
+            } catch (eGenreAnalysis) {
+                wftDebugWarn("AI writing type classification failed during analysis; using local fallback.", eGenreAnalysis);
+                writingGenreInfo = getAutoWritingGenreInfo(text);
+            }
+        }
         currentWritingGenreInfo = writingGenreInfo;
         updateGenreReviewBox();
         var sampleStatus = getSampleStatusData(text, gradeProfile);

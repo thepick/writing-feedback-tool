@@ -2843,7 +2843,7 @@
         justify-content: space-between;
         align-items: flex-end;
         border-bottom: 2px solid #333333;
-        box-shadow: 0 2px 0 #bfdbfe;
+        box-shadow: 0 2px 0 #3b2f45;
         padding-bottom: 4px;
         margin-bottom: 5px;
     }
@@ -2876,16 +2876,21 @@
         margin-bottom: 1px;
     }
     .notebook-print-doc .overall-value {
+        display: inline-block;
         font-family: 'DM Serif Display', Georgia, serif;
-        font-size: 26.5px;
+        font-size: 24.5px;
         font-weight: 400;
         color: #111111;
         line-height: 1;
+        border: 1px solid #999999;
+        border-radius: 7px;
+        padding: 1px 6px 3px;
+        background: #ffffff;
     }
-    .notebook-print-doc .overall-value.score-excellent { color: #166534; }
-    .notebook-print-doc .overall-value.score-good { color: #1d4ed8; }
-    .notebook-print-doc .overall-value.score-developing { color: #b45309; }
-    .notebook-print-doc .overall-value.score-needs-support { color: #c2410c; }
+    .notebook-print-doc .overall-value.score-excellent { color: #0f766e; border-color: #0f766e; background: #f0fdfa; }
+    .notebook-print-doc .overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }
+    .notebook-print-doc .overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }
+    .notebook-print-doc .overall-value.score-needs-support { color: #c2410c; border-color: #fb923c; background: #fff7ed; }
     .notebook-print-doc .meta-row {
         display: flex;
         flex-wrap: wrap;
@@ -2898,14 +2903,14 @@
     }
     .notebook-print-doc .meta-row strong { color: #111111; font-weight: 600; }
     .notebook-print-doc .writing-type-chip {
-        display: inline-block;
-        border: 1px solid #bfdbfe;
-        background: #eff6ff;
-        color: #1d4ed8;
-        border-radius: 99px;
-        padding: 0 6px;
-        font-weight: 700;
-        line-height: 1.35;
+        display: inline;
+        border: 0;
+        background: transparent;
+        color: #444444;
+        border-radius: 0;
+        padding: 0;
+        font-weight: 400;
+        line-height: inherit;
     }
     .notebook-print-doc .top-boxes {
         display: grid;
@@ -2920,16 +2925,18 @@
         padding: 4px 5px;
     }
     .notebook-print-doc .strength-box {
-        border-left: 3px solid #22c55e;
+        background: #f0fdfa;
+        border-left: 3px solid #0f766e;
     }
     .notebook-print-doc .strength-box .box-label {
-        color: #166534;
+        color: #0f766e;
     }
     .notebook-print-doc .grow-goal-box {
-        border-left: 3px solid #3b82f6;
+        background: #fffbeb;
+        border-left: 3px solid #d97706;
     }
     .notebook-print-doc .grow-goal-box .box-label {
-        color: #1d4ed8;
+        color: #92400e;
     }
     .notebook-print-doc .box-label {
         font-size: 9px;
@@ -3006,9 +3013,9 @@
         white-space: nowrap;
         color: #111111;
     }
-    .notebook-print-doc .score-excellent .score-badge { background: #f0fdf4; border-color: #22c55e; color: #166534; }
-    .notebook-print-doc .score-good .score-badge { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
-    .notebook-print-doc .score-developing .score-badge { background: #fffbeb; border-color: #f59e0b; color: #b45309; }
+    .notebook-print-doc .score-excellent .score-badge { background: #f0fdfa; border-color: #0f766e; color: #0f766e; }
+    .notebook-print-doc .score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }
+    .notebook-print-doc .score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }
     .notebook-print-doc .score-needs-support .score-badge { background: #fff7ed; border-color: #fb923c; color: #c2410c; }
     .notebook-print-doc .score-bar-track {
         display: block;
@@ -3034,21 +3041,21 @@
         line-height: 1.45;
         margin-bottom: 3px;
     }
-    .notebook-print-doc .evidence-block strong,
-    .notebook-print-doc .tip-block strong { font-weight: 700; color: #111111; }
+    .notebook-print-doc .evidence-block strong { font-weight: 700; color: #111111; }
+    .notebook-print-doc .tip-block strong { font-weight: 700; color: #92400e; }
     .notebook-print-doc .tip-block {
         font-size: 9.3px;
-        color: #444444;
+        color: #7c2d12;
         line-height: 1.45;
         padding-top: 3px;
-        border-top: 1px dashed #cccccc;
+        border-top: 1px dashed #f3d08a;
     }
     .notebook-print-doc .page2-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
         border-bottom: 2px solid #333333;
-        box-shadow: 0 2px 0 #bfdbfe;
+        box-shadow: 0 2px 0 #3b2f45;
         padding-bottom: 4px;
         margin-bottom: 8mm;
     }
@@ -3069,24 +3076,40 @@
     }
     .notebook-print-doc .corrected-writing {
         border: 1px solid #cccccc;
-        border-left: 3px solid #60a5fa;
+        border-top: 3px solid #3b2f45;
         border-radius: 4px;
         padding: 6mm 7mm;
     }
     .notebook-print-doc .corrected-writing .section-title {
-        color: #1d4ed8;
-        border-bottom-color: #bfdbfe;
+        color: #3b2f45;
+        border-bottom-color: #d6d3d1;
         margin-bottom: 2mm;
     }
-    .notebook-print-doc .corrected-note {
+    .notebook-print-doc .revision-focus {
         font-size: 8.8px;
         color: #374151;
-        background: #f8fbff;
-        border-left: 2px solid #bfdbfe;
+        background: #fafaf9;
+        border-left: 2px solid #d97706;
         padding: 2mm 2.5mm;
         margin-bottom: 3mm;
         line-height: 1.35;
     }
+    .notebook-print-doc .revision-focus-title {
+        font-size: 8.2px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #92400e;
+        margin-bottom: 1mm;
+    }
+    .notebook-print-doc .revision-focus ul {
+        margin: 0;
+        padding-left: 3.8mm;
+    }
+    .notebook-print-doc .revision-focus li {
+        margin: 0 0 0.5mm;
+    }
+    .notebook-print-doc .revision-focus li:last-child { margin-bottom: 0; }
     .notebook-print-doc .corrected-writing .notebook-corrected-text {
         font-size: 10px;
         color: #111111;
@@ -3100,15 +3123,14 @@
         line-height: 1.45;
         margin-bottom: 3mm;
         white-space: normal;
-        border-left: 2px solid #dbeafe;
-        padding-left: 3mm;
+        border-left: 0;
+        padding-left: 0;
     }
     .notebook-print-doc .corrected-writing .notebook-corrected-text p:last-child { margin-bottom: 0; }
     .notebook-print-doc .corrected-writing b,
     .notebook-print-doc .corrected-writing .corrected-highlight {
-        font-weight: 700;
-        text-decoration: underline;
-        text-decoration-thickness: 1px;
+        font-weight: inherit;
+        text-decoration: none;
         background: transparent;
         color: #111111;
         padding: 0;
@@ -3983,7 +4005,13 @@
 
                                 <div class="corrected-writing">
                                     <div class="section-title">Corrected Writing</div>
-                                    <div class="corrected-note">Read this version to see how your writing sounds with corrections.</div>
+                                    <div class="revision-focus">
+                                        <div class="revision-focus-title">Revision Focus</div>
+                                        <ul id="notebookRevisionFocusList">
+                                            <li>Read the corrected version aloud.</li>
+                                            <li>Notice one change you can use next time.</li>
+                                        </ul>
+                                    </div>
                                     <div id="notebookCorrectedText" class="notebook-corrected-text">-</div>
                                 </div>
                             </div>
