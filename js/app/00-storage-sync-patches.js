@@ -1840,23 +1840,57 @@ function rebuildPortfolioIndex(callback) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════════════════════
+function getWftStorageHealthHelpText(label) {
+    var help = {
+        "Storage mode": "Shows the format the app is using to save portfolio records. Older name-based storage can still work, but student-ID storage is safer for long-term use.",
+        "Safe mode": "Shows whether troubleshooting mode is active. Off means the app is running normally.",
+        "localStorage est. size": "Estimates how much small browser storage the app is using. A few hundred KB is normal and not a problem.",
+        "IndexedDB": "Shows whether the browser supports the larger local database used for heavier saved data, such as portfolio records and images.",
+        "Portfolio index": "Shows whether the app's list of saved student writing sessions looks healthy. Clean means no repair is currently needed.",
+        "Cached students": "Counts the students and writing sessions currently visible in this browser's saved data.",
+        "Last Drive sync": "Shows when the app last successfully synced with Google Drive. Never means Drive backup has not been completed from this browser.",
+        "Last index rebuild": "Shows when the portfolio index was last repaired or rebuilt.",
+        "Active source of truth": "Shows which saved-data source the app currently trusts most when loading portfolio information."
+    };
+    return help[label] || "";
+}
+
 function renderStorageHealthSummaryLines(summaryEl, lines) {
     if (!summaryEl) { return; }
     summaryEl.textContent = "";
     for (var i = 0; i < lines.length; i++) {
-        if (i > 0) { summaryEl.appendChild(document.createElement("br")); }
         var line = String(lines[i] || "");
+        var plainLine = line.replace(/<\/?b>/g, "");
+        var label = plainLine.split(":")[0];
+        var helpText = getWftStorageHealthHelpText(label);
+
+        var row = document.createElement("div");
+        row.className = "storage-health-row";
+
+        var valueEl = document.createElement("div");
+        valueEl.className = "storage-health-value";
+
         var parts = line.split(/<b>|<\/b>/);
         for (var p = 0; p < parts.length; p++) {
             if (!parts[p]) { continue; }
             if (p % 2 === 1) {
                 var strong = document.createElement("strong");
                 strong.textContent = parts[p];
-                summaryEl.appendChild(strong);
+                valueEl.appendChild(strong);
             } else {
-                summaryEl.appendChild(document.createTextNode(parts[p]));
+                valueEl.appendChild(document.createTextNode(parts[p]));
             }
         }
+        row.appendChild(valueEl);
+
+        if (helpText) {
+            var helpEl = document.createElement("div");
+            helpEl.className = "storage-health-explain";
+            helpEl.textContent = helpText;
+            row.appendChild(helpEl);
+        }
+
+        summaryEl.appendChild(row);
     }
 }
 
