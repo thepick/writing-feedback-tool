@@ -7461,6 +7461,60 @@ function getNotebookAssessmentSettings(data) {
     };
 }
 
+
+function getNotebookRevisionFocusItems(data) {
+    data = data || {};
+    var scoreMap = data.categoryScores || {};
+    var labels = typeof getActiveCategoryKeys === "function" ? getActiveCategoryKeys() : CATEGORY_KEYS.slice();
+    var focusLabels = {
+        "Grammar": "Verb tense and sentence breaks",
+        "Flow": "Sentence flow",
+        "Spelling & Punctuation": "Spelling and punctuation",
+        "Organization": "Paragraph organization and transitions",
+        "Ideas & Details": "Specific details",
+        "Word Choice": "Precise word choices",
+        "Neatness": "Spacing and handwriting"
+    };
+    var ranked = [];
+    for (var i = 0; i < labels.length; i += 1) {
+        var key = labels[i];
+        var score = scoreMap && scoreMap[key] != null ? Number(scoreMap[key]) : null;
+        if (!isFinite(score)) continue;
+        ranked.push({ key: key, score: score });
+    }
+    ranked.sort(function(a, b) {
+        if (a.score !== b.score) return a.score - b.score;
+        return labels.indexOf(a.key) - labels.indexOf(b.key);
+    });
+
+    var items = [];
+    function addItem(text) {
+        text = String(text || "").replace(/\s+/g, " ").trim();
+        if (!text || items.indexOf(text) !== -1) return;
+        items.push(text);
+    }
+
+    for (var j = 0; j < ranked.length && items.length < 3; j += 1) {
+        if (ranked[j].score >= 9 && items.length >= 2) continue;
+        addItem(focusLabels[ranked[j].key] || categoryDisplayLabel(ranked[j].key));
+    }
+
+    var plan = getGoalPlan(data);
+    if (items.length < 2 && plan && plan.growGoal) addItem(cleanNotebookSentence(plan.growGoal));
+    if (items.length < 2) addItem("Read the corrected version aloud");
+    if (items.length < 2) addItem("Notice one change you can use next time");
+    return items.slice(0, 3);
+}
+
+function renderNotebookRevisionFocusList(data) {
+    var items = getNotebookRevisionFocusItems(data);
+    var html = "";
+    for (var i = 0; i < items.length; i += 1) {
+        html += "<li>" + escapeHtml(items[i]) + "</li>";
+    }
+    return html || "<li>Read the corrected version aloud.</li>";
+}
+
 function fillNotebookSummary() {
     if (!latestAnalysisData) {
         alert("Please analyze the writing first.");
@@ -7511,6 +7565,7 @@ function fillNotebookSummary() {
         setWftSanitizedInnerHtml(nbDetailed, renderNotebookDetailedAssessment(latestAnalysisData.detailed));
     }
     document.getElementById("notebookTeacherComment").textContent = pickTeacherComment(latestAnalysisData);
+    setWftSanitizedInnerHtml("notebookRevisionFocusList", renderNotebookRevisionFocusList(latestAnalysisData));
     setWftSanitizedInnerHtml("notebookCorrectedText", wrapCorrectedHtmlForNotebookPrint(renderCorrected(text, latestAnalysisData.correctedStory || text)));
     return true;
 }
@@ -7526,25 +7581,25 @@ function getNotebookPrintCss() {
         ".btn-print:hover { background: #000; }",
         ".page { width: 148mm; min-height: 210mm; background: #ffffff; margin: 8mm auto; padding: 8mm 9mm 9mm; box-shadow: 0 2px 12px rgba(0,0,0,0.18); page-break-after: always; }",
         ".page:last-child { page-break-after: auto; }",
-        ".page-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #bfdbfe; padding-bottom: 4px; margin-bottom: 5px; }",
+        ".page-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #3b2f45; padding-bottom: 4px; margin-bottom: 5px; }",
         ".page-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 2px; }",
         ".page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 18.5px; font-weight: 400; color: #111111; line-height: 1.1; }",
         ".overall-score { text-align: right; flex-shrink: 0; margin-left: 8px; }",
         ".overall-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 1px; }",
-        ".overall-value { font-family: 'DM Serif Display', Georgia, serif; font-size: 26.5px; font-weight: 400; color: #111111; line-height: 1; }",
-        ".overall-value.score-excellent { color: #166534; }",
-        ".overall-value.score-good { color: #1d4ed8; }",
-        ".overall-value.score-developing { color: #b45309; }",
-        ".overall-value.score-needs-support { color: #c2410c; }",
+        ".overall-value { display: inline-block; font-family: 'DM Serif Display', Georgia, serif; font-size: 24.5px; font-weight: 400; color: #111111; line-height: 1; border: 1px solid #999999; border-radius: 7px; padding: 1px 6px 3px; background: #ffffff; }",
+        ".overall-value.score-excellent { color: #0f766e; border-color: #0f766e; background: #f0fdfa; }",
+        ".overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }",
+        ".overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }",
+        ".overall-value.score-needs-support { color: #c2410c; border-color: #fb923c; background: #fff7ed; }",
         ".meta-row { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
         ".meta-row strong { color: #111111; font-weight: 600; }",
-        ".writing-type-chip { display: inline-block; border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; border-radius: 99px; padding: 0 6px; font-weight: 700; line-height: 1.35; }",
+        ".writing-type-chip { display: inline; border: 0; background: transparent; color: #444444; border-radius: 0; padding: 0; font-weight: 400; line-height: inherit; }",
         ".top-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 5px; }",
         ".info-box { background: #f8fafc; border: 1px solid #cccccc; border-radius: 4px; padding: 4px 5px; }",
-        ".strength-box { border-left: 3px solid #22c55e; }",
-        ".strength-box .box-label { color: #166534; }",
-        ".grow-goal-box { border-left: 3px solid #3b82f6; }",
-        ".grow-goal-box .box-label { color: #1d4ed8; }",
+        ".strength-box { background: #f0fdfa; border-left: 3px solid #0f766e; }",
+        ".strength-box .box-label { color: #0f766e; }",
+        ".grow-goal-box { background: #fffbeb; border-left: 3px solid #d97706; }",
+        ".grow-goal-box .box-label { color: #92400e; }",
         ".box-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #444444; margin-bottom: 2px; }",
         ".info-box p { font-size: 9.9px; color: #111111; line-height: 1.45; }",
         ".teacher-comment { background: #f8fafc; border: 1px solid #cccccc; border-left: 3px solid #64748b; border-radius: 4px; padding: 4px 5px; margin-bottom: 6px; }",
@@ -7555,26 +7610,31 @@ function getNotebookPrintCss() {
         ".category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; width: 100%; min-width: 0; }",
         ".category-name { font-weight: 700; font-size: 10.3px; color: #111111; letter-spacing: 0.01em; min-width: 0; }",
         ".score-badge { font-size: 9.3px; font-weight: 700; background: #f3f4f6; border: 1px solid #9ca3af; border-radius: 99px; padding: 0px 5px; white-space: nowrap; color: #111111; }",
-        ".score-excellent .score-badge { background: #f0fdf4; border-color: #22c55e; color: #166534; }",
-        ".score-good .score-badge { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }",
-        ".score-developing .score-badge { background: #fffbeb; border-color: #f59e0b; color: #b45309; }",
+        ".score-excellent .score-badge { background: #f0fdfa; border-color: #0f766e; color: #0f766e; }",
+        ".score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }",
+        ".score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }",
         ".score-needs-support .score-badge { background: #fff7ed; border-color: #fb923c; color: #c2410c; }",
         ".score-bar-track { display: block; width: 100%; min-width: 0; height: 3.5px; min-height: 3.5px; background: #cccccc; border-radius: 99px; margin-bottom: 4px; overflow: hidden; }",
         ".score-bar-fill { display: block; height: 100%; min-height: 100%; border-radius: 99px; background: #333333; }",
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
-        ".evidence-block strong, .tip-block strong { font-weight: 700; color: #111111; }",
-        ".tip-block { font-size: 9.3px; color: #444444; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #cccccc; }",
-        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #bfdbfe; padding-bottom: 4px; margin-bottom: 8mm; }",
+        ".evidence-block strong { font-weight: 700; color: #111111; }",
+        ".tip-block strong { font-weight: 700; color: #92400e; }",
+        ".tip-block { font-size: 9.3px; color: #7c2d12; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #f3d08a; }",
+        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #3b2f45; padding-bottom: 4px; margin-bottom: 8mm; }",
         ".page2-meta { font-size: 8px; color: #444444; margin-bottom: 2px; }",
         ".page2-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; font-weight: 400; }",
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
-        ".corrected-writing { border: 1px solid #cccccc; border-left: 3px solid #60a5fa; border-radius: 4px; padding: 6mm 7mm; }",
-        ".corrected-writing .section-title { color: #1d4ed8; border-bottom-color: #bfdbfe; margin-bottom: 2mm; }",
-        ".corrected-note { font-size: 8.8px; color: #374151; background: #f8fbff; border-left: 2px solid #bfdbfe; padding: 2mm 2.5mm; margin-bottom: 3mm; line-height: 1.35; }",
+        ".corrected-writing { border: 1px solid #cccccc; border-top: 3px solid #3b2f45; border-radius: 4px; padding: 6mm 7mm; }",
+        ".corrected-writing .section-title { color: #3b2f45; border-bottom-color: #d6d3d1; margin-bottom: 2mm; }",
+        ".revision-focus { font-size: 8.8px; color: #374151; background: #fafaf9; border-left: 2px solid #d97706; padding: 2mm 2.5mm; margin-bottom: 3mm; line-height: 1.35; }",
+        ".revision-focus-title { font-size: 8.2px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #92400e; margin-bottom: 1mm; }",
+        ".revision-focus ul { margin: 0; padding-left: 3.8mm; }",
+        ".revision-focus li { margin: 0 0 0.5mm; }",
+        ".revision-focus li:last-child { margin-bottom: 0; }",
         ".corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; }",
-        ".corrected-writing .notebook-corrected-text p { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; border-left: 2px solid #dbeafe; padding-left: 3mm; }",
+        ".corrected-writing .notebook-corrected-text p { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; border-left: 0; padding-left: 0; }",
         ".corrected-writing .notebook-corrected-text p:last-child { margin-bottom: 0; }",
-        ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
+        ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: inherit; text-decoration: none; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
         ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3mm; color: #111111; }",
         ".auto-fit-page { --fit-scale: 1; }",
         ".auto-fit-page .page-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
@@ -7772,7 +7832,7 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
         + '</div>'
         + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
-        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="corrected-note">Read this version to see how your writing sounds with corrections.</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
+        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="revision-focus"><div class="revision-focus-title">Revision Focus</div><ul>' + renderNotebookRevisionFocusList(session) + '</ul></div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
 }
 
 
@@ -7959,8 +8019,9 @@ function reassessPortfolioSession(studentName, sessionId) {
 function refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session) {
     var html = String(printContentHtml || "");
     var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml((session && session.correctedPlainText) || (session && session.originalText) || "-");
-    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="corrected-note">Read this version to see how your writing sounds with corrections.</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
-    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div>(?:<div class="corrected-note">[\s\S]*?<\/div>)?<div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
+    var revisionFocusHtml = '<div class="revision-focus"><div class="revision-focus-title">Revision Focus</div><ul>' + renderNotebookRevisionFocusList(session || {}) + '</ul></div>';
+    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div>' + revisionFocusHtml + '<div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
+    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div>(?:<div class="corrected-note">[\s\S]*?<\/div>|<div class="revision-focus">[\s\S]*?<\/ul><\/div>)?<div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
     if (pattern.test(html)) return html.replace(pattern, replacement);
     return buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
 }
