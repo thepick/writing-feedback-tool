@@ -4600,6 +4600,195 @@ function bindDesktopImageDrop() {
     });
 }
 
+
+function getMedianNumber(values) {
+    var nums = Array.isArray(values) ? values.slice().filter(function(v) {
+        return typeof v === "number" && !isNaN(v);
+    }) : [];
+    if (!nums.length) return 0;
+    nums.sort(function(a, b) { return a - b; });
+    var mid = Math.floor(nums.length / 2);
+    if (nums.length % 2) return nums[mid];
+    return (nums[mid - 1] + nums[mid]) / 2;
+}
+
+function analyzeOcrPageMetrics(text) {
+    var lines = String(text || "").replace(/\r\n?/g, "\n").split("\n");
+    var lengths = [];
+    for (var i = 0; i < lines.length; i++) {
+        var trimmed = lines[i].trim();
+        if (trimmed.length >= 12) lengths.push(trimmed.length);
+    }
+    var median = getMedianNumber(lengths);
+    var maxLen = 0;
+    for (var j = 0; j < lengths.length; j++) {
+        if (lengths[j] > maxLen) maxLen = lengths[j];
+    }
+    return {
+        lines: lines,
+        typicalLineLength: median || maxLen || 0,
+        maxLineLength: maxLen || median || 0
+    };
+}
+
+function startsWithContinuationWord(line) {
+    return /^(and|but|so|because|then|or|yet|for|when|while|after|before|if|although|though|as|until|since|therefore|however)\b/i.test(String(line || "").trim());
+}
+
+function endsWithStrongSentencePunctuation(line) {
+    return /[.!?]["')\]]*$/.test(String(line || "").trim());
+}
+
+function lineStartsLowercase(line) {
+    var trimmed = String(line || "").trim();
+    return /^[a-z]/.test(trimmed);
+}
+
+function lineHasIndent(line) {
+    return /^[ \t]{2,}\S/.test(String(line || ""));
+}
+
+function looksLikeLikelyTitleLine(line) {
+    var trimmed = String(line || "").trim();
+    if (!trimmed) return false;
+    var words = trimmed.split(/\s+/).filter(Boolean);
+    if (!words.length || words.length > 8 || trimmed.length > 60) return false;
+    if (/[.!?,:;]$/.test(trimmed)) return false;
+    if (!/^[A-Z0-9"']/.test(trimmed)) return false;
+    return /^[A-Za-z0-9'" -]+$/.test(trimmed);
+}
+
+function joinOcrParagraphLines(lines) {
+    var result = "";
+    for (var i = 0; i < lines.length; i++) {
+        var part = String(lines[i] || "").trim();
+        if (!part) continue;
+        if (!result) {
+            result = part;
+        } else if (/-$/.test(result)) {
+            result += part;
+        } else {
+            result += " " + part;
+        }
+    }
+    return result.trim();
+}
+
+function makeOcrLineInfo(rawLine, pageIndex, lineIndex, metrics) {
+    var trimmed = String(rawLine || "").trim();
+    var typical = metrics && metrics.typicalLineLength ? metrics.typicalLineLength : 0;
+    return {
+        raw: String(rawLine || ""),
+        text: trimmed,
+        pageIndex: pageIndex,
+        lineIndex: lineIndex,
+        hasIndent: lineHasIndent(rawLine),
+        endsSentence: endsWithStrongSentencePunctuation(trimmed),
+        endsSoftPunctuation: /[,;:]$/.test(trimmed),
+        startsLowercase: lineStartsLowercase(trimmed),
+        startsContinuationWord: startsWithContinuationWord(trimmed),
+        startsWithQuote: /^["']/.test(trimmed),
+        wordCount: countWords(trimmed),
+        isLikelyTitle: looksLikeLikelyTitleLine(trimmed),
+        isFullLine: typical ? (trimmed.length >= Math.max(18, Math.round(typical * 0.85))) : false
+    };
+}
+
+function shouldBreakOcrParagraph(prevInfo, nextInfo, state) {
+    if (!prevInfo || !nextInfo) return false;
+    if (state && state.forceBreakAfterPrevious) return true;
+
+    var isPageBoundary = !!(state && state.isPageBoundary);
+
+    if (isPageBoundary) {
+        if (!prevInfo.endsSentence) return false;
+        if (prevInfo.isFullLine && !nextInfo.hasIndent) return false;
+    }
+
+    var score = 0;
+
+    if (nextInfo.hasIndent) score += 4;
+    else score -= 1;
+
+    if (prevInfo.endsSentence) score += 1;
+    else score -= 4;
+
+    if (prevInfo.isFullLine) score -= 2;
+    else if (prevInfo.endsSentence) score += 2;
+
+    if (prevInfo.endsSoftPunctuation) score -= 1;
+    if (nextInfo.startsLowercase) score -= 3;
+    if (nextInfo.startsContinuationWord) score -= 2;
+
+    if (nextInfo.startsWithQuote && prevInfo.endsSentence) score += 2;
+    if (prevInfo.startsWithQuote && nextInfo.startsWithQuote) score += 1;
+    if (nextInfo.isLikelyTitle) score += 3;
+
+    if (isPageBoundary) score -= 1;
+
+    return score >= 3;
+}
+
+function reconstructParagraphsFromOcrPages(pageTexts) {
+    var pages = Array.isArray(pageTexts) ? pageTexts : [String(pageTexts || "")];
+    if (!pages.length) return "";
+
+    var pageData = [];
+    for (var p = 0; p < pages.length; p++) {
+        pageData.push(analyzeOcrPageMetrics(pages[p]));
+    }
+
+    var paragraphs = [];
+    var currentParagraph = [];
+    var previousInfo = null;
+    var forceBreakAfterPrevious = false;
+
+    function flushParagraph() {
+        if (!currentParagraph.length) return;
+        var joined = joinOcrParagraphLines(currentParagraph);
+        if (joined) paragraphs.push(joined);
+        currentParagraph = [];
+    }
+
+    for (var pageIndex = 0; pageIndex < pageData.length; pageIndex++) {
+        var page = pageData[pageIndex];
+        for (var lineIndex = 0; lineIndex < page.lines.length; lineIndex++) {
+            var rawLine = page.lines[lineIndex];
+            var trimmed = String(rawLine || "").trim();
+
+            if (!trimmed) {
+                flushParagraph();
+                previousInfo = null;
+                forceBreakAfterPrevious = false;
+                continue;
+            }
+
+            var info = makeOcrLineInfo(rawLine, pageIndex, lineIndex, page);
+
+            if (!previousInfo) {
+                currentParagraph.push(info.text);
+                previousInfo = info;
+                forceBreakAfterPrevious = (paragraphs.length === 0 && currentParagraph.length === 1 && info.isLikelyTitle);
+                continue;
+            }
+
+            var shouldBreak = shouldBreakOcrParagraph(previousInfo, info, {
+                isPageBoundary: previousInfo.pageIndex !== info.pageIndex,
+                forceBreakAfterPrevious: forceBreakAfterPrevious
+            });
+
+            if (shouldBreak) flushParagraph();
+            currentParagraph.push(info.text);
+            previousInfo = info;
+            forceBreakAfterPrevious = (paragraphs.length === 0 && currentParagraph.length === 1 && info.isLikelyTitle);
+        }
+    }
+
+    flushParagraph();
+    return paragraphs.join("\n\n").trim();
+}
+
+
 async function extractTextFromSelectedImage(isAutomatic) {
     // When this function is used directly as a click handler, the browser passes
     // a MouseEvent as the first argument. Treat only a literal true as automatic.
@@ -4665,7 +4854,7 @@ async function extractTextFromSelectedImage(isAutomatic) {
                 }
             }
 
-            var combinedText = combinedParts.join("\n\n").trim();
+            var combinedText = reconstructParagraphsFromOcrPages(combinedParts);
             syncSelectedImageState();
             selectedImageExtractedText = selectedImages.length === 1 ? combinedText : "";
             document.getElementById("studentWriting").value = combinedText;
@@ -6234,6 +6423,60 @@ function detectNarrativeSubtype(value) {
     return "Story";
 }
 
+function looksLikeProceduralWriting(text) {
+    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
+    var value = raw.toLowerCase();
+    if (!value) return false;
+
+    var parts = extractWritingTitleParts(raw);
+    var title = String(parts.title || "").trim();
+    var body = String(parts.body || raw).trim();
+    var bodyLower = body.toLowerCase();
+
+    var lines = body.split("\n").map(function(line) {
+        return line.trim();
+    }).filter(function(line) {
+        return line.length > 0;
+    });
+
+    var firstLines = lines.slice(0, 6).join("\n");
+    var hasHowToTitle = /^\s*how\s+to\s+\w+/i.test(title) || /^\s*how\s+to\s+\w+/i.test(lines[0] || "");
+    var hasProcedureHeading = /(^|\n)\s*(materials|ingredients|supplies|tools|directions|instructions|procedure|method|steps)\s*:?\s*($|\n)/i.test("\n" + firstLines + "\n");
+    var hasMaterialsWithDirections = /(^|\n)\s*(materials|ingredients|supplies|tools)\s*:/i.test("\n" + body + "\n") && /(^|\n)\s*(directions|instructions|procedure|method|steps)\s*:/i.test("\n" + body + "\n");
+    var hasTeacherHowToPhrase = /\b(i will explain|i will show|this will show|this explains|this tells)\s+you\s+how\s+to\b/i.test(bodyLower);
+    var hasNeedList = /\byou\s+(will\s+)?need\b|\bwhat\s+you\s+need\b/i.test(bodyLower);
+
+    var sequenceCount = countGenreRegexMatches(bodyLower, [
+        /(^|[.!?]\s+)first\b\s*[,;]?/i,
+        /(^|[.!?]\s+)next\b\s*[,;]?/i,
+        /(^|[.!?]\s+)then\b\s*[,;]?/i,
+        /(^|[.!?]\s+)after\s+that\b\s*[,;]?/i,
+        /(^|[.!?]\s+)finally\b\s*[,;]?/i,
+        /(^|[.!?]\s+)last\b\s*[,;]?/i
+    ]);
+
+    var instructionVerbPattern = "add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write";
+    var imperativeCount = countGenreRegexMatches(bodyLower, [
+        new RegExp("(^|[.!?]\\s+)(" + instructionVerbPattern + ")\\b", "i"),
+        new RegExp("(^|\\n)\\s*\\d+[.)]\\s*(" + instructionVerbPattern + ")\\b", "i"),
+        new RegExp("(^|\\n)\\s*[-*]\\s*(" + instructionVerbPattern + ")\\b", "i"),
+        new RegExp("(^|[.!?]\\s+)(first|next|then|after that|finally|last)\\s*[,;]?\\s*(" + instructionVerbPattern + ")\\b", "i")
+    ]);
+
+    var numberedOrBulletedInstructionCount = 0;
+    for (var i = 0; i < lines.length; i++) {
+        if (/^(\d+[.)]|[-*])\s+/.test(lines[i])) numberedOrBulletedInstructionCount += 1;
+    }
+
+    if (hasHowToTitle || hasMaterialsWithDirections) return true;
+    if (hasProcedureHeading && (hasNeedList || sequenceCount >= 1 || imperativeCount >= 1 || numberedOrBulletedInstructionCount >= 2)) return true;
+    if (hasTeacherHowToPhrase && (sequenceCount >= 1 || imperativeCount >= 1)) return true;
+    if (sequenceCount >= 2 && (imperativeCount >= 1 || hasNeedList)) return true;
+    if (numberedOrBulletedInstructionCount >= 2 && (imperativeCount >= 1 || hasNeedList || hasProcedureHeading)) return true;
+
+    return false;
+}
+
 function detectWritingGenreInfo(text) {
     var raw = String(text || "").trim();
     var value = raw.toLowerCase();
@@ -6243,7 +6486,7 @@ function detectWritingGenreInfo(text) {
         return makeWritingGenreInfo("Letter / Email", "Letter", "letter", "high", "auto");
     }
 
-    if (/\b(materials|ingredients|directions|procedure|steps|method)\b/i.test(value) || /\bhow to\b/i.test(value) || /\bfirst\b[\s\S]{0,120}\bnext\b[\s\S]{0,160}\bfinally\b/i.test(value)) {
+    if (looksLikeProceduralWriting(raw)) {
         return makeWritingGenreInfo("Procedural / How-To", "How-To", "how-to piece", "high", "auto");
     }
 
@@ -6251,7 +6494,7 @@ function detectWritingGenreInfo(text) {
         return makeWritingGenreInfo("Speech / Presentation", "Speech", "speech", "medium", "auto");
     }
 
-    if (/\bdear diary\b|\btoday i learned\b|\bi learned that\b|\bthis taught me\b|\bmy goal is\b|\bi feel\b/i.test(value)) {
+    if (/\bdear diary\b|\btoday i learned\b|\bi learned that\b|\bthis taught me\b|\bmy goal is\b|\bnext time i will\b|\bi realized that\b|\bi learned from\b/i.test(value)) {
         return makeWritingGenreInfo("Journal / Reflection", "Reflection", "reflection", "medium", "auto");
     }
 
