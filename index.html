@@ -893,6 +893,83 @@
     /* =============================================
        SETTINGS GEAR BUTTON
     ============================================= */
+    .assessment-settings-panel, .class-defaults-section {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background: #f8fafc;
+        padding: 14px;
+        margin: 12px 0 16px;
+    }
+
+    .assessment-settings-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+        color: var(--text-primary);
+    }
+
+    .mini-settings-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .assessment-settings-panel label,
+    .class-defaults-field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 8px 0 6px;
+    }
+
+    .assessment-settings-panel select,
+    .class-defaults-field select,
+    .class-defaults-field input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+    }
+
+    .class-defaults-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        align-items: start;
+    }
+
+    .class-defaults-field {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    .class-defaults-field .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 8px 0;
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    .assessment-settings-summary {
+        margin-top: 10px;
+        padding: 9px 10px;
+        border-radius: 8px;
+        background: #ffffff;
+        border: 1px dashed #cbd5e1;
+        color: var(--text-secondary);
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
     .settings-gear-btn {
         background: rgba(255,255,255,0.2);
         border: 1px solid rgba(255,255,255,0.4);
@@ -3104,13 +3181,14 @@
         }
         .control-panel .step-header      { order: 1; }
         .control-panel .student-selector { order: 2; }
-        .control-panel #ocrPanel         { order: 3; margin-top: 0; margin-bottom: 14px; }
-        .control-panel label[for="studentWriting"] { order: 4; }
-        .control-panel .writing-box-wrap  { order: 5; }
-        .control-panel .writing-status-bar{ order: 6; }
-        .control-panel .genre-review-box  { order: 7; }
-        .control-panel .workflow-status   { order: 8; }
-        .control-panel .small-note        { order: 9; }
+        .control-panel #currentAssessmentSettingsPanel { order: 3; }
+        .control-panel #ocrPanel         { order: 4; margin-top: 0; margin-bottom: 14px; }
+        .control-panel label[for="studentWriting"] { order: 5; }
+        .control-panel .writing-box-wrap  { order: 6; }
+        .control-panel .writing-status-bar{ order: 7; }
+        .control-panel .genre-review-box  { order: 8; }
+        .control-panel .workflow-status   { order: 9; }
+        .control-panel .small-note        { order: 10; }
 
     }
 
@@ -3148,7 +3226,7 @@
                 <button type="button" class="btn-google-signout" onclick="handleGoogleSignOut()" style="color:white;border-color:rgba(255,255,255,0.5);">Sign Out</button>
             </div>
         </div>
-        <button type="button" class="settings-gear-btn" onclick="openSettingsDrawer()" title="Settings" aria-label="Open settings">&#9881;</button>
+        <button type="button" class="settings-gear-btn" onclick="openSettingsDrawer()" title="System settings" aria-label="Open system settings">&#9881;</button>
     </div>
 
     <div class="app-inner">
@@ -3156,13 +3234,13 @@
     <nav class="tabs" aria-label="Primary">
         <button type="button" class="nav-tab active" id="toolTabBtn" onclick="switchTab('tool')">Writing Tool</button>
         <button type="button" class="nav-tab" id="portfolioTabBtn" onclick="switchTab('portfolio')">Portfolio</button>
-        <button type="button" class="nav-tab" id="adminTabBtn" onclick="switchTab('admin')">Teacher Admin</button>
+        <button type="button" class="nav-tab" id="adminTabBtn" onclick="switchTab('admin')">Manage Class</button>
     </nav>
 
     <!-- ADMIN PANEL -->
     <div class="admin-panel" id="adminPanel">
-        <h2>Teacher Admin <span class="student-count" id="studentCount">0 students</span></h2>
-        <p>Add and manage your class roster. Student names will appear in a drop-down when checking writing.</p>
+        <h2>Manage Class <span class="student-count" id="studentCount">0 students</span></h2>
+        <p>Manage your roster, class defaults, and school-year data. Student names will appear in the Writing Tool and Portfolio.</p>
 
         <!-- Roster toggle button allows collapsing/expanding the class list.  It starts collapsed to
              prioritize viewing student progress. -->
@@ -3183,10 +3261,58 @@
                 <button type="button" class="stop-btn" onclick="clearAllStudents()">Clear All</button>
             </div>
         </div>
-        <!-- Student Portfolio & Progress Section -->
+        <!-- Class Defaults Section -->
+        <div class="student-portfolio-section class-defaults-section" id="classDefaultsSection">
+            <h3 style="display:flex;align-items:center;">Class Defaults</h3>
+            <p class="helper-text">Set the defaults that should apply when checking student writing. The Writing Tool can still use a student grade-level override for a single assessment.</p>
+            <div class="class-defaults-grid">
+                <div class="class-defaults-field">
+                    <label for="classGradeLevelSelect">Class Grade Level</label>
+                    <select id="classGradeLevelSelect" onchange="onGradeLevelChanged('class')">
+                        <option value="4">Grade 4</option>
+                        <option value="5" selected>Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
+                    <div id="classGradeProfileDescription" class="settings-help-text">Sets the default grade level for the class.</div>
+                </div>
+
+                <div class="class-defaults-field">
+                    <label for="grammarStrictness">Default Grammar Strictness (1 = Lenient, 5 = Strict)</label>
+                    <input id="grammarStrictness" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('grammarStrictnessVal').textContent = this.value; saveSettingsToLocalStorage(); refreshAssessmentSettingsSummary();" style="width:100%; margin-bottom:4px; accent-color: var(--primary-color);">
+                    <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
+                        <span>1 - Lenient</span>
+                        <span id="grammarStrictnessVal" style="font-weight:600; color:var(--primary-color);">3</span>
+                        <span>5 - Strict</span>
+                    </div>
+                </div>
+
+                <div class="class-defaults-field">
+                    <label for="targetWordCount">Default Target Word Count</label>
+                    <div class="checkbox-row">
+                        <input id="useWordCountTarget" type="checkbox" checked="checked">
+                        <span>Use word count target</span>
+                    </div>
+                    <input id="targetWordCount" type="number" min="1" step="1" value="200">
+                </div>
+
+                <div class="class-defaults-field">
+                    <label>Script Quality</label>
+                    <div class="checkbox-row" id="scriptQualityRow">
+                        <input id="assessScriptQuality" type="checkbox">
+                        <label for="assessScriptQuality" class="checkbox-label">Assess handwriting neatness when a photo is provided</label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="student-portfolio-section" id="dataManagementSection">
-            <h3 style="display:flex;align-items:center;">Data Management</h3>
+            <h3 style="display:flex;align-items:center;">School Year Data</h3>
             <p class="helper-text">Archive the current school year or reset the active class after you have saved what you need.</p>
             <div class="roster-controls" style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items:center;">
                 <button type="button" class="secondary-btn" onclick="archiveCurrentSchoolYear()">Archive Current School Year</button>
@@ -3196,10 +3322,6 @@
                 <input type="checkbox" id="archiveIncludeImages">
                 Include available images/photos in archive exports. This can make the zip much larger.
             </label>
-            <div id="duplicateSyncMaintenance" style="margin-top:12px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;">
-                <div id="duplicateSyncStatus" class="helper-text" style="margin:0;" aria-live="polite">Google Drive sync file check will run after Drive connects.</div>
-                <button type="button" class="secondary-btn" id="duplicateSyncCleanupBtn" onclick="moveDuplicateSyncFilesToBackup()" style="display:none;margin-top:8px;">Move Older Duplicate Sync Files to Backup</button>
-            </div>
             <div id="archiveStatus" class="helper-text" style="margin-top:10px;min-height:20px;" aria-live="polite"></div>
         </div>
 
@@ -3247,7 +3369,30 @@
                             <select id="studentSelect" onchange="updateSelectedStudent()">
                                 <option value="" selected="selected">-- Choose a student --</option>
                             </select>
-                            <p class="helper-text">Do not see your students? <a href="#" onclick="switchTab('admin'); return false;">Add them in Teacher Admin</a>.</p>
+                            <p class="helper-text">Do not see your students? <a href="#" onclick="switchTab('admin'); return false;">Add them in Manage Class</a>.</p>
+                        </div>
+
+
+                        <!-- CURRENT ASSESSMENT SETTINGS -->
+                        <div class="assessment-settings-panel" id="currentAssessmentSettingsPanel">
+                            <div class="assessment-settings-header">
+                                <strong>Current Assessment Settings</strong>
+                                <button type="button" class="secondary-btn mini-settings-btn" onclick="switchTab('admin')">Manage Class Defaults</button>
+                            </div>
+                            <label for="gradeLevelSelect">Student Grade Level</label>
+                            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('student')">
+                                <option value="4">Grade 4</option>
+                                <option value="5" selected>Grade 5</option>
+                                <option value="6">Grade 6</option>
+                                <option value="7">Grade 7</option>
+                                <option value="8">Grade 8</option>
+                                <option value="9">Grade 9</option>
+                                <option value="10">Grade 10</option>
+                                <option value="11">Grade 11</option>
+                                <option value="12">Grade 12</option>
+                            </select>
+                            <div id="gradeProfileDescription" class="settings-help-text">Uses the class grade level unless this student is changed deliberately.</div>
+                            <div id="assessmentSettingsSummary" class="assessment-settings-summary">Class defaults are used for grammar, word count, and script quality.</div>
                         </div>
 
                         <!-- OCR PANEL -->
@@ -3305,7 +3450,7 @@
                             </div>
                             <!-- Removed duplicate right-side analyzing indicator; the button spinner already shows analysis state. -->
                         </div>
-                        <div class="small-note">Use Settings to add or change your OpenRouter API key on this browser.</div>
+                        <div class="small-note">Use System Settings to add or change your OpenRouter API key on this browser.</div>
                     </div>
                 </section>
             </div><!-- /left-col -->
@@ -3477,17 +3622,17 @@
 <!-- Mobile FAB for camera -->
 <button type="button" class="camera-fab" id="cameraFab" aria-label="Take Photo" title="Take Photo"><img src="data:image/png;base64,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" alt="" aria-hidden="true"></button>
 
-<!-- Settings drawer -->
+<!-- System settings drawer -->
 <div class="settings-drawer-overlay" id="settingsDrawerOverlay" onclick="closeSettingsDrawer()"></div>
 <div class="settings-drawer" id="settingsDrawer">
     <div class="settings-drawer-header">
-        <h3>&#9881; Settings</h3>
+        <h3>&#9881; System Settings</h3>
         <button type="button" class="settings-drawer-close" onclick="closeSettingsDrawer()">Close</button>
     </div>
     <div class="settings-drawer-body">
-        <!-- AI & Authentication Section -->
+        <!-- AI Section -->
         <div class="settings-section">
-            <div class="settings-section-title">AI & Authentication</div>
+            <div class="settings-section-title">AI</div>
 
             <label for="apiKeyInput">OpenRouter API Key</label>
             <input id="apiKeyInput" type="password" placeholder="Paste your OpenRouter API key here" autocomplete="off">
@@ -3509,75 +3654,20 @@
             </select>
         </div>
 
-        <!-- Grammar & Writing Section -->
-        <div class="settings-section">
-            <div class="settings-section-title">Grade Level</div>
-            <label for="classGradeLevelSelect">Class Grade Level</label>
-            <select id="classGradeLevelSelect" onchange="onGradeLevelChanged('class')">
-                <option value="4">Grade 4</option>
-                <option value="5" selected>Grade 5</option>
-                <option value="6">Grade 6</option>
-                <option value="7">Grade 7</option>
-                <option value="8">Grade 8</option>
-                <option value="9">Grade 9</option>
-                <option value="10">Grade 10</option>
-                <option value="11">Grade 11</option>
-                <option value="12">Grade 12</option>
-            </select>
-            <div id="classGradeProfileDescription" class="settings-help-text">Sets the default grade level for the class.</div>
-            <label for="gradeLevelSelect">Student Grade Level</label>
-            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('student')">
-                <option value="4">Grade 4</option>
-                <option value="5" selected>Grade 5</option>
-                <option value="6">Grade 6</option>
-                <option value="7">Grade 7</option>
-                <option value="8">Grade 8</option>
-                <option value="9">Grade 9</option>
-                <option value="10">Grade 10</option>
-                <option value="11">Grade 11</option>
-                <option value="12">Grade 12</option>
-            </select>
-            <div id="gradeProfileDescription" class="settings-help-text">Uses the class grade level unless this student is changed deliberately.</div>
-        </div>
 
-        <div class="settings-section">
-            <div class="settings-section-title">Grammar & Writing</div>
-
-            <label for="grammarStrictness">Grammar Strictness (1 = Lenient, 5 = Strict)</label>
-            <input id="grammarStrictness" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('grammarStrictnessVal').textContent = this.value; saveSettingsToLocalStorage()" style="width:100%; margin-bottom:4px; accent-color: var(--primary-color);">
-            <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
-                <span>1 - Lenient</span>
-                <span id="grammarStrictnessVal" style="font-weight:600; color:var(--primary-color);">3</span>
-                <span>5 - Strict</span>
+        <!-- Sync Section -->
+        <div class="settings-section" id="syncMaintenanceSection">
+            <div class="settings-section-title">Sync</div>
+            <p class="settings-help-text">Use these controls for Google Drive sync status and cleanup. Class archiving and reset tools are in Manage Class.</p>
+            <div id="duplicateSyncMaintenance" style="margin-top:12px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;">
+                <div id="duplicateSyncStatus" class="helper-text" style="margin:0;" aria-live="polite">Google Drive sync file check will run after Drive connects.</div>
+                <button type="button" class="secondary-btn" id="duplicateSyncCleanupBtn" onclick="moveDuplicateSyncFilesToBackup()" style="display:none;margin-top:8px;">Move Older Duplicate Sync Files to Backup</button>
             </div>
         </div>
 
-        <!-- Word Count Section -->
-        <div class="settings-section">
-            <div class="settings-section-title">Word Count</div>
-
-            <label for="targetWordCount">Target Word Count</label>
-            <div class="checkbox-row">
-                <input id="useWordCountTarget" type="checkbox" checked="checked">
-                <span>Use word count target</span>
-            </div>
-            <input id="targetWordCount" type="number" min="1" step="1" value="200">
-        </div>
-
-        <!-- Script Quality Section -->
-        <div class="settings-section">
-            <div class="settings-section-title">Script Quality</div>
-
-            <!-- Script Quality Assessment Toggle -->
-            <div class="checkbox-row" id="scriptQualityRow">
-                <input id="assessScriptQuality" type="checkbox">
-                <label for="assessScriptQuality" class="checkbox-label">Assess handwriting neatness (only applies if a photo of the writing is provided)</label>
-            </div>
-        </div>
-
-        <!-- Storage & Sync Health (Patch 13) -->
+        <!-- Advanced Storage & Sync Health (Patch 13) -->
         <div class="settings-section" id="storageHealthSection" style="display:none;">
-            <div class="settings-section-title">Storage &amp; Sync Health</div>
+            <div class="settings-section-title">Advanced Storage &amp; Sync Health</div>
             <div id="storageHealthContent" style="font-size:13px; line-height:1.6; color:var(--text-secondary);">
                 <div id="storageHealthSummary">Loading...</div>
                 <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:6px;" id="storageHealthButtons">

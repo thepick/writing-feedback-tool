@@ -497,6 +497,31 @@ function refreshGradeProfileDescription() {
         var prefix = wftStudentGradeLevelOverride ? "Student override active. " : "Following class grade level. ";
         settingsDesc.textContent = prefix + getGradeProfileDescriptionText(studentProfile);
     }
+    refreshAssessmentSettingsSummary();
+}
+
+function refreshAssessmentSettingsSummary() {
+    var summary = document.getElementById("assessmentSettingsSummary");
+    if (!summary) return;
+
+    var strictness = 3;
+    if (typeof getGrammarStrictness === "function") {
+        strictness = getGrammarStrictness();
+    } else {
+        var strictnessEl = document.getElementById("grammarStrictness");
+        strictness = strictnessEl ? (parseInt(strictnessEl.value, 10) || 3) : 3;
+    }
+
+    var useWordCountTargetEl = document.getElementById("useWordCountTarget");
+    var targetWordCountEl = document.getElementById("targetWordCount");
+    var useWordCount = !useWordCountTargetEl || useWordCountTargetEl.checked;
+    var targetWordCount = targetWordCountEl ? (parseInt(targetWordCountEl.value, 10) || 0) : 0;
+    var wordText = useWordCount && targetWordCount > 0 ? "word target " + targetWordCount + " words" : "no word count target";
+
+    var scriptQualityEl = document.getElementById("assessScriptQuality");
+    var scriptText = scriptQualityEl && scriptQualityEl.checked ? "script quality on for photo submissions" : "script quality off";
+
+    summary.textContent = "Active defaults: grammar strictness " + strictness + "/5; " + wordText + "; " + scriptText + ".";
 }
 function applyGradeWordCountRange() {
     var profile = getGradeProfile();
@@ -2614,7 +2639,7 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                 var payload = payloadBuilder(model);
                 refreshApiKeyRuntimeValue();
                 if (!API_KEY) {
-                    throw new Error('No API key found. Open Settings and paste your OpenRouter API key.');
+                    throw new Error('No API key found. Open System Settings and paste your OpenRouter API key.');
                 }
                 var res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
@@ -4422,7 +4447,7 @@ async function extractTextFromSelectedImage(isAutomatic) {
 
     refreshApiKeyRuntimeValue();
     if (!API_KEY) {
-        setOcrStatus("Open Settings and paste your OpenRouter API key before extracting text.", "error");
+        setOcrStatus("Open System Settings and paste your OpenRouter API key before extracting text.", "error");
         return "";
     }
 
@@ -7672,6 +7697,7 @@ loadStudents();
 renderStudentList();
 populateStudentDropdown();
 refreshScoreWeightingDescription();
+refreshAssessmentSettingsSummary();
 
 studentWriting.addEventListener("input", syncUiState);
 studentWriting.addEventListener("input", updateGenreReviewBox);
@@ -7681,11 +7707,17 @@ studentWriting.addEventListener("keydown", function(e) {
         document.getElementById("analyzeBtn").click();
     }
 });
-targetWordCountInput.addEventListener("input", updateMeter);
+targetWordCountInput.addEventListener("input", function() {
+    updateMeter();
+    saveSettingsToLocalStorage();
+    refreshAssessmentSettingsSummary();
+});
 if (useWordCountTargetInput) {
     useWordCountTargetInput.addEventListener("change", function() {
         targetWordCountInput.disabled = !useWordCountTargetInput.checked;
         updateMeter();
+        saveSettingsToLocalStorage();
+        refreshAssessmentSettingsSummary();
     });
     targetWordCountInput.disabled = !useWordCountTargetInput.checked;
 }
@@ -7695,6 +7727,7 @@ if (assessScriptQualityInput) {
     assessScriptQualityInput.addEventListener("change", function() {
         saveSettingsToLocalStorage();
         refreshScoreWeightingDescription();
+        refreshAssessmentSettingsSummary();
     });
 }
 var apiKeyInput = document.getElementById("apiKeyInput");

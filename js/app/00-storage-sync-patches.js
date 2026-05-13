@@ -599,7 +599,7 @@ function shouldShowNeatnessWeighting() {
     return settings.assessScriptQuality === true;
 }
 
-// Script quality toggle is always visible in settings
+// Script quality toggle is always visible in Manage Class
 function updateScriptQualityToggleVisibility() {
     var row = document.getElementById('scriptQualityRow');
     if (row) {
