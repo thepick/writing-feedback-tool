@@ -988,6 +988,7 @@ var WFT_SYNC_DEBOUNCE_MS = 2500;
 var WFT_POLL_INTERVAL_MS = 60000;
 var WFT_SAVE_FILE_TIMEOUT_MS = 30000;
 var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session";
+var WFT_LAST_DRIVE_SYNC_KEY = "wft_last_drive_sync_at";
 var wftSuppressDirtyMarks = false;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1016,6 +1017,7 @@ function _wftDefaultStorageMeta() {
         migrationStartedAt: "",
         migrationCompletedAt: "",
         lastSuccessfulPatch: "",
+        lastDriveSyncAt: "",
         deviceId: "",
         safeMode: false,
         safeModeReason: "",
@@ -1839,6 +1841,57 @@ function rebuildPortfolioIndex(callback) {
 // END PATCH 6
 // ═══════════════════════════════════════════════════════════════════════════
 
+
+// ═══════════════════════════════════════════════════════════════════════════
+function recordWftDriveSyncSuccess(reason) {
+    var nowIso = new Date().toISOString();
+    try {
+        wftSyncState.lastSyncAt = nowIso;
+    } catch (e) { }
+    try {
+        localStorage.setItem(WFT_LAST_DRIVE_SYNC_KEY, nowIso);
+    } catch (e2) { }
+    try {
+        var meta = getWftStorageMeta();
+        meta.lastDriveSyncAt = nowIso;
+        meta.lastDriveSyncReason = reason || "drive-sync";
+        setWftStorageMeta(meta);
+    } catch (e3) { }
+}
+
+function getWftLastDriveSyncAt() {
+    var value = "";
+    try {
+        if (wftSyncState && wftSyncState.lastSyncAt) {
+            value = wftSyncState.lastSyncAt;
+        }
+    } catch (e) { }
+    if (value) { return value; }
+
+    try {
+        value = localStorage.getItem(WFT_LAST_DRIVE_SYNC_KEY) || "";
+    } catch (e2) { }
+    if (value) { return value; }
+
+    try {
+        var meta = getWftStorageMeta();
+        value = meta.lastDriveSyncAt || "";
+    } catch (e3) { }
+    return value || "";
+}
+
+function formatWftTokenTimeRemaining(expiresAt) {
+    var expiry = Number(expiresAt || 0);
+    if (!expiry) { return "not connected"; }
+    var diff = expiry - Date.now();
+    if (diff <= 0) { return "expired"; }
+    var minutes = Math.ceil(diff / 60000);
+    if (minutes < 60) { return "active, about " + minutes + " min left"; }
+    var hours = Math.floor(minutes / 60);
+    var rem = minutes % 60;
+    return "active, about " + hours + "h " + rem + "m left";
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 function getWftStorageHealthHelpText(label) {
     var help = {
@@ -1848,7 +1901,8 @@ function getWftStorageHealthHelpText(label) {
         "IndexedDB": "Larger browser database used for heavier saved data, including portfolio records and images.",
         "Portfolio index": "The app's list of saved student writing sessions. Clean means no repair is needed.",
         "Cached data": "Students and writing sessions currently visible from this browser's saved data.",
-        "Last Drive sync": "The last successful Google Drive sync from this browser. Never means Drive backup has not completed here.",
+        "Google session": "Whether the current Google Drive access token is still available in this browser.",
+        "Last Drive sync": "The last successful Google Drive load or save from this browser. Never means no completed Drive activity has been recorded here yet.",
         "Last index rebuild": "The last time the portfolio index was repaired or rebuilt.",
         "Source of truth": "The saved-data source the app currently trusts most when loading portfolio information."
     };
@@ -1939,13 +1993,17 @@ function refreshStorageHealthUI() {
         lines.push("Cached data: <b>" + names.length + " students, " + totalSessions + " sessions</b>");
     }
 
-    // Last sync info
+    // Google session and last sync info
     if (typeof wftSyncState !== "undefined" && wftSyncState) {
-        if (wftSyncState.lastSyncAt) {
-            lines.push("Last Drive sync: <b>" + formatWftRelativeTime(wftSyncState.lastSyncAt) + "</b>");
-        } else {
-            lines.push("Last Drive sync: <b>never</b>");
-        }
+        var tokenExpiry = Number(wftSyncState.tokenExpiresAt || getWftSessionTokenExpiry() || 0);
+        lines.push("Google session: <b>" + formatWftTokenTimeRemaining(tokenExpiry) + "</b>");
+    }
+
+    var lastDriveSyncAt = getWftLastDriveSyncAt();
+    if (lastDriveSyncAt) {
+        lines.push("Last Drive sync: <b>" + formatWftRelativeTime(lastDriveSyncAt) + "</b>");
+    } else {
+        lines.push("Last Drive sync: <b>never recorded</b>");
     }
 
     // Last index rebuild
@@ -3435,6 +3493,7 @@ var wftSyncState = {
     lastSyncedSettingsHash: "",
     lastSyncedPortfolioHash: "",
     lastSyncedDeletionsHash: "",
+    lastSyncAt: "",
 
     localSettingsCounter: 0,
     localPortfolioCounter: 0,
@@ -3529,8 +3588,6 @@ function checkHashForOAuthTokens() {
         var expiresAt = Date.now() + Math.max(60, (expiresIn - 30)) * 1000;
         saveWftTokenSession(accessToken, expiresAt);
         try {
-            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
             localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, '1');
         } catch (storageErr) { }
 
@@ -4080,6 +4137,9 @@ function setDriveSyncStatus(state, text) {
     var dotHeader = document.getElementById("driveSyncDotHeader");
     var txtHeader = document.getElementById("driveSyncTextHeader");
     var dotClass = "drive-sync-dot" + (state ? " " + state : "");
+    if (state === "synced" && text !== "Ready") {
+        recordWftDriveSyncSuccess(text || "drive-sync");
+    }
     if (dot) { dot.className = dotClass; }
     if (dotHeader) { dotHeader.className = dotClass; }
     if (txt) txt.textContent = text || "";
@@ -6043,49 +6103,84 @@ function saveWftTokenSession(token, expiresAt) {
             tokenExpiresAt: expiresAt
         }));
     } catch (e) { }
+
+    // Keep the Google Drive session through normal page refreshes until the
+    // short-lived OAuth access token expires. This is still cleared on sign-out.
+    try {
+        localStorage.setItem(DRIVE_TOKEN_CACHE_KEY, token);
+        localStorage.setItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY, String(expiresAt));
+        localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, "1");
+    } catch (e2) { }
 }
 
 function restoreWftTokenSession() {
     var raw;
     var saved;
+    var token;
+    var expiry;
 
     try {
         raw = sessionStorage.getItem(DRIVE_TOKEN_SESSION_KEY);
-        if (!raw) return false;
-
-        saved = JSON.parse(raw);
-        if (!saved || !saved.accessToken || !saved.tokenExpiresAt) return false;
-
-        if (Date.now() >= Number(saved.tokenExpiresAt)) {
-            sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
-            return false;
+        if (raw) {
+            saved = JSON.parse(raw);
+            if (saved && saved.accessToken && saved.tokenExpiresAt) {
+                token = saved.accessToken;
+                expiry = Number(saved.tokenExpiresAt);
+            }
         }
+    } catch (e) { }
 
-        wftSyncState.accessToken = saved.accessToken;
-        wftSyncState.tokenExpiresAt = Number(saved.tokenExpiresAt);
-        wftSyncState.signedIn = true;
+    if (!token || !expiry) {
+        try {
+            token = localStorage.getItem(DRIVE_TOKEN_CACHE_KEY);
+            expiry = Number(localStorage.getItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY) || 0);
+        } catch (e2) { }
+    }
 
-        driveAccessToken = saved.accessToken;
+    if (!token || !expiry) { return false; }
 
-        return true;
-    } catch (e) {
+    if (Date.now() >= expiry) {
+        try { sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY); } catch (e3) { }
+        try {
+            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
+        } catch (e4) { }
         return false;
     }
+
+    saveWftTokenSession(token, expiry);
+
+    wftSyncState.accessToken = token;
+    wftSyncState.tokenExpiresAt = expiry;
+    wftSyncState.signedIn = true;
+
+    driveAccessToken = token;
+
+    return true;
 }
 
 function clearWftTokenSession() {
     try {
         sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
     } catch (e) { }
+    try {
+        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
+    } catch (e2) { }
 }
 
 function getWftSessionTokenExpiry() {
     try {
         var raw = sessionStorage.getItem(DRIVE_TOKEN_SESSION_KEY);
-        if (!raw) return 0;
-        var saved = JSON.parse(raw);
-        return Number(saved && saved.tokenExpiresAt ? saved.tokenExpiresAt : 0);
-    } catch (e) {
+        if (raw) {
+            var saved = JSON.parse(raw);
+            return Number(saved && saved.tokenExpiresAt ? saved.tokenExpiresAt : 0);
+        }
+    } catch (e) { }
+
+    try {
+        return Number(localStorage.getItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY) || 0);
+    } catch (e2) {
         return 0;
     }
 }
@@ -6106,11 +6201,6 @@ function migrateOldWftTokenToSessionStorage() {
     }
 
     saveWftTokenSession(token, expiry);
-
-    try {
-        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-    } catch (e2) { }
 
     wftSyncState.accessToken = token;
     wftSyncState.tokenExpiresAt = expiry;
