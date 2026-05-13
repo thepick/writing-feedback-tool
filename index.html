@@ -969,13 +969,33 @@
 
     .assessment-settings-summary {
         margin-top: 10px;
-        padding: 9px 10px;
-        border-radius: 8px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 8px;
+    }
+
+    .assessment-default-item {
         background: #ffffff;
-        border: 1px dashed #cbd5e1;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 8px 10px;
+    }
+
+    .assessment-default-label {
+        display: block;
         color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+    }
+
+    .assessment-default-value {
+        color: var(--text-primary);
         font-size: 13px;
-        line-height: 1.4;
+        font-weight: 600;
+        line-height: 1.25;
     }
 
     .settings-gear-btn {
@@ -3639,8 +3659,10 @@
                                 <option value="11">Grade 11</option>
                                 <option value="12">Grade 12</option>
                             </select>
-                            <div id="gradeProfileDescription" class="settings-help-text">Using the class grade level unless changed for this assessment.</div>
-                            <div id="assessmentSettingsSummary" class="assessment-settings-summary">Class defaults control grammar strictness, word target, and photo neatness.</div>
+                            <div id="assessmentSettingsSummary" class="assessment-settings-summary">
+                                <div class="assessment-default-item"><span class="assessment-default-label">Grammar Strictness</span><span class="assessment-default-value">3/5</span></div>
+                                <div class="assessment-default-item"><span class="assessment-default-label">Target word count</span><span class="assessment-default-value">200 words</span></div>
+                            </div>
                         </div>
 
                         <!-- OCR PANEL -->

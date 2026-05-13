@@ -485,24 +485,19 @@ function getGradeGrowGoalListText(optGradeProfile) {
     return goals.map(function(goal) { return "- " + goal; }).join("\n");
 }
 function getGradeProfileDescriptionText(profile) {
-    return (profile.gradeLabel || profile.label) + " expectations are active. Default target: " + (profile.targetWordCountBase || profile.targetWordCount) + " words. Grammar default: " + profile.grammarStrictnessDefault + "/5.";
+    return (profile.gradeLabel || profile.label) + " defaults: Grammar Strictness " + profile.grammarStrictnessDefault + "/5, Target word count " + (profile.targetWordCountBase || profile.targetWordCount) + " words.";
 }
 function refreshGradeProfileDescription() {
     var classProfile = getGradeProfile(getClassGradeLevel());
-    var studentProfile = getGradeProfile(getSelectedGradeLevel());
-    var settingsDesc = document.getElementById("gradeProfileDescription");
     var classDesc = document.getElementById("classGradeProfileDescription");
-    if (classDesc) classDesc.textContent = "Class default: " + getGradeProfileDescriptionText(classProfile);
-    if (settingsDesc) {
-        var classLabel = classProfile.gradeLabel || classProfile.label || "Grade 5";
-        var studentLabel = studentProfile.gradeLabel || studentProfile.label || "Grade 5";
-        if (wftStudentGradeLevelOverride) {
-            settingsDesc.textContent = "Override active: using " + studentLabel + " expectations. Class default is " + classLabel + ".";
-        } else {
-            settingsDesc.textContent = "Using the class default: " + classLabel + " expectations.";
-        }
-    }
+    if (classDesc) classDesc.textContent = getGradeProfileDescriptionText(classProfile);
     refreshAssessmentSettingsSummary();
+}
+
+function escapeAssessmentSummaryText(value) {
+    return String(value == null ? "" : value).replace(/[&<>"]/g, function(ch) {
+        return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch] || ch;
+    });
 }
 
 function refreshAssessmentSettingsSummary() {
@@ -521,28 +516,27 @@ function refreshAssessmentSettingsSummary() {
     var targetWordCountEl = document.getElementById("targetWordCount");
     var useWordCount = !useWordCountTargetEl || useWordCountTargetEl.checked;
     var targetWordCount = targetWordCountEl ? (parseInt(targetWordCountEl.value, 10) || 0) : 0;
-    var wordText = useWordCount && targetWordCount > 0 ? "word target " + targetWordCount + " words" : "no word count target";
+    var wordText = useWordCount && targetWordCount > 0 ? targetWordCount + " words" : "Not used";
 
-    var scriptQualityEl = document.getElementById("assessScriptQuality");
-    var scriptText = scriptQualityEl && scriptQualityEl.checked ? "script quality on for photo submissions" : "script quality off";
-
-    summary.textContent = "Other class defaults: grammar " + strictness + "/5; " + wordText + "; " + scriptText + ".";
+    summary.innerHTML = ""
+        + '<div class="assessment-default-item"><span class="assessment-default-label">Grammar Strictness</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(strictness + "/5") + '</span></div>'
+        + '<div class="assessment-default-item"><span class="assessment-default-label">Target word count</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(wordText) + '</span></div>';
 }
-function applyGradeWordCountRange() {
-    var profile = getGradeProfile();
+function applyGradeWordCountRange(optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile();
     var input = document.getElementById("targetWordCount");
     if (!input || !profile.targetWordCountRange) return;
     input.min = String(profile.targetWordCountRange[0]);
     input.max = String(profile.targetWordCountRange[1]);
 }
-function applyGradeDefaultTargetWordCount() {
-    var profile = getGradeProfile();
+function applyGradeDefaultTargetWordCount(optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile(getClassGradeLevel());
     var input = document.getElementById("targetWordCount");
     if (input) input.value = String(profile.targetWordCountBase || profile.targetWordCount || 200);
-    applyGradeWordCountRange();
+    applyGradeWordCountRange(profile);
 }
-function applyGradeDefaultStrictness() {
-    var profile = getGradeProfile();
+function applyGradeDefaultStrictness(optGradeProfile) {
+    var profile = optGradeProfile || getGradeProfile(getClassGradeLevel());
     var el = document.getElementById("grammarStrictness");
     var valEl = document.getElementById("grammarStrictnessVal");
     if (el && profile.grammarStrictnessDefault) {
@@ -550,17 +544,10 @@ function applyGradeDefaultStrictness() {
         if (valEl) valEl.textContent = String(profile.grammarStrictnessDefault);
     }
 }
-function applyGradeDefaultNeatness() {
-    var profile = getGradeProfile();
-    var el = document.getElementById("assessScriptQuality");
-    if (!el || typeof profile.neatnessDefaultEnabled !== "boolean") return;
-    el.checked = profile.neatnessDefaultEnabled;
-    try { el.dispatchEvent(new Event("change", { bubbles: true })); } catch (e) {}
-}
 function applyGradeDefaults() {
-    applyGradeDefaultStrictness();
-    applyGradeDefaultTargetWordCount();
-    applyGradeDefaultNeatness();
+    var classProfile = getGradeProfile(getClassGradeLevel());
+    applyGradeDefaultStrictness(classProfile);
+    applyGradeDefaultTargetWordCount(classProfile);
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
     if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
@@ -570,6 +557,9 @@ function applyGradeDefaults() {
 function onGradeLevelChanged(source) {
     if (source === "class") {
         syncStudentGradeToClassIfNeeded();
+        var classProfile = getGradeProfile(getClassGradeLevel());
+        applyGradeDefaultStrictness(classProfile);
+        applyGradeDefaultTargetWordCount(classProfile);
     } else if (source === "student" || source === "settings") {
         wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
     }
