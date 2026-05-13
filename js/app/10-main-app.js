@@ -3788,16 +3788,22 @@ function exportSelectedStudentPortfolio() {
 
 function setDuplicateSyncMaintenanceStatus(message, duplicateCount, checking) {
     var status = document.getElementById("duplicateSyncStatus");
-    var button = document.getElementById("duplicateSyncCleanupBtn");
+    var cleanupButton = document.getElementById("duplicateSyncCleanupBtn");
+    var checkButton = document.getElementById("duplicateSyncCheckBtn");
     var count = Number(duplicateCount || 0);
 
     if (status) {
         status.textContent = message || "Google Drive sync file status is not available.";
     }
 
-    if (button) {
-        button.style.display = count > 0 ? "inline-block" : "none";
-        button.disabled = !!checking;
+    if (cleanupButton) {
+        cleanupButton.style.display = count > 0 ? "inline-block" : "none";
+        cleanupButton.disabled = !!checking;
+    }
+
+    if (checkButton) {
+        checkButton.disabled = !!checking || !driveAccessToken;
+        checkButton.textContent = checking ? "Checking..." : "Check now";
     }
 }
 
@@ -3830,6 +3836,27 @@ function summarizeDuplicateSyncFilesPromise() {
     });
 }
 
+function withWftDuplicateCheckTimeout(promise, timeoutMs) {
+    var timeoutHandle = null;
+    var timeoutPromise = new Promise(function(resolve, reject) {
+        timeoutHandle = setTimeout(function() {
+            reject(new Error("Duplicate sync file check timed out."));
+        }, timeoutMs);
+    });
+
+    return Promise.race([promise, timeoutPromise]).then(function(result) {
+        if (timeoutHandle) {
+            clearTimeout(timeoutHandle);
+        }
+        return result;
+    }).catch(function(e) {
+        if (timeoutHandle) {
+            clearTimeout(timeoutHandle);
+        }
+        throw e;
+    });
+}
+
 function checkDuplicateSyncFilesStatus() {
     if (!driveAccessToken) {
         setDuplicateSyncMaintenanceStatus("Sign in with Google Drive to check for duplicate sync files.", 0, false);
@@ -3838,16 +3865,20 @@ function checkDuplicateSyncFilesStatus() {
 
     setDuplicateSyncMaintenanceStatus("Checking Google Drive sync files...", 0, true);
 
-    return summarizeDuplicateSyncFilesPromise().then(function(summary) {
+    return withWftDuplicateCheckTimeout(summarizeDuplicateSyncFilesPromise(), 15000).then(function(summary) {
         if (summary.totalDuplicates > 0) {
-            setDuplicateSyncMaintenanceStatus("Duplicate Google Drive sync files found. The tool is using the newest copy. Older duplicate files can be moved to Backup. Details: " + summary.details.join(", ") + ".", summary.totalDuplicates, false);
+            setDuplicateSyncMaintenanceStatus("Duplicate sync files found. The app is using the newest copy. You can move older duplicate files to Backup. Details: " + summary.details.join(", ") + ".", summary.totalDuplicates, false);
         } else {
-            setDuplicateSyncMaintenanceStatus("No duplicate sync files found.", 0, false);
+            setDuplicateSyncMaintenanceStatus("No duplicate sync files found. Google Drive sync looks tidy.", 0, false);
         }
         return summary;
     }).catch(function(e) {
         wftDebugError("[WFT Duplicate Check] Failed:", e);
-        setDuplicateSyncMaintenanceStatus("Could not check duplicate sync files right now.", 0, false);
+        if (e && e.message && e.message.indexOf("timed out") !== -1) {
+            setDuplicateSyncMaintenanceStatus("Google Drive is connected, but the duplicate-file check took too long. This does not mean sync failed. Try Check now again later if needed.", 0, false);
+        } else {
+            setDuplicateSyncMaintenanceStatus("Google Drive is connected, but duplicate sync files could not be checked right now.", 0, false);
+        }
         return null;
     });
 }
