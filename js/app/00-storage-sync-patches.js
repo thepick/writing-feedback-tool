@@ -494,6 +494,8 @@ function saveSettingsToLocalStorage(settingsOverride) {
         if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
         if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
+        if (typeof GRADE_PROFILE_VERSION !== 'undefined') settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
+        if (typeof getClassGradeLevel === 'function') settings.classDefaultsGradeLevel = getClassGradeLevel();
         settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
 
         if (typeof students !== "undefined" && Array.isArray(students)) {
@@ -558,6 +560,7 @@ function loadSettingsFromLocalStorage() {
                 var effectiveStudentGrade = wftStudentGradeLevelOverride && savedStudentGrade ? savedStudentGrade : getClassGradeLevel();
                 document.getElementById('gradeLevelSelect').value = String(effectiveStudentGrade || 5);
             }
+            maybeApplyClassDefaultsForLegacyGradeSettings(s);
             applyGradeWordCountRange();
             refreshGradeProfileDescription();
             if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
@@ -566,6 +569,37 @@ function loadSettingsFromLocalStorage() {
         }
         refreshApiKeyRuntimeValue();
     } catch(e) {}
+}
+
+function maybeApplyClassDefaultsForLegacyGradeSettings(settings) {
+    if (!settings || typeof getClassGradeLevel !== "function" || typeof getGradeProfile !== "function") return false;
+    if (typeof GRADE_PROFILE_VERSION === "undefined" || typeof parseGradeLevelValue !== "function") return false;
+    if (settings.classDefaultsProfileVersion === GRADE_PROFILE_VERSION && parseGradeLevelValue(settings.classDefaultsGradeLevel) === getClassGradeLevel()) return false;
+
+    var classGrade = getClassGradeLevel();
+    var profile = getGradeProfile(classGrade);
+    var grade5Profile = getGradeProfile(5);
+    var savedStrictness = parseInt(settings.grammarStrictness, 10);
+    var savedTarget = parseInt(settings.targetWordCount, 10);
+    var grade5Strictness = parseInt(grade5Profile.grammarStrictnessDefault, 10);
+    var grade5Target = parseInt(grade5Profile.targetWordCountBase || grade5Profile.targetWordCount, 10);
+    var looksLikeOldGrade5Defaults = savedStrictness === grade5Strictness && savedTarget === grade5Target;
+    var missingDefaults = isNaN(savedStrictness) || isNaN(savedTarget);
+
+    if (classGrade !== 5 && (looksLikeOldGrade5Defaults || missingDefaults)) {
+        if (typeof applyGradeDefaultStrictness === "function") applyGradeDefaultStrictness(profile);
+        if (typeof applyGradeDefaultTargetWordCount === "function") applyGradeDefaultTargetWordCount(profile);
+        try {
+            settings.grammarStrictness = profile.grammarStrictnessDefault;
+            settings.targetWordCount = String(profile.targetWordCountBase || profile.targetWordCount || 200);
+            settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
+            settings.classDefaultsGradeLevel = classGrade;
+            localStorage.setItem("wft_settings", JSON.stringify(settings));
+        } catch (e) { }
+        return true;
+    }
+
+    return false;
 }
 
 /* =============================================
@@ -4771,6 +4805,8 @@ function getLocalSettingsSnapshot() {
         if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
         if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
+        if (typeof GRADE_PROFILE_VERSION !== 'undefined') settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
+        if (typeof getClassGradeLevel === 'function') settings.classDefaultsGradeLevel = getClassGradeLevel();
         settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
@@ -6326,6 +6362,7 @@ function applyLoadedSettings(settings) {
         var effectiveLoadedStudentGrade = wftStudentGradeLevelOverride && loadedStudentGrade ? loadedStudentGrade : getClassGradeLevel();
         document.getElementById("gradeLevelSelect").value = String(effectiveLoadedStudentGrade || 5);
     }
+    maybeApplyClassDefaultsForLegacyGradeSettings(settings);
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
