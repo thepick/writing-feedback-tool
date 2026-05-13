@@ -7354,6 +7354,41 @@ function getNotebookCategoryPrintData(key, item) {
         tip: feedback.growthTip || "Choose one part to revise carefully in your next piece of writing."
     };
 }
+function getNotebookScoreClass(score, maxScore) {
+    var n = Number(score);
+    var max = Number(maxScore) || 100;
+    if (!isFinite(n)) return "score-missing";
+    var percent = max > 0 ? (n / max) * 100 : n;
+    if (percent >= 90) return "score-excellent";
+    if (percent >= 80) return "score-good";
+    if (percent >= 70) return "score-developing";
+    return "score-needs-support";
+}
+
+function toNotebookTitleCase(value) {
+    value = String(value || "piece of writing").replace(/\s+/g, " ").trim();
+    if (!value) return "Piece of Writing";
+    return value.split(" ").map(function(word) {
+        if (!word) return word;
+        if (/^how-to$/i.test(word)) return "How-to";
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+}
+
+function getNotebookWritingTypeLabel(genreInfo) {
+    var info = normalizeWritingGenreInfo(genreInfo || currentWritingGenreInfo || {});
+    return toNotebookTitleCase(info.safeReference || "piece of writing");
+}
+
+function getNotebookWordsTargetLabel(settings) {
+    settings = settings || {};
+    var actual = settings.actualWords != null ? parseInt(settings.actualWords, 10) : parseInt(settings.actualWordsLabel, 10);
+    if (!isFinite(actual) || actual < 0) actual = 0;
+    var target = settings.targetWords != null ? parseInt(settings.targetWords, 10) : 0;
+    if (isFinite(target) && target > 0) return actual + " / " + target + "-word target";
+    return actual + " words";
+}
+
 
 function renderNotebookDetailedAssessment(detailed) {
     if (!detailed || !detailed.categories) {
@@ -7383,7 +7418,7 @@ function renderNotebookDetailedAssessment(detailed) {
         var scoreLabel = hasNumericScore ? (escapeHtml(String(item.score)) + " / " + RUBRIC_MAX) : "Missing";
         var width = score != null ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
         var printData = getNotebookCategoryPrintData(key, item);
-        html += '<div class="category">';
+        html += '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
         html += '<div class="evidence-block"><strong>Teacher Comment:</strong> ' + escapeHtml(printData.teacherComment) + '</div>';
@@ -7411,11 +7446,18 @@ function getNotebookAssessmentSettings(data) {
     var classGradeLabel = settings.classGradeLabel || data.classGradeLabel || formatGradeLevelLabel(settings.classGradeLevel || data.classGradeLevel || data.gradeLevel || getClassGradeLevel());
     var strictness = settings.grammarStrictness != null ? settings.grammarStrictness : (data.grammarStrictness != null ? data.grammarStrictness : getEffectiveGrammarStrictnessValue());
     var target = data.targetWords != null ? data.targetWords : (settings.targetWordCount != null ? settings.targetWordCount : getEffectiveTargetWordCount());
+    var actual = data.actualWords != null ? parseInt(data.actualWords, 10) : 0;
+    if (!isFinite(actual) || actual < 0) actual = 0;
+    target = parseInt(target, 10);
+    if (!isFinite(target) || target < 0) target = 0;
     return {
         classGradeLabel: classGradeLabel,
         grammarStrictnessLabel: settings.grammarStrictnessLabel || formatGrammarStrictnessLabel(strictness),
         targetWordCountLabel: settings.targetWordCountLabel || formatTargetWordCountLabel(target, target > 0),
-        actualWordsLabel: data.actualWords != null ? String(data.actualWords) : "0"
+        actualWords: actual,
+        targetWords: target,
+        actualWordsLabel: String(actual),
+        wordTargetLabel: getNotebookWordsTargetLabel({ actualWords: actual, targetWords: target })
     };
 }
 
@@ -7434,19 +7476,20 @@ function fillNotebookSummary() {
     document.getElementById("notebookTitle").textContent = title;
     var notebookPage2Title = document.getElementById("notebookPage2Title");
     if (notebookPage2Title) notebookPage2Title.textContent = title;
-    document.getElementById("notebookOverallScore").textContent = latestAnalysisData.overall == null ? (latestAnalysisData.sampleStatus ? latestAnalysisData.sampleStatus.label : "Not scored") : (latestAnalysisData.overall + "%");
+    var notebookOverallScore = document.getElementById("notebookOverallScore");
+    if (notebookOverallScore) {
+        notebookOverallScore.textContent = latestAnalysisData.overall == null ? (latestAnalysisData.sampleStatus ? latestAnalysisData.sampleStatus.label : "Not scored") : (latestAnalysisData.overall + "%");
+        notebookOverallScore.className = "overall-value " + getNotebookScoreClass(latestAnalysisData.overall, 100);
+    }
     document.getElementById("notebookDate").textContent = dateText;
     var notebookPage2Date = document.getElementById("notebookPage2Date");
     if (notebookPage2Date) notebookPage2Date.textContent = dateText;
     var notebookStudentName = document.getElementById("notebookStudentName");
     if (notebookStudentName) notebookStudentName.textContent = selectedStudent || "No student selected";
-    var notebookClassGradeLevel = document.getElementById("notebookClassGradeLevel");
-    if (notebookClassGradeLevel) notebookClassGradeLevel.textContent = notebookSettings.classGradeLabel;
-    var notebookTargetWordCount = document.getElementById("notebookTargetWordCount");
-    if (notebookTargetWordCount) notebookTargetWordCount.textContent = notebookSettings.targetWordCountLabel;
-    var notebookGrammarStrictness = document.getElementById("notebookGrammarStrictness");
-    if (notebookGrammarStrictness) notebookGrammarStrictness.textContent = notebookSettings.grammarStrictnessLabel;
-    document.getElementById("notebookWordCount").textContent = notebookSettings.actualWordsLabel;
+    var notebookWritingType = document.getElementById("notebookWritingType");
+    if (notebookWritingType) notebookWritingType.textContent = getNotebookWritingTypeLabel((latestAnalysisData && latestAnalysisData.writingGenre) || (latestAnalysisData.detailed && latestAnalysisData.detailed.writingGenre) || currentWritingGenreInfo);
+    var notebookWordsTarget = document.getElementById("notebookWordsTarget");
+    if (notebookWordsTarget) notebookWordsTarget.textContent = notebookSettings.wordTargetLabel;
 
     var goalPlan = getGoalPlan(latestAnalysisData);
     var notebookGrowGoal = goalPlan.growGoal;
@@ -7483,39 +7526,54 @@ function getNotebookPrintCss() {
         ".btn-print:hover { background: #000; }",
         ".page { width: 148mm; min-height: 210mm; background: #ffffff; margin: 8mm auto; padding: 8mm 9mm 9mm; box-shadow: 0 2px 12px rgba(0,0,0,0.18); page-break-after: always; }",
         ".page:last-child { page-break-after: auto; }",
-        ".page-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; padding-bottom: 4px; margin-bottom: 5px; }",
+        ".page-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #bfdbfe; padding-bottom: 4px; margin-bottom: 5px; }",
         ".page-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 2px; }",
         ".page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 18.5px; font-weight: 400; color: #111111; line-height: 1.1; }",
         ".overall-score { text-align: right; flex-shrink: 0; margin-left: 8px; }",
         ".overall-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 1px; }",
         ".overall-value { font-family: 'DM Serif Display', Georgia, serif; font-size: 26.5px; font-weight: 400; color: #111111; line-height: 1; }",
+        ".overall-value.score-excellent { color: #166534; }",
+        ".overall-value.score-good { color: #1d4ed8; }",
+        ".overall-value.score-developing { color: #b45309; }",
+        ".overall-value.score-needs-support { color: #c2410c; }",
         ".meta-row { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
         ".meta-row strong { color: #111111; font-weight: 600; }",
+        ".writing-type-chip { display: inline-block; border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; border-radius: 99px; padding: 0 6px; font-weight: 700; line-height: 1.35; }",
         ".top-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 5px; }",
-        ".info-box { background: #f5f5f5; border: 1px solid #cccccc; border-radius: 4px; padding: 4px 5px; }",
+        ".info-box { background: #f8fafc; border: 1px solid #cccccc; border-radius: 4px; padding: 4px 5px; }",
+        ".strength-box { border-left: 3px solid #22c55e; }",
+        ".strength-box .box-label { color: #166534; }",
+        ".grow-goal-box { border-left: 3px solid #3b82f6; }",
+        ".grow-goal-box .box-label { color: #1d4ed8; }",
         ".box-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #444444; margin-bottom: 2px; }",
         ".info-box p { font-size: 9.9px; color: #111111; line-height: 1.45; }",
-        ".teacher-comment { background: #f5f5f5; border: 1px solid #cccccc; border-left: 3px solid #333333; border-radius: 4px; padding: 4px 5px; margin-bottom: 6px; }",
+        ".teacher-comment { background: #f8fafc; border: 1px solid #cccccc; border-left: 3px solid #64748b; border-radius: 4px; padding: 4px 5px; margin-bottom: 6px; }",
         ".teacher-comment p { font-size: 9.9px; color: #111111; line-height: 1.5; }",
         ".section-title { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; border-bottom: 1px solid #888888; padding-bottom: 2px; margin-bottom: 5px; }",
         ".assessment-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 6px; align-items: start; }",
         ".category { border: 1px solid #cccccc; border-radius: 3px; padding: 4px 5px; background: #ffffff; width: 100%; min-width: 0; }",
         ".category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; width: 100%; min-width: 0; }",
         ".category-name { font-weight: 700; font-size: 10.3px; color: #111111; letter-spacing: 0.01em; min-width: 0; }",
-        ".score-badge { font-size: 9.3px; font-weight: 700; background: #ececec; border: 1px solid #888888; border-radius: 99px; padding: 0px 5px; white-space: nowrap; color: #111111; }",
+        ".score-badge { font-size: 9.3px; font-weight: 700; background: #f3f4f6; border: 1px solid #9ca3af; border-radius: 99px; padding: 0px 5px; white-space: nowrap; color: #111111; }",
+        ".score-excellent .score-badge { background: #f0fdf4; border-color: #22c55e; color: #166534; }",
+        ".score-good .score-badge { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }",
+        ".score-developing .score-badge { background: #fffbeb; border-color: #f59e0b; color: #b45309; }",
+        ".score-needs-support .score-badge { background: #fff7ed; border-color: #fb923c; color: #c2410c; }",
         ".score-bar-track { display: block; width: 100%; min-width: 0; height: 3.5px; min-height: 3.5px; background: #cccccc; border-radius: 99px; margin-bottom: 4px; overflow: hidden; }",
         ".score-bar-fill { display: block; height: 100%; min-height: 100%; border-radius: 99px; background: #333333; }",
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
         ".evidence-block strong, .tip-block strong { font-weight: 700; color: #111111; }",
         ".tip-block { font-size: 9.3px; color: #444444; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #cccccc; }",
-        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; padding-bottom: 4px; margin-bottom: 8mm; }",
+        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #bfdbfe; padding-bottom: 4px; margin-bottom: 8mm; }",
         ".page2-meta { font-size: 8px; color: #444444; margin-bottom: 2px; }",
         ".page2-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; font-weight: 400; }",
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
-        ".corrected-writing { border: 1px solid #cccccc; border-radius: 4px; padding: 6mm 7mm; }",
-        ".corrected-writing .section-title { margin-bottom: 3mm; }",
-        ".corrected-writing p, .corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; }",
-        ".corrected-writing p:last-child { margin-bottom: 0; }",
+        ".corrected-writing { border: 1px solid #cccccc; border-left: 3px solid #60a5fa; border-radius: 4px; padding: 6mm 7mm; }",
+        ".corrected-writing .section-title { color: #1d4ed8; border-bottom-color: #bfdbfe; margin-bottom: 2mm; }",
+        ".corrected-note { font-size: 8.8px; color: #374151; background: #f8fbff; border-left: 2px solid #bfdbfe; padding: 2mm 2.5mm; margin-bottom: 3mm; line-height: 1.35; }",
+        ".corrected-writing .notebook-corrected-text { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; }",
+        ".corrected-writing .notebook-corrected-text p { font-size: 10px; color: #111111; line-height: 1.45; margin-bottom: 3mm; white-space: normal; border-left: 2px solid #dbeafe; padding-left: 3mm; }",
+        ".corrected-writing .notebook-corrected-text p:last-child { margin-bottom: 0; }",
         ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
         ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3mm; color: #111111; }",
         ".auto-fit-page { --fit-scale: 1; }",
@@ -7665,7 +7723,7 @@ function renderNotebookDetailedAssessmentFromSavedSession(session) {
         var hasScore = !isNaN(score);
         var scoreLabel = hasScore ? (escapeHtml(String(scores[key])) + " / " + RUBRIC_MAX) : escapeHtml(String(scores[key]));
         var width = hasScore ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
-        html += '<div class="category">';
+        html += '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
         html += '<div class="evidence-block"><strong>Teacher Comment:</strong> This saved portfolio entry was created before printable notebook snapshots were stored.</div>';
@@ -7701,17 +7759,20 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         actualWords: session.actualWords != null ? session.actualWords : countWords(originalText)
     });
     var scoreText = session.overall == null ? "Not scored" : (session.overall + "%");
+    var scoreClass = getNotebookScoreClass(session.overall, 100);
+    var writingTypeLabel = getNotebookWritingTypeLabel(genreInfo);
+    var wordsTargetLabel = notebookSettings.wordTargetLabel;
 
     return ''
         + '<div class="page page-1 auto-fit-page">'
-        + '<div class="page-header"><div><div class="page-label">Writing Notebook Summary</div><div class="page-title">' + escapeHtml(title) + '</div></div><div class="overall-score"><div class="overall-label">Overall</div><div class="overall-value">' + escapeHtml(scoreText) + '</div></div></div>'
-        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Class Grade:</strong> <span>' + escapeHtml(notebookSettings.classGradeLabel) + '</span></span><span><strong>Target:</strong> <span>' + escapeHtml(notebookSettings.targetWordCountLabel) + '</span></span><span><strong>Grammar:</strong> <span>' + escapeHtml(notebookSettings.grammarStrictnessLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(notebookSettings.actualWordsLabel) + '</span></span></div>'
-        + '<div class="top-boxes"><div class="info-box"><div class="box-label">My Strength</div><p>' + escapeHtml(strength) + '</p></div><div class="info-box"><div class="box-label">My Grow Goal</div><p>' + escapeHtml(growGoal) + '</p></div></div>'
+        + '<div class="page-header"><div><div class="page-label">Writing Notebook Summary</div><div class="page-title">' + escapeHtml(title) + '</div></div><div class="overall-score"><div class="overall-label">Overall</div><div class="overall-value ' + scoreClass + '">' + escapeHtml(scoreText) + '</div></div></div>'
+        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Writing Type:</strong> <span class="writing-type-chip">' + escapeHtml(writingTypeLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordsTargetLabel) + '</span></span></div>'
+        + '<div class="top-boxes"><div class="info-box strength-box"><div class="box-label">My Strength</div><p>' + escapeHtml(strength) + '</p></div><div class="info-box grow-goal-box"><div class="box-label">My Grow Goal</div><p>' + escapeHtml(growGoal) + '</p></div></div>'
         + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
         + '</div>'
         + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
-        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
+        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="corrected-note">Read this version to see how your writing sounds with corrections.</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
 }
 
 
@@ -7898,8 +7959,8 @@ function reassessPortfolioSession(studentName, sessionId) {
 function refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session) {
     var html = String(printContentHtml || "");
     var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml((session && session.correctedPlainText) || (session && session.originalText) || "-");
-    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
-    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div><div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
+    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="corrected-note">Read this version to see how your writing sounds with corrections.</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
+    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div>(?:<div class="corrected-note">[\s\S]*?<\/div>)?<div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
     if (pattern.test(html)) return html.replace(pattern, replacement);
     return buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
 }
