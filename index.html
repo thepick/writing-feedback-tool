@@ -903,17 +903,25 @@
 
     .assessment-settings-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        gap: 10px;
+        gap: 12px;
         margin-bottom: 10px;
         color: var(--text-primary);
+    }
+
+    .assessment-settings-intro {
+        margin: 4px 0 0;
+        color: var(--text-secondary);
+        font-size: 13px;
+        line-height: 1.4;
     }
 
     .mini-settings-btn {
         padding: 6px 10px;
         font-size: 12px;
         white-space: nowrap;
+        flex: 0 0 auto;
     }
 
     .assessment-settings-panel label,
@@ -2292,6 +2300,12 @@
         color: #31465a;
         margin-top: 8px;
         font-size: 13px;
+        line-height: 1.45;
+    }
+    .score-basis-note {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 4px;
     }
     .meter-card, .stat-card.inline-word-count {
         background: #f8fafc;
@@ -3382,6 +3396,8 @@
             padding: 14px;
         }
         .score-note { font-size: 12px; }
+        .assessment-settings-header { flex-direction: column; }
+        .mini-settings-btn { width: 100%; }
         .rubric-card {
             padding: 10px;
             min-height: 0;
@@ -3602,13 +3618,16 @@
                         </div>
 
 
-                        <!-- CURRENT ASSESSMENT SETTINGS -->
+                        <!-- ASSESSMENT SETUP -->
                         <div class="assessment-settings-panel" id="currentAssessmentSettingsPanel">
                             <div class="assessment-settings-header">
-                                <strong>Current Assessment Settings</strong>
-                                <button type="button" class="secondary-btn mini-settings-btn" onclick="switchTab('admin')">Manage Class Defaults</button>
+                                <div>
+                                    <strong>Assessment Setup</strong>
+                                    <p class="assessment-settings-intro">Choose the grade expectations for this analysis. Most other settings come from Manage Class.</p>
+                                </div>
+                                <button type="button" class="secondary-btn mini-settings-btn" onclick="switchTab('admin')">Class Defaults</button>
                             </div>
-                            <label for="gradeLevelSelect">Student Grade Level</label>
+                            <label for="gradeLevelSelect">Scoring Grade Level</label>
                             <select id="gradeLevelSelect" onchange="onGradeLevelChanged('student')">
                                 <option value="4">Grade 4</option>
                                 <option value="5" selected>Grade 5</option>
@@ -3620,8 +3639,8 @@
                                 <option value="11">Grade 11</option>
                                 <option value="12">Grade 12</option>
                             </select>
-                            <div id="gradeProfileDescription" class="settings-help-text">Uses the class grade level unless this student is changed deliberately.</div>
-                            <div id="assessmentSettingsSummary" class="assessment-settings-summary">Class defaults are used for grammar, word count, and script quality.</div>
+                            <div id="gradeProfileDescription" class="settings-help-text">Using the class grade level unless changed for this assessment.</div>
+                            <div id="assessmentSettingsSummary" class="assessment-settings-summary">Class defaults control grammar strictness, word target, and photo neatness.</div>
                         </div>
 
                         <!-- OCR PANEL -->
@@ -3702,8 +3721,8 @@
                             <div class="score-box">
                                 <div class="score-label">Overall score</div>
                                 <div id="overallScore" class="score-number">--</div>
-                                <div id="gradeLevelResultNote" class="score-note" style="margin-bottom:4px; font-weight:500; color:var(--primary-color);">Scoring with Grade 5 expectations.</div>
-                                <div id="overallScoreNote" class="score-note">Weighted by category importance: Ideas &amp; Details (30%), Organization (20%), Grammar (15%), Flow (15%), Word Choice (10%), Spelling &amp; Punctuation (10%).</div>
+                                <div id="gradeLevelResultNote" class="score-note score-basis-note">Analyze writing to see the scoring basis.</div>
+                                <div id="overallScoreNote" class="score-note">Category weights will appear after analysis.</div>
                                 <div id="sampleStatusLine" class="muted" style="margin-top:10px; display:none;">Sample status: No analysis yet.</div>
                             </div>
                             <div id="meterCard" class="meter-card">

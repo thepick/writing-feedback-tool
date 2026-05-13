@@ -494,8 +494,13 @@ function refreshGradeProfileDescription() {
     var classDesc = document.getElementById("classGradeProfileDescription");
     if (classDesc) classDesc.textContent = "Class default: " + getGradeProfileDescriptionText(classProfile);
     if (settingsDesc) {
-        var prefix = wftStudentGradeLevelOverride ? "Student override active. " : "Following class grade level. ";
-        settingsDesc.textContent = prefix + getGradeProfileDescriptionText(studentProfile);
+        var classLabel = classProfile.gradeLabel || classProfile.label || "Grade 5";
+        var studentLabel = studentProfile.gradeLabel || studentProfile.label || "Grade 5";
+        if (wftStudentGradeLevelOverride) {
+            settingsDesc.textContent = "Override active: using " + studentLabel + " expectations. Class default is " + classLabel + ".";
+        } else {
+            settingsDesc.textContent = "Using the class default: " + classLabel + " expectations.";
+        }
     }
     refreshAssessmentSettingsSummary();
 }
@@ -521,7 +526,7 @@ function refreshAssessmentSettingsSummary() {
     var scriptQualityEl = document.getElementById("assessScriptQuality");
     var scriptText = scriptQualityEl && scriptQualityEl.checked ? "script quality on for photo submissions" : "script quality off";
 
-    summary.textContent = "Active defaults: grammar strictness " + strictness + "/5; " + wordText + "; " + scriptText + ".";
+    summary.textContent = "Other class defaults: grammar " + strictness + "/5; " + wordText + "; " + scriptText + ".";
 }
 function applyGradeWordCountRange() {
     var profile = getGradeProfile();
@@ -790,7 +795,12 @@ function updateGradeLevelResultNote() {
     var el = document.getElementById("gradeLevelResultNote");
     if (!el) return;
     var profile = getGradeProfile();
-    el.textContent = "Scored using " + (profile.gradeLabel || profile.label) + " expectations. " + getWeightDescriptionText(profile);
+    var label = profile.gradeLabel || profile.label || "Grade 5";
+    if (!latestAnalysisData) {
+        el.textContent = "Analyze writing to confirm the scoring basis.";
+        return;
+    }
+    el.textContent = "Scoring basis: " + label + " expectations.";
 }
 
 function updateScoreDisplay(data) {
@@ -805,7 +815,7 @@ function updateScoreDisplay(data) {
 
     if (!data) {
         overallScoreEl.textContent = "--";
-        noteEl.textContent = weightingText;
+        noteEl.textContent = "Category weights will appear after analysis.";
         statusEl.textContent = "Sample status: No analysis yet.";
         // FIX O1: updateGradeLevelResultNote() guard
         if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
@@ -816,7 +826,7 @@ function updateScoreDisplay(data) {
         noteEl.textContent = "A full percentage is hidden until there is enough writing to score fairly.";
     } else {
         overallScoreEl.textContent = data.overall + "%";
-        noteEl.textContent = weightingText;
+        noteEl.textContent = "Category weights: " + weightingText.replace(/^Weighted by category importance:\s*/i, "");
     }
     statusEl.textContent = "Sample status: " + (statusData ? statusData.label + ". " + statusData.reason : "Scorable sample.");
     if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
