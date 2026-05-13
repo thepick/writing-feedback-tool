@@ -1112,90 +1112,136 @@
         display: inline-block;
     }
     .advanced-recovery-panel {
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        background: #f8fafc;
+        border: 1px solid #dbe4ef;
+        border-radius: 14px;
+        background: #ffffff;
         overflow: hidden;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
     .advanced-recovery-panel summary {
         cursor: pointer;
         list-style: none;
-        padding: 14px 16px;
-        background: #f1f5f9;
+        padding: 16px 58px 16px 16px;
+        background: linear-gradient(180deg, #f8fafc 0%, #eef4fb 100%);
         border-bottom: 1px solid transparent;
+        position: relative;
     }
     .advanced-recovery-panel summary::-webkit-details-marker {
         display: none;
     }
     .advanced-recovery-panel summary::after {
-        content: "Show tools";
-        display: inline-block;
-        margin-top: 10px;
-        font-size: 12px;
-        font-weight: 700;
+        content: "Open";
+        position: absolute;
+        right: 14px;
+        top: 16px;
+        padding: 4px 9px;
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        background: #eff6ff;
         color: var(--primary-color);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
     }
     .advanced-recovery-panel[open] summary {
-        border-bottom-color: #e2e8f0;
+        border-bottom-color: #dbe4ef;
     }
     .advanced-recovery-panel[open] summary::after {
-        content: "Hide tools";
+        content: "Close";
+    }
+    .advanced-summary-kicker {
+        display: inline-block;
+        margin-bottom: 7px;
+        padding: 3px 7px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #075985;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
     }
     .advanced-summary-title {
         display: block;
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 800;
+        line-height: 1.25;
         color: #0f172a;
     }
     .advanced-summary-caption {
         display: block;
-        margin-top: 4px;
+        margin-top: 6px;
         font-size: 12px;
         line-height: 1.45;
         color: var(--text-secondary);
     }
     .advanced-recovery-body {
-        padding: 14px 16px 16px;
+        padding: 16px;
+        background: #fbfdff;
     }
     .advanced-warning {
-        padding: 10px 12px;
-        border: 1px solid #facc15;
-        border-radius: 8px;
-        background: #fefce8;
-        color: #713f12;
+        padding: 11px 12px;
+        border: 1px solid #f59e0b;
+        border-left-width: 4px;
+        border-radius: 10px;
+        background: #fffbeb;
+        color: #78350f;
         font-size: 12px;
         line-height: 1.45;
-        margin-bottom: 14px;
+        margin-bottom: 16px;
+    }
+    .advanced-warning strong {
+        color: #78350f;
     }
     .advanced-subtitle {
         font-size: 12px;
-        font-weight: 800;
-        color: var(--text);
+        font-weight: 900;
+        color: #0f172a;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        margin: 16px 0 8px;
+        letter-spacing: 0.07em;
+        margin: 18px 0 4px;
+    }
+    .advanced-section-help {
+        margin: 0 0 10px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.45;
     }
     .storage-health-list {
         display: grid;
         gap: 8px;
     }
     .storage-health-row {
-        padding: 9px 10px;
+        padding: 10px 11px;
         border: 1px solid #e2e8f0;
-        border-radius: 8px;
+        border-radius: 10px;
         background: #ffffff;
     }
-    .storage-health-value {
-        font-size: 13px;
-        color: var(--text-secondary);
-        line-height: 1.45;
+    .storage-health-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
     }
-    .storage-health-value strong {
-        color: var(--text);
+    .storage-health-label {
+        color: #334155;
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.35;
+    }
+    .storage-health-value {
+        color: #0f172a;
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.35;
+        text-align: right;
+        overflow-wrap: anywhere;
     }
     .storage-health-explain {
-        margin-top: 4px;
-        font-size: 12px;
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px dashed #e2e8f0;
+        font-size: 11px;
         line-height: 1.4;
         color: #64748b;
     }
@@ -1205,14 +1251,32 @@
         margin-top: 8px;
     }
     .recovery-action {
-        padding: 10px;
+        padding: 11px;
         border: 1px solid #e2e8f0;
-        border-radius: 10px;
+        border-radius: 11px;
         background: #ffffff;
     }
+    .recovery-action-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
     .recovery-action .secondary-btn {
-        width: 100%;
+        flex: 1;
+        width: auto;
         margin: 0;
+        min-height: 40px;
+    }
+    .recovery-action-tag {
+        flex: 0 0 auto;
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
     }
     .recovery-action p {
         margin: 7px 0 0;
@@ -1223,6 +1287,10 @@
     .recovery-action-danger {
         border-color: #fecaca;
         background: #fff7f7;
+    }
+    .recovery-action-danger .recovery-action-tag {
+        background: #fee2e2;
+        color: #991b1b;
     }
     .recovery-action-danger p {
         color: #991b1b;
@@ -3783,45 +3851,66 @@
 
         <!-- Advanced Recovery Tools (Patch 13) -->
         <div class="settings-section" id="storageHealthSection" style="display:none;">
-            <div class="settings-section-title">Advanced Recovery Tools</div>
+            <div class="settings-section-title">Storage and Backup</div>
             <details class="advanced-recovery-panel" id="advancedRecoveryPanel">
                 <summary>
-                    <span class="advanced-summary-title">Storage and sync recovery tools</span>
-                    <span class="advanced-summary-caption">Most teachers will not need these during normal use. Open this section only when backing up, troubleshooting missing portfolio data, or repairing Google Drive sync.</span>
+                    <span class="advanced-summary-kicker">Advanced</span>
+                    <span class="advanced-summary-title">Recovery tools for saved class data</span>
+                    <span class="advanced-summary-caption">Usually leave this closed. Open it only to make a backup, troubleshoot missing portfolio work, or repair Google Drive sync.</span>
                 </summary>
                 <div class="advanced-recovery-body" id="storageHealthContent">
                     <div class="advanced-warning">
-                        Before using repair tools, download an emergency backup. Some actions affect the browser's saved class data or change how the app rebuilds portfolio records.
+                        <strong>Start with a backup.</strong> Before using any repair action, download an emergency backup. Some tools can change the data saved in this browser.
                     </div>
 
-                    <div class="advanced-subtitle">Current storage status</div>
+                    <div class="advanced-subtitle">Status check</div>
+                    <p class="advanced-section-help">These read-only checks show what the app is currently using to load class and portfolio data.</p>
                     <div id="storageHealthSummary" class="storage-health-list">Loading...</div>
 
-                    <div class="advanced-subtitle">Recovery actions</div>
+                    <div class="advanced-subtitle">Actions</div>
+                    <p class="advanced-section-help">Use these from top to bottom when troubleshooting. The backup options are safest; cache clearing is the riskiest.</p>
                     <div id="storageHealthButtons" class="recovery-action-list">
                         <div class="recovery-action">
-                            <button class="secondary-btn" onclick="downloadWftEmergencyBackup()" title="Download a full backup of all local data as JSON">Download Emergency Backup</button>
-                            <p>Saves a copy of the browser's current class and portfolio data as a file. Use this before testing changes or using any repair tool.</p>
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" onclick="downloadWftEmergencyBackup()" title="Download a full backup of all local data as JSON">Download Emergency Backup</button>
+                                <span class="recovery-action-tag">Safest</span>
+                            </div>
+                            <p>Downloads a file containing this browser's current class and portfolio data. Use this before testing changes or repairing data.</p>
                         </div>
                         <div class="recovery-action">
-                            <button class="secondary-btn" onclick="saveWftPreMigrationBackupToDrive(function(){})" title="Upload a backup to Google Drive">Create Drive Backup</button>
-                            <p>Attempts to save a backup copy to Google Drive. This is useful after Drive connection is working.</p>
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" onclick="saveWftPreMigrationBackupToDrive(function(){})" title="Upload a backup to Google Drive">Create Drive Backup</button>
+                                <span class="recovery-action-tag">Backup</span>
+                            </div>
+                            <p>Saves a backup copy to Google Drive. Use this after Drive has been connected successfully.</p>
                         </div>
                         <div class="recovery-action">
-                            <button class="secondary-btn" onclick="rebuildPortfolioIndex(function(){})" title="Rebuild the portfolio index from current data">Rebuild Portfolio Index</button>
-                            <p>Recreates the app's list of student writing sessions from the saved data. Use this if portfolios look incomplete or do not load correctly.</p>
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" onclick="rebuildPortfolioIndex(function(){})" title="Rebuild the portfolio index from current data">Rebuild Portfolio Index</button>
+                                <span class="recovery-action-tag">Repair</span>
+                            </div>
+                            <p>Recreates the list of saved student writing sessions. Use this if portfolios look incomplete or do not load correctly.</p>
+                        </div>
+                        <div class="recovery-action">
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" onclick="loadPortfolioIndexFromDrive(function(err, idx){ if(idx){ alert('Index loaded from Drive: ' + Object.keys(idx.students).length + ' students'); } else { alert('No index found on Drive'); } })" title="Download the index file from Google Drive">Reload Index from Drive</button>
+                                <span class="recovery-action-tag">Drive</span>
+                            </div>
+                            <p>Loads the portfolio index from Google Drive. Use this only after Drive sync has already been set up.</p>
+                        </div>
+                        <div class="recovery-action">
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" id="btnSafeMode" onclick="toggleWftSafeMode()">Enter Safe Mode</button>
+                                <span class="recovery-action-tag">Troubleshoot</span>
+                            </div>
+                            <p>Starts a limited troubleshooting mode. Use this if normal loading is broken and you need to inspect or recover data.</p>
                         </div>
                         <div class="recovery-action recovery-action-danger">
-                            <button class="secondary-btn" id="btnClearLocalCache" onclick="clearWftLocalCache()" title="Remove IndexedDB and localStorage cache (not Drive data)">Clear Local Cache</button>
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" id="btnClearLocalCache" onclick="clearWftLocalCache()" title="Remove IndexedDB and localStorage cache (not Drive data)">Clear Local Cache</button>
+                                <span class="recovery-action-tag">Careful</span>
+                            </div>
                             <p>Removes saved app data from this browser. Do not use this unless you have a backup or are intentionally resetting this device.</p>
-                        </div>
-                        <div class="recovery-action">
-                            <button class="secondary-btn" onclick="loadPortfolioIndexFromDrive(function(err, idx){ if(idx){ alert('Index loaded from Drive: ' + Object.keys(idx.students).length + ' students'); } else { alert('No index found on Drive'); } })" title="Download the index file from Google Drive">Reload Index from Drive</button>
-                            <p>Checks Google Drive for the portfolio index and loads it into the app. Use this only if Drive sync has already been set up.</p>
-                        </div>
-                        <div class="recovery-action">
-                            <button class="secondary-btn" id="btnSafeMode" onclick="toggleWftSafeMode()">Enter Safe Mode</button>
-                            <p>Switches the app into a troubleshooting mode. Use this if normal loading is broken and you need to recover or inspect data safely.</p>
                         </div>
                     </div>
                 </div>

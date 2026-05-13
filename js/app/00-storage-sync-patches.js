@@ -1842,17 +1842,21 @@ function rebuildPortfolioIndex(callback) {
 // ═══════════════════════════════════════════════════════════════════════════
 function getWftStorageHealthHelpText(label) {
     var help = {
-        "Storage mode": "Shows the format the app is using to save portfolio records. Older name-based storage can still work, but student-ID storage is safer for long-term use.",
-        "Safe mode": "Shows whether troubleshooting mode is active. Off means the app is running normally.",
-        "localStorage est. size": "Estimates how much small browser storage the app is using. A few hundred KB is normal and not a problem.",
-        "IndexedDB": "Shows whether the browser supports the larger local database used for heavier saved data, such as portfolio records and images.",
-        "Portfolio index": "Shows whether the app's list of saved student writing sessions looks healthy. Clean means no repair is currently needed.",
-        "Cached students": "Counts the students and writing sessions currently visible in this browser's saved data.",
-        "Last Drive sync": "Shows when the app last successfully synced with Google Drive. Never means Drive backup has not been completed from this browser.",
-        "Last index rebuild": "Shows when the portfolio index was last repaired or rebuilt.",
-        "Active source of truth": "Shows which saved-data source the app currently trusts most when loading portfolio information."
+        "Storage mode": "How the app saves portfolio records. Name-based storage still works, but ID-based storage is safer long term.",
+        "Safe mode": "Whether troubleshooting mode is active. Off means normal app loading.",
+        "localStorage size": "Small browser storage used by the app. A few hundred KB is normal.",
+        "IndexedDB": "Larger browser database used for heavier saved data, including portfolio records and images.",
+        "Portfolio index": "The app's list of saved student writing sessions. Clean means no repair is needed.",
+        "Cached data": "Students and writing sessions currently visible from this browser's saved data.",
+        "Last Drive sync": "The last successful Google Drive sync from this browser. Never means Drive backup has not completed here.",
+        "Last index rebuild": "The last time the portfolio index was repaired or rebuilt.",
+        "Source of truth": "The saved-data source the app currently trusts most when loading portfolio information."
     };
     return help[label] || "";
+}
+
+function stripWftSimpleBoldTags(text) {
+    return String(text || "").replace(/<\/?b>/g, "");
 }
 
 function renderStorageHealthSummaryLines(summaryEl, lines) {
@@ -1860,28 +1864,29 @@ function renderStorageHealthSummaryLines(summaryEl, lines) {
     summaryEl.textContent = "";
     for (var i = 0; i < lines.length; i++) {
         var line = String(lines[i] || "");
-        var plainLine = line.replace(/<\/?b>/g, "");
-        var label = plainLine.split(":")[0];
+        var plainLine = stripWftSimpleBoldTags(line);
+        var colonIndex = plainLine.indexOf(":");
+        var label = colonIndex >= 0 ? plainLine.slice(0, colonIndex) : plainLine;
+        var value = colonIndex >= 0 ? plainLine.slice(colonIndex + 1).replace(/^\s+/, "") : "";
         var helpText = getWftStorageHealthHelpText(label);
 
         var row = document.createElement("div");
         row.className = "storage-health-row";
 
+        var main = document.createElement("div");
+        main.className = "storage-health-main";
+
+        var labelEl = document.createElement("div");
+        labelEl.className = "storage-health-label";
+        labelEl.textContent = label;
+        main.appendChild(labelEl);
+
         var valueEl = document.createElement("div");
         valueEl.className = "storage-health-value";
+        valueEl.textContent = value || "-";
+        main.appendChild(valueEl);
 
-        var parts = line.split(/<b>|<\/b>/);
-        for (var p = 0; p < parts.length; p++) {
-            if (!parts[p]) { continue; }
-            if (p % 2 === 1) {
-                var strong = document.createElement("strong");
-                strong.textContent = parts[p];
-                valueEl.appendChild(strong);
-            } else {
-                valueEl.appendChild(document.createTextNode(parts[p]));
-            }
-        }
-        row.appendChild(valueEl);
+        row.appendChild(main);
 
         if (helpText) {
             var helpEl = document.createElement("div");
@@ -1914,7 +1919,7 @@ function refreshStorageHealthUI() {
     var lines = [];
     lines.push("Storage mode: <b>" + meta.activePortfolioFormat.replace(/-/g, " ") + "</b>");
     lines.push("Safe mode: <b>" + (safeMode ? "ON (" + meta.safeModeReason + ")" : "off") + "</b>");
-    lines.push("localStorage est. size: <b>" + formatWftBytes(lsSize) + "</b>");
+    lines.push("localStorage size: <b>" + formatWftBytes(lsSize) + "</b>");
     lines.push("IndexedDB: <b>" + (checkIndexedDbAvailable() ? "available" : "unavailable") + "</b>");
 
     // Portfolio index status
@@ -1931,7 +1936,7 @@ function refreshStorageHealthUI() {
             var sd = portfolio[names[hi]];
             if (sd && sd.sessions) { totalSessions += sd.sessions.length; }
         }
-        lines.push("Cached students: <b>" + names.length + "</b>, sessions: <b>" + totalSessions + "</b>");
+        lines.push("Cached data: <b>" + names.length + " students, " + totalSessions + " sessions</b>");
     }
 
     // Last sync info
@@ -1949,7 +1954,7 @@ function refreshStorageHealthUI() {
         lines.push("Last index rebuild: <b>" + formatWftRelativeTime(meta.updatedAt) + "</b>");
     }
 
-    lines.push("Active source of truth: <b>" + meta.activePortfolioFormat.replace(/-/g, " ") + "</b>");
+    lines.push("Source of truth: <b>" + meta.activePortfolioFormat.replace(/-/g, " ") + "</b>");
 
     var summaryEl = document.getElementById("storageHealthSummary");
     if (summaryEl) {
