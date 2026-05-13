@@ -450,26 +450,34 @@ GRADE_PROFILES[11] = makeGradeProfile({grade:11,label:"Grade 11",gradeLabel:"Gra
 GRADE_PROFILES[12] = makeGradeProfile({grade:12,label:"Grade 12",gradeLabel:"Grade 12",audience:"12th-grade student",targetWordCountBase:700,targetWordCount:700,targetWordCountRange:[150,2500],sampleStatusMinWords:{limited:18,scorable:90},sampleStatusMinSentences:{scorable:6},wordRules:{insufficient:18,limited:18,scorable:90}});
 
 var wftStudentGradeLevelOverride = false;
+var wftAssessmentSettingsOverrideActive = false;
+var wftAssessmentOverrideGrammarStrictness = null;
+var wftAssessmentOverrideTargetWordCount = null;
 
-function getSelectedGradeLevel() {
-    var el = document.getElementById("gradeLevelSelect");
-    var n = el ? parseGradeLevelValue(el.value) : null;
-    return n || getClassGradeLevel() || 5;
-}
 function getClassGradeLevel() {
     var el = document.getElementById("classGradeLevelSelect");
     var n = el ? parseGradeLevelValue(el.value) : null;
     return n || 5;
 }
-function syncStudentGradeToClassIfNeeded() {
-    var classSelect = document.getElementById("classGradeLevelSelect");
-    var studentSelect = document.getElementById("gradeLevelSelect");
-    if (!classSelect || !studentSelect) return;
-    if (!wftStudentGradeLevelOverride) {
-        studentSelect.value = String(getClassGradeLevel());
-    }
+function formatGradeLevelLabel(value) {
+    var n = parseGradeLevelValue(value) || 5;
+    return "Grade " + n;
 }
-function getActiveGradeLevel() { return getSelectedGradeLevel() || getClassGradeLevel() || 5; }
+function getClassGradeLabel() {
+    return formatGradeLevelLabel(getClassGradeLevel());
+}
+function getSelectedGradeLevel() {
+    var classGrade = getClassGradeLevel() || 5;
+    var el = document.getElementById("gradeLevelSelect");
+    if (el && String(el.value) !== String(classGrade)) el.value = String(classGrade);
+    return classGrade;
+}
+function syncStudentGradeToClassIfNeeded() {
+    var studentSelect = document.getElementById("gradeLevelSelect");
+    if (studentSelect) studentSelect.value = String(getClassGradeLevel());
+    wftStudentGradeLevelOverride = false;
+}
+function getActiveGradeLevel() { return getClassGradeLevel() || 5; }
 function getGradeProfile(optGrade) {
     var grade = optGrade != null ? parseGradeLevelValue(optGrade) : getActiveGradeLevel();
     return GRADE_PROFILES[grade] || GRADE_PROFILES[5];
@@ -485,7 +493,7 @@ function getGradeGrowGoalListText(optGradeProfile) {
     return goals.map(function(goal) { return "- " + goal; }).join("\n");
 }
 function getGradeProfileDescriptionText(profile) {
-    return (profile.gradeLabel || profile.label) + " defaults: Grammar Strictness " + profile.grammarStrictnessDefault + "/5, Target word count " + (profile.targetWordCountBase || profile.targetWordCount) + " words.";
+    return (profile.gradeLabel || profile.label) + " defaults: Grammar Strictness Level " + profile.grammarStrictnessDefault + ", Target word count " + (profile.targetWordCountBase || profile.targetWordCount) + " words.";
 }
 function refreshGradeProfileDescription() {
     var classProfile = getGradeProfile(getClassGradeLevel());
@@ -499,35 +507,160 @@ function escapeAssessmentSummaryText(value) {
         return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch] || ch;
     });
 }
-
+function clampGrammarStrictness(value) {
+    var n = parseInt(value, 10);
+    if (isNaN(n)) n = 3;
+    if (n < 1) n = 1;
+    if (n > 5) n = 5;
+    return n;
+}
+function formatGrammarStrictnessLabel(value) {
+    return "Level " + clampGrammarStrictness(value);
+}
+function formatTargetWordCountLabel(value, enabled) {
+    var n = parseInt(value, 10);
+    if (enabled === false || isNaN(n) || n <= 0) return "Not used";
+    return n + " words";
+}
+function getClassDefaultGrammarStrictness() {
+    var fallback = 3;
+    try {
+        var profile = getGradeProfile(getClassGradeLevel());
+        if (profile && profile.grammarStrictnessDefault != null) fallback = parseInt(profile.grammarStrictnessDefault, 10) || fallback;
+    } catch (e) { }
+    var el = document.getElementById("grammarStrictness");
+    if (el && el.value !== "") return clampGrammarStrictness(el.value);
+    return clampGrammarStrictness(fallback);
+}
+function getClassDefaultTargetWordCountValue() {
+    var input = document.getElementById("targetWordCount");
+    var value = input ? parseInt(input.value, 10) : 200;
+    if (!isFinite(value) || value <= 0) value = 200;
+    return value;
+}
+function isClassDefaultWordCountTargetEnabled() {
+    var checkbox = document.getElementById("useWordCountTarget");
+    return checkbox ? checkbox.checked !== false : true;
+}
+function getAssessmentOverrideTargetWordCountValue() {
+    var value = parseInt(wftAssessmentOverrideTargetWordCount, 10);
+    if (!isFinite(value) || value <= 0) value = getClassDefaultTargetWordCountValue();
+    return value;
+}
+function isAssessmentOverrideActive() {
+    return wftAssessmentSettingsOverrideActive === true;
+}
+function getEffectiveGrammarStrictnessValue() {
+    if (isAssessmentOverrideActive() && wftAssessmentOverrideGrammarStrictness != null) {
+        return clampGrammarStrictness(wftAssessmentOverrideGrammarStrictness);
+    }
+    return getClassDefaultGrammarStrictness();
+}
+function isEffectiveWordCountTargetEnabled() {
+    if (isAssessmentOverrideActive()) return getAssessmentOverrideTargetWordCountValue() > 0;
+    return isClassDefaultWordCountTargetEnabled();
+}
+function getEffectiveTargetWordCountValueForSettings() {
+    if (isAssessmentOverrideActive()) return getAssessmentOverrideTargetWordCountValue();
+    return getClassDefaultTargetWordCountValue();
+}
+function getCurrentAssessmentSettingsSnapshot() {
+    var classGrade = getClassGradeLevel();
+    var targetEnabled = isEffectiveWordCountTargetEnabled();
+    var target = targetEnabled ? getEffectiveTargetWordCountValueForSettings() : 0;
+    var strictness = getEffectiveGrammarStrictnessValue();
+    return {
+        classGradeLevel: classGrade,
+        classGradeLabel: formatGradeLevelLabel(classGrade),
+        gradeLevel: getActiveGradeLevel(),
+        gradeLabel: formatGradeLevelLabel(getActiveGradeLevel()),
+        grammarStrictness: strictness,
+        grammarStrictnessLabel: formatGrammarStrictnessLabel(strictness),
+        targetWordCount: target,
+        targetWordCountLabel: formatTargetWordCountLabel(target, targetEnabled),
+        useWordCountTarget: targetEnabled,
+        assessmentOverrideActive: isAssessmentOverrideActive()
+    };
+}
+function updateAssessmentOverrideDraftLabels() {
+    var strictnessEl = document.getElementById("assessmentGrammarStrictnessOverride");
+    var strictnessValEl = document.getElementById("assessmentGrammarStrictnessOverrideVal");
+    if (strictnessEl && strictnessValEl) strictnessValEl.textContent = formatGrammarStrictnessLabel(strictnessEl.value);
+}
+function populateAssessmentOverrideControls() {
+    var strictnessEl = document.getElementById("assessmentGrammarStrictnessOverride");
+    var targetEl = document.getElementById("assessmentTargetWordCountOverride");
+    var strictness = isAssessmentOverrideActive() && wftAssessmentOverrideGrammarStrictness != null ? wftAssessmentOverrideGrammarStrictness : getEffectiveGrammarStrictnessValue();
+    var target = isAssessmentOverrideActive() && wftAssessmentOverrideTargetWordCount != null ? wftAssessmentOverrideTargetWordCount : getEffectiveTargetWordCountValueForSettings();
+    if (strictnessEl) strictnessEl.value = String(clampGrammarStrictness(strictness));
+    if (targetEl) targetEl.value = String(parseInt(target, 10) || getClassDefaultTargetWordCountValue());
+    updateAssessmentOverrideDraftLabels();
+}
+function toggleAssessmentOverridePanel(forceOpen) {
+    var panel = document.getElementById("assessmentOverridePanel");
+    if (!panel) return;
+    var shouldOpen = forceOpen === true ? true : (forceOpen === false ? false : panel.hidden);
+    if (shouldOpen) populateAssessmentOverrideControls();
+    panel.hidden = !shouldOpen;
+}
+function applyAssessmentOverrideSettings() {
+    var strictnessEl = document.getElementById("assessmentGrammarStrictnessOverride");
+    var targetEl = document.getElementById("assessmentTargetWordCountOverride");
+    wftAssessmentOverrideGrammarStrictness = clampGrammarStrictness(strictnessEl ? strictnessEl.value : getClassDefaultGrammarStrictness());
+    var target = targetEl ? parseInt(targetEl.value, 10) : getClassDefaultTargetWordCountValue();
+    if (!isFinite(target) || target <= 0) target = getClassDefaultTargetWordCountValue();
+    wftAssessmentOverrideTargetWordCount = target;
+    wftAssessmentSettingsOverrideActive = true;
+    toggleAssessmentOverridePanel(false);
+    refreshAssessmentSettingsSummary();
+    if (typeof updateMeter === "function") updateMeter();
+    if (typeof syncUiState === "function") syncUiState();
+}
+function cancelAssessmentOverrideEdit() {
+    toggleAssessmentOverridePanel(false);
+}
+function clearAssessmentOverrideSettings() {
+    wftAssessmentSettingsOverrideActive = false;
+    wftAssessmentOverrideGrammarStrictness = null;
+    wftAssessmentOverrideTargetWordCount = null;
+    toggleAssessmentOverridePanel(false);
+    refreshAssessmentSettingsSummary();
+    if (typeof updateMeter === "function") updateMeter();
+    if (typeof syncUiState === "function") syncUiState();
+}
 function refreshAssessmentSettingsSummary() {
     var summary = document.getElementById("assessmentSettingsSummary");
     if (!summary) return;
-
-    var strictness = 3;
-    if (typeof getGrammarStrictness === "function") {
-        strictness = getGrammarStrictness();
-    } else {
-        var strictnessEl = document.getElementById("grammarStrictness");
-        strictness = strictnessEl ? (parseInt(strictnessEl.value, 10) || 3) : 3;
+    var settings = getCurrentAssessmentSettingsSnapshot();
+    var intro = document.getElementById("assessmentSettingsIntro");
+    if (intro) {
+        intro.textContent = settings.assessmentOverrideActive
+            ? "Using an individual adjustment for this assessment."
+            : "Using class defaults from Manage Class.";
     }
-
-    var useWordCountTargetEl = document.getElementById("useWordCountTarget");
-    var targetWordCountEl = document.getElementById("targetWordCount");
-    var useWordCount = !useWordCountTargetEl || useWordCountTargetEl.checked;
-    var targetWordCount = targetWordCountEl ? (parseInt(targetWordCountEl.value, 10) || 0) : 0;
-    var wordText = useWordCount && targetWordCount > 0 ? targetWordCount + " words" : "Not used";
+    var toggleBtn = document.getElementById("assessmentOverrideToggleBtn");
+    if (toggleBtn) toggleBtn.textContent = settings.assessmentOverrideActive ? "Edit adjustment" : "Adjust for this assessment";
+    var clearBtn = document.getElementById("assessmentOverrideClearBtn");
+    if (clearBtn) clearBtn.style.display = settings.assessmentOverrideActive ? "inline-flex" : "none";
 
     summary.innerHTML = ""
-        + '<div class="assessment-default-item"><span class="assessment-default-label">Grammar Strictness</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(strictness + "/5") + '</span></div>'
-        + '<div class="assessment-default-item"><span class="assessment-default-label">Target word count</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(wordText) + '</span></div>';
+        + '<div class="assessment-default-item"><span class="assessment-default-label">Class Grade Level</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(settings.classGradeLabel) + '</span></div>'
+        + '<div class="assessment-default-item"><span class="assessment-default-label">Grammar Strictness</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(settings.grammarStrictnessLabel) + '</span></div>'
+        + '<div class="assessment-default-item"><span class="assessment-default-label">Target Word Count</span><span class="assessment-default-value">' + escapeAssessmentSummaryText(settings.targetWordCountLabel) + '</span></div>';
 }
 function applyGradeWordCountRange(optGradeProfile) {
-    var profile = optGradeProfile || getGradeProfile();
+    var profile = optGradeProfile || getGradeProfile(getClassGradeLevel());
+    if (!profile.targetWordCountRange) return;
     var input = document.getElementById("targetWordCount");
-    if (!input || !profile.targetWordCountRange) return;
-    input.min = String(profile.targetWordCountRange[0]);
-    input.max = String(profile.targetWordCountRange[1]);
+    if (input) {
+        input.min = String(profile.targetWordCountRange[0]);
+        input.max = String(profile.targetWordCountRange[1]);
+    }
+    var overrideInput = document.getElementById("assessmentTargetWordCountOverride");
+    if (overrideInput) {
+        overrideInput.min = String(profile.targetWordCountRange[0]);
+        overrideInput.max = String(profile.targetWordCountRange[1]);
+    }
 }
 function applyGradeDefaultTargetWordCount(optGradeProfile) {
     var profile = optGradeProfile || getGradeProfile(getClassGradeLevel());
@@ -546,6 +679,7 @@ function applyGradeDefaultStrictness(optGradeProfile) {
 }
 function applyGradeDefaults() {
     var classProfile = getGradeProfile(getClassGradeLevel());
+    clearAssessmentOverrideSettings();
     applyGradeDefaultStrictness(classProfile);
     applyGradeDefaultTargetWordCount(classProfile);
     refreshGradeProfileDescription();
@@ -555,13 +689,12 @@ function applyGradeDefaults() {
     if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-defaults");
 }
 function onGradeLevelChanged(source) {
+    syncStudentGradeToClassIfNeeded();
     if (source === "class") {
-        syncStudentGradeToClassIfNeeded();
         var classProfile = getGradeProfile(getClassGradeLevel());
+        clearAssessmentOverrideSettings();
         applyGradeDefaultStrictness(classProfile);
         applyGradeDefaultTargetWordCount(classProfile);
-    } else if (source === "student" || source === "settings") {
-        wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
     }
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
@@ -574,9 +707,11 @@ function initializeGradeLevelFeature() {
     syncStudentGradeToClassIfNeeded();
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
+    populateAssessmentOverrideControls();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
     if (typeof syncUiState === "function") syncUiState();
 }
+
 
 
 function hasSentenceEndingPunctuation(text) {
@@ -4561,38 +4696,9 @@ async function extractTextFromSelectedImage(isAutomatic) {
 
 
 function getGrammarStrictness() {
-    var fallback = 3;
-
-    try {
-        var profile = typeof getGradeProfile === "function" ? getGradeProfile() : null;
-        if (profile && profile.grammarStrictnessDefault != null) {
-            fallback = parseInt(profile.grammarStrictnessDefault, 10) || fallback;
-        }
-    } catch (e) { }
-
-    var value = null;
-    var el = document.getElementById("grammarStrictness");
-    if (el && el.value !== "") {
-        value = parseInt(el.value, 10);
-    }
-
-    if ((value == null || isNaN(value)) && typeof localStorage !== "undefined") {
-        try {
-            var raw = localStorage.getItem("wft_settings");
-            if (raw) {
-                var settings = JSON.parse(raw);
-                if (settings && settings.grammarStrictness != null) {
-                    value = parseInt(settings.grammarStrictness, 10);
-                }
-            }
-        } catch (e2) { }
-    }
-
-    if (value == null || isNaN(value)) value = fallback;
-    if (value < 1) value = 1;
-    if (value > 5) value = 5;
-    return value;
+    return getEffectiveGrammarStrictnessValue();
 }
+
 
 function getStrictnessRuleForPrompt(strictness, optGradeProfile) {
     var profile = optGradeProfile || getGradeProfile();
@@ -5669,15 +5775,11 @@ function formatGrammarCalc(calc) {
 
 
 function isWordCountTargetEnabled() {
-    var checkbox = document.getElementById("useWordCountTarget");
-    return checkbox ? checkbox.checked !== false : true;
+    return isEffectiveWordCountTargetEnabled();
 }
 
 function getTargetWordCountValue() {
-    var input = document.getElementById("targetWordCount");
-    var value = input ? parseInt(input.value, 10) : 200;
-    if (!isFinite(value) || value <= 0) value = 200;
-    return value;
+    return getEffectiveTargetWordCountValueForSettings();
 }
 
 function getEffectiveTargetWordCount() {
@@ -6751,6 +6853,20 @@ function wrapCorrectedHtmlForNotebookPrint(html) {
     return sanitizeWftHtmlFragment(value);
 }
 
+function getNotebookAssessmentSettings(data) {
+    data = data || {};
+    var settings = data.assessmentSettings || {};
+    var classGradeLabel = settings.classGradeLabel || data.classGradeLabel || formatGradeLevelLabel(settings.classGradeLevel || data.classGradeLevel || data.gradeLevel || getClassGradeLevel());
+    var strictness = settings.grammarStrictness != null ? settings.grammarStrictness : (data.grammarStrictness != null ? data.grammarStrictness : getEffectiveGrammarStrictnessValue());
+    var target = data.targetWords != null ? data.targetWords : (settings.targetWordCount != null ? settings.targetWordCount : getEffectiveTargetWordCount());
+    return {
+        classGradeLabel: classGradeLabel,
+        grammarStrictnessLabel: settings.grammarStrictnessLabel || formatGrammarStrictnessLabel(strictness),
+        targetWordCountLabel: settings.targetWordCountLabel || formatTargetWordCountLabel(target, target > 0),
+        actualWordsLabel: data.actualWords != null ? String(data.actualWords) : "0"
+    };
+}
+
 function fillNotebookSummary() {
     if (!latestAnalysisData) {
         alert("Please analyze the writing first.");
@@ -6761,7 +6877,7 @@ function fillNotebookSummary() {
     var title = getPreferredWritingTitle(text, latestAnalysisData.detailed && latestAnalysisData.detailed.titleSuggestion);
     var today = new Date();
     var dateText = today.toLocaleDateString("en-GB");
-    var wordCountText = latestAnalysisData.targetWords > 0 ? (latestAnalysisData.actualWords + " / " + latestAnalysisData.targetWords) : (latestAnalysisData.actualWords + " words");
+    var notebookSettings = getNotebookAssessmentSettings(latestAnalysisData);
 
     document.getElementById("notebookTitle").textContent = title;
     var notebookPage2Title = document.getElementById("notebookPage2Title");
@@ -6772,7 +6888,13 @@ function fillNotebookSummary() {
     if (notebookPage2Date) notebookPage2Date.textContent = dateText;
     var notebookStudentName = document.getElementById("notebookStudentName");
     if (notebookStudentName) notebookStudentName.textContent = selectedStudent || "No student selected";
-    document.getElementById("notebookWordCount").textContent = wordCountText;
+    var notebookClassGradeLevel = document.getElementById("notebookClassGradeLevel");
+    if (notebookClassGradeLevel) notebookClassGradeLevel.textContent = notebookSettings.classGradeLabel;
+    var notebookTargetWordCount = document.getElementById("notebookTargetWordCount");
+    if (notebookTargetWordCount) notebookTargetWordCount.textContent = notebookSettings.targetWordCountLabel;
+    var notebookGrammarStrictness = document.getElementById("notebookGrammarStrictness");
+    if (notebookGrammarStrictness) notebookGrammarStrictness.textContent = notebookSettings.grammarStrictnessLabel;
+    document.getElementById("notebookWordCount").textContent = notebookSettings.actualWordsLabel;
 
     var goalPlan = getGoalPlan(latestAnalysisData);
     var notebookGrowGoal = goalPlan.growGoal;
@@ -6815,7 +6937,7 @@ function getNotebookPrintCss() {
         ".overall-score { text-align: right; flex-shrink: 0; margin-left: 8px; }",
         ".overall-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #444444; margin-bottom: 1px; }",
         ".overall-value { font-family: 'DM Serif Display', Georgia, serif; font-size: 26.5px; font-weight: 400; color: #111111; line-height: 1; }",
-        ".meta-row { display: flex; gap: 14px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
+        ".meta-row { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
         ".meta-row strong { color: #111111; font-weight: 600; }",
         ".top-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 5px; }",
         ".info-box { background: #f5f5f5; border: 1px solid #cccccc; border-radius: 4px; padding: 4px 5px; }",
@@ -6850,7 +6972,7 @@ function getNotebookPrintCss() {
         ".auto-fit-page .page-title { font-size: calc(18.5px * var(--fit-scale)); }",
         ".auto-fit-page .overall-label { font-size: calc(8.5px * var(--fit-scale)); }",
         ".auto-fit-page .overall-value { font-size: calc(26.5px * var(--fit-scale)); }",
-        ".auto-fit-page .meta-row { gap: calc(14px * var(--fit-scale)); font-size: calc(10.3px * var(--fit-scale)); padding-top: calc(3px * var(--fit-scale)); padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
+        ".auto-fit-page .meta-row { row-gap: calc(4px * var(--fit-scale)); column-gap: calc(12px * var(--fit-scale)); font-size: calc(10.3px * var(--fit-scale)); padding-top: calc(3px * var(--fit-scale)); padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
         ".auto-fit-page .top-boxes { gap: calc(5px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
         ".auto-fit-page .info-box, .auto-fit-page .teacher-comment { padding: calc(4px * var(--fit-scale)) calc(5px * var(--fit-scale)); }",
         ".auto-fit-page .teacher-comment { margin-bottom: calc(6px * var(--fit-scale)); }",
@@ -6877,7 +6999,7 @@ function getNotebookPrintFitScript() {
         'function mmToPx(mm){var probe=document.createElement("div");probe.style.position="absolute";probe.style.visibility="hidden";probe.style.height=mm+"mm";document.body.appendChild(probe);var px=probe.getBoundingClientRect().height;document.body.removeChild(probe);return px;}' +
         'function each(page,sel,fn){var nodes=page.querySelectorAll(sel);for(var i=0;i<nodes.length;i++){fn(nodes[i]);}}' +
         'function setPx(page,sel,prop,value){each(page,sel,function(node){node.style[prop]=(Math.max(0,value)).toFixed(2)+"px";});}' +
-        'function applyScale(page,scale){page.style.setProperty("--fit-scale",String(scale));var rules=[[".page-header","paddingBottom",4],[".page-header","marginBottom",5],[".page-label","fontSize",9],[".page-label","marginBottom",2],[".page-title","fontSize",18.5],[".overall-label","fontSize",8.5],[".overall-value","fontSize",26.5],[".meta-row","gap",14],[".meta-row","fontSize",10.3],[".meta-row","paddingTop",3],[".meta-row","paddingBottom",4],[".meta-row","marginBottom",5],[".top-boxes","gap",5],[".top-boxes","marginBottom",5],[".box-label","fontSize",9],[".box-label","marginBottom",2],[".section-title","fontSize",9],[".section-title","paddingBottom",2],[".section-title","marginBottom",5],[".assessment-grid","rowGap",4],[".assessment-grid","columnGap",6],[".category","paddingTop",4],[".category","paddingRight",5],[".category","paddingBottom",4],[".category","paddingLeft",5],[".category-header","marginBottom",2],[".category-name","fontSize",10.3],[".score-badge","fontSize",9.3],[".score-badge","paddingLeft",5],[".score-badge","paddingRight",5],[".score-bar-track","marginBottom",4],[".evidence-block","fontSize",9.3],[".evidence-block","marginBottom",3],[".tip-block","fontSize",9.3],[".tip-block","paddingTop",3]];for(var i=0;i<rules.length;i++){setPx(page,rules[i][0],rules[i][1],rules[i][2]*scale);}each(page,".info-box,.teacher-comment",function(node){node.style.paddingTop=(4*scale).toFixed(2)+"px";node.style.paddingRight=(5*scale).toFixed(2)+"px";node.style.paddingBottom=(4*scale).toFixed(2)+"px";node.style.paddingLeft=(5*scale).toFixed(2)+"px";});setPx(page,".teacher-comment","marginBottom",6*scale);each(page,".score-bar-track",function(node){node.style.display="block";node.style.width="100%";node.style.minWidth="0";node.style.height="3.5px";node.style.minHeight="3.5px";});each(page,".score-bar-fill",function(node){node.style.display="block";node.style.height="100%";node.style.minHeight="100%";});each(page,".info-box p,.teacher-comment p,.evidence-block,.tip-block",function(node){node.style.lineHeight="1.32";});}' +
+        'function applyScale(page,scale){page.style.setProperty("--fit-scale",String(scale));var rules=[[".page-header","paddingBottom",4],[".page-header","marginBottom",5],[".page-label","fontSize",9],[".page-label","marginBottom",2],[".page-title","fontSize",18.5],[".overall-label","fontSize",8.5],[".overall-value","fontSize",26.5],[".meta-row","rowGap",4],[".meta-row","columnGap",12],[".meta-row","fontSize",10.3],[".meta-row","paddingTop",3],[".meta-row","paddingBottom",4],[".meta-row","marginBottom",5],[".top-boxes","gap",5],[".top-boxes","marginBottom",5],[".box-label","fontSize",9],[".box-label","marginBottom",2],[".section-title","fontSize",9],[".section-title","paddingBottom",2],[".section-title","marginBottom",5],[".assessment-grid","rowGap",4],[".assessment-grid","columnGap",6],[".category","paddingTop",4],[".category","paddingRight",5],[".category","paddingBottom",4],[".category","paddingLeft",5],[".category-header","marginBottom",2],[".category-name","fontSize",10.3],[".score-badge","fontSize",9.3],[".score-badge","paddingLeft",5],[".score-badge","paddingRight",5],[".score-bar-track","marginBottom",4],[".evidence-block","fontSize",9.3],[".evidence-block","marginBottom",3],[".tip-block","fontSize",9.3],[".tip-block","paddingTop",3]];for(var i=0;i<rules.length;i++){setPx(page,rules[i][0],rules[i][1],rules[i][2]*scale);}each(page,".info-box,.teacher-comment",function(node){node.style.paddingTop=(4*scale).toFixed(2)+"px";node.style.paddingRight=(5*scale).toFixed(2)+"px";node.style.paddingBottom=(4*scale).toFixed(2)+"px";node.style.paddingLeft=(5*scale).toFixed(2)+"px";});setPx(page,".teacher-comment","marginBottom",6*scale);each(page,".score-bar-track",function(node){node.style.display="block";node.style.width="100%";node.style.minWidth="0";node.style.height="3.5px";node.style.minHeight="3.5px";});each(page,".score-bar-fill",function(node){node.style.display="block";node.style.height="100%";node.style.minHeight="100%";});each(page,".info-box p,.teacher-comment p,.evidence-block,.tip-block",function(node){node.style.lineHeight="1.32";});}' +
         'function pageOverflows(page){return page.scrollHeight>page.clientHeight+1;}' +
         'function fitPageOne(){var page=document.querySelector(".auto-fit-page");if(!page)return;var targetHeight=mmToPx(210)-mmToPx(5);var originalHeight=page.style.height;var originalMinHeight=page.style.minHeight;var originalMaxHeight=page.style.maxHeight;var originalOverflow=page.style.overflow;page.style.height=targetHeight+"px";page.style.minHeight=targetHeight+"px";page.style.maxHeight=targetHeight+"px";page.style.overflow="hidden";applyScale(page,1);var minScale=0.62;var low=minScale;var high=1;var best=1;if(pageOverflows(page)){best=minScale;for(var i=0;i<24;i++){var mid=(low+high)/2;applyScale(page,mid);if(pageOverflows(page)){high=mid;}else{best=mid;low=mid;}}applyScale(page,Math.floor(best*1000)/1000);}if(pageOverflows(page)){page.classList.add("fit-warning");}else{page.classList.remove("fit-warning");}page.style.height=originalHeight;page.style.minHeight=originalMinHeight;page.style.maxHeight=originalMaxHeight;page.style.overflow=originalOverflow;}' +
         'window.fitNotebookPageOne=fitPageOne;window.addEventListener("load",function(){var run=function(){fitPageOne();setTimeout(fitPageOne,120);setTimeout(fitPageOne,400);};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(run);}else{run();}});window.addEventListener("resize",fitPageOne);window.addEventListener("beforeprint",fitPageOne);' +
@@ -7018,13 +7140,20 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
     var strength = sanitizeGenreReferenceInFeedback(feedback.strength || "Saved portfolio entry.", genreInfo);
     var growGoal = sanitizeGenreReferenceInFeedback(feedback.growGoal || feedback.nextTime || "Review the corrected writing and improve one focus area.", genreInfo);
     var teacherComment = sanitizeGenreReferenceInFeedback(feedback.closing || feedback.nextTime || "Review the saved feedback from this portfolio entry.", genreInfo);
-    var wordCountText = countWords(originalText) + " words";
+    var notebookSettings = getNotebookAssessmentSettings({
+        assessmentSettings: session.assessmentSettings || {},
+        classGradeLevel: session.classGradeLevel || session.gradeLevel,
+        classGradeLabel: session.classGradeLabel || session.gradeLabel,
+        grammarStrictness: session.grammarStrictness,
+        targetWords: session.targetWords != null ? session.targetWords : 0,
+        actualWords: session.actualWords != null ? session.actualWords : countWords(originalText)
+    });
     var scoreText = session.overall == null ? "Not scored" : (session.overall + "%");
 
     return ''
         + '<div class="page page-1 auto-fit-page">'
         + '<div class="page-header"><div><div class="page-label">Writing Notebook Summary</div><div class="page-title">' + escapeHtml(title) + '</div></div><div class="overall-score"><div class="overall-label">Overall</div><div class="overall-value">' + escapeHtml(scoreText) + '</div></div></div>'
-        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordCountText) + '</span></span></div>'
+        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Class Grade:</strong> <span>' + escapeHtml(notebookSettings.classGradeLabel) + '</span></span><span><strong>Target:</strong> <span>' + escapeHtml(notebookSettings.targetWordCountLabel) + '</span></span><span><strong>Grammar:</strong> <span>' + escapeHtml(notebookSettings.grammarStrictnessLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(notebookSettings.actualWordsLabel) + '</span></span></div>'
         + '<div class="top-boxes"><div class="info-box"><div class="box-label">My Strength</div><p>' + escapeHtml(strength) + '</p></div><div class="info-box"><div class="box-label">My Grow Goal</div><p>' + escapeHtml(growGoal) + '</p></div></div>'
         + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
@@ -7305,10 +7434,11 @@ function setLoadingButtonState(button, isLoading, busyLabel) {
 
 async function analyzeWriting() {
     var text = document.getElementById("studentWriting").value.trim();
-    var targetWords = getEffectiveTargetWordCount();
+    var assessmentSettings = getCurrentAssessmentSettingsSnapshot();
+    var targetWords = assessmentSettings.targetWordCount || 0;
     var model = document.getElementById("modelSelect").value;
     // FIX O2: Resolve grade profile right at the start, before any early exits.
-    var gradeProfile = getGradeProfile();
+    var gradeProfile = getGradeProfile(assessmentSettings.gradeLevel);
     if (!text && selectedImages && selectedImages.length) {
         try {
             text = String(await extractTextFromSelectedImage(true) || "").trim();
@@ -7348,6 +7478,10 @@ async function analyzeWriting() {
                 gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
                 gradeTier: gradeProfile.tier,
                 gradeProfileVersion: GRADE_PROFILE_VERSION,
+                classGradeLevel: assessmentSettings.classGradeLevel,
+                classGradeLabel: assessmentSettings.classGradeLabel,
+                grammarStrictness: assessmentSettings.grammarStrictness,
+                assessmentSettings: assessmentSettings,
                 actualWords: actualWords,
                 targetWords: targetWords,
                 categoryScores: lowSample.categoryScores,
@@ -7582,6 +7716,10 @@ async function analyzeWriting() {
             gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
             gradeTier: gradeProfile.tier,
             gradeProfileVersion: GRADE_PROFILE_VERSION,
+            classGradeLevel: assessmentSettings.classGradeLevel,
+            classGradeLabel: assessmentSettings.classGradeLabel,
+            grammarStrictness: assessmentSettings.grammarStrictness,
+            assessmentSettings: assessmentSettings,
             actualWords: actualWords,
             targetWords: targetWords,
             categoryScores: categoryScores,

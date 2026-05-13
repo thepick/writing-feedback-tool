@@ -490,13 +490,15 @@ function saveSettingsToLocalStorage(settingsOverride) {
         if (modelSelect) settings.model = modelSelect.value || '';
         if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
         if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
+        if (typeof getClassDefaultGrammarStrictness === 'function') settings.grammarStrictness = getClassDefaultGrammarStrictness();
+        else if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
         if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
+        if (typeof getClassGradeLevel === 'function') settings.gradeLevel = getClassGradeLevel();
+        else if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
         if (typeof GRADE_PROFILE_VERSION !== 'undefined') settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
         if (typeof getClassGradeLevel === 'function') settings.classDefaultsGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+        settings.studentGradeLevelOverride = false;
 
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
@@ -551,14 +553,9 @@ function loadSettingsFromLocalStorage() {
                 var savedClassGrade = parseGradeLevelValue(s.classGradeLevel) || 5;
                 document.getElementById('classGradeLevelSelect').value = String(savedClassGrade);
             }
-            wftStudentGradeLevelOverride = s.studentGradeLevelOverride === true;
-            if (s.studentGradeLevelOverride == null && s.gradeLevel != null && s.classGradeLevel != null) {
-                wftStudentGradeLevelOverride = (parseGradeLevelValue(s.gradeLevel) !== (parseGradeLevelValue(s.classGradeLevel) || 5));
-            }
+            wftStudentGradeLevelOverride = false;
             if (document.getElementById('gradeLevelSelect')) {
-                var savedStudentGrade = parseGradeLevelValue(s.gradeLevel);
-                var effectiveStudentGrade = wftStudentGradeLevelOverride && savedStudentGrade ? savedStudentGrade : getClassGradeLevel();
-                document.getElementById('gradeLevelSelect').value = String(effectiveStudentGrade || 5);
+                document.getElementById('gradeLevelSelect').value = String(getClassGradeLevel() || 5);
             }
             maybeApplyClassDefaultsForLegacyGradeSettings(s);
             applyGradeWordCountRange();
@@ -4801,13 +4798,15 @@ function getLocalSettingsSnapshot() {
         if (modelSelect) settings.model = modelSelect.value || '';
         if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
         if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
+        if (typeof getClassDefaultGrammarStrictness === 'function') settings.grammarStrictness = getClassDefaultGrammarStrictness();
+        else if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
         if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
+        if (typeof getClassGradeLevel === 'function') settings.gradeLevel = getClassGradeLevel();
+        else if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
         if (typeof GRADE_PROFILE_VERSION !== 'undefined') settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
         if (typeof getClassGradeLevel === 'function') settings.classDefaultsGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+        settings.studentGradeLevelOverride = false;
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
         }
@@ -6353,14 +6352,9 @@ function applyLoadedSettings(settings) {
         var loadedClassGrade = parseGradeLevelValue(settings.classGradeLevel) || 5;
         document.getElementById("classGradeLevelSelect").value = String(loadedClassGrade);
     }
-    wftStudentGradeLevelOverride = settings.studentGradeLevelOverride === true;
-    if (settings.studentGradeLevelOverride == null && settings.gradeLevel != null && settings.classGradeLevel != null) {
-        wftStudentGradeLevelOverride = (parseGradeLevelValue(settings.gradeLevel) !== (parseGradeLevelValue(settings.classGradeLevel) || 5));
-    }
+    wftStudentGradeLevelOverride = false;
     if (document.getElementById("gradeLevelSelect")) {
-        var loadedStudentGrade = parseGradeLevelValue(settings.gradeLevel);
-        var effectiveLoadedStudentGrade = wftStudentGradeLevelOverride && loadedStudentGrade ? loadedStudentGrade : getClassGradeLevel();
-        document.getElementById("gradeLevelSelect").value = String(effectiveLoadedStudentGrade || 5);
+        document.getElementById("gradeLevelSelect").value = String(getClassGradeLevel() || 5);
     }
     maybeApplyClassDefaultsForLegacyGradeSettings(settings);
     applyGradeWordCountRange();
@@ -7516,12 +7510,17 @@ function renderStudentPortfolio() {
                     + '</div>';
             }).join('') + '</div>';
         }
+        var sessClassGradeLabel = sess.classGradeLabel || (sess.assessmentSettings && sess.assessmentSettings.classGradeLabel) || sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5));
+        var sessGrammarValue = sess.grammarStrictness || (sess.assessmentSettings && sess.assessmentSettings.grammarStrictness) || 3;
+        var sessGrammarLabel = (sess.assessmentSettings && sess.assessmentSettings.grammarStrictnessLabel) || (typeof formatGrammarStrictnessLabel === 'function' ? formatGrammarStrictnessLabel(sessGrammarValue) : ('Level ' + sessGrammarValue));
+        var sessTargetValue = sess.targetWords != null ? sess.targetWords : (sess.assessmentSettings && sess.assessmentSettings.targetWordCount);
+        var sessTargetLabel = typeof formatTargetWordCountLabel === 'function' ? formatTargetWordCountLabel(sessTargetValue, sessTargetValue > 0) : (sessTargetValue > 0 ? (sessTargetValue + ' words') : 'Not used');
         sessionCardsHtml += '<div class="session-card">'
             + '<div class="session-card-header">'
             + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
             + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>'
             + '</div>'
-            + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
+            + '<div class="session-meta">Class grade: ' + escapeHtml(sessClassGradeLabel) + ' - Grammar: ' + escapeHtml(sessGrammarLabel) + ' - Target: ' + escapeHtml(sessTargetLabel) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'
             + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
@@ -7625,6 +7624,12 @@ function saveCurrentSessionToPortfolio(analysisData) {
         gradeLabel: analysisData.gradeLabel || (getGradeProfile().gradeLabel || getGradeProfile().label),
         gradeTier: analysisData.gradeTier || getGradeProfile().tier,
         gradeProfileVersion: analysisData.gradeProfileVersion || GRADE_PROFILE_VERSION,
+        classGradeLevel: analysisData.classGradeLevel || (analysisData.assessmentSettings && analysisData.assessmentSettings.classGradeLevel) || (typeof getClassGradeLevel === "function" ? getClassGradeLevel() : analysisData.gradeLevel),
+        classGradeLabel: analysisData.classGradeLabel || (analysisData.assessmentSettings && analysisData.assessmentSettings.classGradeLabel) || (typeof formatGradeLevelLabel === "function" ? formatGradeLevelLabel(analysisData.classGradeLevel || analysisData.gradeLevel || 5) : (analysisData.gradeLabel || "Grade 5")),
+        grammarStrictness: analysisData.grammarStrictness || (analysisData.assessmentSettings && analysisData.assessmentSettings.grammarStrictness) || (typeof getGrammarStrictness === "function" ? getGrammarStrictness() : 3),
+        targetWords: analysisData.targetWords || 0,
+        actualWords: analysisData.actualWords || countWords(String((document.getElementById('studentWriting') || {}).value || '')),
+        assessmentSettings: cloneWftJson(analysisData.assessmentSettings || {}),
         categoryScores: savedCategoryScores,
         assessScriptQuality: neatnessAssessed,
         neatnessAssessed: neatnessAssessed,

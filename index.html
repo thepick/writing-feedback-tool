@@ -901,12 +901,16 @@
         margin: 12px 0 16px;
     }
 
+    .assessment-settings-panel {
+        padding: 12px;
+    }
+
     .assessment-settings-header {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         color: var(--text-primary);
     }
 
@@ -915,6 +919,14 @@
         color: var(--text-secondary);
         font-size: 13px;
         line-height: 1.4;
+    }
+
+    .assessment-settings-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-top: 10px;
     }
 
     .mini-settings-btn {
@@ -934,6 +946,7 @@
     }
 
     .assessment-settings-panel select,
+    .assessment-settings-panel input[type="number"],
     .class-defaults-field select,
     .class-defaults-field input[type="number"] {
         width: 100%;
@@ -942,6 +955,53 @@
         border-radius: 8px;
         font-size: 14px;
         background: white;
+    }
+
+    .assessment-override-panel {
+        margin-top: 10px;
+        padding: 12px;
+        border: 1px solid #dbe7f3;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+
+    .assessment-override-panel[hidden] {
+        display: none;
+    }
+
+    .assessment-override-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .assessment-override-help {
+        color: var(--text-secondary);
+        font-size: 12px;
+        line-height: 1.4;
+        margin: 0 0 10px;
+    }
+
+    .assessment-override-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+    }
+
+    .assessment-override-field {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .assessment-override-value-row {
+        display: flex;
+        justify-content: space-between;
+        color: var(--text-secondary);
+        font-size: 12px;
+        margin-top: 4px;
     }
 
     .class-defaults-grid {
@@ -3638,17 +3698,16 @@
                         </div>
 
 
-                        <!-- ASSESSMENT SETUP -->
+                        <!-- ASSESSMENT SETTINGS -->
                         <div class="assessment-settings-panel" id="currentAssessmentSettingsPanel">
                             <div class="assessment-settings-header">
                                 <div>
-                                    <strong>Assessment Setup</strong>
-                                    <p class="assessment-settings-intro">Choose the grade expectations for this analysis. Most other settings come from Manage Class.</p>
+                                    <strong>Assessment Settings</strong>
+                                    <p class="assessment-settings-intro" id="assessmentSettingsIntro">Using class defaults from Manage Class.</p>
                                 </div>
                                 <button type="button" class="secondary-btn mini-settings-btn" onclick="switchTab('admin')">Class Defaults</button>
                             </div>
-                            <label for="gradeLevelSelect">Scoring Grade Level</label>
-                            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('student')">
+                            <select id="gradeLevelSelect" onchange="onGradeLevelChanged('student')" hidden>
                                 <option value="4">Grade 4</option>
                                 <option value="5" selected>Grade 5</option>
                                 <option value="6">Grade 6</option>
@@ -3660,8 +3719,32 @@
                                 <option value="12">Grade 12</option>
                             </select>
                             <div id="assessmentSettingsSummary" class="assessment-settings-summary">
-                                <div class="assessment-default-item"><span class="assessment-default-label">Grammar Strictness</span><span class="assessment-default-value">3/5</span></div>
-                                <div class="assessment-default-item"><span class="assessment-default-label">Target word count</span><span class="assessment-default-value">200 words</span></div>
+                                <div class="assessment-default-item"><span class="assessment-default-label">Class Grade Level</span><span class="assessment-default-value">Grade 5</span></div>
+                                <div class="assessment-default-item"><span class="assessment-default-label">Grammar Strictness</span><span class="assessment-default-value">Level 3</span></div>
+                                <div class="assessment-default-item"><span class="assessment-default-label">Target Word Count</span><span class="assessment-default-value">200 words</span></div>
+                            </div>
+                            <div class="assessment-settings-actions">
+                                <button type="button" class="secondary-btn mini-settings-btn" id="assessmentOverrideToggleBtn" onclick="toggleAssessmentOverridePanel()">Adjust for this assessment</button>
+                                <button type="button" class="secondary-btn mini-settings-btn" id="assessmentOverrideClearBtn" onclick="clearAssessmentOverrideSettings()" style="display:none;">Clear adjustment</button>
+                            </div>
+                            <div id="assessmentOverridePanel" class="assessment-override-panel" hidden>
+                                <div class="assessment-override-title">Individual adjustment for this assessment</div>
+                                <p class="assessment-override-help">Use this only when this piece of writing needs a different word count target or grammar strictness.</p>
+                                <div class="assessment-override-grid">
+                                    <div class="assessment-override-field">
+                                        <label for="assessmentGrammarStrictnessOverride">Grammar Strictness</label>
+                                        <input id="assessmentGrammarStrictnessOverride" type="range" min="1" max="5" step="1" value="3" oninput="updateAssessmentOverrideDraftLabels()" style="width:100%; margin-bottom:4px; accent-color: var(--primary-color);">
+                                        <div class="assessment-override-value-row"><span>Level 1</span><strong id="assessmentGrammarStrictnessOverrideVal">Level 3</strong><span>Level 5</span></div>
+                                    </div>
+                                    <div class="assessment-override-field">
+                                        <label for="assessmentTargetWordCountOverride">Target Word Count</label>
+                                        <input id="assessmentTargetWordCountOverride" type="number" min="1" step="1" value="200" oninput="updateAssessmentOverrideDraftLabels()">
+                                    </div>
+                                </div>
+                                <div class="assessment-settings-actions">
+                                    <button type="button" class="secondary-btn mini-settings-btn" onclick="applyAssessmentOverrideSettings()">Use these settings</button>
+                                    <button type="button" class="secondary-btn mini-settings-btn" onclick="cancelAssessmentOverrideEdit()">Cancel</button>
+                                </div>
                             </div>
                         </div>
 
@@ -3810,7 +3893,10 @@
                                 <div class="meta-row">
                                     <span><strong>Student:</strong> <span id="notebookStudentName">No student selected</span></span>
                                     <span><strong>Date:</strong> <span id="notebookDate"></span></span>
-                                    <span><strong>Words:</strong> <span id="notebookWordCount">0 / 0</span></span>
+                                    <span><strong>Class Grade:</strong> <span id="notebookClassGradeLevel">Grade 5</span></span>
+                                    <span><strong>Target:</strong> <span id="notebookTargetWordCount">200 words</span></span>
+                                    <span><strong>Grammar:</strong> <span id="notebookGrammarStrictness">Level 3</span></span>
+                                    <span><strong>Words:</strong> <span id="notebookWordCount">0</span></span>
                                 </div>
 
                                 <div class="top-boxes">
