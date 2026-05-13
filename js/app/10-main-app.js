@@ -4788,6 +4788,75 @@ function reconstructParagraphsFromOcrPages(pageTexts) {
     return paragraphs.join("\n\n").trim();
 }
 
+function stripAiCodeFence(text) {
+    var value = String(text || "").trim();
+    value = value.replace(/^```[a-zA-Z]*\s*/i, "");
+    value = value.replace(/```$/i, "");
+    return value.trim();
+}
+
+function parseFirstJsonObject(text) {
+    var value = stripAiCodeFence(text);
+    try {
+        return JSON.parse(value);
+    } catch (e) { }
+
+    var start = value.indexOf("{");
+    var end = value.lastIndexOf("}");
+    if (start !== -1 && end !== -1 && end > start) {
+        try {
+            return JSON.parse(value.slice(start, end + 1));
+        } catch (e2) { }
+    }
+    return null;
+}
+
+function buildOcrPageMarkedText(pageTexts) {
+    var pages = Array.isArray(pageTexts) ? pageTexts : [String(pageTexts || "")];
+    var parts = [];
+    for (var i = 0; i < pages.length; i++) {
+        var pageText = String(pages[i] || "").trim();
+        if (pageText) {
+            parts.push("[PAGE " + (i + 1) + "]\n" + pageText);
+        }
+    }
+    return parts.join("\n\n");
+}
+
+async function reconstructStudentWritingFromOcrPages(pageTexts, model) {
+    var fallback = reconstructParagraphsFromOcrPages(pageTexts);
+    var markedText = buildOcrPageMarkedText(pageTexts);
+    if (!markedText || countWords(markedText) < 20) return fallback;
+
+    try {
+        var prompt = [
+            "You are reconstructing student writing after OCR from one or more photos.",
+            "The OCR text below includes page markers such as [PAGE 1].",
+            "Your job is only to reconstruct the student's intended spacing, line wrapping, and paragraph breaks.",
+            "Do not correct spelling, grammar, punctuation, capitalization, word choice, or sentence structure.",
+            "Do not rewrite the student's wording.",
+            "Do not add new words or remove student words unless they are only page markers.",
+            "Do not treat a new page or new photo as a paragraph break by itself.",
+            "Join across page breaks when the previous page ends mid-sentence, mid-phrase, or on a full line that continues on the next page.",
+            "Join ordinary wrapped handwriting lines into sentences and paragraphs.",
+            "Preserve a paragraph break only when there is strong evidence, such as a blank line, clear indentation, a completed thought followed by a new thought, a new speaker, or a heading/title.",
+            "If unsure, keep the text in the same paragraph instead of inventing a new paragraph.",
+            "Return only the reconstructed student writing. Do not include explanations, markdown, labels, or page markers.",
+            "",
+            markedText
+        ].join("\n");
+        var response = await callOpenRouter(model || OCR_MODEL, prompt);
+        var cleaned = stripAiCodeFence(response).replace(/^Reconstructed student writing:\s*/i, "").trim();
+        if (countWords(cleaned) >= Math.max(10, Math.round(countWords(fallback) * 0.75))) {
+            return cleaned;
+        }
+    } catch (e) {
+        wftDebugWarn("AI paragraph reconstruction failed; using local OCR reconstruction.", e);
+    }
+
+    return fallback;
+}
+
 
 async function extractTextFromSelectedImage(isAutomatic) {
     // When this function is used directly as a click handler, the browser passes
@@ -4854,15 +4923,32 @@ async function extractTextFromSelectedImage(isAutomatic) {
                 }
             }
 
-            var combinedText = reconstructParagraphsFromOcrPages(combinedParts);
+            setOcrStatus(
+                selectedImages.length > 1
+                    ? "Reconstructing paragraphs across " + selectedImages.length + " pages..."
+                    : "Reconstructing paragraphs...",
+                ""
+            );
+            var combinedText = await reconstructStudentWritingFromOcrPages(combinedParts, OCR_MODEL);
             syncSelectedImageState();
             selectedImageExtractedText = selectedImages.length === 1 ? combinedText : "";
             document.getElementById("studentWriting").value = combinedText;
             syncUiState();
+
+            if (isAutoGenreSelected()) {
+                setOcrStatus("Checking writing type from the whole passage...", "");
+                try {
+                    await classifyWritingGenreWithAi(combinedText, OCR_MODEL, { updateUi: true, reason: "ocr" });
+                } catch (eGenre) {
+                    wftDebugWarn("AI writing type check after OCR failed; using local fallback.", eGenre);
+                    updateGenreReviewBox();
+                }
+            }
+
             setOcrStatus(
                 selectedImages.length > 1
-                    ? "Text from " + selectedImages.length + " images was extracted and inserted into the writing box using " + OCR_MODEL + "."
-                    : "Text extracted and inserted into the writing box using " + OCR_MODEL + ".",
+                    ? "Text from " + selectedImages.length + " images was extracted, reconstructed, and inserted into the writing box using " + OCR_MODEL + "."
+                    : "Text extracted, reconstructed, and inserted into the writing box using " + OCR_MODEL + ".",
                 "success"
             );
             document.getElementById("studentWriting").focus();
@@ -6280,6 +6366,11 @@ function cleanPrintedStrength(text) {
 
 var currentWritingGenreInfo = null;
 var manualGenreOverrideValue = "__auto__";
+var aiWritingGenreCacheText = "";
+var aiWritingGenreCacheInfo = null;
+var aiWritingGenrePendingText = "";
+var aiWritingGenrePendingPromise = null;
+var aiWritingGenreStatus = "";
 
 function getWritingGenreChoices() {
     return [
@@ -6317,28 +6408,48 @@ function makeWritingGenreInfo(mainGenre, subtype, safeReference, confidence, sou
 
 function normalizeWritingGenreInfo(info) {
     info = info || {};
-    var mainGenre = info.mainGenre || info.genre || "Other / Unsure";
-    var subtype = info.subtype || "Writing";
+    var mainGenre = info.mainGenre || info.genre || info.writingType || "Other / Unsure";
+    var subtype = info.subtype || info.subGenre || "Writing";
     var safeReference = info.safeReference || info.referenceWord || info.safeRef || "piece of writing";
     var confidence = info.confidence || "low";
     var source = info.source || "auto";
+    var summary = info.oneSentenceSummary || info.summary || "";
+    var reason = info.reason || "";
+    var notProceduralReason = info.notProceduralReason || "";
 
-    if (mainGenre === "Narrative" || mainGenre === "Story") mainGenre = "Narrative / Story";
-    if (mainGenre === "Informational" || mainGenre === "Explanatory") mainGenre = "Informational / Explanatory";
-    if (mainGenre === "Opinion" || mainGenre === "Argument") mainGenre = "Opinion / Argument";
-    if (mainGenre === "Letter") mainGenre = "Letter / Email";
+    if (mainGenre === "Narrative" || mainGenre === "Story" || mainGenre === "Narrative / Story") mainGenre = "Narrative / Story";
+    else if (mainGenre === "Informational" || mainGenre === "Explanatory" || mainGenre === "Informational / Explanatory") mainGenre = "Informational / Explanatory";
+    else if (mainGenre === "Opinion" || mainGenre === "Argument" || mainGenre === "Opinion / Argument") mainGenre = "Opinion / Argument";
+    else if (mainGenre === "Letter" || mainGenre === "Email" || mainGenre === "Letter / Email") mainGenre = "Letter / Email";
+    else if (mainGenre === "Procedural" || mainGenre === "How-To" || mainGenre === "How To" || mainGenre === "Procedural / How-To") mainGenre = "Procedural / How-To";
+    else if (mainGenre === "Poem" || mainGenre === "Creative Writing" || mainGenre === "Poem / Creative Writing") mainGenre = "Poem / Creative Writing";
+    else if (mainGenre === "Text Response" || mainGenre === "Literary Analysis" || mainGenre === "Literary Analysis / Text Response") mainGenre = "Literary Analysis / Text Response";
+    else if (mainGenre === "Academic Short Response" || mainGenre === "Short Response") mainGenre = "Academic Short Response";
+    else if (mainGenre === "Journal" || mainGenre === "Reflection" || mainGenre === "Journal / Reflection") mainGenre = "Journal / Reflection";
+    else if (mainGenre === "Speech" || mainGenre === "Presentation" || mainGenre === "Speech / Presentation") mainGenre = "Speech / Presentation";
+    else mainGenre = "Other / Unsure";
 
-    if (mainGenre !== "Letter / Email" && safeReference === "letter") safeReference = "piece of writing";
-    if (mainGenre !== "Narrative / Story" && safeReference === "story") safeReference = "piece of writing";
-    if (mainGenre === "Poem / Creative Writing" && !/poem/i.test(subtype)) safeReference = "creative piece";
-    if (mainGenre === "Other / Unsure") safeReference = "piece of writing";
+    if (mainGenre === "Narrative / Story") safeReference = "story";
+    else if (mainGenre === "Informational / Explanatory") safeReference = "explanation";
+    else if (mainGenre === "Opinion / Argument") safeReference = "opinion piece";
+    else if (mainGenre === "Letter / Email") safeReference = "letter";
+    else if (mainGenre === "Procedural / How-To") safeReference = "how-to piece";
+    else if (mainGenre === "Poem / Creative Writing") safeReference = /poem/i.test(subtype) ? "poem" : "creative piece";
+    else if (mainGenre === "Literary Analysis / Text Response") safeReference = "response";
+    else if (mainGenre === "Academic Short Response") safeReference = "response";
+    else if (mainGenre === "Journal / Reflection") safeReference = "reflection";
+    else if (mainGenre === "Speech / Presentation") safeReference = "speech";
+    else safeReference = "piece of writing";
 
     return {
         mainGenre: mainGenre,
         subtype: subtype,
         safeReference: safeReference,
         confidence: confidence,
-        source: source
+        source: source,
+        oneSentenceSummary: summary,
+        reason: reason,
+        notProceduralReason: notProceduralReason
     };
 }
 
@@ -6423,28 +6534,39 @@ function detectNarrativeSubtype(value) {
     return "Story";
 }
 
-function looksLikeProceduralWriting(text) {
-    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
-    var value = raw.toLowerCase();
+function startsWithCommandVerbForProcedural(line) {
+    var value = String(line || "").trim().toLowerCase();
     if (!value) return false;
+    return /^(add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write)\b/.test(value);
+}
 
+function getProceduralSignalData(text) {
+    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
     var parts = extractWritingTitleParts(raw);
     var title = String(parts.title || "").trim();
     var body = String(parts.body || raw).trim();
     var bodyLower = body.toLowerCase();
-
     var lines = body.split("\n").map(function(line) {
         return line.trim();
     }).filter(function(line) {
         return line.length > 0;
     });
+    var firstLines = lines.slice(0, 8).join("\n");
+    var sentences = splitSentences(body);
+    var imperativeCount = 0;
+    var numberedOrBulletedInstructionCount = 0;
 
-    var firstLines = lines.slice(0, 6).join("\n");
-    var hasHowToTitle = /^\s*how\s+to\s+\w+/i.test(title) || /^\s*how\s+to\s+\w+/i.test(lines[0] || "");
-    var hasProcedureHeading = /(^|\n)\s*(materials|ingredients|supplies|tools|directions|instructions|procedure|method|steps)\s*:?\s*($|\n)/i.test("\n" + firstLines + "\n");
-    var hasMaterialsWithDirections = /(^|\n)\s*(materials|ingredients|supplies|tools)\s*:/i.test("\n" + body + "\n") && /(^|\n)\s*(directions|instructions|procedure|method|steps)\s*:/i.test("\n" + body + "\n");
-    var hasTeacherHowToPhrase = /\b(i will explain|i will show|this will show|this explains|this tells)\s+you\s+how\s+to\b/i.test(bodyLower);
-    var hasNeedList = /\byou\s+(will\s+)?need\b|\bwhat\s+you\s+need\b/i.test(bodyLower);
+    for (var i = 0; i < lines.length; i++) {
+        if (/^(\d+[.)]|[-*])\s+/.test(lines[i])) {
+            numberedOrBulletedInstructionCount += 1;
+            if (startsWithCommandVerbForProcedural(lines[i].replace(/^(\d+[.)]|[-*])\s+/, ""))) imperativeCount += 1;
+        }
+    }
+    for (var j = 0; j < sentences.length; j++) {
+        var sentence = String(sentences[j] || "").trim();
+        sentence = sentence.replace(/^(first|next|then|after that|finally|last)\s*[,;]?\s+/i, "");
+        if (startsWithCommandVerbForProcedural(sentence)) imperativeCount += 1;
+    }
 
     var sequenceCount = countGenreRegexMatches(bodyLower, [
         /(^|[.!?]\s+)first\b\s*[,;]?/i,
@@ -6455,26 +6577,62 @@ function looksLikeProceduralWriting(text) {
         /(^|[.!?]\s+)last\b\s*[,;]?/i
     ]);
 
-    var instructionVerbPattern = "add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write";
-    var imperativeCount = countGenreRegexMatches(bodyLower, [
-        new RegExp("(^|[.!?]\\s+)(" + instructionVerbPattern + ")\\b", "i"),
-        new RegExp("(^|\\n)\\s*\\d+[.)]\\s*(" + instructionVerbPattern + ")\\b", "i"),
-        new RegExp("(^|\\n)\\s*[-*]\\s*(" + instructionVerbPattern + ")\\b", "i"),
-        new RegExp("(^|[.!?]\\s+)(first|next|then|after that|finally|last)\\s*[,;]?\\s*(" + instructionVerbPattern + ")\\b", "i")
-    ]);
+    return {
+        title: title,
+        body: body,
+        hasHowToTitle: /^\s*how\s+to\s+\w+/i.test(title) || /^\s*how\s+to\s+\w+/i.test(lines[0] || ""),
+        hasProcedureHeading: /(^|\n)\s*(materials|ingredients|supplies|tools|directions|instructions|procedure|method|steps)\s*:?\s*($|\n)/i.test("\n" + firstLines + "\n"),
+        hasMaterialsWithDirections: /(^|\n)\s*(materials|ingredients|supplies|tools)\s*:/i.test("\n" + body + "\n") && /(^|\n)\s*(directions|instructions|procedure|method|steps)\s*:/i.test("\n" + body + "\n"),
+        hasTeacherHowToPhrase: /\b(i will explain|i will show|this will show|this explains|this tells)\s+you\s+how\s+to\b/i.test(bodyLower),
+        hasNeedList: /\byou\s+(will\s+)?need\b|\bwhat\s+you\s+need\b/i.test(bodyLower),
+        hasDirectReaderInstruction: /\byou\s+(should|must|need to|have to|will|can)\s+(add|attach|bake|boil|build|choose|click|collect|connect|cook|cover|cut|draw|fold|get|glue|insert|label|make|measure|mix|open|place|plug|pour|press|put|remove|repeat|select|set|stir|take|turn|use|wait|wash|write)\b/i.test(bodyLower),
+        sequenceCount: sequenceCount,
+        imperativeCount: imperativeCount,
+        numberedOrBulletedInstructionCount: numberedOrBulletedInstructionCount
+    };
+}
 
-    var numberedOrBulletedInstructionCount = 0;
-    for (var i = 0; i < lines.length; i++) {
-        if (/^(\d+[.)]|[-*])\s+/.test(lines[i])) numberedOrBulletedInstructionCount += 1;
+function hasClearProceduralTeachingPurpose(text) {
+    var signals = getProceduralSignalData(text);
+    if (signals.hasHowToTitle || signals.hasMaterialsWithDirections) return true;
+    if (signals.hasProcedureHeading && (signals.hasNeedList || signals.hasDirectReaderInstruction || signals.imperativeCount >= 1 || signals.numberedOrBulletedInstructionCount >= 2)) return true;
+    if (signals.hasTeacherHowToPhrase && (signals.sequenceCount >= 1 || signals.imperativeCount >= 1 || signals.hasDirectReaderInstruction)) return true;
+    if (signals.hasNeedList && (signals.imperativeCount >= 2 || signals.numberedOrBulletedInstructionCount >= 2)) return true;
+    if (signals.hasDirectReaderInstruction && (signals.sequenceCount >= 2 || signals.imperativeCount >= 2)) return true;
+    if (signals.numberedOrBulletedInstructionCount >= 3 && signals.imperativeCount >= 2) return true;
+    return false;
+}
+
+function hasStrongNarrativeSignals(text) {
+    var raw = String(text || "");
+    var value = raw.toLowerCase();
+    var score = 0;
+    if (/\b(i|he|she|they|we)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped|wanted|tried|knew|asked|realized|realised|laid|lay|closed|entered|found)\b/i.test(value)) score += 2;
+    if (/\b(door|dimension|world|city|school|room|house|bed|window|sky)\b/i.test(value)) score += 1;
+    if (/\b(magic|magical|dragon|dragons|dimension|portal|kingdom|castle|witch|wizard|fairy|monster|mysterious|galasteria|superpower|spell|bunny|bunnies|foxes)\b/i.test(value)) score += 2;
+    if (/\b(once|one day|suddenly|finally|after|then|when|while)\b/i.test(value)) score += 1;
+    if (/\b(said|asked|told|waking me up|woke up|dream|dreaming)\b/i.test(value)) score += 1;
+    if (/\b(myself|my mom|teacher|teachers|kids|guard|bunny|mom|children|student)\b/i.test(value)) score += 1;
+    if (/\b(how to|materials|ingredients|directions|instructions|procedure)\b/i.test(value)) score -= 2;
+    return score >= 4;
+}
+
+function getLocalNarrativeGenreInfo(text) {
+    var nSubtype = detectNarrativeSubtype(text);
+    return makeWritingGenreInfo("Narrative / Story", nSubtype, "story", hasStrongNarrativeSignals(text) ? "high" : "medium", "auto");
+}
+
+function looksLikeProceduralWriting(text) {
+    var raw = String(text || "").replace(/\r\n?/g, "\n").trim();
+    if (!raw) return false;
+
+    var signals = getProceduralSignalData(raw);
+
+    if (hasStrongNarrativeSignals(raw) && !signals.hasHowToTitle && !signals.hasMaterialsWithDirections && !signals.hasTeacherHowToPhrase) {
+        return false;
     }
 
-    if (hasHowToTitle || hasMaterialsWithDirections) return true;
-    if (hasProcedureHeading && (hasNeedList || sequenceCount >= 1 || imperativeCount >= 1 || numberedOrBulletedInstructionCount >= 2)) return true;
-    if (hasTeacherHowToPhrase && (sequenceCount >= 1 || imperativeCount >= 1)) return true;
-    if (sequenceCount >= 2 && (imperativeCount >= 1 || hasNeedList)) return true;
-    if (numberedOrBulletedInstructionCount >= 2 && (imperativeCount >= 1 || hasNeedList || hasProcedureHeading)) return true;
-
-    return false;
+    return hasClearProceduralTeachingPurpose(raw);
 }
 
 function detectWritingGenreInfo(text) {
@@ -6486,8 +6644,12 @@ function detectWritingGenreInfo(text) {
         return makeWritingGenreInfo("Letter / Email", "Letter", "letter", "high", "auto");
     }
 
+    if (hasStrongNarrativeSignals(raw)) {
+        return getLocalNarrativeGenreInfo(raw);
+    }
+
     if (looksLikeProceduralWriting(raw)) {
-        return makeWritingGenreInfo("Procedural / How-To", "How-To", "how-to piece", "high", "auto");
+        return makeWritingGenreInfo("Procedural / How-To", "How-To", "how-to piece", "medium", "auto");
     }
 
     if (/\b(good morning|today i will|my presentation|i am here to talk|ladies and gentlemen|fellow students)\b/i.test(value)) {
@@ -6537,9 +6699,8 @@ function detectWritingGenreInfo(text) {
         /\bdoor\b/i,
         /\bcharacter\b/i
     ]);
-    if (narrativeScore >= 2 || /\b(i|he|she|they)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped)\b/i.test(value)) {
-        var nSubtype = detectNarrativeSubtype(raw);
-        return makeWritingGenreInfo("Narrative / Story", nSubtype, "story", narrativeScore >= 4 ? "high" : "medium", "auto");
+    if (narrativeScore >= 2 || /\b(i|he|she|they)\s+(went|saw|looked|walked|ran|opened|felt|heard|woke|jumped|wanted|tried|knew|asked|realized|realised)\b/i.test(value)) {
+        return getLocalNarrativeGenreInfo(raw);
     }
 
     if (/\bfacts?\b|\bfor example\b|\baccording to\b|\bexplains?\b|\bis called\b|\bare called\b|\bbecause\b|\bthis means\b|\breport\b|\bresearch\b/i.test(value)) {
@@ -6553,6 +6714,145 @@ function detectWritingGenreInfo(text) {
     return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
 }
 
+function isAutoGenreSelected() {
+    var select = typeof document !== "undefined" ? document.getElementById("writingGenreSelect") : null;
+    var selected = select ? select.value : manualGenreOverrideValue;
+    return !selected || selected === "__auto__";
+}
+
+function getGenreClassificationModel(fallbackModel) {
+    if (fallbackModel) return fallbackModel;
+    var modelEl = typeof document !== "undefined" ? document.getElementById("modelSelect") : null;
+    if (modelEl && modelEl.value) return modelEl.value;
+    return DEFAULT_MODEL;
+}
+
+function getCachedAiGenreInfo(text) {
+    var raw = String(text || "").trim();
+    if (raw && aiWritingGenreCacheInfo && aiWritingGenreCacheText === raw) {
+        return aiWritingGenreCacheInfo;
+    }
+    return null;
+}
+
+function getAutoWritingGenreInfo(text) {
+    var cached = getCachedAiGenreInfo(text);
+    if (cached) return cached;
+    return detectWritingGenreInfo(text);
+}
+
+function buildWritingGenreClassificationPrompt(text) {
+    return [
+        "Classify the student's writing type by understanding the whole passage, not by matching isolated keywords.",
+        "First make a one-sentence summary of what the passage is about. Then classify the genre from that summary and the overall purpose.",
+        "Return JSON only, with no markdown.",
+        "Allowed mainGenre values: Narrative / Story, Informational / Explanatory, Opinion / Argument, Literary Analysis / Text Response, Poem / Creative Writing, Letter / Email, Journal / Reflection, Procedural / How-To, Academic Short Response, Speech / Presentation, Other / Unsure.",
+        "Use Procedural / How-To only if the main purpose is to teach the reader how to do, make, cook, build, use, play, or complete something with instructions.",
+        "Do not classify a story as Procedural / How-To just because it contains sequence words such as first, next, after, finally, steps, open, or turn.",
+        "Narrative / Story should be used when the passage has a narrator or characters, setting, events over time, a problem/discovery/adventure, dialogue, thoughts, or fictional/fantasy elements.",
+        "If the passage enters another world, has magic, dragons, animals acting like people, a portal, a mystery door, or a fictional place, it is probably Narrative / Story with subtype Fantasy.",
+        "JSON schema:",
+        "{",
+        "  \"oneSentenceSummary\": \"short summary of the passage\",",
+        "  \"mainGenre\": \"one allowed value\",",
+        "  \"subtype\": \"specific subtype, such as Fantasy, Personal Narrative, How-To, Opinion Writing, Informational Writing, Poem, Letter, or Short Response\",",
+        "  \"safeReference\": \"story, explanation, opinion piece, response, creative piece, letter, reflection, how-to piece, speech, poem, or piece of writing\",",
+        "  \"confidence\": \"high, medium, or low\",",
+        "  \"reason\": \"brief reason based on the whole passage\",",
+        "  \"notProceduralReason\": \"briefly explain why it is or is not a how-to piece\"",
+        "}",
+        "",
+        "Student writing:",
+        String(text || "").trim()
+    ].join("\n");
+}
+
+function sanitizeAiGenreAgainstText(info, text) {
+    var normalized = normalizeWritingGenreInfo(info);
+    var raw = String(text || "");
+
+    if (normalized.mainGenre === "Procedural / How-To" && !hasClearProceduralTeachingPurpose(raw)) {
+        if (hasStrongNarrativeSignals(raw)) {
+            return normalizeWritingGenreInfo({
+                mainGenre: "Narrative / Story",
+                subtype: detectNarrativeSubtype(raw),
+                safeReference: "story",
+                confidence: "high",
+                source: "ai-safety",
+                oneSentenceSummary: normalized.oneSentenceSummary,
+                reason: "The passage has story features, so it should not be treated as a how-to piece.",
+                notProceduralReason: "It follows a narrator through events instead of teaching the reader a procedure."
+            });
+        }
+        return normalizeWritingGenreInfo({
+            mainGenre: "Other / Unsure",
+            subtype: "Writing",
+            safeReference: "piece of writing",
+            confidence: "low",
+            source: "ai-safety",
+            oneSentenceSummary: normalized.oneSentenceSummary,
+            reason: "The AI suggested procedural, but the writing does not clearly teach a process.",
+            notProceduralReason: "Procedural labels require clear reader instructions, not just sequence words."
+        });
+    }
+
+    if (hasStrongNarrativeSignals(raw) && normalized.mainGenre !== "Narrative / Story" && normalized.mainGenre !== "Letter / Email" && normalized.mainGenre !== "Poem / Creative Writing") {
+        var localNarrative = getLocalNarrativeGenreInfo(raw);
+        localNarrative.source = normalized.source === "ai" ? "ai-safety" : localNarrative.source;
+        localNarrative.oneSentenceSummary = normalized.oneSentenceSummary;
+        localNarrative.reason = "Strong story signals were detected in the whole passage.";
+        localNarrative.notProceduralReason = "The passage follows events in a story rather than giving directions.";
+        return normalizeWritingGenreInfo(localNarrative);
+    }
+
+    normalized.source = normalized.source || "ai";
+    return normalized;
+}
+
+async function classifyWritingGenreWithAi(text, model, options) {
+    options = options || {};
+    var raw = String(text || "").trim();
+    if (!raw) return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
+
+    var cached = getCachedAiGenreInfo(raw);
+    if (cached) return cached;
+
+    if (aiWritingGenrePendingPromise && aiWritingGenrePendingText === raw) {
+        return aiWritingGenrePendingPromise;
+    }
+
+    aiWritingGenreStatus = "checking";
+    if (options.updateUi) updateGenreReviewBox();
+
+    aiWritingGenrePendingText = raw;
+    aiWritingGenrePendingPromise = (async function() {
+        try {
+            var prompt = buildWritingGenreClassificationPrompt(raw);
+            var response = await callOpenRouter(getGenreClassificationModel(model), prompt);
+            var parsed = parseFirstJsonObject(response);
+            if (!parsed) throw new Error("The writing type classifier did not return valid JSON.");
+            parsed.source = "ai";
+            var info = sanitizeAiGenreAgainstText(parsed, raw);
+            aiWritingGenreCacheText = raw;
+            aiWritingGenreCacheInfo = info;
+            aiWritingGenreStatus = "ready";
+            if (options.updateUi && isAutoGenreSelected()) {
+                currentWritingGenreInfo = info;
+                updateGenreReviewBox();
+            }
+            return info;
+        } catch (e) {
+            aiWritingGenreStatus = "failed";
+            throw e;
+        } finally {
+            aiWritingGenrePendingText = "";
+            aiWritingGenrePendingPromise = null;
+        }
+    })();
+
+    return aiWritingGenrePendingPromise;
+}
+
 function getManualGenreInfo(value) {
     var choice = getGenreChoiceByValue(value);
     if (!choice) return null;
@@ -6562,8 +6862,8 @@ function getManualGenreInfo(value) {
 function getWritingGenreInfoFromUi(text) {
     var select = typeof document !== "undefined" ? document.getElementById("writingGenreSelect") : null;
     var selected = select ? select.value : manualGenreOverrideValue;
-    if (selected && selected !== "__auto__") return getManualGenreInfo(selected) || detectWritingGenreInfo(text);
-    return detectWritingGenreInfo(text);
+    if (selected && selected !== "__auto__") return getManualGenreInfo(selected) || getAutoWritingGenreInfo(text);
+    return getAutoWritingGenreInfo(text);
 }
 
 function buildWritingGenrePromptText(genreInfo) {
@@ -6629,14 +6929,23 @@ function updateGenreReviewBox() {
         return;
     }
     box.classList.add("active");
-    var autoInfo = detectWritingGenreInfo(text);
+    var autoInfo = getAutoWritingGenreInfo(text);
     var activeInfo = getWritingGenreInfoFromUi(text);
     currentWritingGenreInfo = activeInfo;
-    var sourceText = select.value === "__auto__" ? "Auto-detected" : "Teacher-selected";
+    var sourceText = select.value === "__auto__" ? (activeInfo.source === "ai" || activeInfo.source === "ai-safety" ? "AI-detected" : "Auto-detected") : "Teacher-selected";
+    var extraText = "";
+    if (select.value === "__auto__" && aiWritingGenreStatus === "checking" && !getCachedAiGenreInfo(text)) {
+        extraText = " Checking with AI...";
+    } else if (select.value === "__auto__" && autoInfo.confidence) {
+        extraText = " Confidence: " + escapeHtml(autoInfo.confidence) + ".";
+    }
+    if (select.value === "__auto__" && activeInfo.oneSentenceSummary) {
+        extraText += " Summary: " + escapeHtml(activeInfo.oneSentenceSummary);
+    }
     setWftSanitizedInnerHtml(summary, sourceText + ": <strong>" + escapeHtml(activeInfo.mainGenre) + "</strong>"
         + (activeInfo.subtype ? " - " + escapeHtml(activeInfo.subtype) : "")
         + " | Feedback will call it: <strong>" + escapeHtml(activeInfo.safeReference) + "</strong>."
-        + (select.value === "__auto__" && autoInfo.confidence ? " Confidence: " + escapeHtml(autoInfo.confidence) + "." : ""));
+        + extraText);
 }
 
 function isGenericKeepWriting(text) {
@@ -7709,6 +8018,14 @@ async function analyzeWriting() {
     try {
         var actualWords = countWords(text);
         var writingGenreInfo = getWritingGenreInfoFromUi(text);
+        if (isAutoGenreSelected()) {
+            try {
+                writingGenreInfo = await classifyWritingGenreWithAi(text, model, { updateUi: true, reason: "analysis" });
+            } catch (eGenreAnalysis) {
+                wftDebugWarn("AI writing type classification failed during analysis; using local fallback.", eGenreAnalysis);
+                writingGenreInfo = getAutoWritingGenreInfo(text);
+            }
+        }
         currentWritingGenreInfo = writingGenreInfo;
         updateGenreReviewBox();
         var sampleStatus = getSampleStatusData(text, gradeProfile);
