@@ -5208,14 +5208,14 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "12a. Only point out errors that truly exist in the original student writing. Do not use a correct word or capital as your correction example.",
         "12b. If a category score is below 10, avoid overclaiming with words like perfect, perfectly, flawless, or always correct.",
         "12c. Use teacher-natural language (warm and specific). Avoid robotic phrasing like there is room to improve. Prefer 'your writing' over 'the piece'.",
-        "12d. Teacher Comment rules: write exactly one student-friendly sentence, use the score and the What I Noticed evidence, and do not introduce new evidence that is not supported by the row comments.",
+        "12d. Teacher Comment rules: write exactly one student-friendly sentence that gives instructional framing: explain why the primary skill matters or what the student is working toward. Do not simply restate the What I Noticed row.",
         "12e. Teacher Comment rules: do not mention percentages, issue counts, word counts, sentence counts, weights, calculations, score basis, or internal scoring rules.",
         "12f. Teacher Comment score bands: 10 = excellent with a small refinement if needed; 8-9 = strong or good with one improvement area; 6-7 = developing and encouraging; 4-5 = needs support with one clear priority.",
         "12g. If the score is below 10, the Teacher Comment should mention a strength first and then one improvement area when evidence supports it.",
         "12h. Growth Tips must be specific actions the student can do during revision. Avoid generic tips like improve your writing, add more details, or check your work unless the action says exactly what to check or add.",
         "12i. Use category-specific evidence: Ideas = topic/detail/development; Grammar = sentence correctness/verb tense/agreement; Word Choice = vocabulary precision/variety; Organization = beginning/middle/end/sequence/paragraphing; Flow = rhythm/starters/transitions/sentence variety; Spelling & Punctuation = spelling/capitalization/punctuation.",
         "12j. For Try This Next Time, write strategy names as natural sentence text, not title-style labels. For example, write 'Mix up your sentences by...' instead of 'Mix Up My Sentences by...'.",
-        "12k. In each category, choose one primary focus. The Teacher Comment, the first What I Noticed row, and the Growth Tip must all address that same focus; extra What I Noticed rows may come after the primary row.",
+        "12k. In each category, choose one primary focus. The Teacher Comment, the first What I Noticed row, and the Growth Tip must stay aligned to that same focus, but each must do a different job: Teacher Comment = why the skill matters, What I Noticed = evidence, Growth Tip = action.",
         "12l. When possible, make the What I Noticed comment include direct evidence from the writing, such as quoted words, named details, repeated sentence starters, or a specific part of the student's text. Do not invent examples that are not in the writing.",
         "13. Keep the final encouragement line to one warm sentence.",
         "",
@@ -5666,7 +5666,7 @@ function buildStudentFeedbackForCategory(key, item) {
         mainEvidence: getMainEvidenceSummary([primaryRow]),
         teacherCommentSource: getAuditTeacherCommentSource(key, displayItem, [primaryRow]),
         growthTipSource: getGrowthTipSource(key, displayItem, [primaryRow]),
-        primaryFocus: buildNotebookNoticedLine(primaryRow)
+        primaryFocus: buildNotebookNoticedLine(key, primaryRow)
     };
     return {
         teacherComment: teacherComment,
@@ -5969,12 +5969,14 @@ function getAuditRawRows(key, item, data) {
 function getAuditTeacherCommentSource(key, item, rows) {
     item = item || {};
     rows = rows || [];
+    var focusRow = rows[0] || null;
+    var noticedLine = focusRow ? buildNotebookNoticedLine(key, focusRow) : "";
     if (item.teacherComment) {
         var candidate = cleanTeacherCommentText(item.teacherComment, key, item.score);
-        if (isValidTeacherComment(candidate, key, item, rows)) return "AI teacher comment passed validation.";
-        return "Fallback evidence-based comment used because the AI teacher comment did not pass validation.";
+        if (isValidTeacherComment(candidate, key, item, rows) && notebookTextSatisfiesRequiredFocus(key, candidate, focusRow) && !notebookTextContradictsFocus(key, candidate, focusRow) && !notebookLinesEcho(candidate, noticedLine)) return "AI teacher comment passed notebook validation.";
+        return "Instructional notebook comment used because the AI teacher comment was invalid, off-focus, or too repetitive.";
     }
-    return "Fallback evidence-based comment used because no AI teacher comment was available.";
+    return "Instructional notebook comment used because no AI teacher comment was available.";
 }
 
 function addAuditValidation(checks, label, passed, note) {
@@ -5998,12 +6000,12 @@ function buildAuditValidationRows(key, item, rows, teacherComment, growthTip, fe
     addAuditValidation(checks, "No raw scoring data in Teacher Comment", !commentHasRawScoringData(teacherComment), "Student view should not show percentages, counts, weights, or formulas.");
     addAuditValidation(checks, "Teacher Comment matches category", !categoryMismatchInTeacherComment(key, teacherComment), "Comment should stay inside " + key + ".");
     addAuditValidation(checks, "Teacher Comment matches score band", scoreBandLanguageOk(teacherComment, item ? item.score : null), getAuditScoreBandLabel(item ? item.score : null));
-    addAuditValidation(checks, "Teacher Comment matches evidence rows", commentOverlapsEvidence(teacherComment, rows), "Comment should be supported by the What I noticed rows.");
+    addAuditValidation(checks, "Teacher Comment is evidence-aligned or instructional", commentOverlapsEvidence(teacherComment, rows) || !notebookTextContradictsFocus(key, teacherComment, feedback ? feedback.primaryRow : null), "Comment should be supported by the What I noticed rows or give aligned instructional framing.");
     addAuditValidation(checks, "Growth Tip present", !!String(growthTip || "").trim(), "Growth Tip should give one next step.");
     addAuditValidation(checks, "Growth Tip is actionable", growthTipLooksActionable(growthTip) && !isGenericGrowthTip(growthTip), "Growth tip should tell the student exactly what to do during revision.");
     addAuditValidation(checks, "Growth Tip matches category", !categoryMismatchInTeacherComment(key, growthTip), "Growth tip should stay inside " + key + ".");
     if (feedback && feedback.primaryRow) {
-        addAuditValidation(checks, "Teacher Comment aligns to primary focus", notebookTextSatisfiesRequiredFocus(key, teacherComment, feedback.primaryRow) && (notebookTextMatchesFocus(key, teacherComment, feedback.primaryRow) || !notebookTextContradictsFocus(key, teacherComment, feedback.primaryRow)), "Teacher Comment should not point to a different issue than the primary What I noticed row.");
+        addAuditValidation(checks, "Teacher Comment aligns without echoing", notebookTextSatisfiesRequiredFocus(key, teacherComment, feedback.primaryRow) && !notebookTextContradictsFocus(key, teacherComment, feedback.primaryRow) && !notebookLinesEcho(teacherComment, buildNotebookNoticedLine(key, feedback.primaryRow)), "Teacher Comment should explain why the same focus matters without restating the evidence row.");
         addAuditValidation(checks, "Growth Tip aligns to primary focus", notebookTextSatisfiesRequiredFocus(key, growthTip, feedback.primaryRow) && (notebookTextMatchesFocus(key, growthTip, feedback.primaryRow) || !notebookTextContradictsFocus(key, growthTip, feedback.primaryRow)), "Growth Tip should not point to a different issue than the primary What I noticed row.");
     }
     if (key === "Grammar") {
@@ -7494,6 +7496,359 @@ function getNotebookIssueFamilies(key) {
     return [];
 }
 
+
+function getNotebookInstructionalCommentMap() {
+    return {
+        "Grammar": {
+            "verb tense": {
+                strong: "Your control of verb tense helps the reader follow the action clearly.",
+                next: "Keeping verbs in the same tense helps the reader follow the action from beginning to end.",
+                support: "Working on consistent verb tense will help the reader follow when each action happens.",
+                skill: "consistent verb tense",
+                why: "the reader can follow when each action happens"
+            },
+            "sentence boundaries": {
+                strong: "Your clear sentence boundaries help the reader know where each idea ends.",
+                next: "Clear sentence breaks help the reader know where one idea ends and the next begins.",
+                support: "Working on sentence boundaries will help each idea stand on its own clearly.",
+                skill: "clear sentence boundaries",
+                why: "each idea can stand on its own clearly"
+            },
+            "word order": {
+                strong: "Your natural phrasing helps your ideas sound clear and easy to read.",
+                next: "Clear word order helps your sentences sound natural and easy to understand.",
+                support: "Working on word order will help each sentence say exactly what you mean.",
+                skill: "clear word order",
+                why: "each sentence says exactly what you mean"
+            },
+            "pronouns": {
+                strong: "Your clear pronoun references help the reader know who or what each sentence means.",
+                next: "Clear pronouns help the reader know exactly who or what each sentence is about.",
+                support: "Working on pronoun references will help the reader follow who or what you mean.",
+                skill: "clear pronoun references",
+                why: "the reader can follow who or what you mean"
+            },
+            general: {
+                strong: "Your grammar choices help the reader follow your ideas smoothly.",
+                next: "Polishing this grammar skill helps the reader focus on your ideas without getting distracted.",
+                support: "Working on this grammar skill will make your writing easier to understand.",
+                skill: "this grammar skill",
+                why: "your writing is easier to understand"
+            }
+        },
+        "Flow": {
+            "sentence starters": {
+                strong: "Your varied sentence openings help your writing sound smooth and natural.",
+                next: "Varying sentence openings gives your writing a smoother, more natural rhythm.",
+                support: "Working on sentence openings will help your writing sound less repetitive.",
+                skill: "varied sentence openings",
+                why: "your writing sounds less repetitive"
+            },
+            "short sentences": {
+                strong: "Your sentence length choices help the writing sound clear and easy to read.",
+                next: "Mixing short and longer sentences helps your writing sound less choppy and more connected.",
+                support: "Working on sentence length will help your ideas connect more smoothly.",
+                skill: "sentence length",
+                why: "your ideas connect more smoothly"
+            },
+            "sentence variety": {
+                strong: "Your sentence variety gives the writing a smooth rhythm when it is read aloud.",
+                next: "Using a mix of sentence lengths helps the writing sound smoother when it is read aloud.",
+                support: "Working on sentence variety will help your writing sound smoother when it is read aloud.",
+                skill: "sentence variety",
+                why: "your writing sounds smoother when it is read aloud"
+            },
+            "transitions": {
+                strong: "Your transitions help the reader move smoothly from one idea to the next.",
+                next: "Clear transitions help the reader see how one idea connects to the next.",
+                support: "Working on transitions will help your ideas connect more clearly.",
+                skill: "clear transitions",
+                why: "your ideas connect more clearly"
+            },
+            general: {
+                strong: "Your sentence flow helps the writing sound smooth when it is read aloud.",
+                next: "Smoother sentence flow helps the reader move through your ideas more easily.",
+                support: "Working on sentence flow will help your writing sound more natural.",
+                skill: "sentence flow",
+                why: "your writing sounds more natural"
+            }
+        },
+        "Spelling & Punctuation": {
+            spelling: {
+                strong: "Your spelling helps the reader focus on your ideas instead of stopping to figure out words.",
+                next: "Careful spelling helps the reader understand your ideas without distraction.",
+                support: "Working on spelling will help the reader focus on what you are trying to say.",
+                skill: "careful spelling",
+                why: "the reader can focus on your ideas"
+            },
+            capitalization: {
+                strong: "Your capitalization helps each sentence and name look polished and easy to read.",
+                next: "Correct capitalization helps the reader see where sentences and important names begin.",
+                support: "Working on capitalization will help your writing look clearer and more complete.",
+                skill: "correct capitalization",
+                why: "your writing looks clearer and more complete"
+            },
+            punctuation: {
+                strong: "Your punctuation helps the reader hear the pauses and stops in your writing.",
+                next: "Careful punctuation helps the reader know when to pause and when an idea is complete.",
+                support: "Working on punctuation will help the reader follow your sentences more easily.",
+                skill: "careful punctuation",
+                why: "the reader can follow your sentences more easily"
+            },
+            general: {
+                strong: "Your conventions help the reader move through the writing smoothly.",
+                next: "Polishing spelling and punctuation helps the reader focus on your ideas.",
+                support: "Working on spelling and punctuation will make your writing easier to read.",
+                skill: "spelling and punctuation",
+                why: "your writing is easier to read"
+            }
+        },
+        "Organization": {
+            sequence: {
+                strong: "Your event order helps the reader follow what happens from start to finish.",
+                next: "A clear event sequence helps the reader understand what happens first, next, and last.",
+                support: "Working on event order will help the reader follow your writing from beginning to end.",
+                skill: "clear event order",
+                why: "the reader can follow your writing from beginning to end"
+            },
+            structure: {
+                strong: "Your clear structure helps the reader understand the beginning, middle, and ending.",
+                next: "A clear beginning, middle, and end helps the reader follow the whole piece.",
+                support: "Working on structure will help your writing feel complete and easy to follow.",
+                skill: "clear structure",
+                why: "your writing feels complete and easy to follow"
+            },
+            paragraphs: {
+                strong: "Your paragraphing helps the reader see how your ideas are grouped.",
+                next: "Clear paragraphs help the reader see where one part ends and another begins.",
+                support: "Working on paragraphs will help the reader follow each part of your writing.",
+                skill: "clear paragraphs",
+                why: "the reader can follow each part of your writing"
+            },
+            transitions: {
+                strong: "Your transitions help the reader move smoothly through the events.",
+                next: "Transitions help the reader understand how each event connects to the next.",
+                support: "Working on transitions will help your events connect more clearly.",
+                skill: "clear transitions",
+                why: "your events connect more clearly"
+            },
+            general: {
+                strong: "Your organization helps the reader follow your writing from start to finish.",
+                next: "Clear organization helps the reader understand how your ideas fit together.",
+                support: "Working on organization will help the reader follow your ideas more easily.",
+                skill: "clear organization",
+                why: "the reader can follow your ideas more easily"
+            }
+        },
+        "Ideas & Details": {
+            details: {
+                strong: "Your specific details help the reader picture the world you created.",
+                next: "Specific details help the reader picture exactly what you want them to see.",
+                support: "Working on details will help the reader picture your ideas more clearly.",
+                skill: "specific details",
+                why: "the reader can picture your ideas more clearly"
+            },
+            development: {
+                strong: "Your developed ideas give the reader enough information to stay interested.",
+                next: "Developing important moments helps the reader understand and care about your ideas.",
+                support: "Working on idea development will help your writing feel fuller and clearer.",
+                skill: "idea development",
+                why: "your writing feels fuller and clearer"
+            },
+            "main idea": {
+                strong: "Your clear main idea gives the reader a strong path to follow.",
+                next: "A clear main idea helps the reader understand what the writing is mostly about.",
+                support: "Working on the main idea will help the reader understand your focus.",
+                skill: "a clear main idea",
+                why: "the reader can understand your focus"
+            },
+            general: {
+                strong: "Your ideas and details help the reader understand and imagine your writing.",
+                next: "Clear ideas and details help the reader picture and understand your writing.",
+                support: "Working on ideas and details will help your writing become clearer and more interesting.",
+                skill: "ideas and details",
+                why: "your writing becomes clearer and more interesting"
+            }
+        },
+        "Word Choice": {
+            "specific words": {
+                strong: "Your specific word choices help the reader picture your meaning clearly.",
+                next: "Precise words help the reader picture exactly what you mean.",
+                support: "Working on precise words will help your ideas sound clearer and stronger.",
+                skill: "precise word choice",
+                why: "your ideas sound clearer and stronger"
+            },
+            "repeated words": {
+                strong: "Your word variety helps the writing sound fresh and interesting.",
+                next: "Using a variety of words helps your writing sound less repetitive.",
+                support: "Working on word variety will help your writing sound more interesting.",
+                skill: "word variety",
+                why: "your writing sounds more interesting"
+            },
+            "action words": {
+                strong: "Your action words help the reader see what is happening clearly.",
+                next: "Stronger action words help scenes feel more active and specific.",
+                support: "Working on action words will help the reader picture what is happening.",
+                skill: "strong action words",
+                why: "the reader can picture what is happening"
+            },
+            general: {
+                strong: "Your word choice helps the reader picture your ideas clearly.",
+                next: "Careful word choice helps the reader understand exactly what you mean.",
+                support: "Working on word choice will help your writing sound clearer and stronger.",
+                skill: "word choice",
+                why: "your writing sounds clearer and stronger"
+            }
+        },
+        "Neatness": {
+            spacing: {
+                strong: "Your spacing helps the writing look clear and easy to read.",
+                next: "Even spacing helps each word stand apart so the reader can read smoothly.",
+                support: "Working on spacing will help each word stand apart more clearly.",
+                skill: "even spacing",
+                why: "each word stands apart more clearly"
+            },
+            "letter formation": {
+                strong: "Your letter formation helps the reader recognize each word easily.",
+                next: "Clear letter formation helps the reader recognize each word quickly.",
+                support: "Working on letter formation will make your words easier to read.",
+                skill: "clear letter formation",
+                why: "your words are easier to read"
+            },
+            "line use": {
+                strong: "Your line use helps the page look organized and easy to follow.",
+                next: "Staying on the line helps the writing look organized and easy to read.",
+                support: "Working on line use will help your writing look more organized.",
+                skill: "staying on the line",
+                why: "your writing looks more organized"
+            },
+            size: {
+                strong: "Your letter size helps the writing look neat and consistent.",
+                next: "Consistent letter size helps the page look neat and balanced.",
+                support: "Working on letter size will help your handwriting look more consistent.",
+                skill: "consistent letter size",
+                why: "your handwriting looks more consistent"
+            },
+            marks: {
+                strong: "Your clean page presentation helps the reader focus on the writing.",
+                next: "A clean page helps the reader focus on your words without distraction.",
+                support: "Working on clean corrections will help the page look easier to read.",
+                skill: "clean corrections",
+                why: "the page looks easier to read"
+            },
+            general: {
+                strong: "Your handwriting helps the reader move through your writing easily.",
+                next: "Neat handwriting helps the reader focus on your words and ideas.",
+                support: "Working on handwriting neatness will make your writing easier to read.",
+                skill: "handwriting neatness",
+                why: "your writing is easier to read"
+            }
+        }
+    };
+}
+
+function getNotebookPrimaryIssueFamilyName(key, focusRow) {
+    var required = getRequiredNotebookFocusFamilyName(key, focusRow);
+    if (required) return required;
+    var matches = getMatchingNotebookIssueFamilies(key, notebookRowText(focusRow));
+    return matches.length ? matches[0].name : "general";
+}
+
+function getNotebookInstructionalBand(score) {
+    var n = Number(score);
+    if (!isFinite(n)) return "next";
+    if (n >= 9) return "strong";
+    if (n >= 7) return "next";
+    return "support";
+}
+
+function buildNotebookInstructionalComment(key, focusRow, score) {
+    var map = getNotebookInstructionalCommentMap();
+    var categoryMap = map[key] || {};
+    var familyName = getNotebookPrimaryIssueFamilyName(key, focusRow);
+    var entry = categoryMap[familyName] || categoryMap.general;
+    if (!entry) entry = {
+        strong: "Your writing choices help the reader understand your ideas.",
+        next: "Polishing this skill helps the reader understand your writing more clearly.",
+        support: "Working on this skill will help your writing become easier to understand.",
+        skill: "this skill",
+        why: "your writing becomes easier to understand"
+    };
+    var band = getNotebookInstructionalBand(score);
+    var text = entry[band] || entry.next || entry.strong || entry.support || "";
+    if (!text && entry.skill && entry.why) {
+        text = "Working on " + entry.skill + " will help " + entry.why + ".";
+    }
+    return makeSentence(text);
+}
+
+function getNotebookEchoStopwords() {
+    return {
+        a: true, an: true, and: true, are: true, area: true, because: true, been: true,
+        but: true, can: true, category: true, clear: true, clearly: true, comment: true,
+        easy: true, easier: true, feedback: true, from: true, gives: true, good: true,
+        has: true, have: true, help: true, helps: true, into: true, make: true, makes: true,
+        more: true, most: true, natural: true, noticed: true, reader: true, really: true,
+        score: true, sentence: true, sentences: true, smooth: true, smoother: true, sound: true,
+        sounds: true, story: true, strong: true, teacher: true, that: true, the: true, their: true,
+        them: true, this: true, through: true, very: true, when: true, where: true, with: true,
+        word: true, words: true, work: true, working: true, writing: true, your: true, you: true
+    };
+}
+
+function normalizeNotebookEchoToken(token) {
+    token = String(token || "").toLowerCase();
+    if (token.length > 4 && /s$/.test(token) && !/ss$/.test(token)) token = token.slice(0, -1);
+    return token;
+}
+
+function getNotebookEchoTokens(text) {
+    var stop = getNotebookEchoStopwords();
+    var raw = normalizeNotebookMatchText(text).split(" ");
+    var seen = {};
+    var tokens = [];
+    for (var i = 0; i < raw.length; i++) {
+        var token = normalizeNotebookEchoToken(raw[i]);
+        if (!token || token.length < 4 || stop[token] || seen[token]) continue;
+        seen[token] = true;
+        tokens.push(token);
+    }
+    return tokens;
+}
+
+function notebookLinesEcho(teacherComment, noticedLine) {
+    var teacherTokens = getNotebookEchoTokens(teacherComment);
+    var noticeTokens = getNotebookEchoTokens(noticedLine);
+    if (!teacherTokens.length || !noticeTokens.length) return false;
+    var noticeBag = {};
+    var overlap = 0;
+    for (var i = 0; i < noticeTokens.length; i++) noticeBag[noticeTokens[i]] = true;
+    for (var j = 0; j < teacherTokens.length; j++) {
+        if (noticeBag[teacherTokens[j]]) overlap += 1;
+    }
+    if (overlap >= 4) return true;
+    if (overlap >= 3 && teacherTokens.length <= 8) return true;
+    if (overlap >= 2 && teacherTokens.length <= 4) return true;
+    return false;
+}
+
+function cleanNotebookFlowObservation(comment) {
+    var text = String(comment || "").replace(/\s+/g, " ").trim();
+    var starterMatch = text.match(/you\s+started\s+\d+\s+sentences?\s+with\s+the\s+word\s+["']?([^"',.]+)["']?/i);
+    if (starterMatch) {
+        var starter = String(starterMatch[1] || "").replace(/["']/g, "").trim();
+        if (starter) return makeSentence("Many sentences begin with \"" + starter + "\", which makes the rhythm feel repetitive");
+        return "Many sentences begin the same way, which makes the rhythm feel repetitive.";
+    }
+    if (/you\s+started\s+\d+\s+sentences?/i.test(text)) {
+        return "Many sentences begin the same way, which makes the rhythm feel repetitive.";
+    }
+    text = text.replace(/\s*,?\s*which\s+is\s+\d+(?:\.\d+)?%\s+of\s+your\s+sentences?/ig, "");
+    text = text.replace(/\b\d+(?:\.\d+)?%\b/g, "");
+    text = text.replace(/\s{2,}/g, " ").trim();
+    return text || String(comment || "");
+}
+
 function getMatchingNotebookIssueFamilies(key, text) {
     var families = getNotebookIssueFamilies(key);
     var matches = [];
@@ -7728,11 +8083,15 @@ function notebookTextMatchesFocus(key, text, focusRow) {
 function buildNotebookTeacherComment(key, item, focusRow, fallback) {
     item = item || {};
     var candidate = cleanTeacherCommentText(fallback || "", key, item.score);
-    var mustMatchFocus = isHighEvidenceNotebookRow(key, focusRow) || notebookTextContradictsFocus(key, candidate, focusRow);
-    if (candidate && isValidTeacherComment(candidate, key, item, [focusRow]) && notebookTextSatisfiesRequiredFocus(key, candidate, focusRow)) {
-        if (notebookTextMatchesFocus(key, candidate, focusRow) || !mustMatchFocus) return candidate;
+    var noticedLine = buildNotebookNoticedLine(key, focusRow);
+    if (candidate && isValidTeacherComment(candidate, key, item, [focusRow]) && notebookTextSatisfiesRequiredFocus(key, candidate, focusRow) && !notebookTextContradictsFocus(key, candidate, focusRow) && !notebookLinesEcho(candidate, noticedLine)) {
+        return candidate;
     }
-    return cleanTeacherCommentText(buildEvidenceBasedTeacherComment(key, item, [focusRow]), key, item.score);
+    var instructional = cleanTeacherCommentText(buildNotebookInstructionalComment(key, focusRow, item.score), key, item.score);
+    if (instructional && !notebookTextContradictsFocus(key, instructional, focusRow) && !notebookLinesEcho(instructional, noticedLine)) {
+        return instructional;
+    }
+    return instructional || cleanTeacherCommentText(buildEvidenceBasedTeacherComment(key, item, [focusRow]), key, item.score);
 }
 
 function buildNotebookGrowthTip(key, item, focusRow, fallback) {
@@ -7744,10 +8103,15 @@ function buildNotebookGrowthTip(key, item, focusRow, fallback) {
     return cleanGrowthTipText(buildActionGrowthTip(key, item, [focusRow]), key, item.score);
 }
 
-function buildNotebookNoticedLine(focusRow) {
+function buildNotebookNoticedLine(key, focusRow) {
+    if (typeof focusRow === "undefined") {
+        focusRow = key;
+        key = "";
+    }
     focusRow = focusRow || {};
     var area = String(focusRow.area || "").trim();
     var comment = String(focusRow.comment || "").trim() || "No assessment note available yet.";
+    if (key === "Flow") comment = cleanNotebookFlowObservation(comment);
     return (area ? area + ": " : "") + comment;
 }
 
@@ -7760,7 +8124,7 @@ function getNotebookCategoryPrintData(key, item, context) {
     var tip = buildNotebookGrowthTip(key, item, focusRow, feedback.growthTip);
     return {
         teacherComment: teacherComment,
-        noticed: buildNotebookNoticedLine(focusRow),
+        noticed: buildNotebookNoticedLine(key, focusRow),
         tip: tip || "Choose one part to revise carefully in your next piece of writing.",
         focusArea: focusRow.area || "",
         source: "detailed-feedback"
