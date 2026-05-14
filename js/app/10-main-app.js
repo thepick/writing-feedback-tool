@@ -5215,6 +5215,8 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "12h. Growth Tips must be specific actions the student can do during revision. Avoid generic tips like improve your writing, add more details, or check your work unless the action says exactly what to check or add.",
         "12i. Use category-specific evidence: Ideas = topic/detail/development; Grammar = sentence correctness/verb tense/agreement; Word Choice = vocabulary precision/variety; Organization = beginning/middle/end/sequence/paragraphing; Flow = rhythm/starters/transitions/sentence variety; Spelling & Punctuation = spelling/capitalization/punctuation.",
         "12j. For Try This Next Time, write strategy names as natural sentence text, not title-style labels. For example, write 'Mix up your sentences by...' instead of 'Mix Up My Sentences by...'.",
+        "12k. In each category, the Teacher Comment, What I Noticed row, and Growth Tip must focus on the same main skill or issue. Do not mention verb tense in the Teacher Comment, sentence boundaries in What I Noticed, and then verb tense again in the Growth Tip.",
+        "12l. When possible, make the What I Noticed comment include direct evidence from the writing, such as quoted words, named details, repeated sentence starters, or a specific part of the student's text. Do not invent examples that are not in the writing.",
         "13. Keep the final encouragement line to one warm sentence.",
         "",
         "Grow Goal options:",
@@ -7402,18 +7404,199 @@ function getGoalPlan(data) {
 }
 
 
+function normalizeNotebookMatchText(text) {
+    return String(text || "").toLowerCase().replace(/[^a-z0-9\s]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function hasNotebookKeyword(text, keywords) {
+    var value = normalizeNotebookMatchText(text);
+    if (!value) return false;
+    for (var i = 0; i < keywords.length; i++) {
+        var word = normalizeNotebookMatchText(keywords[i]);
+        if (!word) continue;
+        var pattern = new RegExp("(^|\\s)" + word.replace(/\s+/g, "\\s+") + "($|\\s)", "i");
+        if (pattern.test(value)) return true;
+    }
+    return false;
+}
+
+function getNotebookIssueFamilies(key) {
+    if (key === "Grammar") {
+        return [
+            { name: "verb tense", keywords: ["verb", "verbs", "tense", "tenses", "agreement", "past tense", "present tense"] },
+            { name: "sentence boundaries", keywords: ["sentence", "sentences", "boundary", "boundaries", "run on", "run ons", "break", "breaks", "period", "ending mark"] },
+            { name: "word order", keywords: ["word order", "phrasing", "phrase", "phrases", "natural", "clearer"] },
+            { name: "pronouns", keywords: ["pronoun", "pronouns", "reference", "references"] }
+        ];
+    }
+    if (key === "Flow") {
+        return [
+            { name: "sentence starters", keywords: ["starter", "starters", "started", "begin", "begins", "beginning", "beginnings", "same word", "repeated", "repetitive"] },
+            { name: "short sentences", keywords: ["short", "choppy", "jumpy", "combine", "combining"] },
+            { name: "sentence variety", keywords: ["variety", "length", "lengths", "rhythm", "smooth", "smoother", "flows"] },
+            { name: "transitions", keywords: ["transition", "transitions", "connect", "connection"] }
+        ];
+    }
+    if (key === "Spelling & Punctuation") {
+        return [
+            { name: "spelling", keywords: ["spell", "spelling", "misspelled", "word choice", "should be", "versus"] },
+            { name: "capitalization", keywords: ["capital", "capitalization", "uppercase", "lowercase"] },
+            { name: "punctuation", keywords: ["punctuation", "period", "comma", "commas", "ending", "end mark", "question mark", "quotation", "apostrophe"] }
+        ];
+    }
+    if (key === "Organization") {
+        return [
+            { name: "sequence", keywords: ["sequence", "order", "events", "event", "logical", "timeline"] },
+            { name: "structure", keywords: ["beginning", "middle", "ending", "start", "end", "structure"] },
+            { name: "paragraphs", keywords: ["paragraph", "paragraphs", "section", "sections"] },
+            { name: "transitions", keywords: ["transition", "transitions", "connect", "connection"] }
+        ];
+    }
+    if (key === "Ideas & Details") {
+        return [
+            { name: "details", keywords: ["detail", "details", "description", "descriptions", "sensory", "specific", "picture"] },
+            { name: "development", keywords: ["develop", "development", "explain", "fuller", "target", "word count"] },
+            { name: "main idea", keywords: ["main idea", "topic", "focus", "clear idea"] }
+        ];
+    }
+    if (key === "Word Choice") {
+        return [
+            { name: "specific words", keywords: ["specific", "precise", "exact", "vivid", "descriptive"] },
+            { name: "repeated words", keywords: ["repeated", "repeat", "common", "same word", "word variety"] },
+            { name: "action words", keywords: ["verb", "verbs", "action", "stronger word"] }
+        ];
+    }
+    if (key === "Neatness") {
+        return [
+            { name: "spacing", keywords: ["spacing", "space", "spaces", "crowded", "gap"] },
+            { name: "letter formation", keywords: ["letter", "letters", "formation", "shape", "shaping"] },
+            { name: "line use", keywords: ["line", "lines", "drifts", "above", "below"] },
+            { name: "size", keywords: ["size", "consistent", "uneven"] },
+            { name: "marks", keywords: ["smudge", "smudges", "cross out", "correction", "marks"] }
+        ];
+    }
+    return [];
+}
+
+function getMatchingNotebookIssueFamilies(key, text) {
+    var families = getNotebookIssueFamilies(key);
+    var matches = [];
+    for (var i = 0; i < families.length; i++) {
+        if (hasNotebookKeyword(text, families[i].keywords)) matches.push(families[i]);
+    }
+    return matches;
+}
+
+function notebookRowText(row) {
+    row = row || {};
+    return String(row.area || "") + " " + String(row.comment || "");
+}
+
+function notebookRowHasDirectEvidence(row) {
+    var text = String(row && row.comment ? row.comment : "");
+    if (!text) return false;
+    if (/["']([^"']{2,})["']/.test(text)) return true;
+    if (/\b(such as|like|for example|including|you used|you started|you wrote|from .* to|between|versus|should be)\b/i.test(text)) return true;
+    return false;
+}
+
+function notebookTokenOverlapScore(a, b) {
+    var left = normalizeNotebookMatchText(a).split(" ");
+    var rightText = " " + normalizeNotebookMatchText(b) + " ";
+    var seen = {};
+    var score = 0;
+    for (var i = 0; i < left.length; i++) {
+        var token = left[i];
+        if (!token || token.length < 4 || seen[token]) continue;
+        seen[token] = true;
+        if (rightText.indexOf(" " + token + " ") !== -1) score += 1;
+    }
+    return score;
+}
+
+function scoreNotebookFocusRow(key, row, combinedText, index) {
+    row = row || {};
+    var rowText = notebookRowText(row);
+    var score = Math.max(0, 4 - index);
+    var comment = String(row.comment || "");
+    var matchedFamilies = getMatchingNotebookIssueFamilies(key, combinedText);
+    var rowMatched = false;
+    var i;
+
+    for (i = 0; i < matchedFamilies.length; i++) {
+        if (hasNotebookKeyword(rowText, matchedFamilies[i].keywords)) {
+            rowMatched = true;
+            score += 30;
+        }
+    }
+
+    score += notebookTokenOverlapScore(rowText, combinedText) * 3;
+    if (isNeedNoticeComment(comment)) score += 8;
+    if (notebookRowHasDirectEvidence(row)) score += 6;
+    if (isNeutralNoticeComment(comment)) score -= rowMatched ? 1 : 6;
+    if (!String(comment || "").trim()) score -= 20;
+    return score;
+}
+
+function selectNotebookFocusRow(key, item, feedback) {
+    feedback = feedback || {};
+    var rows = feedback.noticeRows || [];
+    if (!rows.length) return { area: getStudentFriendlyAreaName(key), comment: "No detailed note available yet." };
+    var combined = [feedback.teacherComment || "", feedback.growthTip || "", item && item.evidence ? item.evidence : "", item && item.growthTip ? item.growthTip : "", item && item.teacherComment ? item.teacherComment : ""].join(" ");
+    var best = rows[0];
+    var bestScore = -9999;
+    for (var i = 0; i < rows.length; i++) {
+        var currentScore = scoreNotebookFocusRow(key, rows[i], combined, i);
+        if (currentScore > bestScore) {
+            best = rows[i];
+            bestScore = currentScore;
+        }
+    }
+    return best || rows[0];
+}
+
+function notebookTextMatchesFocus(key, text, focusRow) {
+    var value = String(text || "");
+    if (!value || !focusRow) return false;
+    var rowText = notebookRowText(focusRow);
+    var textFamilies = getMatchingNotebookIssueFamilies(key, value);
+    for (var i = 0; i < textFamilies.length; i++) {
+        if (hasNotebookKeyword(rowText, textFamilies[i].keywords)) return true;
+    }
+    return notebookTokenOverlapScore(rowText, value) >= 2;
+}
+
+function buildNotebookTeacherComment(key, item, focusRow, fallback) {
+    item = item || {};
+    var candidate = cleanTeacherCommentText(fallback || "", key, item.score);
+    if (candidate && isValidTeacherComment(candidate, key, item, [focusRow]) && notebookTextMatchesFocus(key, candidate, focusRow)) return candidate;
+    return cleanTeacherCommentText(buildEvidenceBasedTeacherComment(key, item, [focusRow]), key, item.score);
+}
+
+function buildNotebookGrowthTip(key, item, focusRow, fallback) {
+    item = item || {};
+    var candidate = cleanGrowthTipText(fallback || "", key, item.score);
+    if (candidate && isValidGrowthTip(candidate, key, item, [focusRow]) && notebookTextMatchesFocus(key, candidate, focusRow)) return candidate;
+    return cleanGrowthTipText(buildActionGrowthTip(key, item, [focusRow]), key, item.score);
+}
+
+function buildNotebookNoticedLine(focusRow) {
+    focusRow = focusRow || {};
+    var area = String(focusRow.area || "").trim();
+    var comment = String(focusRow.comment || "").trim() || "No assessment note available yet.";
+    return (area ? area + ": " : "") + comment;
+}
+
 function getNotebookCategoryPrintData(key, item) {
     item = item || {};
     var feedback = buildStudentFeedbackForCategory(key, item);
-    var rows = feedback.noticeRows || [];
-    var noticed = "No assessment note available yet.";
-    if (rows && rows.length) {
-        noticed = (rows[0].area ? rows[0].area + ": " : "") + (rows[0].comment || "No assessment note available yet.");
-    }
+    var focusRow = selectNotebookFocusRow(key, item, feedback);
+    var teacherComment = buildNotebookTeacherComment(key, item, focusRow, feedback.teacherComment);
+    var tip = buildNotebookGrowthTip(key, item, focusRow, feedback.growthTip);
     return {
-        teacherComment: feedback.teacherComment,
-        noticed: noticed,
-        tip: feedback.growthTip || "Choose one part to revise carefully in your next piece of writing."
+        teacherComment: teacherComment,
+        noticed: buildNotebookNoticedLine(focusRow),
+        tip: tip || "Choose one part to revise carefully in your next piece of writing."
     };
 }
 function getNotebookScoreClass(score, maxScore) {
