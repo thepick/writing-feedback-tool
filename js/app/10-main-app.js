@@ -5215,7 +5215,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "12h. Growth Tips must be specific actions the student can do during revision. Avoid generic tips like improve your writing, add more details, or check your work unless the action says exactly what to check or add.",
         "12i. Use category-specific evidence: Ideas = topic/detail/development; Grammar = sentence correctness/verb tense/agreement; Word Choice = vocabulary precision/variety; Organization = beginning/middle/end/sequence/paragraphing; Flow = rhythm/starters/transitions/sentence variety; Spelling & Punctuation = spelling/capitalization/punctuation.",
         "12j. For Try This Next Time, write strategy names as natural sentence text, not title-style labels. For example, write 'Mix up your sentences by...' instead of 'Mix Up My Sentences by...'.",
-        "12k. In each category, the Teacher Comment, What I Noticed row, and Growth Tip must focus on the same main skill or issue. Do not mention verb tense in the Teacher Comment, sentence boundaries in What I Noticed, and then verb tense again in the Growth Tip.",
+        "12k. In each category, choose one primary focus. The Teacher Comment, the first What I Noticed row, and the Growth Tip must all address that same focus; extra What I Noticed rows may come after the primary row.",
         "12l. When possible, make the What I Noticed comment include direct evidence from the writing, such as quoted words, named details, repeated sentence starters, or a specific part of the student's text. Do not invent examples that are not in the writing.",
         "13. Keep the final encouragement line to one warm sentence.",
         "",
@@ -5574,7 +5574,7 @@ function buildActionGrowthTip(key, item, rows) {
         return "Before revising, number the events in order and add one transition word where the order feels unclear.";
     }
     if (key === "Flow") {
-        if (/starter|begin|open|same way/i.test(need)) return "Rewrite three sentence beginnings so they start with a time word, place detail, or different subject.";
+        if (/starter|started|start|begin|open|same word|same starter|repeated|repetitive/i.test(need)) return "Rewrite three sentence beginnings so they start with a time word, place detail, or different subject.";
         if (/short|choppy|combine/i.test(need)) return "Choose two short sentences that belong together and combine them into one smoother sentence.";
         return "Read your writing aloud and revise one sentence that sounds bumpy or too much like the sentence before it.";
     }
@@ -5649,18 +5649,29 @@ function buildStudentFeedbackForCategory(key, item) {
     var rows = buildNoticeRowsForCategory(key, displayItem);
     rows = cleanNoticeRowsForDisplay(key, displayItem, rows);
     if (!rows.length) rows.push({ area: getStudentFriendlyAreaName(key), comment: "No detailed note available yet." });
-    var teacherComment = buildTeacherComment(key, displayItem, rows);
-    var growthTip = buildGrowthTip(key, displayItem, rows);
+
+    var primaryRow = selectNotebookFocusRow(key, displayItem, {
+        noticeRows: rows,
+        teacherComment: displayItem.teacherComment || "",
+        growthTip: displayItem.growthTip || ""
+    }, {});
+    rows = moveNotebookPrimaryRowToTop(rows, primaryRow);
+    primaryRow = rows[0] || primaryRow;
+
+    var teacherComment = buildNotebookTeacherComment(key, displayItem, primaryRow, displayItem.teacherComment || "");
+    var growthTip = buildNotebookGrowthTip(key, displayItem, primaryRow, displayItem.growthTip || "");
     var audit = {
         builderName: getFeedbackBuilderName(key),
         scoreBand: getAuditScoreBandLabel(displayItem.score),
-        mainEvidence: getMainEvidenceSummary(rows),
-        teacherCommentSource: getAuditTeacherCommentSource(key, displayItem, rows),
-        growthTipSource: getGrowthTipSource(key, displayItem, rows)
+        mainEvidence: getMainEvidenceSummary([primaryRow]),
+        teacherCommentSource: getAuditTeacherCommentSource(key, displayItem, [primaryRow]),
+        growthTipSource: getGrowthTipSource(key, displayItem, [primaryRow]),
+        primaryFocus: buildNotebookNoticedLine(primaryRow)
     };
     return {
         teacherComment: teacherComment,
         noticeRows: rows,
+        primaryRow: primaryRow,
         growthTip: growthTip,
         audit: audit
     };
@@ -5991,6 +6002,10 @@ function buildAuditValidationRows(key, item, rows, teacherComment, growthTip, fe
     addAuditValidation(checks, "Growth Tip present", !!String(growthTip || "").trim(), "Growth Tip should give one next step.");
     addAuditValidation(checks, "Growth Tip is actionable", growthTipLooksActionable(growthTip) && !isGenericGrowthTip(growthTip), "Growth tip should tell the student exactly what to do during revision.");
     addAuditValidation(checks, "Growth Tip matches category", !categoryMismatchInTeacherComment(key, growthTip), "Growth tip should stay inside " + key + ".");
+    if (feedback && feedback.primaryRow) {
+        addAuditValidation(checks, "Teacher Comment aligns to primary focus", notebookTextSatisfiesRequiredFocus(key, teacherComment, feedback.primaryRow) && (notebookTextMatchesFocus(key, teacherComment, feedback.primaryRow) || !notebookTextContradictsFocus(key, teacherComment, feedback.primaryRow)), "Teacher Comment should not point to a different issue than the primary What I noticed row.");
+        addAuditValidation(checks, "Growth Tip aligns to primary focus", notebookTextSatisfiesRequiredFocus(key, growthTip, feedback.primaryRow) && (notebookTextMatchesFocus(key, growthTip, feedback.primaryRow) || !notebookTextContradictsFocus(key, growthTip, feedback.primaryRow)), "Growth Tip should not point to a different issue than the primary What I noticed row.");
+    }
     if (key === "Grammar") {
         addAuditValidation(checks, "Grammar wording aligned with error data", !/\bonly a few\b/i.test(teacherComment) || Number(item.totalErrors) < 25, "Avoid saying 'only a few' when the error count is high.");
     }
@@ -6009,6 +6024,7 @@ function getAuditBuilderRows(key, item, feedback) {
     addAuditRawRow(rows, "Main evidence selected", audit.mainEvidence || getMainEvidenceSummary(feedback.noticeRows || []));
     addAuditRawRow(rows, "Teacher Comment source", audit.teacherCommentSource || "Not recorded.");
     addAuditRawRow(rows, "Growth Tip source", audit.growthTipSource || "Not recorded.");
+    addAuditRawRow(rows, "Primary focus row", audit.primaryFocus || "Not recorded.");
     return rows;
 }
 
@@ -7522,6 +7538,81 @@ function rowMatchesAnyNotebookFamily(key, rowText, families) {
     return false;
 }
 
+function getNotebookFamilyNames(families) {
+    var names = {};
+    families = families || [];
+    for (var i = 0; i < families.length; i++) {
+        if (families[i] && families[i].name) names[families[i].name] = true;
+    }
+    return names;
+}
+
+function notebookFamiliesOverlap(leftFamilies, rightFamilies) {
+    var left = getNotebookFamilyNames(leftFamilies);
+    rightFamilies = rightFamilies || [];
+    for (var i = 0; i < rightFamilies.length; i++) {
+        if (rightFamilies[i] && left[rightFamilies[i].name]) return true;
+    }
+    return false;
+}
+
+function notebookTextContradictsFocus(key, text, focusRow) {
+    if (!focusRow) return false;
+    var focusFamilies = getMatchingNotebookIssueFamilies(key, notebookRowText(focusRow));
+    if (!focusFamilies.length) return false;
+    var textFamilies = getMatchingNotebookIssueFamilies(key, text);
+    if (!textFamilies.length) return false;
+    return !notebookFamiliesOverlap(focusFamilies, textFamilies);
+}
+
+function notebookTextMentionsFamily(key, text, familyName) {
+    var families = getMatchingNotebookIssueFamilies(key, text);
+    for (var i = 0; i < families.length; i++) {
+        if (families[i] && families[i].name === familyName) return true;
+    }
+    return false;
+}
+
+function getRequiredNotebookFocusFamilyName(key, focusRow) {
+    var rowText = notebookRowText(focusRow);
+    if (key === "Flow") {
+        if (/sentence starters?/i.test(rowText) || /you\s+started\s+\d+\s+sentences?\s+with\s+the\s+word/i.test(rowText)) return "sentence starters";
+        if (/sentence length|short|choppy|combine/i.test(rowText)) return "short sentences";
+        if (/transition|connect|connection/i.test(rowText)) return "transitions";
+    }
+    if (key === "Grammar") {
+        if (/verb|tense|agreement/i.test(rowText)) return "verb tense";
+        if (/sentence boundaries|run[- ]?ons?|complete idea|period/i.test(rowText)) return "sentence boundaries";
+        if (/word order|phrasing|natural/i.test(rowText)) return "word order";
+        if (/pronoun|reference/i.test(rowText)) return "pronouns";
+    }
+    return "";
+}
+
+function notebookTextSatisfiesRequiredFocus(key, text, focusRow) {
+    var required = getRequiredNotebookFocusFamilyName(key, focusRow);
+    if (!required) return true;
+    return notebookTextMentionsFamily(key, text, required);
+}
+
+function moveNotebookPrimaryRowToTop(rows, primaryRow) {
+    rows = rows || [];
+    if (!rows.length || !primaryRow) return rows;
+    var primaryText = notebookRowText(primaryRow);
+    var index = -1;
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i] === primaryRow || notebookRowText(rows[i]) === primaryText) {
+            index = i;
+            break;
+        }
+    }
+    if (index <= 0) return rows;
+    var output = rows.slice();
+    var selected = output.splice(index, 1)[0];
+    output.unshift(selected);
+    return output;
+}
+
 function isHighEvidenceNotebookRow(key, row) {
     row = row || {};
     var text = notebookRowText(row);
@@ -7530,6 +7621,22 @@ function isHighEvidenceNotebookRow(key, row) {
     if (key === "Spelling & Punctuation" && /\b(should be|instead of|versus|spelling errors? like|commas?)\b/i.test(text)) return true;
     if (/\b\d+%\b/.test(text)) return true;
     return false;
+}
+
+function getRepeatedSentenceStarterFocusRow(rows) {
+    rows = rows || [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i] || {};
+        var text = notebookRowText(row);
+        var m = text.match(/you\s+started\s+(\d+)\s+sentences?\s+with\s+the\s+word[\s\S]{0,80}?(\d+(?:\.\d+)?)\s*%/i);
+        if (m) {
+            var count = parseInt(m[1], 10);
+            var pct = parseFloat(m[2]);
+            if (isFinite(count) && isFinite(pct) && count >= 3 && pct > 25) return row;
+        }
+        if (/you\s+started\s+\d+\s+sentences?\s+with\s+the\s+word/i.test(text) && /repetitive|same word|rhythm/i.test(text)) return row;
+    }
+    return null;
 }
 
 function scoreNotebookFocusRow(key, row, context, index) {
@@ -7566,7 +7673,7 @@ function scoreNotebookFocusRow(key, row, context, index) {
 
     if (isNeedNoticeComment(comment)) score += context.isGrowGoalCategory ? 22 : 10;
     if (isHighEvidenceNotebookRow(key, row)) score += context.isGrowGoalCategory ? 34 : 22;
-    if (key === "Flow" && /\byou started\s+\d+\s+sentences?\s+with\s+the\s+word\b/i.test(comment)) score += context.isGrowGoalCategory ? 120 : 90;
+    if (key === "Flow" && /\byou started\s+\d+\s+sentences?\s+with\s+the\s+word\b/i.test(comment)) score += context.isGrowGoalCategory ? 220 : 180;
     if (key === "Grammar" && /\bverb\b|\btense\b|\bagreement\b/i.test(rowText) && /\bverb\b|\btense\b|\bagreement\b/i.test(teacherText + " " + growthText)) score += 80;
     if (key === "Grammar" && /\bsentence boundaries\b|\brun[- ]?ons?\b/i.test(rowText) && !/\bsentence boundaries\b|\brun[- ]?ons?\b|\bclearer breaks\b|\bending mark\b|\bperiod\b/i.test(teacherText + " " + growthText)) score -= 25;
     if (key === "Neatness" && /\b(spacing|crowded|space)\b/i.test(rowText) && /\b(spacing|crowded|space)\b/i.test(teacherText + " " + growthText)) score += 60;
@@ -7578,8 +7685,13 @@ function scoreNotebookFocusRow(key, row, context, index) {
 function selectNotebookFocusRow(key, item, feedback, context) {
     feedback = feedback || {};
     context = context || {};
+    if (feedback.primaryRow) return feedback.primaryRow;
     var rows = feedback.noticeRows || [];
     if (!rows.length) return { area: getStudentFriendlyAreaName(key), comment: "No detailed note available yet." };
+    if (key === "Flow") {
+        var repeatedStarterRow = getRepeatedSentenceStarterFocusRow(rows);
+        if (repeatedStarterRow) return repeatedStarterRow;
+    }
     var itemText = [item && item.evidence ? item.evidence : "", item && item.growthTip ? item.growthTip : "", item && item.teacherComment ? item.teacherComment : ""].join(" ");
     var scoringContext = {
         teacherText: feedback.teacherComment || item && item.teacherComment || "",
@@ -7616,14 +7728,19 @@ function notebookTextMatchesFocus(key, text, focusRow) {
 function buildNotebookTeacherComment(key, item, focusRow, fallback) {
     item = item || {};
     var candidate = cleanTeacherCommentText(fallback || "", key, item.score);
-    if (candidate && isValidTeacherComment(candidate, key, item, [focusRow]) && notebookTextMatchesFocus(key, candidate, focusRow)) return candidate;
+    var mustMatchFocus = isHighEvidenceNotebookRow(key, focusRow) || notebookTextContradictsFocus(key, candidate, focusRow);
+    if (candidate && isValidTeacherComment(candidate, key, item, [focusRow]) && notebookTextSatisfiesRequiredFocus(key, candidate, focusRow)) {
+        if (notebookTextMatchesFocus(key, candidate, focusRow) || !mustMatchFocus) return candidate;
+    }
     return cleanTeacherCommentText(buildEvidenceBasedTeacherComment(key, item, [focusRow]), key, item.score);
 }
 
 function buildNotebookGrowthTip(key, item, focusRow, fallback) {
     item = item || {};
     var candidate = cleanGrowthTipText(fallback || "", key, item.score);
-    if (candidate && isValidGrowthTip(candidate, key, item, [focusRow]) && notebookTextMatchesFocus(key, candidate, focusRow)) return candidate;
+    if (candidate && isValidGrowthTip(candidate, key, item, [focusRow]) && notebookTextSatisfiesRequiredFocus(key, candidate, focusRow)) {
+        if (notebookTextMatchesFocus(key, candidate, focusRow) || !notebookTextContradictsFocus(key, candidate, focusRow)) return candidate;
+    }
     return cleanGrowthTipText(buildActionGrowthTip(key, item, [focusRow]), key, item.score);
 }
 
@@ -7638,7 +7755,7 @@ function getNotebookCategoryPrintData(key, item, context) {
     item = item || {};
     context = context || {};
     var feedback = buildStudentFeedbackForCategory(key, item);
-    var focusRow = selectNotebookFocusRow(key, item, feedback, context);
+    var focusRow = feedback.primaryRow || selectNotebookFocusRow(key, item, feedback, context);
     var teacherComment = buildNotebookTeacherComment(key, item, focusRow, feedback.teacherComment);
     var tip = buildNotebookGrowthTip(key, item, focusRow, feedback.growthTip);
     return {
