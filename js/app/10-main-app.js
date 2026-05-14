@@ -7424,7 +7424,7 @@ function getNotebookIssueFamilies(key) {
     if (key === "Grammar") {
         return [
             { name: "verb tense", keywords: ["verb", "verbs", "tense", "tenses", "agreement", "past tense", "present tense"] },
-            { name: "sentence boundaries", keywords: ["sentence", "sentences", "boundary", "boundaries", "run on", "run ons", "break", "breaks", "period", "ending mark"] },
+            { name: "sentence boundaries", keywords: ["sentence boundary", "sentence boundaries", "run on", "run ons", "run-on", "run-ons", "break", "breaks", "period", "ending mark", "punctuation"] },
             { name: "word order", keywords: ["word order", "phrasing", "phrase", "phrases", "natural", "clearer"] },
             { name: "pronouns", keywords: ["pronoun", "pronouns", "reference", "references"] }
         ];
@@ -7514,39 +7514,85 @@ function notebookTokenOverlapScore(a, b) {
     return score;
 }
 
-function scoreNotebookFocusRow(key, row, combinedText, index) {
-    row = row || {};
-    var rowText = notebookRowText(row);
-    var score = Math.max(0, 4 - index);
-    var comment = String(row.comment || "");
-    var matchedFamilies = getMatchingNotebookIssueFamilies(key, combinedText);
-    var rowMatched = false;
-    var i;
+function rowMatchesAnyNotebookFamily(key, rowText, families) {
+    families = families || [];
+    for (var i = 0; i < families.length; i++) {
+        if (hasNotebookKeyword(rowText, families[i].keywords)) return true;
+    }
+    return false;
+}
 
-    for (i = 0; i < matchedFamilies.length; i++) {
-        if (hasNotebookKeyword(rowText, matchedFamilies[i].keywords)) {
-            rowMatched = true;
-            score += 30;
-        }
+function isHighEvidenceNotebookRow(key, row) {
+    row = row || {};
+    var text = notebookRowText(row);
+    if (notebookRowHasDirectEvidence(row)) return true;
+    if (key === "Flow" && /\byou started\s+\d+\s+sentences?\b/i.test(text)) return true;
+    if (key === "Spelling & Punctuation" && /\b(should be|instead of|versus|spelling errors? like|commas?)\b/i.test(text)) return true;
+    if (/\b\d+%\b/.test(text)) return true;
+    return false;
+}
+
+function scoreNotebookFocusRow(key, row, context, index) {
+    row = row || {};
+    context = context || {};
+    var rowText = notebookRowText(row);
+    var score = Math.max(0, 3 - index);
+    var comment = String(row.comment || "");
+    var teacherText = context.teacherText || "";
+    var growthText = context.growthText || "";
+    var itemText = context.itemText || "";
+    var combinedText = [teacherText, growthText, itemText, context.growGoalText || "", context.nextTimeText || ""].join(" ");
+    var teacherFamilies = getMatchingNotebookIssueFamilies(key, teacherText);
+    var growthFamilies = getMatchingNotebookIssueFamilies(key, growthText);
+    var combinedFamilies = getMatchingNotebookIssueFamilies(key, combinedText);
+    var rowMatched = false;
+
+    if (rowMatchesAnyNotebookFamily(key, rowText, teacherFamilies)) {
+        score += 90;
+        rowMatched = true;
+    }
+    if (rowMatchesAnyNotebookFamily(key, rowText, growthFamilies)) {
+        score += 70;
+        rowMatched = true;
+    }
+    if (rowMatchesAnyNotebookFamily(key, rowText, combinedFamilies)) {
+        score += 20;
+        rowMatched = true;
     }
 
-    score += notebookTokenOverlapScore(rowText, combinedText) * 3;
-    if (isNeedNoticeComment(comment)) score += 8;
-    if (notebookRowHasDirectEvidence(row)) score += 6;
-    if (isNeutralNoticeComment(comment)) score -= rowMatched ? 1 : 6;
-    if (!String(comment || "").trim()) score -= 20;
+    score += notebookTokenOverlapScore(rowText, teacherText) * 6;
+    score += notebookTokenOverlapScore(rowText, growthText) * 5;
+    score += notebookTokenOverlapScore(rowText, itemText) * 2;
+
+    if (isNeedNoticeComment(comment)) score += context.isGrowGoalCategory ? 22 : 10;
+    if (isHighEvidenceNotebookRow(key, row)) score += context.isGrowGoalCategory ? 34 : 22;
+    if (key === "Flow" && /\byou started\s+\d+\s+sentences?\s+with\s+the\s+word\b/i.test(comment)) score += context.isGrowGoalCategory ? 120 : 90;
+    if (key === "Grammar" && /\bverb\b|\btense\b|\bagreement\b/i.test(rowText) && /\bverb\b|\btense\b|\bagreement\b/i.test(teacherText + " " + growthText)) score += 80;
+    if (key === "Grammar" && /\bsentence boundaries\b|\brun[- ]?ons?\b/i.test(rowText) && !/\bsentence boundaries\b|\brun[- ]?ons?\b|\bclearer breaks\b|\bending mark\b|\bperiod\b/i.test(teacherText + " " + growthText)) score -= 25;
+    if (key === "Neatness" && /\b(spacing|crowded|space)\b/i.test(rowText) && /\b(spacing|crowded|space)\b/i.test(teacherText + " " + growthText)) score += 60;
+    if (isNeutralNoticeComment(comment)) score -= rowMatched ? 8 : 22;
+    if (!String(comment || "").trim()) score -= 40;
     return score;
 }
 
-function selectNotebookFocusRow(key, item, feedback) {
+function selectNotebookFocusRow(key, item, feedback, context) {
     feedback = feedback || {};
+    context = context || {};
     var rows = feedback.noticeRows || [];
     if (!rows.length) return { area: getStudentFriendlyAreaName(key), comment: "No detailed note available yet." };
-    var combined = [feedback.teacherComment || "", feedback.growthTip || "", item && item.evidence ? item.evidence : "", item && item.growthTip ? item.growthTip : "", item && item.teacherComment ? item.teacherComment : ""].join(" ");
+    var itemText = [item && item.evidence ? item.evidence : "", item && item.growthTip ? item.growthTip : "", item && item.teacherComment ? item.teacherComment : ""].join(" ");
+    var scoringContext = {
+        teacherText: feedback.teacherComment || item && item.teacherComment || "",
+        growthText: feedback.growthTip || item && item.growthTip || "",
+        itemText: itemText,
+        growGoalText: context.growGoalText || "",
+        nextTimeText: context.nextTimeText || "",
+        isGrowGoalCategory: !!context.isGrowGoalCategory
+    };
     var best = rows[0];
     var bestScore = -9999;
     for (var i = 0; i < rows.length; i++) {
-        var currentScore = scoreNotebookFocusRow(key, rows[i], combined, i);
+        var currentScore = scoreNotebookFocusRow(key, rows[i], scoringContext, i);
         if (currentScore > bestScore) {
             best = rows[i];
             bestScore = currentScore;
@@ -7563,6 +7609,7 @@ function notebookTextMatchesFocus(key, text, focusRow) {
     for (var i = 0; i < textFamilies.length; i++) {
         if (hasNotebookKeyword(rowText, textFamilies[i].keywords)) return true;
     }
+    if (isHighEvidenceNotebookRow(key, focusRow) && notebookTokenOverlapScore(rowText, value) >= 1) return true;
     return notebookTokenOverlapScore(rowText, value) >= 2;
 }
 
@@ -7587,16 +7634,19 @@ function buildNotebookNoticedLine(focusRow) {
     return (area ? area + ": " : "") + comment;
 }
 
-function getNotebookCategoryPrintData(key, item) {
+function getNotebookCategoryPrintData(key, item, context) {
     item = item || {};
+    context = context || {};
     var feedback = buildStudentFeedbackForCategory(key, item);
-    var focusRow = selectNotebookFocusRow(key, item, feedback);
+    var focusRow = selectNotebookFocusRow(key, item, feedback, context);
     var teacherComment = buildNotebookTeacherComment(key, item, focusRow, feedback.teacherComment);
     var tip = buildNotebookGrowthTip(key, item, focusRow, feedback.growthTip);
     return {
         teacherComment: teacherComment,
         noticed: buildNotebookNoticedLine(focusRow),
-        tip: tip || "Choose one part to revise carefully in your next piece of writing."
+        tip: tip || "Choose one part to revise carefully in your next piece of writing.",
+        focusArea: focusRow.area || "",
+        source: "detailed-feedback"
     };
 }
 function getNotebookScoreClass(score, maxScore) {
@@ -7635,21 +7685,55 @@ function getNotebookWordsTargetLabel(settings) {
 }
 
 
-function renderNotebookDetailedAssessment(detailed) {
+function getNotebookDetailedAssessmentSource(dataOrDetailed) {
+    var data = dataOrDetailed || {};
+    if (data.detailed && data.detailed.categories) {
+        return {
+            detailed: data.detailed,
+            categoryScores: data.categoryScores || {},
+            growGoalText: data.detailed.growGoal || "",
+            nextTimeText: data.detailed.nextTime || ""
+        };
+    }
+    return {
+        detailed: data,
+        categoryScores: data.categoryScores || {},
+        growGoalText: data.growGoal || "",
+        nextTimeText: data.nextTime || ""
+    };
+}
+
+function getNotebookAlignedCategoryScore(key, item, categoryScores) {
+    item = item || {};
+    categoryScores = categoryScores || {};
+    if (item.score != null && item.score !== "" && !isNaN(Number(item.score))) return Number(item.score);
+    if (categoryScores[key] != null && categoryScores[key] !== "" && !isNaN(Number(categoryScores[key]))) return Number(categoryScores[key]);
+    return null;
+}
+
+function notebookCategoryIsGrowGoal(key, growGoalText, nextTimeText) {
+    var combined = String(growGoalText || "") + " " + String(nextTimeText || "");
+    if (!combined.replace(/\s+/g, "").length) return false;
+    return textMentionsCategory(combined, key);
+}
+
+function renderNotebookDetailedAssessment(dataOrDetailed) {
+    var source = getNotebookDetailedAssessmentSource(dataOrDetailed);
+    var detailed = source.detailed;
     if (!detailed || !detailed.categories) {
         return '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Teacher Comment:</strong> No assessment data.</div><div class="tip-block"><strong>Tip:</strong> Analyze the writing first to create a notebook summary.</div></div>';
     }
     var baseOrder = [
         ["Ideas & Details", "Ideas & Details"],
-        ["Flow", "Flow"],
         ["Grammar", "Grammar"],
-        ["Spelling & Punctuation", "Spelling & Punctuation"],
-        ["Organization", "Organization"]
+        ["Word Choice", "Vocabulary"],
+        ["Organization", "Organization"],
+        ["Flow", "Flow"],
+        ["Spelling & Punctuation", "Spelling & Punctuation"]
     ];
-    if (shouldAssessNeatness()) {
+    if (shouldAssessNeatness() || (detailed.categories && detailed.categories["Neatness"])) {
         baseOrder.push(["Neatness", "Neatness"]);
     }
-    baseOrder.push(["Word Choice", "Vocabulary"]);
 
     var html = "";
     var renderedCount = 0;
@@ -7658,11 +7742,21 @@ function renderNotebookDetailedAssessment(detailed) {
         var label = baseOrder[i][1];
         var item = detailed.categories[key];
         if (!item) continue;
-        var hasNumericScore = item.score != null && item.score !== "" && !isNaN(Number(item.score));
-        var score = hasNumericScore ? Number(item.score) : null;
-        var scoreLabel = hasNumericScore ? (escapeHtml(String(item.score)) + " / " + RUBRIC_MAX) : "Missing";
+        var score = getNotebookAlignedCategoryScore(key, item, source.categoryScores);
+        var hasNumericScore = score != null && !isNaN(Number(score));
+        var scoreLabel = hasNumericScore ? (escapeHtml(String(score)) + " / " + RUBRIC_MAX) : "Missing";
         var width = score != null ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
-        var printData = getNotebookCategoryPrintData(key, item);
+        var context = {
+            growGoalText: source.growGoalText,
+            nextTimeText: source.nextTimeText,
+            isGrowGoalCategory: notebookCategoryIsGrowGoal(key, source.growGoalText, source.nextTimeText)
+        };
+        var itemForPrint = item;
+        if (score != null && item.score !== score) {
+            itemForPrint = cloneWftJson(item);
+            itemForPrint.score = score;
+        }
+        var printData = getNotebookCategoryPrintData(key, itemForPrint, context);
         html += '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
@@ -7807,7 +7901,7 @@ function fillNotebookSummary() {
 
     var nbDetailed = document.getElementById("notebookDetailedAssessment");
     if (nbDetailed) {
-        setWftSanitizedInnerHtml(nbDetailed, renderNotebookDetailedAssessment(latestAnalysisData.detailed));
+        setWftSanitizedInnerHtml(nbDetailed, renderNotebookDetailedAssessment(latestAnalysisData));
     }
     document.getElementById("notebookTeacherComment").textContent = pickTeacherComment(latestAnalysisData);
     setWftSanitizedInnerHtml("notebookRevisionFocusList", renderNotebookRevisionFocusList(latestAnalysisData));
@@ -8008,15 +8102,25 @@ function findPortfolioSession(studentName, sessionId) {
 
 function renderNotebookDetailedAssessmentFromSavedSession(session) {
     session = session || {};
+    if (session.detailedFeedback && session.detailedFeedback.categories) {
+        return renderNotebookDetailedAssessment({
+            detailed: {
+                categories: session.detailedFeedback.categories || {},
+                growGoal: session.detailedFeedback.growGoal && session.detailedFeedback.growGoal.growGoal || "",
+                nextTime: session.detailedFeedback.growGoal && session.detailedFeedback.growGoal.nextTime || ""
+            },
+            categoryScores: session.categoryScores || {}
+        });
+    }
     var scores = session.categoryScores || {};
     var order = [
         ["Ideas & Details", "Ideas & Details"],
-        ["Flow", "Flow"],
         ["Grammar", "Grammar"],
-        ["Spelling & Punctuation", "Spelling & Punctuation"],
+        ["Word Choice", "Vocabulary"],
         ["Organization", "Organization"],
-        ["Neatness", "Neatness"],
-        ["Word Choice", "Vocabulary"]
+        ["Flow", "Flow"],
+        ["Spelling & Punctuation", "Spelling & Punctuation"],
+        ["Neatness", "Neatness"]
     ];
     var html = "";
     var renderedCount = 0;
@@ -8031,7 +8135,8 @@ function renderNotebookDetailedAssessmentFromSavedSession(session) {
         html += '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
-        html += '<div class="evidence-block"><strong>Teacher Comment:</strong> This saved portfolio entry was created before printable notebook snapshots were stored.</div>';
+        html += '<div class="evidence-block"><strong>Teacher Comment:</strong> This saved portfolio entry was created before printable detailed feedback was stored.</div>';
+        html += '<div class="evidence-block"><strong>What I noticed:</strong> Review the saved teacher notes for this category.</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> Use the saved teacher notes and corrected writing from this entry.</div>';
         html += '</div>';
         renderedCount += 1;
