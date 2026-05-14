@@ -7648,16 +7648,41 @@ function saveCurrentSessionToPortfolio(analysisData) {
         images: getSessionImagePayloads(),
         notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
     };
+    var replaceSource = activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null;
+    if (replaceSource) {
+        var sourceStudentName = replaceSource.sourceStudentName || replaceSource.studentName || "";
+        var sourceSessionId = replaceSource.sourceSessionId || replaceSource.sessionId || "";
+        if (sourceStudentName && sourceStudentName !== student) {
+            clearActivePortfolioReassessmentState("student-changed-before-save");
+            setDriveSyncStatus('error', 'Reassessment was not saved because the selected student changed');
+            alert('The reassessment was not saved because the selected student changed. This prevents creating a duplicate portfolio entry.');
+            return;
+        }
+        var sourcePortfolio = getPortfolioData();
+        var sourceMatch = getPortfolioSessionMatchFromData(sourcePortfolio, sourceStudentName, sourceSessionId, replaceSource.sourceCreatedAt);
+        if (!sourceMatch) {
+            clearActivePortfolioReassessmentState("source-missing-before-save");
+            setDriveSyncStatus('error', 'Original portfolio entry not found');
+            alert('The original portfolio entry could not be found, so the reassessment was not saved. This prevents creating a duplicate entry.');
+            return;
+        }
+        replaceSource.sourceOriginalId = sourceMatch.session.id || replaceSource.sourceOriginalId || "";
+        replaceSource.sourceCreatedAt = sourceMatch.session.createdAt || replaceSource.sourceCreatedAt || "";
+        replaceSource.sourceOriginalText = Object.prototype.hasOwnProperty.call(replaceSource, 'sourceOriginalText') ? replaceSource.sourceOriginalText : (sourceMatch.session.originalText || "");
+        replaceSource.sourceTargetWords = sourceMatch.session.targetWords != null ? sourceMatch.session.targetWords : replaceSource.sourceTargetWords;
+        replaceSource.sourceAssessmentSettings = cloneWftJson(sourceMatch.session.assessmentSettings || replaceSource.sourceAssessmentSettings || {});
+    }
+
     pendingPortfolioSync = {
         studentName: student,
         sessionData: sessionData,
         signature: getCurrentPortfolioSessionSignature(),
-        replaceSource: activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null
+        replaceSource: replaceSource
     };
-    activePortfolioReassessmentSource = null;
+    clearActivePortfolioReassessmentState("pending-sync-created");
     persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
-    setDriveSyncStatus('syncing', 'Ready to sync to portfolio');
+    setDriveSyncStatus('syncing', replaceSource ? 'Ready to replace portfolio entry' : 'Ready to sync to portfolio');
 }
 
 var manualSyncInProgress = false;
@@ -7965,6 +7990,91 @@ var pendingPortfolioSync = null;
 var activePortfolioReassessmentSource = null;
 var lastSyncedPortfolioSessionSignature = "";
 
+function clearActivePortfolioReassessmentState(reason) {
+    activePortfolioReassessmentSource = null;
+}
+
+function normalizePortfolioReassessmentText(text) {
+    return String(text || "").replace(/\r\n?/g, "\n");
+}
+
+function getPortfolioSessionMatchFromData(portfolio, studentName, sessionId, sourceCreatedAt) {
+    if (!portfolio || !studentName) return null;
+    var studentData = portfolio[studentName];
+    var sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
+    for (var i = 0; i < sessions.length; i++) {
+        var session = sessions[i] || {};
+        if (String(session.id || "") === String(sessionId) || String(session.createdAt || "") === String(sessionId) || String(i) === String(sessionId) || (sourceCreatedAt && String(session.createdAt || "") === String(sourceCreatedAt))) {
+            return { session: session, index: i, sessions: sessions };
+        }
+    }
+    return null;
+}
+
+function getPreservedPortfolioTargetWords(oldSession, source, newSession) {
+    if (oldSession && oldSession.targetWords != null) return oldSession.targetWords;
+    if (source && source.sourceTargetWords != null) return source.sourceTargetWords;
+    if (oldSession && oldSession.assessmentSettings && oldSession.assessmentSettings.targetWordCount != null) return oldSession.assessmentSettings.targetWordCount;
+    if (source && source.sourceAssessmentSettings && source.sourceAssessmentSettings.targetWordCount != null) return source.sourceAssessmentSettings.targetWordCount;
+    return newSession && newSession.targetWords != null ? newSession.targetWords : 0;
+}
+
+function buildPortfolioReassessmentReplacementSession(oldSession, newSession, source) {
+    oldSession = oldSession || {};
+    newSession = newSession || {};
+    source = source || {};
+    var replacement = cloneWftJson(oldSession);
+    var overwriteFields = [
+        'title', 'overall', 'gradeLevel', 'gradeLabel', 'gradeTier', 'gradeProfileVersion',
+        'classGradeLevel', 'classGradeLabel', 'grammarStrictness', 'actualWords',
+        'categoryScores', 'assessScriptQuality', 'neatnessAssessed', 'correctedHtml',
+        'correctedMarkup', 'correctedPlainText', 'writingGenreInfo', 'writingGenre',
+        'writingSubtype', 'writingSafeReference', 'genreConfidence', 'feedbackSummary',
+        'detailedFeedback', 'sourceType', 'notebookPrintHtml'
+    ];
+    for (var i = 0; i < overwriteFields.length; i++) {
+        var field = overwriteFields[i];
+        if (Object.prototype.hasOwnProperty.call(newSession, field)) replacement[field] = cloneWftJson(newSession[field]);
+    }
+
+    if (Array.isArray(newSession.images) && newSession.images.length) {
+        replacement.images = cloneWftJson(newSession.images);
+    } else if (Array.isArray(oldSession.images)) {
+        replacement.images = cloneWftJson(oldSession.images);
+    } else {
+        replacement.images = [];
+    }
+
+    replacement.id = oldSession.id || source.sourceOriginalId || source.sourceSessionId || newSession.id;
+    replacement.createdAt = oldSession.createdAt || source.sourceCreatedAt || newSession.createdAt;
+    replacement.date = oldSession.date || newSession.date;
+
+    var preservedTargetWords = getPreservedPortfolioTargetWords(oldSession, source, newSession);
+    replacement.targetWords = preservedTargetWords;
+
+    var settings = cloneWftJson(newSession.assessmentSettings || oldSession.assessmentSettings || {});
+    if (!settings || typeof settings !== 'object') settings = {};
+    if (oldSession.assessmentSettings && oldSession.assessmentSettings.targetWordCount != null) {
+        settings.targetWordCount = oldSession.assessmentSettings.targetWordCount;
+    } else if (source.sourceAssessmentSettings && source.sourceAssessmentSettings.targetWordCount != null) {
+        settings.targetWordCount = source.sourceAssessmentSettings.targetWordCount;
+    } else if (preservedTargetWords != null) {
+        settings.targetWordCount = preservedTargetWords;
+    }
+    replacement.assessmentSettings = settings;
+
+    var sourceOriginalText = Object.prototype.hasOwnProperty.call(source, 'sourceOriginalText') ? source.sourceOriginalText : oldSession.originalText;
+    var newOriginalText = Object.prototype.hasOwnProperty.call(newSession, 'originalText') ? newSession.originalText : '';
+    var textEdited = normalizePortfolioReassessmentText(sourceOriginalText) !== normalizePortfolioReassessmentText(newOriginalText);
+    replacement.originalText = textEdited ? String(newOriginalText || '') : String(oldSession.originalText || sourceOriginalText || newOriginalText || '');
+    replacement.reassessmentTextEdited = !!textEdited;
+
+    replacement.lastReassessedAt = new Date().toISOString();
+    replacement.reassessmentCount = (Number(oldSession.reassessmentCount) || 0) + 1;
+    replacement.reassessedFromSessionId = oldSession.id || source.sourceSessionId || '';
+    return replacement;
+}
+
 function getActivePortfolioStudentName() {
     var select = document.getElementById("studentSelect");
     var selectValue = select ? String(select.value || "").trim() : "";
@@ -8113,50 +8223,23 @@ function commitPendingPortfolioReplacement(pending) {
     var newSession = pending.sessionData;
     if (!sourceStudent || !sourceSessionId || !targetStudent || !newSession) return false;
 
+    if (sourceStudent !== targetStudent) {
+        wftDebugWarn('[Portfolio] Reassessment replacement aborted because the target student changed.', { sourceStudent: sourceStudent, targetStudent: targetStudent });
+        if (driveAccessToken) setDriveSyncStatus('error', 'Reassessment was not saved because the selected student changed');
+        return false;
+    }
+
     var portfolio = getPortfolioData();
     if (!portfolio[sourceStudent]) portfolio[sourceStudent] = { sessions: [] };
-    if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
-
-    var sourceSessions = Array.isArray(portfolio[sourceStudent].sessions) ? portfolio[sourceStudent].sessions : [];
-    var removed = false;
-    var replaceIndex = -1;
-    for (var i = 0; i < sourceSessions.length; i++) {
-        var session = sourceSessions[i] || {};
-        if (String(session.id || "") === String(sourceSessionId) || String(session.createdAt || "") === String(sourceSessionId) || String(i) === String(sourceSessionId)) {
-            replaceIndex = i;
-            break;
-        }
+    var match = getPortfolioSessionMatchFromData(portfolio, sourceStudent, sourceSessionId, source.sourceCreatedAt);
+    if (!match) {
+        wftDebugWarn('[Portfolio] Reassessment replacement aborted because the source session was not found.', { sourceStudent: sourceStudent, sourceSessionId: sourceSessionId });
+        if (driveAccessToken) setDriveSyncStatus('error', 'Original portfolio entry not found');
+        return false;
     }
 
-    if (sourceStudent === targetStudent && replaceIndex >= 0) {
-        var oldSession = sourceSessions[replaceIndex] || {};
-        if ((oldSession.id || oldSession.createdAt) && (oldSession.id || oldSession.createdAt) !== newSession.id) {
-            recordSessionDeletion(sourceStudent, oldSession.id || oldSession.createdAt);
-        }
-        sourceSessions[replaceIndex] = newSession;
-        removed = true;
-    } else {
-        var filtered = [];
-        for (var j = 0; j < sourceSessions.length; j++) {
-            var old = sourceSessions[j] || {};
-            var isMatch = (String(old.id || "") === String(sourceSessionId) || String(old.createdAt || "") === String(sourceSessionId) || String(j) === String(sourceSessionId));
-            if (isMatch) {
-                removed = true;
-                recordSessionDeletion(sourceStudent, old.id || old.createdAt || sourceSessionId);
-            } else {
-                filtered.push(old);
-            }
-        }
-        portfolio[sourceStudent].sessions = filtered;
-        portfolio[targetStudent].sessions.push(newSession);
-        if (portfolio[targetStudent].sessions.length > 50) {
-            portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
-        }
-    }
-
-    if (!removed && sourceStudent !== targetStudent) {
-        portfolio[targetStudent].sessions.push(newSession);
-    }
+    var replacement = buildPortfolioReassessmentReplacementSession(match.session, newSession, source);
+    match.sessions[match.index] = replacement;
 
     savePortfolioData(portfolio);
     try { renderStudentPortfolio(); } catch (e) { wftDebugError('Portfolio saved, but portfolio rendering failed:', e); }
