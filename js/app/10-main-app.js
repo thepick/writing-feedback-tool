@@ -29,6 +29,9 @@ function switchTab(tab) {
     var portfolioBtn = document.getElementById("portfolioTabBtn");
     var adminBtn = document.getElementById("adminTabBtn");
     if (!toolShell || !adminPanel || !portfolioPanel || !toolBtn || !portfolioBtn || !adminBtn) return;
+    if (tab !== "tool" && typeof clearActivePortfolioReassessmentState === "function") {
+        clearActivePortfolioReassessmentState("navigated-away-from-tool");
+    }
 
     adminPanel.classList.remove("active");
     portfolioPanel.classList.remove("active");
@@ -1363,13 +1366,48 @@ function getSentenceLengths(text) {
     return lengths;
 }
 
+function normalizeSentenceStarterWord(word) {
+    var cleaned = String(word || "")
+        .replace(/^[\s"'`“”‘’([{<.,;:!?-]+/, "")
+        .replace(/[\s"'`“”‘’)]}>.,;:!?-]+$/, "")
+        .toLowerCase();
+    return cleaned;
+}
+
+function displaySentenceStarterWord(word) {
+    var cleaned = String(word || "")
+        .replace(/^[\s"'`“”‘’([{<.,;:!?-]+/, "")
+        .replace(/[\s"'`“”‘’)]}>.,;:!?-]+$/, "");
+    if (!cleaned) return "";
+    if (/^[a-z]+$/.test(cleaned)) return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+    return cleaned;
+}
+
+function isRepeatedSentenceStarterConcern(starterInfo) {
+    if (!starterInfo) return false;
+    return (starterInfo.count || 0) >= 3 && (starterInfo.ratio || 0) > 0.25;
+}
+
+function getRepeatedSentenceStarterFeedback(starterInfo) {
+    if (!isRepeatedSentenceStarterConcern(starterInfo)) return "";
+    var word = starterInfo.displayStarter || starterInfo.mostCommonStarter || "";
+    var count = starterInfo.count || 0;
+    var pct = Math.round((starterInfo.ratio || 0) * 100);
+    return 'You started ' + count + ' sentences with the word "' + word + '", which is ' + pct + '% of your sentences.';
+}
+
 function analyzeSentenceStarters(sentences) {
     var counts = {};
-    for (var i = 0; i < sentences.length; i++) {
-        var words = sentences[i].match(/\b[\w'-]+\b/g);
-        if (!words || !words.length) continue;
-        var starter = words[0].toLowerCase();
+    var displays = {};
+    var total = sentences ? sentences.length : 0;
+    for (var i = 0; i < total; i++) {
+        var rawSentence = String(sentences[i] || "");
+        var m = rawSentence.match(/^[\s"'`“”‘’([{<.,;:!?-]*([A-Za-z][A-Za-z'-]*)/);
+        if (!m) continue;
+        var starter = normalizeSentenceStarterWord(m[1]);
+        if (!starter) continue;
         counts[starter] = (counts[starter] || 0) + 1;
+        if (!displays[starter]) displays[starter] = displaySentenceStarterWord(m[1]);
     }
 
     var maxStarter = 0;
@@ -1381,11 +1419,17 @@ function analyzeSentenceStarters(sentences) {
         }
     }
 
-    return {
+    var ratio = total ? maxStarter / total : 0;
+    var info = {
         mostCommonStarter: mostCommon,
+        displayStarter: displays[mostCommon] || displaySentenceStarterWord(mostCommon),
         count: maxStarter,
-        ratio: sentences.length ? maxStarter / sentences.length : 0
+        sentenceCount: total,
+        ratio: ratio,
+        isRepeatedStarterConcern: false
     };
+    info.isRepeatedStarterConcern = isRepeatedSentenceStarterConcern(info);
+    return info;
 }
 
 function getShortSentenceRun(lengths) {
@@ -1413,7 +1457,7 @@ function analyzeSentenceVariety(lengths, sentences) {
             varietyLabel: "No data",
             bandSummary: "No sentence data",
             starterSummary: "No sentence data",
-            starterInfo: { mostCommonStarter: "", count: 0, ratio: 0 },
+            starterInfo: { mostCommonStarter: "", displayStarter: "", count: 0, ratio: 0 },
             shortRun: 0,
             flowRating: "No data"
         };
@@ -1459,8 +1503,8 @@ function analyzeSentenceVariety(lengths, sentences) {
     else score += 10;
 
     var starterInfo = analyzeSentenceStarters(sentences || []);
-    if (starterInfo.ratio > 0.6) score -= 20;
-    else if (starterInfo.ratio > 0.5) score -= 10;
+    if (starterInfo.isRepeatedStarterConcern && starterInfo.ratio > 0.6) score -= 20;
+    else if (starterInfo.isRepeatedStarterConcern && starterInfo.ratio > 0.5) score -= 10;
 
     var shortRun = getShortSentenceRun(lengths);
     if (shortRun >= 6) score -= 20;
@@ -1479,14 +1523,14 @@ function analyzeSentenceVariety(lengths, sentences) {
     else if (average >= 9 && score >= 65) flowRating = "Good";
     else if (average >= 9 || score >= 45) flowRating = "Developing";
 
-    if (starterInfo.ratio > 0.5 && flowRating === "Good") flowRating = "Developing";
-    if (starterInfo.ratio > 0.6) flowRating = "Needs Improvement";
+    if (starterInfo.isRepeatedStarterConcern && starterInfo.ratio > 0.5 && flowRating === "Good") flowRating = "Developing";
+    if (starterInfo.isRepeatedStarterConcern && starterInfo.ratio > 0.6) flowRating = "Needs Improvement";
     if (shortRun >= 4 && flowRating === "Good") flowRating = "Developing";
     if (shortRun >= 6) flowRating = "Needs Improvement";
 
     var starterSummary = "Starter variety looks balanced.";
     if (starterInfo.count > 0) {
-        starterSummary = 'Most common starter "' + starterInfo.mostCommonStarter + '" appears ' + starterInfo.count + ' time';
+        starterSummary = 'Most common starter "' + (starterInfo.displayStarter || starterInfo.mostCommonStarter) + '" appears ' + starterInfo.count + ' time';
         if (starterInfo.count !== 1) starterSummary += 's';
         starterSummary += ' (' + Math.round(starterInfo.ratio * 100) + '%).';
     }
@@ -1514,9 +1558,8 @@ function buildComputedFlowTip(flowData) {
         return "Try mixing short, medium, and longer sentences for smoother flow.";
     }
     var tips = [];
-    if (flowData.starterInfo && flowData.starterInfo.ratio > 0.25) {
-        var pct = Math.round(flowData.starterInfo.ratio * 100);
-        tips.push('About ' + pct + '% of sentences start with "' + flowData.starterInfo.mostCommonStarter + '" - try starting some sentences with a time word, a detail, or a different subject instead.');
+    if (flowData.starterInfo && isRepeatedSentenceStarterConcern(flowData.starterInfo)) {
+        tips.push(getRepeatedSentenceStarterFeedback(flowData.starterInfo) + ' Try starting some sentences with a time word, a detail, or a different subject instead.');
     }
     if (flowData.shortRun >= 4) {
         tips.push("Try combining some of the short sentences that are next to each other into one longer sentence.");
@@ -1880,24 +1923,25 @@ function buildFlowReasonFromData(score, flowData) {
     var n = Number(score);
     if (!flowData) return "";
     var starterPct = flowData.starterInfo ? Math.round(flowData.starterInfo.ratio * 100) : 0;
-    var starterWord = flowData.starterInfo ? flowData.starterInfo.mostCommonStarter : "";
-    var starterBad = flowData.starterInfo && flowData.starterInfo.ratio > 0.25;
-    var starterSerious = flowData.starterInfo && flowData.starterInfo.ratio > 0.33;
+    var starterWord = flowData.starterInfo ? (flowData.starterInfo.displayStarter || flowData.starterInfo.mostCommonStarter) : "";
+    var starterCount = flowData.starterInfo ? (flowData.starterInfo.count || 0) : 0;
+    var starterBad = isRepeatedSentenceStarterConcern(flowData.starterInfo);
+    var starterSerious = starterBad && flowData.starterInfo && flowData.starterInfo.ratio > 0.33;
     var shortRunBad = flowData.shortRun >= 4;
     var shortRunMild = flowData.shortRun >= 3;
 
     if (n <= 6) {
         if (starterSerious && shortRunBad) {
-            return 'Your ideas are easy to understand, but ' + starterPct + '% of sentences start with "' + starterWord + '" and several short sentences stack up in a row, which makes the rhythm feel choppy and repetitive.';
+            return 'Your ideas are easy to understand, but you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), and several short sentences stack up in a row, which makes the rhythm feel choppy and repetitive.';
         }
         if (starterSerious) {
-            return starterPct + '% of sentences start with "' + starterWord + '", which makes the rhythm sound repetitive - try opening some sentences differently.';
+            return 'You started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), which makes the rhythm sound repetitive - try opening some sentences differently.';
         }
         if (shortRunBad) {
             return "Your ideas are easy to understand, but many short sentences in a row make parts of the writing sound choppy.";
         }
         if (starterBad) {
-            return 'Your story stays clear, but about ' + starterPct + '% of sentences begin with "' + starterWord + '", so varying the sentence starters would help the flow.';
+            return 'Your story stays clear, but you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), so varying the sentence starters would help the flow.';
         }
         if (flowData.varietyScore < 55) {
             return "Your writing makes sense, but the sentence rhythm feels uneven, so mixing short and longer sentences will help it flow better.";
@@ -1905,10 +1949,10 @@ function buildFlowReasonFromData(score, flowData) {
     }
     if (n <= 8) {
         if (starterBad && shortRunMild) {
-            return 'Your writing flows fairly well, but ' + starterPct + '% of sentences open with "' + starterWord + '" and some short sentences cluster together - both are worth fixing for a smoother read.';
+            return 'Your writing flows fairly well, but you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), and some short sentences cluster together - both are worth fixing for a smoother read.';
         }
         if (starterBad) {
-            return 'Your ideas connect well, but starting ' + starterPct + '% of sentences with "' + starterWord + '" makes the rhythm feel a little repetitive - try varying some sentence openers.';
+            return 'Your ideas connect well, but starting ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%) makes the rhythm feel a little repetitive - try varying some sentence openers.';
         }
         if (shortRunMild) {
             return "Your story moves along clearly, and adding a few longer sentences will help the rhythm feel smoother.";
@@ -1924,16 +1968,17 @@ function buildFlowEvidenceFromData(score, flowData) {
     var n = Number(score);
     if (!flowData) return "";
     var starterPct = flowData.starterInfo ? Math.round(flowData.starterInfo.ratio * 100) : 0;
-    var starterWord = flowData.starterInfo ? flowData.starterInfo.mostCommonStarter : "";
-    var starterBad = flowData.starterInfo && flowData.starterInfo.ratio > 0.25;
+    var starterWord = flowData.starterInfo ? (flowData.starterInfo.displayStarter || flowData.starterInfo.mostCommonStarter) : "";
+    var starterCount = flowData.starterInfo ? (flowData.starterInfo.count || 0) : 0;
+    var starterBad = isRepeatedSentenceStarterConcern(flowData.starterInfo);
     var shortRunBad = flowData.shortRun >= 4;
 
     if (n <= 6) {
         if (starterBad && shortRunBad) {
-            return '"' + starterWord + '" opens ' + starterPct + '% of sentences, and there are also several very short sentences stacked in a row, both of which disrupt the rhythm.';
+            return 'You started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), and there are also several very short sentences stacked in a row, both of which disrupt the rhythm.';
         }
         if (starterBad) {
-            return '"' + starterWord + '" is used to open ' + starterPct + '% of sentences, which makes the rhythm feel repetitive in places.';
+            return 'You started ' + starterCount + ' sentences with the word "' + starterWord + '", which is ' + starterPct + '% of your sentences and makes the rhythm feel repetitive in places.';
         }
         if (shortRunBad) {
             return "There are several very short sentences in a row, which makes the rhythm feel jumpy in places.";
@@ -1942,7 +1987,7 @@ function buildFlowEvidenceFromData(score, flowData) {
     }
     if (n <= 8) {
         if (starterBad) {
-            return '"' + starterWord + '" opens ' + starterPct + '% of sentences, which creates a slightly repetitive rhythm even though the sentence lengths are varied.';
+            return 'You started ' + starterCount + ' sentences with the word "' + starterWord + '", which is ' + starterPct + '% of your sentences and creates a slightly repetitive rhythm even though the sentence lengths are varied.';
         }
         if (flowData.varietyScore < 65) {
             return "Some sentence variety is present, but the rhythm would be smoother with a wider mix of sentence lengths.";
@@ -2207,9 +2252,8 @@ function parseDetailedAssessment(step3Text) {
         titleSuggestion: ""
     };
 
-    function captureCategory(label, nextLabelRegex) {
-        var labelSafe = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        var pattern = new RegExp("\\*\\*" + labelSafe + ":\\*\\*\\s*((?:10|9|8|7|6|5|4)|Missing)\\s*(?:\\/" + RUBRIC_MAX + ")?([\\s\\S]*?)" + nextLabelRegex, "i");
+    function captureCategoryByPattern(label, labelPattern, nextLabelRegex) {
+        var pattern = new RegExp("(?:^|\\n)\\s*(?:#{1,6}\\s*)?(?:\\*\\*)?\\s*" + labelPattern + "\\s*(?:\\*\\*)?\\s*(?::|-)\\s*(?:\\*\\*)?\\s*((?:10|9|8|7|6|5|4)|Missing)\\s*(?:\\/\\s*" + RUBRIC_MAX + ")?(?:\\s*(?:\\*\\*)?)?([\\s\\S]*?)(?=" + nextLabelRegex + "|$)", "i");
         var m = step3Text.match(pattern);
         if (!m) return null;
         var body = (m[2] || "").trim();
@@ -2255,6 +2299,15 @@ function parseDetailedAssessment(step3Text) {
         };
     }
 
+    function captureCategory(label, nextLabelRegex) {
+        var labelSafe = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return captureCategoryByPattern(label, labelSafe, nextLabelRegex);
+    }
+
+    function categoryHeadingTerminator(labelPattern) {
+        return "(?:^|\\n)\\s*(?:#{1,6}\\s*)?(?:\\*\\*)?\\s*" + labelPattern + "\\s*(?:\\*\\*)?\\s*(?::|-|\\n)";
+    }
+
     var c1 = captureCategory("1. Clear Ideas & Details", "\\*\\*2\\. Grammar:|##\\s*Grow Goal Selection");
     var c2 = captureCategory("2. Grammar", "\\*\\*3\\. Word Choice:|##\\s*Grow Goal Selection");
     var c3 = captureCategory("3. Word Choice", "\\*\\*4\\. Organization:|##\\s*Grow Goal Selection");
@@ -2264,12 +2317,13 @@ function parseDetailedAssessment(step3Text) {
     // NOTE: Neatness never appears in the Step 3 response (it is assessed separately via image),
     // so it must NOT be used as a terminator here — doing so caused Flow and Spelling &
     // Punctuation to always fall through to their extractScoreNearLabel fallbacks.
-    var flowNextLabel = "\\*\\*6\\. Spelling & Punctuation:|##\\s*Grow Goal Selection";
+    var spellingLabelPattern = "(?:6\\.\\s*)?Spelling\\s*(?:and|&)\\s*Punctuation";
+    var flowNextLabel = categoryHeadingTerminator(spellingLabelPattern) + "|(?:^|\\n)\\s*##\\s*Grow Goal Selection";
     var c5_flow = captureCategory("5. Flow", flowNextLabel);
 
     // Spelling & Punctuation terminates at the Grow Goal section.
-    var spellNextLabel = "##\\s*Grow Goal Selection|\\*\\*Your Writing Strength:";
-    var c5 = captureCategory("6. Spelling & Punctuation", spellNextLabel);
+    var spellNextLabel = "(?:^|\\n)\\s*##\\s*Grow Goal Selection|(?:^|\\n)\\s*(?:\\*\\*)?Your Writing Strength:";
+    var c5 = captureCategoryByPattern("6. Spelling & Punctuation", spellingLabelPattern, spellNextLabel);
 
     if (c1) result.categories["Ideas & Details"] = c1;
     if (c2) result.categories["Grammar"] = c2;
@@ -2375,7 +2429,9 @@ function parseDetailedAssessment(step3Text) {
     if (!c5) {
         var sSpellingPunctuation = extractScoreNearLabel(step3Text, [
             "6. Spelling & Punctuation",
+            "6. Spelling and Punctuation",
             "5. Spelling & Punctuation",
+            "5. Spelling and Punctuation",
             "Spelling & Punctuation",
             "Spelling and Punctuation"
         ]);
@@ -2514,18 +2570,19 @@ function buildComputedFlowQuickNote(flowData) {
     if (!flowData || !flowData.sentenceCount) {
         return "Try mixing short, medium, and longer sentences for smoother flow.";
     }
-    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "", displayStarter: "" };
     var starterPct = Math.round((starterInfo.ratio || 0) * 100);
-    var starterWord = starterInfo.mostCommonStarter || "";
-    var starterBad = starterInfo.ratio > 0.25 && starterWord;
+    var starterWord = starterInfo.displayStarter || starterInfo.mostCommonStarter || "";
+    var starterCount = starterInfo.count || 0;
+    var starterBad = isRepeatedSentenceStarterConcern(starterInfo) && starterWord;
     var shortRunBad = (flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0;
     var dominant = getDominantSentenceBand(flowData);
 
     if (starterBad && shortRunBad) {
-        return 'Try varying sentence starters and combining some short sentences - about ' + starterPct + '% of sentences start with "' + starterWord + '", and some short sentences sit close together.';
+        return 'Try varying sentence starters and combining some short sentences - you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), and some short sentences sit close together.';
     }
     if (starterBad) {
-        return 'Try varying sentence starters - about ' + starterPct + '% of sentences start with "' + starterWord + '", which can make the rhythm sound repetitive.';
+        return 'Try varying sentence starters - you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), which can make the rhythm sound repetitive.';
     }
     if (shortRunBad) {
         return "Try combining some short sentences that are next to each other so the rhythm feels less choppy.";
@@ -2554,11 +2611,12 @@ function buildComputedFlowQuickNote(flowData) {
 function buildFlowSentenceVarietyLabel(flowData) {
     if (!flowData) return "";
     var counts = "(short: " + flowData.shortCount + ", medium: " + flowData.mediumCount + ", long: " + flowData.longCount + ")";
-    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "", displayStarter: "" };
     var starterPct = Math.round((starterInfo.ratio || 0) * 100);
-    var starterWord = starterInfo.mostCommonStarter || "";
-    var starterBad = starterInfo.ratio > 0.25 && starterWord;
-    var starterNote = starterBad ? ' Also, "' + starterWord + '" opens ' + starterPct + '% of sentences, which creates some repetition.' : "";
+    var starterWord = starterInfo.displayStarter || starterInfo.mostCommonStarter || "";
+    var starterCount = starterInfo.count || 0;
+    var starterBad = isRepeatedSentenceStarterConcern(starterInfo) && starterWord;
+    var starterNote = starterBad ? ' Also, you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%), which creates some repetition.' : "";
     var shortRunBad = (flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0;
     var dominant = getDominantSentenceBand(flowData);
 
@@ -2599,14 +2657,16 @@ function buildFlowSentenceVarietyLabel(flowData) {
 
 function buildFlowPatternSummary(flowData) {
     if (!flowData || !flowData.sentenceCount) return "The writing needs more sentence evidence before a clear flow pattern can be described.";
-    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
-    var starterWord = starterInfo.mostCommonStarter || "";
-    var starterBad = starterWord && starterInfo.ratio > 0.25;
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "", displayStarter: "" };
+    var starterWord = starterInfo.displayStarter || starterInfo.mostCommonStarter || "";
+    var starterCount = starterInfo.count || 0;
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterBad = starterWord && isRepeatedSentenceStarterConcern(starterInfo);
     if (starterBad && (flowData.shortCount || 0) === 0) {
-        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '". Adding a few shorter sentences could also improve rhythm.';
+        return 'Your writing is easy to follow, but the rhythm feels repetitive because you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%). Adding a few shorter sentences could also improve rhythm.';
     }
     if (starterBad) {
-        return 'Your writing is easy to follow, but the rhythm feels repetitive because many sentences begin with "' + starterWord + '".';
+        return 'Your writing is easy to follow, but the rhythm feels repetitive because you started ' + starterCount + ' sentences with the word "' + starterWord + '" (' + starterPct + '%).';
     }
     if ((flowData.shortCount || 0) === 0) {
         return "Your writing uses mostly medium and long sentences, so adding a few shorter sentences could create more rhythm and contrast.";
@@ -2620,9 +2680,11 @@ function buildFlowPatternSummary(flowData) {
 function buildFlowPatternNotes(flowData) {
     if (!flowData || !flowData.sentenceCount) return [];
     var notes = [];
-    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "", count: 0 };
-    var starterWord = starterInfo.mostCommonStarter || "";
-    var starterBad = starterWord && starterInfo.ratio > 0.25;
+    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "", displayStarter: "", count: 0 };
+    var starterWord = starterInfo.displayStarter || starterInfo.mostCommonStarter || "";
+    var starterCount = starterInfo.count || 0;
+    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
+    var starterBad = starterWord && isRepeatedSentenceStarterConcern(starterInfo);
     var lengthNote;
     if ((flowData.shortCount || 0) === 0) {
         lengthNote = "The writing uses mostly medium and long sentences. Adding a few shorter sentences could add contrast.";
@@ -2637,7 +2699,7 @@ function buildFlowPatternNotes(flowData) {
 
     var starterNote;
     if (starterBad) {
-        starterNote = 'Many sentences begin with "' + starterWord + '", which can make the rhythm feel repetitive.';
+        starterNote = 'You started ' + starterCount + ' sentences with the word "' + starterWord + '", which is ' + starterPct + '% of your sentences and can make the rhythm feel repetitive.';
     } else if (starterWord) {
         starterNote = "Sentence starters show some variety and do not create a major repeated pattern.";
     } else {
@@ -7973,7 +8035,13 @@ function reassessPortfolioSession(studentName, sessionId) {
 
     activePortfolioReassessmentSource = {
         sourceStudentName: studentName,
-        sourceSessionId: sessionId
+        sourceSessionId: session.id || session.createdAt || sessionId,
+        sourceOriginalId: session.id || "",
+        sourceCreatedAt: session.createdAt || "",
+        sourceOriginalText: session.originalText || reassessText || "",
+        sourceTargetWords: session.targetWords != null ? session.targetWords : (session.assessmentSettings && session.assessmentSettings.targetWordCount != null ? session.assessmentSettings.targetWordCount : 0),
+        sourceAssessmentSettings: cloneWftJson(session.assessmentSettings || {}),
+        startedAt: new Date().toISOString()
     };
 
     switchTab("tool");
@@ -8343,9 +8411,11 @@ async function analyzeWriting() {
             };
         }
 
-        // Spelling & Punctuation fallback (core category - always needs an entry)
+        // Spelling & Punctuation fallback (core category - always needs an entry).
+        // If the detailed parser misses a flexible heading, inherit the quick rubric score
+        // before showing this category as missing.
+        var spellQuick = parsed1.quickRubric["Spelling & Punctuation"] || { score: null, reason: getEvidenceNote("Spelling & Punctuation") };
         if (!detailed.categories["Spelling & Punctuation"]) {
-            var spellQuick = parsed1.quickRubric["Spelling & Punctuation"] || { score: null, reason: getEvidenceNote("Spelling & Punctuation") };
             detailed.categories["Spelling & Punctuation"] = {
                 score: eligibility["Spelling & Punctuation"] ? spellQuick.score : null,
                 evidence: "Spelling and punctuation were reviewed in this piece.",
@@ -8354,6 +8424,14 @@ async function analyzeWriting() {
                 sentenceVariety: "",
                 rawBody: ""
             };
+        } else if (eligibility["Spelling & Punctuation"] && detailed.categories["Spelling & Punctuation"].score == null && spellQuick.score != null) {
+            detailed.categories["Spelling & Punctuation"].score = spellQuick.score;
+            if (!detailed.categories["Spelling & Punctuation"].growthTip) {
+                detailed.categories["Spelling & Punctuation"].growthTip = spellQuick.reason || "Check your spelling and punctuation carefully before finishing your work.";
+            }
+            if (!detailed.categories["Spelling & Punctuation"].evidence) {
+                detailed.categories["Spelling & Punctuation"].evidence = "Spelling and punctuation were reviewed in this piece.";
+            }
         }
 
         // Flow fallback (sentence rhythm - computed support applied above by applyComputedFlowToFlow)
@@ -8510,6 +8588,9 @@ async function analyzeWriting() {
 function requestStopAnalysis() {
     if (!isAnalyzing) return;
     cancelAnalysis = true;
+    if (typeof clearActivePortfolioReassessmentState === "function") {
+        clearActivePortfolioReassessmentState("analysis-cancelled");
+    }
     var debugEl = document.getElementById("debugRaw");
     if (debugEl) debugEl.textContent = "Stopping analysis...";
     var stopBtn = document.getElementById("stopAnalysisBtn");
@@ -8523,6 +8604,9 @@ function requestStopAnalysis() {
 }
 
 function clearWritingArea() {
+    if (typeof clearActivePortfolioReassessmentState === "function") {
+        clearActivePortfolioReassessmentState("writing-area-cleared");
+    }
     var ta = document.getElementById("studentWriting");
     if (ta) {
         ta.value = '';
