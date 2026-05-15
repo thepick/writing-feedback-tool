@@ -7191,13 +7191,15 @@ function pickTeacherComment(data) {
         ? "You especially showed strength in " + categoryDisplayLabel(highest) + ". " + topEvidence
         : "Your effort really shows in this piece.";
 
-    var lowestGrowthTip = cleanNotebookSentence(categories[lowest] && categories[lowest].growthTip ? categories[lowest].growthTip : "");
+    var lowestGrowthTip = cleanNotebookSentence(goalPlan.nextTime || "");
+    if (!lowestGrowthTip || isGenericNotebookGuidance(lowestGrowthTip)) {
+        lowestGrowthTip = cleanNotebookSentence(categories[lowest] && categories[lowest].growthTip ? categories[lowest].growthTip : "");
+    }
+
     var coaching = "Keep revising carefully to make your writing even stronger.";
     if (lowestGrowthTip) {
         var firstSentenceMatch = lowestGrowthTip.match(/^[^.!?]+[.!?]?/);
         coaching = firstSentenceMatch && firstSentenceMatch[0] ? cleanNotebookSentence(firstSentenceMatch[0]) : lowestGrowthTip;
-    } else if (goalPlan.nextTime) {
-        coaching = cleanNotebookSentence(goalPlan.nextTime);
     }
 
     return sanitizeGenreReferenceInFeedback((opening + " " + praise + " " + coaching).replace(/\s+/g, " ").trim(), genreInfo);
@@ -7385,10 +7387,24 @@ function getGoalPlan(data) {
     var detailed = data && data.detailed ? data.detailed : null;
     var categories = data && data.detailed && data.detailed.categories ? data.detailed.categories : {};
     var lowestCategory = categories[lowest] || {};
-    var growthTip = normalizeGrowGoalStrategyForSentence(cleanNotebookSentence(lowestCategory.growthTip || ""));
+    var lowestCategoryForGoal = lowestCategory;
+    var lowestScore = data && data.categoryScores ? data.categoryScores[lowest] : null;
+
+    if (lowestScore != null && lowestScore !== "" && !isNaN(Number(lowestScore))) {
+        lowestCategoryForGoal = {};
+        for (var prop in lowestCategory) {
+            if (Object.prototype.hasOwnProperty.call(lowestCategory, prop)) lowestCategoryForGoal[prop] = lowestCategory[prop];
+        }
+        lowestCategoryForGoal.score = Number(lowestScore);
+    }
+
+    var lowestFeedback = buildStudentFeedbackForCategory(lowest, lowestCategoryForGoal);
+    var smartGoal = cleanNotebookSentence(lowestFeedback.growthTip || "");
+    var rawFallback = cleanNotebookSentence(lowestCategory.growthTip || "");
+    var growthTip = smartGoal || rawFallback || "Read my work carefully and fix one thing before I hand it in.";
     var plan = {
         growGoal: "Check my writing carefully before I submit it.",
-        nextTime: growthTip || "Read my work carefully and fix one thing before I hand it in.",
+        nextTime: growthTip,
         checklist: [
             "Read my work carefully before I submit it.",
             "Fix one thing that I notice during proofreading."
@@ -7410,9 +7426,13 @@ function getGoalPlan(data) {
     }
 
     if (detailed) {
-        var detailedGrowGoal = cleanNotebookSentence(detailed.growGoal || "");
-        if (detailedGrowGoal && !isGenericNotebookGuidance(detailedGrowGoal) && textMentionsCategory(detailedGrowGoal, lowest)) {
-            plan.growGoal = detailedGrowGoal;
+        if (smartGoal && !isGenericNotebookGuidance(smartGoal)) {
+            plan.growGoal = smartGoal;
+        } else {
+            var detailedGrowGoal = cleanNotebookSentence(detailed.growGoal || "");
+            if (detailedGrowGoal && !isGenericNotebookGuidance(detailedGrowGoal) && textMentionsCategory(detailedGrowGoal, lowest)) {
+                plan.growGoal = detailedGrowGoal;
+            }
         }
         plan.checklist = buildNotebookActionChecklist(data, plan.checklist, plan.nextTime, plan.growGoal);
     }
