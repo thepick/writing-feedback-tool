@@ -7191,15 +7191,10 @@ function pickTeacherComment(data) {
         ? "You especially showed strength in " + categoryDisplayLabel(highest) + ". " + topEvidence
         : "Your effort really shows in this piece.";
 
-    var lowestGrowthTip = cleanNotebookSentence(goalPlan.nextTime || "");
-    if (!lowestGrowthTip || isGenericNotebookGuidance(lowestGrowthTip)) {
-        lowestGrowthTip = cleanNotebookSentence(categories[lowest] && categories[lowest].growthTip ? categories[lowest].growthTip : "");
-    }
-
-    var coaching = "Keep revising carefully to make your writing even stronger.";
-    if (lowestGrowthTip) {
-        var firstSentenceMatch = lowestGrowthTip.match(/^[^.!?]+[.!?]?/);
-        coaching = firstSentenceMatch && firstSentenceMatch[0] ? cleanNotebookSentence(firstSentenceMatch[0]) : lowestGrowthTip;
+    var lowestFeedback = buildNotebookGoalFeedback(data, lowest);
+    var coaching = buildNotebookTeacherCoachingSentence(lowest, goalPlan, lowestFeedback, data);
+    if (!coaching || isGenericNotebookGuidance(coaching)) {
+        coaching = "Keep revising carefully to make your writing even stronger.";
     }
 
     return sanitizeGenreReferenceInFeedback((opening + " " + praise + " " + coaching).replace(/\s+/g, " ").trim(), genreInfo);
@@ -7369,6 +7364,381 @@ function textMentionsCategory(text, category) {
     return false;
 }
 
+function notebookNormalizedTextHasAny(text, terms) {
+    var value = normalizeNotebookMatchText(text);
+    if (!value) return false;
+    for (var i = 0; i < terms.length; i++) {
+        var term = normalizeNotebookMatchText(terms[i]);
+        if (!term) continue;
+        if ((" " + value + " ").indexOf(" " + term + " ") !== -1) return true;
+    }
+    return false;
+}
+
+function getNotebookFeedbackEvidenceText(feedback, actionTip) {
+    var rows = feedback && feedback.noticeRows ? feedback.noticeRows : [];
+    var parts = [actionTip || ""];
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i] || {};
+        parts.push(row.area || "");
+        parts.push(row.comment || "");
+    }
+    if (feedback && feedback.teacherComment) parts.push(feedback.teacherComment);
+    return normalizeNotebookMatchText(parts.join(" "));
+}
+
+function getNotebookGoalCategoryItem(data, category) {
+    data = data || {};
+    var detailed = data.detailed || {};
+    var categories = detailed.categories || {};
+    var source = categories[category] || {};
+    var copy = {};
+    var prop;
+    for (prop in source) {
+        if (Object.prototype.hasOwnProperty.call(source, prop)) copy[prop] = source[prop];
+    }
+    var score = data.categoryScores && data.categoryScores[category] != null ? data.categoryScores[category] : copy.score;
+    if (score != null && score !== "" && !isNaN(Number(score))) copy.score = Number(score);
+    return copy;
+}
+
+function buildNotebookGoalFeedback(data, category) {
+    return buildStudentFeedbackForCategory(category, getNotebookGoalCategoryItem(data, category));
+}
+
+function collectNotebookTopicSourceText(data) {
+    data = data || {};
+    var parts = [];
+    var detailed = data.detailed || {};
+    if (detailed.strength) parts.push(detailed.strength);
+    if (detailed.keepWriting) parts.push(detailed.keepWriting);
+    var categories = detailed.categories || {};
+    var order = ["Ideas & Details", "Organization", "Word Choice", "Flow", "Grammar", "Spelling & Punctuation", "Neatness"];
+    for (var i = 0; i < order.length; i++) {
+        var item = categories[order[i]] || {};
+        parts.push(item.evidence || "");
+        parts.push(item.teacherComment || "");
+        parts.push(item.growthTip || "");
+        if (item.noticeRows && item.noticeRows.length) {
+            for (var j = 0; j < item.noticeRows.length; j++) {
+                var row = item.noticeRows[j] || {};
+                parts.push(row.comment || "");
+            }
+        }
+    }
+    if (typeof document !== "undefined") {
+        var writingEl = document.getElementById("studentWriting");
+        if (writingEl && writingEl.value) parts.push(writingEl.value);
+    }
+    return parts.join(" ");
+}
+
+function isNotebookWeakTopicHint(value) {
+    var text = String(value || "").replace(/["']/g, "").replace(/\s+/g, " ").trim();
+    var normalized = normalizeNotebookMatchText(text);
+    if (!normalized || normalized.length < 2) return true;
+    if (normalized === "i" || normalized === "me" || normalized === "my" || normalized === "you" || normalized === "your") return true;
+    if (normalized === "story" || normalized === "writing" || normalized === "piece" || normalized === "paragraph") return true;
+    if (normalized === "clear") return true;
+    return false;
+}
+
+function isNotebookCommonProperWord(value) {
+    var word = String(value || "").replace(/\s+/g, " ").trim();
+    var common = {
+        A: true, An: true, And: true, Area: true, Before: true, Clear: true, Comment: true,
+        Details: true, Developing: true, During: true, Flow: true, Grammar: true, Growth: true,
+        Ideas: true, Keeping: true, Most: true, Next: true, Organization: true, Punctuation: true,
+        Read: true, Sentence: true, Some: true, Spelling: true, Teacher: true, The: true, This: true,
+        Try: true, Using: true, Vocabulary: true, What: true, When: true, While: true, Word: true,
+        Writing: true, Strength: true, Goal: true, Choice: true, Neatness: true, Conventions: true,
+        One: true, First: true, Then: true, After: true, Finally: true, Suddenly: true, Today: true,
+        Monday: true, Tuesday: true, Wednesday: true, Thursday: true, Friday: true, Saturday: true, Sunday: true,
+        January: true, February: true, March: true, April: true, May: true, June: true, July: true,
+        August: true, September: true, October: true, November: true, December: true,
+        Your: true, You: true
+    };
+    if (common[word]) return true;
+    var parts = word.split(/\s+/);
+    for (var i = 0; i < parts.length; i++) {
+        if (common[parts[i]]) return true;
+    }
+    return false;
+}
+
+function getNotebookPieceTopicHint(data) {
+    var source = collectNotebookTopicSourceText(data);
+    if (!source) return "";
+
+    var proper = source.match(/\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?\b/g) || [];
+    for (var i = 0; i < proper.length; i++) {
+        var candidate = proper[i].replace(/\s+/g, " ").trim();
+        if (!candidate || isNotebookCommonProperWord(candidate)) continue;
+        if (isNotebookWeakTopicHint(candidate)) continue;
+        return candidate;
+    }
+
+    var quoteRegex = /["']([^"']{2,40})["']/g;
+    var match;
+    while ((match = quoteRegex.exec(source)) !== null) {
+        var quoted = String(match[1] || "").replace(/\s+/g, " ").trim();
+        if (!isNotebookWeakTopicHint(quoted)) return quoted;
+    }
+    return "";
+}
+
+function getNotebookGenreReference(data) {
+    var text = "";
+    if (typeof document !== "undefined") {
+        var writingEl = document.getElementById("studentWriting");
+        if (writingEl && writingEl.value) text = writingEl.value;
+    }
+    var genreInfo = normalizeWritingGenreInfo((data && data.writingGenre) || (data && data.detailed && data.detailed.writingGenre) || currentWritingGenreInfo || detectWritingGenreInfo(text));
+    var genre = String(genreInfo.safeReference || "writing").replace(/\s+/g, " ").trim().toLowerCase();
+    if (!genre || genre === "piece" || genre === "piece of writing") return "writing";
+    return genre;
+}
+
+function getNotebookTopicReference(data) {
+    var genre = getNotebookGenreReference(data);
+    var hint = getNotebookPieceTopicHint(data);
+    if (!hint) return "my " + genre;
+    if (/^[A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)?$/.test(hint)) return "my " + hint + " " + genre;
+    return "my " + genre + " about " + hint;
+}
+
+function getNotebookRepeatedStarter(feedback) {
+    var rows = feedback && feedback.noticeRows ? feedback.noticeRows : [];
+    for (var i = 0; i < rows.length; i++) {
+        var text = notebookRowText(rows[i]);
+        var match = text.match(/started\s+\d+\s+sentences?\s+with\s+the\s+word\s+["']?([^"'.,;:!?\s]+)["']?/i);
+        if (match && match[1]) return String(match[1]).replace(/["']/g, "").trim();
+    }
+    return "";
+}
+
+function buildNotebookFallbackSkillGoal(category) {
+    if (category === "Grammar") return "Check my grammar carefully before I submit my work.";
+    if (category === "Spelling & Punctuation") return "Double-check my spelling and punctuation before I hand in my work.";
+    if (category === "Organization") return "Organize my ideas so my writing has a clear beginning, middle, and end.";
+    if (category === "Flow") return "Connect some of my ideas so my writing flows more smoothly.";
+    if (category === "Ideas & Details") return "Add a few more details to explain my ideas clearly.";
+    if (category === "Word Choice" || category === "Vocabulary") return "Choose a few stronger words to make my writing clearer.";
+    if (category === "Neatness") return "Keep my handwriting neat so my writing is easy to read.";
+    return "Check my writing carefully before I submit it.";
+}
+
+function buildFlowSkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var topic = getNotebookTopicReference(data);
+    var starter = getNotebookRepeatedStarter(feedback);
+    var starters = notebookNormalizedTextHasAny(text, ["sentence starter", "sentence starters", "begin", "started", "same word", "repeated", "repetitive"]);
+    var length = notebookNormalizedTextHasAny(text, ["sentence length", "short sentence", "long sentence", "medium and long", "mostly medium", "mostly long", "rhythm"]);
+    var connections = notebookNormalizedTextHasAny(text, ["transition", "transitions", "connect", "connections", "jumps", "smooth", "smoother"]);
+
+    if (starters && length && connections) return "Vary my sentence openings, sentence lengths, and connections so " + topic + " has a smoother rhythm.";
+    if (starters && length) return "Vary my sentence openings and add a few shorter sentences so " + topic + " sounds smoother and less repetitive.";
+    if (starters && connections) return "Vary my sentence openings and add clearer connections so " + topic + " flows more smoothly.";
+    if (length && connections) return "Use a mix of sentence lengths and clearer transitions so " + topic + " flows more smoothly.";
+    if (starters && starter) return "Vary sentence openings that begin with \"" + starter + "\" so " + topic + " sounds less repetitive.";
+    if (starters) return "Vary how my sentences begin so " + topic + " sounds less repetitive.";
+    if (length) return "Use a mix of short, medium, and long sentences so " + topic + " has a smoother rhythm.";
+    if (connections) return "Use clearer transitions so the ideas in " + topic + " connect smoothly.";
+    return "";
+}
+
+function buildGrammarSkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var topic = getNotebookTopicReference(data);
+    var tense = notebookNormalizedTextHasAny(text, ["verb", "verbs", "tense", "tenses", "agreement", "past tense", "present tense"]);
+    var boundaries = notebookNormalizedTextHasAny(text, ["sentence boundaries", "run on", "run ons", "run", "clearer breaks", "complete sentence", "period", "ending mark"]);
+    var phrasing = notebookNormalizedTextHasAny(text, ["word order", "phrasing", "natural", "clearer phrasing"]);
+    var pronouns = notebookNormalizedTextHasAny(text, ["pronoun", "pronouns", "reference", "references"]);
+
+    if (tense && boundaries) return "Keep my verb tense consistent and use clearer sentence breaks so " + topic + " is easier to follow.";
+    if (tense && phrasing) return "Keep my verb tense consistent and make sentences sound natural so " + topic + " is clear.";
+    if (boundaries && phrasing) return "Use clear sentence breaks and natural phrasing so " + topic + " is easy to read.";
+    if (tense) return "Keep my verb tense consistent so the timeline in " + topic + " is easy to follow.";
+    if (boundaries) return "Use complete sentences with clear breaks so the ideas in " + topic + " are easy to follow.";
+    if (phrasing) return "Make my sentences sound clear and natural so " + topic + " is easy to understand.";
+    if (pronouns) return "Use clear pronouns so the reader knows exactly who or what I mean in " + topic + ".";
+    return "";
+}
+
+function buildConventionsSkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var topic = getNotebookTopicReference(data);
+    var commas = notebookNormalizedTextHasAny(text, ["comma", "commas", "introductory phrase", "compound sentence"]);
+    var capitals = notebookNormalizedTextHasAny(text, ["capital", "capitals", "capitalization"]);
+    var endings = notebookNormalizedTextHasAny(text, ["ending punctuation", "ending mark", "period", "question mark", "exclamation"]);
+    var spelling = notebookNormalizedTextHasAny(text, ["spelling", "spelled", "spell"]);
+
+    if (commas && spelling) return "Proofread commas and spelling so the reader can focus on the ideas in " + topic + ".";
+    if ((commas || endings) && capitals) return "Check punctuation and capitals so " + topic + " looks polished and is easy to read.";
+    if (commas || endings) return "Use punctuation carefully so the reader knows when to pause in " + topic + ".";
+    if (spelling && capitals) return "Check spelling and capitals so " + topic + " is clear and polished.";
+    if (spelling) return "Check spelling carefully so the reader can focus on the ideas in " + topic + ".";
+    if (capitals) return "Check capitals so " + topic + " looks polished and easy to read.";
+    return "";
+}
+
+function buildOrganizationSkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var topic = getNotebookTopicReference(data);
+    var ending = notebookNormalizedTextHasAny(text, ["ending", "concluding", "conclusion", "closure", "complete"]);
+    var sequence = notebookNormalizedTextHasAny(text, ["sequence", "sequencing", "order", "events", "logical", "number the events"]);
+    var transitions = notebookNormalizedTextHasAny(text, ["transition", "transitions", "connect", "moving smoothly"]);
+    var paragraphs = notebookNormalizedTextHasAny(text, ["paragraph", "paragraphs", "new paragraph"]);
+
+    if (ending && sequence) return "Strengthen the ending and keep events in a clear order so " + topic + " feels complete.";
+    if (sequence && transitions) return "Use a clear order and smooth transitions so the reader can follow " + topic + ".";
+    if (paragraphs) return "Use paragraph breaks to organize the important parts of " + topic + ".";
+    if (ending) return "Strengthen the ending of " + topic + " so it feels complete.";
+    if (sequence) return "Put events and ideas in a clear order so the reader can follow " + topic + ".";
+    if (transitions) return "Use transitions to connect each part of " + topic + " clearly.";
+    return "";
+}
+
+function buildIdeasSkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var topic = getNotebookTopicReference(data);
+    var sensory = notebookNormalizedTextHasAny(text, ["sensory", "saw", "heard", "felt", "smells", "smell", "feels", "ground", "air"]);
+    var detail = notebookNormalizedTextHasAny(text, ["detail", "details", "specific", "description", "describe"]);
+    var explain = notebookNormalizedTextHasAny(text, ["explain", "develop", "development", "important moment", "why", "how"]);
+    var examples = notebookNormalizedTextHasAny(text, ["example", "examples", "such as", "like"]);
+
+    if (sensory) return "Add sensory details to " + topic + " so the reader can picture the setting more clearly.";
+    if (detail && explain) return "Develop important ideas in " + topic + " with specific details and clear explanations.";
+    if (detail || examples) return "Add specific details to " + topic + " so the reader can picture my ideas clearly.";
+    if (explain) return "Explain important moments in " + topic + " so the reader understands my ideas fully.";
+    return "";
+}
+
+function buildVocabularySkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var topic = getNotebookTopicReference(data);
+    var verbs = notebookNormalizedTextHasAny(text, ["verb", "verbs", "action word", "action words", "got", "saw", "walked", "replace"]);
+    var precise = notebookNormalizedTextHasAny(text, ["precise", "specific", "exact", "general", "common"]);
+    var descriptive = notebookNormalizedTextHasAny(text, ["descriptive", "vivid", "paint", "picture", "pinkish", "purplish"]);
+    var repeated = notebookNormalizedTextHasAny(text, ["repeated", "repeat", "same word", "word variety", "variety"]);
+
+    if (verbs && precise) return "Choose stronger action words so the details in " + topic + " feel more exact and vivid.";
+    if (verbs) return "Replace general verbs with stronger action words so " + topic + " feels more vivid.";
+    if (precise && descriptive) return "Choose precise, descriptive words that help the reader picture " + topic + ".";
+    if (repeated) return "Use more word variety so the language in " + topic + " sounds fresh and clear.";
+    if (precise) return "Choose precise words that help the reader understand exactly what I mean in " + topic + ".";
+    if (descriptive) return "Use descriptive words that help the reader picture " + topic + " clearly.";
+    return "";
+}
+
+function buildNeatnessSkillGoalFromFeedback(feedback, actionTip, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    var spacing = notebookNormalizedTextHasAny(text, ["spacing", "space", "spaces", "crowded", "bump"]);
+    var formation = notebookNormalizedTextHasAny(text, ["letter formation", "letters", "letter shapes", "formation"]);
+    var line = notebookNormalizedTextHasAny(text, ["line", "lines", "stays on the line", "drifts"]);
+    var size = notebookNormalizedTextHasAny(text, ["size", "consistent", "letter size"]);
+    var marks = notebookNormalizedTextHasAny(text, ["marks", "smudges", "cross outs", "corrections", "pen control"]);
+    var layout = notebookNormalizedTextHasAny(text, ["page layout", "paragraph", "organized", "lines up"]);
+
+    if (spacing && formation) return "Use even spacing and clear letter shapes so my notebook writing is easy to read.";
+    if (spacing) return "Use even spacing so each word in my notebook writing is easy to read.";
+    if (formation) return "Form my letters clearly so my notebook writing is easy to read.";
+    if (line) return "Keep my writing on the lines so the page looks neat and easy to follow.";
+    if (size) return "Keep my letter size consistent so my notebook writing looks neat.";
+    if (marks) return "Use careful pen control so marks and corrections do not distract the reader.";
+    if (layout) return "Organize the page clearly so my notebook writing is easy to follow.";
+    return "";
+}
+
+function buildNotebookSkillGoalFromFeedback(key, feedback, actionTip, data) {
+    var evidenceText = getNotebookFeedbackEvidenceText(feedback, actionTip);
+    if (!evidenceText) return "";
+    if (key === "Flow") return buildFlowSkillGoalFromFeedback(feedback, actionTip, data);
+    if (key === "Grammar") return buildGrammarSkillGoalFromFeedback(feedback, actionTip, data);
+    if (key === "Spelling & Punctuation") return buildConventionsSkillGoalFromFeedback(feedback, actionTip, data);
+    if (key === "Organization") return buildOrganizationSkillGoalFromFeedback(feedback, actionTip, data);
+    if (key === "Ideas & Details") return buildIdeasSkillGoalFromFeedback(feedback, actionTip, data);
+    if (key === "Word Choice" || key === "Vocabulary") return buildVocabularySkillGoalFromFeedback(feedback, actionTip, data);
+    if (key === "Neatness") return buildNeatnessSkillGoalFromFeedback(feedback, actionTip, data);
+    return "";
+}
+
+function tailorNotebookActionTip(key, feedback, actionTip, data) {
+    var tip = cleanNotebookSentence(actionTip || "");
+    if (!tip) return tip;
+    if (key === "Flow") {
+        var starter = getNotebookRepeatedStarter(feedback);
+        if (starter && /^rewrite three sentence beginnings/i.test(tip)) {
+            return "Rewrite three sentences that begin with \"" + starter + "\" so they start with a time word, place detail, or different subject.";
+        }
+    }
+    return tip;
+}
+
+function buildNotebookTeacherCoachingSentence(lowest, goalPlan, feedback, data) {
+    var text = getNotebookFeedbackEvidenceText(feedback, goalPlan ? goalPlan.nextTime : "");
+    var topic = getNotebookTopicReference(data);
+    var starter = getNotebookRepeatedStarter(feedback);
+
+    if (lowest === "Flow") {
+        var starters = notebookNormalizedTextHasAny(text, ["sentence starter", "sentence starters", "begin", "started", "same word", "repeated", "repetitive"]);
+        var length = notebookNormalizedTextHasAny(text, ["sentence length", "short sentence", "long sentence", "medium and long", "rhythm"]);
+        var connections = notebookNormalizedTextHasAny(text, ["transition", "connect", "connections", "smooth", "smoother"]);
+        if (starters && length && starter) return "Next, focus on smoother rhythm by changing some repeated \"" + starter + "\" sentence openings and adding a few shorter sentences.";
+        if (starters && length) return "Next, focus on smoother rhythm by changing some repeated sentence openings and adding a few shorter sentences.";
+        if (starters && starter) return "Next, focus on smoother rhythm by changing some sentence openings that repeat \"" + starter + "\".";
+        if (length) return "Next, focus on smoother rhythm by mixing in a few shorter or longer sentences.";
+        if (connections) return "Next, focus on helping each idea connect smoothly to the next one.";
+        return "Next, focus on making the sentences in " + topic + " flow more smoothly.";
+    }
+
+    if (lowest === "Grammar") {
+        var tense = notebookNormalizedTextHasAny(text, ["verb", "verbs", "tense", "agreement"]);
+        var boundaries = notebookNormalizedTextHasAny(text, ["sentence boundaries", "run on", "run ons", "clearer breaks", "complete sentence", "period"]);
+        if (tense && boundaries) return "Next, check verb tense and sentence breaks so the timeline and meaning stay clear.";
+        if (tense) return "Next, check verb tense so the timeline in " + topic + " stays clear.";
+        if (boundaries) return "Next, check sentence breaks so each idea is easy to follow.";
+        return "Next, check sentence grammar carefully so the meaning stays clear.";
+    }
+
+    if (lowest === "Spelling & Punctuation") {
+        var commas = notebookNormalizedTextHasAny(text, ["comma", "commas", "punctuation", "ending mark", "period"]);
+        var spelling = notebookNormalizedTextHasAny(text, ["spelling", "spelled", "spell"]);
+        if (commas && spelling) return "Next, proofread punctuation and spelling so the reader can focus on the ideas.";
+        if (commas) return "Next, check punctuation so the reader knows where to pause.";
+        if (spelling) return "Next, check spelling so the reader can focus on the message.";
+        return "Next, proofread capitals, punctuation, and spelling carefully.";
+    }
+
+    if (lowest === "Organization") {
+        var ending = notebookNormalizedTextHasAny(text, ["ending", "concluding", "conclusion", "closure"]);
+        var sequence = notebookNormalizedTextHasAny(text, ["sequence", "order", "events", "logical"]);
+        if (ending) return "Next, strengthen the ending so " + topic + " feels complete.";
+        if (sequence) return "Next, keep the events and ideas in a clear order so the reader can follow them.";
+        return "Next, strengthen the structure so the reader can follow " + topic + " from beginning to end.";
+    }
+
+    if (lowest === "Ideas & Details") {
+        var sensory = notebookNormalizedTextHasAny(text, ["sensory", "saw", "heard", "felt", "smell", "feel", "setting"]);
+        if (sensory) return "Next, add sensory details so the reader can picture the setting more clearly.";
+        return "Next, develop the important ideas with details that help the reader picture them clearly.";
+    }
+
+    if (lowest === "Word Choice" || lowest === "Vocabulary") {
+        var verbs = notebookNormalizedTextHasAny(text, ["verb", "verbs", "action word", "got", "saw", "walked"]);
+        if (verbs) return "Next, choose stronger action words so the writing feels more vivid.";
+        return "Next, choose precise words that make the meaning more exact and vivid.";
+    }
+
+    if (lowest === "Neatness") {
+        var spacing = notebookNormalizedTextHasAny(text, ["spacing", "space", "spaces", "crowded"]);
+        if (spacing) return "Next, use even spacing so each word is easy to read.";
+        return "Next, keep the handwriting clear and easy to read.";
+    }
+
+    return "Next, choose one part of the writing to revise carefully.";
+}
+
 function getGoalPlan(data) {
     if (data && data.sampleStatus && data.sampleStatus.status !== "scorable") {
         return {
@@ -7383,57 +7753,43 @@ function getGoalPlan(data) {
             ]
         };
     }
-    var lowest = getLowestNotebookCategory(data ? data.categoryScores : null);
-    var detailed = data && data.detailed ? data.detailed : null;
-    var categories = data && data.detailed && data.detailed.categories ? data.detailed.categories : {};
+    data = data || {};
+    var lowest = getLowestNotebookCategory(data.categoryScores || null);
+    var detailed = data.detailed || null;
+    var categories = detailed && detailed.categories ? detailed.categories : {};
     var lowestCategory = categories[lowest] || {};
-    var lowestCategoryForGoal = lowestCategory;
-    var lowestScore = data && data.categoryScores ? data.categoryScores[lowest] : null;
+    var lowestFeedback = buildNotebookGoalFeedback(data, lowest);
+    var smartActionTip = cleanNotebookSentence(lowestFeedback.growthTip || "");
+    smartActionTip = tailorNotebookActionTip(lowest, lowestFeedback, smartActionTip, data);
 
-    if (lowestScore != null && lowestScore !== "" && !isNaN(Number(lowestScore))) {
-        lowestCategoryForGoal = {};
-        for (var prop in lowestCategory) {
-            if (Object.prototype.hasOwnProperty.call(lowestCategory, prop)) lowestCategoryForGoal[prop] = lowestCategory[prop];
-        }
-        lowestCategoryForGoal.score = Number(lowestScore);
-    }
-
-    var lowestFeedback = buildStudentFeedbackForCategory(lowest, lowestCategoryForGoal);
-    var smartGoal = cleanNotebookSentence(lowestFeedback.growthTip || "");
     var rawFallback = cleanNotebookSentence(lowestCategory.growthTip || "");
-    var growthTip = smartGoal || rawFallback || "Read my work carefully and fix one thing before I hand it in.";
+    var fallbackCategoryGoal = buildNotebookFallbackSkillGoal(lowest);
+    var fallbackNextTime = smartActionTip || rawFallback || "Read my work carefully and fix one thing before I hand it in.";
+    var smartSkillGoal = buildNotebookSkillGoalFromFeedback(lowest, lowestFeedback, fallbackNextTime, data);
+
     var plan = {
-        growGoal: "Check my writing carefully before I submit it.",
-        nextTime: growthTip,
+        growGoal: fallbackCategoryGoal,
+        nextTime: fallbackNextTime,
         checklist: [
             "Read my work carefully before I submit it.",
             "Fix one thing that I notice during proofreading."
         ]
     };
 
-    if (lowest === "Grammar") {
-        plan.growGoal = "Check my grammar carefully before I submit my work.";
-    } else if (lowest === "Spelling & Punctuation") {
-        plan.growGoal = "Double-check my spelling and punctuation before I hand in my work.";
-    } else if (lowest === "Organization") {
-        plan.growGoal = "Organize my ideas so my writing has a clear beginning, middle, and end.";
-    } else if (lowest === "Flow") {
-        plan.growGoal = "Connect some of my ideas so my writing flows more smoothly.";
-    } else if (lowest === "Ideas & Details") {
-        plan.growGoal = "Add a few more details to explain my ideas clearly.";
-    } else if (lowest === "Word Choice") {
-        plan.growGoal = "Choose a few stronger words to make my writing clearer.";
+    if (smartSkillGoal && !isGenericNotebookGuidance(smartSkillGoal)) {
+        plan.growGoal = smartSkillGoal;
+    } else if (detailed) {
+        var detailedGrowGoal = cleanNotebookSentence(detailed.growGoal || "");
+        if (detailedGrowGoal && !isGenericNotebookGuidance(detailedGrowGoal) && textMentionsCategory(detailedGrowGoal, lowest)) {
+            plan.growGoal = detailedGrowGoal;
+        }
+    }
+
+    if (!plan.nextTime || isGenericNotebookGuidance(plan.nextTime)) {
+        plan.nextTime = rawFallback || "Read my work carefully and fix one thing before I hand it in.";
     }
 
     if (detailed) {
-        if (smartGoal && !isGenericNotebookGuidance(smartGoal)) {
-            plan.growGoal = smartGoal;
-        } else {
-            var detailedGrowGoal = cleanNotebookSentence(detailed.growGoal || "");
-            if (detailedGrowGoal && !isGenericNotebookGuidance(detailedGrowGoal) && textMentionsCategory(detailedGrowGoal, lowest)) {
-                plan.growGoal = detailedGrowGoal;
-            }
-        }
         plan.checklist = buildNotebookActionChecklist(data, plan.checklist, plan.nextTime, plan.growGoal);
     }
 
