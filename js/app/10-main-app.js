@@ -1610,11 +1610,11 @@ function calculateWordCountAdjustment(baseScore, actualWords, targetWords, optGr
         var goingBeyondMeaningful = exceedRatio >= meaningfulExceedRatio;
         var bonusMultiplier = 1;
         var goingBeyondNote = "";
-        if (goingBeyondMeaningful) { bonusMultiplier = meaningfulBonus; goingBeyondNote = "You went well beyond the target word count - real dedication!"; }
-        else if (goingBeyond) { bonusMultiplier = slightBonus; goingBeyondNote = "You exceeded the target word count - nice extra effort."; }
+        if (goingBeyondMeaningful) { bonusMultiplier = meaningfulBonus; goingBeyondNote = "You went well beyond the minimum word count - real dedication!"; }
+        else if (goingBeyond) { bonusMultiplier = slightBonus; goingBeyondNote = "You exceeded the minimum word count - nice extra effort."; }
         var adjustedRaw = baseScore * bonusMultiplier;
         var adjustedScore = clampRubricScore(roundToNearestRubric(adjustedRaw));
-        return { adjustedScore: adjustedScore, shortfallRatio: 0, multiplier: 1, bonusMultiplier: bonusMultiplier, goingBeyond: goingBeyond, goingBeyondNote: goingBeyondNote, penaltyRubricPoints: 0, note: goingBeyond ? "Target word count exceeded. Going Beyond bonus applied." : "Target word count met. No adjustments applied." };
+        return { adjustedScore: adjustedScore, shortfallRatio: 0, multiplier: 1, bonusMultiplier: bonusMultiplier, goingBeyond: goingBeyond, goingBeyondNote: goingBeyondNote, penaltyRubricPoints: 0, note: goingBeyond ? "Minimum word count exceeded. Going Beyond bonus applied." : "Minimum word count met. No adjustments applied." };
     }
     var shortfallRatio = (targetWords - actualWords) / targetWords;
     var multiplier = 1 - (shortfallPenaltyFactor * Math.pow(shortfallRatio, 0.9));
@@ -1622,11 +1622,11 @@ function calculateWordCountAdjustment(baseScore, actualWords, targetWords, optGr
     var adjustedRaw2 = baseScore * multiplier;
     var adjustedScore2 = clampRubricScore(roundToNearestRubric(adjustedRaw2));
     var penaltyRubricPoints = Math.max(0, baseScore - adjustedScore2);
-    var note = "Writing is under the target word count, so Ideas and Details was softened by a grade-aware multiplier.";
-    if (shortfallRatio < 0.1) note = "Writing is very close to the target word count, so the Ideas and Details adjustment is very small.";
-    else if (shortfallRatio < 0.25) note = "Writing is somewhat below the target word count, so Ideas and Details received a small adjustment.";
-    else if (shortfallRatio < 0.4) note = "Writing is clearly below the target word count, so Ideas and Details received a moderate adjustment.";
-    else note = "Writing is far below the target word count, so Ideas and Details received a stronger adjustment.";
+    var note = "Writing is under the minimum word count, so Ideas and Details was softened by a grade-aware multiplier.";
+    if (shortfallRatio < 0.1) note = "Writing is very close to the minimum word count, so the Ideas and Details adjustment is very small.";
+    else if (shortfallRatio < 0.25) note = "Writing is somewhat below the minimum word count, so Ideas and Details received a small adjustment.";
+    else if (shortfallRatio < 0.4) note = "Writing is clearly below the minimum word count, so Ideas and Details received a moderate adjustment.";
+    else note = "Writing is far below the minimum word count, so Ideas and Details received a stronger adjustment.";
     return { adjustedScore: adjustedScore2, shortfallRatio: shortfallRatio, multiplier: multiplier, bonusMultiplier: 1, goingBeyond: false, goingBeyondNote: "", penaltyRubricPoints: penaltyRubricPoints, note: note };
 }
 
@@ -2491,9 +2491,9 @@ function applyWordCountToIdeas(step1Parsed, detailedParsed, actualWords, targetW
     step1Parsed.quickRubric["Ideas & Details"].score = adjustment.adjustedScore;
     if (targetWords && actualWords < targetWords) {
         if (actualWords < targetWords * 0.8) {
-            step1Parsed.quickRubric["Ideas & Details"].reason += " Since the piece is noticeably shorter than the target word count, adding more detail would help it feel fuller.";
+            step1Parsed.quickRubric["Ideas & Details"].reason += " Since the piece is noticeably shorter than the minimum word count, adding more detail would help it feel fuller.";
         } else {
-            step1Parsed.quickRubric["Ideas & Details"].reason += " Getting a little closer to the target word count would create more room for details.";
+            step1Parsed.quickRubric["Ideas & Details"].reason += " Getting a little closer to the minimum word count would create more room for details.";
         }
     } else if (targetWords && adjustment.goingBeyond) {
         // Going Beyond feedback
@@ -2512,9 +2512,9 @@ function applyWordCountToIdeas(step1Parsed, detailedParsed, actualWords, targetW
         detailedParsed.categories["Ideas & Details"].score = adjustment.adjustedScore;
         if (targetWords && actualWords < targetWords) {
             if (actualWords < targetWords * 0.8) {
-                detailedParsed.categories["Ideas & Details"].growthTip += " Also, the piece is significantly shorter than the target word count, so adding more detail would strengthen this category.";
+                detailedParsed.categories["Ideas & Details"].growthTip += " Also, the piece is significantly shorter than the minimum word count, so adding more detail would strengthen this category.";
             } else {
-                detailedParsed.categories["Ideas & Details"].growthTip += " Reaching the target word count would also give you more space to develop details.";
+                detailedParsed.categories["Ideas & Details"].growthTip += " Reaching the minimum word count would also give you more space to develop details.";
             }
         } else if (targetWords && adjustment.goingBeyond) {
             // Going Beyond feedback for detailed rubric
@@ -5364,6 +5364,7 @@ function countWordsInComment(text) {
 function cleanTeacherCommentText(text, key, score) {
     var value = toOneSentence(teacherizeWording(String(text || "").trim(), key, score));
     value = value.replace(/\s+/g, " ").trim();
+    if (key === "Spelling & Punctuation") value = clarifyConventionNoticeText(value);
     value = value.replace(/\bthe piece\b/gi, "your writing");
     value = value.replace(/\bthere is room to improve\b/gi, "you can keep improving");
     value = value.replace(/\s+([,.!?])/g, "$1");
@@ -5576,10 +5577,37 @@ function growthTipLooksActionable(text) {
     return /\b(add|choose|check|circle|underline|reread|rewrite|revise|replace|plan|use|try|combine|split|start|look|leave|space|write|pick|read)\b/i.test(value);
 }
 
+function clarifyPastTenseGrowthTip(text, key) {
+    var value = String(text || "");
+    if (key !== "Grammar") return value;
+    if (/\bverbs?\b/i.test(value) && /\bpast\s+tense\b/i.test(value) && /\bend\s+in\s+-?ed\b/i.test(value)) {
+        return "Read your writing aloud and check that each action verb matches the story's time. Use -ed for regular past-tense verbs and correct irregular forms like ran or saw.";
+    }
+    return value;
+}
+
+function clarifyConventionNoticeText(text) {
+    var value = String(text || "");
+    if (!value) return value;
+    value = value.replace(/small spelling errors like\s+"([^"]+)"\s*\(which should be\s+"([^"]+)"\)\s+and\s+"pass"\s*\(which should be\s+"past"\)/gi, 'plural spelling, such as "$1" -> "$2", and commonly confused words, such as "pass" and "past"');
+    value = value.replace(/spelling errors like\s+"([^"]+)"\s*\(which should be\s+"([^"]+)"\)\s+and\s+"pass"\s*\(which should be\s+"past"\)/gi, 'plural spelling, such as "$1" -> "$2", and commonly confused words, such as "pass" and "past"');
+    return value;
+}
+
+function clarifyYToIesGuideText(text) {
+    var value = String(text || "");
+    if (/\by\s*(?:-|to|into)\s*ies\b/i.test(value) || (/\bends?\s+in\s+y\b/i.test(value) && /\bies\b/i.test(value))) {
+        return "For bunny, the consonant before y changes y to ies: bunny -> bunnies. A vowel before y usually just adds s: key -> keys.";
+    }
+    return value;
+}
+
 function cleanGrowthTipText(text, key, score) {
     var raw = normalizeGrowGoalStrategyForSentence(String(text || ""));
     var value = teacherizeWording(softenOverclaim(raw, score), key, score);
     value = toOneSentence(value).replace(/\s+/g, " ").trim();
+    value = clarifyPastTenseGrowthTip(value, key);
+    if (key === "Spelling & Punctuation") value = clarifyConventionNoticeText(value);
     value = value.replace(/\bthe piece\b/gi, "your writing");
     value = value.replace(/\s+([,.!?])/g, "$1");
     return value;
@@ -5685,6 +5713,7 @@ function cleanNoticeRowsForDisplay(key, item, rows) {
         var row = rows[i] || {};
         var comment = row.comment || "";
         if (key === "Grammar") comment = alignGrammarWordingWithErrorData(comment, item);
+        if (key === "Spelling & Punctuation") comment = clarifyConventionNoticeText(comment);
         output.push({ area: row.area || "Overall", comment: comment || "No detailed note available yet." });
     }
     return output;
@@ -8553,6 +8582,7 @@ function getNotebookCategoryPrintData(key, item, context) {
     };
 }
 function getNotebookScoreClass(score, maxScore) {
+    if (score == null || score === "") return "score-missing";
     var n = Number(score);
     var max = Number(maxScore) || 100;
     if (!isFinite(n)) return "score-missing";
@@ -8614,29 +8644,55 @@ function getNotebookAlignedCategoryScore(key, item, categoryScores) {
     return null;
 }
 
-function getNotebookVisibleOverallScore(dataOrSession) {
+function getNotebookGradeProfileForScore(dataOrSession) {
+    var data = dataOrSession || {};
+    var settings = data.assessmentSettings || {};
+    var grade = data.gradeLevel || data.classGradeLevel || settings.gradeLevel || settings.classGradeLevel;
+    return getGradeProfile(grade || getClassGradeLevel());
+}
+
+function computeNotebookWeightedOverallScore(dataOrSession) {
     var data = dataOrSession || {};
     var detailed = data.detailed || data.detailedFeedback || {};
     var categories = detailed.categories || {};
     var categoryScores = data.categoryScores || {};
+    var gradeProfile = getNotebookGradeProfileForScore(data);
     var order = ["Ideas & Details", "Grammar", "Word Choice", "Organization", "Flow", "Spelling & Punctuation"];
-    var includeNeatness = shouldAssessNeatness() || categories["Neatness"] || categoryScores["Neatness"] != null;
-    var values = [];
+    var hasSavedNeatness = categoryScores["Neatness"] != null || (categories["Neatness"] && categories["Neatness"].score != null);
+    var neatnessWeight = hasSavedNeatness ? getNeatnessWeight(gradeProfile) : 0;
+    var nonNeatScale = 1 - neatnessWeight;
+    var weightedSum = 0;
+    var totalWeight = 0;
     var i;
 
-    if (includeNeatness) order.push("Neatness");
+    if (hasSavedNeatness) order.push("Neatness");
 
     for (i = 0; i < order.length; i += 1) {
         var key = order[i];
         var score = getNotebookAlignedCategoryScore(key, categories[key] || {}, categoryScores);
-        if (score != null && isFinite(score)) values.push(score);
+        if (score == null || !isFinite(score)) continue;
+        var rubric = String(score);
+        if (!SCORE_MAP.hasOwnProperty(rubric)) continue;
+        var weight = key === "Neatness" ? neatnessWeight : getCategoryWeight(key, gradeProfile) * nonNeatScale;
+        if (weight <= 0) continue;
+        weightedSum += SCORE_MAP[rubric] * weight;
+        totalWeight += weight;
     }
 
-    if (!values.length) return null;
+    if (!totalWeight) return null;
+    return Math.round(weightedSum / totalWeight);
+}
 
-    var sum = 0;
-    for (i = 0; i < values.length; i += 1) sum += values[i];
-    return Math.round((sum / values.length / RUBRIC_MAX) * 100);
+function getNotebookOverallScore(dataOrSession) {
+    var data = dataOrSession || {};
+    if (data.overall != null && data.overall !== "" && isFinite(Number(data.overall))) {
+        return Math.round(Number(data.overall));
+    }
+    return computeNotebookWeightedOverallScore(data);
+}
+
+function getNotebookVisibleOverallScore(dataOrSession) {
+    return getNotebookOverallScore(dataOrSession);
 }
 
 function notebookCategoryIsGrowGoal(key, growGoalText, nextTimeText) {
@@ -8726,6 +8782,13 @@ function getNotebookAssessmentSettings(data) {
         actualWordsLabel: String(actual),
         wordTargetLabel: getNotebookWordsTargetLabel({ actualWords: actual, targetWords: target })
     };
+}
+
+function getNotebookScoringBasisLabel(settings) {
+    settings = settings || {};
+    var grade = settings.classGradeLabel || "Grade 5";
+    var grammar = settings.grammarStrictnessLabel || "Level 3";
+    return grade + " expectations | Grammar: " + grammar;
 }
 
 
@@ -8985,7 +9048,8 @@ function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, n
     }
     var rawNextTimeExample = String(candidate.nextTimeExample || candidate.after || candidate.revision || "");
     var nextTimeExample = truncateNotebookGuideText(rawNextTimeExample, 220);
-    var whyThisWorks = truncateNotebookGuideText(candidate.whyThisWorks || candidate.explanation || candidate.why || "", 130);
+    var whyThisWorksRaw = clarifyYToIesGuideText(candidate.whyThisWorks || candidate.explanation || candidate.why || "");
+    var whyThisWorks = truncateNotebookGuideText(whyThisWorksRaw, 130);
     var combinedLabel = cleanNotebookGuideText(area + " " + skill + " " + connection).toLowerCase();
     var originalTokenCount = cleanNotebookGuideText(originalQuote).split(/\s+/).length;
     var nextTokenCount = cleanNotebookGuideText(nextTimeExample).split(/\s+/).length;
@@ -9339,6 +9403,27 @@ function addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes,
     return true;
 }
 
+function buildNotebookGuideFocusItemsFromExamples(examples, fallbackPriorities) {
+    var items = [];
+    var used = {};
+    var i;
+
+    examples = Array.isArray(examples) ? examples : [];
+    for (i = 0; i < examples.length; i += 1) {
+        var ex = examples[i] || {};
+        var category = getNotebookGuideExampleCategory(ex);
+        var focus = ex.skill || getNotebookGuideDefaultFocus(category, "") || categoryDisplayLabel(category || "Writing");
+        focus = truncateNotebookGuideText(focus, 90);
+        if (!focus || used[focus]) continue;
+        used[focus] = true;
+        items.push(focus);
+    }
+
+    if (!items.length) items = getNotebookGuideFocusItems(fallbackPriorities || []);
+    return items;
+}
+
+
 function buildNotebookGuideFallback(originalText, correctedText, analysisData, optGenreInfo, notebookGuidePriorities) {
     var genreInfo = normalizeWritingGenreInfo(optGenreInfo || (analysisData && analysisData.writingGenre) || currentWritingGenreInfo || detectWritingGenreInfo(originalText || correctedText || ""));
     var writingLabel = getNotebookGuideWritingLabel(genreInfo);
@@ -9365,11 +9450,12 @@ function buildNotebookGuideFallback(originalText, correctedText, analysisData, o
         addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, false);
     }
 
+    var finalExamples = examples.slice(0, maxExamples);
     return {
         version: NOTEBOOK_GUIDE_VERSION,
         writingLabel: writingLabel,
-        focusItems: getNotebookGuideFocusItems(priorities),
-        examples: examples.slice(0, maxExamples),
+        focusItems: buildNotebookGuideFocusItemsFromExamples(finalExamples, priorities),
+        examples: finalExamples,
         quickChecks: buildNotebookGuideQuickChecks(priorities, writingLabel)
     };
 }
@@ -9453,11 +9539,12 @@ function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreI
         if (!selected.length) return fallback;
     }
 
+    var finalSelectedExamples = selected.slice(0, maxExamples);
     return {
         version: NOTEBOOK_GUIDE_VERSION,
         writingLabel: writingLabel,
-        focusItems: getNotebookGuideFocusItems(priorities),
-        examples: selected.slice(0, maxExamples),
+        focusItems: buildNotebookGuideFocusItemsFromExamples(finalSelectedExamples, priorities),
+        examples: finalSelectedExamples,
         quickChecks: buildNotebookGuideQuickChecks(priorities, writingLabel)
     };
 }
@@ -9566,8 +9653,7 @@ function fillNotebookSummary() {
     if (notebookPage2Title) notebookPage2Title.textContent = title;
     var notebookOverallScore = document.getElementById("notebookOverallScore");
     if (notebookOverallScore) {
-        var visibleOverallScore = getNotebookVisibleOverallScore(latestAnalysisData);
-        var notebookOverallValue = visibleOverallScore == null ? latestAnalysisData.overall : visibleOverallScore;
+        var notebookOverallValue = getNotebookOverallScore(latestAnalysisData);
         notebookOverallScore.textContent = notebookOverallValue == null ? (latestAnalysisData.sampleStatus ? latestAnalysisData.sampleStatus.label : "Not scored") : (notebookOverallValue + "%");
         notebookOverallScore.className = "overall-value " + getNotebookScoreClass(notebookOverallValue, 100);
     }
@@ -9580,6 +9666,8 @@ function fillNotebookSummary() {
     if (notebookWritingType) notebookWritingType.textContent = getNotebookWritingTypeLabel((latestAnalysisData && latestAnalysisData.writingGenre) || (latestAnalysisData.detailed && latestAnalysisData.detailed.writingGenre) || currentWritingGenreInfo);
     var notebookWordsTarget = document.getElementById("notebookWordsTarget");
     if (notebookWordsTarget) notebookWordsTarget.textContent = notebookSettings.wordTargetLabel;
+    var notebookScoringBasis = document.getElementById("notebookScoringBasis");
+    if (notebookScoringBasis) notebookScoringBasis.textContent = getNotebookScoringBasisLabel(notebookSettings);
 
     var goalPlan = getGoalPlan(latestAnalysisData);
     var notebookGrowGoal = goalPlan.growGoal;
@@ -9644,6 +9732,7 @@ function getNotebookPrintCss() {
         ".overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }",
         ".overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }",
         ".overall-value.score-needs-support { color: #6d28d9; border-color: #8b5cf6; background: #faf5ff; }",
+        ".overall-value.score-missing { color: #4b5563; border-color: #9ca3af; background: #f9fafb; }",
         ".meta-row { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
         ".meta-row strong { color: #111111; font-weight: 600; }",
         ".writing-type-chip { display: inline; border: 0; background: transparent; color: #444444; border-radius: 0; padding: 0; font-weight: 400; line-height: inherit; }",
@@ -9667,6 +9756,7 @@ function getNotebookPrintCss() {
         ".score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }",
         ".score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }",
         ".score-needs-support .score-badge { background: #f3e8ff; border-color: #8b5cf6; color: #6d28d9; }",
+        ".score-missing .score-badge { background: #f9fafb; border-color: #9ca3af; color: #4b5563; }",
         ".score-bar-track { display: block; width: 100%; min-width: 0; height: 3.5px; min-height: 3.5px; background: #cccccc; border-radius: 99px; margin-bottom: 4px; overflow: hidden; }",
         ".score-bar-fill { display: block; height: 100%; min-height: 100%; border-radius: 99px; background: #333333; }",
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
@@ -9901,8 +9991,7 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         targetWords: session.targetWords != null ? session.targetWords : 0,
         actualWords: session.actualWords != null ? session.actualWords : countWords(originalText)
     });
-    var visibleOverallScore = getNotebookVisibleOverallScore(session);
-    var overallForNotebook = visibleOverallScore == null ? session.overall : visibleOverallScore;
+    var overallForNotebook = getNotebookOverallScore(session);
     var scoreText = overallForNotebook == null ? "Not scored" : (overallForNotebook + "%");
     var scoreClass = getNotebookScoreClass(overallForNotebook, 100);
     var writingTypeLabel = getNotebookWritingTypeLabel(genreInfo);
@@ -9943,7 +10032,7 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
     return ''
         + '<div class="page page-1 auto-fit-page">'
         + '<div class="page-header"><div><div class="page-label">Writing Notebook Summary</div><div class="page-title">' + escapeHtml(title) + '</div></div><div class="overall-score"><div class="overall-label">Overall</div><div class="overall-value ' + scoreClass + '">' + escapeHtml(scoreText) + '</div></div></div>'
-        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Writing Type:</strong> <span class="writing-type-chip">' + escapeHtml(writingTypeLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordsTargetLabel) + '</span></span></div>'
+        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Writing Type:</strong> <span class="writing-type-chip">' + escapeHtml(writingTypeLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordsTargetLabel) + '</span></span><span><strong>Scoring:</strong> <span>' + escapeHtml(getNotebookScoringBasisLabel(notebookSettings)) + '</span></span></div>'
         + '<div class="top-boxes"><div class="info-box strength-box"><div class="box-label">My Strength</div><p>' + escapeHtml(strength) + '</p></div><div class="info-box grow-goal-box"><div class="box-label">My Grow Goal</div><p>' + escapeHtml(growGoal) + '</p></div></div>'
         + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
