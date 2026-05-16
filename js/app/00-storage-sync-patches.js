@@ -7643,6 +7643,11 @@ function saveCurrentSessionToPortfolio(analysisData) {
     var now = new Date();
     var savedCategoryScores = analysisData.categoryScores || {};
     var neatnessAssessed = !!(savedCategoryScores["Neatness"] != null);
+    var notebookDecisions = analysisData._notebookDecisions;
+    if (!(typeof isNotebookDecisionsV1 === "function" && isNotebookDecisionsV1(notebookDecisions))) {
+        notebookDecisions = typeof buildNotebookDecisions === "function" ? buildNotebookDecisions(analysisData) : null;
+        if (notebookDecisions) analysisData._notebookDecisions = notebookDecisions;
+    }
     var sessionData = {
         id: 'sess_' + now.getTime() + '_' + Math.random().toString(36).slice(2, 8),
         createdAt: now.toISOString(),
@@ -7676,6 +7681,7 @@ function saveCurrentSessionToPortfolio(analysisData) {
         genreConfidence: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).confidence,
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
+        notebookDecisions: notebookDecisions ? cloneWftJson(notebookDecisions) : null,
         notebookGuide: cloneWftJson(analysisData.notebookGuide || null),
         notebookGuideVersion: analysisData.notebookGuideVersion || (typeof NOTEBOOK_GUIDE_VERSION !== "undefined" ? NOTEBOOK_GUIDE_VERSION : 2),
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
@@ -8064,7 +8070,7 @@ function buildPortfolioReassessmentReplacementSession(oldSession, newSession, so
         'categoryScores', 'assessScriptQuality', 'neatnessAssessed', 'correctedHtml',
         'correctedMarkup', 'correctedPlainText', 'writingGenreInfo', 'writingGenre',
         'writingSubtype', 'writingSafeReference', 'genreConfidence', 'feedbackSummary',
-        'detailedFeedback', 'notebookGuide', 'notebookGuideVersion', 'sourceType', 'notebookPrintHtml'
+        'detailedFeedback', 'notebookDecisions', 'notebookGuide', 'notebookGuideVersion', 'sourceType', 'notebookPrintHtml'
     ];
     for (var i = 0; i < overwriteFields.length; i++) {
         var field = overwriteFields[i];
