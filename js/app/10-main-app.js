@@ -5307,6 +5307,9 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "- If Spelling & Punctuation is listed as a priority above, include at least one candidate that actually shows a convention improvement.",
         "- Use 'Next time' style suggestions. Do not tell the student to rewrite this piece now.",
         "- Keep each whyThisWorks explanation short, clear, and student-friendly.",
+        "- Each candidate should focus on one main skill. Make the smallest useful revision instead of fixing many unrelated issues at once.",
+        "- Do not label a candidate as paragraphing unless the paragraph break is visible in nextTimeExample. If a paragraphing example cannot be shown clearly in a short quote, choose a different Organization example instead.",
+        "- For y-to-ies spelling examples, do not say all words ending in y change to ies. Use wording like: For bunny, change the y to ies to make bunnies.",
         "- Use the genre information above. Do not call the writing a story unless it is clearly narrative.",
         "",
         "Return exactly this JSON shape after the heading:",
@@ -8580,7 +8583,7 @@ function getNotebookWordsTargetLabel(settings) {
     var actual = settings.actualWords != null ? parseInt(settings.actualWords, 10) : parseInt(settings.actualWordsLabel, 10);
     if (!isFinite(actual) || actual < 0) actual = 0;
     var target = settings.targetWords != null ? parseInt(settings.targetWords, 10) : 0;
-    if (isFinite(target) && target > 0) return actual + " / " + target + "-word target";
+    if (isFinite(target) && target > 0) return actual + " / " + target + "-word minimum";
     return actual + " words";
 }
 
@@ -8609,6 +8612,31 @@ function getNotebookAlignedCategoryScore(key, item, categoryScores) {
     if (item.score != null && item.score !== "" && !isNaN(Number(item.score))) return Number(item.score);
     if (categoryScores[key] != null && categoryScores[key] !== "" && !isNaN(Number(categoryScores[key]))) return Number(categoryScores[key]);
     return null;
+}
+
+function getNotebookVisibleOverallScore(dataOrSession) {
+    var data = dataOrSession || {};
+    var detailed = data.detailed || data.detailedFeedback || {};
+    var categories = detailed.categories || {};
+    var categoryScores = data.categoryScores || {};
+    var order = ["Ideas & Details", "Grammar", "Word Choice", "Organization", "Flow", "Spelling & Punctuation"];
+    var includeNeatness = shouldAssessNeatness() || categories["Neatness"] || categoryScores["Neatness"] != null;
+    var values = [];
+    var i;
+
+    if (includeNeatness) order.push("Neatness");
+
+    for (i = 0; i < order.length; i += 1) {
+        var key = order[i];
+        var score = getNotebookAlignedCategoryScore(key, categories[key] || {}, categoryScores);
+        if (score != null && isFinite(score)) values.push(score);
+    }
+
+    if (!values.length) return null;
+
+    var sum = 0;
+    for (i = 0; i < values.length; i += 1) sum += values[i];
+    return Math.round((sum / values.length / RUBRIC_MAX) * 100);
 }
 
 function notebookCategoryIsGrowGoal(key, growGoalText, nextTimeText) {
@@ -8836,7 +8864,12 @@ function getNotebookGuideDefaultFocus(category, sourceText) {
         return "Keep grammar and sentence breaks clear";
     }
     if (category === "Spelling & Punctuation") return "Check spelling, punctuation, and word forms";
-    if (category === "Organization") return "Organize ideas in a clear order";
+    if (category === "Organization") {
+        if (value.indexOf("ending") !== -1 || value.indexOf("conclusion") !== -1 || value.indexOf("reflect") !== -1) return "Add a clearer ending or reflection";
+        if (value.indexOf("paragraph") !== -1) return "Use paragraph breaks to organize new parts";
+        if (value.indexOf("transition") !== -1) return "Use transitions to connect ideas clearly";
+        return "Organize ideas in a clear order";
+    }
     if (category === "Ideas & Details") return "Add specific details that develop the main idea";
     if (category === "Word Choice") return "Choose precise words that fit the meaning";
     return cleanNotebookGuideText(sourceText) || "Check one important writing skill";
@@ -8950,9 +8983,19 @@ function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, n
     if (Array.isArray(notebookGuidePriorities) && notebookGuidePriorities.length && !notebookGuideExampleMatchesPriority({ page1Connection: connection, area: area, skill: skill }, notebookGuidePriorities)) {
         return null;
     }
-    var nextTimeExample = truncateNotebookGuideText(candidate.nextTimeExample || candidate.after || candidate.revision || "", 220);
+    var rawNextTimeExample = String(candidate.nextTimeExample || candidate.after || candidate.revision || "");
+    var nextTimeExample = truncateNotebookGuideText(rawNextTimeExample, 220);
     var whyThisWorks = truncateNotebookGuideText(candidate.whyThisWorks || candidate.explanation || candidate.why || "", 130);
+    var combinedLabel = cleanNotebookGuideText(area + " " + skill + " " + connection).toLowerCase();
+    var originalTokenCount = cleanNotebookGuideText(originalQuote).split(/\s+/).length;
+    var nextTokenCount = cleanNotebookGuideText(nextTimeExample).split(/\s+/).length;
+    var originalSentenceCount = getNotebookGuideSentenceList(originalQuote).length;
+    var nextSentenceCount = getNotebookGuideSentenceList(nextTimeExample).length;
+
     if (!nextTimeExample || !whyThisWorks) return null;
+    if (combinedLabel.indexOf("paragraph") !== -1 && !(new RegExp("\\n\\s*\\n|<\\s*br\\b|<\\s*p\\b", "i").test(rawNextTimeExample))) return null;
+    if (originalTokenCount > 4 && nextTokenCount > Math.max(Math.ceil(originalTokenCount * 1.8), originalTokenCount + 12)) return null;
+    if (originalSentenceCount > 0 && nextSentenceCount > originalSentenceCount + 1) return null;
     if (!area) area = categoryDisplayLabel(connection);
     if (!skill) skill = getNotebookGuideDefaultFocus(connection, "");
     return {
@@ -9429,19 +9472,37 @@ function getNotebookGuideQuickCheckTitle(guide) {
     return "Quick Check for Your Next " + toNotebookTitleCase(label);
 }
 
-function renderNotebookGuideFocusList(guide) {
+function normalizeNotebookGuideRenderOptions(options) {
+    options = options || {};
+    var maxItems = parseInt(options.maxGuideItems != null ? options.maxGuideItems : options.maxItems, 10);
+    if (!isFinite(maxItems) || maxItems < 1) maxItems = options.isPrint ? 3 : 4;
+    if (maxItems > 4) maxItems = 4;
+    return {
+        isPrint: !!options.isPrint,
+        maxGuideItems: maxItems,
+        showQuickCheck: options.showQuickCheck === false ? false : !options.isPrint
+    };
+}
+
+function getNotebookPrintGuideRenderOptions() {
+    return { isPrint: true, maxGuideItems: 3, showQuickCheck: false };
+}
+
+function renderNotebookGuideFocusList(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
     var items = guide && Array.isArray(guide.focusItems) ? guide.focusItems : ["Check one important writing skill next time"];
     var html = "";
-    for (var i = 0; i < items.length && i < 4; i += 1) {
+    for (var i = 0; i < items.length && i < options.maxGuideItems; i += 1) {
         html += "<li>" + escapeHtml(truncateNotebookGuideText(items[i], 90)) + "</li>";
     }
     return html || "<li>Check one important writing skill next time.</li>";
 }
 
-function renderNotebookGuideExamples(guide) {
+function renderNotebookGuideExamples(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
     var examples = guide && Array.isArray(guide.examples) ? guide.examples : [];
     var html = "";
-    for (var i = 0; i < examples.length && i < 4; i += 1) {
+    for (var i = 0; i < examples.length && i < options.maxGuideItems; i += 1) {
         var ex = examples[i] || {};
         html += '<div class="guide-example">';
         html += '<div class="example-heading">EXAMPLE ' + (i + 1) + '</div>';
@@ -9455,12 +9516,14 @@ function renderNotebookGuideExamples(guide) {
         html += '</div>';
     }
     if (!html) {
-        html = '<div class="guide-no-examples">Use the focus list and quick check below with your next piece of writing.</div>';
+        html = '<div class="guide-no-examples">Use the focus list' + (options.showQuickCheck ? ' and quick check below' : '') + ' with your next piece of writing.</div>';
     }
     return html;
 }
 
-function renderNotebookQuickCheckList(guide) {
+function renderNotebookQuickCheckList(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
+    if (!options.showQuickCheck) return "";
     var checks = guide && Array.isArray(guide.quickChecks) ? guide.quickChecks : [];
     var html = "";
     for (var i = 0; i < checks.length && i < 5; i += 1) {
@@ -9469,16 +9532,21 @@ function renderNotebookQuickCheckList(guide) {
     return html || "<li>Did I check one important skill before turning in my next piece?</li>";
 }
 
-function renderNotebookGuideHtml(guide) {
+function renderNotebookGuideHtml(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
     guide = guide || buildNotebookGuideFallback("", "", {}, currentWritingGenreInfo, []);
+    var quickCheckHtml = "";
+    if (options.showQuickCheck) {
+        quickCheckHtml = '<div class="quick-check"><div class="quick-check-title">' + escapeHtml(getNotebookGuideQuickCheckTitle(guide)) + '</div>'
+            + '<div class="quick-check-intro">Before turning in your next ' + escapeHtml(guide.writingLabel || "piece of writing") + ', ask yourself:</div>'
+            + '<ul>' + renderNotebookQuickCheckList(guide, options) + '</ul></div>';
+    }
     return ''
         + '<div class="section-title">Next Time Writing Guide</div>'
         + '<div class="guide-intro">' + escapeHtml(getNotebookGuideIntro(guide)) + '</div>'
-        + '<div class="next-time-focus"><div class="next-time-focus-title">Next Time Focus</div><ul>' + renderNotebookGuideFocusList(guide) + '</ul></div>'
-        + '<div class="guide-examples">' + renderNotebookGuideExamples(guide) + '</div>'
-        + '<div class="quick-check"><div class="quick-check-title">' + escapeHtml(getNotebookGuideQuickCheckTitle(guide)) + '</div>'
-        + '<div class="quick-check-intro">Before turning in your next ' + escapeHtml(guide.writingLabel || "piece of writing") + ', ask yourself:</div>'
-        + '<ul>' + renderNotebookQuickCheckList(guide) + '</ul></div>';
+        + '<div class="next-time-focus"><div class="next-time-focus-title">Next Time Focus</div><ul>' + renderNotebookGuideFocusList(guide, options) + '</ul></div>'
+        + '<div class="guide-examples">' + renderNotebookGuideExamples(guide, options) + '</div>'
+        + quickCheckHtml;
 }
 
 function fillNotebookSummary() {
@@ -9498,8 +9566,10 @@ function fillNotebookSummary() {
     if (notebookPage2Title) notebookPage2Title.textContent = title;
     var notebookOverallScore = document.getElementById("notebookOverallScore");
     if (notebookOverallScore) {
-        notebookOverallScore.textContent = latestAnalysisData.overall == null ? (latestAnalysisData.sampleStatus ? latestAnalysisData.sampleStatus.label : "Not scored") : (latestAnalysisData.overall + "%");
-        notebookOverallScore.className = "overall-value " + getNotebookScoreClass(latestAnalysisData.overall, 100);
+        var visibleOverallScore = getNotebookVisibleOverallScore(latestAnalysisData);
+        var notebookOverallValue = visibleOverallScore == null ? latestAnalysisData.overall : visibleOverallScore;
+        notebookOverallScore.textContent = notebookOverallValue == null ? (latestAnalysisData.sampleStatus ? latestAnalysisData.sampleStatus.label : "Not scored") : (notebookOverallValue + "%");
+        notebookOverallScore.className = "overall-value " + getNotebookScoreClass(notebookOverallValue, 100);
     }
     document.getElementById("notebookDate").textContent = dateText;
     var notebookPage2Date = document.getElementById("notebookPage2Date");
@@ -9549,7 +9619,7 @@ function fillNotebookSummary() {
         latestAnalysisData.notebookGuide = guide;
         latestAnalysisData.notebookGuideVersion = NOTEBOOK_GUIDE_VERSION;
     }
-    setWftSanitizedInnerHtml("notebookPage2Content", renderNotebookGuideHtml(guide));
+    setWftSanitizedInnerHtml("notebookPage2Content", renderNotebookGuideHtml(guide, getNotebookPrintGuideRenderOptions()));
     return true;
 }
 
@@ -9573,7 +9643,7 @@ function getNotebookPrintCss() {
         ".overall-value.score-excellent { color: #0f766e; border-color: #0f766e; background: #f0fdfa; }",
         ".overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }",
         ".overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }",
-        ".overall-value.score-needs-support { color: #c2410c; border-color: #fb923c; background: #fff7ed; }",
+        ".overall-value.score-needs-support { color: #6d28d9; border-color: #8b5cf6; background: #faf5ff; }",
         ".meta-row { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 10.3px; color: #444444; padding: 3px 0 4px; border-bottom: 1px solid #cccccc; margin-bottom: 5px; }",
         ".meta-row strong { color: #111111; font-weight: 600; }",
         ".writing-type-chip { display: inline; border: 0; background: transparent; color: #444444; border-radius: 0; padding: 0; font-weight: 400; line-height: inherit; }",
@@ -9596,18 +9666,18 @@ function getNotebookPrintCss() {
         ".score-excellent .score-badge { background: #f0fdfa; border-color: #0f766e; color: #0f766e; }",
         ".score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }",
         ".score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }",
-        ".score-needs-support .score-badge { background: #fff7ed; border-color: #fb923c; color: #c2410c; }",
+        ".score-needs-support .score-badge { background: #f3e8ff; border-color: #8b5cf6; color: #6d28d9; }",
         ".score-bar-track { display: block; width: 100%; min-width: 0; height: 3.5px; min-height: 3.5px; background: #cccccc; border-radius: 99px; margin-bottom: 4px; overflow: hidden; }",
         ".score-bar-fill { display: block; height: 100%; min-height: 100%; border-radius: 99px; background: #333333; }",
         ".evidence-block { font-size: 9.3px; color: #111111; line-height: 1.45; margin-bottom: 3px; }",
         ".evidence-block strong { font-weight: 700; color: #111111; }",
         ".tip-block strong { font-weight: 700; color: #92400e; }",
         ".tip-block { font-size: 9.3px; color: #7c2d12; line-height: 1.45; padding-top: 3px; border-top: 1px dashed #f3d08a; }",
-        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #3b2f45; padding-bottom: 4px; margin-bottom: 8mm; }",
+        ".page2-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #333333; box-shadow: 0 2px 0 #3b2f45; padding-bottom: 4px; margin-bottom: 3mm; }",
         ".page2-meta { font-size: 8px; color: #444444; margin-bottom: 2px; }",
         ".page2-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 14px; font-weight: 400; }",
         ".page2-date { font-size: 8.5px; color: #444444; text-align: right; }",
-        ".next-time-guide { border: 1px solid #cccccc; border-top: 3px solid #3b2f45; border-radius: 4px; padding: 4.5mm 5mm; font-size: 9.2px; line-height: 1.28; color: #111111; }",
+        ".next-time-guide { border: 1px solid #cccccc; border-top: 3px solid #3b2f45; border-radius: 4px; padding: 2.5mm 3mm; font-size: 9.2px; line-height: 1.28; color: #111111; }",
         ".next-time-guide .section-title { color: #3b2f45; border-bottom-color: #d6d3d1; margin-bottom: 1.8mm; }",
         ".guide-intro { font-size: 9px; line-height: 1.28; color: #374151; margin-bottom: 2mm; }",
         ".next-time-focus, .quick-check { font-size: 8.6px; color: #374151; background: #fafaf9; border-left: 2px solid #d97706; padding: 1.5mm 2mm; margin-bottom: 2mm; line-height: 1.25; }",
@@ -9643,6 +9713,23 @@ function getNotebookPrintCss() {
         ".auto-fit-page .evidence-block, .auto-fit-page .tip-block { font-size: calc(9.3px * var(--fit-scale)); line-height: 1.32; }",
         ".auto-fit-page .evidence-block { margin-bottom: calc(3px * var(--fit-scale)); }",
         ".auto-fit-page .tip-block { padding-top: calc(3px * var(--fit-scale)); }",
+        ".auto-fit-page .page2-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(3mm * var(--fit-scale)); }",
+        ".auto-fit-page .page2-meta { font-size: calc(8px * var(--fit-scale)); margin-bottom: calc(2px * var(--fit-scale)); }",
+        ".auto-fit-page .page2-title { font-size: calc(14px * var(--fit-scale)); }",
+        ".auto-fit-page .page2-date { font-size: calc(8.5px * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-guide { padding: calc(2.5mm * var(--fit-scale)) calc(3mm * var(--fit-scale)); font-size: calc(9.2px * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-guide .section-title { margin-bottom: calc(1.8mm * var(--fit-scale)); }",
+        ".auto-fit-page .guide-intro { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(2mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus, .auto-fit-page .quick-check { font-size: calc(8.6px * var(--fit-scale)); padding: calc(1.5mm * var(--fit-scale)) calc(2mm * var(--fit-scale)); margin-bottom: calc(2mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus-title, .auto-fit-page .quick-check-title, .auto-fit-page .example-heading { font-size: calc(7.8px * var(--fit-scale)); margin-bottom: calc(0.8mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus ul, .auto-fit-page .quick-check ul { padding-left: calc(3.5mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus li, .auto-fit-page .quick-check li { margin-bottom: calc(0.4mm * var(--fit-scale)); }",
+        ".auto-fit-page .guide-example { padding: calc(1.5mm * var(--fit-scale)) calc(1.8mm * var(--fit-scale)); margin-bottom: calc(1.7mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-skill { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(1mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-label { font-size: calc(7.8px * var(--fit-scale)); margin-top: calc(0.7mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-quote, .auto-fit-page .example-after, .auto-fit-page .example-why, .auto-fit-page .guide-no-examples, .auto-fit-page .quick-check-intro { font-size: calc(8.7px * var(--fit-scale)); }",
+        ".auto-fit-page .example-quote, .auto-fit-page .example-after { padding: calc(0.6mm * var(--fit-scale)) calc(1.2mm * var(--fit-scale)); margin-top: calc(0.4mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-why { margin-top: calc(0.4mm * var(--fit-scale)); }",
         "@media print { body { background: white; } .screen-controls { display: none; } .page { margin: 0; box-shadow: none; width: 148mm; min-height: 210mm; } .auto-fit-page { height: 210mm; min-height: 210mm; max-height: 210mm; overflow: hidden; } }"
     ].join("\n");
 }
@@ -9655,8 +9742,9 @@ function getNotebookPrintFitScript() {
         'function setPx(page,sel,prop,value){each(page,sel,function(node){node.style[prop]=(Math.max(0,value)).toFixed(2)+"px";});}' +
         'function applyScale(page,scale){page.style.setProperty("--fit-scale",String(scale));var rules=[[".page-header","paddingBottom",4],[".page-header","marginBottom",5],[".page-label","fontSize",9],[".page-label","marginBottom",2],[".page-title","fontSize",18.5],[".overall-label","fontSize",8.5],[".overall-value","fontSize",26.5],[".meta-row","rowGap",4],[".meta-row","columnGap",12],[".meta-row","fontSize",10.3],[".meta-row","paddingTop",3],[".meta-row","paddingBottom",4],[".meta-row","marginBottom",5],[".top-boxes","gap",5],[".top-boxes","marginBottom",5],[".box-label","fontSize",9],[".box-label","marginBottom",2],[".section-title","fontSize",9],[".section-title","paddingBottom",2],[".section-title","marginBottom",5],[".assessment-grid","rowGap",4],[".assessment-grid","columnGap",6],[".category","paddingTop",4],[".category","paddingRight",5],[".category","paddingBottom",4],[".category","paddingLeft",5],[".category-header","marginBottom",2],[".category-name","fontSize",10.3],[".score-badge","fontSize",9.3],[".score-badge","paddingLeft",5],[".score-badge","paddingRight",5],[".score-bar-track","marginBottom",4],[".evidence-block","fontSize",9.3],[".evidence-block","marginBottom",3],[".tip-block","fontSize",9.3],[".tip-block","paddingTop",3]];for(var i=0;i<rules.length;i++){setPx(page,rules[i][0],rules[i][1],rules[i][2]*scale);}each(page,".info-box,.teacher-comment",function(node){node.style.paddingTop=(4*scale).toFixed(2)+"px";node.style.paddingRight=(5*scale).toFixed(2)+"px";node.style.paddingBottom=(4*scale).toFixed(2)+"px";node.style.paddingLeft=(5*scale).toFixed(2)+"px";});setPx(page,".teacher-comment","marginBottom",6*scale);each(page,".score-bar-track",function(node){node.style.display="block";node.style.width="100%";node.style.minWidth="0";node.style.height="3.5px";node.style.minHeight="3.5px";});each(page,".score-bar-fill",function(node){node.style.display="block";node.style.height="100%";node.style.minHeight="100%";});each(page,".info-box p,.teacher-comment p,.evidence-block,.tip-block",function(node){node.style.lineHeight="1.32";});}' +
         'function pageOverflows(page){return page.scrollHeight>page.clientHeight+1;}' +
-        'function fitPageOne(){var page=document.querySelector(".auto-fit-page");if(!page)return;var targetHeight=mmToPx(210)-mmToPx(5);var originalHeight=page.style.height;var originalMinHeight=page.style.minHeight;var originalMaxHeight=page.style.maxHeight;var originalOverflow=page.style.overflow;page.style.height=targetHeight+"px";page.style.minHeight=targetHeight+"px";page.style.maxHeight=targetHeight+"px";page.style.overflow="hidden";applyScale(page,1);var minScale=0.62;var low=minScale;var high=1;var best=1;if(pageOverflows(page)){best=minScale;for(var i=0;i<24;i++){var mid=(low+high)/2;applyScale(page,mid);if(pageOverflows(page)){high=mid;}else{best=mid;low=mid;}}applyScale(page,Math.floor(best*1000)/1000);}if(pageOverflows(page)){page.classList.add("fit-warning");}else{page.classList.remove("fit-warning");}page.style.height=originalHeight;page.style.minHeight=originalMinHeight;page.style.maxHeight=originalMaxHeight;page.style.overflow=originalOverflow;}' +
-        'window.fitNotebookPageOne=fitPageOne;window.addEventListener("load",function(){var run=function(){fitPageOne();setTimeout(fitPageOne,120);setTimeout(fitPageOne,400);};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(run);}else{run();}});window.addEventListener("resize",fitPageOne);window.addEventListener("beforeprint",fitPageOne);' +
+        'function fitNotebookPage(page){if(!page)return;var targetHeight=mmToPx(210)-mmToPx(5);var originalHeight=page.style.height;var originalMinHeight=page.style.minHeight;var originalMaxHeight=page.style.maxHeight;var originalOverflow=page.style.overflow;page.style.height=targetHeight+"px";page.style.minHeight=targetHeight+"px";page.style.maxHeight=targetHeight+"px";page.style.overflow="hidden";applyScale(page,1);var minScale=0.62;var low=minScale;var high=1;var best=1;if(pageOverflows(page)){best=minScale;for(var i=0;i<24;i++){var mid=(low+high)/2;applyScale(page,mid);if(pageOverflows(page)){high=mid;}else{best=mid;low=mid;}}applyScale(page,Math.floor(best*1000)/1000);}if(pageOverflows(page)){page.classList.add("fit-warning");}else{page.classList.remove("fit-warning");}page.style.height=originalHeight;page.style.minHeight=originalMinHeight;page.style.maxHeight=originalMaxHeight;page.style.overflow=originalOverflow;}' +
+        'function fitAllNotebookPages(){var pages=document.querySelectorAll(".auto-fit-page");for(var i=0;i<pages.length;i++){fitNotebookPage(pages[i]);}}' +
+        'window.fitAllNotebookPages=fitAllNotebookPages;window.fitNotebookPageOne=fitAllNotebookPages;window.addEventListener("load",function(){var run=function(){fitAllNotebookPages();setTimeout(fitAllNotebookPages,120);setTimeout(fitAllNotebookPages,400);};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(run);}else{run();}});window.addEventListener("resize",fitAllNotebookPages);window.addEventListener("beforeprint",fitAllNotebookPages);' +
         '})();' +
         '<\/script>';
 }
@@ -9673,7 +9761,7 @@ function scheduleWftPrintWindow(printWindow) {
     try { printWindow.focus(); } catch (e) { }
     setTimeout(function() {
         try {
-            if (printWindow.fitNotebookPageOne) printWindow.fitNotebookPageOne();
+            if (printWindow.fitAllNotebookPages) printWindow.fitAllNotebookPages(); else if (printWindow.fitNotebookPageOne) printWindow.fitNotebookPageOne();
             printWindow.print();
         } catch (e) { }
     }, 700);
@@ -9813,8 +9901,10 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         targetWords: session.targetWords != null ? session.targetWords : 0,
         actualWords: session.actualWords != null ? session.actualWords : countWords(originalText)
     });
-    var scoreText = session.overall == null ? "Not scored" : (session.overall + "%");
-    var scoreClass = getNotebookScoreClass(session.overall, 100);
+    var visibleOverallScore = getNotebookVisibleOverallScore(session);
+    var overallForNotebook = visibleOverallScore == null ? session.overall : visibleOverallScore;
+    var scoreText = overallForNotebook == null ? "Not scored" : (overallForNotebook + "%");
+    var scoreClass = getNotebookScoreClass(overallForNotebook, 100);
     var writingTypeLabel = getNotebookWritingTypeLabel(genreInfo);
     var wordsTargetLabel = notebookSettings.wordTargetLabel;
     var savedDetailed = session.detailedFeedback || {};
@@ -9858,8 +9948,8 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
         + '</div>'
-        + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
-        + '<div class="next-time-guide">' + renderNotebookGuideHtml(savedGuide) + '</div></div>';
+        + '<div class="page auto-fit-page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
+        + '<div class="next-time-guide">' + renderNotebookGuideHtml(savedGuide, getNotebookPrintGuideRenderOptions()) + '</div></div>';
 }
 
 

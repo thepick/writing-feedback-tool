@@ -2890,7 +2890,7 @@
     .notebook-print-doc .overall-value.score-excellent { color: #0f766e; border-color: #0f766e; background: #f0fdfa; }
     .notebook-print-doc .overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }
     .notebook-print-doc .overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }
-    .notebook-print-doc .overall-value.score-needs-support { color: #c2410c; border-color: #fb923c; background: #fff7ed; }
+    .notebook-print-doc .overall-value.score-needs-support { color: #6d28d9; border-color: #8b5cf6; background: #faf5ff; }
     .notebook-print-doc .meta-row {
         display: flex;
         flex-wrap: wrap;
@@ -3016,7 +3016,7 @@
     .notebook-print-doc .score-excellent .score-badge { background: #f0fdfa; border-color: #0f766e; color: #0f766e; }
     .notebook-print-doc .score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }
     .notebook-print-doc .score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }
-    .notebook-print-doc .score-needs-support .score-badge { background: #fff7ed; border-color: #fb923c; color: #c2410c; }
+    .notebook-print-doc .score-needs-support .score-badge { background: #f3e8ff; border-color: #8b5cf6; color: #6d28d9; }
     .notebook-print-doc .score-bar-track {
         display: block;
         width: 100%;
@@ -3057,7 +3057,7 @@
         border-bottom: 2px solid #333333;
         box-shadow: 0 2px 0 #3b2f45;
         padding-bottom: 4px;
-        margin-bottom: 8mm;
+        margin-bottom: 3mm;
     }
     .notebook-print-doc .page2-meta {
         font-size: 8px;
@@ -3078,7 +3078,7 @@
         border: 1px solid #cccccc;
         border-top: 3px solid #3b2f45;
         border-radius: 4px;
-        padding: 4.5mm 5mm;
+        padding: 2.5mm 3mm;
         font-size: 9.2px;
         line-height: 1.28;
         color: #111111;
@@ -3250,6 +3250,78 @@
     }
     .notebook-print-doc .auto-fit-page .tip-block {
         padding-top: calc(3px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .page2-header {
+        padding-bottom: calc(4px * var(--fit-scale));
+        margin-bottom: calc(3mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .page2-meta {
+        font-size: calc(8px * var(--fit-scale));
+        margin-bottom: calc(2px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .page2-title {
+        font-size: calc(14px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .page2-date {
+        font-size: calc(8.5px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .next-time-guide {
+        padding: calc(2.5mm * var(--fit-scale)) calc(3mm * var(--fit-scale));
+        font-size: calc(9.2px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .next-time-guide .section-title {
+        margin-bottom: calc(1.8mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .guide-intro {
+        font-size: calc(9px * var(--fit-scale));
+        margin-bottom: calc(2mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .next-time-focus,
+    .notebook-print-doc .auto-fit-page .quick-check {
+        font-size: calc(8.6px * var(--fit-scale));
+        padding: calc(1.5mm * var(--fit-scale)) calc(2mm * var(--fit-scale));
+        margin-bottom: calc(2mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .next-time-focus-title,
+    .notebook-print-doc .auto-fit-page .quick-check-title,
+    .notebook-print-doc .auto-fit-page .example-heading {
+        font-size: calc(7.8px * var(--fit-scale));
+        margin-bottom: calc(0.8mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .next-time-focus ul,
+    .notebook-print-doc .auto-fit-page .quick-check ul {
+        padding-left: calc(3.5mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .next-time-focus li,
+    .notebook-print-doc .auto-fit-page .quick-check li {
+        margin-bottom: calc(0.4mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .guide-example {
+        padding: calc(1.5mm * var(--fit-scale)) calc(1.8mm * var(--fit-scale));
+        margin-bottom: calc(1.7mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .example-skill {
+        font-size: calc(9px * var(--fit-scale));
+        margin-bottom: calc(1mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .example-label {
+        font-size: calc(7.8px * var(--fit-scale));
+        margin-top: calc(0.7mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .example-quote,
+    .notebook-print-doc .auto-fit-page .example-after,
+    .notebook-print-doc .auto-fit-page .example-why,
+    .notebook-print-doc .auto-fit-page .guide-no-examples,
+    .notebook-print-doc .auto-fit-page .quick-check-intro {
+        font-size: calc(8.7px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .example-quote,
+    .notebook-print-doc .auto-fit-page .example-after {
+        padding: calc(0.6mm * var(--fit-scale)) calc(1.2mm * var(--fit-scale));
+        margin-top: calc(0.4mm * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .example-why {
+        margin-top: calc(0.4mm * var(--fit-scale));
     }
 
     /* =============================================
@@ -4016,7 +4088,7 @@
                                 <div id="notebookDetailedAssessment" class="assessment-grid"></div>
                             </div>
 
-                            <div class="page">
+                            <div class="page auto-fit-page">
                                 <div class="page2-header">
                                     <div>
                                         <div class="page2-meta">Writing Notebook Summary - Page 2</div>
