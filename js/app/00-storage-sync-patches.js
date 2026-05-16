@@ -681,12 +681,44 @@ function getWeightDescriptionText(optProfile) {
     var neatnessWeight = neatnessActive ? getNeatnessWeight(profile) : 0;
     var nonNeatScale = 1 - neatnessWeight;
     var order = ["Ideas & Details", "Organization", "Grammar", "Flow", "Word Choice", "Spelling & Punctuation"];
-    var parts = [];
-    for (var i = 0; i < order.length; i++) {
+    var entries = [];
+    var floorsTotal = 0;
+    var i;
+
+    for (i = 0; i < order.length; i += 1) {
         var k = order[i];
-        if (weights[k] != null) parts.push(k + " (" + formatPercentFromWeight(weights[k] * nonNeatScale) + ")");
+        if (weights[k] != null) {
+            var pct = Number(weights[k] * nonNeatScale * 100) || 0;
+            var floorPct = Math.floor(pct);
+            entries.push({ label: k, pct: pct, rounded: floorPct, remainder: pct - floorPct });
+            floorsTotal += floorPct;
+        }
     }
-    if (neatnessActive && neatnessWeight > 0) parts.push("Neatness (" + formatPercentFromWeight(neatnessWeight) + ")");
+    if (neatnessActive && neatnessWeight > 0) {
+        var neatPct = Number(neatnessWeight * 100) || 0;
+        var neatFloor = Math.floor(neatPct);
+        entries.push({ label: "Neatness", pct: neatPct, rounded: neatFloor, remainder: neatPct - neatFloor });
+        floorsTotal += neatFloor;
+    }
+
+    var pointsToAdd = Math.max(0, 100 - floorsTotal);
+    entries.sort(function(a, b) { return b.remainder - a.remainder; });
+    for (i = 0; i < entries.length && pointsToAdd > 0; i += 1) {
+        entries[i].rounded += 1;
+        pointsToAdd -= 1;
+    }
+    entries.sort(function(a, b) {
+        var ai = order.indexOf(a.label);
+        var bi = order.indexOf(b.label);
+        if (a.label === "Neatness") ai = 999;
+        if (b.label === "Neatness") bi = 999;
+        return ai - bi;
+    });
+
+    var parts = [];
+    for (i = 0; i < entries.length; i += 1) {
+        parts.push(entries[i].label + " (" + entries[i].rounded + "%)");
+    }
     return "Weighted by category importance: " + parts.join(", ") + ".";
 }
 
