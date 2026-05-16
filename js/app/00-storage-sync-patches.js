@@ -7645,7 +7645,7 @@ function saveCurrentSessionToPortfolio(analysisData) {
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
         notebookGuide: cloneWftJson(analysisData.notebookGuide || null),
-        notebookGuideVersion: analysisData.notebookGuideVersion || 1,
+        notebookGuideVersion: analysisData.notebookGuideVersion || (typeof NOTEBOOK_GUIDE_VERSION !== "undefined" ? NOTEBOOK_GUIDE_VERSION : 2),
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
         images: getSessionImagePayloads(),
         notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
