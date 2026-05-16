@@ -4003,8 +4003,8 @@ function resetWftResultUiToFreshSlate() {
     var notebookDetailedAssessmentEl = document.getElementById("notebookDetailedAssessment");
     if (notebookDetailedAssessmentEl) notebookDetailedAssessmentEl.innerHTML = "";
 
-    var notebookCorrectedTextEl = document.getElementById("notebookCorrectedText");
-    if (notebookCorrectedTextEl) notebookCorrectedTextEl.innerHTML = "-";
+    var notebookPage2ContentEl = document.getElementById("notebookPage2Content");
+    if (notebookPage2ContentEl) notebookPage2ContentEl.innerHTML = '<div class="section-title">Next Time Writing Guide</div>';
 
     var portfolioContentEl = document.getElementById("portfolioContent");
     if (portfolioContentEl) portfolioContentEl.innerHTML = '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>';
@@ -7644,6 +7644,8 @@ function saveCurrentSessionToPortfolio(analysisData) {
         genreConfidence: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).confidence,
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
+        notebookGuide: cloneWftJson(analysisData.notebookGuide || null),
+        notebookGuideVersion: analysisData.notebookGuideVersion || 1,
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
         images: getSessionImagePayloads(),
         notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
@@ -8030,7 +8032,7 @@ function buildPortfolioReassessmentReplacementSession(oldSession, newSession, so
         'categoryScores', 'assessScriptQuality', 'neatnessAssessed', 'correctedHtml',
         'correctedMarkup', 'correctedPlainText', 'writingGenreInfo', 'writingGenre',
         'writingSubtype', 'writingSafeReference', 'genreConfidence', 'feedbackSummary',
-        'detailedFeedback', 'sourceType', 'notebookPrintHtml'
+        'detailedFeedback', 'notebookGuide', 'notebookGuideVersion', 'sourceType', 'notebookPrintHtml'
     ];
     for (var i = 0; i < overwriteFields.length; i++) {
         var field = overwriteFields[i];
