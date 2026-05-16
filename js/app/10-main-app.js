@@ -5295,11 +5295,14 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "Important rules for candidates:",
         "- The student already has the original writing in the notebook. Do not rewrite the full piece.",
         "- Generate 5 to 7 short candidate examples from the original writing.",
-        "- Each originalQuote must be an exact quote from the original student writing above. Do not invent or silently correct the quote.",
+        "- Each originalQuote must be an exact quote from the original student writing above. Do not invent, paraphrase, or silently correct the quote.",
         "- Each candidate must connect to one of these Page 1 priority areas when possible:",
         notebookGuidePriorityPromptText,
         "- Tag each candidate with page1Connection: Flow, Grammar, Spelling & Punctuation, Organization, Ideas & Details, or Word Choice.",
-        "- If Flow is listed as a priority above, include at least one candidate that actually improves sentence flow.",
+        "- First, provide one candidate for each Page 1 priority area when the original writing gives a clear, exact quote.",
+        "- You may reorder the candidates to put the strongest examples first.",
+        "- Then, if you have fewer than 7 candidates, add extra examples for the most important areas.",
+        "- If Flow is listed as a priority above, include at least one candidate that actually improves sentence flow, such as varying repeated sentence openings, sentence rhythm, or transitions.",
         "- If Grammar is listed as a priority above, include at least one candidate that actually shows a grammar improvement.",
         "- If Spelling & Punctuation is listed as a priority above, include at least one candidate that actually shows a convention improvement.",
         "- Use 'Next time' style suggestions. Do not tell the student to rewrite this piece now.",
@@ -8752,6 +8755,8 @@ function renderNotebookRevisionFocusList(data) {
 }
 
 
+var NOTEBOOK_GUIDE_VERSION = 2;
+
 var NOTEBOOK_GUIDE_CATEGORY_ALIASES = {
     "flow": ["flow", "sentence flow", "sentence opening", "sentence starter", "sentence variety", "sentence rhythm", "transition", "smooth"],
     "grammar": ["grammar", "verb tense", "tense", "sentence break", "sentence boundary", "run-on", "complete sentence", "agreement", "sentence correctness"],
@@ -8826,7 +8831,7 @@ function getNotebookGuideDefaultFocus(category, sourceText) {
         return "Make sentence flow smoother";
     }
     if (category === "Grammar") {
-        if (value.indexOf("tense") !== -1) return "Keep verb tense consistent";
+        if (value.indexOf("tense") !== -1 || /\bverb\b|\bverbs\b/.test(value)) return "Keep verb tense consistent";
         if (value.indexOf("run-on") !== -1 || value.indexOf("break") !== -1 || value.indexOf("complete sentence") !== -1) return "Break long sentences into clearer parts";
         return "Keep grammar and sentence breaks clear";
     }
@@ -8837,11 +8842,30 @@ function getNotebookGuideDefaultFocus(category, sourceText) {
     return cleanNotebookGuideText(sourceText) || "Check one important writing skill";
 }
 
+function getNotebookGuideCategoryFocusSource(category, data) {
+    data = data || {};
+    var detailed = data.detailedFeedback || data.detailed || {};
+    var categories = detailed.categories || {};
+    var item = categories[category] || {};
+
+    return cleanNotebookGuideText([
+        item.growthTip || "",
+        item.evidence || "",
+        item.teacherComment || "",
+        item.sentenceVariety || "",
+        item.flowPattern || "",
+        item.rawBody || ""
+    ].join(" "));
+}
+
 function buildNotebookGuidePriorities(data) {
     data = data || {};
     var categoryScores = data.categoryScores || {};
     var detailed = data.detailedFeedback || data.detailed || {};
     var priorities = [];
+    var labels = ["Ideas & Details", "Grammar", "Word Choice", "Organization", "Flow", "Spelling & Punctuation"];
+    var ranked = [];
+    var j;
 
     function addPriority(category, text, source) {
         category = normalizeNotebookGuideCategoryName(category || text);
@@ -8859,12 +8883,7 @@ function buildNotebookGuidePriorities(data) {
         });
     }
 
-    addPriority(inferNotebookGuideCategoryFromText(data.growGoal || (detailed && detailed.growGoal) || ""), data.growGoal || (detailed && detailed.growGoal) || "", "growGoal");
-    addPriority(inferNotebookGuideCategoryFromText(data.nextTime || (detailed && detailed.nextTime) || ""), data.nextTime || (detailed && detailed.nextTime) || "", "nextTime");
-
-    var labels = ["Ideas & Details", "Grammar", "Word Choice", "Organization", "Flow", "Spelling & Punctuation"];
-    var ranked = [];
-    for (var j = 0; j < labels.length; j += 1) {
+    for (j = 0; j < labels.length; j += 1) {
         var key = labels[j];
         var score = categoryScores && categoryScores[key] != null ? Number(categoryScores[key]) : null;
         if (!isFinite(score)) continue;
@@ -8875,15 +8894,23 @@ function buildNotebookGuidePriorities(data) {
         return labels.indexOf(a.key) - labels.indexOf(b.key);
     });
 
+    // The lowest-scoring core category must be represented on Page 2 before other goals can fill the guide.
+    if (ranked.length) {
+        addPriority(ranked[0].key, getNotebookGuideCategoryFocusSource(ranked[0].key, data) || ranked[0].key, "lowestScore");
+    }
+
+    addPriority(inferNotebookGuideCategoryFromText(data.growGoal || (detailed && detailed.growGoal) || ""), data.growGoal || (detailed && detailed.growGoal) || "", "growGoal");
+    addPriority(inferNotebookGuideCategoryFromText(data.nextTime || (detailed && detailed.nextTime) || ""), data.nextTime || (detailed && detailed.nextTime) || "", "nextTime");
+
     for (var r = 0; r < ranked.length && priorities.length < 4; r += 1) {
         if (ranked[r].score <= 8 || priorities.length < 2) {
-            addPriority(ranked[r].key, ranked[r].key, "score");
+            addPriority(ranked[r].key, getNotebookGuideCategoryFocusSource(ranked[r].key, data) || ranked[r].key, "score");
         }
     }
 
     if (data.flowData && priorities.length < 4) {
         var flowScore = data.flowData.varietyScore != null ? Number(data.flowData.varietyScore) : 100;
-        if (isFinite(flowScore) && flowScore < 70) addPriority("Flow", "sentence flow", "computedFlow");
+        if (isFinite(flowScore) && flowScore < 70) addPriority("Flow", getNotebookGuideCategoryFocusSource("Flow", data) || "sentence flow", "computedFlow");
     }
 
     if (!priorities.length) {
@@ -8965,6 +8992,35 @@ function notebookGuideExampleMatchesPriority(example, notebookGuidePriorities) {
     return false;
 }
 
+function normalizeNotebookGuideQuickCheckKey(text) {
+    var value = cleanNotebookGuideText(text).toLowerCase();
+
+    if (
+        value.indexOf("spelling") !== -1 ||
+        value.indexOf("punctuation") !== -1 ||
+        value.indexOf("capital") !== -1 ||
+        value.indexOf("comma") !== -1 ||
+        value.indexOf("plural") !== -1 ||
+        value.indexOf("word form") !== -1
+    ) {
+        return "conventions";
+    }
+
+    if (value.indexOf("read") !== -1 && value.indexOf("out loud") !== -1) {
+        return "read-aloud";
+    }
+
+    if (value.indexOf("sentence") !== -1 && value.indexOf("same way") !== -1) {
+        return "sentence-openings";
+    }
+
+    if (/\bverb\b|\bverbs\b|\btense\b/.test(value)) {
+        return "verb-tense";
+    }
+
+    return value.replace(/[^a-z0-9]+/g, " ").trim();
+}
+
 function getNotebookGuideQuickCheckForPriority(priority, writingLabel) {
     var category = normalizeNotebookGuideCategoryName(priority && priority.category);
     var text = cleanNotebookGuideText(priority && priority.priority).toLowerCase();
@@ -8974,7 +9030,7 @@ function getNotebookGuideQuickCheckForPriority(priority, writingLabel) {
         return "Does my writing sound smooth when I read it out loud?";
     }
     if (category === "Grammar") {
-        if (text.indexOf("tense") !== -1) return "Did I keep my writing in one main tense?";
+        if (text.indexOf("tense") !== -1 || /\bverb\b|\bverbs\b/.test(text)) return "Did I keep my writing in one main tense?";
         return "Did I break long sentences into clear parts?";
     }
     if (category === "Spelling & Punctuation") return "Did I check spelling, punctuation, and word forms?";
@@ -8986,17 +9042,23 @@ function getNotebookGuideQuickCheckForPriority(priority, writingLabel) {
 
 function buildNotebookGuideQuickChecks(priorities, writingLabel) {
     var checks = [];
+    var seenChecks = {};
+
     function addCheck(text) {
+        var key;
         text = truncateNotebookGuideText(text, 100);
-        if (!text || checks.indexOf(text) !== -1) return;
+        key = normalizeNotebookGuideQuickCheckKey(text);
+        if (!text || seenChecks[key]) return;
+        seenChecks[key] = true;
         checks.push(text);
     }
+
     priorities = Array.isArray(priorities) ? priorities : [];
     for (var i = 0; i < priorities.length && checks.length < 5; i += 1) {
         addCheck(getNotebookGuideQuickCheckForPriority(priorities[i], writingLabel));
     }
     addCheck("Did I read my writing out loud to hear how it sounds?");
-    addCheck("Did I check spelling and punctuation before turning it in?");
+    if (!seenChecks.conventions) addCheck("Did I check spelling and punctuation before turning it in?");
     return checks.slice(0, 5);
 }
 
@@ -9009,6 +9071,62 @@ function getNotebookGuideFocusItems(priorities) {
     }
     if (!items.length) items.push("Check one important writing skill next time");
     return items;
+}
+
+function getNotebookGuideExampleCategory(example) {
+    return normalizeNotebookGuideCategoryName(
+        (example && example.page1Connection) ||
+        (example && example.area) ||
+        (example && example.skill) ||
+        ""
+    );
+}
+
+function getNotebookGuideRequiredCategories(priorities, maxExamples) {
+    var required = [];
+    var seen = {};
+    priorities = Array.isArray(priorities) ? priorities : [];
+    maxExamples = parseInt(maxExamples, 10);
+    if (!isFinite(maxExamples) || maxExamples < 1) maxExamples = 3;
+
+    for (var i = 0; i < priorities.length && required.length < maxExamples; i += 1) {
+        var category = normalizeNotebookGuideCategoryName(priorities[i].category);
+        if (!category || category === "Neatness" || seen[category]) continue;
+        seen[category] = true;
+        required.push(category);
+    }
+
+    return required;
+}
+
+function getNotebookGuideMaxExamples(priorities) {
+    return getNotebookGuideRequiredCategories(priorities, 4).length > 3 ? 4 : 3;
+}
+
+function notebookGuideHasCategory(examples, category) {
+    examples = Array.isArray(examples) ? examples : [];
+    category = normalizeNotebookGuideCategoryName(category);
+
+    for (var i = 0; i < examples.length; i += 1) {
+        if (getNotebookGuideExampleCategory(examples[i]) === category) return true;
+    }
+
+    return false;
+}
+
+function notebookGuideHasRequiredCoverage(guide, priorities) {
+    guide = guide || {};
+    var examples = Array.isArray(guide.examples) ? guide.examples : [];
+    var maxExamples = getNotebookGuideMaxExamples(priorities);
+    var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
+
+    if (!examples.length) return false;
+
+    for (var i = 0; i < requiredCategories.length && i < maxExamples; i += 1) {
+        if (!notebookGuideHasCategory(examples, requiredCategories[i])) return false;
+    }
+
+    return true;
 }
 
 function getNotebookGuideSentenceList(text) {
@@ -9029,11 +9147,73 @@ function getNotebookGuideSentenceStarter(sentence) {
     return m ? m[1].toLowerCase() : "";
 }
 
+function buildSafeFlowOpeningModel(sentence) {
+    var s = cleanNotebookGuideText(sentence);
+    var m = s.match(/^([A-Za-z]+)([\s\S]*)$/);
+    var firstWord;
+    var rest;
+    var safeLowercaseStarters = /^(The|A|An|This|That|These|Those|He|She|They|We|It|My|Our|His|Her|Their|One|Some|Many|All|Each|Every|Another)$/i;
+    var connectiveStarters = /^(When|If|After|Before|While|Since|Because|Then|So|And|But|Or)$/i;
+
+    if (!m) return "";
+    firstWord = m[1];
+    rest = m[2] || "";
+
+    if (firstWord === "I") {
+        return "After a moment, I" + rest;
+    }
+
+    if (safeLowercaseStarters.test(firstWord)) {
+        return "After a moment, " + firstWord.toLowerCase() + rest;
+    }
+
+    if (connectiveStarters.test(firstWord)) {
+        return "Try starting this idea with a different time, place, or action phrase.";
+    }
+
+    return "Try starting this idea with a time, place, or action phrase instead of repeating the same opening.";
+}
+
 function buildFallbackExampleForPriority(priority, originalText, correctedText) {
     var category = normalizeNotebookGuideCategoryName(priority && priority.category);
     var sentences = getNotebookGuideSentenceList(originalText);
     var i;
     if (category === "Flow") {
+        var starterCounts = {};
+        var starterFirstSentence = {};
+        var mostRepeatedStarter = "";
+        var mostRepeatedCount = 1;
+        var starterKey;
+
+        for (i = 0; i < sentences.length; i += 1) {
+            var starter = getNotebookGuideSentenceStarter(sentences[i]);
+            if (!starter) continue;
+            starterCounts[starter] = (starterCounts[starter] || 0) + 1;
+            if (!starterFirstSentence[starter]) starterFirstSentence[starter] = sentences[i];
+        }
+
+        for (starterKey in starterCounts) {
+            if (starterCounts.hasOwnProperty(starterKey) && starterCounts[starterKey] > mostRepeatedCount) {
+                mostRepeatedStarter = starterKey;
+                mostRepeatedCount = starterCounts[starterKey];
+            }
+        }
+
+        if (mostRepeatedStarter && mostRepeatedCount >= 3 && sentences.length && (mostRepeatedCount / sentences.length) >= 0.25) {
+            var originalSentence = starterFirstSentence[mostRepeatedStarter];
+            var modelSentence = buildSafeFlowOpeningModel(originalSentence);
+            if (originalSentence && modelSentence) {
+                return {
+                    area: "Sentence Flow",
+                    skill: "Varying Sentence Openings",
+                    page1Connection: "Flow",
+                    originalQuote: truncateNotebookGuideText(originalSentence, 180),
+                    nextTimeExample: truncateNotebookGuideText(modelSentence, 220),
+                    whyThisWorks: "Changing repeated openings helps the writing sound smoother."
+                };
+            }
+        }
+
         for (i = 0; i < sentences.length - 1; i += 1) {
             var a = getNotebookGuideSentenceStarter(sentences[i]);
             var b = getNotebookGuideSentenceStarter(sentences[i + 1]);
@@ -9081,11 +9261,15 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
         }
     }
     if (sentences.length) {
+        var fallbackIndex = 0;
+        if (category === "Organization" && sentences.length > 1) fallbackIndex = Math.min(sentences.length - 1, Math.max(1, Math.floor(sentences.length / 2)));
+        else if (category === "Ideas & Details" && sentences.length > 1) fallbackIndex = 1;
+        else if (category === "Word Choice" && sentences.length > 2) fallbackIndex = 2;
         return {
             area: categoryDisplayLabel(category || "Writing"),
             skill: getNotebookGuideDefaultFocus(category, priority && priority.priority),
             page1Connection: category || "Grammar",
-            originalQuote: truncateNotebookGuideText(sentences[0], 180),
+            originalQuote: truncateNotebookGuideText(sentences[fallbackIndex], 180),
             nextTimeExample: "Use this sentence as a place to check the focus skill before turning in your next piece.",
             whyThisWorks: "Looking closely at one sentence helps you apply the feedback next time."
         };
@@ -9093,26 +9277,56 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
     return null;
 }
 
+function addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, allowDuplicateQuote) {
+    var qKey;
+    var category;
+
+    if (!ex || !ex.originalQuote) return false;
+
+    qKey = normalizeNotebookQuoteText(ex.originalQuote).toLowerCase();
+    category = getNotebookGuideExampleCategory(ex);
+    if (!qKey) return false;
+    if (seenQuotes[qKey] && (!allowDuplicateQuote || seenCategories[category])) return false;
+    if (!originalTextContainsNotebookQuote(originalText, ex.originalQuote)) return false;
+
+    seenQuotes[qKey] = true;
+    if (category) seenCategories[category] = true;
+    examples.push(ex);
+
+    return true;
+}
+
 function buildNotebookGuideFallback(originalText, correctedText, analysisData, optGenreInfo, notebookGuidePriorities) {
     var genreInfo = normalizeWritingGenreInfo(optGenreInfo || (analysisData && analysisData.writingGenre) || currentWritingGenreInfo || detectWritingGenreInfo(originalText || correctedText || ""));
     var writingLabel = getNotebookGuideWritingLabel(genreInfo);
     var priorities = Array.isArray(notebookGuidePriorities) && notebookGuidePriorities.length ? notebookGuidePriorities : buildNotebookGuidePriorities(analysisData || {});
+    var maxExamples = getNotebookGuideMaxExamples(priorities);
+    var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
     var examples = [];
     var seenQuotes = {};
-    for (var i = 0; i < priorities.length && examples.length < 3; i += 1) {
-        var ex = buildFallbackExampleForPriority(priorities[i], originalText, correctedText);
-        if (!ex || !ex.originalQuote) continue;
-        var qKey = normalizeNotebookQuoteText(ex.originalQuote).toLowerCase();
-        if (seenQuotes[qKey]) continue;
-        if (!originalTextContainsNotebookQuote(originalText, ex.originalQuote)) continue;
-        seenQuotes[qKey] = true;
-        examples.push(ex);
+    var seenCategories = {};
+    var i;
+    var p;
+    var ex;
+
+    for (i = 0; i < requiredCategories.length && examples.length < maxExamples; i += 1) {
+        for (p = 0; p < priorities.length; p += 1) {
+            if (normalizeNotebookGuideCategoryName(priorities[p].category) !== requiredCategories[i]) continue;
+            ex = buildFallbackExampleForPriority(priorities[p], originalText, correctedText);
+            if (addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, true)) break;
+        }
     }
+
+    for (i = 0; i < priorities.length && examples.length < maxExamples; i += 1) {
+        ex = buildFallbackExampleForPriority(priorities[i], originalText, correctedText);
+        addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, false);
+    }
+
     return {
-        version: 1,
+        version: NOTEBOOK_GUIDE_VERSION,
         writingLabel: writingLabel,
         focusItems: getNotebookGuideFocusItems(priorities),
-        examples: examples,
+        examples: examples.slice(0, maxExamples),
         quickChecks: buildNotebookGuideQuickChecks(priorities, writingLabel)
     };
 }
@@ -9121,10 +9335,12 @@ function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreI
     var genreInfo = normalizeWritingGenreInfo(optGenreInfo || currentWritingGenreInfo || detectWritingGenreInfo(originalText || ""));
     var writingLabel = getNotebookGuideWritingLabel(genreInfo);
     var priorities = Array.isArray(notebookGuidePriorities) && notebookGuidePriorities.length ? notebookGuidePriorities : buildNotebookGuidePriorities(analysisData || {});
-    var maxExamples = countWords(originalText || "") > 160 || priorities.length > 3 ? 4 : 3;
+    var maxExamples = getNotebookGuideMaxExamples(priorities);
+    var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
     var sanitized = [];
     var selected = [];
     var seen = {};
+    var selectedCategories = {};
     var i;
 
     candidates = Array.isArray(candidates) ? candidates : [];
@@ -9133,34 +9349,69 @@ function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreI
         if (c) sanitized.push(c);
     }
 
-    function addExample(ex) {
-        if (!ex || selected.length >= maxExamples) return;
-        var key = normalizeNotebookQuoteText(ex.originalQuote).toLowerCase();
-        if (!key || seen[key]) return;
-        if (!notebookGuideExampleMatchesPriority(ex, priorities)) return;
+    function addExample(ex, allowDuplicateCategory, allowDuplicateQuote) {
+        var key;
+        var category;
+
+        if (!ex || selected.length >= maxExamples) return false;
+        key = normalizeNotebookQuoteText(ex.originalQuote).toLowerCase();
+        if (!key) return false;
+        if (!originalTextContainsNotebookQuote(originalText, ex.originalQuote)) return false;
+        if (!notebookGuideExampleMatchesPriority(ex, priorities)) return false;
+
+        category = getNotebookGuideExampleCategory(ex);
+        if (!category) return false;
+        if (!allowDuplicateCategory && selectedCategories[category]) return false;
+        if (seen[key] && (!allowDuplicateQuote || selectedCategories[category])) return false;
+
         seen[key] = true;
+        selectedCategories[category] = true;
         selected.push(ex);
+        return true;
     }
 
-    for (i = 0; i < priorities.length && selected.length < maxExamples; i += 1) {
-        var pCat = normalizeNotebookGuideCategoryName(priorities[i].category);
+    for (i = 0; i < requiredCategories.length && selected.length < maxExamples; i += 1) {
+        var requiredCategory = requiredCategories[i];
+        var found = false;
+
         for (var j = 0; j < sanitized.length; j += 1) {
-            if (normalizeNotebookGuideCategoryName(sanitized[j].page1Connection) === pCat) {
-                addExample(sanitized[j]);
-                break;
+            if (getNotebookGuideExampleCategory(sanitized[j]) === requiredCategory) {
+                found = addExample(sanitized[j], true, false);
+                if (found) break;
+            }
+        }
+
+        if (!found) {
+            for (var p = 0; p < priorities.length; p += 1) {
+                if (normalizeNotebookGuideCategoryName(priorities[p].category) === requiredCategory) {
+                    var fallbackExample = buildFallbackExampleForPriority(
+                        priorities[p],
+                        originalText,
+                        analysisData && analysisData.correctedText || originalText
+                    );
+                    addExample(fallbackExample, true, true);
+                    break;
+                }
             }
         }
     }
-    for (i = 0; i < sanitized.length && selected.length < maxExamples; i += 1) addExample(sanitized[i]);
 
-    if (selected.length < Math.min(3, priorities.length)) {
+    for (i = 0; i < sanitized.length && selected.length < maxExamples; i += 1) {
+        addExample(sanitized[i], false, false);
+    }
+
+    for (i = 0; i < sanitized.length && selected.length < Math.min(3, maxExamples); i += 1) {
+        addExample(sanitized[i], true, false);
+    }
+
+    if (!notebookGuideHasRequiredCoverage({ examples: selected }, priorities) || selected.length < Math.min(3, priorities.length)) {
         var fallback = buildNotebookGuideFallback(originalText, analysisData && analysisData.correctedText || originalText, analysisData || {}, genreInfo, priorities);
-        for (i = 0; fallback.examples && i < fallback.examples.length && selected.length < maxExamples; i += 1) addExample(fallback.examples[i]);
+        for (i = 0; fallback.examples && i < fallback.examples.length && selected.length < maxExamples; i += 1) addExample(fallback.examples[i], true, true);
         if (!selected.length) return fallback;
     }
 
     return {
-        version: 1,
+        version: NOTEBOOK_GUIDE_VERSION,
         writingLabel: writingLabel,
         focusItems: getNotebookGuideFocusItems(priorities),
         examples: selected.slice(0, maxExamples),
@@ -9280,17 +9531,23 @@ function fillNotebookSummary() {
         setWftSanitizedInnerHtml(nbDetailed, renderNotebookDetailedAssessment(latestAnalysisData));
     }
     document.getElementById("notebookTeacherComment").textContent = pickTeacherComment(latestAnalysisData);
+    var guidePriorities = buildNotebookGuidePriorities({
+        growGoal: latestAnalysisData.detailed && latestAnalysisData.detailed.growGoal,
+        nextTime: latestAnalysisData.detailed && latestAnalysisData.detailed.nextTime,
+        categoryScores: latestAnalysisData.categoryScores || {},
+        flowData: latestAnalysisData.flowData || null,
+        detailedFeedback: latestAnalysisData.detailed || {},
+        writingGenre: latestAnalysisData.writingGenre || currentWritingGenreInfo
+    });
     var guide = latestAnalysisData.notebookGuide;
-    if (!guide) {
-        var guidePriorities = buildNotebookGuidePriorities({
-            growGoal: latestAnalysisData.detailed && latestAnalysisData.detailed.growGoal,
-            nextTime: latestAnalysisData.detailed && latestAnalysisData.detailed.nextTime,
-            categoryScores: latestAnalysisData.categoryScores || {},
-            flowData: latestAnalysisData.flowData || null,
-            detailedFeedback: latestAnalysisData.detailed || {},
-            writingGenre: latestAnalysisData.writingGenre || currentWritingGenreInfo
-        });
+    var guideVersionCurrent = guide && (
+        Number(latestAnalysisData.notebookGuideVersion || 0) >= NOTEBOOK_GUIDE_VERSION ||
+        Number(guide.version || 0) >= NOTEBOOK_GUIDE_VERSION
+    );
+    if (!guide || !guideVersionCurrent || !notebookGuideHasRequiredCoverage(guide, guidePriorities)) {
         guide = buildNotebookGuideFallback(text, latestAnalysisData.correctedStory || text, latestAnalysisData, latestAnalysisData.writingGenre || currentWritingGenreInfo, guidePriorities);
+        latestAnalysisData.notebookGuide = guide;
+        latestAnalysisData.notebookGuideVersion = NOTEBOOK_GUIDE_VERSION;
     }
     setWftSanitizedInnerHtml("notebookPage2Content", renderNotebookGuideHtml(guide));
     return true;
@@ -9574,12 +9831,24 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         detailedFeedback: savedDetailedForGuide,
         writingGenre: genreInfo
     });
-    var savedGuide = session.notebookGuide || buildNotebookGuideFallback(originalText, correctedText, {
-        categoryScores: session.categoryScores || {},
-        detailed: savedDetailedForGuide,
-        correctedText: correctedText,
-        writingGenre: genreInfo
-    }, genreInfo, savedGuidePriorities);
+    var savedGuide = null;
+    var versionCurrent = (
+        Number(session.notebookGuideVersion || 0) >= NOTEBOOK_GUIDE_VERSION ||
+        Number((session.notebookGuide || {}).version || 0) >= NOTEBOOK_GUIDE_VERSION
+    );
+    var hasGuideCoverage = notebookGuideHasRequiredCoverage(session.notebookGuide, savedGuidePriorities);
+    if (session.notebookGuide && versionCurrent && hasGuideCoverage) {
+        savedGuide = session.notebookGuide;
+    }
+    if (!savedGuide) {
+        savedGuide = buildNotebookGuideFallback(originalText, correctedText, {
+            categoryScores: session.categoryScores || {},
+            detailed: savedDetailedForGuide,
+            correctedText: correctedText,
+            writingGenre: genreInfo,
+            flowData: session.flowData || null
+        }, genreInfo, savedGuidePriorities);
+    }
 
     return ''
         + '<div class="page page-1 auto-fit-page">'
@@ -9948,7 +10217,7 @@ async function analyzeWriting() {
                 wordCountAdjustment: null,
                 categoryEligibility: null,
                 notebookGuide: lowSampleNotebookGuide,
-                notebookGuideVersion: 1
+                notebookGuideVersion: NOTEBOOK_GUIDE_VERSION
             };
 
             updateScoreDisplay(latestAnalysisData);
@@ -10234,7 +10503,7 @@ async function analyzeWriting() {
             wordCountAdjustment: adjustment,
             categoryEligibility: eligibility,
             notebookGuide: notebookGuide,
-            notebookGuideVersion: 1,
+            notebookGuideVersion: NOTEBOOK_GUIDE_VERSION,
             grammarAudit: {
                 totalErrors: totalErrors,
                 correctedWordCount: correctedWordCount,
