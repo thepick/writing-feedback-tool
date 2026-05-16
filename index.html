@@ -3074,73 +3074,95 @@
         color: #444444;
         text-align: right;
     }
-    .notebook-print-doc .corrected-writing {
+    .notebook-print-doc .next-time-guide {
         border: 1px solid #cccccc;
         border-top: 3px solid #3b2f45;
         border-radius: 4px;
-        padding: 6mm 7mm;
+        padding: 4.5mm 5mm;
+        font-size: 9.2px;
+        line-height: 1.28;
+        color: #111111;
     }
-    .notebook-print-doc .corrected-writing .section-title {
+    .notebook-print-doc .next-time-guide .section-title {
         color: #3b2f45;
         border-bottom-color: #d6d3d1;
+        margin-bottom: 1.8mm;
+    }
+    .notebook-print-doc .guide-intro {
+        font-size: 9px;
+        line-height: 1.28;
+        color: #374151;
         margin-bottom: 2mm;
     }
-    .notebook-print-doc .revision-focus {
-        font-size: 8.8px;
+    .notebook-print-doc .next-time-focus,
+    .notebook-print-doc .quick-check {
+        font-size: 8.6px;
         color: #374151;
         background: #fafaf9;
         border-left: 2px solid #d97706;
-        padding: 2mm 2.5mm;
-        margin-bottom: 3mm;
-        line-height: 1.35;
+        padding: 1.5mm 2mm;
+        margin-bottom: 2mm;
+        line-height: 1.25;
     }
-    .notebook-print-doc .revision-focus-title {
-        font-size: 8.2px;
+    .notebook-print-doc .next-time-focus-title,
+    .notebook-print-doc .quick-check-title,
+    .notebook-print-doc .example-heading {
+        font-size: 7.8px;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: #92400e;
+        margin-bottom: 0.8mm;
+    }
+    .notebook-print-doc .next-time-focus ul,
+    .notebook-print-doc .quick-check ul {
+        margin: 0;
+        padding-left: 3.5mm;
+    }
+    .notebook-print-doc .next-time-focus li,
+    .notebook-print-doc .quick-check li {
+        margin: 0 0 0.4mm;
+    }
+    .notebook-print-doc .guide-example {
+        border: 1px solid #e5e7eb;
+        border-radius: 3px;
+        padding: 1.5mm 1.8mm;
+        margin-bottom: 1.7mm;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .notebook-print-doc .example-skill {
+        font-size: 9px;
+        font-weight: 700;
+        color: #111827;
         margin-bottom: 1mm;
     }
-    .notebook-print-doc .revision-focus ul {
-        margin: 0;
-        padding-left: 3.8mm;
-    }
-    .notebook-print-doc .revision-focus li {
-        margin: 0 0 0.5mm;
-    }
-    .notebook-print-doc .revision-focus li:last-child { margin-bottom: 0; }
-    .notebook-print-doc .corrected-writing .notebook-corrected-text {
-        font-size: 10px;
-        color: #111111;
-        line-height: 1.45;
-        margin-bottom: 3mm;
-        white-space: normal;
-    }
-    .notebook-print-doc .corrected-writing .notebook-corrected-text p {
-        font-size: 10px;
-        color: #111111;
-        line-height: 1.45;
-        margin-bottom: 3mm;
-        white-space: normal;
-        border-left: 0;
-        padding-left: 0;
-    }
-    .notebook-print-doc .corrected-writing .notebook-corrected-text p:last-child { margin-bottom: 0; }
-    .notebook-print-doc .corrected-writing b,
-    .notebook-print-doc .corrected-writing .corrected-highlight {
-        font-weight: inherit;
-        text-decoration: none;
-        background: transparent;
-        color: #111111;
-        padding: 0;
-        border-radius: 0;
-    }
-    .notebook-print-doc .corrected-writing .story-title-line {
-        display: block;
+    .notebook-print-doc .example-label {
+        font-size: 7.8px;
         font-weight: 700;
-        margin-bottom: 3mm;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+        margin-top: 0.7mm;
+    }
+    .notebook-print-doc .example-quote,
+    .notebook-print-doc .example-after,
+    .notebook-print-doc .example-why,
+    .notebook-print-doc .guide-no-examples,
+    .notebook-print-doc .quick-check-intro {
+        font-size: 8.7px;
+        line-height: 1.26;
         color: #111111;
+    }
+    .notebook-print-doc .example-quote,
+    .notebook-print-doc .example-after {
+        background: #ffffff;
+        border-left: 2px solid #d6d3d1;
+        padding: 0.6mm 1.2mm;
+        margin-top: 0.4mm;
+    }
+    .notebook-print-doc .example-why {
+        margin-top: 0.4mm;
     }
     .notebook-print-doc .auto-fit-page { --fit-scale: 1; }
     .notebook-print-doc .auto-fit-page .page-header {
@@ -4003,16 +4025,8 @@
                                     <div id="notebookPage2Date" class="page2-date"></div>
                                 </div>
 
-                                <div class="corrected-writing">
-                                    <div class="section-title">Corrected Writing</div>
-                                    <div class="revision-focus">
-                                        <div class="revision-focus-title">Revision Focus</div>
-                                        <ul id="notebookRevisionFocusList">
-                                            <li>Read the corrected version aloud.</li>
-                                            <li>Notice one change you can use next time.</li>
-                                        </ul>
-                                    </div>
-                                    <div id="notebookCorrectedText" class="notebook-corrected-text">-</div>
+                                <div id="notebookPage2Content" class="next-time-guide">
+                                    <div class="section-title">Next Time Writing Guide</div>
                                 </div>
                             </div>
                         </div>
