@@ -2931,10 +2931,10 @@
         padding: 1px 6px 3px;
         background: #ffffff;
     }
-    .notebook-print-doc .overall-value.score-excellent { color: #0f766e; border-color: #0f766e; background: #f0fdfa; }
-    .notebook-print-doc .overall-value.score-good { color: #334155; border-color: #64748b; background: #f8fafc; }
-    .notebook-print-doc .overall-value.score-developing { color: #92400e; border-color: #d97706; background: #fffbeb; }
-    .notebook-print-doc .overall-value.score-needs-support { color: #6d28d9; border-color: #8b5cf6; background: #faf5ff; }
+    .notebook-print-doc .overall-value.score-excellent { color: #1f6a35; border-color: #1f6a35; background: #e3f4e8; }
+    .notebook-print-doc .overall-value.score-good { color: #1a4f96; border-color: #1a4f96; background: #e3eefc; }
+    .notebook-print-doc .overall-value.score-developing { color: #8b5a05; border-color: #8b5a05; background: #fff1d8; }
+    .notebook-print-doc .overall-value.score-needs-support { color: #8b5a05; border-color: #8b5a05; background: #fff1d8; }
     .notebook-print-doc .meta-row {
         display: flex;
         flex-wrap: wrap;
@@ -3019,10 +3019,16 @@
         margin-bottom: 5px;
     }
     .notebook-print-doc .assessment-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        display: flex;
         gap: 4px 6px;
-        align-items: start;
+        align-items: flex-start;
+    }
+    .notebook-print-doc .assessment-column {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1 1 0;
+        min-width: 0;
     }
     .notebook-print-doc .category {
         border: 1px solid #cccccc;
@@ -3057,10 +3063,10 @@
         white-space: nowrap;
         color: #111111;
     }
-    .notebook-print-doc .score-excellent .score-badge { background: #f0fdfa; border-color: #0f766e; color: #0f766e; }
-    .notebook-print-doc .score-good .score-badge { background: #f8fafc; border-color: #64748b; color: #334155; }
-    .notebook-print-doc .score-developing .score-badge { background: #fffbeb; border-color: #d97706; color: #92400e; }
-    .notebook-print-doc .score-needs-support .score-badge { background: #f3e8ff; border-color: #8b5cf6; color: #6d28d9; }
+    .notebook-print-doc .score-excellent .score-badge { background: #e3f4e8; border-color: #1f6a35; color: #1f6a35; }
+    .notebook-print-doc .score-good .score-badge { background: #e3eefc; border-color: #1a4f96; color: #1a4f96; }
+    .notebook-print-doc .score-developing .score-badge { background: #fff1d8; border-color: #8b5a05; color: #8b5a05; }
+    .notebook-print-doc .score-needs-support .score-badge { background: #fff1d8; border-color: #8b5a05; color: #8b5a05; }
     .notebook-print-doc .score-bar-track {
         display: block;
         width: 100%;
@@ -3262,6 +3268,9 @@
     }
     .notebook-print-doc .auto-fit-page .assessment-grid {
         gap: calc(4px * var(--fit-scale)) calc(6px * var(--fit-scale));
+    }
+    .notebook-print-doc .auto-fit-page .assessment-column {
+        gap: calc(4px * var(--fit-scale));
     }
     .notebook-print-doc .auto-fit-page .category {
         padding: calc(4px * var(--fit-scale)) calc(5px * var(--fit-scale));
@@ -4110,7 +4119,6 @@
                                     <span><strong>Date:</strong> <span id="notebookDate"></span></span>
                                     <span><strong>Writing Type:</strong> <span id="notebookWritingType" class="writing-type-chip">Piece of Writing</span></span>
                                     <span><strong>Words:</strong> <span id="notebookWordsTarget">0</span></span>
-                                    <span><strong>Scoring:</strong> <span id="notebookScoringBasis">Grade 5 expectations | Grammar: Level 3</span></span>
                                 </div>
 
                                 <div class="top-boxes">
