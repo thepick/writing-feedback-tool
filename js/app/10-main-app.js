@@ -8885,12 +8885,29 @@ function buildNotebookDecisions(data) {
     return decisions;
 }
 
+function wrapNotebookAssessmentColumns(cards) {
+    cards = Array.isArray(cards) ? cards : [];
+    if (!cards.length) return "";
+
+    var leftHtml = "";
+    var rightHtml = "";
+    for (var i = 0; i < cards.length; i += 1) {
+        if (i % 2 === 0) {
+            leftHtml += cards[i];
+        } else {
+            rightHtml += cards[i];
+        }
+    }
+
+    if (!rightHtml) return leftHtml;
+    return '<div class="assessment-column">' + leftHtml + '</div><div class="assessment-column">' + rightHtml + '</div>';
+}
+
 function renderNotebookDetailedAssessmentFromDecisions(decisions) {
     decisions = decisions || {};
     var categories = decisions.categories || {};
     var order = getNotebookCategoryOrderForData(decisions);
-    var html = "";
-    var renderedCount = 0;
+    var cards = [];
 
     for (var i = 0; i < order.length; i += 1) {
         var key = order[i][0];
@@ -8903,20 +8920,19 @@ function renderNotebookDetailedAssessmentFromDecisions(decisions) {
         var width = score != null ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
         var label = item.label || defaultLabel || key;
 
-        html += '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
+        var html = '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
         html += '<div class="evidence-block"><strong>Teacher Comment:</strong> ' + escapeHtml(item.teacherComment || "") + '</div>';
         html += '<div class="evidence-block"><strong>What I noticed:</strong> ' + escapeHtml(item.noticed || "") + '</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> ' + escapeHtml(item.tip || "") + '</div>';
         html += '</div>';
-        renderedCount += 1;
+        cards.push(html);
     }
-    if (!renderedCount) {
+    if (!cards.length) {
         return '<div class="category"><div class="category-header"><span class="category-name">Detailed Assessment</span><span class="score-badge">--</span></div><div class="evidence-block"><strong>Teacher Comment:</strong> No assessment data.</div><div class="tip-block"><strong>Tip:</strong> Analyze the writing first to create a notebook summary.</div></div>';
     }
-    if (renderedCount % 2 === 1) html += '<div></div>';
-    return html;
+    return wrapNotebookAssessmentColumns(cards);
 }
 function getNotebookScoreClass(score, maxScore) {
     if (score == null || score === "") return "score-missing";
@@ -8924,10 +8940,13 @@ function getNotebookScoreClass(score, maxScore) {
     var max = Number(maxScore) || 100;
     if (!isFinite(n)) return "score-missing";
     var percent = max > 0 ? (n / max) * 100 : n;
+
+    // Match the Writing Tool's three student-facing score colors:
+    // 10/10 and 9/10 = green, 8/10 and 7/10 = blue, 6/10 and below = yellow.
+    // The same bands are used for the notebook overall percentage.
     if (percent >= 90) return "score-excellent";
-    if (percent >= 80) return "score-good";
-    if (percent >= 70) return "score-developing";
-    return "score-needs-support";
+    if (percent >= 70) return "score-good";
+    return "score-developing";
 }
 
 function toNotebookTitleCase(value) {
@@ -9058,8 +9077,7 @@ function renderNotebookDetailedAssessment(dataOrDetailed) {
     }
     var baseOrder = getNotebookCategoryOrderForData({ detailed: detailed, categoryScores: source.categoryScores || {} });
 
-    var html = "";
-    var renderedCount = 0;
+    var cards = [];
     for (var i = 0; i < baseOrder.length; i++) {
         var key = baseOrder[i][0];
         var label = baseOrder[i][1];
@@ -9080,17 +9098,16 @@ function renderNotebookDetailedAssessment(dataOrDetailed) {
             itemForPrint.score = score;
         }
         var printData = getNotebookCategoryPrintData(key, itemForPrint, context);
-        html += '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
+        var html = '<div class="category ' + getNotebookScoreClass(score, RUBRIC_MAX) + '">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
         html += '<div class="score-bar-track"><div class="score-bar-fill" style="width:' + width + '%"></div></div>';
         html += '<div class="evidence-block"><strong>Teacher Comment:</strong> ' + escapeHtml(printData.teacherComment) + '</div>';
         html += '<div class="evidence-block"><strong>What I noticed:</strong> ' + escapeHtml(printData.noticed) + '</div>';
         html += '<div class="tip-block"><strong>Tip:</strong> ' + escapeHtml(printData.tip) + '</div>';
         html += '</div>';
-        renderedCount += 1;
+        cards.push(html);
     }
-    if (renderedCount % 2 === 1) html += '<div></div>';
-    return html;
+    return wrapNotebookAssessmentColumns(cards);
 }
 
 function wrapCorrectedHtmlForNotebookPrint(html) {
@@ -9782,33 +9799,6 @@ function getNotebookGuideSentenceStarter(sentence) {
     return m ? m[1].toLowerCase() : "";
 }
 
-function buildSafeFlowOpeningModel(sentence) {
-    var s = cleanNotebookGuideText(sentence);
-    var m = s.match(/^([A-Za-z]+)([\s\S]*)$/);
-    var firstWord;
-    var rest;
-    var safeLowercaseStarters = /^(The|A|An|This|That|These|Those|He|She|They|We|It|My|Our|His|Her|Their|One|Some|Many|All|Each|Every|Another)$/i;
-    var connectiveStarters = /^(When|If|After|Before|While|Since|Because|Then|So|And|But|Or)$/i;
-
-    if (!m) return "";
-    firstWord = m[1];
-    rest = m[2] || "";
-
-    if (firstWord === "I") {
-        return "After a moment, I" + rest;
-    }
-
-    if (safeLowercaseStarters.test(firstWord)) {
-        return "After a moment, " + firstWord.toLowerCase() + rest;
-    }
-
-    if (connectiveStarters.test(firstWord)) {
-        return "";
-    }
-
-    return "";
-}
-
 function getNotebookGuideTokenOverlapScore(a, b) {
     var wordsA = getNotebookGuideContentWords(a);
     var wordsB = getNotebookGuideContentWords(b);
@@ -9952,62 +9942,9 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
     if (!sentences.length) return null;
 
     if (category === "Flow") {
-        var starterCounts = {};
-        var starterFirstSentence = {};
-        var mostRepeatedStarter = "";
-        var mostRepeatedCount = 1;
-        var starterKey;
-
-        for (i = 0; i < sentences.length; i += 1) {
-            var starter = getNotebookGuideSentenceStarter(sentences[i]);
-            if (!starter) continue;
-            starterCounts[starter] = (starterCounts[starter] || 0) + 1;
-            if (!starterFirstSentence[starter]) starterFirstSentence[starter] = sentences[i];
-        }
-
-        for (starterKey in starterCounts) {
-            if (starterCounts.hasOwnProperty(starterKey) && starterCounts[starterKey] > mostRepeatedCount) {
-                mostRepeatedStarter = starterKey;
-                mostRepeatedCount = starterCounts[starterKey];
-            }
-        }
-
-        if (mostRepeatedStarter && mostRepeatedCount >= 3 && (mostRepeatedCount / sentences.length) >= 0.25) {
-            originalQuote = starterFirstSentence[mostRepeatedStarter];
-            correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
-            modelSentence = buildSafeFlowOpeningModel(correctedMatch || originalQuote);
-            if (modelSentence) {
-                return makeNotebookGuideExample(
-                    "Sentence Flow",
-                    "Varying Sentence Openings",
-                    "Flow",
-                    originalQuote,
-                    modelSentence,
-                    "Changing repeated openings helps the writing sound smoother."
-                );
-            }
-        }
-
-        for (i = 0; i < sentences.length - 1; i += 1) {
-            var a = getNotebookGuideSentenceStarter(sentences[i]);
-            var b = getNotebookGuideSentenceStarter(sentences[i + 1]);
-            if (a && b && a === b) {
-                originalQuote = sentences[i] + " " + sentences[i + 1];
-                if (originalTextContainsNotebookQuote(originalText, originalQuote)) {
-                    modelSentence = buildSafeFlowOpeningModel(sentences[i + 1]);
-                    if (modelSentence) {
-                        return makeNotebookGuideExample(
-                            "Sentence Flow",
-                            "Varying Sentence Openings",
-                            "Flow",
-                            originalQuote,
-                            sentences[i] + " " + modelSentence,
-                            "Changing repeated openings helps the writing sound smoother."
-                        );
-                    }
-                }
-            }
-        }
+        // Flow revisions can be too subtle for a safe mechanical fallback. Do not
+        // generate sentence-opening examples from hardcoded opener templates.
+        // Flow examples may still be used when they come from validated Step 3 candidates.
         return null;
     }
 
@@ -10782,7 +10719,7 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
     return ''
         + '<div class="page page-1 auto-fit-page">'
         + '<div class="page-header"><div><div class="page-label">Writing Notebook Summary</div><div class="page-title">' + escapeHtml(title) + '</div></div><div class="overall-score"><div class="overall-label">Overall</div><div class="overall-value ' + scoreClass + '">' + escapeHtml(scoreText) + '</div></div></div>'
-        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Writing Type:</strong> <span class="writing-type-chip">' + escapeHtml(writingTypeLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordsTargetLabel) + '</span></span><span><strong>Scoring:</strong> <span>' + escapeHtml(getNotebookScoringBasisLabel(notebookSettings)) + '</span></span></div>'
+        + '<div class="meta-row"><span><strong>Student:</strong> <span>' + escapeHtml(studentName || "No student selected") + '</span></span><span><strong>Date:</strong> <span>' + escapeHtml(dateText) + '</span></span><span><strong>Writing Type:</strong> <span class="writing-type-chip">' + escapeHtml(writingTypeLabel) + '</span></span><span><strong>Words:</strong> <span>' + escapeHtml(wordsTargetLabel) + '</span></span></div>'
         + '<div class="top-boxes"><div class="info-box strength-box"><div class="box-label">My Strength</div><p>' + escapeHtml(strength) + '</p></div><div class="info-box grow-goal-box"><div class="box-label">My Grow Goal</div><p>' + escapeHtml(growGoal) + '</p></div></div>'
         + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessment(decisions) + '</div>'
