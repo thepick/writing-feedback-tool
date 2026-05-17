@@ -1484,19 +1484,15 @@
         align-items: start;
     }
 
-    /* Left column: sticky input panel */
+    /* Left column: let the page scroll instead of creating an internal scrollbar */
     .left-col {
-        position: sticky;
-        top: 20px;
-        max-height: calc(100vh - 40px);
-        overflow-y: auto;
-        /* Hide scrollbar visually but keep functionality */
-        scrollbar-width: thin;
-        scrollbar-color: #cbd5e1 transparent;
+        position: static;
+        top: auto;
+        max-height: none;
+        overflow-y: visible;
+        scrollbar-width: none;
     }
-    .left-col::-webkit-scrollbar { width: 4px; }
-    .left-col::-webkit-scrollbar-track { background: transparent; }
-    .left-col::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .left-col::-webkit-scrollbar { display: none; }
 
     /* Right column: output */
     .right-col {
@@ -1610,8 +1606,14 @@
         font-family: Consolas, "Courier New", monospace;
         line-height: 1.5;
         min-height: 240px;
+        max-height: none;
         resize: none;
-        transition: min-height 0.25s ease;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        transition: height 0.15s ease, min-height 0.25s ease;
+    }
+    textarea::-webkit-scrollbar {
+        display: none;
     }
     @media (min-width: 901px) {
         textarea {
