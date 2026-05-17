@@ -838,7 +838,7 @@ Use exactly this format:
 - Pen Control and Marks: [score]/5 - [level name]
 - Page Layout and Paragraphs: [score]/5 - [level name]
 
-**Quick Rubric:**
+**Detailed Feedback Input Scores:**
 - Neatness: [converted final score]/10 ([rounded final score]/5 - [level name]) - [one sentence describing the most noticeable thing you see in this student's handwriting overall]
 
 **Neatness Growth Tip:** [one short, specific tip written directly to the student about the single most important thing to work on]
@@ -852,7 +852,7 @@ Example:
 - Pen Control and Marks: 4/5 - Proficient
 - Page Layout and Paragraphs: 3/5 - Developing
 
-**Quick Rubric:**
+**Detailed Feedback Input Scores:**
 - Neatness: 8/10 (4/5 - Proficient) - Most of your letters are easy to read, but some words need clearer spaces between them.
 **Neatness Growth Tip:** Try leaving a finger-width gap between each word so your writing is easier to read.`;
 
@@ -3997,14 +3997,23 @@ function resetWftResultUiToFreshSlate() {
     var diffControlsEl = document.getElementById("diffControls");
     if (diffControlsEl) diffControlsEl.style.display = "none";
 
-    var step1RawEl = document.getElementById("step1Raw");
-    if (step1RawEl) step1RawEl.textContent = "";
+    var debugTextIds = [
+        "step1PromptRaw",
+        "step1Raw",
+        "step2PromptRaw",
+        "step2Raw",
+        "step3PromptRaw",
+        "step3Raw",
+        "detailedFeedbackInputRaw",
+        "debugRaw"
+    ];
+    for (var debugTextIndex = 0; debugTextIndex < debugTextIds.length; debugTextIndex += 1) {
+        var debugTextEl = document.getElementById(debugTextIds[debugTextIndex]);
+        if (debugTextEl) debugTextEl.textContent = "";
+    }
 
-    var step3RawEl = document.getElementById("step3Raw");
-    if (step3RawEl) step3RawEl.textContent = "";
-
-    var debugRawEl = document.getElementById("debugRaw");
-    if (debugRawEl) debugRawEl.textContent = "";
+    var debugSummaryEl = document.getElementById("debugSummary");
+    if (debugSummaryEl) debugSummaryEl.innerHTML = "No debug summary yet.";
 
     var grammarCalcEl = document.getElementById("grammarCalc");
     if (grammarCalcEl) grammarCalcEl.innerHTML = "";
