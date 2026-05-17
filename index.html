@@ -300,13 +300,13 @@
         font-style: italic;
     }
     .student-item {
-        display: flex;
-        justify-content: flex-start;
+        display: grid;
+        grid-template-columns: minmax(0, 260px) auto;
+        justify-content: start;
         align-items: center;
         padding: 12px 16px;
         border-bottom: 1px solid var(--border-color);
-        /* Keep a small gap between the name and its delete button */
-        gap: 12px;
+        column-gap: 18px;
     }
     .student-item:last-child { border-bottom: none; }
     .student-item:hover { background: #f8fafc; }
@@ -321,7 +321,10 @@
         font-weight: 600;
         text-align: left;
         min-height: auto;
-        flex: 0 1 auto;
+        width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        line-height: 1.35;
     }
     .student-name-btn:hover { text-decoration: underline; }
 
@@ -1025,6 +1028,49 @@
         margin: 8px 0;
         font-size: 13px;
         color: var(--text-secondary);
+    }
+
+    .strictness-title-main {
+        display: block;
+        white-space: nowrap;
+    }
+
+    .strictness-title-sub {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 2px;
+        color: var(--text-secondary);
+    }
+
+    .grammar-strictness-slider {
+        width: 100%;
+        margin-bottom: 2px;
+        accent-color: var(--primary-color);
+    }
+
+    .grammar-strictness-value-row {
+        position: relative;
+        height: 18px;
+        margin: -1px 0 0;
+    }
+
+    #grammarStrictnessVal {
+        position: absolute;
+        left: calc(50% + 0px);
+        transform: translateX(-50%);
+        font-weight: 600;
+        color: var(--primary-color);
+        min-width: 14px;
+        text-align: center;
+    }
+
+    .grammar-strictness-label-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
     }
 
     .assessment-settings-summary {
@@ -3833,12 +3879,17 @@
                     <div id="classGradeProfileDescription" class="settings-help-text">Sets the default grade level for the class.</div>
                 </div>
 
-                <div class="class-defaults-field">
-                    <label for="grammarStrictness">Default Grammar Strictness (1 = Lenient, 5 = Strict)</label>
-                    <input id="grammarStrictness" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('grammarStrictnessVal').textContent = this.value; saveSettingsToLocalStorage(); refreshAssessmentSettingsSummary();" style="width:100%; margin-bottom:4px; accent-color: var(--primary-color);">
-                    <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
+                <div class="class-defaults-field grammar-strictness-field">
+                    <label for="grammarStrictness">
+                        <span class="strictness-title-main">Default Grammar Strictness</span>
+                        <span class="strictness-title-sub">(1 = Lenient, 5 = Strict)</span>
+                    </label>
+                    <input id="grammarStrictness" class="grammar-strictness-slider" type="range" min="1" max="5" step="1" value="3" oninput="updateGrammarStrictnessDisplay(this.value); saveSettingsToLocalStorage(); refreshAssessmentSettingsSummary();">
+                    <div class="grammar-strictness-value-row" aria-hidden="true">
+                        <span id="grammarStrictnessVal">3</span>
+                    </div>
+                    <div class="grammar-strictness-label-row">
                         <span>1 - Lenient</span>
-                        <span id="grammarStrictnessVal" style="font-weight:600; color:var(--primary-color);">3</span>
                         <span>5 - Strict</span>
                     </div>
                 </div>
