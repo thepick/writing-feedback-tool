@@ -7951,13 +7951,16 @@ function toggleZenMode() {
         if (btn) { btn.textContent = 'Expand'; }
         checkExpandBtnVisibility();
     }
+    if (typeof autoResizeStudentWriting === 'function') {
+        autoResizeStudentWriting();
+    }
 }
 function checkExpandBtnVisibility() {
     var ta = document.getElementById('studentWriting');
     var btn = document.getElementById('expandTextBtn');
     if (!ta || !btn) return;
     if (zenModeActive) { btn.style.display = 'block'; return; }
-    btn.style.display = (ta.scrollHeight > ta.clientHeight + 2) ? 'block' : 'none';
+    btn.style.display = (ta.scrollHeight > ta.clientHeight + 8) ? 'block' : 'none';
 }
 
 /* =============================================

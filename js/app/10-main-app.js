@@ -10956,8 +10956,15 @@ function buildQuickRubricText(quickRubric) {
 function autoResizeStudentWriting() {
     var ta = document.getElementById("studentWriting");
     if (!ta) return;
+
+    var minHeight = isMobileLayout() ? 280 : 380;
+    var borderBuffer = 4;
+
+    ta.style.overflowY = "hidden";
     ta.style.height = "auto";
-    ta.style.height = Math.max(ta.scrollHeight, isMobileLayout() ? 280 : 380) + "px";
+
+    var neededHeight = Math.max(ta.scrollHeight + borderBuffer, minHeight);
+    ta.style.height = neededHeight + "px";
 }
 
 function syncUiState() {
