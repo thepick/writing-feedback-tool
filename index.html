@@ -4163,6 +4163,7 @@
                     <details id="teacherReviewDetails" class="teacher-review-toggle">
                         <summary></summary>
                         <p class="step-help">Optional technical details, raw model output, and debugging information.</p>
+                        <button type="button" class="secondary-btn" onclick="exportDebugPanelInfo()" title="Download the current debug panel information as a text file">Export Debug Info</button>
                         <div id="teacherPanel" class="details-panel">
                             <div class="teacher-grid">
                                 <div class="teacher-box debug-wide debug-summary-card">
@@ -4324,6 +4325,7 @@
 
                     <div class="advanced-subtitle">Status check</div>
                     <p class="advanced-section-help">These read-only checks show what the app is currently using to load class and portfolio data.</p>
+                    <button type="button" class="secondary-btn settings-inline-btn" onclick="exportWftStorageHealthDebugInfo()" title="Download the current status check information as a text file">Export Status Check</button>
                     <div id="storageHealthSummary" class="storage-health-list">Loading...</div>
 
                     <div class="advanced-subtitle">Actions</div>
@@ -4349,6 +4351,13 @@
                                 <span class="recovery-action-tag">Repair</span>
                             </div>
                             <p>Recreates the list of saved student writing sessions. Use this if portfolios look incomplete or do not load correctly.</p>
+                        </div>
+                        <div class="recovery-action">
+                            <div class="recovery-action-header">
+                                <button class="secondary-btn" onclick="purgeWftOffRosterPortfolioData()" title="Remove portfolio records for students who are no longer in Manage Class">Remove Old Deleted Student Data</button>
+                                <span class="recovery-action-tag">Clean up</span>
+                            </div>
+                            <p>Removes saved portfolio records for students who are no longer in the current roster and marks them deleted so Drive sync should not restore them.</p>
                         </div>
                         <div class="recovery-action">
                             <div class="recovery-action-header">
