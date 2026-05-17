@@ -735,10 +735,13 @@ function applyGradeDefaultTargetWordCount(optGradeProfile) {
 function applyGradeDefaultStrictness(optGradeProfile) {
     var profile = optGradeProfile || getGradeProfile(getClassGradeLevel());
     var el = document.getElementById("grammarStrictness");
-    var valEl = document.getElementById("grammarStrictnessVal");
     if (el && profile.grammarStrictnessDefault) {
         el.value = String(profile.grammarStrictnessDefault);
-        if (valEl) valEl.textContent = String(profile.grammarStrictnessDefault);
+        if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay(profile.grammarStrictnessDefault);
+        else {
+            var valEl = document.getElementById("grammarStrictnessVal");
+            if (valEl) valEl.textContent = String(profile.grammarStrictnessDefault);
+        }
     }
 }
 function applyGradeDefaults() {

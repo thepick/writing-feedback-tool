@@ -380,6 +380,21 @@
 /* =============================================
    SETTINGS DRAWER
 ============================================= */
+function updateGrammarStrictnessDisplay(value) {
+    var n = parseInt(value, 10);
+    if (isNaN(n)) n = 3;
+    if (n < 1) n = 1;
+    if (n > 5) n = 5;
+    var valEl = document.getElementById("grammarStrictnessVal");
+    if (valEl) {
+        var ratio = (n - 1) / 4;
+        var percent = ratio * 100;
+        var offset = 10 - (20 * ratio);
+        valEl.textContent = String(n);
+        valEl.style.left = "calc(" + percent + "% + " + offset + "px)";
+    }
+}
+
 function openSettingsDrawer() {
     document.getElementById('settingsDrawer').classList.add('open');
     document.getElementById('settingsDrawerOverlay').classList.add('open');
@@ -556,7 +571,8 @@ function loadSettingsFromLocalStorage() {
                 var slider = document.getElementById('grammarStrictness');
                 var valEl = document.getElementById('grammarStrictnessVal');
                 if (slider) slider.value = s.grammarStrictness;
-                if (valEl) valEl.textContent = s.grammarStrictness;
+                if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay(s.grammarStrictness);
+                else if (valEl) valEl.textContent = s.grammarStrictness;
             }
             if (s.assessScriptQuality != null && document.getElementById('assessScriptQuality')) {
                 document.getElementById('assessScriptQuality').checked = s.assessScriptQuality;
@@ -4099,8 +4115,11 @@ function resetWftInputUiToFreshSlate() {
     var grammarStrictnessEl = document.getElementById("grammarStrictness");
     if (grammarStrictnessEl) grammarStrictnessEl.value = "3";
 
-    var grammarStrictnessValEl = document.getElementById("grammarStrictnessVal");
-    if (grammarStrictnessValEl) grammarStrictnessValEl.textContent = "3";
+    if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay("3");
+    else {
+        var grammarStrictnessValEl = document.getElementById("grammarStrictnessVal");
+        if (grammarStrictnessValEl) grammarStrictnessValEl.textContent = "3";
+    }
 
     var assessScriptQualityEl = document.getElementById("assessScriptQuality");
     if (assessScriptQualityEl) assessScriptQualityEl.checked = false;
@@ -6568,8 +6587,11 @@ function applyLoadedSettings(settings) {
     if (settings.useWordCountTarget != null && document.getElementById("useWordCountTarget")) document.getElementById("useWordCountTarget").checked = settings.useWordCountTarget;
     if (settings.grammarStrictness && document.getElementById("grammarStrictness")) {
         document.getElementById("grammarStrictness").value = settings.grammarStrictness;
-        var valEl = document.getElementById("grammarStrictnessVal");
-        if (valEl) valEl.textContent = settings.grammarStrictness;
+        if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay(settings.grammarStrictness);
+        else {
+            var valEl = document.getElementById("grammarStrictnessVal");
+            if (valEl) valEl.textContent = settings.grammarStrictness;
+        }
     }
     if (settings.assessScriptQuality != null && document.getElementById("assessScriptQuality")) {
         document.getElementById("assessScriptQuality").checked = settings.assessScriptQuality;
