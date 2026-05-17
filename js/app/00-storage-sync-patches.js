@@ -416,15 +416,28 @@ function migrateLegacyApiKeyStorage() {
     } catch (e) {}
 }
 
-function isRememberApiKeyEnabled() {
-    var rememberEl = document.getElementById('rememberApiKeyOnDevice');
-    if (rememberEl) { return rememberEl.checked === true; }
+function getRememberApiKeyStoredPreference() {
     try { return localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) === 'true'; } catch (e) {}
     return false;
 }
 
+function isRememberApiKeyEnabled() {
+    var rememberEl = document.getElementById('rememberApiKeyOnDevice');
+    if (rememberEl && rememberEl.getAttribute('data-wft-api-key-pref-loaded') === 'true') {
+        return rememberEl.checked === true;
+    }
+    return getRememberApiKeyStoredPreference();
+}
+
 function setRememberApiKeyEnabled(enabled) {
     try { localStorage.setItem(WFT_API_KEY_REMEMBER_PREF_KEY, enabled ? 'true' : 'false'); } catch (e) {}
+}
+
+function applyRememberApiKeyStoredPreferenceToUi() {
+    var rememberEl = document.getElementById('rememberApiKeyOnDevice');
+    if (!rememberEl) { return; }
+    rememberEl.checked = getRememberApiKeyStoredPreference();
+    rememberEl.setAttribute('data-wft-api-key-pref-loaded', 'true');
 }
 
 function getStoredApiKey() {
@@ -521,8 +534,7 @@ function saveSettingsToLocalStorage(settingsOverride) {
 function loadSettingsFromLocalStorage() {
     try {
         migrateLegacyApiKeyStorage();
-        var rememberApiKeyEl = document.getElementById('rememberApiKeyOnDevice');
-        if (rememberApiKeyEl) { rememberApiKeyEl.checked = isRememberApiKeyEnabled(); }
+        applyRememberApiKeyStoredPreferenceToUi();
         if (document.getElementById('apiKeyInput')) {
             document.getElementById('apiKeyInput').value = getStoredApiKey();
         }
@@ -1963,7 +1975,10 @@ function getWftStorageHealthHelpText(label) {
         "localStorage size": "Small browser storage used by the app. A few hundred KB is normal.",
         "IndexedDB": "Larger browser database used for heavier saved data, including portfolio records and images.",
         "Portfolio index": "The app's list of saved student writing sessions. Clean means no repair is needed.",
-        "Cached data": "Students and writing sessions currently visible from this browser's saved data.",
+        "Active roster": "The students currently listed in Manage Class.",
+        "Cached data": "Saved portfolio records that match students currently in Manage Class.",
+        "Old cached data": "Saved portfolio records for students who are no longer in Manage Class. These can be removed if deleted students should stay deleted.",
+        "Portfolio cache total": "All portfolio records currently stored in this browser, including any old off-roster records.",
         "Google session": "Whether the current Google Drive access token is still available in this browser.",
         "Last Drive sync": "The last successful Google Drive load or save from this browser. Never means no completed Drive activity has been recorded here yet.",
         "Last index rebuild": "The last time the portfolio index was repaired or rebuilt.",
@@ -2044,17 +2059,15 @@ function refreshStorageHealthUI() {
     lines.push("Portfolio index: <b>" + (WFT_PORTFOLIO_INDEX_V1 ? (indexDirty ? "dirty" : "clean") : "disabled") + "</b>");
 
     // Cached data counts
-    var portfolio = null;
-    try { portfolio = getPortfolioData(); } catch (e) {}
-    if (portfolio) {
-        var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
-        var totalSessions = 0;
-        for (var hi = 0; hi < names.length; hi++) {
-            var sd = portfolio[names[hi]];
-            if (sd && sd.sessions) { totalSessions += sd.sessions.length; }
-        }
-        lines.push("Cached data: <b>" + names.length + " students, " + totalSessions + " sessions</b>");
+    var cacheSummary = getWftPortfolioCacheSummary();
+    lines.push("Active roster: <b>" + cacheSummary.rosterStudents + (cacheSummary.rosterStudents === 1 ? " student" : " students") + "</b>");
+    lines.push("Cached data: <b>" + cacheSummary.activePortfolioStudents + " active " + (cacheSummary.activePortfolioStudents === 1 ? "student" : "students") + ", " + cacheSummary.activePortfolioSessions + " visible " + (cacheSummary.activePortfolioSessions === 1 ? "session" : "sessions") + "</b>");
+    if (cacheSummary.offRosterStudents > 0) {
+        lines.push("Old cached data: <b>" + cacheSummary.offRosterStudents + " deleted/off-roster " + (cacheSummary.offRosterStudents === 1 ? "student" : "students") + ", " + cacheSummary.offRosterSessions + " " + (cacheSummary.offRosterSessions === 1 ? "session" : "sessions") + "</b>");
+    } else {
+        lines.push("Old cached data: <b>none</b>");
     }
+    lines.push("Portfolio cache total: <b>" + cacheSummary.portfolioStudents + " " + (cacheSummary.portfolioStudents === 1 ? "student" : "students") + ", " + cacheSummary.portfolioSessions + " " + (cacheSummary.portfolioSessions === 1 ? "session" : "sessions") + "</b>");
 
     // Google session and last sync info
     if (typeof wftSyncState !== "undefined" && wftSyncState) {
@@ -4092,6 +4105,7 @@ function resetWftInputUiToFreshSlate() {
     var assessScriptQualityEl = document.getElementById("assessScriptQuality");
     if (assessScriptQualityEl) assessScriptQualityEl.checked = false;
 
+    applyRememberApiKeyStoredPreferenceToUi();
     var apiKeyInputEl = document.getElementById("apiKeyInput");
     if (apiKeyInputEl) apiKeyInputEl.value = getStoredApiKey();
 
@@ -5048,6 +5062,177 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
     }
 
     return rebuildWftPortfolioDerivedStats(result);
+}
+
+
+function isWftReservedPortfolioKey(key) {
+    var k = String(key || "");
+    return k === "_meta" || k === "updatedAt" || k === "__syncMeta" || k === "syncMeta" || k === "lastSyncedAt" || k === "lastSyncStatus";
+}
+
+function getWftRosterNameSet() {
+    var source = [];
+    var names = [];
+    var set = {};
+    var i;
+    var name;
+
+    try {
+        if (typeof students !== "undefined" && Array.isArray(students)) {
+            source = students.slice(0);
+        }
+    } catch (e) { }
+
+    if (!source.length) {
+        try {
+            source = JSON.parse(localStorage.getItem("wft_students") || "[]");
+            if (!Array.isArray(source)) { source = []; }
+        } catch (e2) {
+            source = [];
+        }
+    }
+
+    for (i = 0; i < source.length; i += 1) {
+        name = getWftStudentName(source[i]);
+        if (!name) { continue; }
+        names.push(name);
+        set[name.toLowerCase()] = true;
+    }
+
+    return { names: names, set: set, count: names.length };
+}
+
+function getWftPortfolioStudentNames(portfolio) {
+    var names = [];
+    var key;
+    var data = portfolio || {};
+
+    for (key in data) {
+        if (!Object.prototype.hasOwnProperty.call(data, key)) { continue; }
+        if (isWftReservedPortfolioKey(key)) { continue; }
+        names.push(key);
+    }
+
+    names.sort(function(a, b) { return String(a).localeCompare(String(b)); });
+    return names;
+}
+
+function getWftStudentSessionCount(studentData) {
+    if (!studentData || !Array.isArray(studentData.sessions)) { return 0; }
+    return studentData.sessions.length;
+}
+
+function getWftPortfolioCacheSummary() {
+    var portfolio = {};
+    var roster = getWftRosterNameSet();
+    var names;
+    var i;
+    var name;
+    var sessions;
+    var summary = {
+        rosterStudents: roster.count,
+        portfolioStudents: 0,
+        portfolioSessions: 0,
+        activePortfolioStudents: 0,
+        activePortfolioSessions: 0,
+        offRosterStudents: 0,
+        offRosterSessions: 0,
+        offRosterNames: []
+    };
+
+    try { portfolio = getPortfolioData(); } catch (e) { portfolio = {}; }
+    names = getWftPortfolioStudentNames(portfolio);
+    summary.portfolioStudents = names.length;
+
+    for (i = 0; i < names.length; i += 1) {
+        name = names[i];
+        sessions = getWftStudentSessionCount(portfolio[name]);
+        summary.portfolioSessions += sessions;
+
+        if (roster.set[String(name || "").toLowerCase()]) {
+            summary.activePortfolioStudents += 1;
+            summary.activePortfolioSessions += sessions;
+        } else {
+            summary.offRosterStudents += 1;
+            summary.offRosterSessions += sessions;
+            summary.offRosterNames.push(name);
+        }
+    }
+
+    return summary;
+}
+
+function recordWftPortfolioDeletionForStudent(studentName, studentData) {
+    var name = String(studentName || "").trim();
+    var sessions;
+    var sessionId;
+    var count = 0;
+    var i;
+
+    if (!name) { return 0; }
+
+    recordStudentDeletion(name);
+    sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
+
+    for (i = 0; i < sessions.length; i += 1) {
+        sessionId = getSessionKey(sessions[i]);
+        if (sessionId) {
+            recordSessionDeletion(name, sessionId);
+            count += 1;
+        }
+    }
+
+    return count;
+}
+
+function purgeWftOffRosterPortfolioData() {
+    var roster = getWftRosterNameSet();
+    var portfolio;
+    var names;
+    var removedStudents = 0;
+    var removedSessions = 0;
+    var i;
+    var name;
+    var lowerName;
+
+    if (!window.confirm("Remove saved portfolio records for students who are not in the current Manage Class roster? This is intended for students you already deleted.")) {
+        return;
+    }
+    if (!window.confirm("This will remove old off-roster portfolio data from this browser and mark it deleted so Drive sync should not restore it. Continue?")) {
+        return;
+    }
+
+    try { portfolio = getPortfolioData(); } catch (e) { portfolio = {}; }
+    names = getWftPortfolioStudentNames(portfolio);
+
+    for (i = 0; i < names.length; i += 1) {
+        name = names[i];
+        lowerName = String(name || "").toLowerCase();
+        if (roster.set[lowerName]) { continue; }
+        removedSessions += recordWftPortfolioDeletionForStudent(name, portfolio[name]);
+        delete portfolio[name];
+        removedStudents += 1;
+    }
+
+    if (!removedStudents) {
+        alert("No old off-roster portfolio records were found.");
+        try { refreshStorageHealthUI(); } catch (e2) { }
+        return;
+    }
+
+    savePortfolioData(portfolio);
+
+    try { refreshPortfolioDropdown(); } catch (e3) { }
+    try { renderStudentPortfolio(); } catch (e4) { }
+    try { refreshStorageHealthUI(); } catch (e5) { }
+
+    if (typeof rebuildPortfolioIndex === "function") {
+        rebuildPortfolioIndex(function() {
+            try { refreshStorageHealthUI(); } catch (e6) { }
+        });
+    }
+
+    alert("Removed " + removedStudents + " old student record" + (removedStudents === 1 ? "" : "s") + " and " + removedSessions + " saved session" + (removedSessions === 1 ? "" : "s") + ".");
 }
 
 function mergeWftDeletions(localDeletions, cloudDeletions) {

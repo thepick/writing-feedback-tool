@@ -143,7 +143,12 @@ function removeStudent(name) {
     if (!name) return;
     if (!window.confirm("Delete this student from the current class and portfolio? This student will not be restored from backups.")) return;
 
-    recordStudentDeletion(name);
+    var portfolio = getPortfolioData();
+    if (typeof recordWftPortfolioDeletionForStudent === "function") {
+        recordWftPortfolioDeletionForStudent(name, portfolio ? portfolio[name] : null);
+    } else {
+        recordStudentDeletion(name);
+    }
 
     students = students.filter(function(s) { return s !== name; });
     if (selectedStudent === name) {
@@ -151,7 +156,6 @@ function removeStudent(name) {
         localStorage.setItem("wft_selectedStudent", "");
     }
 
-    var portfolio = getPortfolioData();
     if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, name)) {
         delete portfolio[name];
     }
@@ -167,8 +171,29 @@ function removeStudent(name) {
 function clearAllStudents() {
     if (!students.length) return;
     if (!window.confirm("Clear the entire student list?")) return;
-    for (var i = 0; i < students.length; i += 1) {
-        recordStudentDeletion(students[i]);
+    var portfolio = getPortfolioData();
+    var portfolioNames = Object.keys(portfolio || {});
+    var deletionNames = {};
+    var i;
+    var name;
+
+    for (i = 0; i < students.length; i += 1) {
+        name = students[i];
+        deletionNames[String(name || "").toLowerCase()] = name;
+    }
+    for (i = 0; i < portfolioNames.length; i += 1) {
+        name = portfolioNames[i];
+        if (typeof isWftReservedPortfolioKey === "function" && isWftReservedPortfolioKey(name)) { continue; }
+        deletionNames[String(name || "").toLowerCase()] = name;
+    }
+    for (name in deletionNames) {
+        if (Object.prototype.hasOwnProperty.call(deletionNames, name)) {
+            if (typeof recordWftPortfolioDeletionForStudent === "function") {
+                recordWftPortfolioDeletionForStudent(deletionNames[name], portfolio ? portfolio[deletionNames[name]] : null);
+            } else {
+                recordStudentDeletion(deletionNames[name]);
+            }
+        }
     }
     savePortfolioData({});
     students = [];
@@ -3841,6 +3866,152 @@ function downloadBlob(blob, fileName) {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }, 0);
+}
+
+function getWftExportFileStamp() {
+    var d = new Date();
+    function pad(n) { return String(n).length < 2 ? "0" + n : String(n); }
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "_" + pad(d.getHours()) + "-" + pad(d.getMinutes()) + "-" + pad(d.getSeconds());
+}
+
+function getWftElementTextForExport(id) {
+    var el = document.getElementById(id);
+    if (!el) { return ""; }
+    var text = "";
+    try {
+        text = el.innerText || el.textContent || "";
+    } catch (e) {
+        text = el.textContent || "";
+    }
+    return String(text || "").replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").trim();
+}
+
+function getWftSelectedStudentForExport() {
+    try {
+        if (typeof selectedStudent !== "undefined" && selectedStudent) { return selectedStudent; }
+    } catch (e) { }
+    try {
+        var select = document.getElementById("studentSelect");
+        if (select && select.value) { return select.value; }
+    } catch (e2) { }
+    return "";
+}
+
+function getWftModelForExport() {
+    try {
+        var modelSelect = document.getElementById("modelSelect");
+        if (modelSelect && modelSelect.value) { return modelSelect.value; }
+    } catch (e) { }
+    return "";
+}
+
+function appendWftExportSection(lines, title, body) {
+    lines.push("=== " + title + " ===");
+    lines.push(body && String(body).trim() ? String(body).trim() : "(empty)");
+    lines.push("");
+}
+
+function buildWftExportHeader(title) {
+    var lines = [];
+    lines.push(title);
+    lines.push("Exported: " + new Date().toISOString());
+    var studentName = getWftSelectedStudentForExport();
+    if (studentName) { lines.push("Selected student: " + studentName); }
+    var modelName = getWftModelForExport();
+    if (modelName) { lines.push("AI model: " + modelName); }
+    try {
+        if (window.location && window.location.href) { lines.push("Page: " + window.location.href); }
+    } catch (e) { }
+    lines.push("");
+    return lines;
+}
+
+function exportDebugPanelInfo() {
+    var lines = buildWftExportHeader("Writing Feedback Tool - Debug Panel Export");
+    var sections = [
+        { title: "Run Summary and Settings", id: "debugSummary" },
+        { title: "Grammar and Score Calculations", id: "grammarCalc" },
+        { title: "Detailed Feedback Input Scores", id: "detailedFeedbackInputRaw" },
+        { title: "Teacher Audit View", id: "teacherAuditView" },
+        { title: "Final Displayed Feedback Audit", id: "cookedOutputRaw" },
+        { title: "Detailed Feedback Debug and Extraction", id: "debugRaw" },
+        { title: "Step 1 Prompt: Corrections", id: "step1PromptRaw" },
+        { title: "Step 1 Raw Output: Corrected Writing", id: "step1Raw" },
+        { title: "Step 2 Prompt: Detailed Feedback Input Scores", id: "step2PromptRaw" },
+        { title: "Step 2 Raw Output: Detailed Feedback Input Scores", id: "step2Raw" },
+        { title: "Step 3 Prompt: Detailed Writing Feedback", id: "step3PromptRaw" },
+        { title: "Step 3 Raw Output: Detailed Writing Feedback", id: "step3Raw" }
+    ];
+    for (var i = 0; i < sections.length; i++) {
+        appendWftExportSection(lines, sections[i].title, getWftElementTextForExport(sections[i].id));
+    }
+
+    var studentName = getWftSelectedStudentForExport() || "debug";
+    var safeStudentName = typeof sanitizeFileName === "function" ? sanitizeFileName(studentName) : String(studentName).replace(/[\\\/:*?"<>|]/g, "-");
+    var fileName = "wft-debug-panel-" + safeStudentName + "-" + getWftExportFileStamp() + ".txt";
+    downloadBlob(new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" }), fileName);
+}
+
+function buildWftStorageHealthExportText() {
+    var lines = buildWftExportHeader("Writing Feedback Tool - Storage Status Export");
+    var rows = [];
+    try {
+        rows = document.querySelectorAll("#storageHealthSummary .storage-health-row");
+    } catch (e) {
+        rows = [];
+    }
+
+    if (rows && rows.length) {
+        lines.push("=== Status Check ===");
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var labelEl = row.querySelector(".storage-health-label");
+            var valueEl = row.querySelector(".storage-health-value");
+            var explainEl = row.querySelector(".storage-health-explain");
+            var label = labelEl ? labelEl.textContent : "";
+            var value = valueEl ? valueEl.textContent : "";
+            var explain = explainEl ? explainEl.textContent : "";
+            lines.push(String(label || "").trim() + ": " + String(value || "").trim());
+            if (explain) { lines.push("  " + String(explain).trim()); }
+        }
+        lines.push("");
+    } else {
+        appendWftExportSection(lines, "Status Check", getWftElementTextForExport("storageHealthSummary"));
+    }
+
+    try {
+        var meta = typeof getWftStorageMeta === "function" ? getWftStorageMeta() : null;
+        if (meta) {
+            appendWftExportSection(lines, "Storage Metadata", JSON.stringify(meta, null, 2));
+        }
+    } catch (e2) { }
+
+    try {
+        if (typeof getWftPortfolioCacheSummary === "function") {
+            appendWftExportSection(lines, "Portfolio Cache Summary", JSON.stringify(getWftPortfolioCacheSummary(), null, 2));
+        }
+    } catch (e3) { }
+
+    try {
+        if (typeof wftSyncState !== "undefined" && wftSyncState) {
+            appendWftExportSection(lines, "Google Drive Sync State", JSON.stringify({
+                isSignedIn: !!wftSyncState.isSignedIn,
+                tokenExpiresAt: wftSyncState.tokenExpiresAt || 0,
+                tokenTimeRemaining: formatWftTokenTimeRemaining(wftSyncState.tokenExpiresAt || 0),
+                lastSyncAt: wftSyncState.lastSyncAt || ""
+            }, null, 2));
+        }
+    } catch (e4) { }
+
+    return lines.join("\n");
+}
+
+function exportWftStorageHealthDebugInfo() {
+    try {
+        if (typeof refreshStorageHealthUI === "function") { refreshStorageHealthUI(); }
+    } catch (e) { }
+    var fileName = "wft-storage-status-" + getWftExportFileStamp() + ".txt";
+    downloadBlob(new Blob([buildWftStorageHealthExportText()], { type: "text/plain;charset=utf-8" }), fileName);
 }
 
 function ensureDriveSubfolderPromise(parentFolderId, folderName) {
