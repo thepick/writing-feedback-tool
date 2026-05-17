@@ -2724,24 +2724,31 @@
         padding: 14px 16px;
         margin-top: 16px;
     }
-    .teacher-review-toggle summary {
+    .teacher-review-toggle > summary {
         cursor: pointer;
         font-weight: 700;
         color: #163e73;
         list-style: none;
         font-size: 14px;
     }
-    .teacher-review-toggle summary::-webkit-details-marker { display: none; }
-    .teacher-review-toggle summary:after { content: "Show debug"; }
-    .teacher-review-toggle[open] summary:after { content: "Hide debug"; }
+    .teacher-review-toggle > summary::-webkit-details-marker { display: none; }
+    .teacher-review-toggle > summary:after { content: "Show debug"; }
+    .teacher-review-toggle[open] > summary:after { content: "Hide debug"; }
     .teacher-review-toggle .step-help {
         margin-top: 8px;
         margin-bottom: 0;
     }
     .teacher-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
         gap: 20px;
+        align-items: start;
+    }
+    .teacher-box {
+        min-width: 0;
+    }
+    .teacher-box.debug-wide {
+        grid-column: 1 / -1;
     }
     .teacher-box pre {
         white-space: pre-wrap;
@@ -2755,6 +2762,43 @@
         line-height: 1.55;
     }
     .teacher-box h3 { margin-top: 0; font-size: 15px; }
+    .debug-card-details {
+        padding: 0;
+        overflow: hidden;
+    }
+    .debug-card-details summary {
+        cursor: pointer;
+        list-style: none;
+        padding: 18px;
+        color: #163e73;
+        font-weight: 700;
+    }
+    .debug-card-details summary::-webkit-details-marker { display: none; }
+    .debug-card-details summary h3 {
+        display: inline;
+        margin: 0;
+    }
+    .debug-card-details summary:after {
+        content: "Show";
+        float: right;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .debug-card-details[open] summary {
+        border-bottom: 1px solid var(--border-color);
+    }
+    .debug-card-details[open] summary:after { content: "Hide"; }
+    .debug-card-body { padding: 18px; }
+    .debug-scroll {
+        max-height: 420px;
+        overflow: auto;
+        padding-right: 8px;
+    }
+    .debug-scroll-tall { max-height: 560px; }
+    .debug-summary-card .calc-table { margin-top: 0; }
     .calc-table {
         width: 100%;
         border-collapse: collapse;
@@ -4111,26 +4155,83 @@
                         <p class="step-help">Optional technical details, raw model output, and debugging information.</p>
                         <div id="teacherPanel" class="details-panel">
                             <div class="teacher-grid">
-                                <div class="teacher-box">
-                                    <h3>Grammar, Organization, Flow, and Quick Rubric</h3>
-                                    <pre id="step1Raw"></pre>
+                                <div class="teacher-box debug-wide debug-summary-card">
+                                    <h3>Run Summary and Settings</h3>
+                                    <div id="debugSummary">No debug summary yet.</div>
                                 </div>
+
                                 <div class="teacher-box">
-                                    <h3>Grammar Score Calculation</h3>
+                                    <h3>Grammar and Score Calculations</h3>
                                     <div id="grammarCalc"></div>
                                 </div>
+
                                 <div class="teacher-box">
-                                    <h3>Detailed Assessment and Grow Goal</h3>
-                                    <pre id="step3Raw"></pre>
+                                    <h3>Detailed Feedback Input Scores</h3>
+                                    <pre id="detailedFeedbackInputRaw" class="debug-scroll"></pre>
                                 </div>
-                                <div class="teacher-box">
-                                    <h3>Teacher Audit View</h3>
-                                    <div id="teacherAuditView" class="teacher-audit-view">No teacher audit data yet.</div>
-                                </div>
-                                <div class="teacher-box">
-                                    <h3>Debug and Extraction</h3>
-                                    <pre id="debugRaw"></pre>
-                                </div>
+
+                                <details class="teacher-box debug-wide debug-card-details" open>
+                                    <summary><h3>Teacher Audit View</h3></summary>
+                                    <div class="debug-card-body">
+                                        <div id="teacherAuditView" class="teacher-audit-view">No teacher audit data yet.</div>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details" open>
+                                    <summary><h3>Final Displayed Feedback Audit</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="cookedOutputRaw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details" open>
+                                    <summary><h3>Detailed Feedback Debug and Extraction</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="debugRaw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details">
+                                    <summary><h3>Step 1 Prompt: Corrections</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="step1PromptRaw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details">
+                                    <summary><h3>Step 1 Raw Output: Corrected Writing</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="step1Raw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details">
+                                    <summary><h3>Step 2 Prompt: Detailed Feedback Input Scores</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="step2PromptRaw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details">
+                                    <summary><h3>Step 2 Raw Output: Detailed Feedback Input Scores</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="step2Raw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details">
+                                    <summary><h3>Step 3 Prompt: Detailed Writing Feedback</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="step3PromptRaw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
+
+                                <details class="teacher-box debug-wide debug-card-details">
+                                    <summary><h3>Step 3 Raw Output: Detailed Writing Feedback</h3></summary>
+                                    <div class="debug-card-body">
+                                        <pre id="step3Raw" class="debug-scroll debug-scroll-tall"></pre>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </details>

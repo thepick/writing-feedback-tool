@@ -1715,7 +1715,7 @@ function softenOverclaim(text, score) {
 function toOneSentence(input) {
     var s = String(input || "").trim();
     if (!s) return s;
-    // Keep the first sentence-ish chunk. This prevents multi-sentence rambles in the quick rubric.
+    // Keep the first sentence-ish chunk. This prevents multi-sentence rambles in the detailed feedback input.
     var m = s.match(/^([\s\S]*?[.!?])(\s+|$)/);
     if (m && m[1]) return m[1].trim();
     return s;
@@ -1745,7 +1745,7 @@ function teacherizeWording(input, category, score) {
     s = s.replace(/\b(even\s+more|overall|in\s+general)\b/gi, function(m) { return m.toLowerCase() === 'overall' ? '' : ''; });
     s = s.replace(/\s{2,}/g, " ").trim();
 
-    // Category-specific nudges (keep it to one sentence for quick rubric).
+    // Category-specific nudges (keep it to one sentence for detailed feedback input).
     var n = Number(score);
     if (category === "Word Choice") {
         s = s.replace(/\bvocabulary\b/gi, "word choices");
@@ -2197,7 +2197,7 @@ function parseStep1(step1Text, originalText, targetWords) {
 
 function parseStep2QuickRubric(step2Text, originalText, targetWords) {
     var rubric = {};
-    var rubricSectionMatch = step2Text.match(/\*\*Quick Rubric:?\*\*([\s\S]*)$/i);
+    var rubricSectionMatch = step2Text.match(/\*\*(?:Detailed Feedback Input Scores|[A-Za-z ]*Rubric):?\*\*([\s\S]*)$/i);
     var rubricSection = rubricSectionMatch ? rubricSectionMatch[1] : step2Text;
 
     function parseQuickLine(category) {
@@ -5149,7 +5149,7 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
     var genreInfo = normalizeWritingGenreInfo(optGenreInfo || detectWritingGenreInfo(originalText || correctedText || ""));
 
     return [
-        "Analyze this writing and provide a quick rubric snapshot with one kind, supportive feedback sentence per category. Write like a real teacher talking to " + audience + ": clear, warm, specific, and not robotic.",
+        "Analyze this writing and provide detailed feedback input scores with one kind, supportive feedback sentence per category. Write like a real teacher talking to " + audience + ": clear, warm, specific, and not robotic.",
         "",
         gradeContext,
         "",
@@ -5183,10 +5183,10 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
         "3d. Use the genre information above. Never call this work a letter unless the writing type is Letter / Email. Never call it a poem unless the subtype is Poem. If unsure, use piece of writing.",
         "4. Mention target word count only if the actual word count is below target.",
         "5. If a category does not have enough clear evidence, write Missing instead of guessing a score.",
-        "6. Return only the quick rubric in the exact format below.",
+        "6. Return only the detailed feedback input scores in the exact format below.",
         "",
         "Provide exactly this format:",
-        "**Quick Rubric:**",
+        "**Detailed Feedback Input Scores:**",
         "- Ideas & Details: [score]/10 - [kind, supportive one-sentence reason]",
         "- Grammar: [score]/10 - [kind, supportive one-sentence reason]",
         "- Word Choice: [score]/10 - [kind, supportive one-sentence reason]",
@@ -5196,7 +5196,7 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
     ].join("\n");
 }
 
-function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile, optGenreInfo, originalText, notebookGuidePriorities) {
+function buildStep3Prompt(correctedText, detailedFeedbackInputText, flowData, targetWords, actualWords, optGradeProfile, optGenreInfo, originalText, notebookGuidePriorities) {
     var profile = optGradeProfile || getGradeProfile();
     var audience = profile.audience || "5th-grade student";
     var bilingualGuide = profile.bilingualGuidance || "";
@@ -5207,7 +5207,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
     // so step 3 only needs to handle the 6 core writing categories
 
     return [
-        "Explain the scores from the Quick Rubric Snapshot and expand them into a detailed writing assessment for this student.",
+        "Explain the detailed feedback input scores and expand them into a detailed writing assessment for this student.",
         "",
         "Student grade level: " + (profile.gradeLabel || profile.label),
         "Write the detailed assessment for a " + audience + ".",
@@ -5224,8 +5224,8 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "Corrected text for assessment reference:",
         correctedText,
         "",
-        "Quick Rubric Snapshot:",
-        quickRubricText,
+        "Detailed feedback input scores:",
+        detailedFeedbackInputText,
         "",
         "Computed sentence count: " + (flowData && flowData.sentenceCount ? flowData.sentenceCount : "unknown"),
         "Computed average sentence length: " + (flowData && flowData.average ? flowData.average.toFixed(1) + " words" : "unknown"),
@@ -5245,7 +5245,7 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "7. For Flow, focus only on sentence rhythm: transitions, sentence starters, sentence variety, and smoothness of reading. Make the What I noticed rows match the computed flow data. Do NOT say short sentences are a problem unless the sentence counts show many short sentences or a run of short sentences. Do NOT blend Organization and Flow into the same section.",
         "8. Mention the target word count only if the actual word count is below the target word count.",
         "9. Choose ONE grow goal only.",
-        "10. Keep the same rubric scores from the Quick Rubric Snapshot unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the quick rubric.",
+        "10. Keep the same input scores unless there is a very clear reason to change them. In most cases the scores should remain the same so the detailed assessment matches the detailed feedback inputs.",
         "11. If a category does not have enough clear evidence, leave it as Missing instead of guessing a score.",
         "12. Make the final encouragement line sound like a real teacher speaking to the student. It must be specific to the submitted writing and use the safe reference word from the genre information above. Do not use letter, poem, story, or another genre word unless that genre is clearly identified above.",
         "12a. Only point out errors that truly exist in the original student writing. Do not use a correct word or capital as your correction example.",
@@ -6072,8 +6072,8 @@ function getAuditRawRows(key, item, data) {
         }
     } else {
         if (data.quickRubric && data.quickRubric[key]) {
-            addAuditRawRow(rows, "Quick rubric score", data.quickRubric[key].score);
-            addAuditRawRow(rows, "Quick rubric reason", data.quickRubric[key].reason);
+            addAuditRawRow(rows, "Detailed feedback input score", data.quickRubric[key].score);
+            addAuditRawRow(rows, "Detailed feedback input note", data.quickRubric[key].reason);
         }
         if (data.categoryEligibility && data.categoryEligibility[key] !== undefined) {
             addAuditRawRow(rows, "Category eligibility", data.categoryEligibility[key] ? "Scored" : "Not scored");
@@ -6244,6 +6244,149 @@ function formatGrammarCalc(calc) {
             '<tr><td>Ideas decaying multiplier</td><td>' + calc.multiplier.toFixed(3) + '</td></tr>' +
             '<tr><td>Ideas adjustment note</td><td>' + escapeHtml(calc.ideasNote) + '</td></tr>' +
         '</table>';
+}
+
+function setDebugText(id, value) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = value == null ? "" : String(value);
+}
+
+function setDebugHtml(id, value) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = value == null ? "" : String(value);
+}
+
+function cloneForDebug(value) {
+    try {
+        return JSON.parse(JSON.stringify(value || {}));
+    } catch (e) {
+        return {};
+    }
+}
+
+function renameDetailedFeedbackInputKeyForDebug(value) {
+    var copy = cloneForDebug(value);
+    if (copy.quickRubric) {
+        copy.detailedFeedbackInputScores = copy.quickRubric;
+        delete copy.quickRubric;
+    }
+    return copy;
+}
+
+function buildDetailedFeedbackInputDebugText(inputText, inputScores, finalScores) {
+    var lines = [];
+    lines.push("Detailed feedback input sent to the Detailed Writing Feedback model:");
+    lines.push(String(inputText || "No detailed feedback input scores were sent."));
+    lines.push("");
+    lines.push("Final normalized detailed feedback input scores after app calculations:");
+    lines.push(JSON.stringify(renameDetailedFeedbackInputKeyForDebug({ quickRubric: inputScores || {} }).detailedFeedbackInputScores || {}, null, 2));
+    if (finalScores) {
+        lines.push("");
+        lines.push("Final category scores used for the overall score:");
+        lines.push(JSON.stringify(finalScores, null, 2));
+    }
+    return lines.join("\n");
+}
+
+function buildLowSampleDebugObject(lowSample) {
+    return renameDetailedFeedbackInputKeyForDebug(lowSample || {});
+}
+
+function buildDetailedFeedbackCookedDebug(detailed) {
+    // This debug helper intentionally reuses buildStudentFeedbackForCategory.
+    // It should stay in sync with renderDetailedAssessment, which uses the same builder.
+    var categories = detailed && detailed.categories ? detailed.categories : {};
+    var keys = Object.keys(categories);
+    var output = {};
+    for (var i = 0; i < keys.length; i += 1) {
+        var key = keys[i];
+        var item = categories[key] || {};
+        var feedback = buildStudentFeedbackForCategory(key, item);
+        var audit = feedback.audit || {};
+        output[key] = {
+            score: item.score,
+            rawAi: {
+                evidence: item.evidence || "(none)",
+                teacherComment: item.teacherComment || "(none)",
+                growthTip: item.growthTip || "(none)"
+            },
+            displayed: {
+                teacherComment: feedback.teacherComment || "",
+                growthTip: feedback.growthTip || "",
+                primaryFocusRow: feedback.primaryRow || null,
+                noticeRows: feedback.noticeRows || []
+            },
+            source: {
+                teacherComment: audit.teacherCommentSource || getAuditTeacherCommentSource(key, item, [feedback.primaryRow || {}]),
+                growthTip: audit.growthTipSource || getGrowthTipSource(key, item, [feedback.primaryRow || {}]),
+                builder: audit.builderName || getFeedbackBuilderName(key),
+                scoreBand: audit.scoreBand || getAuditScoreBandLabel(item.score)
+            },
+            sanityCheck: {
+                noticeRowCount: feedback.noticeRows ? feedback.noticeRows.length : 0,
+                primaryFocus: audit.primaryFocus || buildNotebookNoticedLine(key, feedback.primaryRow || {})
+            }
+        };
+    }
+    return output;
+}
+
+function buildParsedCorrectionsDebugObject(parsed) {
+    return renameDetailedFeedbackInputKeyForDebug(parsed || {});
+}
+
+function addDebugSummaryRow(rows, label, value) {
+    if (value === undefined || value === null || value === "") value = "None";
+    rows.push('<tr><td>' + escapeHtml(label) + '</td><td>' + escapeHtml(String(value)) + '</td></tr>');
+}
+
+function formatCategoryScoresForDebug(categoryScores) {
+    if (!categoryScores) return "None";
+    var keys = Object.keys(categoryScores);
+    var parts = [];
+    for (var i = 0; i < keys.length; i += 1) {
+        parts.push(keys[i] + ": " + (categoryScores[keys[i]] == null ? "Not scored" : categoryScores[keys[i]] + "/" + RUBRIC_MAX));
+    }
+    return parts.join(" | ");
+}
+
+function formatEligibilityForDebug(eligibility) {
+    if (!eligibility) return "None";
+    var keys = Object.keys(eligibility);
+    var parts = [];
+    for (var i = 0; i < keys.length; i += 1) {
+        parts.push(keys[i] + ": " + (eligibility[keys[i]] ? "Scored" : "Not scored"));
+    }
+    return parts.join(" | ");
+}
+
+function buildDebugSummaryHtml(info) {
+    info = info || {};
+    var rows = [];
+    var genre = normalizeWritingGenreInfo(info.writingGenre || {});
+    var sample = info.sampleStatus || {};
+    var flow = info.flowData || null;
+    var adjustment = info.wordCountAdjustment || null;
+    var notebookGuide = info.notebookGuide || null;
+    addDebugSummaryRow(rows, "Mode", info.mode || "Detailed Writing Feedback");
+    addDebugSummaryRow(rows, "Model", info.model || "Not recorded");
+    addDebugSummaryRow(rows, "Grade level", info.gradeLabel || info.gradeLevel || "Not recorded");
+    addDebugSummaryRow(rows, "Class grade default", info.classGradeLabel || "Not recorded");
+    addDebugSummaryRow(rows, "Grammar strictness", info.grammarStrictness != null ? "Level " + info.grammarStrictness : "Not recorded");
+    addDebugSummaryRow(rows, "Writing type", genre.mainGenre ? genre.mainGenre + " / " + (genre.subtype || "") + " / " + (genre.source || "") : "Not recorded");
+    addDebugSummaryRow(rows, "Sample status", (sample.label || sample.status || "Not recorded") + (sample.reason ? " - " + sample.reason : ""));
+    addDebugSummaryRow(rows, "Word count", (info.actualWords != null ? info.actualWords : "?") + " actual | " + (info.targetWords > 0 ? info.targetWords + " target" : "target off"));
+    addDebugSummaryRow(rows, "Sentence count", sample.sentenceCount != null ? sample.sentenceCount : (flow && flow.sentenceCount != null ? flow.sentenceCount : "Not recorded"));
+    addDebugSummaryRow(rows, "Category eligibility", formatEligibilityForDebug(info.categoryEligibility));
+    addDebugSummaryRow(rows, "Category scores", formatCategoryScoresForDebug(info.categoryScores));
+    addDebugSummaryRow(rows, "Overall score", info.overall == null ? "Not scored" : info.overall + "%");
+    addDebugSummaryRow(rows, "Flow summary", flow ? ((flow.flowRating || "") + " | " + (flow.varietyLabel || "") + " | " + (flow.bandSummary || "")) : "Not available");
+    addDebugSummaryRow(rows, "Ideas word count adjustment", adjustment ? adjustment.note : "Not applied");
+    addDebugSummaryRow(rows, "Notebook guide", notebookGuide ? "Built with " + ((notebookGuide.examples && notebookGuide.examples.length) || 0) + " example(s)" : "Not built");
+    addDebugSummaryRow(rows, "Neatness image scoring", info.neatnessUsed ? "Used" : "Not used");
+    return '<table class="calc-table"><tbody>' + rows.join("") + '</tbody></table>';
 }
 
 
@@ -10952,6 +11095,7 @@ async function analyzeWriting() {
     setLoadingButtonState(stopBtn, false);
     stopBtn.textContent = 'Stop Analysis';
     stopBtn.disabled = false;
+    setDebugText("cookedOutputRaw", "");
 
     try {
         var actualWords = countWords(text);
@@ -11001,7 +11145,7 @@ async function analyzeWriting() {
                 sampleStatus: sampleStatus,
                 flowData: null,
                 wordCountAdjustment: null,
-                categoryEligibility: null,
+                categoryEligibility: getCategoryEligibility(sampleStatus),
                 notebookGuide: lowSampleNotebookGuide,
                 notebookGuideVersion: NOTEBOOK_GUIDE_VERSION
             };
@@ -11011,16 +11155,43 @@ async function analyzeWriting() {
             // quickRubric display removed
             renderDetailedAssessment(lowSample.detailed);
             renderTeacherAuditView(latestAnalysisData);
-            document.getElementById("step1Raw").textContent = "Low-sample coaching mode used. Full AI rubric scoring was skipped because the sample was too short for a fair score.";
-            document.getElementById("step3Raw").textContent = JSON.stringify({ sampleStatus: sampleStatus, mode: "low-sample-coaching" }, null, 2);
+            setDebugHtml("debugSummary", buildDebugSummaryHtml({
+                mode: "Low-sample coaching",
+                model: model,
+                gradeLevel: gradeProfile.grade,
+                gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
+                classGradeLabel: assessmentSettings.classGradeLabel,
+                grammarStrictness: assessmentSettings.grammarStrictness,
+                writingGenre: writingGenreInfo,
+                sampleStatus: sampleStatus,
+                actualWords: actualWords,
+                targetWords: targetWords,
+                categoryScores: lowSample.categoryScores,
+                categoryEligibility: getCategoryEligibility(sampleStatus),
+                overall: null,
+                flowData: null,
+                wordCountAdjustment: null,
+                notebookGuide: lowSampleNotebookGuide,
+                neatnessUsed: false
+            }));
+            setDebugText("step1PromptRaw", "Skipped: low-sample coaching mode does not request correction prompts from AI.");
+            setDebugText("step1Raw", "Low-sample coaching mode used. Full AI correction and scoring were skipped because the sample was too short for a fair score.");
+            setDebugText("step2PromptRaw", "Skipped: low-sample coaching mode does not request detailed feedback input scores from AI.");
+            setDebugText("step2Raw", "Skipped: low-sample coaching mode used built-in category coaching instead of an intermediate AI score response.");
+            setDebugText("detailedFeedbackInputRaw", buildDetailedFeedbackInputDebugText(buildQuickRubricText(lowSample.quickRubric), lowSample.quickRubric, lowSample.categoryScores));
+            setDebugText("step3PromptRaw", "Skipped: low-sample coaching mode does not request the Detailed Writing Feedback prompt from AI.");
+            setDebugText("step3Raw", JSON.stringify({ sampleStatus: sampleStatus, mode: "low-sample-coaching" }, null, 2));
             document.getElementById("grammarCalc").innerHTML = '<div class="assessment-item">Full grammar density scoring is hidden until there is enough writing to score fairly.</div>';
-            document.getElementById("debugRaw").textContent =
+            var lowSampleCookedDebug = buildDetailedFeedbackCookedDebug(lowSample.detailed);
+            setDebugText("cookedOutputRaw", JSON.stringify(lowSampleCookedDebug, null, 2));
+            setDebugText("debugRaw",
                 "Overview:\n" +
                 "Sample status: " + sampleStatus.label + "\n" +
                 "Reason: " + sampleStatus.reason + "\n" +
                 "Target words: " + (targetWords > 0 ? targetWords : "Off") + " | Actual words: " + actualWords + "\n" +
                 "Sentences: " + sampleStatus.sentenceCount + "\n\n" +
-                "Low-sample analysis:\n" + JSON.stringify(lowSample, null, 2);
+                "Low-sample analysis:\n" + JSON.stringify(buildLowSampleDebugObject(lowSample), null, 2) + "\n\n" +
+                "Final displayed feedback audit:\n" + JSON.stringify(lowSampleCookedDebug, null, 2));
             try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolioLowSample) {
                 wftDebugError('Could not prepare low-sample portfolio sync:', ePortfolioLowSample);
                 setDriveSyncStatus('error', 'Could not prepare portfolio sync');
@@ -11030,7 +11201,9 @@ async function analyzeWriting() {
         }
 
         var step1Prompt = buildStep1Prompt(text, gradeProfile);
+        setDebugText("step1PromptRaw", step1Prompt);
         var step1 = await callOpenRouter(model, step1Prompt);
+        setDebugText("step1Raw", step1);
         var parsed1 = parseStep1(step1, text, targetWords);
 
         var correctedText = parsed1.correctedStory || text;
@@ -11047,7 +11220,9 @@ async function analyzeWriting() {
         parsed1.flowTip = buildComputedFlowTip(flowData);
 
         var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, writingGenreInfo);
+        setDebugText("step2PromptRaw", step2Prompt);
         var step2 = await callOpenRouter(model, step2Prompt);
+        setDebugText("step2Raw", step2);
         parsed1.quickRubric = parseStep2QuickRubric(step2, text, targetWords);
         var eligibility = getCategoryEligibility(sampleStatus);
         applyEligibilityToQuickRubric(parsed1.quickRubric, eligibility);
@@ -11072,7 +11247,8 @@ async function analyzeWriting() {
             }
         }
 
-        var quickRubricText = buildQuickRubricText(parsed1.quickRubric);
+        var detailedFeedbackInputText = buildQuickRubricText(parsed1.quickRubric);
+        setDebugText("detailedFeedbackInputRaw", buildDetailedFeedbackInputDebugText(detailedFeedbackInputText, parsed1.quickRubric, null));
         var preliminaryCategoryScores = {};
         var preliminaryKeys = getActiveCategoryKeys();
         for (var prelimIndex = 0; prelimIndex < preliminaryKeys.length; prelimIndex += 1) {
@@ -11088,8 +11264,10 @@ async function analyzeWriting() {
             detailedFeedback: { categories: {} },
             writingGenre: writingGenreInfo
         });
-        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo, text, notebookGuidePriorities);
+        var step3Prompt = buildStep3Prompt(correctedText, detailedFeedbackInputText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo, text, notebookGuidePriorities);
+        setDebugText("step3PromptRaw", step3Prompt);
         var step3 = await callOpenRouter(model, step3Prompt);
+        setDebugText("step3Raw", step3);
         var detailed = parseDetailedAssessment(step3, text, writingGenreInfo, notebookGuidePriorities);
         detailed.writingGenre = writingGenreInfo;
         if (detailed.keepWriting) detailed.keepWriting = sanitizeGenreReferenceInFeedback(detailed.keepWriting, writingGenreInfo);
@@ -11139,7 +11317,7 @@ async function analyzeWriting() {
             if (!detailed.categories[inheritKey] && parsed1.quickRubric[inheritKey]) {
                 var qr = parsed1.quickRubric[inheritKey];
                 if (inheritKey === "Neatness") {
-                    // For Neatness the quick rubric 'reason' is an observation (evidence),
+                    // For Neatness the detailed feedback input 'reason' is an observation (evidence),
                     // and 'growthTip' is the separate actionable tip from the image prompt.
                     detailed.categories[inheritKey] = {
                         score: qr.score,
@@ -11188,7 +11366,7 @@ async function analyzeWriting() {
         }
 
         // Spelling & Punctuation fallback (core category - always needs an entry).
-        // If the detailed parser misses a flexible heading, inherit the quick rubric score
+        // If the detailed parser misses a flexible heading, inherit the detailed feedback input score
         // before showing this category as missing.
         var spellQuick = parsed1.quickRubric["Spelling & Punctuation"] || { score: null, reason: getEvidenceNote("Spelling & Punctuation") };
         if (!detailed.categories["Spelling & Punctuation"]) {
@@ -11318,8 +11496,26 @@ async function analyzeWriting() {
         else if (grammarScore === 3) bandText = "9.1 - 13 = 3";
         else if (grammarScore === 2) bandText = "13.1 - 18 = 2";
 
-        document.getElementById("step1Raw").textContent = step1 + "\n\n--- Step 2 (Quick Rubric) ---\n" + step2;
-        document.getElementById("step3Raw").textContent = step3;
+        setDebugText("detailedFeedbackInputRaw", buildDetailedFeedbackInputDebugText(detailedFeedbackInputText, parsed1.quickRubric, categoryScores));
+        setDebugHtml("debugSummary", buildDebugSummaryHtml({
+            mode: "Detailed Writing Feedback",
+            model: model,
+            gradeLevel: gradeProfile.grade,
+            gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
+            classGradeLabel: assessmentSettings.classGradeLabel,
+            grammarStrictness: assessmentSettings.grammarStrictness,
+            writingGenre: writingGenreInfo,
+            sampleStatus: sampleStatus,
+            actualWords: actualWords,
+            targetWords: targetWords,
+            categoryScores: categoryScores,
+            categoryEligibility: eligibility,
+            overall: overall,
+            flowData: flowData,
+            wordCountAdjustment: adjustment,
+            notebookGuide: notebookGuide,
+            neatnessUsed: !!pendingNeatnessDetail
+        }));
         document.getElementById("grammarCalc").innerHTML = formatGrammarCalc({
             grammarErrors: parsed1.errorCounts.grammar,
             punctuationErrors: parsed1.errorCounts.punctuation,
@@ -11346,25 +11542,35 @@ async function analyzeWriting() {
             overviewLines.push(flowData.starterSummary + " | Longest short-sentence run: " + flowData.shortRun);
         }
 
-        document.getElementById("debugRaw").textContent =
+        var parsed1Debug = buildParsedCorrectionsDebugObject(parsed1 || {});
+        var neatnessDebug = typeof neatnessResult !== "undefined" ? neatnessResult : null;
+        var cookedOutputDebug = buildDetailedFeedbackCookedDebug(detailed);
+        setDebugText("cookedOutputRaw", JSON.stringify(cookedOutputDebug, null, 2));
+        setDebugText("debugRaw",
             "Overview:\n" + overviewLines.join("\n") + "\n\n" +
             "Model: " + model + "\n\n" +
-            "Parsed Step 1:\n" + JSON.stringify(parsed1, null, 2) + "\n\n" +
-            "Raw Step 2:\n" + step2 + "\n\n" +
-            "Parsed Step 3:\n" + JSON.stringify(detailed, null, 2) + "\n\n" +
+            "Writing type classification:\n" + JSON.stringify(writingGenreInfo, null, 2) + "\n\n" +
+            "Parsed corrections and scoring inputs:\n" + JSON.stringify(parsed1Debug, null, 2) + "\n\n" +
+            "Detailed feedback input scores sent to Step 3:\n" + detailedFeedbackInputText + "\n\n" +
+            "Parsed Detailed Writing Feedback:\n" + JSON.stringify(detailed, null, 2) + "\n\n" +
             "Sample status data:\n" + JSON.stringify(sampleStatus, null, 2) + "\n\n" +
             "Category eligibility:\n" + JSON.stringify(eligibility, null, 2) + "\n\n" +
             "Category scores used for overall score:\n" + JSON.stringify(categoryScores, null, 2) + "\n\n" +
-            "Overall score formula check:\n" +
-            "10 = 100, 9 = 90, 8 = 80, 7 = 70, 6 = 60, 5 = 50, 4 = 40, then average only scored categories and round.\n\n" +
-            "Word count adjustment:\n" + JSON.stringify(adjustment, null, 2);
+            "Word count adjustment:\n" + JSON.stringify(adjustment, null, 2) + "\n\n" +
+            "Notebook guide priorities (preliminary - before Step 3):\n" + JSON.stringify(notebookGuidePriorities, null, 2) + "\n\n" +
+            "Final notebook guide priorities:\n" + JSON.stringify(finalNotebookGuidePriorities, null, 2) + "\n\n" +
+            "Final notebook guide:\n" + JSON.stringify(notebookGuide, null, 2) + "\n\n" +
+            "Neatness image assessment:\n" + JSON.stringify(neatnessDebug, null, 2) + "\n\n" +
+            "Final displayed feedback audit:\n" + JSON.stringify(cookedOutputDebug, null, 2));
 
     } catch (e) {
         if (e.message === "Analysis cancelled by user.") {
             document.getElementById("debugRaw").textContent = "Analysis stopped by user.";
+            setDebugText("cookedOutputRaw", "");
             renderTeacherAuditView(null);
         } else {
             document.getElementById("debugRaw").textContent = "Error:\n" + e.message;
+            setDebugText("cookedOutputRaw", "");
             alert("Analysis failed. See Debug for details.");
             showTeacherReview();
         }
