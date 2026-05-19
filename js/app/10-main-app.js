@@ -11925,38 +11925,8 @@ window.addEventListener('pageshow', function(event) {
     }
 });
 
-window.addEventListener('pagehide', function() {
-    // ── WFT Sync V2: only fast local save on hide; Drive upload is unsafe here ──
-    if (WFT_SYNC_ENGINE_V2) {
-        try { saveWftLocalSnapshotsBeforeHide(); } catch (e) {}
-        return;
-    }
-    try {
-        savePortfolioData(getPortfolioData());
-        if (driveAccessToken) {
-            syncAllToDrive();
-        }
-    } catch (e) {}
-});
-
-document.addEventListener('visibilitychange', function() {
-    // ── WFT Sync V2: only fast local save on hide; Drive upload is unsafe here ──
-    if (WFT_SYNC_ENGINE_V2) {
-        if (document.visibilityState === 'hidden') {
-            try { saveWftLocalSnapshotsBeforeHide(); } catch (e) {}
-        }
-        return;
-    }
-    if (document.visibilityState === 'hidden') {
-        try {
-            savePortfolioData(getPortfolioData());
-            if (driveAccessToken) {
-                syncAllToDrive();
-            }
-        } catch (e) {}
-    }
-});
-
+// Page lifecycle sync is centralized in 00-storage-sync-patches.js.
+// Do not upload to Drive from pagehide/visibilitychange; stale tabs must not overwrite newer Drive data.
 
 /* =============================================
    Function overrides — applied after main JS block

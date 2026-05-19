@@ -540,7 +540,7 @@ function saveSettingsToLocalStorage(settingsOverride) {
     if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks && !(typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
         markWftSettingsDirty("settings-change");
         scheduleWftCloudSync("settings-change");
-    } else if ((typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === "function") {
+    } else if (!WFT_SYNC_ENGINE_V2 && (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === "function") {
         try { saveSettingsToDrive(); } catch (e) {}
     }
     return settings;
@@ -988,8 +988,11 @@ var DRIVE_TOKEN_EXPIRY_CACHE_KEY = "wft_drive_access_token_expiry";
 var GOOGLE_CONNECTED_CACHE_KEY = "wft_google_connected";
 
 // ── WFT Sync Engine V2 feature flags ──
-var WFT_SYNC_ENGINE_V2 = false;
+var WFT_SYNC_ENGINE_V2 = true;
+var WFT_SYNC_ENGINE_V2_SAFE_MODE = false;
 var WFT_SYNC_DEBUG = false;
+var WFT_VISIBILITY_SYNC_COOLDOWN_MS = 2500;
+var wftLastVisibilitySyncAt = 0;
 var WFT_DEBUG = false;
 var WFT_DUPLICATE_DETECTION_V2 = true;
 var WFT_DUPLICATE_CLEANUP_V2 = false;
@@ -3000,9 +3003,11 @@ function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessi
     return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt);
 }
 
-function chooseNewerSession(sessionA, sessionB) {
-    var timeA = sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
-    var timeB = sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
+function chooseNewerSessionLegacy(sessionA, sessionB) {
+    // Legacy timestamp-only helper kept for compatibility with older split-file code.
+    // Runtime portfolio sync uses the image-preserving chooseNewerSession() defined in the V2 merge section below.
+    var timeA = sessionA && sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
+    var timeB = sessionB && sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
     if (isNaN(timeA)) { timeA = 0; } if (isNaN(timeB)) { timeB = 0; }
     return (timeA >= timeB) ? sessionA : sessionB;
 }
@@ -3886,8 +3891,23 @@ function fetchGoogleUserInfo(token) {
 
         // ── WFT Sync V2: use V2 merge/sync instead of old Drive loading ──
         if (WFT_SYNC_ENGINE_V2) {
-            startWftSyncPolling();
-            syncWftNow("sign-in", { immediate: false });
+            syncWftNow("sign-in", { immediate: true })
+                .then(function() {
+                    return new Promise(function(resolve) {
+                        syncPendingPortfolioMedia(function() { resolve(); });
+                    });
+                })
+                .then(function() {
+                    return syncWftNow("sign-in-media-complete", { immediate: true });
+                })
+                .then(function() {
+                    startWftSyncPolling();
+                })
+                .catch(function(e) {
+                    wftSyncErrorLog("Sign-in sync failed", e);
+                    setDriveSyncStatus("error", "Google Drive sync failed. Local data is still available.");
+                    startWftSyncPolling();
+                });
         } else {
             loadSettingsFromDrive();
             loadPortfolioFromDrive();
@@ -4224,7 +4244,21 @@ function handleGoogleSignOut() {
         try { updateSyncPortfolioButtonState(); } catch (e) { }
     }
 
-    if (driveAccessToken) {
+    if (driveAccessToken && WFT_SYNC_ENGINE_V2 && !WFT_SYNC_ENGINE_V2_SAFE_MODE && !(typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && hasWftDirtyChanges()) {
+        setDriveSyncStatus('syncing', 'Saving changes before sign out...');
+        syncPendingPortfolioMedia(function() {
+            flushWftCloudSyncNow("signout").then(function() {
+                finishSignOut();
+            }).catch(function(e) {
+                wftSyncErrorLog("Sign-out sync failed", e);
+                setDriveSyncStatus("error", "Local changes may not be saved to Drive. Sign in again to retry.");
+                finishSignOut();
+            });
+        });
+        return;
+    }
+
+    if (driveAccessToken && !WFT_SYNC_ENGINE_V2) {
         setDriveSyncStatus('syncing', 'Syncing before sign out...');
         syncAllToDrive(function() {
             finishSignOut();
@@ -4249,6 +4283,53 @@ function setDriveSyncStatus(state, text) {
     if (dotHeader) { dotHeader.className = dotClass; }
     if (txt) txt.textContent = text || "";
     if (txtHeader) txtHeader.textContent = text || "";
+}
+
+
+function showDriveSyncPausedForSafety() {
+    setDriveSyncStatus("paused", "Drive sync paused for safety. Local changes are still saved on this device.");
+}
+
+function isDriveSyncAllowed() {
+    if (!WFT_SYNC_ENGINE_V2) return false;
+    if (WFT_SYNC_ENGINE_V2_SAFE_MODE) return false;
+    if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) return false;
+    if (!driveAccessToken) return false;
+    if (typeof signedIn !== "undefined" && !signedIn) return false;
+    if (typeof wftSyncState !== "undefined" && wftSyncState && !wftSyncState.signedIn && !wftSyncState.accessToken) return false;
+    return true;
+}
+
+function portfolioHasPendingDriveMedia(portfolio) {
+    var data = normalizePortfolioShape(portfolio || {});
+    var studentNames = Object.keys(data || {});
+    for (var i = 0; i < studentNames.length; i += 1) {
+        var student = data[studentNames[i]] || {};
+        var sessions = Array.isArray(student.sessions) ? student.sessions : [];
+        for (var j = 0; j < sessions.length; j += 1) {
+            var images = Array.isArray(sessions[j].images) ? sessions[j].images : [];
+            for (var k = 0; k < images.length; k += 1) {
+                if (images[k] && images[k].pendingDriveUpload) return true;
+            }
+        }
+    }
+    return false;
+}
+
+function hasWftDirtyChanges() {
+    if (typeof wftSyncState !== "undefined" && wftSyncState) {
+        if (wftSyncState.pendingSettingsPush || wftSyncState.pendingPortfolioPush || wftSyncState.pendingDeletionsPush) return true;
+    }
+    try {
+        if (typeof isWftPortfolioIndexDirty === "function" && isWftPortfolioIndexDirty()) return true;
+    } catch (e) { }
+    try {
+        if (typeof getPendingPortfolioSync === "function" && getPendingPortfolioSync()) return true;
+    } catch (e2) { }
+    try {
+        if (portfolioHasPendingDriveMedia(getPortfolioData())) return true;
+    } catch (e3) { }
+    return false;
 }
 
 // ── WFT Sync Engine V2 guarded Drive fetch ──
@@ -5070,8 +5151,10 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
         for (i = 0; i < sessions.length; i += 1) {
             var session = sessions[i];
             var sessionId = getSessionKey(session);
+            var sessionStudentId = (session && session.studentId) || "";
+            var sessionUpdatedAt = session && (session.updatedAt || session.createdAt || session.date);
 
-            if (!sessionId || !cleanDeletions.deletedSessions[getDeletedSessionKey(studentName, sessionId)]) {
+            if (!sessionId || !isStudentSessionDeleted(sessionId, sessionStudentId, cleanDeletions, sessionUpdatedAt)) {
                 filteredSessions.push(session);
             }
         }
@@ -5322,6 +5405,7 @@ function markWftDeletionsDirty(reason) {
 
 function scheduleWftCloudSync(reason) {
     if (!WFT_SYNC_ENGINE_V2) return;
+    if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) return;
 
     syncStateFromLegacyGoogleGlobals();
 
@@ -5894,6 +5978,13 @@ function chooseNewerSession(a, b) {
     var bTime = getTimeMs(b && (b.updatedAt || b.createdAt || b.date));
 
     if (bTime > aTime) return mergeSessionImageRefs(b, a);
+    if (aTime > bTime) return mergeSessionImageRefs(a, b);
+
+    if (getWftHash(a || {}) !== getWftHash(b || {})) {
+        wftSyncWarn("[WFT Sync][PORTFOLIO] Same session ID has different content with equal timestamps; preserving newer-looking copy plus image refs.");
+        return mergeSessionImageRefs(b, a);
+    }
+
     return mergeSessionImageRefs(a, b);
 }
 
@@ -5903,77 +5994,69 @@ function rebuildWftPortfolioDerivedStats(portfolio) {
 }
 
 function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative) {
-    // WFT portfolio is keyed by student name; use WFT's existing merge logic as base
-    var localNorm = normalizePortfolioShape(localPortfolio);
-    var cloudNorm = normalizePortfolioShape(cloudPortfolio);
-
-    // Start with cloud, overlay local
+    // Merge by student/session rather than replacing a whole student record.
+    // localIsAuthoritative is kept for API compatibility, but it must not cause
+    // a whole-student overwrite because that can drop newer sessions from Drive.
+    var localNorm = normalizePortfolioShape(localPortfolio || {});
+    var cloudNorm = normalizePortfolioShape(cloudPortfolio || {});
     var merged = {};
-    var studentName;
+    var studentNames = {};
 
-    // Copy all cloud students
-    for (studentName in cloudNorm) {
-        if (Object.prototype.hasOwnProperty.call(cloudNorm, studentName)) {
-            merged[studentName] = cloneWftJson(cloudNorm[studentName]);
-        }
-    }
+    Object.keys(cloudNorm || {}).forEach(function(studentName) {
+        studentNames[studentName] = true;
+    });
+    Object.keys(localNorm || {}).forEach(function(studentName) {
+        studentNames[studentName] = true;
+    });
 
-    // Merge local students
-    for (studentName in localNorm) {
-        if (!Object.prototype.hasOwnProperty.call(localNorm, studentName)) continue;
-
-        if (!merged[studentName]) {
-            merged[studentName] = cloneWftJson(localNorm[studentName]);
-            continue;
-        }
-
-        if (localIsAuthoritative) {
-            wftSyncLog("[WFT Sync][PORTFOLIO] merge local-authoritative", {
-                studentName: studentName,
-                localSessions: (localNorm[studentName].sessions || []).length,
-                cloudSessions: (merged[studentName].sessions || []).length
-            });
-
-            merged[studentName] = cloneWftJson(localNorm[studentName]);
-            continue;
-        }
-
-        // Merge sessions for this student
+    Object.keys(studentNames).forEach(function(studentName) {
+        var localStudent = localNorm[studentName] || {};
+        var cloudStudent = cloudNorm[studentName] || {};
+        var localSessions = Array.isArray(localStudent.sessions) ? localStudent.sessions : [];
+        var cloudSessions = Array.isArray(cloudStudent.sessions) ? cloudStudent.sessions : [];
         var byKey = {};
-        var cloudSessions = merged[studentName].sessions || [];
-        var localSessions = localNorm[studentName].sessions || [];
-        var i;
-        var key;
+        var ordered = [];
 
-        for (i = 0; i < cloudSessions.length; i += 1) {
-            key = getSessionKey(cloudSessions[i]);
-            if (key) byKey[key] = cloudSessions[i];
-        }
+        function storeSession(session) {
+            if (!session) return;
+            var key = getSessionKey(session);
 
-        for (i = 0; i < localSessions.length; i += 1) {
-            key = getSessionKey(localSessions[i]);
-            if (!key) continue;
+            if (!key) {
+                ordered.push(cloneWftJson(session));
+                return;
+            }
 
             if (!byKey[key]) {
-                byKey[key] = localSessions[i];
-            } else {
-                byKey[key] = chooseNewerSession(byKey[key], localSessions[i]);
+                byKey[key] = cloneWftJson(session);
+                ordered.push(byKey[key]);
+                return;
+            }
+
+            byKey[key] = chooseNewerSession(byKey[key], session);
+            for (var i = 0; i < ordered.length; i += 1) {
+                if (getSessionKey(ordered[i]) === key) {
+                    ordered[i] = byKey[key];
+                    break;
+                }
             }
         }
 
-        var resultSessions = [];
-        for (key in byKey) {
-            if (Object.prototype.hasOwnProperty.call(byKey, key)) {
-                resultSessions.push(byKey[key]);
-            }
-        }
+        cloudSessions.forEach(storeSession);
+        localSessions.forEach(storeSession);
 
-        resultSessions.sort(function (a, b) {
-            return getTimeMs(b.date || b.createdAt || b.updatedAt) - getTimeMs(a.date || a.createdAt || a.updatedAt);
+        ordered.sort(function (a, b) {
+            return getTimeMs(b && (b.date || b.createdAt || b.updatedAt)) - getTimeMs(a && (a.date || a.createdAt || a.updatedAt));
         });
 
-        merged[studentName].sessions = resultSessions;
-    }
+        merged[studentName] = cloneWftJson(cloudStudent);
+        Object.keys(localStudent).forEach(function(key) {
+            if (key === "sessions") return;
+            if (typeof merged[studentName][key] === "undefined") {
+                merged[studentName][key] = cloneWftJson(localStudent[key]);
+            }
+        });
+        merged[studentName].sessions = ordered;
+    });
 
     // DO NOT add root-level metadata keys (like updatedAt) - normalizePortfolioData
     // treats every top-level key as a student name, so metadata would become a fake student.
@@ -6137,6 +6220,12 @@ function syncWftNow(reason, options) {
 
     if (!WFT_SYNC_ENGINE_V2) {
         wftSyncLog("[WFT Sync] sync skipped - V2 disabled", reason);
+        return Promise.resolve(false);
+    }
+
+    if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
+        wftSyncLog("[WFT Sync] sync skipped - safe mode", reason);
+        showDriveSyncPausedForSafety();
         return Promise.resolve(false);
     }
 
@@ -6341,6 +6430,12 @@ function saveWftLocalSnapshotsBeforeHide() {
 }
 
 function initWftSyncLifecycleHandlers() {
+    window.addEventListener("pagehide", function () {
+        if (WFT_SYNC_ENGINE_V2) {
+            saveWftLocalSnapshotsBeforeHide();
+        }
+    });
+
     window.addEventListener("online", function () {
         clearWftSyncBlockState();
         if (!WFT_SYNC_ENGINE_V2) return;
@@ -6364,6 +6459,10 @@ function initWftSyncLifecycleHandlers() {
         }
 
         if (document.visibilityState === "visible" && shouldPollWftCloudNow()) {
+            if (!isDriveSyncAllowed()) return;
+            var now = Date.now();
+            if (now - wftLastVisibilitySyncAt < WFT_VISIBILITY_SYNC_COOLDOWN_MS) return;
+            wftLastVisibilitySyncAt = now;
             syncWftNow("visible", { immediate: false });
         }
     });
@@ -6793,9 +6892,11 @@ function savePortfolioData(data) {
     // ── WFT Sync V2: use dirty flags + debounced sync instead of direct upload ──
     if (WFT_SYNC_ENGINE_V2 && !wftSafeModeActive) {
         markWftPortfolioDirty("portfolio-change");
-        markWftPortfolioIndexDirty("portfolio-change");  // Patch 6
+        if (typeof markWftPortfolioIndexDirty === "function") {
+            markWftPortfolioIndexDirty("portfolio-change");  // Patch 6
+        }
         scheduleWftCloudSync("portfolio-change");
-    } else if (driveAccessToken) {
+    } else if (!WFT_SYNC_ENGINE_V2 && driveAccessToken) {
         saveFileToDrive('wft-portfolio.json', JSON.stringify(savedData, null, 2), 'application/json');
     }
     return savedData;
@@ -6817,29 +6918,7 @@ function loadPortfolioFromDrive() {
 }
 
 function mergePortfolioData(base, incoming) {
-    var merged = normalizePortfolioData(base || {});
-    var next = normalizePortfolioData(incoming || {});
-    Object.keys(next).forEach(function(studentName) {
-        if (!merged[studentName]) {
-            merged[studentName] = next[studentName];
-            return;
-        }
-        var byId = {};
-        merged[studentName].sessions.forEach(function(session) {
-            byId[session.id] = session;
-        });
-        next[studentName].sessions.forEach(function(session) {
-            if (!byId[session.id]) {
-                merged[studentName].sessions.push(session);
-            }
-        });
-        merged[studentName].sessions.sort(function(a, b) {
-            var aTime = a.createdAt ? Date.parse(a.createdAt) : 0;
-            var bTime = b.createdAt ? Date.parse(b.createdAt) : 0;
-            return aTime - bTime;
-        });
-    });
-    return merged;
+    return mergeWftPortfolios(base || {}, incoming || {}, false);
 }
 
 function scoreBadgeColor(score) {
@@ -7186,37 +7265,51 @@ function toggleRosterVisibility() {
 }
 
 function syncAllToDrive(callback) {
-    if (!driveAccessToken) {
-        if (callback) callback(false);
-        return;
-    }
-
-    // ── WFT Sync V2: use immediate flush ──
-    if (WFT_SYNC_ENGINE_V2) {
-        markWftSettingsDirty("sync-all");
-        markWftDeletionsDirty("sync-all");
-        markWftPortfolioDirty("sync-all");
+    if (!WFT_SYNC_ENGINE_V2) {
+        if (!driveAccessToken) {
+            if (callback) callback(false);
+            return;
+        }
+        saveSettingsToDrive();
+        savePortfolioData(getPortfolioData());
         syncPendingPortfolioMedia(function() {
-            try {
-                var normalized = normalizePortfolioData(getPortfolioData());
-                localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
-            } catch (e) { }
-            flushWftCloudSyncNow("sync-all").then(function(result) {
-                if (callback) callback(!!result);
-            }).catch(function(e) {
-                wftDebugError("syncAllToDrive flush failed:", normalizeWftAsyncErrorForLog(e));
-                setDriveSyncStatus("error", "Drive sync failed - please retry");
-                if (callback) callback(false);
-            });
+            savePortfolioData(getPortfolioData());
+            if (callback) callback(true);
         });
         return;
     }
 
-    saveSettingsToDrive();
-    savePortfolioData(getPortfolioData());
+    if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
+        showDriveSyncPausedForSafety();
+        if (callback) callback(false);
+        return;
+    }
+
+    if (!driveAccessToken) {
+        setDriveSyncStatus("error", "Please sign in to Google Drive first.");
+        if (callback) callback(false);
+        return;
+    }
+
+    markWftSettingsDirty("sync-all");
+    markWftDeletionsDirty("sync-all");
+    markWftPortfolioDirty("sync-all");
+    if (typeof markWftPortfolioIndexDirty === "function") {
+        markWftPortfolioIndexDirty("sync-all");
+    }
+
     syncPendingPortfolioMedia(function() {
-        savePortfolioData(getPortfolioData());
-        if (callback) callback(true);
+        try {
+            var normalized = normalizePortfolioData(getPortfolioData());
+            localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
+        } catch (e) { }
+        flushWftCloudSyncNow("sync-all").then(function(result) {
+            if (callback) callback(!!result);
+        }).catch(function(e) {
+            wftDebugError("syncAllToDrive flush failed:", normalizeWftAsyncErrorForLog(e));
+            setDriveSyncStatus("error", "Drive sync failed - please retry");
+            if (callback) callback(false);
+        });
     });
 }
 
@@ -8054,6 +8147,11 @@ function manualSaveToDrive() {
         setDriveSyncStatus('error', 'Could not prepare portfolio sync');
         return;
     }
+    if (WFT_SYNC_ENGINE_V2 && (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()))) {
+        showDriveSyncPausedForSafety();
+        return;
+    }
+
     if (!driveAccessToken) {
         wftSyncLog("[WFT Sync] manualSaveToDrive needs Drive access");
         setDriveSyncStatus('syncing', 'Connecting to Drive...');
@@ -8096,27 +8194,40 @@ function manualSaveToDrive() {
 
         // ── WFT Sync V2: use immediate flush for explicit Sync to Portfolio ──
         if (WFT_SYNC_ENGINE_V2) {
-            markWftPortfolioDirty("explicit-sync-to-portfolio");
-            flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
-                wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
-                manualSyncInProgress = false;
-                if (!result) {
-                    setSyncButtonsFailure('Retry Sync to Portfolio');
-                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
-                } else {
-                    setSyncButtonsBusy(false);
-                    setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
-                }
-            }).catch(function (e) {
-                wftDebugError('Manual Drive flush failed:', e);
-                wftSyncLog("[WFT Sync] manualSaveToDrive flush threw", {
-                    name: e && e.name ? e.name : '',
-                    message: e && e.message ? e.message : String(e),
-                    stack: e && e.stack ? e.stack : ''
-                }, getWftSyncDebugSnapshot());
+            if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
                 manualSyncInProgress = false;
                 setSyncButtonsFailure('Retry Sync to Portfolio');
-                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                showDriveSyncPausedForSafety();
+                return;
+            }
+            markWftSettingsDirty("explicit-sync-to-portfolio");
+            markWftDeletionsDirty("explicit-sync-to-portfolio");
+            markWftPortfolioDirty("explicit-sync-to-portfolio");
+            if (typeof markWftPortfolioIndexDirty === "function") {
+                markWftPortfolioIndexDirty("explicit-sync-to-portfolio");
+            }
+            syncPendingPortfolioMedia(function() {
+                flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
+                    wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
+                    manualSyncInProgress = false;
+                    if (!result) {
+                        setSyncButtonsFailure('Retry Sync to Portfolio');
+                        setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                    } else {
+                        setSyncButtonsBusy(false);
+                        setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
+                    }
+                }).catch(function (e) {
+                    wftDebugError('Manual Drive flush failed:', e);
+                    wftSyncLog("[WFT Sync] manualSaveToDrive flush threw", {
+                        name: e && e.name ? e.name : '',
+                        message: e && e.message ? e.message : String(e),
+                        stack: e && e.stack ? e.stack : ''
+                    }, getWftSyncDebugSnapshot());
+                    manualSyncInProgress = false;
+                    setSyncButtonsFailure('Retry Sync to Portfolio');
+                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                });
             });
             return;
         }
