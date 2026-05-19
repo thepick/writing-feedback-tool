@@ -11098,22 +11098,134 @@ function refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, ses
     return String(printContentHtml || "");
 }
 
-function printPortfolioNotebookSummary(studentName, sessionId) {
-    var session = findPortfolioSession(studentName, sessionId);
+function shouldRefreshPortfolioBeforeNotebookReprint() {
+    var hasV2Auth = (typeof wftSyncState !== "undefined" && wftSyncState && (wftSyncState.signedIn || wftSyncState.accessToken));
+    var hasLegacyAuth = (typeof driveAccessToken !== "undefined" && !!driveAccessToken);
+
+    return !!(
+        typeof WFT_SYNC_ENGINE_V2 !== "undefined" &&
+        WFT_SYNC_ENGINE_V2 &&
+        typeof syncWftNow === "function" &&
+        (hasV2Auth || hasLegacyAuth) &&
+        !(typeof WFT_SYNC_ENGINE_V2_SAFE_MODE !== "undefined" && WFT_SYNC_ENGINE_V2_SAFE_MODE) &&
+        !(typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())
+    );
+}
+
+function writeNotebookReprintStatusWindow(printWindow, title, message) {
+    if (!printWindow || !printWindow.document) return;
+    var safeTitle = escapeHtml(title || "Notebook Summary");
+    var safeMessage = escapeHtml(message || "Preparing notebook summary...");
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + safeTitle + '</title>'
+        + '<style>body{font-family:Arial,sans-serif;padding:28px;color:#1f2937;} .box{max-width:620px;margin:60px auto;border:1px solid #d1d5db;border-radius:12px;padding:24px;background:#f9fafb;} h1{font-size:1.25rem;margin:0 0 10px;} p{font-size:1rem;line-height:1.5;}</style>'
+        + '</head><body><div class="box"><h1>' + safeTitle + '</h1><p>' + safeMessage + '</p></div></body></html>';
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+}
+
+function getReprintSessionModifiedTimeMs(session) {
+    if (typeof getSessionModifiedTimeMs === "function") return getSessionModifiedTimeMs(session);
+    session = session || {};
+    var fields = [session.updatedAt, session.lastReassessedAt, session.createdAt, session.date];
+    var newest = 0;
+    for (var i = 0; i < fields.length; i += 1) {
+        var time = Date.parse(fields[i] || "");
+        if (!isNaN(time) && time > newest) newest = time;
+    }
+    return newest;
+}
+
+function findPortfolioSessionForReprint(studentName, sessionId) {
+    if (!studentName || sessionId == null) return null;
+
+    // Runs after syncWftNow("reprint", { immediate: true }), so Drive merge and deletion filtering
+    // have already been applied to localStorage by the V2 portfolio sync path.
+    var portfolio = getPortfolioData();
+    var studentData = portfolio && portfolio[studentName];
+    var sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
+    var requestedId = String(sessionId || "");
+    var candidates = [];
+    var reassessedForStudent = [];
+
+    for (var i = 0; i < sessions.length; i += 1) {
+        var session = sessions[i];
+        if (!session) continue;
+
+        var sessionIdText = String(session.id || "");
+        var createdAtText = String(session.createdAt || "");
+        var indexText = String(i);
+        var reassessedFromText = String(session.reassessedFromSessionId || "");
+
+        if (sessionIdText === requestedId || createdAtText === requestedId || indexText === requestedId || reassessedFromText === requestedId) {
+            candidates.push(session);
+        }
+        if (session.lastReassessedAt) {
+            reassessedForStudent.push(session);
+        }
+    }
+
+    if (candidates.length) {
+        candidates.sort(function(a, b) {
+            return getReprintSessionModifiedTimeMs(b) - getReprintSessionModifiedTimeMs(a);
+        });
+        return candidates[0];
+    }
+
+    if (reassessedForStudent.length) {
+        reassessedForStudent.sort(function(a, b) {
+            return getReprintSessionModifiedTimeMs(b) - getReprintSessionModifiedTimeMs(a);
+        });
+        return reassessedForStudent[0];
+    }
+
+    return null;
+}
+
+function renderPortfolioNotebookSummaryToWindow(printWindow, studentName, sessionId) {
+    var session = findPortfolioSessionForReprint(studentName, sessionId);
     if (!session) {
+        session = findPortfolioSession(studentName, sessionId);
+    }
+    if (!session) {
+        writeNotebookReprintStatusWindow(printWindow, "Notebook Summary", "Could not find that saved portfolio entry after refreshing from Drive.");
         alert("Could not find that saved portfolio entry.");
         return;
     }
-    var printContentHtml = session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
+
+    var shouldRegenerateHtml = !!(session.lastReassessedAt || session.reassessmentCount || session.reassessedFromSessionId);
+    var printContentHtml = shouldRegenerateHtml
+        ? buildNotebookPrintHtmlFromPortfolioSession(studentName, session)
+        : (session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session));
     printContentHtml = refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session);
+    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary");
+    writeWftPrintWindow(printWindow, printHtml);
+    scheduleWftPrintWindow(printWindow);
+}
+
+function printPortfolioNotebookSummary(studentName, sessionId) {
     var printWindow = window.open("", "_blank", "width=1200,height=900");
     if (!printWindow) {
         alert("Please allow pop-ups for this page to re-print the notebook summary.");
         return;
     }
-    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary");
-    writeWftPrintWindow(printWindow, printHtml);
-    scheduleWftPrintWindow(printWindow);
+
+    writeNotebookReprintStatusWindow(printWindow, "Notebook Summary", "Refreshing the latest saved assessment from Google Drive...");
+
+    if (shouldRefreshPortfolioBeforeNotebookReprint()) {
+        try { setDriveSyncStatus("syncing", "Refreshing latest portfolio copy..."); } catch (eStatus) { }
+        syncWftNow("reprint", { immediate: true }).then(function() {
+            renderPortfolioNotebookSummaryToWindow(printWindow, studentName, sessionId);
+        }).catch(function(e) {
+            if (typeof wftDebugWarn === "function") {
+                wftDebugWarn("Could not refresh portfolio before notebook reprint; using local copy.", e);
+            }
+            renderPortfolioNotebookSummaryToWindow(printWindow, studentName, sessionId);
+        });
+        return;
+    }
+
+    renderPortfolioNotebookSummaryToWindow(printWindow, studentName, sessionId);
 }
 
 function buildQuickRubricText(quickRubric) {

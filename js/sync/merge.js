@@ -101,7 +101,7 @@ function getWftDeletionRecords(deletions) {
 function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt) {
     if (!deletions || !sessionId) { return false; }
     var records = getWftDeletionRecords(deletions);
-    var sessionUpdateMs = sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0;
+    var sessionUpdateMs = typeof sessionUpdatedAt === "number" ? sessionUpdatedAt : (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0);
     var normalizedStudentId = String(studentId || "");
     for (var i = 0; i < records.length; i++) {
         var d = records[i] || {};
@@ -130,12 +130,20 @@ function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessi
     return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt);
 }
 
-function chooseNewerSession(sessionA, sessionB) {
-    var timeA = sessionA && (sessionA.updatedAt || sessionA.createdAt || sessionA.date) ? Date.parse(sessionA.updatedAt || sessionA.createdAt || sessionA.date) : 0;
-    var timeB = sessionB && (sessionB.updatedAt || sessionB.createdAt || sessionB.date) ? Date.parse(sessionB.updatedAt || sessionB.createdAt || sessionB.date) : 0;
+function getSessionModifiedTimeMs(session) {
+    session = session || {};
+    var fields = [session.updatedAt, session.lastReassessedAt, session.createdAt, session.date];
+    var newest = 0;
+    for (var i = 0; i < fields.length; i += 1) {
+        var time = fields[i] ? Date.parse(fields[i]) : 0;
+        if (!isNaN(time) && time > newest) newest = time;
+    }
+    return newest;
+}
 
-    if (isNaN(timeA)) { timeA = 0; }
-    if (isNaN(timeB)) { timeB = 0; }
+function chooseNewerSession(sessionA, sessionB) {
+    var timeA = getSessionModifiedTimeMs(sessionA);
+    var timeB = getSessionModifiedTimeMs(sessionB);
 
     if (typeof mergeSessionImageRefs === "function") {
         if (timeB > timeA) { return mergeSessionImageRefs(sessionB, sessionA); }
@@ -162,7 +170,7 @@ function applyDeletionsToFile(file, deletions) {
     var sessions = file.sessions || [];
     for (var i = 0; i < sessions.length; i++) {
         var s = sessions[i];
-        if (!isSessionDeleted(s.id, file.studentId || "", deletions, s.updatedAt || s.createdAt)) {
+        if (!isSessionDeleted(s.id, file.studentId || "", deletions, getSessionModifiedTimeMs(s))) {
             filtered.sessions.push(s);
         }
     }

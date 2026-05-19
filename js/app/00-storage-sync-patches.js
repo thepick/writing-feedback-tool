@@ -2936,7 +2936,7 @@ function mergeStudentSessions(localSessions, remoteSessions, deletions, studentI
             sessionId = session.id;
         }
         var sessionStudentId = session.studentId || studentId || "";
-        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt)) { continue; }
+        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, getSessionModifiedTimeMs(session))) { continue; }
         if (!merged[sessionId]) { merged[sessionId] = session; }
         else { merged[sessionId] = chooseNewerSession(merged[sessionId], session); }
     }
@@ -2974,7 +2974,7 @@ function getWftDeletionRecords(deletions) {
 function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt) {
     if (!deletions || !sessionId) { return false; }
     var records = getWftDeletionRecords(deletions);
-    var sessionUpdateMs = sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0;
+    var sessionUpdateMs = typeof getTimeMs === "function" ? getTimeMs(sessionUpdatedAt) : (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0);
     var normalizedStudentId = String(studentId || "");
     for (var i = 0; i < records.length; i++) {
         var rec = records[i] || {};
@@ -3019,7 +3019,7 @@ function applyDeletionsToFile(file, deletions) {
         createdAt: file.createdAt, updatedAt: new Date().toISOString(), sessions: [] };
     var sessions = file.sessions || [];
     for (var i = 0; i < sessions.length; i++) {
-        if (!isSessionDeleted(sessions[i].id, file.studentId || "", deletions, sessions[i].updatedAt || sessions[i].createdAt)) { filtered.sessions.push(sessions[i]); }
+        if (!isSessionDeleted(sessions[i].id, file.studentId || "", deletions, getSessionModifiedTimeMs(sessions[i]))) { filtered.sessions.push(sessions[i]); }
     }
     return filtered;
 }
@@ -4294,10 +4294,12 @@ function isDriveSyncAllowed() {
     if (!WFT_SYNC_ENGINE_V2) return false;
     if (WFT_SYNC_ENGINE_V2_SAFE_MODE) return false;
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) return false;
-    if (!driveAccessToken) return false;
-    if (typeof signedIn !== "undefined" && !signedIn) return false;
-    if (typeof wftSyncState !== "undefined" && wftSyncState && !wftSyncState.signedIn && !wftSyncState.accessToken) return false;
-    return true;
+
+    // Compatible with both the V2 sync state and the legacy Drive token.
+    // Do not require the legacy signedIn/driveAccessToken globals when V2 already has auth.
+    var hasV2Auth = (typeof wftSyncState !== "undefined" && wftSyncState && (wftSyncState.signedIn || wftSyncState.accessToken));
+    var hasLegacyAuth = (typeof driveAccessToken !== "undefined" && !!driveAccessToken);
+    return !!(hasV2Auth || hasLegacyAuth);
 }
 
 function portfolioHasPendingDriveMedia(portfolio) {
@@ -5152,7 +5154,7 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
             var session = sessions[i];
             var sessionId = getSessionKey(session);
             var sessionStudentId = (session && session.studentId) || "";
-            var sessionUpdatedAt = session && (session.updatedAt || session.createdAt || session.date);
+            var sessionUpdatedAt = session ? getSessionModifiedTimeMs(session) : 0;
 
             if (!sessionId || !isStudentSessionDeleted(sessionId, sessionStudentId, cleanDeletions, sessionUpdatedAt)) {
                 filteredSessions.push(session);
@@ -5928,6 +5930,7 @@ function getSessionKey(session) {
 }
 
 function getTimeMs(value) {
+    if (typeof value === "number") return isNaN(value) ? 0 : value;
     var time = Date.parse(value || "");
     return isNaN(time) ? 0 : time;
 }
@@ -5973,9 +5976,20 @@ function mergeSessionImageRefs(primary, secondary) {
     return merged;
 }
 
+function getSessionModifiedTimeMs(session) {
+    session = session || {};
+    var fields = [session.updatedAt, session.lastReassessedAt, session.createdAt, session.date];
+    var newest = 0;
+    for (var i = 0; i < fields.length; i += 1) {
+        var time = getTimeMs(fields[i]);
+        if (time > newest) newest = time;
+    }
+    return newest;
+}
+
 function chooseNewerSession(a, b) {
-    var aTime = getTimeMs(a && (a.updatedAt || a.createdAt || a.date));
-    var bTime = getTimeMs(b && (b.updatedAt || b.createdAt || b.date));
+    var aTime = getSessionModifiedTimeMs(a);
+    var bTime = getSessionModifiedTimeMs(b);
 
     if (bTime > aTime) return mergeSessionImageRefs(b, a);
     if (aTime > bTime) return mergeSessionImageRefs(a, b);
@@ -6045,7 +6059,7 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative
         localSessions.forEach(storeSession);
 
         ordered.sort(function (a, b) {
-            return getTimeMs(b && (b.date || b.createdAt || b.updatedAt)) - getTimeMs(a && (a.date || a.createdAt || a.updatedAt));
+            return getSessionModifiedTimeMs(b) - getSessionModifiedTimeMs(a);
         });
 
         merged[studentName] = cloneWftJson(cloudStudent);
@@ -6890,7 +6904,7 @@ function savePortfolioData(data) {
         }
     }
     // ── WFT Sync V2: use dirty flags + debounced sync instead of direct upload ──
-    if (WFT_SYNC_ENGINE_V2 && !wftSafeModeActive) {
+    if (WFT_SYNC_ENGINE_V2 && !wftSafeModeActive && !WFT_SYNC_ENGINE_V2_SAFE_MODE) {
         markWftPortfolioDirty("portfolio-change");
         if (typeof markWftPortfolioIndexDirty === "function") {
             markWftPortfolioIndexDirty("portfolio-change");  // Patch 6
@@ -8440,6 +8454,7 @@ function buildPortfolioReassessmentReplacementSession(oldSession, newSession, so
     replacement.reassessmentTextEdited = !!textEdited;
 
     replacement.lastReassessedAt = new Date().toISOString();
+    replacement.updatedAt = replacement.lastReassessedAt;
     replacement.reassessmentCount = (Number(oldSession.reassessmentCount) || 0) + 1;
     replacement.reassessedFromSessionId = oldSession.id || source.sourceSessionId || '';
     return replacement;
