@@ -131,11 +131,16 @@ function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessi
 }
 
 function chooseNewerSession(sessionA, sessionB) {
-    var timeA = sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
-    var timeB = sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
+    var timeA = sessionA && (sessionA.updatedAt || sessionA.createdAt || sessionA.date) ? Date.parse(sessionA.updatedAt || sessionA.createdAt || sessionA.date) : 0;
+    var timeB = sessionB && (sessionB.updatedAt || sessionB.createdAt || sessionB.date) ? Date.parse(sessionB.updatedAt || sessionB.createdAt || sessionB.date) : 0;
 
     if (isNaN(timeA)) { timeA = 0; }
     if (isNaN(timeB)) { timeB = 0; }
+
+    if (typeof mergeSessionImageRefs === "function") {
+        if (timeB > timeA) { return mergeSessionImageRefs(sessionB, sessionA); }
+        return mergeSessionImageRefs(sessionA, sessionB);
+    }
 
     if (timeA >= timeB) { return sessionA; }
     return sessionB;
