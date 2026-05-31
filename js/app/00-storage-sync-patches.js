@@ -1083,6 +1083,10 @@ var WFT_POLL_INTERVAL_MS = 60000;
 var WFT_SAVE_FILE_TIMEOUT_MS = 30000;
 var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session";
 var WFT_LAST_DRIVE_SYNC_KEY = "wft_last_drive_sync_at";
+var WFT_TOKEN_FRESHNESS_BUFFER_MS = 7 * 60 * 1000;
+var WFT_TOKEN_EXPIRY_WARNING_MS = 5 * 60 * 1000;
+var WFT_ALLOW_LEGACY_LOCAL_TOKEN_MIGRATION = false;
+var wftTokenExpiryWarningTimer = null;
 var wftSuppressDirtyMarks = false;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -3646,6 +3650,89 @@ function isWftTokenValid() {
     return Date.now() < wftSyncState.tokenExpiresAt;
 }
 
+function getWftTokenMsRemaining() {
+    var expiry = Number(wftSyncState.tokenExpiresAt || getWftSessionTokenExpiry() || 0);
+    if (!expiry) return 0;
+    return expiry - Date.now();
+}
+
+function isWftTokenExpiringSoon(bufferMs) {
+    var msLeft = getWftTokenMsRemaining();
+    if (msLeft <= 0) return true;
+    return msLeft < (bufferMs || WFT_TOKEN_FRESHNESS_BUFFER_MS);
+}
+
+function clearWftTokenExpiryWarningTimer() {
+    if (wftTokenExpiryWarningTimer) {
+        clearTimeout(wftTokenExpiryWarningTimer);
+        wftTokenExpiryWarningTimer = null;
+    }
+}
+
+function scheduleWftTokenExpiryWarning() {
+    clearWftTokenExpiryWarningTimer();
+
+    if (!wftSyncState || !wftSyncState.accessToken || !wftSyncState.tokenExpiresAt) return;
+
+    var msUntilWarning = Number(wftSyncState.tokenExpiresAt || 0) - Date.now() - WFT_TOKEN_EXPIRY_WARNING_MS;
+    if (msUntilWarning <= 0) {
+        handleWftTokenExpiringSoon();
+        return;
+    }
+
+    wftTokenExpiryWarningTimer = setTimeout(function () {
+        handleWftTokenExpiringSoon();
+    }, msUntilWarning);
+}
+
+function handleWftTokenExpiringSoon() {
+    if (!wftSyncState || !wftSyncState.accessToken) return;
+
+    if (!isWftTokenValid()) {
+        wftSyncState.authBlocked = true;
+        clearWftTokenSession();
+        setDriveSyncStatus("error", "Google session expired - click Sync to reconnect.");
+        return;
+    }
+
+    saveWftLocalSnapshotsBeforeHide();
+    setDriveSyncStatus("error", "Google session expires soon - click Sync to reconnect before saving to Drive.");
+}
+
+function requestWftDriveReconnect(reason) {
+    saveWftLocalSnapshotsBeforeHide();
+    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...");
+    requestDriveAccess(function () {
+        if (reason === "explicit-sync-to-portfolio" || reason === "manual") {
+            manualSaveToDrive();
+        }
+    });
+}
+
+function ensureFreshWftDriveTokenBeforeSync(reason) {
+    syncStateFromLegacyGoogleGlobals();
+
+    if (!wftSyncState.accessToken && !driveAccessToken) {
+        requestWftDriveReconnect(reason || "manual");
+        return false;
+    }
+
+    if (!isWftTokenValid()) {
+        wftSyncState.authBlocked = true;
+        clearWftTokenSession();
+        requestWftDriveReconnect(reason || "manual");
+        return false;
+    }
+
+    if (isWftTokenExpiringSoon(WFT_TOKEN_FRESHNESS_BUFFER_MS)) {
+        requestWftDriveReconnect(reason || "manual");
+        return false;
+    }
+
+    scheduleWftTokenExpiryWarning();
+    return true;
+}
+
 function clearPersistedGoogleState() {
     localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
     localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
@@ -3692,6 +3779,7 @@ function checkHashForOAuthTokens() {
         wftSyncState.tokenExpiresAt = expiresAt;
         wftSyncState.signedIn = true;
         driveAccessToken = accessToken;
+        scheduleWftTokenExpiryWarning();
         wftSyncLog("[WFT Sync][AUTH] OAuth token received", { hasAccessToken: true, expiresIn: expiresIn, scope: params.get("scope") || "" });
 
         history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
@@ -3733,6 +3821,7 @@ function restoreGoogleStateFromStorage() {
     wftSyncState.accessToken = null;
     wftSyncState.tokenExpiresAt = 0;
     wftSyncState.signedIn = false;
+    clearWftTokenExpiryWarningTimer();
     try {
         localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
         localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
@@ -3776,6 +3865,7 @@ function restoreWftOAuthDraftAfterRedirect() {
         var ta = document.getElementById("studentWriting");
         if (ta && !String(ta.value || "").trim() && draft.text.trim()) {
             ta.value = draft.text;
+            ta.setAttribute("data-wft-oauth-draft-restored", "true");
         }
         if (draft.selectedStudent) {
             selectedStudent = draft.selectedStudent;
@@ -3885,6 +3975,7 @@ function fetchGoogleUserInfo(token) {
             wftSyncState.tokenExpiresAt = expiry;
             wftSyncState.signedIn = true;
             syncStateFromLegacyGoogleGlobals();
+            scheduleWftTokenExpiryWarning();
         }
 
         showSignedInState(info);
@@ -3952,6 +4043,7 @@ function showSignedInState(info) {
 
 // ── WFT Sync V2: reset sync state on sign-out ──
 function resetWftSyncStateAfterSignOut() {
+    clearWftTokenExpiryWarningTimer();
     if (wftSyncState.syncDebounceTimer) {
         clearTimeout(wftSyncState.syncDebounceTimer);
         wftSyncState.syncDebounceTimer = null;
@@ -4299,7 +4391,7 @@ function isDriveSyncAllowed() {
     // Do not require the legacy signedIn/driveAccessToken globals when V2 already has auth.
     var hasV2Auth = (typeof wftSyncState !== "undefined" && wftSyncState && (wftSyncState.signedIn || wftSyncState.accessToken));
     var hasLegacyAuth = (typeof driveAccessToken !== "undefined" && !!driveAccessToken);
-    return !!(hasV2Auth || hasLegacyAuth);
+    return !!(hasV2Auth || hasLegacyAuth) && isWftTokenValid();
 }
 
 function portfolioHasPendingDriveMedia(portfolio) {
@@ -4377,6 +4469,7 @@ function wftDriveFetch(url, options) {
 
     if (!isWftTokenValid()) {
         wftSyncState.authBlocked = true;
+        clearWftTokenSession();
         setDriveSyncStatus("error", "Session expired - please sign in again.");
         return Promise.reject(new Error("TOKEN_EXPIRED"));
     }
@@ -4398,6 +4491,7 @@ function wftDriveFetch(url, options) {
 
             if (response.status === 401) {
                 wftSyncState.authBlocked = true;
+                clearWftTokenSession();
                 setDriveSyncStatus("error", "Session expired - please sign in again.");
             } else if (response.status === 404) {
                 err.notFound = true;
@@ -6249,6 +6343,14 @@ function syncWftNow(reason, options) {
         return Promise.resolve(false);
     }
 
+    if (!isWftTokenValid()) {
+        wftSyncState.authBlocked = true;
+        clearWftTokenSession();
+        wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
+        setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+        return Promise.resolve(false);
+    }
+
     if (!navigator.onLine) {
         wftSyncLog("[WFT Sync] sync skipped - offline", reason);
         setDriveSyncStatus("error", "Offline - will sync later");
@@ -6455,6 +6557,12 @@ function initWftSyncLifecycleHandlers() {
         if (!WFT_SYNC_ENGINE_V2) return;
         syncStateFromLegacyGoogleGlobals();
         if (!wftSyncState.signedIn && !driveAccessToken) return;
+        if (!isWftTokenValid()) {
+            wftSyncState.authBlocked = true;
+            clearWftTokenSession();
+            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+            return;
+        }
         setDriveSyncStatus("syncing", "Back online - syncing...");
         syncWftNow("online", { immediate: false });
     });
@@ -6474,6 +6582,10 @@ function initWftSyncLifecycleHandlers() {
 
         if (document.visibilityState === "visible" && shouldPollWftCloudNow()) {
             if (!isDriveSyncAllowed()) return;
+            if (isWftTokenExpiringSoon(WFT_TOKEN_EXPIRY_WARNING_MS)) {
+                handleWftTokenExpiringSoon();
+                return;
+            }
             var now = Date.now();
             if (now - wftLastVisibilitySyncAt < WFT_VISIBILITY_SYNC_COOLDOWN_MS) return;
             wftLastVisibilitySyncAt = now;
@@ -6497,13 +6609,20 @@ function saveWftTokenSession(token, expiresAt) {
         }));
     } catch (e) { }
 
-    // Keep the Google Drive session through normal page refreshes until the
-    // short-lived OAuth access token expires. This is still cleared on sign-out.
+    // Access tokens stay in sessionStorage only. localStorage keeps only a
+    // harmless connection marker so shared devices do not inherit another
+    // user's Drive session after the tab/browser is closed.
     try {
-        localStorage.setItem(DRIVE_TOKEN_CACHE_KEY, token);
-        localStorage.setItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY, String(expiresAt));
+        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
         localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, "1");
     } catch (e2) { }
+
+    wftSyncState.accessToken = token;
+    wftSyncState.tokenExpiresAt = Number(expiresAt || 0);
+    wftSyncState.signedIn = !!token;
+    driveAccessToken = token;
+    scheduleWftTokenExpiryWarning();
 }
 
 function restoreWftTokenSession() {
@@ -6522,13 +6641,6 @@ function restoreWftTokenSession() {
             }
         }
     } catch (e) { }
-
-    if (!token || !expiry) {
-        try {
-            token = localStorage.getItem(DRIVE_TOKEN_CACHE_KEY);
-            expiry = Number(localStorage.getItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY) || 0);
-        } catch (e2) { }
-    }
 
     if (!token || !expiry) { return false; }
 
@@ -6553,6 +6665,7 @@ function restoreWftTokenSession() {
 }
 
 function clearWftTokenSession() {
+    clearWftTokenExpiryWarningTimer();
     try {
         sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
     } catch (e) { }
@@ -6560,6 +6673,12 @@ function clearWftTokenSession() {
         localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
         localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
     } catch (e2) { }
+    try {
+        wftSyncState.accessToken = null;
+        wftSyncState.tokenExpiresAt = 0;
+        wftSyncState.signedIn = false;
+        driveAccessToken = null;
+    } catch (e3) { }
 }
 
 function getWftSessionTokenExpiry() {
@@ -6571,11 +6690,7 @@ function getWftSessionTokenExpiry() {
         }
     } catch (e) { }
 
-    try {
-        return Number(localStorage.getItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY) || 0);
-    } catch (e2) {
-        return 0;
-    }
+    return 0;
 }
 
 function migrateOldWftTokenToSessionStorage() {
@@ -6590,15 +6705,33 @@ function migrateOldWftTokenToSessionStorage() {
     }
 
     if (!token || !expiry || expiry <= Date.now()) {
+        try {
+            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
+        } catch (e2) { }
+        return false;
+    }
+
+    if (!WFT_ALLOW_LEGACY_LOCAL_TOKEN_MIGRATION) {
+        try {
+            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
+        } catch (e3) { }
         return false;
     }
 
     saveWftTokenSession(token, expiry);
 
+    try {
+        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
+    } catch (e4) { }
+
     wftSyncState.accessToken = token;
     wftSyncState.tokenExpiresAt = expiry;
     wftSyncState.signedIn = true;
     driveAccessToken = token;
+    scheduleWftTokenExpiryWarning();
 
     return true;
 }
@@ -8166,12 +8299,8 @@ function manualSaveToDrive() {
         return;
     }
 
-    if (!driveAccessToken) {
-        wftSyncLog("[WFT Sync] manualSaveToDrive needs Drive access");
-        setDriveSyncStatus('syncing', 'Connecting to Drive...');
-        requestDriveAccess(function() {
-            manualSaveToDrive();
-        });
+    if (!ensureFreshWftDriveTokenBeforeSync("explicit-sync-to-portfolio")) {
+        wftSyncLog("[WFT Sync] manualSaveToDrive waiting for fresh Drive access");
         return;
     }
 
