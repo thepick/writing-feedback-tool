@@ -974,10 +974,9 @@ Example:
  * The Google OAuth Client ID is embedded below so users do not need
  * to enter it in the Settings panel.
  *
- * TODO WFT_GIS_AUTH_V2:
- * After Sync Engine V2 is stable, replace the OAuth implicit redirect flow
- * with Google Identity Services token client. Do not combine that migration
- * with the sync engine patch.
+ * WFT_GIS_AUTH_V2:
+ * Google Identity Services token client is used first. The older OAuth
+ * implicit redirect flow remains as a fallback if GIS cannot open.
  */
 var WFT_APP_VERSION = "v9";
 var GOOGLE_CLIENT_ID = "546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com";
@@ -998,7 +997,7 @@ var WFT_DUPLICATE_DETECTION_V2 = true;
 var WFT_DUPLICATE_CLEANUP_V2 = false;
 var WFT_IMAGE_IDEMPOTENCY_V2 = true;
 var WFT_SESSION_TOKEN_STORAGE_V2 = true;
-var WFT_GIS_AUTH_V2 = false;
+var WFT_GIS_AUTH_V2 = true;
 
 
 function isWftDebugLoggingEnabled() {
@@ -1086,7 +1085,17 @@ var WFT_LAST_DRIVE_SYNC_KEY = "wft_last_drive_sync_at";
 var WFT_TOKEN_FRESHNESS_BUFFER_MS = 7 * 60 * 1000;
 var WFT_TOKEN_EXPIRY_WARNING_MS = 5 * 60 * 1000;
 var WFT_ALLOW_LEGACY_LOCAL_TOKEN_MIGRATION = false;
+var WFT_GOOGLE_AUTH_SCOPE = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
+var WFT_GIS_SCRIPT_URL = "https://accounts.google.com/gsi/client";
+var WFT_GIS_SILENT_RETRY_COOLDOWN_MS = 2 * 60 * 1000;
+var WFT_GIS_FALLBACK_TO_REDIRECT = true;
 var wftTokenExpiryWarningTimer = null;
+var wftGisScriptLoadPromise = null;
+var wftGisTokenClient = null;
+var wftGisActiveTokenRequest = null;
+var wftGisSilentRefreshInFlight = null;
+var wftGisSilentBootstrapInFlight = null;
+var wftLastSilentGisAttemptAt = 0;
 var wftSuppressDirtyMarks = false;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -3688,6 +3697,35 @@ function scheduleWftTokenExpiryWarning() {
 function handleWftTokenExpiringSoon() {
     if (!wftSyncState || !wftSyncState.accessToken) return;
 
+    saveWftLocalSnapshotsBeforeHide();
+
+    if (isWftGisAuthEnabled()) {
+        if (!wftGisSilentRefreshInFlight) {
+            setDriveSyncStatus("syncing", "Refreshing Google session...");
+            wftGisSilentRefreshInFlight = attemptSilentWftGisTokenRefresh("token-expiry-warning")
+                .then(function () {
+                    setDriveSyncStatus("success", "Google session refreshed.");
+                    return true;
+                })
+                .catch(function (e) {
+                    wftDebugWarn("[WFT Auth] Silent token refresh failed:", e);
+                    if (!isWftTokenValid()) {
+                        wftSyncState.authBlocked = true;
+                        clearWftTokenSession();
+                        setDriveSyncStatus("error", "Google session expired - click Sync to reconnect.");
+                    } else {
+                        setDriveSyncStatus("error", "Google session expires soon - click Sync to reconnect before saving to Drive.");
+                    }
+                    return false;
+                })
+                .then(function (result) {
+                    wftGisSilentRefreshInFlight = null;
+                    return result;
+                });
+        }
+        return;
+    }
+
     if (!isWftTokenValid()) {
         wftSyncState.authBlocked = true;
         clearWftTokenSession();
@@ -3695,7 +3733,6 @@ function handleWftTokenExpiringSoon() {
         return;
     }
 
-    saveWftLocalSnapshotsBeforeHide();
     setDriveSyncStatus("error", "Google session expires soon - click Sync to reconnect before saving to Drive.");
 }
 
@@ -3754,6 +3791,315 @@ function getCachedGoogleUser() {
 
 function hasPersistedGoogleConnection() {
     return localStorage.getItem(GOOGLE_CONNECTED_CACHE_KEY) === "1";
+}
+
+function isWftGisAuthEnabled() {
+    return WFT_GIS_AUTH_V2 === true && typeof window !== "undefined";
+}
+
+function isWftGisLibraryReady() {
+    return isWftGisAuthEnabled() &&
+        !!(window.google && window.google.accounts && window.google.accounts.oauth2 &&
+        typeof window.google.accounts.oauth2.initTokenClient === "function");
+}
+
+function loadWftGisClientLibrary() {
+    if (!isWftGisAuthEnabled()) {
+        return Promise.reject(new Error("GIS auth is disabled"));
+    }
+
+    if (isWftGisLibraryReady()) {
+        return Promise.resolve(true);
+    }
+
+    if (wftGisScriptLoadPromise) {
+        return wftGisScriptLoadPromise;
+    }
+
+    wftGisScriptLoadPromise = new Promise(function (resolve, reject) {
+        var existing = null;
+        var scripts = document.getElementsByTagName("script");
+        for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i] && scripts[i].src && scripts[i].src.indexOf(WFT_GIS_SCRIPT_URL) === 0) {
+                existing = scripts[i];
+                break;
+            }
+        }
+
+        function finishWhenReady() {
+            var attempts = 0;
+            var maxAttempts = 80;
+            var timer = setInterval(function () {
+                attempts += 1;
+                if (isWftGisLibraryReady()) {
+                    clearInterval(timer);
+                    resolve(true);
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(timer);
+                    reject(new Error("Google Identity Services did not load"));
+                }
+            }, 100);
+        }
+
+        if (existing) {
+            finishWhenReady();
+            return;
+        }
+
+        var script = document.createElement("script");
+        script.src = WFT_GIS_SCRIPT_URL;
+        script.async = true;
+        script.defer = true;
+        script.onload = function () { finishWhenReady(); };
+        script.onerror = function () { reject(new Error("Could not load Google Identity Services")); };
+        document.head.appendChild(script);
+    });
+
+    return wftGisScriptLoadPromise;
+}
+
+function getWftGisLoginHint() {
+    var cachedUser = getCachedGoogleUser();
+    if (cachedUser && cachedUser.email) return cachedUser.email;
+    if (googleUser && googleUser.email) return googleUser.email;
+    return "";
+}
+
+function getWftGisTokenClient() {
+    var loginHint;
+    var config;
+
+    if (!isWftGisLibraryReady()) return null;
+    if (wftGisTokenClient) return wftGisTokenClient;
+
+    config = {
+        client_id: GOOGLE_CLIENT_ID,
+        scope: WFT_GOOGLE_AUTH_SCOPE,
+        include_granted_scopes: true,
+        prompt: "",
+        callback: handleWftGisTokenResponse,
+        error_callback: handleWftGisTokenError
+    };
+
+    loginHint = getWftGisLoginHint();
+    if (loginHint) {
+        config.login_hint = loginHint;
+    }
+
+    wftGisTokenClient = window.google.accounts.oauth2.initTokenClient(config);
+    return wftGisTokenClient;
+}
+
+function makeWftGisError(message, detail) {
+    var err = new Error(message || "Google authorization failed");
+    if (detail) {
+        err.detail = detail;
+        err.type = detail.type || detail.error || "";
+        err.error = detail.error || "";
+        err.error_description = detail.error_description || detail.message || "";
+    }
+    return err;
+}
+
+function completeWftGisTokenRequest(err, response) {
+    var record = wftGisActiveTokenRequest;
+    wftGisActiveTokenRequest = null;
+
+    if (!record) return;
+
+    if (err) {
+        record.reject(err);
+        return;
+    }
+
+    record.resolve(response);
+}
+
+function handleWftGisTokenError(err) {
+    completeWftGisTokenRequest(makeWftGisError("Google authorization popup was cancelled or could not open.", err || {}), null);
+}
+
+function hasWftGisGrantedRequiredScopes(tokenResponse) {
+    var requiredScopes;
+    var grantedScopes;
+    var args;
+    var i;
+
+    if (!tokenResponse || !tokenResponse.access_token) return false;
+
+    if (window.google && window.google.accounts && window.google.accounts.oauth2 &&
+        typeof window.google.accounts.oauth2.hasGrantedAllScopes === "function") {
+        requiredScopes = WFT_GOOGLE_AUTH_SCOPE.split(/\s+/);
+        args = [tokenResponse].concat(requiredScopes);
+        try {
+            return window.google.accounts.oauth2.hasGrantedAllScopes.apply(window.google.accounts.oauth2, args);
+        } catch (e) { }
+    }
+
+    if (!tokenResponse.scope) return true;
+
+    grantedScopes = String(tokenResponse.scope || "").split(/\s+/);
+    requiredScopes = WFT_GOOGLE_AUTH_SCOPE.split(/\s+/);
+    for (i = 0; i < requiredScopes.length; i++) {
+        if (grantedScopes.indexOf(requiredScopes[i]) === -1) return false;
+    }
+    return true;
+}
+
+function handleWftGisTokenResponse(response) {
+    var accessToken;
+    var expiresIn;
+    var expiresAt;
+    var record = wftGisActiveTokenRequest;
+
+    if (!response || response.error) {
+        completeWftGisTokenRequest(makeWftGisError("Google authorization failed.", response || {}), null);
+        return;
+    }
+
+    accessToken = response.access_token;
+    if (!accessToken) {
+        completeWftGisTokenRequest(makeWftGisError("Google did not return a Drive access token.", response || {}), null);
+        return;
+    }
+
+    if (!hasWftGisGrantedRequiredScopes(response)) {
+        completeWftGisTokenRequest(makeWftGisError("Google Drive permission was not granted.", response || {}), null);
+        setDriveSyncStatus("error", "Google Drive permission was not granted. Please sign in again and allow Drive access.");
+        return;
+    }
+
+    expiresIn = parseInt(response.expires_in || "3600", 10);
+    if (!isFinite(expiresIn) || expiresIn <= 0) {
+        expiresIn = 3600;
+    }
+    expiresAt = Date.now() + Math.max(60, expiresIn - 30) * 1000;
+
+    saveWftTokenSession(accessToken, expiresAt);
+    try { localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, "1"); } catch (e) { }
+
+    wftSyncState.accessToken = accessToken;
+    wftSyncState.tokenExpiresAt = expiresAt;
+    wftSyncState.signedIn = true;
+    wftSyncState.authBlocked = false;
+    driveAccessToken = accessToken;
+    syncStateFromLegacyGoogleGlobals();
+    clearWftSyncBlockState();
+    scheduleWftTokenExpiryWarning();
+
+    wftSyncLog("[WFT Sync][AUTH] GIS token received", { hasAccessToken: true, expiresIn: expiresIn, scope: response.scope || "" });
+
+    fetchGoogleUserInfo(accessToken);
+
+    if (record && typeof record.onSuccess === "function") {
+        setTimeout(function () {
+            try { record.onSuccess(); } catch (e2) { wftDebugError("[WFT Auth] post-auth callback failed:", e2); }
+        }, 150);
+    }
+
+    completeWftGisTokenRequest(null, { accessToken: accessToken, expiresAt: expiresAt, response: response });
+}
+
+function requestWftGisAccessToken(promptValue, onSuccess, options) {
+    var record;
+    var promise;
+    var externalResolve;
+    var externalReject;
+
+    options = options || {};
+    promptValue = typeof promptValue === "string" ? promptValue : "";
+
+    if (!isWftGisAuthEnabled()) {
+        return Promise.reject(new Error("GIS auth is disabled"));
+    }
+
+    if (wftGisActiveTokenRequest && wftGisActiveTokenRequest.promise) {
+        return wftGisActiveTokenRequest.promise.then(function (result) {
+            if (typeof onSuccess === "function") {
+                onSuccess();
+            }
+            return result;
+        });
+    }
+
+    promise = new Promise(function (resolve, reject) {
+        externalResolve = resolve;
+        externalReject = reject;
+    });
+
+    record = {
+        resolve: externalResolve,
+        reject: externalReject,
+        onSuccess: onSuccess,
+        promptValue: promptValue,
+        reason: options.reason || "",
+        promise: promise
+    };
+
+    wftGisActiveTokenRequest = record;
+
+    loadWftGisClientLibrary().then(function () {
+        var client = getWftGisTokenClient();
+        var requestConfig;
+        if (!client) {
+            throw new Error("Google Identity Services token client is unavailable");
+        }
+
+        requestConfig = {
+            scope: WFT_GOOGLE_AUTH_SCOPE,
+            include_granted_scopes: true,
+            prompt: promptValue
+        };
+
+        client.requestAccessToken(requestConfig);
+    }).catch(function (err) {
+        if (wftGisActiveTokenRequest === record) {
+            wftGisActiveTokenRequest = null;
+        }
+        externalReject(err);
+    });
+
+    return promise;
+}
+
+function attemptSilentWftGisTokenRefresh(reason) {
+    var now = Date.now();
+
+    if (!isWftGisAuthEnabled()) {
+        return Promise.reject(new Error("GIS auth is disabled"));
+    }
+
+    if (now - wftLastSilentGisAttemptAt < WFT_GIS_SILENT_RETRY_COOLDOWN_MS) {
+        return Promise.reject(new Error("Silent Google refresh is cooling down"));
+    }
+
+    wftLastSilentGisAttemptAt = now;
+    return requestWftGisAccessToken("none", null, { reason: reason || "silent-refresh", silent: true });
+}
+
+function attemptWftGisSilentBootstrapIfConnected(reason) {
+    if (!isWftGisAuthEnabled() || !hasPersistedGoogleConnection()) {
+        return Promise.resolve(false);
+    }
+
+    if (wftGisSilentBootstrapInFlight) {
+        return wftGisSilentBootstrapInFlight;
+    }
+
+    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...");
+    wftGisSilentBootstrapInFlight = attemptSilentWftGisTokenRefresh(reason || "startup")
+        .then(function () {
+            wftGisSilentBootstrapInFlight = null;
+            return true;
+        })
+        .catch(function (e) {
+            wftDebugWarn("[WFT Auth] Silent GIS bootstrap failed:", e);
+            wftGisSilentBootstrapInFlight = null;
+            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+            return false;
+        });
+
+    return wftGisSilentBootstrapInFlight;
 }
 
 // Read OAuth tokens delivered via the URL fragment (#) after Google redirects
@@ -3828,7 +4174,12 @@ function restoreGoogleStateFromStorage() {
     } catch (e) { }
     showSignedOutState();
     if (cachedUser || hasConnectionMarker) {
-        setDriveSyncStatus("error", "Session expired - please sign in again.");
+        if (isWftGisAuthEnabled()) {
+            showDriveDisconnectedState("Reconnecting to Google Drive...");
+            attemptWftGisSilentBootstrapIfConnected("restore-storage");
+        } else {
+            setDriveSyncStatus("error", "Session expired - please sign in again.");
+        }
     }
     return false;
 }
@@ -3887,10 +4238,9 @@ function restoreWftOAuthDraftAfterRedirect() {
     }
 }
 
-function requestDriveAccess(onSuccess, options) {
-    var scope = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
+function requestDriveAccessViaRedirect(onSuccess, options) {
+    var scope = WFT_GOOGLE_AUTH_SCOPE;
     var redirectUri = "https://thepick.github.io/writing-feedback-tool/";
-
     var authUrl = "https://accounts.google.com/o/oauth2/auth"
         + "?client_id=" + encodeURIComponent(GOOGLE_CLIENT_ID)
         + "&redirect_uri=" + encodeURIComponent(redirectUri)
@@ -3903,6 +4253,41 @@ function requestDriveAccess(onSuccess, options) {
 
     saveWftOAuthDraftBeforeRedirect(typeof onSuccess === "function" ? "sync" : "sign-in");
     window.location.href = authUrl;
+}
+
+function requestDriveAccess(onSuccess, options) {
+    var promptValue;
+    var reason;
+
+    options = options || {};
+
+    if (isWftGisAuthEnabled()) {
+        promptValue = typeof options.prompt === "string" ? options.prompt : "";
+        reason = options.reason || (typeof onSuccess === "function" ? "sync" : "sign-in");
+        saveWftLocalSnapshotsBeforeHide();
+        setDriveSyncStatus("syncing", promptValue === "none" ? "Refreshing Google session..." : "Connecting to Google Drive...");
+
+        requestWftGisAccessToken(promptValue, onSuccess, { reason: reason, silent: promptValue === "none" })
+            .catch(function (err) {
+                var errType = String((err && (err.type || err.error || err.message)) || "");
+                wftDebugWarn("[WFT Auth] GIS token request failed:", err);
+
+                if (promptValue === "none" || options.noRedirectFallback || /popup_closed/i.test(errType)) {
+                    setDriveSyncStatus("error", "Google Drive reconnect was not completed. Click Sync to try again.");
+                    return;
+                }
+
+                if (WFT_GIS_FALLBACK_TO_REDIRECT) {
+                    setDriveSyncStatus("syncing", "Opening Google sign-in...");
+                    requestDriveAccessViaRedirect(onSuccess, options);
+                } else {
+                    setDriveSyncStatus("error", "Google Drive reconnect failed. Please try again.");
+                }
+            });
+        return;
+    }
+
+    requestDriveAccessViaRedirect(onSuccess, options);
 }
 
 function handleGoogleSignIn() {
@@ -4321,10 +4706,21 @@ function handleGoogleSignOut() {
     function finishSignOut() {
         // Revoke the access token with Google
         if (driveAccessToken) {
-            fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" }
-            }).catch(function() {});
+            if (isWftGisLibraryReady() && window.google.accounts.oauth2 && typeof window.google.accounts.oauth2.revoke === "function") {
+                try {
+                    window.google.accounts.oauth2.revoke(driveAccessToken, function () {});
+                } catch (revokeErr) {
+                    fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+                    }).catch(function() {});
+                }
+            } else {
+                fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+                }).catch(function() {});
+            }
         }
         clearPersistedGoogleState();
         clearWftTokenSession();
@@ -6344,6 +6740,31 @@ function syncWftNow(reason, options) {
     }
 
     if (!isWftTokenValid()) {
+        if (isWftGisAuthEnabled() && hasPersistedGoogleConnection() && !options.afterSilentAuthRetry) {
+            var retryOptions = {};
+            var retryKey;
+            for (retryKey in options) {
+                if (Object.prototype.hasOwnProperty.call(options, retryKey)) {
+                    retryOptions[retryKey] = options[retryKey];
+                }
+            }
+            retryOptions.afterSilentAuthRetry = true;
+            wftSyncLog("[WFT Sync] token expired - attempting silent GIS refresh", reason);
+            setDriveSyncStatus("syncing", "Refreshing Google session...");
+            return attemptSilentWftGisTokenRefresh("sync-" + (reason || "background"))
+                .then(function () {
+                    return syncWftNow(reason, retryOptions);
+                })
+                .catch(function (e) {
+                    wftDebugWarn("[WFT Auth] Silent refresh before sync failed:", e);
+                    wftSyncState.authBlocked = true;
+                    clearWftTokenSession();
+                    wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
+                    setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+                    return false;
+                });
+        }
+
         wftSyncState.authBlocked = true;
         clearWftTokenSession();
         wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
@@ -6558,6 +6979,11 @@ function initWftSyncLifecycleHandlers() {
         syncStateFromLegacyGoogleGlobals();
         if (!wftSyncState.signedIn && !driveAccessToken) return;
         if (!isWftTokenValid()) {
+            if (isWftGisAuthEnabled() && hasPersistedGoogleConnection()) {
+                setDriveSyncStatus("syncing", "Back online - refreshing Google session...");
+                syncWftNow("online", { immediate: false });
+                return;
+            }
             wftSyncState.authBlocked = true;
             clearWftTokenSession();
             setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
