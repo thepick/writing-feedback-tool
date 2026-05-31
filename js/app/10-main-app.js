@@ -11982,10 +11982,15 @@ window.addEventListener("resize", function() {
 
 window.addEventListener("load", function() {
     var ta = document.getElementById("studentWriting");
-    // Clear any previously stored text so the box is empty on fresh load
-    ta.value = '';
-    ta.focus();
-    ta.setSelectionRange(ta.value.length, ta.value.length);
+    // Clear any previously stored text so the box is empty on fresh load,
+    // but do not wipe text restored after a Google sign-in redirect.
+    if (ta && ta.getAttribute("data-wft-oauth-draft-restored") !== "true") {
+        ta.value = '';
+    }
+    if (ta) {
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+    }
     syncMobileOcrPanelState();
     syncOcrPanelTitle();
     pendingPortfolioSync = loadPendingPortfolioSyncFromStorage();
