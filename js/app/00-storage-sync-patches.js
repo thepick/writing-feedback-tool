@@ -5819,29 +5819,69 @@ function recordSessionDeletion(studentName, sessionId) {
     saveDeletionsData(deletions);
 }
 
-function recordPortfolioSessionDeletion(studentName, sessionId, session) {
-    var name = String(studentName || "").trim();
+function addWftDeletionCandidateId(ids, seen, value) {
+    var id = String(value || "").trim();
+    if (!id || seen[id]) return;
+    seen[id] = true;
+    ids.push(id);
+}
+
+function getPortfolioSessionDeletionIds(studentName, session, explicitSessionId) {
     var ids = [];
     var seen = {};
+    var legacyName;
+    var legacyDate;
+    var legacyTitle;
+
+    addWftDeletionCandidateId(ids, seen, explicitSessionId);
+
+    if (session) {
+        // Session IDs created by older normalization code may be device-local or read-local.
+        // Check them, but never rely on them as the only deletion identity.
+        addWftDeletionCandidateId(ids, seen, session.id);
+
+        // createdAt is the safest cross-device identity for older portfolio sessions.
+        addWftDeletionCandidateId(ids, seen, session.createdAt);
+
+        // Last-resort legacy key for very old sessions that have no createdAt.
+        // This mirrors getSessionKey's final fallback, but only adds it when needed.
+        if (!session.createdAt) {
+            legacyName = session.studentName || studentName || "";
+            legacyDate = session.date || session.dateIso || "";
+            legacyTitle = session.title || "";
+            if (legacyName || legacyDate || legacyTitle) {
+                addWftDeletionCandidateId(ids, seen, [legacyName, legacyDate, legacyTitle].join("|"));
+            }
+        }
+    }
+
+    return ids;
+}
+
+function isPortfolioSessionDeleted(studentName, session, deletions) {
+    var ids = getPortfolioSessionDeletionIds(studentName, session, null);
+    var studentId = (session && session.studentId) || getWftStudentIdForDeletion(studentName);
+    var sessionUpdatedAt = session ? getSessionModifiedTimeMs(session) : 0;
+
+    for (var i = 0; i < ids.length; i += 1) {
+        if (isStudentSessionDeleted(ids[i], studentId, deletions, sessionUpdatedAt)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function recordPortfolioSessionDeletion(studentName, sessionId, session) {
+    var name = String(studentName || "").trim();
+    var ids;
     var deletions;
     var now;
     var studentId;
 
-    function addId(value) {
-        var id = String(value || "").trim();
-        if (!id || seen[id]) return;
-        seen[id] = true;
-        ids.push(id);
-    }
-
     if (!name) return;
 
-    addId(sessionId);
-    if (session) {
-        addId(session.id);
-        addId(session.createdAt);
-    }
-
+    ids = getPortfolioSessionDeletionIds(name, session, sessionId);
     if (!ids.length) return;
 
     deletions = getDeletionsData();
@@ -5892,11 +5932,8 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
 
         for (i = 0; i < sessions.length; i += 1) {
             var session = sessions[i];
-            var sessionId = getSessionKey(session);
-            var sessionStudentId = (session && session.studentId) || "";
-            var sessionUpdatedAt = session ? getSessionModifiedTimeMs(session) : 0;
 
-            if (!sessionId || !isStudentSessionDeleted(sessionId, sessionStudentId, cleanDeletions, sessionUpdatedAt)) {
+            if (!isPortfolioSessionDeleted(studentName, session, cleanDeletions)) {
                 filteredSessions.push(session);
             }
         }
