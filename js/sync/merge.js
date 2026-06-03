@@ -51,7 +51,7 @@ function mergeStudentSessions(localSessions, remoteSessions, deletions, studentI
         }
 
         var sessionStudentId = session.studentId || studentId || "";
-        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt)) {
+        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt, session.lamportClock)) {
             continue;
         }
 
@@ -101,39 +101,34 @@ function getWftDeletionRecords(deletions) {
     return records;
 }
 
-function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt) {
+function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock) {
     if (!deletions || !sessionId) { return false; }
     var records = getWftDeletionRecords(deletions);
-    var sessionUpdateMs = sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0;
+    var sessionUpdateMs = (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt))) ? Date.parse(sessionUpdatedAt) : 0;
     var normalizedStudentId = String(studentId || "");
     for (var i = 0; i < records.length; i++) {
         var d = records[i] || {};
         var type = d.type || "session";
-        if ((type === "session" || type === "archive-remove") && String(d.sessionId || "") === String(sessionId)) {
-            if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
-            // When WFT_LAMPORT_V1, deletion record carries a lamportClock.
-            // The deletion wins unconditionally because isStudentSessionDeleted()
-            // has no access to the live session's lamportClock for comparison.
-            // TODO: add sessionLamportClock parameter to function signature
-            // when WFT_LAMPORT_V1 is activated, then compare clocks here.
-            var useLamport = WFT_LAMPORT_V1 && (typeof d.lamportClock === "number" && !isNaN(d.lamportClock));
-            if (useLamport) {
-                // Deletion record has lamport; live sessions carry no lamport or lower.
-                // For now, a lamport-stamped deletion wins over any session.
-                return true;
-            }
-            var deletedMs = d.deletedAt && !isNaN(Date.parse(d.deletedAt)) ? Date.parse(d.deletedAt) : 0;
-            if (!deletedMs) { continue; }
-            // Deletion wins only when it is strictly newer than the session.
-            // Equal timestamps can happen during sync batches and should not delete live data.
-            if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
+        if (type !== "session" && type !== "archive-remove") { continue; }
+        if (String(d.sessionId || "") !== String(sessionId)) { continue; }
+        if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
+        var useLamport = WFT_LAMPORT_V1 && typeof d.lamportClock === "number" && !isNaN(d.lamportClock);
+        if (useLamport) {
+            var sessLam = (typeof sessionLamportClock === "number" && !isNaN(sessionLamportClock)) ? sessionLamportClock : -1;
+            // Deletion wins only if its Lamport clock is strictly higher than the session's.
+            // If they are equal or the session is higher, the session survives.
+            if (d.lamportClock > sessLam) { return true; }
+            continue;
         }
+        var deletedMs = (d.deletedAt && !isNaN(Date.parse(d.deletedAt))) ? Date.parse(d.deletedAt) : 0;
+        if (!deletedMs) { continue; }
+        if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
     }
     return false;
 }
 
-function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessionUpdatedAt) {
-    // Backward-compatible wrapper. Prefer isStudentSessionDeleted(...) for new code.
+function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessionUpdatedAt, sessionLamportClock) {
+    // Backward-compatible wrapper. Prefer isStudentSessionDeleted() for new code.
     var studentId = "";
     var deletions = deletionsMaybe;
     if (deletionsMaybe === undefined && studentIdOrDeletions && typeof studentIdOrDeletions === "object") {
@@ -141,7 +136,7 @@ function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessi
     } else {
         studentId = String(studentIdOrDeletions || "");
     }
-    return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt);
+    return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock);
 }
 
 function chooseNewerSession(sessionA, sessionB) {
@@ -180,7 +175,7 @@ function applyDeletionsToFile(file, deletions) {
     var sessions = file.sessions || [];
     for (var i = 0; i < sessions.length; i++) {
         var s = sessions[i];
-        if (!isSessionDeleted(s.id, file.studentId || "", deletions, s.updatedAt || s.createdAt)) {
+        if (!isStudentSessionDeleted(s.id, file.studentId || "", deletions, s.updatedAt || s.createdAt, s.lamportClock)) {
             filtered.sessions.push(s);
         }
     }

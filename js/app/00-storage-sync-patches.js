@@ -2755,7 +2755,7 @@ function mergeStudentSessions(localSessions, remoteSessions, deletions, studentI
             sessionId = session.id;
         }
         var sessionStudentId = session.studentId || studentId || "";
-        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt)) { continue; }
+        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt, session.lamportClock)) { continue; }
         if (!merged[sessionId]) { merged[sessionId] = session; }
         else { merged[sessionId] = chooseNewerSession(merged[sessionId], session); }
     }
@@ -2776,7 +2776,7 @@ function getWftDeletionRecords(deletions) {
     var keys = Object.keys(clean.deletedSessions || {});
     for (var i = 0; i < keys.length; i++) {
         var legacy = clean.deletedSessions[keys[i]] || {};
-        records.push({
+        var legacyRecord = {
             id: legacy.id || keys[i],
             type: legacy.type || "session",
             studentId: legacy.studentId || "",
@@ -2785,33 +2785,41 @@ function getWftDeletionRecords(deletions) {
             deletedAt: legacy.deletedAt || clean.updatedAt || "",
             deviceId: legacy.deviceId || "",
             reason: legacy.reason || "teacher_delete"
-        });
+        };
+        if (typeof legacy.lamportClock === "number") { legacyRecord.lamportClock = legacy.lamportClock; }
+        records.push(legacyRecord);
     }
     return records;
 }
 
-function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt) {
+function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock) {
     if (!deletions || !sessionId) { return false; }
     var records = getWftDeletionRecords(deletions);
-    var sessionUpdateMs = sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0;
+    var sessionUpdateMs = (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt))) ? Date.parse(sessionUpdatedAt) : 0;
     var normalizedStudentId = String(studentId || "");
     for (var i = 0; i < records.length; i++) {
-        var rec = records[i] || {};
-        var recType = rec.type || "session";
-        if ((recType === "session" || recType === "archive-remove") && String(rec.sessionId || "") === String(sessionId)) {
-            if (normalizedStudentId && rec.studentId && String(rec.studentId) !== normalizedStudentId) { continue; }
-            var deletedMs = rec.deletedAt && !isNaN(Date.parse(rec.deletedAt)) ? Date.parse(rec.deletedAt) : 0;
-            if (!deletedMs) { continue; }
-            // Deletion wins only when it is strictly newer than the session.
-            // Equal timestamps can happen during sync batches and should not delete live data.
-            if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
+        var d = records[i] || {};
+        var type = d.type || "session";
+        if (type !== "session" && type !== "archive-remove") { continue; }
+        if (String(d.sessionId || "") !== String(sessionId)) { continue; }
+        if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
+        var useLamport = WFT_LAMPORT_V1 && typeof d.lamportClock === "number" && !isNaN(d.lamportClock);
+        if (useLamport) {
+            var sessLam = (typeof sessionLamportClock === "number" && !isNaN(sessionLamportClock)) ? sessionLamportClock : -1;
+            // Deletion wins only if its Lamport clock is strictly higher than the session's.
+            // If they are equal or the session is higher, the session survives.
+            if (d.lamportClock > sessLam) { return true; }
+            continue;
         }
+        var deletedMs = (d.deletedAt && !isNaN(Date.parse(d.deletedAt))) ? Date.parse(d.deletedAt) : 0;
+        if (!deletedMs) { continue; }
+        if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
     }
     return false;
 }
 
-function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessionUpdatedAt) {
-    // Backward-compatible wrapper. Prefer isStudentSessionDeleted(...) for new code.
+function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessionUpdatedAt, sessionLamportClock) {
+    // Backward-compatible wrapper. Prefer isStudentSessionDeleted() for new code.
     var studentId = "";
     var deletions = deletionsMaybe;
     if (deletionsMaybe === undefined && studentIdOrDeletions && typeof studentIdOrDeletions === "object") {
@@ -2819,10 +2827,17 @@ function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessi
     } else {
         studentId = String(studentIdOrDeletions || "");
     }
-    return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt);
+    return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock);
 }
 
 function chooseNewerSession(sessionA, sessionB) {
+    if (WFT_LAMPORT_V1) {
+        var lamA = (typeof sessionA.lamportClock === "number" && !isNaN(sessionA.lamportClock)) ? sessionA.lamportClock : -1;
+        var lamB = (typeof sessionB.lamportClock === "number" && !isNaN(sessionB.lamportClock)) ? sessionB.lamportClock : -1;
+        if (lamA !== lamB) {
+            return (lamA > lamB) ? sessionA : sessionB;
+        }
+    }
     var timeA = sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
     var timeB = sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
     if (isNaN(timeA)) { timeA = 0; } if (isNaN(timeB)) { timeB = 0; }
@@ -2836,7 +2851,7 @@ function applyDeletionsToFile(file, deletions) {
         createdAt: file.createdAt, updatedAt: new Date().toISOString(), sessions: [] };
     var sessions = file.sessions || [];
     for (var i = 0; i < sessions.length; i++) {
-        if (!isSessionDeleted(sessions[i].id, file.studentId || "", deletions, sessions[i].updatedAt || sessions[i].createdAt)) { filtered.sessions.push(sessions[i]); }
+        if (!isStudentSessionDeleted(sessions[i].id, file.studentId || "", deletions, sessions[i].updatedAt || sessions[i].createdAt, sessions[i].lamportClock)) { filtered.sessions.push(sessions[i]); }
     }
     return filtered;
 }
@@ -2850,6 +2865,13 @@ function recordExtendedDeletion(type, studentId, sessionId, reason) {
     var record = { id: createWftId("del"), type: type || "session", studentId: studentId || "",
         sessionId: sessionId || "", deletedAt: now, deviceId: getWftDeviceId(),
         reason: reason || "user-delete" };
+    if (WFT_LAMPORT_V1) {
+        try {
+            record.lamportClock = (typeof incrementDeviceLamport === "function") ? incrementDeviceLamport() : null;
+        } catch (eLam) {
+            record.lamportClock = null;
+        }
+    }
     deletions.records.push(record);
     if ((record.type === "session" || record.type === "archive-remove") && record.sessionId) {
         deletions.deletedSessions["session:" + (record.studentId || "") + ":" + record.sessionId] = cloneWftJson(record);
