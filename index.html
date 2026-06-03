@@ -394,17 +394,64 @@
         align-items: center;
         gap: 6px;
     }
+    .drive-sync-status-rich {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+        min-width: 120px;
+        max-width: 210px;
+    }
+    .drive-sync-line {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
     .drive-sync-dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
         background: #94a3b8;
         display: inline-block;
+        flex: 0 0 8px;
     }
-    .drive-sync-dot.synced { background: #10b981; }
+    .drive-sync-dot.synced,
+    .drive-sync-dot.success { background: #10b981; }
     .drive-sync-dot.syncing { background: #f59e0b; animation: pulse 1.2s infinite; }
     .drive-sync-dot.error { background: #ef4444; }
     .drive-sync-dot.paused { background: #64748b; }
+    .drive-sync-dot.warning { background: #f59e0b; }
+    .drive-sync-progress-wrap {
+        width: 100%;
+        max-width: 170px;
+        height: 4px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.22);
+        display: none;
+    }
+    .drive-sync-progress-wrap.is-visible {
+        display: block;
+    }
+    .drive-sync-progress-bar {
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: rgba(255,255,255,0.9);
+        transition: width 260ms ease;
+    }
+    .drive-sync-detail {
+        display: none;
+        font-size: 10.5px;
+        line-height: 1.2;
+        opacity: 0.82;
+        max-width: 210px;
+        white-space: normal;
+    }
+    .drive-sync-detail.is-visible {
+        display: block;
+    }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
 
     /* Student portfolio / progress chart */
@@ -3571,6 +3618,14 @@
             #googleUserInfoHeader .drive-sync-status {
                 font-size: 11px;
             }
+            #googleUserInfoHeader .drive-sync-status-rich {
+                min-width: auto;
+                max-width: 115px;
+            }
+            #googleUserInfoHeader .drive-sync-progress-wrap,
+            #googleUserInfoHeader .drive-sync-detail {
+                display: none !important;
+            }
             #googleUserInfoHeader .btn-google-signout {
                 padding: 5px 8px;
             }
@@ -3818,9 +3873,15 @@
             <div id="googleUserInfoHeader" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
                 <img id="googleUserAvatarHeader" src="" width="28" height="28" alt="" style="border-radius:50%;display:none;" onerror="this.style.display='none'">
                 <span class="auth-status" style="color:white;font-size:13px;">Signed in as <strong id="googleUserNameHeader"></strong></span>
-                <div class="drive-sync-status" style="color:rgba(255,255,255,0.85);">
-                    <span class="drive-sync-dot" id="driveSyncDotHeader"></span>
-                    <span id="driveSyncTextHeader">Not synced</span>
+                <div class="drive-sync-status drive-sync-status-rich" style="color:rgba(255,255,255,0.85);">
+                    <div class="drive-sync-line">
+                        <span class="drive-sync-dot" id="driveSyncDotHeader"></span>
+                        <span id="driveSyncTextHeader">Not synced</span>
+                    </div>
+                    <div class="drive-sync-progress-wrap" id="driveSyncProgressWrapHeader" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="drive-sync-progress-bar" id="driveSyncProgressBarHeader"></div>
+                    </div>
+                    <div class="drive-sync-detail" id="driveSyncDetailHeader"></div>
                 </div>
                 <button type="button" class="btn-google-signout" onclick="handleGoogleSignOut()" style="color:white;border-color:rgba(255,255,255,0.5);">Sign Out</button>
             </div>

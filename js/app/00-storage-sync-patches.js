@@ -3701,7 +3701,7 @@ function handleWftTokenExpiringSoon() {
 
     if (isWftGisAuthEnabled()) {
         if (!wftGisSilentRefreshInFlight) {
-            setDriveSyncStatus("syncing", "Refreshing Google session...");
+            setDriveSyncStatus("syncing", "Refreshing Google session...", 8, "Checking your previous Drive connection.");
             wftGisSilentRefreshInFlight = attemptSilentWftGisTokenRefresh("token-expiry-warning")
                 .then(function () {
                     setDriveSyncStatus("success", "Google session refreshed.");
@@ -3738,7 +3738,7 @@ function handleWftTokenExpiringSoon() {
 
 function requestWftDriveReconnect(reason) {
     saveWftLocalSnapshotsBeforeHide();
-    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...");
+    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...", 8, "Checking whether Drive access is still available.");
     requestDriveAccess(function () {
         if (reason === "explicit-sync-to-portfolio" || reason === "manual") {
             manualSaveToDrive();
@@ -4086,7 +4086,7 @@ function attemptWftGisSilentBootstrapIfConnected(reason) {
         return wftGisSilentBootstrapInFlight;
     }
 
-    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...");
+    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...", 8, "Checking whether Drive access is still available.");
     wftGisSilentBootstrapInFlight = attemptSilentWftGisTokenRefresh(reason || "startup")
         .then(function () {
             wftGisSilentBootstrapInFlight = null;
@@ -4095,7 +4095,7 @@ function attemptWftGisSilentBootstrapIfConnected(reason) {
         .catch(function (e) {
             wftDebugWarn("[WFT Auth] Silent GIS bootstrap failed:", e);
             wftGisSilentBootstrapInFlight = null;
-            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
             return false;
         });
 
@@ -4178,7 +4178,7 @@ function restoreGoogleStateFromStorage() {
             showDriveDisconnectedState("Reconnecting to Google Drive...");
             attemptWftGisSilentBootstrapIfConnected("restore-storage");
         } else {
-            setDriveSyncStatus("error", "Session expired - please sign in again.");
+            setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
         }
     }
     return false;
@@ -4265,7 +4265,12 @@ function requestDriveAccess(onSuccess, options) {
         promptValue = typeof options.prompt === "string" ? options.prompt : "";
         reason = options.reason || (typeof onSuccess === "function" ? "sync" : "sign-in");
         saveWftLocalSnapshotsBeforeHide();
-        setDriveSyncStatus("syncing", promptValue === "none" ? "Refreshing Google session..." : "Connecting to Google Drive...");
+        setDriveSyncStatus(
+            "syncing",
+            promptValue === "none" ? "Refreshing Google session..." : "Connecting to Google Drive...",
+            promptValue === "none" ? 8 : 5,
+            promptValue === "none" ? "Checking your previous Drive connection." : "Local data remains saved on this device."
+        );
 
         requestWftGisAccessToken(promptValue, onSuccess, { reason: reason, silent: promptValue === "none" })
             .catch(function (err) {
@@ -4278,7 +4283,7 @@ function requestDriveAccess(onSuccess, options) {
                 }
 
                 if (WFT_GIS_FALLBACK_TO_REDIRECT) {
-                    setDriveSyncStatus("syncing", "Opening Google sign-in...");
+                    setDriveSyncStatus("syncing", "Opening Google sign-in...", 10, "Allow Drive access so the app can sync your class and portfolio data.");
                     requestDriveAccessViaRedirect(onSuccess, options);
                 } else {
                     setDriveSyncStatus("error", "Google Drive reconnect failed. Please try again.");
@@ -4381,7 +4386,7 @@ function fetchGoogleUserInfo(token) {
                 })
                 .catch(function(e) {
                     wftSyncErrorLog("Sign-in sync failed", e);
-                    setDriveSyncStatus("error", "Google Drive sync failed. Local data is still available.");
+                    setDriveSyncStatus("error", "Google Drive sync failed.", null, "Local data is still available.");
                     startWftSyncPolling();
                 });
         } else {
@@ -4400,7 +4405,7 @@ function fetchGoogleUserInfo(token) {
             googleUser = { name: "Connected" };
             showSignedInState(googleUser);
         }
-        setDriveSyncStatus("error", "Reconnect may be needed");
+        setDriveSyncStatus("error", "Reconnect may be needed", null, "Local data is still available.");
     });
 }
 
@@ -4423,7 +4428,7 @@ function showSignedInState(info) {
             avatarHeader.style.display = "none";
         }
     }
-    setDriveSyncStatus("syncing", "Connecting...");
+    setDriveSyncStatus("syncing", "Connecting to Google Drive...", 5, "Local data remains saved on this device.");
 }
 
 // ── WFT Sync V2: reset sync state on sign-out ──
@@ -4757,13 +4762,67 @@ function handleGoogleSignOut() {
     finishSignOut();
 }
 
-function setDriveSyncStatus(state, text) {
+var wftDriveSyncProgressHideTimer = null;
+
+function clampWftSyncProgress(progress) {
+    var numeric = Number(progress);
+    if (!isFinite(numeric)) return null;
+    if (numeric < 0) return 0;
+    if (numeric > 100) return 100;
+    return numeric;
+}
+
+function updateWftSyncProgressDisplay(wrapId, barId, detailId, state, progress, detail) {
+    var wrap = document.getElementById(wrapId);
+    var bar = document.getElementById(barId);
+    var detailEl = document.getElementById(detailId);
+    var pct = clampWftSyncProgress(progress);
+    var shouldShowProgress = state === "syncing" || pct !== null;
+
+    if (wrap) {
+        if (shouldShowProgress && pct !== null && state !== "error" && state !== "paused" && state !== "") {
+            wrap.classList.add("is-visible");
+            wrap.setAttribute("aria-hidden", "false");
+            wrap.setAttribute("aria-valuenow", String(Math.round(pct)));
+        } else {
+            wrap.classList.remove("is-visible");
+            wrap.setAttribute("aria-hidden", "true");
+            wrap.setAttribute("aria-valuenow", "0");
+        }
+    }
+
+    if (bar) {
+        bar.style.width = (pct === null ? 0 : pct) + "%";
+    }
+
+    if (detailEl) {
+        detailEl.textContent = detail || "";
+        if (detail) {
+            detailEl.classList.add("is-visible");
+        } else {
+            detailEl.classList.remove("is-visible");
+        }
+    }
+}
+
+function hideDriveSyncProgressBars() {
+    updateWftSyncProgressDisplay("driveSyncProgressWrap", "driveSyncProgressBar", "driveSyncDetail", "", null, "");
+    updateWftSyncProgressDisplay("driveSyncProgressWrapHeader", "driveSyncProgressBarHeader", "driveSyncDetailHeader", "", null, "");
+}
+
+function setDriveSyncStatus(state, text, progress, detail) {
     wftSyncLog("[WFT Sync] status", state || "", text || "", getWftSyncDebugSnapshot());
+    if (wftDriveSyncProgressHideTimer) {
+        clearTimeout(wftDriveSyncProgressHideTimer);
+        wftDriveSyncProgressHideTimer = null;
+    }
+
     var dot = document.getElementById("driveSyncDot");
     var txt = document.getElementById("driveSyncText");
     var dotHeader = document.getElementById("driveSyncDotHeader");
     var txtHeader = document.getElementById("driveSyncTextHeader");
     var dotClass = "drive-sync-dot" + (state ? " " + state : "");
+
     if (state === "synced" && text !== "Ready") {
         recordWftDriveSyncSuccess(text || "drive-sync");
     }
@@ -4771,11 +4830,56 @@ function setDriveSyncStatus(state, text) {
     if (dotHeader) { dotHeader.className = dotClass; }
     if (txt) txt.textContent = text || "";
     if (txtHeader) txtHeader.textContent = text || "";
+
+    updateWftSyncProgressDisplay("driveSyncProgressWrap", "driveSyncProgressBar", "driveSyncDetail", state, progress, detail);
+    updateWftSyncProgressDisplay("driveSyncProgressWrapHeader", "driveSyncProgressBarHeader", "driveSyncDetailHeader", state, progress, detail);
+}
+
+function setDriveSyncProgress(text, progress, detail) {
+    setDriveSyncStatus("syncing", text, progress, detail || "");
+}
+
+function finishDriveSyncProgress(text, detail) {
+    setDriveSyncStatus("synced", text || "Synced", 100, detail || "");
+    wftDriveSyncProgressHideTimer = setTimeout(function () {
+        wftDriveSyncProgressHideTimer = null;
+        hideDriveSyncProgressBars();
+    }, 450);
+}
+
+function getWftSyncProgressDetail(reason) {
+    reason = String(reason || "");
+
+    if (reason === "initial-load" || reason === "startup" || reason === "page-load") {
+        return "Checking Drive data from your previous session.";
+    }
+
+    if (reason === "sign-in") {
+        return "First sync may take a moment while saved records are checked.";
+    }
+
+    if (reason === "explicit-sync-to-portfolio") {
+        return "Saving the current writing record to Drive.";
+    }
+
+    if (reason === "manual") {
+        return "Running a manual Drive sync.";
+    }
+
+    if (reason === "queued-after-current") {
+        return "Finishing a queued sync after recent changes.";
+    }
+
+    if (reason === "online") {
+        return "Back online. Checking Drive for saved changes.";
+    }
+
+    return "Local data remains saved on this device.";
 }
 
 
 function showDriveSyncPausedForSafety() {
-    setDriveSyncStatus("paused", "Drive sync paused for safety. Local changes are still saved on this device.");
+    setDriveSyncStatus("paused", "Drive sync paused", null, "Local changes are still saved on this device.");
 }
 
 function isDriveSyncAllowed() {
@@ -4859,14 +4963,14 @@ function wftDriveFetch(url, options) {
     }
 
     if (!navigator.onLine) {
-        setDriveSyncStatus("error", "Offline - will sync later");
+        setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
         return Promise.reject(new Error("OFFLINE"));
     }
 
     if (!isWftTokenValid()) {
         wftSyncState.authBlocked = true;
         clearWftTokenSession();
-        setDriveSyncStatus("error", "Session expired - please sign in again.");
+        setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
         return Promise.reject(new Error("TOKEN_EXPIRED"));
     }
 
@@ -4888,7 +4992,7 @@ function wftDriveFetch(url, options) {
             if (response.status === 401) {
                 wftSyncState.authBlocked = true;
                 clearWftTokenSession();
-                setDriveSyncStatus("error", "Session expired - please sign in again.");
+                setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
             } else if (response.status === 404) {
                 err.notFound = true;
                 setDriveSyncStatus("error", "Drive file not found - will recreate on next sync.");
@@ -4897,9 +5001,9 @@ function wftDriveFetch(url, options) {
                 setDriveSyncStatus("error", "Drive quota or rate limit reached.");
             } else if (response.status === 403) {
                 wftSyncState.permissionBlocked = true;
-                setDriveSyncStatus("error", "Drive permission issue - please reconnect.");
+                setDriveSyncStatus("error", "Drive permission issue - please reconnect.", null, "Local data is still available.");
             } else {
-                setDriveSyncStatus("error", "Drive sync needs attention.");
+                setDriveSyncStatus("error", "Drive sync needs attention.", null, "Local data is still saved. Try syncing again.");
             }
 
             throw err;
@@ -6092,7 +6196,7 @@ function noteDuplicateWftFiles(filename, files) {
     setDuplicateSyncMaintenanceStatus("Duplicate Google Drive sync files found. The tool is using the newest copy. Older duplicate files can be moved to Backup.", duplicateCount, false);
 
     if (WFT_DUPLICATE_DETECTION_V2) {
-        setDriveSyncStatus("error", "Duplicate Drive files detected - using newest copy safely.");
+        setDriveSyncStatus("error", "Duplicate Drive files detected", null, "Using the newest copy safely.");
     }
 }
 
@@ -6688,17 +6792,17 @@ function syncWftPortfolioIndexIfNeeded(reason) {
 function handleWftSyncError(e) {
     wftSyncErrorLog("[WFT Sync] sync error", e && e.message ? e.message : e, e || null, getWftSyncDebugSnapshot());
     if (!e) {
-        setDriveSyncStatus("error", "Drive sync needs attention.");
+        setDriveSyncStatus("error", "Drive sync needs attention.", null, "Local data is still saved. Try syncing again.");
         return;
     }
 
     if (e.message === "OFFLINE") {
-        setDriveSyncStatus("error", "Offline - will sync later");
+        setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
         return;
     }
 
     if (e.message === "TOKEN_EXPIRED" || e.status === 401) {
-        setDriveSyncStatus("error", "Session expired - please sign in again.");
+        setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
         return;
     }
 
@@ -6708,11 +6812,11 @@ function handleWftSyncError(e) {
     }
 
     if (e.status === 403) {
-        setDriveSyncStatus("error", "Drive permission issue - please reconnect.");
+        setDriveSyncStatus("error", "Drive permission issue - please reconnect.", null, "Local data is still available.");
         return;
     }
 
-    setDriveSyncStatus("error", "Drive sync needs attention.");
+    setDriveSyncStatus("error", "Drive sync needs attention.", null, "Local data is still saved. Try syncing again.");
 }
 
 function syncWftNow(reason, options) {
@@ -6750,7 +6854,7 @@ function syncWftNow(reason, options) {
             }
             retryOptions.afterSilentAuthRetry = true;
             wftSyncLog("[WFT Sync] token expired - attempting silent GIS refresh", reason);
-            setDriveSyncStatus("syncing", "Refreshing Google session...");
+            setDriveSyncStatus("syncing", "Refreshing Google session...", 8, "Checking your previous Drive connection.");
             return attemptSilentWftGisTokenRefresh("sync-" + (reason || "background"))
                 .then(function () {
                     return syncWftNow(reason, retryOptions);
@@ -6760,7 +6864,7 @@ function syncWftNow(reason, options) {
                     wftSyncState.authBlocked = true;
                     clearWftTokenSession();
                     wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
-                    setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+                    setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
                     return false;
                 });
         }
@@ -6768,13 +6872,13 @@ function syncWftNow(reason, options) {
         wftSyncState.authBlocked = true;
         clearWftTokenSession();
         wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
-        setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+        setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
         return Promise.resolve(false);
     }
 
     if (!navigator.onLine) {
         wftSyncLog("[WFT Sync] sync skipped - offline", reason);
-        setDriveSyncStatus("error", "Offline - will sync later");
+        setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
         return Promise.resolve(false);
     }
 
@@ -6815,27 +6919,33 @@ function syncWftNow(reason, options) {
         wftSyncState.explicitSaveInProgress = true;
     }
 
-    setDriveSyncStatus("syncing", "Syncing...");
+    setDriveSyncProgress("Starting sync...", 5, getWftSyncProgressDetail(reason));
     wftSyncLog("[WFT Sync] run start", runId, reason, getWftSyncDebugSnapshot());
 
+    setDriveSyncProgress("Checking Drive folder...", 20, "Making sure the app folder is ready.");
     wftSyncState.currentSyncPromise = ensureDriveFolderPromise()
         .then(function () {
             wftSyncLog("[WFT Sync] run folder ready", runId, wftSyncState.folderId || driveFolderId || "");
+            setDriveSyncProgress("Checking deleted records...", 35, "Keeping removed records consistent.");
             return syncWftDeletionsIfNeeded(reason);
         })
         .then(function (deletionsChanged) {
             wftSyncLog("[WFT Sync] run deletions done", runId, deletionsChanged, getWftSyncDebugSnapshot());
+            setDriveSyncProgress("Syncing class settings...", 50, "Updating roster, class defaults, and assessment settings.");
             return syncWftSettingsIfNeeded(reason);
         })
         .then(function (settingsChanged) {
             wftSyncLog("[WFT Sync] run settings done", runId, settingsChanged, getWftSyncDebugSnapshot());
+            setDriveSyncProgress("Syncing portfolio records...", 70, "Merging local portfolio records with Drive.");
             return syncWftPortfolioIfNeeded(reason);
         })
         .then(function (portfolioChanged) {
             wftSyncLog("[WFT Sync] run portfolio done", runId, portfolioChanged, getWftSyncDebugSnapshot());
+            setDriveSyncProgress("Updating portfolio index...", 85, "Preparing faster portfolio loading.");
             return syncWftPortfolioIndexIfNeeded(reason).then(function(indexChanged) {
                 wftSyncLog("[WFT Sync] run portfolio index done", runId, indexChanged, getWftSyncDebugSnapshot());
                 wftSyncState.lastPollAt = Date.now();
+                setDriveSyncProgress("Finishing sync...", 95, "");
                 return true;
             });
         })
@@ -6857,12 +6967,13 @@ function syncWftNow(reason, options) {
             wftSyncState.currentSyncPromise = null;
 
             if (shouldRunAgain) {
+                setDriveSyncProgress("Another sync is queued...", 96, "Recent changes will sync next.");
                 wftSyncLog("[WFT Sync] starting queued follow-up run", runId, reason);
                 return syncWftNow("queued-after-current", { immediate: false });
             }
 
             if (result) {
-                setDriveSyncStatus("synced", "Synced");
+                finishDriveSyncProgress("Synced");
                 checkDuplicateSyncFilesStatus();
             }
 
@@ -6980,22 +7091,22 @@ function initWftSyncLifecycleHandlers() {
         if (!wftSyncState.signedIn && !driveAccessToken) return;
         if (!isWftTokenValid()) {
             if (isWftGisAuthEnabled() && hasPersistedGoogleConnection()) {
-                setDriveSyncStatus("syncing", "Back online - refreshing Google session...");
+                setDriveSyncStatus("syncing", "Back online - refreshing Google session...", 8, "Checking your previous Drive connection.");
                 syncWftNow("online", { immediate: false });
                 return;
             }
             wftSyncState.authBlocked = true;
             clearWftTokenSession();
-            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.");
+            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
             return;
         }
-        setDriveSyncStatus("syncing", "Back online - syncing...");
+        setDriveSyncStatus("syncing", "Back online - syncing...", 5, "Checking Drive for saved changes.");
         syncWftNow("online", { immediate: false });
     });
 
     window.addEventListener("offline", function () {
         if (WFT_SYNC_ENGINE_V2 && (wftSyncState.signedIn || driveAccessToken)) {
-            setDriveSyncStatus("error", "Offline - will sync later");
+            setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
         }
     });
 
@@ -7207,7 +7318,16 @@ function uploadBlobToDrive(filename, blob, mimeType, callback) {
         if (callback) callback(null);
         return;
     }
-    setDriveSyncStatus('syncing', 'Syncing...');
+    var currentSyncText = "";
+    try {
+        var currentSyncEl = document.getElementById("driveSyncTextHeader") || document.getElementById("driveSyncText");
+        currentSyncText = currentSyncEl ? currentSyncEl.textContent : "";
+    } catch (e) {
+        currentSyncText = "";
+    }
+    if (currentSyncText !== "Uploading portfolio images...") {
+        setDriveSyncStatus('syncing', 'Uploading to Google Drive...', 90, 'Sending file to Drive.');
+    }
     ensureDriveFolder(function(folderId) {
         var boundary = '----WFTBinaryBoundary' + Date.now();
         var metadata = JSON.stringify({ name: filename, parents: [folderId] });
@@ -7859,7 +7979,7 @@ function syncAllToDrive(callback) {
     }
 
     if (!driveAccessToken) {
-        setDriveSyncStatus("error", "Please sign in to Google Drive first.");
+        setDriveSyncStatus("error", "Please sign in to Google Drive first.", null, "Local data is still saved on this device.");
         if (callback) callback(false);
         return;
     }
@@ -7880,7 +8000,7 @@ function syncAllToDrive(callback) {
             if (callback) callback(!!result);
         }).catch(function(e) {
             wftDebugError("syncAllToDrive flush failed:", normalizeWftAsyncErrorForLog(e));
-            setDriveSyncStatus("error", "Drive sync failed - please retry");
+            setDriveSyncStatus("error", "Drive sync failed", null, "Local data is still saved. Try syncing again.");
             if (callback) callback(false);
         });
     });
@@ -7934,6 +8054,9 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
             if (callback) callback();
             return;
         }
+        var imageNumber = index + 1;
+        var imageProgress = 88 + Math.min(6, Math.floor(((imageNumber - 1) / remaining.length) * 6));
+        setDriveSyncStatus("syncing", "Uploading portfolio images...", imageProgress, "Image " + imageNumber + " of " + remaining.length);
         var image = remaining[index++];
         // ── PATCH 3: Image compression before Drive upload ──
         if (WFT_IMAGE_COMPRESSION_V1) {
@@ -8693,7 +8816,7 @@ function uploadPendingPortfolioMediaBeforeCommit(callback) {
         sessionId: pending.sessionData.id || pending.sessionData.createdAt || '',
         imageCount: pending.sessionData.images ? pending.sessionData.images.length : 0
     });
-    setDriveSyncStatus('syncing', 'Uploading portfolio image...');
+    setDriveSyncStatus('syncing', 'Preparing portfolio images...', 88, 'Images are being saved to Drive before the portfolio record is synced.');
     uploadSessionImagesToDrive(pending.studentName, pending.sessionData, function() {
         // Persist the updated pending session after successful media upload metadata is added.
         // At this point uploaded images have driveFileId values and their dataUrl values have been cleared.
@@ -8732,7 +8855,7 @@ function manualSaveToDrive() {
 
     manualSyncInProgress = true;
     setSyncButtonsBusy(true, 'Syncing...');
-    setDriveSyncStatus('syncing', 'Syncing saved work...');
+    setDriveSyncStatus('syncing', 'Syncing saved work...', 5, 'Saving the current writing record to Drive.');
 
     var hadPendingBeforeCommit = !!getPendingPortfolioSync();
     var committedPending = false;
@@ -8781,10 +8904,10 @@ function manualSaveToDrive() {
                     manualSyncInProgress = false;
                     if (!result) {
                         setSyncButtonsFailure('Retry Sync to Portfolio');
-                        setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                        setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed', null, 'Local data is still saved. Try syncing again.');
                     } else {
                         setSyncButtonsBusy(false);
-                        setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
+                        finishDriveSyncProgress(committedPending ? 'Portfolio synced' : 'Manual sync complete');
                     }
                 }).catch(function (e) {
                     wftDebugError('Manual Drive flush failed:', e);
@@ -8795,7 +8918,7 @@ function manualSaveToDrive() {
                     }, getWftSyncDebugSnapshot());
                     manualSyncInProgress = false;
                     setSyncButtonsFailure('Retry Sync to Portfolio');
-                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed', null, 'Local data is still saved. Try syncing again.');
                 });
             });
             return;
@@ -8805,11 +8928,11 @@ function manualSaveToDrive() {
             manualSyncInProgress = false;
             if (success === false) {
                 setSyncButtonsFailure('Retry Sync to Portfolio');
-                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed', null, 'Local data is still saved. Try syncing again.');
                 return;
             }
             setSyncButtonsBusy(false);
-            setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
+            finishDriveSyncProgress(committedPending ? 'Portfolio synced' : 'Manual sync complete');
         });
     }
 
