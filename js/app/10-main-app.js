@@ -5148,6 +5148,22 @@ function buildStudentFeedbackForCategory(key, item) {
     var rows = buildNoticeRowsForCategory(key, displayItem);
     rows = cleanNoticeRowsForDisplay(key, displayItem, rows);
     if (!rows.length) rows.push({ area: getStudentFriendlyAreaName(key), comment: "No detailed note available yet." });
+    if (key === "Neatness" && isNeatnessNotAssessedItem(displayItem)) {
+        var skippedReason = displayItem.notAssessedReason || displayItem.reason || "Neatness was not assessed because there was not enough clear handwriting to score fairly.";
+        var skippedTip = displayItem.growthTip || "No handwriting score was added to the overall grade for this sample.";
+        return {
+            teacherComment: skippedReason,
+            noticeRows: rows,
+            growthTip: skippedTip,
+            audit: {
+                builderName: getFeedbackBuilderName(key),
+                scoreBand: getAuditScoreBandLabel(displayItem.score),
+                mainEvidence: getMainEvidenceSummary(rows),
+                teacherCommentSource: "Neatness source check skipped scoring before the handwriting rubric was applied.",
+                growthTipSource: "Neutral skipped-score note used because handwriting neatness was not assessed."
+            }
+        };
+    }
     var teacherComment = buildTeacherComment(key, displayItem, rows);
     var growthTip = buildGrowthTip(key, displayItem, rows);
     var audit = {
@@ -5213,10 +5229,25 @@ function getNeatnessComment(kind, score) {
     return "This handwriting area was reviewed.";
 }
 
+function isNeatnessNotAssessedItem(item) {
+    item = item || {};
+    var sourceType = String(item.sourceType || '').toUpperCase();
+    if (item.notAssessedReason) return true;
+    if (sourceType === 'TYPED_OR_PRINTED' || sourceType === 'NOT_SCORABLE') return true;
+    return false;
+}
+
 function buildNeatnessNoticeRows(item) {
     var rows = [];
     item = item || {};
     if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
+    if (isNeatnessNotAssessedItem(item)) {
+        rows.push({
+            area: "Source check",
+            comment: item.notAssessedReason || item.reason || "Neatness was not assessed because there was not enough clear handwriting to score fairly."
+        });
+        return rows;
+    }
     var ss = item.subScores || {};
     rows.push({ area: "Letter formation", comment: getNeatnessComment("letterFormation", ss.letterFormation) });
     rows.push({ area: "Spacing", comment: getNeatnessComment("spacing", ss.spacing) });
@@ -5392,7 +5423,7 @@ function getAuditScoreBandLabel(score) {
 function getAuditScoreSource(key, item, data) {
     if (key === "Grammar") return "Computed error density plus grammar pattern analysis.";
     if (key === "Flow") return "Computed sentence variety, repeated starters, sentence length pattern, and rhythm notes.";
-    if (key === "Neatness") return "Image-based handwriting sub-scores converted into student-friendly comments.";
+    if (key === "Neatness") return item && item.notAssessedReason ? "Image source check skipped handwriting neatness scoring." : "Image-based handwriting sub-scores converted into student-friendly comments.";
     if (key === "Ideas & Details") return "Rubric evidence plus word-count adjustment when the target is enabled.";
     if (key === "Organization") return "Rubric evidence for beginning/middle/end, sequencing, and content order.";
     if (key === "Word Choice") return "Rubric evidence for vocabulary precision, variety, and descriptive language.";
@@ -5428,6 +5459,9 @@ function getAuditRawRows(key, item, data) {
         addAuditRawRow(rows, "Shortest sentence", flowData.shortest);
         addAuditRawRow(rows, "Longest sentence", flowData.longest);
     } else if (key === "Neatness") {
+        addAuditRawRow(rows, "Source type", item.sourceType);
+        addAuditRawRow(rows, "Not assessed reason", item.notAssessedReason);
+        addAuditRawRow(rows, "Score basis", item.scoreBasis);
         var ss = item.subScores || {};
         addAuditRawRow(rows, "Letter formation", ss.letterFormation);
         addAuditRawRow(rows, "Spacing", ss.spacing);
@@ -7364,6 +7398,9 @@ async function analyzeWriting() {
                     evidence: nqr.reason || "",
                     growthTip: nqr.growthTip || "",
                     subScores: nqr.subScores || null,
+                    sourceType: nqr.sourceType || "",
+                    notAssessedReason: nqr.notAssessedReason || "",
+                    scoreBasis: nqr.scoreBasis || "",
                     contentOrganization: "",
                     sentenceVariety: "",
                     rawBody: ""
@@ -7432,7 +7469,10 @@ async function analyzeWriting() {
                         contentOrganization: "",
                         sentenceVariety: "",
                         rawBody: "",
-                        subScores: qr.subScores || null
+                        subScores: qr.subScores || null,
+                        sourceType: qr.sourceType || "",
+                        notAssessedReason: qr.notAssessedReason || "",
+                        scoreBasis: qr.scoreBasis || ""
                     };
                 } else {
                     detailed.categories[inheritKey] = {
