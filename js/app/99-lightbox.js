@@ -1,37 +1,3 @@
-/* === LAYOUT POLISH OVERRIDES === */
-function injectWftLayoutPolishStyles() {
-    if (document.getElementById('wftLayoutPolishStyles')) return;
-    var style = document.createElement('style');
-    style.id = 'wftLayoutPolishStyles';
-    style.textContent = ''
-        + '.assessment-settings-actions .mini-settings-btn {'
-        + 'display:inline-flex;'
-        + 'align-items:center;'
-        + 'justify-content:center;'
-        + 'min-height:44px;'
-        + 'padding:12px 20px;'
-        + 'font-size:15px;'
-        + 'text-align:center;'
-        + '}'
-        + '#assessmentOverrideClearBtn {'
-        + 'justify-content:center;'
-        + 'text-align:center;'
-        + '}'
-        + '.class-defaults-field label,.class-defaults-field .checkbox-label {'
-        + 'color:var(--text-primary);'
-        + 'font-size:13px;'
-        + 'font-weight:600;'
-        + 'letter-spacing:normal;'
-        + 'text-transform:none;'
-        + '}'
-        + '.class-defaults-field #classGradeProfileDescription {'
-        + 'margin:14px 0 0;'
-        + '}';
-    document.head.appendChild(style);
-}
-injectWftLayoutPolishStyles();
-/* === END LAYOUT POLISH OVERRIDES === */
-
 /* === IMAGE LIGHTBOX === */
 function openImageLightbox(imgEl) {
     var lb = document.getElementById('imgLightbox');

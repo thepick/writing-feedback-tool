@@ -380,21 +380,6 @@
 /* =============================================
    SETTINGS DRAWER
 ============================================= */
-function updateGrammarStrictnessDisplay(value) {
-    var n = parseInt(value, 10);
-    if (isNaN(n)) n = 3;
-    if (n < 1) n = 1;
-    if (n > 5) n = 5;
-    var valEl = document.getElementById("grammarStrictnessVal");
-    if (valEl) {
-        var ratio = (n - 1) / 4;
-        var percent = ratio * 100;
-        var offset = 10 - (20 * ratio);
-        valEl.textContent = String(n);
-        valEl.style.left = "calc(" + percent + "% + " + offset + "px)";
-    }
-}
-
 function openSettingsDrawer() {
     document.getElementById('settingsDrawer').classList.add('open');
     document.getElementById('settingsDrawerOverlay').classList.add('open');
@@ -431,28 +416,15 @@ function migrateLegacyApiKeyStorage() {
     } catch (e) {}
 }
 
-function getRememberApiKeyStoredPreference() {
+function isRememberApiKeyEnabled() {
+    var rememberEl = document.getElementById('rememberApiKeyOnDevice');
+    if (rememberEl) { return rememberEl.checked === true; }
     try { return localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) === 'true'; } catch (e) {}
     return false;
 }
 
-function isRememberApiKeyEnabled() {
-    var rememberEl = document.getElementById('rememberApiKeyOnDevice');
-    if (rememberEl && rememberEl.getAttribute('data-wft-api-key-pref-loaded') === 'true') {
-        return rememberEl.checked === true;
-    }
-    return getRememberApiKeyStoredPreference();
-}
-
 function setRememberApiKeyEnabled(enabled) {
     try { localStorage.setItem(WFT_API_KEY_REMEMBER_PREF_KEY, enabled ? 'true' : 'false'); } catch (e) {}
-}
-
-function applyRememberApiKeyStoredPreferenceToUi() {
-    var rememberEl = document.getElementById('rememberApiKeyOnDevice');
-    if (!rememberEl) { return; }
-    rememberEl.checked = getRememberApiKeyStoredPreference();
-    rememberEl.setAttribute('data-wft-api-key-pref-loaded', 'true');
 }
 
 function getStoredApiKey() {
@@ -518,15 +490,11 @@ function saveSettingsToLocalStorage(settingsOverride) {
         if (modelSelect) settings.model = modelSelect.value || '';
         if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
         if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getClassDefaultGrammarStrictness === 'function') settings.grammarStrictness = getClassDefaultGrammarStrictness();
-        else if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
+        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
         if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getClassGradeLevel === 'function') settings.gradeLevel = getClassGradeLevel();
-        else if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
+        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
-        if (typeof GRADE_PROFILE_VERSION !== 'undefined') settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
-        if (typeof getClassGradeLevel === 'function') settings.classDefaultsGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = false;
+        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
 
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
@@ -540,7 +508,7 @@ function saveSettingsToLocalStorage(settingsOverride) {
     if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks && !(typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
         markWftSettingsDirty("settings-change");
         scheduleWftCloudSync("settings-change");
-    } else if (!WFT_SYNC_ENGINE_V2 && (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === "function") {
+    } else if ((typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === "function") {
         try { saveSettingsToDrive(); } catch (e) {}
     }
     return settings;
@@ -549,7 +517,8 @@ function saveSettingsToLocalStorage(settingsOverride) {
 function loadSettingsFromLocalStorage() {
     try {
         migrateLegacyApiKeyStorage();
-        applyRememberApiKeyStoredPreferenceToUi();
+        var rememberApiKeyEl = document.getElementById('rememberApiKeyOnDevice');
+        if (rememberApiKeyEl) { rememberApiKeyEl.checked = isRememberApiKeyEnabled(); }
         if (document.getElementById('apiKeyInput')) {
             document.getElementById('apiKeyInput').value = getStoredApiKey();
         }
@@ -571,8 +540,7 @@ function loadSettingsFromLocalStorage() {
                 var slider = document.getElementById('grammarStrictness');
                 var valEl = document.getElementById('grammarStrictnessVal');
                 if (slider) slider.value = s.grammarStrictness;
-                if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay(s.grammarStrictness);
-                else if (valEl) valEl.textContent = s.grammarStrictness;
+                if (valEl) valEl.textContent = s.grammarStrictness;
             }
             if (s.assessScriptQuality != null && document.getElementById('assessScriptQuality')) {
                 document.getElementById('assessScriptQuality').checked = s.assessScriptQuality;
@@ -581,11 +549,15 @@ function loadSettingsFromLocalStorage() {
                 var savedClassGrade = parseGradeLevelValue(s.classGradeLevel) || 5;
                 document.getElementById('classGradeLevelSelect').value = String(savedClassGrade);
             }
-            wftStudentGradeLevelOverride = false;
-            if (document.getElementById('gradeLevelSelect')) {
-                document.getElementById('gradeLevelSelect').value = String(getClassGradeLevel() || 5);
+            wftStudentGradeLevelOverride = s.studentGradeLevelOverride === true;
+            if (s.studentGradeLevelOverride == null && s.gradeLevel != null && s.classGradeLevel != null) {
+                wftStudentGradeLevelOverride = (parseGradeLevelValue(s.gradeLevel) !== (parseGradeLevelValue(s.classGradeLevel) || 5));
             }
-            maybeApplyClassDefaultsForLegacyGradeSettings(s);
+            if (document.getElementById('gradeLevelSelect')) {
+                var savedStudentGrade = parseGradeLevelValue(s.gradeLevel);
+                var effectiveStudentGrade = wftStudentGradeLevelOverride && savedStudentGrade ? savedStudentGrade : getClassGradeLevel();
+                document.getElementById('gradeLevelSelect').value = String(effectiveStudentGrade || 5);
+            }
             applyGradeWordCountRange();
             refreshGradeProfileDescription();
             if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
@@ -594,37 +566,6 @@ function loadSettingsFromLocalStorage() {
         }
         refreshApiKeyRuntimeValue();
     } catch(e) {}
-}
-
-function maybeApplyClassDefaultsForLegacyGradeSettings(settings) {
-    if (!settings || typeof getClassGradeLevel !== "function" || typeof getGradeProfile !== "function") return false;
-    if (typeof GRADE_PROFILE_VERSION === "undefined" || typeof parseGradeLevelValue !== "function") return false;
-    if (settings.classDefaultsProfileVersion === GRADE_PROFILE_VERSION && parseGradeLevelValue(settings.classDefaultsGradeLevel) === getClassGradeLevel()) return false;
-
-    var classGrade = getClassGradeLevel();
-    var profile = getGradeProfile(classGrade);
-    var grade5Profile = getGradeProfile(5);
-    var savedStrictness = parseInt(settings.grammarStrictness, 10);
-    var savedTarget = parseInt(settings.targetWordCount, 10);
-    var grade5Strictness = parseInt(grade5Profile.grammarStrictnessDefault, 10);
-    var grade5Target = parseInt(grade5Profile.targetWordCountBase || grade5Profile.targetWordCount, 10);
-    var looksLikeOldGrade5Defaults = savedStrictness === grade5Strictness && savedTarget === grade5Target;
-    var missingDefaults = isNaN(savedStrictness) || isNaN(savedTarget);
-
-    if (classGrade !== 5 && (looksLikeOldGrade5Defaults || missingDefaults)) {
-        if (typeof applyGradeDefaultStrictness === "function") applyGradeDefaultStrictness(profile);
-        if (typeof applyGradeDefaultTargetWordCount === "function") applyGradeDefaultTargetWordCount(profile);
-        try {
-            settings.grammarStrictness = profile.grammarStrictnessDefault;
-            settings.targetWordCount = String(profile.targetWordCountBase || profile.targetWordCount || 200);
-            settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
-            settings.classDefaultsGradeLevel = classGrade;
-            localStorage.setItem("wft_settings", JSON.stringify(settings));
-        } catch (e) { }
-        return true;
-    }
-
-    return false;
 }
 
 /* =============================================
@@ -658,7 +599,7 @@ function shouldShowNeatnessWeighting() {
     return settings.assessScriptQuality === true;
 }
 
-// Script quality toggle is always visible in Manage Class
+// Script quality toggle is always visible in settings
 function updateScriptQualityToggleVisibility() {
     var row = document.getElementById('scriptQualityRow');
     if (row) {
@@ -709,44 +650,12 @@ function getWeightDescriptionText(optProfile) {
     var neatnessWeight = neatnessActive ? getNeatnessWeight(profile) : 0;
     var nonNeatScale = 1 - neatnessWeight;
     var order = ["Ideas & Details", "Organization", "Grammar", "Flow", "Word Choice", "Spelling & Punctuation"];
-    var entries = [];
-    var floorsTotal = 0;
-    var i;
-
-    for (i = 0; i < order.length; i += 1) {
-        var k = order[i];
-        if (weights[k] != null) {
-            var pct = Number(weights[k] * nonNeatScale * 100) || 0;
-            var floorPct = Math.floor(pct);
-            entries.push({ label: k, pct: pct, rounded: floorPct, remainder: pct - floorPct });
-            floorsTotal += floorPct;
-        }
-    }
-    if (neatnessActive && neatnessWeight > 0) {
-        var neatPct = Number(neatnessWeight * 100) || 0;
-        var neatFloor = Math.floor(neatPct);
-        entries.push({ label: "Neatness", pct: neatPct, rounded: neatFloor, remainder: neatPct - neatFloor });
-        floorsTotal += neatFloor;
-    }
-
-    var pointsToAdd = Math.max(0, 100 - floorsTotal);
-    entries.sort(function(a, b) { return b.remainder - a.remainder; });
-    for (i = 0; i < entries.length && pointsToAdd > 0; i += 1) {
-        entries[i].rounded += 1;
-        pointsToAdd -= 1;
-    }
-    entries.sort(function(a, b) {
-        var ai = order.indexOf(a.label);
-        var bi = order.indexOf(b.label);
-        if (a.label === "Neatness") ai = 999;
-        if (b.label === "Neatness") bi = 999;
-        return ai - bi;
-    });
-
     var parts = [];
-    for (i = 0; i < entries.length; i += 1) {
-        parts.push(entries[i].label + " (" + entries[i].rounded + "%)");
+    for (var i = 0; i < order.length; i++) {
+        var k = order[i];
+        if (weights[k] != null) parts.push(k + " (" + formatPercentFromWeight(weights[k] * nonNeatScale) + ")");
     }
+    if (neatnessActive && neatnessWeight > 0) parts.push("Neatness (" + formatPercentFromWeight(neatnessWeight) + ")");
     return "Weighted by category importance: " + parts.join(", ") + ".";
 }
 
@@ -866,7 +775,7 @@ Use exactly this format:
 - Pen Control and Marks: [score]/5 - [level name]
 - Page Layout and Paragraphs: [score]/5 - [level name]
 
-**Detailed Feedback Input Scores:**
+**Quick Rubric:**
 - Neatness: [converted final score]/10 ([rounded final score]/5 - [level name]) - [one sentence describing the most noticeable thing you see in this student's handwriting overall]
 
 **Neatness Growth Tip:** [one short, specific tip written directly to the student about the single most important thing to work on]
@@ -880,7 +789,7 @@ Example:
 - Pen Control and Marks: 4/5 - Proficient
 - Page Layout and Paragraphs: 3/5 - Developing
 
-**Detailed Feedback Input Scores:**
+**Quick Rubric:**
 - Neatness: 8/10 (4/5 - Proficient) - Most of your letters are easy to read, but some words need clearer spaces between them.
 **Neatness Growth Tip:** Try leaving a finger-width gap between each word so your writing is easier to read.`;
 
@@ -974,9 +883,10 @@ Example:
  * The Google OAuth Client ID is embedded below so users do not need
  * to enter it in the Settings panel.
  *
- * WFT_GIS_AUTH_V2:
- * Google Identity Services token client is used first. The older OAuth
- * implicit redirect flow remains as a fallback if GIS cannot open.
+ * TODO WFT_GIS_AUTH_V2:
+ * After Sync Engine V2 is stable, replace the OAuth implicit redirect flow
+ * with Google Identity Services token client. Do not combine that migration
+ * with the sync engine patch.
  */
 var WFT_APP_VERSION = "v9";
 var GOOGLE_CLIENT_ID = "546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com";
@@ -988,16 +898,13 @@ var GOOGLE_CONNECTED_CACHE_KEY = "wft_google_connected";
 
 // ── WFT Sync Engine V2 feature flags ──
 var WFT_SYNC_ENGINE_V2 = true;
-var WFT_SYNC_ENGINE_V2_SAFE_MODE = false;
 var WFT_SYNC_DEBUG = false;
-var WFT_VISIBILITY_SYNC_COOLDOWN_MS = 2500;
-var wftLastVisibilitySyncAt = 0;
 var WFT_DEBUG = false;
 var WFT_DUPLICATE_DETECTION_V2 = true;
 var WFT_DUPLICATE_CLEANUP_V2 = false;
 var WFT_IMAGE_IDEMPOTENCY_V2 = true;
 var WFT_SESSION_TOKEN_STORAGE_V2 = true;
-var WFT_GIS_AUTH_V2 = true;
+var WFT_GIS_AUTH_V2 = false;
 
 
 function isWftDebugLoggingEnabled() {
@@ -1064,7 +971,10 @@ var WFT_ASYNC_PORTFOLIO_ACCESS_V1 = false;
 var WFT_INDEXEDDB_CACHE_V1 = false;
 var WFT_PORTFOLIO_INDEX_V1 = false;
 var WFT_STUDENT_ID_MAP_V1 = false;
-var WFT_SPLIT_STUDENT_FILES_V1 = false;
+// Phase 3 — Split student files ENABLED (permanent commitment)
+// Legacy single-portfolio (wft-portfolio.json) support is deprecated
+// See config.js for the authoritative flag definition
+var WFT_SPLIT_STUDENT_FILES_V1 = true;
 var WFT_LAZY_PORTFOLIO_LOAD_V1 = false;
 var WFT_STORAGE_HEALTH_UI_V1 = false;
 
@@ -1081,41 +991,10 @@ var WFT_SYNC_DEBOUNCE_MS = 2500;
 var WFT_POLL_INTERVAL_MS = 60000;
 var WFT_SAVE_FILE_TIMEOUT_MS = 30000;
 var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session";
-var WFT_LAST_DRIVE_SYNC_KEY = "wft_last_drive_sync_at";
-var WFT_TOKEN_FRESHNESS_BUFFER_MS = 7 * 60 * 1000;
-var WFT_TOKEN_EXPIRY_WARNING_MS = 5 * 60 * 1000;
-var WFT_ALLOW_LEGACY_LOCAL_TOKEN_MIGRATION = false;
-var WFT_GOOGLE_AUTH_SCOPE = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
-var WFT_GIS_SCRIPT_URL = "https://accounts.google.com/gsi/client";
-var WFT_GIS_SILENT_RETRY_COOLDOWN_MS = 2 * 60 * 1000;
-var WFT_GIS_FALLBACK_TO_REDIRECT = true;
-var wftTokenExpiryWarningTimer = null;
-var wftGisScriptLoadPromise = null;
-var wftGisTokenClient = null;
-var wftGisActiveTokenRequest = null;
-var wftGisSilentRefreshInFlight = null;
-var wftGisSilentBootstrapInFlight = null;
-var wftLastSilentGisAttemptAt = 0;
 var wftSuppressDirtyMarks = false;
 
-// ── Suppression-flag helper ──────────────────────────────────────────────
-// PR 5 refactor: replace 4 hand-rolled save/set/restore blocks with a
-// single helper. Naturally nested-safe: each call snapshots the current
-// value, sets to true, runs the callback, and restores — so an inner
-// call inside an outer call sees the outer "true" as its `previous` and
-// restores it back to true on the way out. The old code had two
-// versions that lacked try/finally (resetWftLocalWorkAfterSignOut and
-// saveWftLocalSnapshotsBeforeHide); a throw in the body would leave the
-// flag stuck at true and silently swallow all subsequent dirty marks.
-function withWftSuppressedDirtyMarks(fn) {
-    var previous = wftSuppressDirtyMarks;
-    wftSuppressDirtyMarks = true;
-    try {
-        return fn();
-    } finally {
-        wftSuppressDirtyMarks = previous;
-    }
-}
+// WFT_TOMBSTONE_V1 — compaction flag (disabled by default)
+var WFT_TOMBSTONE_COMPACTION_V1 = false;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PATCH 0 — STORAGE METADATA, SAFE MODE & EMERGENCY BACKUP
@@ -1143,7 +1022,6 @@ function _wftDefaultStorageMeta() {
         migrationStartedAt: "",
         migrationCompletedAt: "",
         lastSuccessfulPatch: "",
-        lastDriveSyncAt: "",
         deviceId: "",
         safeMode: false,
         safeModeReason: "",
@@ -1462,6 +1340,11 @@ function normalizeWftSessionDate(session) {
     if (!session.normalizedAt || isNaN(Date.parse(session.normalizedAt))) {
         session.normalizedAt = new Date().toISOString();
     }
+
+    // WFT_LAMPORT_V1 — preserve existing lamportClock from Drive-synced sessions.
+    // Sessions imported from another device may carry a remote lamport value that
+    // merge logic relies on; normalization must not clobber it.
+    // (No-op if the field is absent — new sessions get stamped in saveStudentSession.)
 
     if (!session.dateIso) {
         try { session.dateIso = new Date(session.createdAt).toISOString().substring(0, 10); }
@@ -1967,118 +1850,24 @@ function rebuildPortfolioIndex(callback) {
 // END PATCH 6
 // ═══════════════════════════════════════════════════════════════════════════
 
-
 // ═══════════════════════════════════════════════════════════════════════════
-function recordWftDriveSyncSuccess(reason) {
-    var nowIso = new Date().toISOString();
-    try {
-        wftSyncState.lastSyncAt = nowIso;
-    } catch (e) { }
-    try {
-        localStorage.setItem(WFT_LAST_DRIVE_SYNC_KEY, nowIso);
-    } catch (e2) { }
-    try {
-        var meta = getWftStorageMeta();
-        meta.lastDriveSyncAt = nowIso;
-        meta.lastDriveSyncReason = reason || "drive-sync";
-        setWftStorageMeta(meta);
-    } catch (e3) { }
-}
-
-function getWftLastDriveSyncAt() {
-    var value = "";
-    try {
-        if (wftSyncState && wftSyncState.lastSyncAt) {
-            value = wftSyncState.lastSyncAt;
-        }
-    } catch (e) { }
-    if (value) { return value; }
-
-    try {
-        value = localStorage.getItem(WFT_LAST_DRIVE_SYNC_KEY) || "";
-    } catch (e2) { }
-    if (value) { return value; }
-
-    try {
-        var meta = getWftStorageMeta();
-        value = meta.lastDriveSyncAt || "";
-    } catch (e3) { }
-    return value || "";
-}
-
-function formatWftTokenTimeRemaining(expiresAt) {
-    var expiry = Number(expiresAt || 0);
-    if (!expiry) { return "not connected"; }
-    var diff = expiry - Date.now();
-    if (diff <= 0) { return "expired"; }
-    var minutes = Math.ceil(diff / 60000);
-    if (minutes < 60) { return "active, about " + minutes + " min left"; }
-    var hours = Math.floor(minutes / 60);
-    var rem = minutes % 60;
-    return "active, about " + hours + "h " + rem + "m left";
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-function getWftStorageHealthHelpText(label) {
-    var help = {
-        "Storage mode": "How the app saves portfolio records. Name-based storage still works, but ID-based storage is safer long term.",
-        "Safe mode": "Whether troubleshooting mode is active. Off means normal app loading.",
-        "localStorage size": "Small browser storage used by the app. A few hundred KB is normal.",
-        "IndexedDB": "Larger browser database used for heavier saved data, including portfolio records and images.",
-        "Portfolio index": "The app's list of saved student writing sessions. Clean means no repair is needed.",
-        "Active roster": "The students currently listed in Manage Class.",
-        "Cached data": "Saved portfolio records that match students currently in Manage Class.",
-        "Old cached data": "Saved portfolio records for students who are no longer in Manage Class. These can be removed if deleted students should stay deleted.",
-        "Portfolio cache total": "All portfolio records currently stored in this browser, including any old off-roster records.",
-        "Google session": "Whether the current Google Drive access token is still available in this browser.",
-        "Last Drive sync": "The last successful Google Drive load or save from this browser. Never means no completed Drive activity has been recorded here yet.",
-        "Last index rebuild": "The last time the portfolio index was repaired or rebuilt.",
-        "Source of truth": "The saved-data source the app currently trusts most when loading portfolio information."
-    };
-    return help[label] || "";
-}
-
-function stripWftSimpleBoldTags(text) {
-    return String(text || "").replace(/<\/?b>/g, "");
-}
-
 function renderStorageHealthSummaryLines(summaryEl, lines) {
     if (!summaryEl) { return; }
     summaryEl.textContent = "";
     for (var i = 0; i < lines.length; i++) {
+        if (i > 0) { summaryEl.appendChild(document.createElement("br")); }
         var line = String(lines[i] || "");
-        var plainLine = stripWftSimpleBoldTags(line);
-        var colonIndex = plainLine.indexOf(":");
-        var label = colonIndex >= 0 ? plainLine.slice(0, colonIndex) : plainLine;
-        var value = colonIndex >= 0 ? plainLine.slice(colonIndex + 1).replace(/^\s+/, "") : "";
-        var helpText = getWftStorageHealthHelpText(label);
-
-        var row = document.createElement("div");
-        row.className = "storage-health-row";
-
-        var main = document.createElement("div");
-        main.className = "storage-health-main";
-
-        var labelEl = document.createElement("div");
-        labelEl.className = "storage-health-label";
-        labelEl.textContent = label;
-        main.appendChild(labelEl);
-
-        var valueEl = document.createElement("div");
-        valueEl.className = "storage-health-value";
-        valueEl.textContent = value || "-";
-        main.appendChild(valueEl);
-
-        row.appendChild(main);
-
-        if (helpText) {
-            var helpEl = document.createElement("div");
-            helpEl.className = "storage-health-explain";
-            helpEl.textContent = helpText;
-            row.appendChild(helpEl);
+        var parts = line.split(/<b>|<\/b>/);
+        for (var p = 0; p < parts.length; p++) {
+            if (!parts[p]) { continue; }
+            if (p % 2 === 1) {
+                var strong = document.createElement("strong");
+                strong.textContent = parts[p];
+                summaryEl.appendChild(strong);
+            } else {
+                summaryEl.appendChild(document.createTextNode(parts[p]));
+            }
         }
-
-        summaryEl.appendChild(row);
     }
 }
 
@@ -2102,7 +1891,7 @@ function refreshStorageHealthUI() {
     var lines = [];
     lines.push("Storage mode: <b>" + meta.activePortfolioFormat.replace(/-/g, " ") + "</b>");
     lines.push("Safe mode: <b>" + (safeMode ? "ON (" + meta.safeModeReason + ")" : "off") + "</b>");
-    lines.push("localStorage size: <b>" + formatWftBytes(lsSize) + "</b>");
+    lines.push("localStorage est. size: <b>" + formatWftBytes(lsSize) + "</b>");
     lines.push("IndexedDB: <b>" + (checkIndexedDbAvailable() ? "available" : "unavailable") + "</b>");
 
     // Portfolio index status
@@ -2110,27 +1899,25 @@ function refreshStorageHealthUI() {
     lines.push("Portfolio index: <b>" + (WFT_PORTFOLIO_INDEX_V1 ? (indexDirty ? "dirty" : "clean") : "disabled") + "</b>");
 
     // Cached data counts
-    var cacheSummary = getWftPortfolioCacheSummary();
-    lines.push("Active roster: <b>" + cacheSummary.rosterStudents + (cacheSummary.rosterStudents === 1 ? " student" : " students") + "</b>");
-    lines.push("Cached data: <b>" + cacheSummary.activePortfolioStudents + " active " + (cacheSummary.activePortfolioStudents === 1 ? "student" : "students") + ", " + cacheSummary.activePortfolioSessions + " visible " + (cacheSummary.activePortfolioSessions === 1 ? "session" : "sessions") + "</b>");
-    if (cacheSummary.offRosterStudents > 0) {
-        lines.push("Old cached data: <b>" + cacheSummary.offRosterStudents + " deleted/off-roster " + (cacheSummary.offRosterStudents === 1 ? "student" : "students") + ", " + cacheSummary.offRosterSessions + " " + (cacheSummary.offRosterSessions === 1 ? "session" : "sessions") + "</b>");
-    } else {
-        lines.push("Old cached data: <b>none</b>");
+    var portfolio = null;
+    try { portfolio = getPortfolioData(); } catch (e) {}
+    if (portfolio) {
+        var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
+        var totalSessions = 0;
+        for (var hi = 0; hi < names.length; hi++) {
+            var sd = portfolio[names[hi]];
+            if (sd && sd.sessions) { totalSessions += sd.sessions.length; }
+        }
+        lines.push("Cached students: <b>" + names.length + "</b>, sessions: <b>" + totalSessions + "</b>");
     }
-    lines.push("Portfolio cache total: <b>" + cacheSummary.portfolioStudents + " " + (cacheSummary.portfolioStudents === 1 ? "student" : "students") + ", " + cacheSummary.portfolioSessions + " " + (cacheSummary.portfolioSessions === 1 ? "session" : "sessions") + "</b>");
 
-    // Google session and last sync info
+    // Last sync info
     if (typeof wftSyncState !== "undefined" && wftSyncState) {
-        var tokenExpiry = Number(wftSyncState.tokenExpiresAt || getWftSessionTokenExpiry() || 0);
-        lines.push("Google session: <b>" + formatWftTokenTimeRemaining(tokenExpiry) + "</b>");
-    }
-
-    var lastDriveSyncAt = getWftLastDriveSyncAt();
-    if (lastDriveSyncAt) {
-        lines.push("Last Drive sync: <b>" + formatWftRelativeTime(lastDriveSyncAt) + "</b>");
-    } else {
-        lines.push("Last Drive sync: <b>never recorded</b>");
+        if (wftSyncState.lastSyncAt) {
+            lines.push("Last Drive sync: <b>" + formatWftRelativeTime(wftSyncState.lastSyncAt) + "</b>");
+        } else {
+            lines.push("Last Drive sync: <b>never</b>");
+        }
     }
 
     // Last index rebuild
@@ -2139,7 +1926,7 @@ function refreshStorageHealthUI() {
         lines.push("Last index rebuild: <b>" + formatWftRelativeTime(meta.updatedAt) + "</b>");
     }
 
-    lines.push("Source of truth: <b>" + meta.activePortfolioFormat.replace(/-/g, " ") + "</b>");
+    lines.push("Active source of truth: <b>" + meta.activePortfolioFormat.replace(/-/g, " ") + "</b>");
 
     var summaryEl = document.getElementById("storageHealthSummary");
     if (summaryEl) {
@@ -2968,7 +2755,7 @@ function mergeStudentSessions(localSessions, remoteSessions, deletions, studentI
             sessionId = session.id;
         }
         var sessionStudentId = session.studentId || studentId || "";
-        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, getSessionModifiedTimeMs(session))) { continue; }
+        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt)) { continue; }
         if (!merged[sessionId]) { merged[sessionId] = session; }
         else { merged[sessionId] = chooseNewerSession(merged[sessionId], session); }
     }
@@ -3006,7 +2793,7 @@ function getWftDeletionRecords(deletions) {
 function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt) {
     if (!deletions || !sessionId) { return false; }
     var records = getWftDeletionRecords(deletions);
-    var sessionUpdateMs = typeof getTimeMs === "function" ? getTimeMs(sessionUpdatedAt) : (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0);
+    var sessionUpdateMs = sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt)) ? Date.parse(sessionUpdatedAt) : 0;
     var normalizedStudentId = String(studentId || "");
     for (var i = 0; i < records.length; i++) {
         var rec = records[i] || {};
@@ -3015,10 +2802,9 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
             if (normalizedStudentId && rec.studentId && String(rec.studentId) !== normalizedStudentId) { continue; }
             var deletedMs = rec.deletedAt && !isNaN(Date.parse(rec.deletedAt)) ? Date.parse(rec.deletedAt) : 0;
             if (!deletedMs) { continue; }
-            // TOMBSTONE FIX: A deletion record always wins, regardless of timestamps.
-            // The old code let sessions with equal or newer timestamps survive a deletion,
-            // which caused deleted sessions to be re-uploaded by other devices.
-            return true;
+            // Deletion wins only when it is strictly newer than the session.
+            // Equal timestamps can happen during sync batches and should not delete live data.
+            if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
         }
     }
     return false;
@@ -3036,11 +2822,9 @@ function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessi
     return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt);
 }
 
-function chooseNewerSessionLegacy(sessionA, sessionB) {
-    // Legacy timestamp-only helper kept for compatibility with older split-file code.
-    // Runtime portfolio sync uses the image-preserving chooseNewerSession() defined in the V2 merge section below.
-    var timeA = sessionA && sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
-    var timeB = sessionB && sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
+function chooseNewerSession(sessionA, sessionB) {
+    var timeA = sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
+    var timeB = sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
     if (isNaN(timeA)) { timeA = 0; } if (isNaN(timeB)) { timeB = 0; }
     return (timeA >= timeB) ? sessionA : sessionB;
 }
@@ -3052,7 +2836,7 @@ function applyDeletionsToFile(file, deletions) {
         createdAt: file.createdAt, updatedAt: new Date().toISOString(), sessions: [] };
     var sessions = file.sessions || [];
     for (var i = 0; i < sessions.length; i++) {
-        if (!isSessionDeleted(sessions[i].id, file.studentId || "", deletions, getSessionModifiedTimeMs(sessions[i]))) { filtered.sessions.push(sessions[i]); }
+        if (!isSessionDeleted(sessions[i].id, file.studentId || "", deletions, sessions[i].updatedAt || sessions[i].createdAt)) { filtered.sessions.push(sessions[i]); }
     }
     return filtered;
 }
@@ -3441,7 +3225,7 @@ WFT_ASYNC_PORTFOLIO_ACCESS_V1 = false;
 WFT_INDEXEDDB_CACHE_V1 = false;
 WFT_STUDENT_ID_MAP_V1 = false;
 
-// Phase 3 — Cloud data split (DISABLED until manual migration testing)
+// Phase 3 — Cloud data split ENABLED (permanent commitment)
 // WFT_SPLIT_STUDENT_FILES_V1 = true;
 // WFT_LAZY_PORTFOLIO_LOAD_V1 = true;
 
@@ -3623,7 +3407,6 @@ var wftSyncState = {
     lastSyncedSettingsHash: "",
     lastSyncedPortfolioHash: "",
     lastSyncedDeletionsHash: "",
-    lastSyncAt: "",
 
     localSettingsCounter: 0,
     localPortfolioCounter: 0,
@@ -3641,14 +3424,6 @@ var wftSyncState = {
     authBlocked: false,
     lastError: null
 };
-
-// Per-snapshot memoization tables for the getLocalSettingsSnapshot
-// and getLocalPortfolioSnapshot helpers. A single sync run reads the
-// snapshot several times; without these, every read re-parses the
-// full JSON and re-walks the form DOM. Invalidated by the matching
-// markWft*Dirty() call whenever the underlying data changes.
-var wftSettingsSnapshotCache = { value: null };
-var wftPortfolioSnapshotCache = { value: null };
 
 function syncLegacyGoogleGlobalsFromState() {
     googleUser = wftSyncState.googleUser;
@@ -3681,149 +3456,10 @@ function syncStateFromLegacyGoogleGlobals() {
     }
 }
 
-// Short-TTL validity cache for isWftTokenValid(). See the function
-// comment below for the rationale. The cache auto-resets on every
-// token mutation since accessToken is nulled by 401/refresh paths.
-var wftTokenValidCache = { value: false, expiresAt: 0 };
-
 function isWftTokenValid() {
     if (!wftSyncState.accessToken) return false;
-    // Micro-cache: isWftTokenValid is called on every wftDriveFetch
-    // request, and a single sync run can issue dozens of Drive calls.
-    // The Date.now() comparison itself is cheap, but doing it 50+ times
-    // per run adds up. Cache the positive result for 250ms — token
-    // validity is monotonic on this timescale, and any 401/refresh
-    // path that invalidates the token also nulls accessToken above,
-    // so this returns false correctly on the next call.
-    var now = Date.now();
-    if (wftTokenValidCache.value && wftTokenValidCache.expiresAt > now) {
-        return true;
-    }
-    var valid;
-    if (!wftSyncState.tokenExpiresAt) {
-        valid = !!wftSyncState.accessToken;
-    } else {
-        valid = now < wftSyncState.tokenExpiresAt;
-    }
-    if (valid) {
-        wftTokenValidCache.value = true;
-        wftTokenValidCache.expiresAt = now + 250;
-    } else {
-        wftTokenValidCache.value = false;
-        wftTokenValidCache.expiresAt = 0;
-    }
-    return valid;
-}
-
-function getWftTokenMsRemaining() {
-    var expiry = Number(wftSyncState.tokenExpiresAt || getWftSessionTokenExpiry() || 0);
-    if (!expiry) return 0;
-    return expiry - Date.now();
-}
-
-function isWftTokenExpiringSoon(bufferMs) {
-    var msLeft = getWftTokenMsRemaining();
-    if (msLeft <= 0) return true;
-    return msLeft < (bufferMs || WFT_TOKEN_FRESHNESS_BUFFER_MS);
-}
-
-function clearWftTokenExpiryWarningTimer() {
-    if (wftTokenExpiryWarningTimer) {
-        clearTimeout(wftTokenExpiryWarningTimer);
-        wftTokenExpiryWarningTimer = null;
-    }
-}
-
-function scheduleWftTokenExpiryWarning() {
-    clearWftTokenExpiryWarningTimer();
-
-    if (!wftSyncState || !wftSyncState.accessToken || !wftSyncState.tokenExpiresAt) return;
-
-    var msUntilWarning = Number(wftSyncState.tokenExpiresAt || 0) - Date.now() - WFT_TOKEN_EXPIRY_WARNING_MS;
-    if (msUntilWarning <= 0) {
-        handleWftTokenExpiringSoon();
-        return;
-    }
-
-    wftTokenExpiryWarningTimer = setTimeout(function () {
-        handleWftTokenExpiringSoon();
-    }, msUntilWarning);
-}
-
-function handleWftTokenExpiringSoon() {
-    if (!wftSyncState || !wftSyncState.accessToken) return;
-
-    saveWftLocalSnapshotsBeforeHide();
-
-    if (isWftGisAuthEnabled()) {
-        if (!wftGisSilentRefreshInFlight) {
-            setDriveSyncStatus("syncing", "Refreshing Google session...", 8, "Checking your previous Drive connection.");
-            wftGisSilentRefreshInFlight = attemptSilentWftGisTokenRefresh("token-expiry-warning")
-                .then(function () {
-                    setDriveSyncStatus("success", "Google session refreshed.");
-                    return true;
-                })
-                .catch(function (e) {
-                    wftDebugWarn("[WFT Auth] Silent token refresh failed:", e);
-                    if (!isWftTokenValid()) {
-                        wftSyncState.authBlocked = true;
-                        clearWftTokenSession();
-                        setDriveSyncStatus("error", "Google session expired - click Sync to reconnect.");
-                    } else {
-                        setDriveSyncStatus("error", "Google session expires soon - click Sync to reconnect before saving to Drive.");
-                    }
-                    return false;
-                })
-                .then(function (result) {
-                    wftGisSilentRefreshInFlight = null;
-                    return result;
-                });
-        }
-        return;
-    }
-
-    if (!isWftTokenValid()) {
-        wftSyncState.authBlocked = true;
-        clearWftTokenSession();
-        setDriveSyncStatus("error", "Google session expired - click Sync to reconnect.");
-        return;
-    }
-
-    setDriveSyncStatus("error", "Google session expires soon - click Sync to reconnect before saving to Drive.");
-}
-
-function requestWftDriveReconnect(reason) {
-    saveWftLocalSnapshotsBeforeHide();
-    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...", 8, "Checking whether Drive access is still available.");
-    requestDriveAccess(function () {
-        if (reason === "explicit-sync-to-portfolio" || reason === "manual") {
-            manualSaveToDrive();
-        }
-    });
-}
-
-function ensureFreshWftDriveTokenBeforeSync(reason) {
-    syncStateFromLegacyGoogleGlobals();
-
-    if (!wftSyncState.accessToken && !driveAccessToken) {
-        requestWftDriveReconnect(reason || "manual");
-        return false;
-    }
-
-    if (!isWftTokenValid()) {
-        wftSyncState.authBlocked = true;
-        clearWftTokenSession();
-        requestWftDriveReconnect(reason || "manual");
-        return false;
-    }
-
-    if (isWftTokenExpiringSoon(WFT_TOKEN_FRESHNESS_BUFFER_MS)) {
-        requestWftDriveReconnect(reason || "manual");
-        return false;
-    }
-
-    scheduleWftTokenExpiryWarning();
-    return true;
+    if (!wftSyncState.tokenExpiresAt) return !!wftSyncState.accessToken;
+    return Date.now() < wftSyncState.tokenExpiresAt;
 }
 
 function clearPersistedGoogleState() {
@@ -3849,315 +3485,6 @@ function hasPersistedGoogleConnection() {
     return localStorage.getItem(GOOGLE_CONNECTED_CACHE_KEY) === "1";
 }
 
-function isWftGisAuthEnabled() {
-    return WFT_GIS_AUTH_V2 === true && typeof window !== "undefined";
-}
-
-function isWftGisLibraryReady() {
-    return isWftGisAuthEnabled() &&
-        !!(window.google && window.google.accounts && window.google.accounts.oauth2 &&
-        typeof window.google.accounts.oauth2.initTokenClient === "function");
-}
-
-function loadWftGisClientLibrary() {
-    if (!isWftGisAuthEnabled()) {
-        return Promise.reject(new Error("GIS auth is disabled"));
-    }
-
-    if (isWftGisLibraryReady()) {
-        return Promise.resolve(true);
-    }
-
-    if (wftGisScriptLoadPromise) {
-        return wftGisScriptLoadPromise;
-    }
-
-    wftGisScriptLoadPromise = new Promise(function (resolve, reject) {
-        var existing = null;
-        var scripts = document.getElementsByTagName("script");
-        for (var i = 0; i < scripts.length; i++) {
-            if (scripts[i] && scripts[i].src && scripts[i].src.indexOf(WFT_GIS_SCRIPT_URL) === 0) {
-                existing = scripts[i];
-                break;
-            }
-        }
-
-        function finishWhenReady() {
-            var attempts = 0;
-            var maxAttempts = 80;
-            var timer = setInterval(function () {
-                attempts += 1;
-                if (isWftGisLibraryReady()) {
-                    clearInterval(timer);
-                    resolve(true);
-                } else if (attempts >= maxAttempts) {
-                    clearInterval(timer);
-                    reject(new Error("Google Identity Services did not load"));
-                }
-            }, 100);
-        }
-
-        if (existing) {
-            finishWhenReady();
-            return;
-        }
-
-        var script = document.createElement("script");
-        script.src = WFT_GIS_SCRIPT_URL;
-        script.async = true;
-        script.defer = true;
-        script.onload = function () { finishWhenReady(); };
-        script.onerror = function () { reject(new Error("Could not load Google Identity Services")); };
-        document.head.appendChild(script);
-    });
-
-    return wftGisScriptLoadPromise;
-}
-
-function getWftGisLoginHint() {
-    var cachedUser = getCachedGoogleUser();
-    if (cachedUser && cachedUser.email) return cachedUser.email;
-    if (googleUser && googleUser.email) return googleUser.email;
-    return "";
-}
-
-function getWftGisTokenClient() {
-    var loginHint;
-    var config;
-
-    if (!isWftGisLibraryReady()) return null;
-    if (wftGisTokenClient) return wftGisTokenClient;
-
-    config = {
-        client_id: GOOGLE_CLIENT_ID,
-        scope: WFT_GOOGLE_AUTH_SCOPE,
-        include_granted_scopes: true,
-        prompt: "",
-        callback: handleWftGisTokenResponse,
-        error_callback: handleWftGisTokenError
-    };
-
-    loginHint = getWftGisLoginHint();
-    if (loginHint) {
-        config.login_hint = loginHint;
-    }
-
-    wftGisTokenClient = window.google.accounts.oauth2.initTokenClient(config);
-    return wftGisTokenClient;
-}
-
-function makeWftGisError(message, detail) {
-    var err = new Error(message || "Google authorization failed");
-    if (detail) {
-        err.detail = detail;
-        err.type = detail.type || detail.error || "";
-        err.error = detail.error || "";
-        err.error_description = detail.error_description || detail.message || "";
-    }
-    return err;
-}
-
-function completeWftGisTokenRequest(err, response) {
-    var record = wftGisActiveTokenRequest;
-    wftGisActiveTokenRequest = null;
-
-    if (!record) return;
-
-    if (err) {
-        record.reject(err);
-        return;
-    }
-
-    record.resolve(response);
-}
-
-function handleWftGisTokenError(err) {
-    completeWftGisTokenRequest(makeWftGisError("Google authorization popup was cancelled or could not open.", err || {}), null);
-}
-
-function hasWftGisGrantedRequiredScopes(tokenResponse) {
-    var requiredScopes;
-    var grantedScopes;
-    var args;
-    var i;
-
-    if (!tokenResponse || !tokenResponse.access_token) return false;
-
-    if (window.google && window.google.accounts && window.google.accounts.oauth2 &&
-        typeof window.google.accounts.oauth2.hasGrantedAllScopes === "function") {
-        requiredScopes = WFT_GOOGLE_AUTH_SCOPE.split(/\s+/);
-        args = [tokenResponse].concat(requiredScopes);
-        try {
-            return window.google.accounts.oauth2.hasGrantedAllScopes.apply(window.google.accounts.oauth2, args);
-        } catch (e) { }
-    }
-
-    if (!tokenResponse.scope) return true;
-
-    grantedScopes = String(tokenResponse.scope || "").split(/\s+/);
-    requiredScopes = WFT_GOOGLE_AUTH_SCOPE.split(/\s+/);
-    for (i = 0; i < requiredScopes.length; i++) {
-        if (grantedScopes.indexOf(requiredScopes[i]) === -1) return false;
-    }
-    return true;
-}
-
-function handleWftGisTokenResponse(response) {
-    var accessToken;
-    var expiresIn;
-    var expiresAt;
-    var record = wftGisActiveTokenRequest;
-
-    if (!response || response.error) {
-        completeWftGisTokenRequest(makeWftGisError("Google authorization failed.", response || {}), null);
-        return;
-    }
-
-    accessToken = response.access_token;
-    if (!accessToken) {
-        completeWftGisTokenRequest(makeWftGisError("Google did not return a Drive access token.", response || {}), null);
-        return;
-    }
-
-    if (!hasWftGisGrantedRequiredScopes(response)) {
-        completeWftGisTokenRequest(makeWftGisError("Google Drive permission was not granted.", response || {}), null);
-        setDriveSyncStatus("error", "Google Drive permission was not granted. Please sign in again and allow Drive access.");
-        return;
-    }
-
-    expiresIn = parseInt(response.expires_in || "3600", 10);
-    if (!isFinite(expiresIn) || expiresIn <= 0) {
-        expiresIn = 3600;
-    }
-    expiresAt = Date.now() + Math.max(60, expiresIn - 30) * 1000;
-
-    saveWftTokenSession(accessToken, expiresAt);
-    try { localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, "1"); } catch (e) { }
-
-    wftSyncState.accessToken = accessToken;
-    wftSyncState.tokenExpiresAt = expiresAt;
-    wftSyncState.signedIn = true;
-    wftSyncState.authBlocked = false;
-    driveAccessToken = accessToken;
-    syncStateFromLegacyGoogleGlobals();
-    clearWftSyncBlockState();
-    scheduleWftTokenExpiryWarning();
-
-    wftSyncLog("[WFT Sync][AUTH] GIS token received", { hasAccessToken: true, expiresIn: expiresIn, scope: response.scope || "" });
-
-    fetchGoogleUserInfo(accessToken);
-
-    if (record && typeof record.onSuccess === "function") {
-        setTimeout(function () {
-            try { record.onSuccess(); } catch (e2) { wftDebugError("[WFT Auth] post-auth callback failed:", e2); }
-        }, 150);
-    }
-
-    completeWftGisTokenRequest(null, { accessToken: accessToken, expiresAt: expiresAt, response: response });
-}
-
-function requestWftGisAccessToken(promptValue, onSuccess, options) {
-    var record;
-    var promise;
-    var externalResolve;
-    var externalReject;
-
-    options = options || {};
-    promptValue = typeof promptValue === "string" ? promptValue : "";
-
-    if (!isWftGisAuthEnabled()) {
-        return Promise.reject(new Error("GIS auth is disabled"));
-    }
-
-    if (wftGisActiveTokenRequest && wftGisActiveTokenRequest.promise) {
-        return wftGisActiveTokenRequest.promise.then(function (result) {
-            if (typeof onSuccess === "function") {
-                onSuccess();
-            }
-            return result;
-        });
-    }
-
-    promise = new Promise(function (resolve, reject) {
-        externalResolve = resolve;
-        externalReject = reject;
-    });
-
-    record = {
-        resolve: externalResolve,
-        reject: externalReject,
-        onSuccess: onSuccess,
-        promptValue: promptValue,
-        reason: options.reason || "",
-        promise: promise
-    };
-
-    wftGisActiveTokenRequest = record;
-
-    loadWftGisClientLibrary().then(function () {
-        var client = getWftGisTokenClient();
-        var requestConfig;
-        if (!client) {
-            throw new Error("Google Identity Services token client is unavailable");
-        }
-
-        requestConfig = {
-            scope: WFT_GOOGLE_AUTH_SCOPE,
-            include_granted_scopes: true,
-            prompt: promptValue
-        };
-
-        client.requestAccessToken(requestConfig);
-    }).catch(function (err) {
-        if (wftGisActiveTokenRequest === record) {
-            wftGisActiveTokenRequest = null;
-        }
-        externalReject(err);
-    });
-
-    return promise;
-}
-
-function attemptSilentWftGisTokenRefresh(reason) {
-    var now = Date.now();
-
-    if (!isWftGisAuthEnabled()) {
-        return Promise.reject(new Error("GIS auth is disabled"));
-    }
-
-    if (now - wftLastSilentGisAttemptAt < WFT_GIS_SILENT_RETRY_COOLDOWN_MS) {
-        return Promise.reject(new Error("Silent Google refresh is cooling down"));
-    }
-
-    wftLastSilentGisAttemptAt = now;
-    return requestWftGisAccessToken("none", null, { reason: reason || "silent-refresh", silent: true });
-}
-
-function attemptWftGisSilentBootstrapIfConnected(reason) {
-    if (!isWftGisAuthEnabled() || !hasPersistedGoogleConnection()) {
-        return Promise.resolve(false);
-    }
-
-    if (wftGisSilentBootstrapInFlight) {
-        return wftGisSilentBootstrapInFlight;
-    }
-
-    setDriveSyncStatus("syncing", "Reconnecting to Google Drive...", 8, "Checking whether Drive access is still available.");
-    wftGisSilentBootstrapInFlight = attemptSilentWftGisTokenRefresh(reason || "startup")
-        .then(function () {
-            wftGisSilentBootstrapInFlight = null;
-            return true;
-        })
-        .catch(function (e) {
-            wftDebugWarn("[WFT Auth] Silent GIS bootstrap failed:", e);
-            wftGisSilentBootstrapInFlight = null;
-            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
-            return false;
-        });
-
-    return wftGisSilentBootstrapInFlight;
-}
-
 // Read OAuth tokens delivered via the URL fragment (#) after Google redirects
 // back to the GitHub Pages app using the implicit grant flow.
 function checkHashForOAuthTokens() {
@@ -4174,6 +3501,8 @@ function checkHashForOAuthTokens() {
         var expiresAt = Date.now() + Math.max(60, (expiresIn - 30)) * 1000;
         saveWftTokenSession(accessToken, expiresAt);
         try {
+            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
             localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, '1');
         } catch (storageErr) { }
 
@@ -4181,7 +3510,6 @@ function checkHashForOAuthTokens() {
         wftSyncState.tokenExpiresAt = expiresAt;
         wftSyncState.signedIn = true;
         driveAccessToken = accessToken;
-        scheduleWftTokenExpiryWarning();
         wftSyncLog("[WFT Sync][AUTH] OAuth token received", { hasAccessToken: true, expiresIn: expiresIn, scope: params.get("scope") || "" });
 
         history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
@@ -4223,19 +3551,13 @@ function restoreGoogleStateFromStorage() {
     wftSyncState.accessToken = null;
     wftSyncState.tokenExpiresAt = 0;
     wftSyncState.signedIn = false;
-    clearWftTokenExpiryWarningTimer();
     try {
         localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
         localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
     } catch (e) { }
     showSignedOutState();
     if (cachedUser || hasConnectionMarker) {
-        if (isWftGisAuthEnabled()) {
-            showDriveDisconnectedState("Reconnecting to Google Drive...");
-            attemptWftGisSilentBootstrapIfConnected("restore-storage");
-        } else {
-            setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
-        }
+        setDriveSyncStatus("error", "Session expired - please sign in again.");
     }
     return false;
 }
@@ -4272,7 +3594,6 @@ function restoreWftOAuthDraftAfterRedirect() {
         var ta = document.getElementById("studentWriting");
         if (ta && !String(ta.value || "").trim() && draft.text.trim()) {
             ta.value = draft.text;
-            ta.setAttribute("data-wft-oauth-draft-restored", "true");
         }
         if (draft.selectedStudent) {
             selectedStudent = draft.selectedStudent;
@@ -4294,9 +3615,10 @@ function restoreWftOAuthDraftAfterRedirect() {
     }
 }
 
-function requestDriveAccessViaRedirect(onSuccess, options) {
-    var scope = WFT_GOOGLE_AUTH_SCOPE;
+function requestDriveAccess(onSuccess, options) {
+    var scope = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
     var redirectUri = "https://thepick.github.io/writing-feedback-tool/";
+
     var authUrl = "https://accounts.google.com/o/oauth2/auth"
         + "?client_id=" + encodeURIComponent(GOOGLE_CLIENT_ID)
         + "&redirect_uri=" + encodeURIComponent(redirectUri)
@@ -4309,46 +3631,6 @@ function requestDriveAccessViaRedirect(onSuccess, options) {
 
     saveWftOAuthDraftBeforeRedirect(typeof onSuccess === "function" ? "sync" : "sign-in");
     window.location.href = authUrl;
-}
-
-function requestDriveAccess(onSuccess, options) {
-    var promptValue;
-    var reason;
-
-    options = options || {};
-
-    if (isWftGisAuthEnabled()) {
-        promptValue = typeof options.prompt === "string" ? options.prompt : "";
-        reason = options.reason || (typeof onSuccess === "function" ? "sync" : "sign-in");
-        saveWftLocalSnapshotsBeforeHide();
-        setDriveSyncStatus(
-            "syncing",
-            promptValue === "none" ? "Refreshing Google session..." : "Connecting to Google Drive...",
-            promptValue === "none" ? 8 : 5,
-            promptValue === "none" ? "Checking your previous Drive connection." : "Local data remains saved on this device."
-        );
-
-        requestWftGisAccessToken(promptValue, onSuccess, { reason: reason, silent: promptValue === "none" })
-            .catch(function (err) {
-                var errType = String((err && (err.type || err.error || err.message)) || "");
-                wftDebugWarn("[WFT Auth] GIS token request failed:", err);
-
-                if (promptValue === "none" || options.noRedirectFallback || /popup_closed/i.test(errType)) {
-                    setDriveSyncStatus("error", "Google Drive reconnect was not completed. Click Sync to try again.");
-                    return;
-                }
-
-                if (WFT_GIS_FALLBACK_TO_REDIRECT) {
-                    setDriveSyncStatus("syncing", "Opening Google sign-in...", 10, "Allow Drive access so the app can sync your class and portfolio data.");
-                    requestDriveAccessViaRedirect(onSuccess, options);
-                } else {
-                    setDriveSyncStatus("error", "Google Drive reconnect failed. Please try again.");
-                }
-            });
-        return;
-    }
-
-    requestDriveAccessViaRedirect(onSuccess, options);
 }
 
 function handleGoogleSignIn() {
@@ -4421,30 +3703,14 @@ function fetchGoogleUserInfo(token) {
             wftSyncState.tokenExpiresAt = expiry;
             wftSyncState.signedIn = true;
             syncStateFromLegacyGoogleGlobals();
-            scheduleWftTokenExpiryWarning();
         }
 
         showSignedInState(info);
 
         // ── WFT Sync V2: use V2 merge/sync instead of old Drive loading ──
         if (WFT_SYNC_ENGINE_V2) {
-            syncWftNow("sign-in", { immediate: true })
-                .then(function() {
-                    return new Promise(function(resolve) {
-                        syncPendingPortfolioMedia(function() { resolve(); });
-                    });
-                })
-                .then(function() {
-                    return syncWftNow("sign-in-media-complete", { immediate: true });
-                })
-                .then(function() {
-                    startWftSyncPolling();
-                })
-                .catch(function(e) {
-                    wftSyncErrorLog("Sign-in sync failed", e);
-                    setDriveSyncStatus("error", "Google Drive sync failed.", null, "Local data is still available.");
-                    startWftSyncPolling();
-                });
+            startWftSyncPolling();
+            syncWftNow("sign-in", { immediate: false });
         } else {
             loadSettingsFromDrive();
             loadPortfolioFromDrive();
@@ -4461,40 +3727,8 @@ function fetchGoogleUserInfo(token) {
             googleUser = { name: "Connected" };
             showSignedInState(googleUser);
         }
-        setDriveSyncStatus("error", "Reconnect may be needed", null, "Local data is still available.");
+        setDriveSyncStatus("error", "Reconnect may be needed");
     });
-}
-
-function toWftTitleCaseNamePart(part) {
-    part = String(part || "").trim();
-    if (!part) return "";
-    if (part.indexOf("@") !== -1) return part;
-    return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-}
-
-function formatGoogleDisplayNameForHeader(displayName) {
-    var raw = String(displayName || "").trim();
-    var parts;
-    var first;
-    var last;
-    var initials = [];
-    var i;
-
-    if (!raw) return "Connected";
-    if (raw.indexOf("@") !== -1) return raw;
-
-    parts = raw.split(/\s+/).filter(function(part) { return !!part; });
-    if (parts.length === 1) return toWftTitleCaseNamePart(parts[0]);
-    if (parts.length === 2) {
-        return toWftTitleCaseNamePart(parts[0]) + " " + toWftTitleCaseNamePart(parts[1]);
-    }
-
-    first = toWftTitleCaseNamePart(parts[0]);
-    last = toWftTitleCaseNamePart(parts[parts.length - 1]);
-    for (i = 1; i < parts.length - 1; i++) {
-        if (parts[i]) initials.push(parts[i].charAt(0).toUpperCase() + ".");
-    }
-    return first + " " + initials.join(" ") + (initials.length ? " " : "") + last;
 }
 
 function showSignedInState(info) {
@@ -4503,14 +3737,10 @@ function showSignedInState(info) {
     if (signInBtnHeader) signInBtnHeader.style.display = "none";
     if (userInfoHeader) userInfoHeader.style.display = "flex";
     var displayName = (info && (info.name || info.email)) ? (info.name || info.email) : "Connected";
-    var compactDisplayName = formatGoogleDisplayNameForHeader(displayName);
     var photoUrl = (info && (info.picture || info.photoURL)) ? (info.picture || info.photoURL) : "";
-    setDuplicateSyncMaintenanceStatus("Google Drive is connected. Use Check now if you want to look for older duplicate sync files.", 0, false);
+    setDuplicateSyncMaintenanceStatus("Checking for duplicate sync files after Drive connects...", 0, true);
     var nameElHeader = document.getElementById("googleUserNameHeader");
-    if (nameElHeader) {
-        nameElHeader.textContent = compactDisplayName;
-        nameElHeader.title = displayName;
-    }
+    if (nameElHeader) nameElHeader.textContent = displayName;
     var avatarHeader = document.getElementById("googleUserAvatarHeader");
     if (avatarHeader) {
         if (photoUrl) {
@@ -4520,12 +3750,11 @@ function showSignedInState(info) {
             avatarHeader.style.display = "none";
         }
     }
-    setDriveSyncStatus("syncing", "Connecting to Google Drive...", 5, "Local data remains saved on this device.");
+    setDriveSyncStatus("syncing", "Connecting...");
 }
 
 // ── WFT Sync V2: reset sync state on sign-out ──
 function resetWftSyncStateAfterSignOut() {
-    clearWftTokenExpiryWarningTimer();
     if (wftSyncState.syncDebounceTimer) {
         clearTimeout(wftSyncState.syncDebounceTimer);
         wftSyncState.syncDebounceTimer = null;
@@ -4558,7 +3787,16 @@ function resetWftSyncStateAfterSignOut() {
     wftSyncState.lastSyncedDeletionsCounter = 0;
     wftSyncState.lastPollAt = 0;
     clearWftSyncBlockState();
+    // ── WFT_BROADCAST_CHANNEL_V1: reset channel reference on re-init ──
+    if (WFT_BROADCAST_CHANNEL_V1) {
+        try { if (wftSyncChannel && typeof wftSyncChannel.close === "function") wftSyncChannel.close(); } catch (e) {}
+        wftSyncChannel = null;
+    }
 }
+// ── WFT_BROADCAST_CHANNEL_V1: BroadcastChannel for multi-tab sync coordination ──
+// ES5 compatible; creation is guarded so it fails gracefully in older browsers.
+var wftSyncChannel = null;
+
 function clearWftLocalStorageAfterSignOut() {
     // v5: signing out disconnects Google/Drive but keeps local app data on this device.
     // Do not remove wft_settings, wft_students, wft_selectedStudent, wft_portfolio,
@@ -4620,23 +3858,14 @@ function resetWftResultUiToFreshSlate() {
     var diffControlsEl = document.getElementById("diffControls");
     if (diffControlsEl) diffControlsEl.style.display = "none";
 
-    var debugTextIds = [
-        "step1PromptRaw",
-        "step1Raw",
-        "step2PromptRaw",
-        "step2Raw",
-        "step3PromptRaw",
-        "step3Raw",
-        "detailedFeedbackInputRaw",
-        "debugRaw"
-    ];
-    for (var debugTextIndex = 0; debugTextIndex < debugTextIds.length; debugTextIndex += 1) {
-        var debugTextEl = document.getElementById(debugTextIds[debugTextIndex]);
-        if (debugTextEl) debugTextEl.textContent = "";
-    }
+    var step1RawEl = document.getElementById("step1Raw");
+    if (step1RawEl) step1RawEl.textContent = "";
 
-    var debugSummaryEl = document.getElementById("debugSummary");
-    if (debugSummaryEl) debugSummaryEl.innerHTML = "No debug summary yet.";
+    var step3RawEl = document.getElementById("step3Raw");
+    if (step3RawEl) step3RawEl.textContent = "";
+
+    var debugRawEl = document.getElementById("debugRaw");
+    if (debugRawEl) debugRawEl.textContent = "";
 
     var grammarCalcEl = document.getElementById("grammarCalc");
     if (grammarCalcEl) grammarCalcEl.innerHTML = "";
@@ -4667,8 +3896,8 @@ function resetWftResultUiToFreshSlate() {
     var notebookDetailedAssessmentEl = document.getElementById("notebookDetailedAssessment");
     if (notebookDetailedAssessmentEl) notebookDetailedAssessmentEl.innerHTML = "";
 
-    var notebookPage2ContentEl = document.getElementById("notebookPage2Content");
-    if (notebookPage2ContentEl) notebookPage2ContentEl.innerHTML = '<div class="section-title">Next Time Writing Guide</div>';
+    var notebookCorrectedTextEl = document.getElementById("notebookCorrectedText");
+    if (notebookCorrectedTextEl) notebookCorrectedTextEl.innerHTML = "-";
 
     var portfolioContentEl = document.getElementById("portfolioContent");
     if (portfolioContentEl) portfolioContentEl.innerHTML = '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>';
@@ -4709,16 +3938,12 @@ function resetWftInputUiToFreshSlate() {
     var grammarStrictnessEl = document.getElementById("grammarStrictness");
     if (grammarStrictnessEl) grammarStrictnessEl.value = "3";
 
-    if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay("3");
-    else {
-        var grammarStrictnessValEl = document.getElementById("grammarStrictnessVal");
-        if (grammarStrictnessValEl) grammarStrictnessValEl.textContent = "3";
-    }
+    var grammarStrictnessValEl = document.getElementById("grammarStrictnessVal");
+    if (grammarStrictnessValEl) grammarStrictnessValEl.textContent = "3";
 
     var assessScriptQualityEl = document.getElementById("assessScriptQuality");
     if (assessScriptQualityEl) assessScriptQualityEl.checked = false;
 
-    applyRememberApiKeyStoredPreferenceToUi();
     var apiKeyInputEl = document.getElementById("apiKeyInput");
     if (apiKeyInputEl) apiKeyInputEl.value = getStoredApiKey();
 
@@ -4761,32 +3986,40 @@ function resetWftRuntimeWorkAfterSignOut() {
 }
 
 function resetWftLocalWorkAfterSignOut() {
-    withWftSuppressedDirtyMarks(function () {
-        clearWftLocalStorageAfterSignOut();
-        resetWftRuntimeWorkAfterSignOut();
-        resetWftInputUiToFreshSlate();
-        refreshApiKeyRuntimeValue();
-        resetWftResultUiToFreshSlate();
+    var previousSuppress = typeof wftSuppressDirtyMarks !== "undefined" ? wftSuppressDirtyMarks : false;
 
-        try { renderStudentList(); } catch (e2) { }
-        try { populateStudentDropdown(); } catch (e3) { }
-        try { refreshPortfolioDropdown(); } catch (e4) { }
-        try { renderStudentPortfolio(); } catch (e5) { }
-        try { updateExportSelectedStudentButton(); } catch (e6) { }
-        try { updateSelectedImagePreview(); } catch (e7) { }
-        try { updateScoreDisplay(null); } catch (e8) { }
-        try { syncUiState(); } catch (e9) { }
-        try { updateSyncPortfolioButtonState(); } catch (e10) { }
-        try { refreshScoreWeightingDescription(); } catch (e11) { }
-        try { updateScriptQualityToggleVisibility(); } catch (e12) { }
-        try {
-            var settingsDrawerEl = document.getElementById("settingsDrawer");
-            var settingsDrawerOverlayEl = document.getElementById("settingsDrawerOverlay");
-            if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
-            if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
-        } catch (e13) { }
-        try { switchTab("tool"); } catch (e14) { }
-    });
+    if (typeof wftSuppressDirtyMarks !== "undefined") {
+        wftSuppressDirtyMarks = true;
+    }
+
+    clearWftLocalStorageAfterSignOut();
+    resetWftRuntimeWorkAfterSignOut();
+    resetWftInputUiToFreshSlate();
+    refreshApiKeyRuntimeValue();
+    resetWftResultUiToFreshSlate();
+
+    try { renderStudentList(); } catch (e2) { }
+    try { populateStudentDropdown(); } catch (e3) { }
+    try { refreshPortfolioDropdown(); } catch (e4) { }
+    try { renderStudentPortfolio(); } catch (e5) { }
+    try { updateExportSelectedStudentButton(); } catch (e6) { }
+    try { updateSelectedImagePreview(); } catch (e7) { }
+    try { updateScoreDisplay(null); } catch (e8) { }
+    try { syncUiState(); } catch (e9) { }
+    try { updateSyncPortfolioButtonState(); } catch (e10) { }
+    try { refreshScoreWeightingDescription(); } catch (e11) { }
+    try { updateScriptQualityToggleVisibility(); } catch (e12) { }
+    try {
+        var settingsDrawerEl = document.getElementById("settingsDrawer");
+        var settingsDrawerOverlayEl = document.getElementById("settingsDrawerOverlay");
+        if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
+        if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
+    } catch (e13) { }
+    try { switchTab("tool"); } catch (e14) { }
+
+    if (typeof wftSuppressDirtyMarks !== "undefined") {
+        wftSuppressDirtyMarks = previousSuppress;
+    }
 }
 
 
@@ -4795,21 +4028,10 @@ function handleGoogleSignOut() {
     function finishSignOut() {
         // Revoke the access token with Google
         if (driveAccessToken) {
-            if (isWftGisLibraryReady() && window.google.accounts.oauth2 && typeof window.google.accounts.oauth2.revoke === "function") {
-                try {
-                    window.google.accounts.oauth2.revoke(driveAccessToken, function () {});
-                } catch (revokeErr) {
-                    fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
-                        method: "POST",
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" }
-                    }).catch(function() {});
-                }
-            } else {
-                fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" }
-                }).catch(function() {});
-            }
+            fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            }).catch(function() {});
         }
         clearPersistedGoogleState();
         clearWftTokenSession();
@@ -4821,21 +4043,7 @@ function handleGoogleSignOut() {
         try { updateSyncPortfolioButtonState(); } catch (e) { }
     }
 
-    if (driveAccessToken && WFT_SYNC_ENGINE_V2 && !WFT_SYNC_ENGINE_V2_SAFE_MODE && !(typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && hasWftDirtyChanges()) {
-        setDriveSyncStatus('syncing', 'Saving changes before sign out...');
-        syncPendingPortfolioMedia(function() {
-            flushWftCloudSyncNow("signout").then(function() {
-                finishSignOut();
-            }).catch(function(e) {
-                wftSyncErrorLog("Sign-out sync failed", e);
-                setDriveSyncStatus("error", "Local changes may not be saved to Drive. Sign in again to retry.");
-                finishSignOut();
-            });
-        });
-        return;
-    }
-
-    if (driveAccessToken && !WFT_SYNC_ENGINE_V2) {
+    if (driveAccessToken) {
         setDriveSyncStatus('syncing', 'Syncing before sign out...');
         syncAllToDrive(function() {
             finishSignOut();
@@ -4846,219 +4054,17 @@ function handleGoogleSignOut() {
     finishSignOut();
 }
 
-var wftDriveSyncProgressHideTimer = null;
-
-function clampWftSyncProgress(progress) {
-    var numeric = Number(progress);
-    if (!isFinite(numeric)) return null;
-    if (numeric < 0) return 0;
-    if (numeric > 100) return 100;
-    return numeric;
-}
-
-function getCompactDriveSyncText(state, text) {
-    var raw = String(text || "");
-    var lower = raw.toLowerCase();
-
-    if (state === "syncing") return "Syncing...";
-    if (state === "synced" || state === "success") return "Synced";
-    if (state === "paused") return "Paused";
-    if (state === "error") {
-        if (lower.indexOf("offline") !== -1) return "Offline";
-        if (lower.indexOf("expired") !== -1 || lower.indexOf("reconnect") !== -1 || lower.indexOf("disconnected") !== -1) return "Reconnect";
-        return "Sync issue";
-    }
-
-    return raw || "Not synced";
-}
-
-function shouldShowDriveSyncPanel(state, progress, detail) {
-    if (state === "syncing") return true;
-    if (state === "synced" && progress !== null) return true;
-    if (state === "error" && (detail || progress !== null)) return true;
-    if (state === "paused" && detail) return true;
-    return false;
-}
-
-function updateWftSyncProgressDisplay(wrapId, barId, detailId, state, progress, detail) {
-    var wrap = document.getElementById(wrapId);
-    var bar = document.getElementById(barId);
-    var detailEl = document.getElementById(detailId);
-    var pct = clampWftSyncProgress(progress);
-    var shouldShowProgress = state === "syncing" || pct !== null;
-
-    if (wrap) {
-        if (shouldShowProgress && pct !== null && state !== "error" && state !== "paused" && state !== "") {
-            wrap.classList.add("is-visible");
-            wrap.setAttribute("aria-hidden", "false");
-            wrap.setAttribute("aria-valuenow", String(Math.round(pct)));
-        } else {
-            wrap.classList.remove("is-visible");
-            wrap.setAttribute("aria-hidden", "true");
-            wrap.setAttribute("aria-valuenow", "0");
-        }
-    }
-
-    if (bar) {
-        bar.style.width = (pct === null ? 0 : pct) + "%";
-    }
-
-    if (detailEl) {
-        detailEl.textContent = detail || "";
-        if (detail) {
-            detailEl.classList.add("is-visible");
-        } else {
-            detailEl.classList.remove("is-visible");
-        }
-    }
-}
-
-function updateDriveSyncPanel(state, text, progress, detail) {
-    var panel = document.getElementById("driveSyncPanel");
-    var title = document.getElementById("driveSyncPanelTitle");
-    var dot = document.getElementById("driveSyncDotPanel");
-    var pct = clampWftSyncProgress(progress);
-    var safeText = text || getCompactDriveSyncText(state, text);
-    var shouldShow = shouldShowDriveSyncPanel(state, pct, detail);
-
-    if (title) title.textContent = safeText;
-    if (dot) dot.className = "drive-sync-dot" + (state ? " " + state : "");
-    updateWftSyncProgressDisplay("driveSyncProgressWrapPanel", "driveSyncProgressBarPanel", "driveSyncDetailPanel", state, progress, detail || "");
-
-    if (panel) {
-        if (shouldShow) {
-            panel.classList.add("is-visible");
-            panel.setAttribute("aria-hidden", "false");
-        } else {
-            panel.classList.remove("is-visible");
-            panel.setAttribute("aria-hidden", "true");
-        }
-    }
-}
-
-function hideDriveSyncProgressBars() {
-    updateWftSyncProgressDisplay("driveSyncProgressWrap", "driveSyncProgressBar", "driveSyncDetail", "", null, "");
-    updateWftSyncProgressDisplay("driveSyncProgressWrapPanel", "driveSyncProgressBarPanel", "driveSyncDetailPanel", "", null, "");
-    updateDriveSyncPanel("", "", null, "");
-}
-
-function setDriveSyncStatus(state, text, progress, detail) {
+function setDriveSyncStatus(state, text) {
     wftSyncLog("[WFT Sync] status", state || "", text || "", getWftSyncDebugSnapshot());
-    if (wftDriveSyncProgressHideTimer) {
-        clearTimeout(wftDriveSyncProgressHideTimer);
-        wftDriveSyncProgressHideTimer = null;
-    }
-
     var dot = document.getElementById("driveSyncDot");
     var txt = document.getElementById("driveSyncText");
     var dotHeader = document.getElementById("driveSyncDotHeader");
     var txtHeader = document.getElementById("driveSyncTextHeader");
     var dotClass = "drive-sync-dot" + (state ? " " + state : "");
-    var compactText = getCompactDriveSyncText(state, text);
-
-    if (state === "synced" && text !== "Ready") {
-        recordWftDriveSyncSuccess(text || "drive-sync");
-    }
     if (dot) { dot.className = dotClass; }
     if (dotHeader) { dotHeader.className = dotClass; }
     if (txt) txt.textContent = text || "";
-    if (txtHeader) txtHeader.textContent = compactText;
-    if (txtHeader) txtHeader.title = text || compactText;
-
-    updateWftSyncProgressDisplay("driveSyncProgressWrap", "driveSyncProgressBar", "driveSyncDetail", state, progress, detail);
-    updateDriveSyncPanel(state, text, progress, detail || "");
-}
-
-function setDriveSyncProgress(text, progress, detail) {
-    setDriveSyncStatus("syncing", text, progress, detail || "");
-}
-
-function finishDriveSyncProgress(text, detail) {
-    setDriveSyncStatus("synced", text || "Synced", 100, detail || "");
-    wftDriveSyncProgressHideTimer = setTimeout(function () {
-        wftDriveSyncProgressHideTimer = null;
-        hideDriveSyncProgressBars();
-    }, 450);
-}
-
-
-function getWftSyncProgressDetail(reason) {
-    reason = String(reason || "");
-
-    if (reason === "initial-load" || reason === "startup" || reason === "page-load") {
-        return "Checking Drive data from your previous session.";
-    }
-
-    if (reason === "sign-in") {
-        return "First sync may take a moment while saved records are checked.";
-    }
-
-    if (reason === "explicit-sync-to-portfolio") {
-        return "Saving the current writing record to Drive.";
-    }
-
-    if (reason === "manual") {
-        return "Running a manual Drive sync.";
-    }
-
-    if (reason === "queued-after-current") {
-        return "Finishing a queued sync after recent changes.";
-    }
-
-    if (reason === "online") {
-        return "Back online. Checking Drive for saved changes.";
-    }
-
-    return "Local data remains saved on this device.";
-}
-
-
-function showDriveSyncPausedForSafety() {
-    setDriveSyncStatus("paused", "Drive sync paused", null, "Local changes are still saved on this device.");
-}
-
-function isDriveSyncAllowed() {
-    if (!WFT_SYNC_ENGINE_V2) return false;
-    if (WFT_SYNC_ENGINE_V2_SAFE_MODE) return false;
-    if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) return false;
-
-    // Compatible with both the V2 sync state and the legacy Drive token.
-    // Do not require the legacy signedIn/driveAccessToken globals when V2 already has auth.
-    var hasV2Auth = (typeof wftSyncState !== "undefined" && wftSyncState && (wftSyncState.signedIn || wftSyncState.accessToken));
-    var hasLegacyAuth = (typeof driveAccessToken !== "undefined" && !!driveAccessToken);
-    return !!(hasV2Auth || hasLegacyAuth) && isWftTokenValid();
-}
-
-function portfolioHasPendingDriveMedia(portfolio) {
-    var data = normalizePortfolioShape(portfolio || {});
-    var studentNames = Object.keys(data || {});
-    for (var i = 0; i < studentNames.length; i += 1) {
-        var student = data[studentNames[i]] || {};
-        var sessions = Array.isArray(student.sessions) ? student.sessions : [];
-        for (var j = 0; j < sessions.length; j += 1) {
-            var images = Array.isArray(sessions[j].images) ? sessions[j].images : [];
-            for (var k = 0; k < images.length; k += 1) {
-                if (images[k] && images[k].pendingDriveUpload) return true;
-            }
-        }
-    }
-    return false;
-}
-
-function hasWftDirtyChanges() {
-    if (typeof wftSyncState !== "undefined" && wftSyncState) {
-        if (wftSyncState.pendingSettingsPush || wftSyncState.pendingPortfolioPush || wftSyncState.pendingDeletionsPush) return true;
-    }
-    try {
-        if (typeof isWftPortfolioIndexDirty === "function" && isWftPortfolioIndexDirty()) return true;
-    } catch (e) { }
-    try {
-        if (typeof getPendingPortfolioSync === "function" && getPendingPortfolioSync()) return true;
-    } catch (e2) { }
-    try {
-        if (portfolioHasPendingDriveMedia(getPortfolioData())) return true;
-    } catch (e3) { }
-    return false;
+    if (txtHeader) txtHeader.textContent = text || "";
 }
 
 // ── WFT Sync Engine V2 guarded Drive fetch ──
@@ -5092,30 +4098,19 @@ function wftDriveFetch(url, options) {
     options = options || {};
     wftSyncLog("[WFT Sync] Drive fetch start", (options.method || "GET"), url);
 
-    // SECURITY: This allowlist is the only thing standing between the
-    // Drive access token and a request body, so it must stay tight.
-    // The two whitelisted prefixes are the only Google domains any
-    // Drive API endpoint lives on. `oauth2.googleapis.com` (token
-    // revoke) and `www.googleapis.com/oauth2/v2/userinfo` are NOT
-    // routed through wftDriveFetch on purpose — they are called via
-    // raw `fetch` in fetchGoogleUserInfo() and handleGoogleSignOut()
-    // because they must not trigger Drive auth, retry, or status
-    // side effects. Do not add oauth2.googleapis.com here; keep those
-    // calls as raw fetches.
     if (url.indexOf("https://www.googleapis.com/") !== 0 &&
         url.indexOf("https://www.googleapis.com/upload/") !== 0) {
         return Promise.reject(new Error("Blocked non-Google API URL"));
     }
 
     if (!navigator.onLine) {
-        setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
+        setDriveSyncStatus("error", "Offline - will sync later");
         return Promise.reject(new Error("OFFLINE"));
     }
 
     if (!isWftTokenValid()) {
         wftSyncState.authBlocked = true;
-        clearWftTokenSession();
-        setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
+        setDriveSyncStatus("error", "Session expired - please sign in again.");
         return Promise.reject(new Error("TOKEN_EXPIRED"));
     }
 
@@ -5136,8 +4131,7 @@ function wftDriveFetch(url, options) {
 
             if (response.status === 401) {
                 wftSyncState.authBlocked = true;
-                clearWftTokenSession();
-                setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
+                setDriveSyncStatus("error", "Session expired - please sign in again.");
             } else if (response.status === 404) {
                 err.notFound = true;
                 setDriveSyncStatus("error", "Drive file not found - will recreate on next sync.");
@@ -5146,9 +4140,9 @@ function wftDriveFetch(url, options) {
                 setDriveSyncStatus("error", "Drive quota or rate limit reached.");
             } else if (response.status === 403) {
                 wftSyncState.permissionBlocked = true;
-                setDriveSyncStatus("error", "Drive permission issue - please reconnect.", null, "Local data is still available.");
+                setDriveSyncStatus("error", "Drive permission issue - please reconnect.");
             } else {
-                setDriveSyncStatus("error", "Drive sync needs attention.", null, "Local data is still saved. Try syncing again.");
+                setDriveSyncStatus("error", "Drive sync needs attention.");
             }
 
             throw err;
@@ -5161,56 +4155,6 @@ function clearWftSyncBlockState() {
     wftSyncState.permissionBlocked = false;
     wftSyncState.authBlocked = false;
     wftSyncState.lastError = null;
-}
-
-// Drive files.list pagination helper. Drive returns at most
-// 1000 files per page (and often fewer, default 100). Any list
-// call that does not follow `nextPageToken` silently truncates at
-// that page boundary, which is a real correctness issue for
-// teachers with >1000 portfolio / settings / deletion files in
-// the folder (e.g. multi-year usage, per-student split files,
-// or accidental folder duplication from interrupted migrations).
-//
-// Usage: pass the same baseUrl you would pass to wftDriveFetch
-// (i.e. include q, orderBy, and a `fields` mask that includes
-// `nextPageToken`). The helper appends pageSize=1000 (R5) and
-// walks every page, returning a flat array of file objects.
-function wftDriveListAllPromise(baseUrl) {
-    if (!baseUrl) return Promise.resolve([]);
-    var all = [];
-    var pageSize = 1000;
-    var seenTokens = {};
-
-    function fetchPage(pageToken) {
-        // Defensive: if the same pageToken is returned twice
-        // (which should never happen, but a malformed response
-        // could), bail out to avoid an infinite loop.
-        if (pageToken && seenTokens[pageToken]) {
-            wftSyncWarn("[WFT Sync] Duplicate Drive nextPageToken; aborting pagination");
-            return Promise.resolve(all);
-        }
-        if (pageToken) seenTokens[pageToken] = true;
-
-        var separator = baseUrl.indexOf("?") === -1 ? "?" : "&";
-        var url = baseUrl + separator + "pageSize=" + pageSize;
-        if (pageToken) {
-            url += "&pageToken=" + encodeURIComponent(pageToken);
-        }
-        return wftDriveFetch(url).then(function (response) {
-            return response.json();
-        }).then(function (data) {
-            var files = (data && data.files) || [];
-            if (files.length) {
-                all = all.concat(files);
-            }
-            if (data && data.nextPageToken) {
-                return fetchPage(data.nextPageToken);
-            }
-            return all;
-        });
-    }
-
-    return fetchPage(null);
 }
 
 /* --- Drive Folder Management --- */
@@ -5511,10 +4455,13 @@ function ensureDriveFolderPromise() {
             + " and trashed=false";
         var searchUrl = "https://www.googleapis.com/drive/v3/files"
             + "?q=" + encodeURIComponent(query)
-            + "&fields=files(id,name,modifiedTime),nextPageToken"
+            + "&fields=files(id,name,modifiedTime)"
             + "&orderBy=modifiedTime desc";
 
-        return wftDriveListAllPromise(searchUrl).then(function(files) {
+        return wftDriveFetch(searchUrl).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            var files = data && data.files ? data.files : [];
             wftSyncLog("[WFT Sync][FOLDER] folder search result", files.length, files);
 
             return chooseCanonicalDriveFolderPromise(files).then(function (selected) {
@@ -5574,7 +4521,7 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
         }, WFT_SAVE_FILE_TIMEOUT_MS);
 
         try {
-            saveFileToDrive(filename, content, mimeType, function (err, fileId, fileData) {
+            saveFileToDrive(filename, content, mimeType, function (err, fileId) {
                 if (settled) return;
                 if (err) {
                     settled = true;
@@ -5584,19 +4531,7 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
                 }
                 settled = true;
                 clearTimeout(timer);
-                // Resolve with the full fileData object (id, name,
-                // modifiedTime, etc.) when available so callers can
-                // cache file-id and metadata without a follow-up
-                // findWftFilesByNamePromise Drive call. Fall back to
-                // a {id}-only object when the legacy callback
-                // returned only fileId (defense in depth).
-                if (fileData && fileData.id) {
-                    resolve(fileData);
-                } else if (fileId) {
-                    resolve({ id: fileId });
-                } else {
-                    resolve(null);
-                }
+                resolve(fileId || null);
             });
         } catch (e) {
             if (settled) return;
@@ -5627,14 +4562,7 @@ function saveFileToDrivePromise(filename, content, mimeType) {
             if (n >= maxAttempts || (!retryNotFound && !isTransientWftDriveError(err))) {
                 throw err;
             }
-            var baseDelay = retryNotFound ? 250 : (500 * Math.pow(2, n - 1));
-            // Add ±50% jitter so a fleet of teachers all hitting the
-            // same transient error (e.g. a 503 from Drive) don't
-            // retry in lockstep. The fixed-backoff version was
-            // observed to pile back onto the API and trigger a
-            // longer outage. Math.random() is fine here — we don't
-            // need cryptographic randomness, just spread.
-            var delay = Math.round(baseDelay * (0.5 + Math.random()));
+            var delay = retryNotFound ? 250 : (500 * Math.pow(2, n - 1));
             wftSyncWarn("[WFT Sync][FILE] Drive save error; retrying", { filename: filename, attempt: n + 1, error: err && (err.message || err.status) });
             return new Promise(function (resolve) {
                 setTimeout(resolve, delay);
@@ -5720,46 +4648,12 @@ function normalizePortfolioForFingerprint(portfolio) {
     return copy;
 }
 
-// Module-level memoization table for the three fingerprint functions.
-// Each entry stores the most recent input reference and its hash output.
-// A new input reference (i.e. a fresh snapshot) replaces the entry, so
-// the cache size is bounded at one entry per fingerprint. Declared
-// here, before the fingerprint functions, so top-level code that ever
-// happens to call them sees an initialized cache rather than `undefined`.
-var wftFingerprintCache = {
-    settings:   { input: null, output: "" },
-    portfolio: { input: null, output: "" },
-    deletions:  { input: null, output: "" }
-};
-
 function getSettingsFingerprint(settings) {
-    // Reference-equality memoization. The fingerprint is recomputed on
-    // every upload hash check, and during one sync run the same settings
-    // object (from getLocalSettingsSnapshot()) is hashed several times.
-    // A deep clone + stableStringify on a non-trivial settings object is
-    // ~milliseconds of CPU; caching by input reference eliminates the
-    // redundant work without changing the hash. The cache auto-invalidates
-    // when a new settings object is passed in.
-    if (wftFingerprintCache.settings.input === settings) {
-        return wftFingerprintCache.settings.output;
-    }
-    var hash = getWftHash(normalizeSettingsForFingerprint(settings || {}));
-    wftFingerprintCache.settings.input = settings;
-    wftFingerprintCache.settings.output = hash;
-    return hash;
+    return getWftHash(normalizeSettingsForFingerprint(settings || {}));
 }
 
 function getPortfolioFingerprint(portfolio) {
-    // See getSettingsFingerprint for the memoization rationale. A
-    // portfolio with hundreds of sessions is the largest hot path here;
-    // re-hashing on every check dominated sync time in profiling.
-    if (wftFingerprintCache.portfolio.input === portfolio) {
-        return wftFingerprintCache.portfolio.output;
-    }
-    var hash = getWftHash(normalizePortfolioForFingerprint(portfolio || {}));
-    wftFingerprintCache.portfolio.input = portfolio;
-    wftFingerprintCache.portfolio.output = hash;
-    return hash;
+    return getWftHash(normalizePortfolioForFingerprint(portfolio || {}));
 }
 
 function normalizeDeletionsForFingerprint(deletions) {
@@ -5772,31 +4666,11 @@ function normalizeDeletionsForFingerprint(deletions) {
 }
 
 function getDeletionsFingerprint(deletions) {
-    // See getSettingsFingerprint for the memoization rationale. The
-    // deletions log is small but the normalize+clone+stringify path
-    // was still being repeated unnecessarily across one sync run.
-    if (wftFingerprintCache.deletions.input === deletions) {
-        return wftFingerprintCache.deletions.output;
-    }
-    var hash = getWftHash(normalizeDeletionsForFingerprint(normalizeDeletionsData(deletions || {})));
-    wftFingerprintCache.deletions.input = deletions;
-    wftFingerprintCache.deletions.output = hash;
-    return hash;
+    return getWftHash(normalizeDeletionsForFingerprint(normalizeDeletionsData(deletions || {})));
 }
 
 // ── WFT Sync Engine V2 local snapshot helpers ──
 function getLocalSettingsSnapshot() {
-    // Snapshot cache: a single sync run calls this function 2-3 times
-    // (syncWftSettingsIfNeeded, post-merge re-read, post-upload
-    // re-read). Each call does a JSON.parse of `wft_settings` plus a
-    // series of DOM lookups for the form fields. The data does not
-    // change within a single sync run, so we memoize on the dirty
-    // mark — invalidated by markWftSettingsDirty(). The cached value
-    // is a fresh deep-clone-shaped object, so callers that mutate it
-    // cannot corrupt the cache.
-    if (!wftSyncState.pendingSettingsPush && wftSettingsSnapshotCache.value) {
-        return wftSettingsSnapshotCache.value;
-    }
     var settings = {};
     try {
         var raw = localStorage.getItem("wft_settings");
@@ -5814,15 +4688,11 @@ function getLocalSettingsSnapshot() {
         if (modelSelect) settings.model = modelSelect.value || '';
         if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
         if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getClassDefaultGrammarStrictness === 'function') settings.grammarStrictness = getClassDefaultGrammarStrictness();
-        else if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
+        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
         if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getClassGradeLevel === 'function') settings.gradeLevel = getClassGradeLevel();
-        else if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
+        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
-        if (typeof GRADE_PROFILE_VERSION !== 'undefined') settings.classDefaultsProfileVersion = GRADE_PROFILE_VERSION;
-        if (typeof getClassGradeLevel === 'function') settings.classDefaultsGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = false;
+        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
         }
@@ -5832,7 +4702,6 @@ function getLocalSettingsSnapshot() {
         }
     }
 
-    wftSettingsSnapshotCache.value = settings;
     return settings;
 }
 
@@ -5844,15 +4713,6 @@ function normalizePortfolioShape(portfolio) {
 }
 
 function getLocalPortfolioSnapshot() {
-    // See getLocalSettingsSnapshot for the memoization rationale. The
-    // portfolio is the largest JSON blob in the app (a class with 30
-    // students × dozens of sessions is hundreds of KB), so re-parsing
-    // it on every sync step is the most expensive single operation
-    // in a sync run. Cache keyed on the portfolio dirty mark so we
-    // return fresh data whenever a session was added/edited.
-    if (!wftSyncState.pendingPortfolioPush && wftPortfolioSnapshotCache.value) {
-        return wftPortfolioSnapshotCache.value;
-    }
     var raw;
     var portfolio;
 
@@ -5863,9 +4723,7 @@ function getLocalPortfolioSnapshot() {
         portfolio = null;
     }
 
-    var normalized = normalizePortfolioShape(portfolio);
-    wftPortfolioSnapshotCache.value = normalized;
-    return normalized;
+    return normalizePortfolioShape(portfolio);
 }
 
 // ── WFT Sync Engine V2 true-delete helpers ──
@@ -5879,6 +4737,55 @@ function getEmptyDeletionsData() {
     };
 }
 
+// WFT_TOMBSTONE_V1 — 90-day compaction for tombstone records (ES5-safe)
+function compactDeletions(deletions) {
+    if (!WFT_TOMBSTONE_COMPACTION_V1) { return deletions; }
+    var clean = normalizeDeletionsData(deletions || {});
+    var nowMs = Date.now();
+    var NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+
+    // Compact records array (primary storage)
+    if (Array.isArray(clean.records)) {
+        clean.records = clean.records.filter(function(rec) {
+            if (!rec || !rec.deletedAt) { return true; }
+            var delMs = Date.parse(rec.deletedAt);
+            if (isNaN(delMs)) { return true; }
+            return (nowMs - delMs) < NINETY_DAYS_MS;
+        });
+    }
+
+    // Also trim legacy deletedSessions map entries older than 90 days
+    if (clean.deletedSessions && typeof clean.deletedSessions === "object") {
+        var keys = Object.keys(clean.deletedSessions);
+        for (var k = 0; k < keys.length; k++) {
+            var key = keys[k];
+            var entry = clean.deletedSessions[key];
+            if (entry && entry.deletedAt) {
+                var ems = Date.parse(entry.deletedAt);
+                if (!isNaN(ems) && (nowMs - ems) >= NINETY_DAYS_MS) {
+                    delete clean.deletedSessions[key];
+                }
+            }
+        }
+    }
+
+    // Preserve optional deletionLog if present and keep bounded (drop oldest beyond 200)
+    if (Array.isArray(clean.deletionLog)) {
+        clean.deletionLog = clean.deletionLog.filter(function(logEntry) {
+            if (!logEntry || !logEntry.deletedAt) { return true; }
+            var lms = Date.parse(logEntry.deletedAt);
+            if (isNaN(lms)) { return true; }
+            return (nowMs - lms) < NINETY_DAYS_MS;
+        });
+        if (clean.deletionLog.length > 200) {
+            clean.deletionLog = clean.deletionLog.slice(clean.deletionLog.length - 200);
+        }
+    }
+
+    clean.updatedAt = new Date().toISOString();
+    return clean;
+}
+
 function normalizeDeletionsData(data) {
     var clean = getEmptyDeletionsData();
 
@@ -5890,7 +4797,8 @@ function normalizeDeletionsData(data) {
         clean.records = Array.isArray(data.records) ? data.records.slice(0) : [];
     }
 
-    return clean;
+    // WFT_TOMBSTONE_V1 — run on every normalize/load
+    return compactDeletions(clean);
 }
 
 function getDeletionsData() {
@@ -5955,133 +4863,34 @@ function clearStudentDeletion(studentName) {
     }
 }
 
-function getWftStudentIdForDeletion(studentName) {
-    var name = String(studentName || "").trim();
-    var studentId = "";
-    if (!name) return "";
-
-    try {
-        var settings = getRawSettings ? getRawSettings() : {};
-        studentId = settings.studentIdMap && settings.studentIdMap[name] ? settings.studentIdMap[name] : "";
-    } catch (e) {}
-
-    return studentId;
-}
-
-function addSessionDeletionRecord(deletions, studentName, sessionId, deletedAt, studentId) {
-    var name = String(studentName || "").trim();
-    var id = String(sessionId || "").trim();
-    var record;
-
-    if (!name || !id || !deletions) return null;
-
-    if (!deletions.deletedSessions || typeof deletions.deletedSessions !== "object") {
-        deletions.deletedSessions = {};
-    }
-    if (!Array.isArray(deletions.records)) { deletions.records = []; }
-
-    record = {
-        id: createWftId("del"),
-        type: "session",
-        studentId: studentId || "",
-        studentName: name,
-        sessionId: id,
-        deletedAt: deletedAt || new Date().toISOString(),
-        deviceId: getWftDeviceId(),
-        reason: "teacher_delete"
-    };
-
-    deletions.deletedSessions[getDeletedSessionKey(name, id)] = cloneWftJson(record);
-    if (studentId) {
-        deletions.deletedSessions["session:" + studentId + ":" + id] = cloneWftJson(record);
-    }
-    deletions.records.push(record);
-    return record;
-}
-
 function recordSessionDeletion(studentName, sessionId) {
     var name = String(studentName || "").trim();
     var id = String(sessionId || "").trim();
     if (!name || !id) return;
 
     var deletions = getDeletionsData();
-    addSessionDeletionRecord(deletions, name, id, new Date().toISOString(), getWftStudentIdForDeletion(name));
-    saveDeletionsData(deletions);
-}
-
-function addWftDeletionCandidateId(ids, seen, value) {
-    var id = String(value || "").trim();
-    if (!id || seen[id]) return;
-    seen[id] = true;
-    ids.push(id);
-}
-
-function getPortfolioSessionDeletionIds(studentName, session, explicitSessionId) {
-    var ids = [];
-    var seen = {};
-    var legacyName;
-    var legacyDate;
-    var legacyTitle;
-
-    addWftDeletionCandidateId(ids, seen, explicitSessionId);
-
-    if (session) {
-        // Session IDs created by older normalization code may be device-local or read-local.
-        // Check them, but never rely on them as the only deletion identity.
-        addWftDeletionCandidateId(ids, seen, session.id);
-
-        // createdAt is the safest cross-device identity for older portfolio sessions.
-        addWftDeletionCandidateId(ids, seen, session.createdAt);
-
-        // Last-resort legacy key for very old sessions that have no createdAt.
-        // This mirrors getSessionKey's final fallback, but only adds it when needed.
-        if (!session.createdAt) {
-            legacyName = session.studentName || studentName || "";
-            legacyDate = session.date || session.dateIso || "";
-            legacyTitle = session.title || "";
-            if (legacyName || legacyDate || legacyTitle) {
-                addWftDeletionCandidateId(ids, seen, [legacyName, legacyDate, legacyTitle].join("|"));
-            }
-        }
+    var now = new Date().toISOString();
+    var studentId = "";
+    try {
+        var settings = getRawSettings ? getRawSettings() : {};
+        studentId = settings.studentIdMap && settings.studentIdMap[name] ? settings.studentIdMap[name] : "";
+    } catch (e) {}
+    var record = {
+        id: createWftId("del"),
+        type: "session",
+        studentId: studentId,
+        studentName: name,
+        sessionId: id,
+        deletedAt: now,
+        deviceId: getWftDeviceId(),
+        reason: "teacher_delete"
+    };
+    deletions.deletedSessions[getDeletedSessionKey(name, id)] = cloneWftJson(record);
+    if (studentId) {
+        deletions.deletedSessions["session:" + studentId + ":" + id] = cloneWftJson(record);
     }
-
-    return ids;
-}
-
-function isPortfolioSessionDeleted(studentName, session, deletions) {
-    var ids = getPortfolioSessionDeletionIds(studentName, session, null);
-    var studentId = (session && session.studentId) || getWftStudentIdForDeletion(studentName);
-    var sessionUpdatedAt = session ? getSessionModifiedTimeMs(session) : 0;
-
-    for (var i = 0; i < ids.length; i += 1) {
-        if (isStudentSessionDeleted(ids[i], studentId, deletions, sessionUpdatedAt)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function recordPortfolioSessionDeletion(studentName, sessionId, session) {
-    var name = String(studentName || "").trim();
-    var ids;
-    var deletions;
-    var now;
-    var studentId;
-
-    if (!name) return;
-
-    ids = getPortfolioSessionDeletionIds(name, session, sessionId);
-    if (!ids.length) return;
-
-    deletions = getDeletionsData();
-    now = new Date().toISOString();
-    studentId = getWftStudentIdForDeletion(name);
-
-    for (var i = 0; i < ids.length; i += 1) {
-        addSessionDeletionRecord(deletions, name, ids[i], now, studentId);
-    }
-
+    if (!Array.isArray(deletions.records)) { deletions.records = []; }
+    deletions.records.push(record);
     saveDeletionsData(deletions);
 }
 
@@ -6122,8 +4931,9 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
 
         for (i = 0; i < sessions.length; i += 1) {
             var session = sessions[i];
+            var sessionId = getSessionKey(session);
 
-            if (!isPortfolioSessionDeleted(studentName, session, cleanDeletions)) {
+            if (!sessionId || !cleanDeletions.deletedSessions[getDeletedSessionKey(studentName, sessionId)]) {
                 filteredSessions.push(session);
             }
         }
@@ -6133,177 +4943,6 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
     }
 
     return rebuildWftPortfolioDerivedStats(result);
-}
-
-
-function isWftReservedPortfolioKey(key) {
-    var k = String(key || "");
-    return k === "_meta" || k === "updatedAt" || k === "__syncMeta" || k === "syncMeta" || k === "lastSyncedAt" || k === "lastSyncStatus";
-}
-
-function getWftRosterNameSet() {
-    var source = [];
-    var names = [];
-    var set = {};
-    var i;
-    var name;
-
-    try {
-        if (typeof students !== "undefined" && Array.isArray(students)) {
-            source = students.slice(0);
-        }
-    } catch (e) { }
-
-    if (!source.length) {
-        try {
-            source = JSON.parse(localStorage.getItem("wft_students") || "[]");
-            if (!Array.isArray(source)) { source = []; }
-        } catch (e2) {
-            source = [];
-        }
-    }
-
-    for (i = 0; i < source.length; i += 1) {
-        name = getWftStudentName(source[i]);
-        if (!name) { continue; }
-        names.push(name);
-        set[name.toLowerCase()] = true;
-    }
-
-    return { names: names, set: set, count: names.length };
-}
-
-function getWftPortfolioStudentNames(portfolio) {
-    var names = [];
-    var key;
-    var data = portfolio || {};
-
-    for (key in data) {
-        if (!Object.prototype.hasOwnProperty.call(data, key)) { continue; }
-        if (isWftReservedPortfolioKey(key)) { continue; }
-        names.push(key);
-    }
-
-    names.sort(function(a, b) { return String(a).localeCompare(String(b)); });
-    return names;
-}
-
-function getWftStudentSessionCount(studentData) {
-    if (!studentData || !Array.isArray(studentData.sessions)) { return 0; }
-    return studentData.sessions.length;
-}
-
-function getWftPortfolioCacheSummary() {
-    var portfolio = {};
-    var roster = getWftRosterNameSet();
-    var names;
-    var i;
-    var name;
-    var sessions;
-    var summary = {
-        rosterStudents: roster.count,
-        portfolioStudents: 0,
-        portfolioSessions: 0,
-        activePortfolioStudents: 0,
-        activePortfolioSessions: 0,
-        offRosterStudents: 0,
-        offRosterSessions: 0,
-        offRosterNames: []
-    };
-
-    try { portfolio = getPortfolioData(); } catch (e) { portfolio = {}; }
-    names = getWftPortfolioStudentNames(portfolio);
-    summary.portfolioStudents = names.length;
-
-    for (i = 0; i < names.length; i += 1) {
-        name = names[i];
-        sessions = getWftStudentSessionCount(portfolio[name]);
-        summary.portfolioSessions += sessions;
-
-        if (roster.set[String(name || "").toLowerCase()]) {
-            summary.activePortfolioStudents += 1;
-            summary.activePortfolioSessions += sessions;
-        } else {
-            summary.offRosterStudents += 1;
-            summary.offRosterSessions += sessions;
-            summary.offRosterNames.push(name);
-        }
-    }
-
-    return summary;
-}
-
-function recordWftPortfolioDeletionForStudent(studentName, studentData) {
-    var name = String(studentName || "").trim();
-    var sessions;
-    var sessionId;
-    var count = 0;
-    var i;
-
-    if (!name) { return 0; }
-
-    recordStudentDeletion(name);
-    sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
-
-    for (i = 0; i < sessions.length; i += 1) {
-        sessionId = getSessionKey(sessions[i]);
-        if (sessionId) {
-            recordSessionDeletion(name, sessionId);
-            count += 1;
-        }
-    }
-
-    return count;
-}
-
-function purgeWftOffRosterPortfolioData() {
-    var roster = getWftRosterNameSet();
-    var portfolio;
-    var names;
-    var removedStudents = 0;
-    var removedSessions = 0;
-    var i;
-    var name;
-    var lowerName;
-
-    if (!window.confirm("Remove saved portfolio records for students who are not in the current Manage Class roster? This is intended for students you already deleted.")) {
-        return;
-    }
-    if (!window.confirm("This will remove old off-roster portfolio data from this browser and mark it deleted so Drive sync should not restore it. Continue?")) {
-        return;
-    }
-
-    try { portfolio = getPortfolioData(); } catch (e) { portfolio = {}; }
-    names = getWftPortfolioStudentNames(portfolio);
-
-    for (i = 0; i < names.length; i += 1) {
-        name = names[i];
-        lowerName = String(name || "").toLowerCase();
-        if (roster.set[lowerName]) { continue; }
-        removedSessions += recordWftPortfolioDeletionForStudent(name, portfolio[name]);
-        delete portfolio[name];
-        removedStudents += 1;
-    }
-
-    if (!removedStudents) {
-        alert("No old off-roster portfolio records were found.");
-        try { refreshStorageHealthUI(); } catch (e2) { }
-        return;
-    }
-
-    savePortfolioData(portfolio);
-
-    try { refreshPortfolioDropdown(); } catch (e3) { }
-    try { renderStudentPortfolio(); } catch (e4) { }
-    try { refreshStorageHealthUI(); } catch (e5) { }
-
-    if (typeof rebuildPortfolioIndex === "function") {
-        rebuildPortfolioIndex(function() {
-            try { refreshStorageHealthUI(); } catch (e6) { }
-        });
-    }
-
-    alert("Removed " + removedStudents + " old student record" + (removedStudents === 1 ? "" : "s") + " and " + removedSessions + " saved session" + (removedSessions === 1 ? "" : "s") + ".");
 }
 
 function mergeWftDeletions(localDeletions, cloudDeletions) {
@@ -6333,32 +4972,6 @@ function mergeWftDeletions(localDeletions, cloudDeletions) {
         }
     }
 
-    // Union-merge the `records` array. `deletedStudents` /
-    // `deletedSessions` are the canonical deletion keys used for
-    // filtering; `records` is the audit-trail / extended-metadata
-    // log populated by addSessionDeletionRecord and
-    // recordExtendedDeletion. The previous code dropped records
-    // entirely on every merge, which silently destroyed audit data
-    // (who deleted what, when, from which device, why) the moment
-    // two devices exchanged deletions. Dedup by `id` so a record
-    // present in both inputs is kept once, preferring the local copy
-    // (it has the most recent edits on this device).
-    var recordsById = {};
-    function addRecord(rec) {
-        if (!rec || !rec.id) return;
-        if (!recordsById[rec.id]) {
-            recordsById[rec.id] = cloneWftJson(rec);
-        }
-    }
-    for (var i = 0; i < localClean.records.length; i += 1) addRecord(localClean.records[i]);
-    for (var j = 0; j < cloudClean.records.length; j += 1) addRecord(cloudClean.records[j]);
-    merged.records = [];
-    for (var rid in recordsById) {
-        if (Object.prototype.hasOwnProperty.call(recordsById, rid)) {
-            merged.records.push(recordsById[rid]);
-        }
-    }
-
     merged.updatedAt = new Date().toISOString();
     return merged;
 }
@@ -6383,19 +4996,12 @@ function getWftDeletionCounts(deletions) {
 function markWftSettingsDirty(reason) {
     wftSyncState.pendingSettingsPush = true;
     wftSyncState.localSettingsCounter += 1;
-    // Invalidate the settings snapshot cache so the next
-    // getLocalSettingsSnapshot() re-parses wft_settings and
-    // re-walks the form DOM to pick up the new values.
-    wftSettingsSnapshotCache.value = null;
     wftSyncLog("[WFT Sync] settings dirty", reason, wftSyncState.localSettingsCounter);
 }
 
 function markWftPortfolioDirty(reason) {
     wftSyncState.pendingPortfolioPush = true;
     wftSyncState.localPortfolioCounter += 1;
-    // Invalidate the portfolio snapshot cache so the next
-    // getLocalPortfolioSnapshot() re-parses wft_portfolio.
-    wftPortfolioSnapshotCache.value = null;
     wftSyncLog("[WFT Sync] portfolio dirty", reason, wftSyncState.localPortfolioCounter);
 }
 
@@ -6407,7 +5013,6 @@ function markWftDeletionsDirty(reason) {
 
 function scheduleWftCloudSync(reason) {
     if (!WFT_SYNC_ENGINE_V2) return;
-    if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) return;
 
     syncStateFromLegacyGoogleGlobals();
 
@@ -6490,10 +5095,13 @@ function findWftFilesByNamePromise(filename) {
 
             url = "https://www.googleapis.com/drive/v3/files"
                 + "?q=" + encodeURIComponent(query)
-                + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType),nextPageToken"
+                + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType)"
                 + "&orderBy=modifiedTime desc";
 
-            return wftDriveListAllPromise(url).then(function (files) {
+            return wftDriveFetch(url).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var files = data && data.files ? data.files : [];
                 wftSyncLog("[WFT Sync][FILE] find files result", filename, files.length, files);
                 if (files.length) {
                     setCachedWftDriveFileId(filename, files[0].id);
@@ -6506,33 +5114,7 @@ function findWftFilesByNamePromise(filename) {
 
 function chooseCanonicalWftFile(files) {
     if (!files || !files.length) return null;
-    // The Drive API does not guarantee a stable order across calls, so
-    // a previous `files[0]` may not be `files[0]` on the next call even
-    // when nothing changed. That nondeterminism caused the cached
-    // file-id to flap between syncs and triggered spurious re-uploads
-    // and merge churn. Pick the newest by modifiedTime, with file id
-    // as a stable tiebreaker so two files with identical timestamps
-    // always pick the same one.
-    //
-    // Skip null / non-object / id-less entries defensively. The
-    // Drive list endpoint can occasionally return truncated or
-    // partial file objects (rate-limited responses, fields filter
-    // mismatches). Treating a malformed entry as the canonical
-    // file would cache a bad id and break all subsequent uploads
-    // until the cache was manually cleared.
-    var best = null;
-    var bestTime = 0;
-    for (var i = 0; i < files.length; i += 1) {
-        var f = files[i];
-        if (!f || typeof f !== "object" || !f.id) continue;
-        var fTime = Date.parse(f.modifiedTime || f.createdTime || 0) || 0;
-        if (!best || fTime > bestTime ||
-            (fTime === bestTime && best && best.id && f.id > best.id)) {
-            best = f;
-            bestTime = fTime;
-        }
-    }
-    return best;
+    return files[0];
 }
 
 function downloadWftJsonFilePromise(fileId) {
@@ -6565,19 +5147,8 @@ function uploadWftJsonFilePromise(filename, data) {
         : (filename === WFT_DELETIONS_FILENAME ? getDeletionsFingerprint(data) : (filename === "portfolio-index.json" ? getWftHash(data || {}) : getPortfolioFingerprint(data)));
 
     return saveFileToDrivePromise(filename, content, "application/json")
-        .then(function (uploadedFile) {
+        .then(function () {
             wftSyncLog("[WFT Sync][FILE] upload JSON saved", filename, intendedHash);
-            // saveFileToDrivePromise now resolves with the full
-            // fileData from the upload response, which is more
-            // up-to-date than re-querying Drive via
-            // findWftFilesByNamePromise. Cache the file-id from
-            // the upload response and skip the redundant search.
-            if (uploadedFile && uploadedFile.id) {
-                setCachedWftDriveFileId(filename, uploadedFile.id);
-                return uploadedFile.id;
-            }
-            // Fallback: if the upload callback returned no fileData
-            // (defensive), do the search as before.
             return findWftFilesByNamePromise(filename).then(function (files) {
                 var canonical = chooseCanonicalWftFile(files);
                 if (canonical && canonical.id) {
@@ -6636,7 +5207,7 @@ function noteDuplicateWftFiles(filename, files) {
     setDuplicateSyncMaintenanceStatus("Duplicate Google Drive sync files found. The tool is using the newest copy. Older duplicate files can be moved to Backup.", duplicateCount, false);
 
     if (WFT_DUPLICATE_DETECTION_V2) {
-        setDriveSyncStatus("error", "Duplicate Drive files detected", null, "Using the newest copy safely.");
+        setDriveSyncStatus("error", "Duplicate Drive files detected - using newest copy safely.");
     }
 }
 
@@ -6765,41 +5336,30 @@ function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
 }
 
 function saveSettingsLocalOnly(settings, reason) {
-    withWftSuppressedDirtyMarks(function () {
-        try {
-            var existing = {};
-            var raw = localStorage.getItem("wft_settings");
-            if (raw) {
-                try { existing = JSON.parse(raw) || {}; } catch (e) { existing = {}; }
-            }
+    var previousSuppress = wftSuppressDirtyMarks;
 
-            var merged = cloneWftJson(settings || {});
-
-            if (typeof applyLoadedSettings === "function") {
-                applyLoadedSettings(merged);
-            }
-
-            if (merged && merged.apiKey) { delete merged.apiKey; }
-            localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
-            refreshApiKeyRuntimeValue();
-        } catch (e2) {
-            // R14: surface a visible warning when local persistence
-            // fails. The previous behavior was to only log via
-            // wftDebugWarn, which leaves the teacher believing their
-            // settings were saved when in fact the next sync will
-            // overwrite their local copy with whatever Drive returns.
-            // QuotaExceededError is the most common cause (large
-            // class roster + image-heavy settings) and the user
-            // can act on it (export and reset, switch browsers, etc).
-            wftDebugWarn("[WFT Sync] Could not save merged settings locally:", e2);
-            try {
-                if (typeof setDriveSyncStatus === "function") {
-                    setDriveSyncStatus("error", "Local settings save failed.", null,
-                        "Your browser storage may be full. Settings will not persist until this is resolved.");
-                }
-            } catch (e3) { /* status setter itself broken; do nothing */ }
+    try {
+        var existing = {};
+        var raw = localStorage.getItem("wft_settings");
+        if (raw) {
+            try { existing = JSON.parse(raw) || {}; } catch (e) { existing = {}; }
         }
-    });
+
+        var merged = cloneWftJson(settings || {});
+        wftSuppressDirtyMarks = true;
+
+        if (typeof applyLoadedSettings === "function") {
+            applyLoadedSettings(merged);
+        }
+
+        if (merged && merged.apiKey) { delete merged.apiKey; }
+        localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
+        refreshApiKeyRuntimeValue();
+    } catch (e2) {
+        wftDebugWarn("[WFT Sync] Could not save merged settings locally:", e2);
+    } finally {
+        wftSuppressDirtyMarks = previousSuppress;
+    }
 }
 
 function syncWftSettingsIfNeeded(reason) {
@@ -6845,20 +5405,6 @@ function syncWftSettingsIfNeeded(reason) {
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudSettings) {
                     cloudHash = getSettingsFingerprint(cloudSettings || {});
                     merged = mergeWftSettings(mergedFromDuplicates || localSettings, cloudSettings || {}, !!hadPending);
-                    // UNION-merge the roster. mergeWftSettings is
-                    // winner-takes-all per top-level key, so a
-                    // preferLocal=true merge would drop cloud-only
-                    // students, and a preferLocal=false merge would
-                    // drop local-only students. mergeWftStudents
-                    // (already used by applyLoadedSettings for the
-                    // sign-in bootstrap path) does a true union,
-                    // which is the correct semantic for the roster
-                    // — additions on one device must not erase
-                    // additions on the other.
-                    merged.students = mergeWftStudents(
-                        (mergedFromDuplicates || localSettings).students || [],
-                        cloudSettings && cloudSettings.students ? cloudSettings.students : []
-                    );
                     merged.students = applyDeletionsToStudents(merged.students || [], getDeletionsData());
 
                     // If the roster/settings changed while this Drive read was in flight,
@@ -6869,16 +5415,7 @@ function syncWftSettingsIfNeeded(reason) {
                         localHash = getSettingsFingerprint(localSettings);
                         counterSnapshot = wftSyncState.localSettingsCounter;
                         hadPending = true;
-                        // Re-merge with refreshed local, then union-merge
-                        // the roster again so any cloud-only students
-                        // that arrived during the in-flight read are
-                        // preserved alongside the just-added local
-                        // students.
                         merged = mergeWftSettings(localSettings, merged, true);
-                        merged.students = mergeWftStudents(
-                            localSettings.students || [],
-                            merged.students || []
-                        );
                         merged.students = applyDeletionsToStudents(merged.students || [], getDeletionsData());
                     }
 
@@ -6963,7 +5500,6 @@ function syncWftDeletionsIfNeeded(reason) {
 
                 if (mergedHash !== localHash) {
                     saveDeletionsLocalOnly(merged, "cloud-merge");
-                    applyWftDeletionsToLocalPortfolio(merged, "deletions-cloud-merge");
                 }
 
                 if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
@@ -6999,7 +5535,6 @@ function getSessionKey(session) {
 }
 
 function getTimeMs(value) {
-    if (typeof value === "number") return isNaN(value) ? 0 : value;
     var time = Date.parse(value || "");
     return isNaN(time) ? 0 : time;
 }
@@ -7045,29 +5580,11 @@ function mergeSessionImageRefs(primary, secondary) {
     return merged;
 }
 
-function getSessionModifiedTimeMs(session) {
-    session = session || {};
-    var fields = [session.updatedAt, session.lastReassessedAt, session.createdAt, session.date];
-    var newest = 0;
-    for (var i = 0; i < fields.length; i += 1) {
-        var time = getTimeMs(fields[i]);
-        if (time > newest) newest = time;
-    }
-    return newest;
-}
-
 function chooseNewerSession(a, b) {
-    var aTime = getSessionModifiedTimeMs(a);
-    var bTime = getSessionModifiedTimeMs(b);
+    var aTime = getTimeMs(a && (a.updatedAt || a.createdAt || a.date));
+    var bTime = getTimeMs(b && (b.updatedAt || b.createdAt || b.date));
 
     if (bTime > aTime) return mergeSessionImageRefs(b, a);
-    if (aTime > bTime) return mergeSessionImageRefs(a, b);
-
-    if (getWftHash(a || {}) !== getWftHash(b || {})) {
-        wftSyncWarn("[WFT Sync][PORTFOLIO] Same session ID has different content with equal timestamps; preserving newer-looking copy plus image refs.");
-        return mergeSessionImageRefs(b, a);
-    }
-
     return mergeSessionImageRefs(a, b);
 }
 
@@ -7076,88 +5593,81 @@ function rebuildWftPortfolioDerivedStats(portfolio) {
     return portfolio;
 }
 
-function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
-    // Merge by student/session rather than replacing a whole student record.
-    // A whole-student overwrite would drop newer sessions from Drive when a
-    // device was offline, so we always union-merge regardless of which side
-    // triggered the merge. The legacy `localIsAuthoritative` 3rd argument
-    // was dead and is no longer accepted.
-    var localNorm = normalizePortfolioShape(localPortfolio || {});
-    var cloudNorm = normalizePortfolioShape(cloudPortfolio || {});
+function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative) {
+    // WFT portfolio is keyed by student name; use WFT's existing merge logic as base
+    var localNorm = normalizePortfolioShape(localPortfolio);
+    var cloudNorm = normalizePortfolioShape(cloudPortfolio);
+
+    // Start with cloud, overlay local
     var merged = {};
-    var studentNames = {};
+    var studentName;
 
-    Object.keys(cloudNorm || {}).forEach(function(studentName) {
-        studentNames[studentName] = true;
-    });
-    Object.keys(localNorm || {}).forEach(function(studentName) {
-        studentNames[studentName] = true;
-    });
+    // Copy all cloud students
+    for (studentName in cloudNorm) {
+        if (Object.prototype.hasOwnProperty.call(cloudNorm, studentName)) {
+            merged[studentName] = cloneWftJson(cloudNorm[studentName]);
+        }
+    }
 
-    Object.keys(studentNames).forEach(function(studentName) {
-        var localStudent = localNorm[studentName] || {};
-        var cloudStudent = cloudNorm[studentName] || {};
-        var localSessions = Array.isArray(localStudent.sessions) ? localStudent.sessions : [];
-        var cloudSessions = Array.isArray(cloudStudent.sessions) ? cloudStudent.sessions : [];
+    // Merge local students
+    for (studentName in localNorm) {
+        if (!Object.prototype.hasOwnProperty.call(localNorm, studentName)) continue;
+
+        if (!merged[studentName]) {
+            merged[studentName] = cloneWftJson(localNorm[studentName]);
+            continue;
+        }
+
+        if (localIsAuthoritative) {
+            wftSyncLog("[WFT Sync][PORTFOLIO] merge local-authoritative", {
+                studentName: studentName,
+                localSessions: (localNorm[studentName].sessions || []).length,
+                cloudSessions: (merged[studentName].sessions || []).length
+            });
+
+            merged[studentName] = cloneWftJson(localNorm[studentName]);
+            continue;
+        }
+
+        // Merge sessions for this student
         var byKey = {};
-        var ordered = [];
+        var cloudSessions = merged[studentName].sessions || [];
+        var localSessions = localNorm[studentName].sessions || [];
+        var i;
+        var key;
 
-        function storeSession(session) {
-            if (!session) return;
-            var key = getSessionKey(session);
+        for (i = 0; i < cloudSessions.length; i += 1) {
+            key = getSessionKey(cloudSessions[i]);
+            if (key) byKey[key] = cloudSessions[i];
+        }
 
-            if (!key) {
-                ordered.push(cloneWftJson(session));
-                return;
-            }
+        for (i = 0; i < localSessions.length; i += 1) {
+            key = getSessionKey(localSessions[i]);
+            if (!key) continue;
 
             if (!byKey[key]) {
-                byKey[key] = cloneWftJson(session);
-                ordered.push(byKey[key]);
-                return;
-            }
-
-            byKey[key] = chooseNewerSession(byKey[key], session);
-            for (var i = 0; i < ordered.length; i += 1) {
-                if (getSessionKey(ordered[i]) === key) {
-                    ordered[i] = byKey[key];
-                    break;
-                }
+                byKey[key] = localSessions[i];
+            } else {
+                byKey[key] = chooseNewerSession(byKey[key], localSessions[i]);
             }
         }
 
-        cloudSessions.forEach(storeSession);
-        localSessions.forEach(storeSession);
-
-        ordered.sort(function (a, b) {
-            return getSessionModifiedTimeMs(b) - getSessionModifiedTimeMs(a);
-        });
-
-        merged[studentName] = cloneWftJson(cloudStudent);
-        Object.keys(localStudent).forEach(function(key) {
-            if (key === "sessions") return;
-            if (typeof merged[studentName][key] === "undefined") {
-                merged[studentName][key] = cloneWftJson(localStudent[key]);
+        var resultSessions = [];
+        for (key in byKey) {
+            if (Object.prototype.hasOwnProperty.call(byKey, key)) {
+                resultSessions.push(byKey[key]);
             }
+        }
+
+        resultSessions.sort(function (a, b) {
+            return getTimeMs(b.date || b.createdAt || b.updatedAt) - getTimeMs(a.date || a.createdAt || a.updatedAt);
         });
-        merged[studentName].sessions = ordered;
-    });
+
+        merged[studentName].sessions = resultSessions;
+    }
 
     // DO NOT add root-level metadata keys (like updatedAt) - normalizePortfolioData
     // treats every top-level key as a student name, so metadata would become a fake student.
-    // TOMBSTONE FIX: After the union-merge is complete, re-apply the deletion
-    // filter to the merged result. This guarantees that even if a remote device
-    // uploaded a session that is in our local deletion log, it gets stripped out
-    // before the merged portfolio is ever saved or uploaded.
-    var currentDeletions;
-    try {
-        currentDeletions = (typeof getDeletionsData === 'function') ? getDeletionsData() : null;
-    } catch(e) {
-        currentDeletions = null;
-    }
-    if (currentDeletions) {
-        merged = applyDeletionsToPortfolio(merged, currentDeletions);
-    }
     return rebuildWftPortfolioDerivedStats(merged);
 }
 
@@ -7165,90 +5675,8 @@ function savePortfolioLocalOnly(portfolio, reason) {
     try {
         localStorage.setItem("wft_portfolio", JSON.stringify(portfolio || {}));
     } catch (e) {
-        // R14: surface a visible warning when local portfolio
-        // persistence fails. The portfolio is the largest JSON
-        // blob in the app and is the most likely to hit
-        // QuotaExceededError as a class accumulates sessions.
-        // Silent failure here meant a teacher could write
-        // hundreds of analyses, sync successfully to Drive, and
-        // then have them all vanish on the next device restart
-        // when localStorage was full.
         wftDebugWarn("[WFT Sync] Could not save merged portfolio locally:", e);
-        try {
-            if (typeof setDriveSyncStatus === "function") {
-                setDriveSyncStatus("error", "Local portfolio save failed.", null,
-                    "Your browser storage may be full. Portfolio records will not persist locally until this is resolved.");
-            }
-        } catch (e2) { /* status setter itself broken; do nothing */ }
     }
-}
-
-function applyWftDeletionsToLocalPortfolio(deletions, reason) {
-    var rawPortfolio;
-    var filteredPortfolio;
-    var rawHash;
-    var filteredHash;
-
-    try {
-        // Bypass the snapshot cache: this function's correctness
-        // depends on operating on the LIVE localStorage state, not a
-        // cached parse. The user could have added a new session
-        // (and marked the portfolio dirty, invalidating the cache)
-        // between the last call to getLocalPortfolioSnapshot() and
-        // now. A cached snapshot would miss that addition, and the
-        // subsequent savePortfolioLocalOnly() call would clobber
-        // the user's new session by overwriting localStorage with
-        // the stale snapshot. Read localStorage directly here.
-        wftPortfolioSnapshotCache.value = null;
-        rawPortfolio = getLocalPortfolioSnapshot();
-        filteredPortfolio = applyDeletionsToPortfolio(rawPortfolio, deletions || getDeletionsData());
-        rawHash = getPortfolioFingerprint(rawPortfolio);
-        filteredHash = getPortfolioFingerprint(filteredPortfolio);
-
-        if (rawHash !== filteredHash) {
-            // Re-read localStorage one more time right before
-            // writing. This catches an edit that landed between
-            // the read above and now (Drive operations can take
-            // hundreds of ms during which the user can add
-            // sessions). If the live state has already been
-            // independently updated, we re-apply deletions to the
-            // fresh data and write THAT, not the stale snapshot.
-            var livePortfolio;
-            try {
-                var liveRaw = localStorage.getItem("wft_portfolio");
-                livePortfolio = liveRaw ? JSON.parse(liveRaw) : null;
-            } catch (e3) {
-                livePortfolio = null;
-            }
-            if (livePortfolio && typeof livePortfolio === "object") {
-                var liveNormalized = normalizePortfolioShape(livePortfolio);
-                var liveFiltered = applyDeletionsToPortfolio(liveNormalized, deletions || getDeletionsData());
-                var liveHash = getPortfolioFingerprint(liveNormalized);
-                var liveFilteredHash = getPortfolioFingerprint(liveFiltered);
-                if (liveHash !== liveFilteredHash) {
-                    savePortfolioLocalOnly(liveFiltered, reason || "apply-deletions");
-                    if (typeof markWftPortfolioIndexDirty === "function") {
-                        markWftPortfolioIndexDirty(reason || "apply-deletions");
-                    }
-                    refreshPortfolioUiAfterCloudMerge();
-                    wftSyncLog("[WFT Sync][PORTFOLIO] applied deletion cleanup (live)", { reason: reason || "apply-deletions", rawHash: rawHash, filteredHash: filteredHash, liveHash: liveHash, liveFilteredHash: liveFilteredHash });
-                    return true;
-                }
-                return false;
-            }
-            savePortfolioLocalOnly(filteredPortfolio, reason || "apply-deletions");
-            if (typeof markWftPortfolioIndexDirty === "function") {
-                markWftPortfolioIndexDirty(reason || "apply-deletions");
-            }
-            refreshPortfolioUiAfterCloudMerge();
-            wftSyncLog("[WFT Sync][PORTFOLIO] applied deletion cleanup", { reason: reason || "apply-deletions", rawHash: rawHash, filteredHash: filteredHash });
-            return true;
-        }
-    } catch (e) {
-        wftDebugWarn("[WFT Sync] Could not apply deletion cleanup to local portfolio:", e);
-    }
-
-    return false;
 }
 
 function refreshPortfolioUiAfterCloudMerge() {
@@ -7263,22 +5691,10 @@ function refreshPortfolioUiAfterCloudMerge() {
 function syncWftPortfolioIfNeeded(reason) {
     wftSyncLog("[WFT Sync] portfolio sync start", reason);
     var deletions = getDeletionsData();
-    var rawLocalPortfolio = getLocalPortfolioSnapshot();
-    var rawLocalHash = getPortfolioFingerprint(rawLocalPortfolio);
-    var localPortfolio = applyDeletionsToPortfolio(rawLocalPortfolio, deletions);
+    var localPortfolio = applyDeletionsToPortfolio(getLocalPortfolioSnapshot(), deletions);
     var localHash = getPortfolioFingerprint(localPortfolio);
     var counterSnapshot = wftSyncState.localPortfolioCounter;
     var hadPending = wftSyncState.pendingPortfolioPush;
-
-    if (rawLocalHash !== localHash) {
-        savePortfolioLocalOnly(localPortfolio, "apply-deletions-before-sync");
-        if (typeof markWftPortfolioIndexDirty === "function") {
-            markWftPortfolioIndexDirty("apply-deletions-before-sync");
-        }
-        refreshPortfolioUiAfterCloudMerge();
-        wftSyncLog("[WFT Sync][PORTFOLIO] local deletion cleanup before sync", { rawHash: rawLocalHash, filteredHash: localHash });
-    }
-
     wftSyncLog("[WFT Sync] portfolio local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: Object.keys(localPortfolio || {}).length });
 
     return findWftFilesByNamePromise(WFT_PORTFOLIO_FILENAME)
@@ -7317,7 +5733,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudPortfolio) {
                     cloudNormalized = applyDeletionsToPortfolio(cloudPortfolio || {}, getDeletionsData());
                     cloudHash = getPortfolioFingerprint(cloudNormalized);
-                    merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized);
+                    merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized, hadPending);
                     merged = applyDeletionsToPortfolio(merged, getDeletionsData());
                     mergedHash = getPortfolioFingerprint(merged);
 
@@ -7328,10 +5744,6 @@ function syncWftPortfolioIfNeeded(reason) {
 
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
                         wftSyncLog("[WFT Sync][PORTFOLIO] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
-                        // TOMBSTONE FIX: Always re-apply deletions to the final merged result
-                        // right before uploading. This is a last-chance filter so Device B never
-                        // accidentally re-uploads a session that this device just deleted.
-                        merged = applyDeletionsToPortfolio(merged, getDeletionsData());
                         return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, merged).then(function () {
                             wftSyncState.lastSyncedPortfolioHash = mergedHash;
                             wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
@@ -7380,17 +5792,17 @@ function syncWftPortfolioIndexIfNeeded(reason) {
 function handleWftSyncError(e) {
     wftSyncErrorLog("[WFT Sync] sync error", e && e.message ? e.message : e, e || null, getWftSyncDebugSnapshot());
     if (!e) {
-        setDriveSyncStatus("error", "Drive sync needs attention.", null, "Local data is still saved. Try syncing again.");
+        setDriveSyncStatus("error", "Drive sync needs attention.");
         return;
     }
 
     if (e.message === "OFFLINE") {
-        setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
+        setDriveSyncStatus("error", "Offline - will sync later");
         return;
     }
 
     if (e.message === "TOKEN_EXPIRED" || e.status === 401) {
-        setDriveSyncStatus("error", "Session expired - please sign in again.", null, "Local data is still available.");
+        setDriveSyncStatus("error", "Session expired - please sign in again.");
         return;
     }
 
@@ -7400,11 +5812,11 @@ function handleWftSyncError(e) {
     }
 
     if (e.status === 403) {
-        setDriveSyncStatus("error", "Drive permission issue - please reconnect.", null, "Local data is still available.");
+        setDriveSyncStatus("error", "Drive permission issue - please reconnect.");
         return;
     }
 
-    setDriveSyncStatus("error", "Drive sync needs attention.", null, "Local data is still saved. Try syncing again.");
+    setDriveSyncStatus("error", "Drive sync needs attention.");
 }
 
 function syncWftNow(reason, options) {
@@ -7419,54 +5831,15 @@ function syncWftNow(reason, options) {
         return Promise.resolve(false);
     }
 
-    if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
-        wftSyncLog("[WFT Sync] sync skipped - safe mode", reason);
-        showDriveSyncPausedForSafety();
-        return Promise.resolve(false);
-    }
-
     if (!wftSyncState.signedIn && !wftSyncState.accessToken) {
         wftSyncLog("[WFT Sync] sync skipped - not signed in", reason);
         setDriveSyncStatus("", "Not synced");
         return Promise.resolve(false);
     }
 
-    if (!isWftTokenValid()) {
-        if (isWftGisAuthEnabled() && hasPersistedGoogleConnection() && !options.afterSilentAuthRetry) {
-            var retryOptions = {};
-            var retryKey;
-            for (retryKey in options) {
-                if (Object.prototype.hasOwnProperty.call(options, retryKey)) {
-                    retryOptions[retryKey] = options[retryKey];
-                }
-            }
-            retryOptions.afterSilentAuthRetry = true;
-            wftSyncLog("[WFT Sync] token expired - attempting silent GIS refresh", reason);
-            setDriveSyncStatus("syncing", "Refreshing Google session...", 8, "Checking your previous Drive connection.");
-            return attemptSilentWftGisTokenRefresh("sync-" + (reason || "background"))
-                .then(function () {
-                    return syncWftNow(reason, retryOptions);
-                })
-                .catch(function (e) {
-                    wftDebugWarn("[WFT Auth] Silent refresh before sync failed:", e);
-                    wftSyncState.authBlocked = true;
-                    clearWftTokenSession();
-                    wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
-                    setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
-                    return false;
-                });
-        }
-
-        wftSyncState.authBlocked = true;
-        clearWftTokenSession();
-        wftSyncLog("[WFT Sync] sync skipped - token expired", reason);
-        setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
-        return Promise.resolve(false);
-    }
-
     if (!navigator.onLine) {
         wftSyncLog("[WFT Sync] sync skipped - offline", reason);
-        setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
+        setDriveSyncStatus("error", "Offline - will sync later");
         return Promise.resolve(false);
     }
 
@@ -7507,33 +5880,33 @@ function syncWftNow(reason, options) {
         wftSyncState.explicitSaveInProgress = true;
     }
 
-    setDriveSyncProgress("Starting sync...", 5, getWftSyncProgressDetail(reason));
+    setDriveSyncStatus("syncing", "Syncing...");
     wftSyncLog("[WFT Sync] run start", runId, reason, getWftSyncDebugSnapshot());
 
-    setDriveSyncProgress("Checking Drive folder...", 20, "Making sure the app folder is ready.");
     wftSyncState.currentSyncPromise = ensureDriveFolderPromise()
         .then(function () {
             wftSyncLog("[WFT Sync] run folder ready", runId, wftSyncState.folderId || driveFolderId || "");
-            setDriveSyncProgress("Checking deleted records...", 35, "Keeping removed records consistent.");
             return syncWftDeletionsIfNeeded(reason);
         })
         .then(function (deletionsChanged) {
             wftSyncLog("[WFT Sync] run deletions done", runId, deletionsChanged, getWftSyncDebugSnapshot());
-            setDriveSyncProgress("Syncing class settings...", 50, "Updating roster, class defaults, and assessment settings.");
             return syncWftSettingsIfNeeded(reason);
         })
         .then(function (settingsChanged) {
             wftSyncLog("[WFT Sync] run settings done", runId, settingsChanged, getWftSyncDebugSnapshot());
-            setDriveSyncProgress("Syncing portfolio records...", 70, "Merging local portfolio records with Drive.");
             return syncWftPortfolioIfNeeded(reason);
         })
         .then(function (portfolioChanged) {
             wftSyncLog("[WFT Sync] run portfolio done", runId, portfolioChanged, getWftSyncDebugSnapshot());
-            setDriveSyncProgress("Updating portfolio index...", 85, "Preparing faster portfolio loading.");
             return syncWftPortfolioIndexIfNeeded(reason).then(function(indexChanged) {
                 wftSyncLog("[WFT Sync] run portfolio index done", runId, indexChanged, getWftSyncDebugSnapshot());
                 wftSyncState.lastPollAt = Date.now();
-                setDriveSyncProgress("Finishing sync...", 95, "");
+                // ── WFT_BROADCAST_CHANNEL_V1: notify other tabs that a sync completed ──
+                if (WFT_BROADCAST_CHANNEL_V1 && wftSyncChannel && typeof wftSyncChannel.postMessage === "function") {
+                    try {
+                        wftSyncChannel.postMessage({ type: "sync-complete", ts: Date.now() });
+                    } catch (e) { /* non-fatal */ }
+                }
                 return true;
             });
         })
@@ -7555,13 +5928,12 @@ function syncWftNow(reason, options) {
             wftSyncState.currentSyncPromise = null;
 
             if (shouldRunAgain) {
-                setDriveSyncProgress("Another sync is queued...", 96, "Recent changes will sync next.");
                 wftSyncLog("[WFT Sync] starting queued follow-up run", runId, reason);
                 return syncWftNow("queued-after-current", { immediate: false });
             }
 
             if (result) {
-                finishDriveSyncProgress("Synced");
+                setDriveSyncStatus("synced", "Synced");
                 checkDuplicateSyncFilesStatus();
             }
 
@@ -7647,10 +6019,14 @@ function stopWftSyncPolling() {
 }
 
 function saveWftLocalSnapshotsBeforeHide() {
-    if (typeof saveSettingsToLocalStorage === "function") {
-        withWftSuppressedDirtyMarks(function () {
-            try { saveSettingsToLocalStorage(); } catch (e) { }
-        });
+    try {
+        if (typeof saveSettingsToLocalStorage === "function") {
+            wftSuppressDirtyMarks = true;
+            saveSettingsToLocalStorage();
+            wftSuppressDirtyMarks = false;
+        }
+    } catch (e) {
+        wftSuppressDirtyMarks = false;
     }
 
     try {
@@ -7662,35 +6038,18 @@ function saveWftLocalSnapshotsBeforeHide() {
 }
 
 function initWftSyncLifecycleHandlers() {
-    window.addEventListener("pagehide", function () {
-        if (WFT_SYNC_ENGINE_V2) {
-            saveWftLocalSnapshotsBeforeHide();
-        }
-    });
-
     window.addEventListener("online", function () {
         clearWftSyncBlockState();
         if (!WFT_SYNC_ENGINE_V2) return;
         syncStateFromLegacyGoogleGlobals();
         if (!wftSyncState.signedIn && !driveAccessToken) return;
-        if (!isWftTokenValid()) {
-            if (isWftGisAuthEnabled() && hasPersistedGoogleConnection()) {
-                setDriveSyncStatus("syncing", "Back online - refreshing Google session...", 8, "Checking your previous Drive connection.");
-                syncWftNow("online", { immediate: false });
-                return;
-            }
-            wftSyncState.authBlocked = true;
-            clearWftTokenSession();
-            setDriveSyncStatus("error", "Session expired - click Sync to reconnect.", null, "Local data is still available.");
-            return;
-        }
-        setDriveSyncStatus("syncing", "Back online - syncing...", 5, "Checking Drive for saved changes.");
+        setDriveSyncStatus("syncing", "Back online - syncing...");
         syncWftNow("online", { immediate: false });
     });
 
     window.addEventListener("offline", function () {
         if (WFT_SYNC_ENGINE_V2 && (wftSyncState.signedIn || driveAccessToken)) {
-            setDriveSyncStatus("error", "Offline - will sync later", null, "Local changes are saved on this device.");
+            setDriveSyncStatus("error", "Offline - will sync later");
         }
     });
 
@@ -7702,21 +6061,49 @@ function initWftSyncLifecycleHandlers() {
         }
 
         if (document.visibilityState === "visible" && shouldPollWftCloudNow()) {
-            if (!isDriveSyncAllowed()) return;
-            if (isWftTokenExpiringSoon(WFT_TOKEN_EXPIRY_WARNING_MS)) {
-                handleWftTokenExpiringSoon();
-                return;
-            }
-            var now = Date.now();
-            if (now - wftLastVisibilitySyncAt < WFT_VISIBILITY_SYNC_COOLDOWN_MS) return;
-            wftLastVisibilitySyncAt = now;
             syncWftNow("visible", { immediate: false });
         }
     });
 
+    // ── WFT_BROADCAST_CHANNEL_V1: initialize channel and message listener ──
+    // Creates 'wft-sync' channel; guarded so it fails gracefully if unsupported.
+    if (WFT_BROADCAST_CHANNEL_V1 && typeof BroadcastChannel === "function") {
+        try {
+            wftSyncChannel = new BroadcastChannel("wft-sync");
+            // Dedup guard: ignore sync-complete messages if this tab synced within
+            // the last 10 seconds — prevents rapid re-sync cascades from closely-
+            // spaced broadcasts.
+            var _lastLocalSyncTs = 0;
+            wftSyncChannel.onmessage = function (ev) {
+                try {
+                    var data = ev && ev.data;
+                    if (data && data.type === "sync-complete" && typeof data.ts === "number") {
+                        // If this tab just completed its own sync within 10s, ignore the broadcast
+                        if (_lastLocalSyncTs && (data.ts - _lastLocalSyncTs) < 10000) { return; }
+                        // Treat a received sync-complete as if this tab just synced
+                        wftSyncState.lastPollAt = data.ts;
+                    }
+                } catch (e) { /* defensive */ }
+            };
+            // Stash current local sync ts so onmessage can debounce
+            var _origSyncFn = syncWftNow;
+            syncWftNow = function(reason, options) {
+                _lastLocalSyncTs = Date.now();
+                return _origSyncFn(reason, options);
+            };
+        } catch (e) {
+            // Older browsers or security contexts may throw; treat as unavailable
+            wftSyncChannel = null;
+        }
+    }
+
     window.addEventListener("beforeunload", function () {
         if (WFT_SYNC_ENGINE_V2) {
             saveWftLocalSnapshotsBeforeHide();
+        }
+        // ── WFT_BROADCAST_CHANNEL_V1: close channel on unload ──
+        if (WFT_BROADCAST_CHANNEL_V1 && wftSyncChannel && typeof wftSyncChannel.close === "function") {
+            try { wftSyncChannel.close(); } catch (e) {}
         }
     });
 }
@@ -7729,89 +6116,51 @@ function saveWftTokenSession(token, expiresAt) {
             tokenExpiresAt: expiresAt
         }));
     } catch (e) { }
-
-    // Access tokens stay in sessionStorage only. localStorage keeps only a
-    // harmless connection marker so shared devices do not inherit another
-    // user's Drive session after the tab/browser is closed.
-    try {
-        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-        localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, "1");
-    } catch (e2) { }
-
-    wftSyncState.accessToken = token;
-    wftSyncState.tokenExpiresAt = Number(expiresAt || 0);
-    wftSyncState.signedIn = !!token;
-    driveAccessToken = token;
-    scheduleWftTokenExpiryWarning();
 }
 
 function restoreWftTokenSession() {
     var raw;
     var saved;
-    var token;
-    var expiry;
 
     try {
         raw = sessionStorage.getItem(DRIVE_TOKEN_SESSION_KEY);
-        if (raw) {
-            saved = JSON.parse(raw);
-            if (saved && saved.accessToken && saved.tokenExpiresAt) {
-                token = saved.accessToken;
-                expiry = Number(saved.tokenExpiresAt);
-            }
+        if (!raw) return false;
+
+        saved = JSON.parse(raw);
+        if (!saved || !saved.accessToken || !saved.tokenExpiresAt) return false;
+
+        if (Date.now() >= Number(saved.tokenExpiresAt)) {
+            sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
+            return false;
         }
-    } catch (e) { }
 
-    if (!token || !expiry) { return false; }
+        wftSyncState.accessToken = saved.accessToken;
+        wftSyncState.tokenExpiresAt = Number(saved.tokenExpiresAt);
+        wftSyncState.signedIn = true;
 
-    if (Date.now() >= expiry) {
-        try { sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY); } catch (e3) { }
-        try {
-            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-        } catch (e4) { }
+        driveAccessToken = saved.accessToken;
+
+        return true;
+    } catch (e) {
         return false;
     }
-
-    saveWftTokenSession(token, expiry);
-
-    wftSyncState.accessToken = token;
-    wftSyncState.tokenExpiresAt = expiry;
-    wftSyncState.signedIn = true;
-
-    driveAccessToken = token;
-
-    return true;
 }
 
 function clearWftTokenSession() {
-    clearWftTokenExpiryWarningTimer();
     try {
         sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
     } catch (e) { }
-    try {
-        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-    } catch (e2) { }
-    try {
-        wftSyncState.accessToken = null;
-        wftSyncState.tokenExpiresAt = 0;
-        wftSyncState.signedIn = false;
-        driveAccessToken = null;
-    } catch (e3) { }
 }
 
 function getWftSessionTokenExpiry() {
     try {
         var raw = sessionStorage.getItem(DRIVE_TOKEN_SESSION_KEY);
-        if (raw) {
-            var saved = JSON.parse(raw);
-            return Number(saved && saved.tokenExpiresAt ? saved.tokenExpiresAt : 0);
-        }
-    } catch (e) { }
-
-    return 0;
+        if (!raw) return 0;
+        var saved = JSON.parse(raw);
+        return Number(saved && saved.tokenExpiresAt ? saved.tokenExpiresAt : 0);
+    } catch (e) {
+        return 0;
+    }
 }
 
 function migrateOldWftTokenToSessionStorage() {
@@ -7826,18 +6175,6 @@ function migrateOldWftTokenToSessionStorage() {
     }
 
     if (!token || !expiry || expiry <= Date.now()) {
-        try {
-            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-        } catch (e2) { }
-        return false;
-    }
-
-    if (!WFT_ALLOW_LEGACY_LOCAL_TOKEN_MIGRATION) {
-        try {
-            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-        } catch (e3) { }
         return false;
     }
 
@@ -7846,13 +6183,12 @@ function migrateOldWftTokenToSessionStorage() {
     try {
         localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
         localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-    } catch (e4) { }
+    } catch (e2) { }
 
     wftSyncState.accessToken = token;
     wftSyncState.tokenExpiresAt = expiry;
     wftSyncState.signedIn = true;
     driveAccessToken = token;
-    scheduleWftTokenExpiryWarning();
 
     return true;
 }
@@ -7902,16 +6238,7 @@ function uploadBlobToDrive(filename, blob, mimeType, callback) {
         if (callback) callback(null);
         return;
     }
-    var currentSyncText = "";
-    try {
-        var currentSyncEl = document.getElementById("driveSyncTextHeader") || document.getElementById("driveSyncText");
-        currentSyncText = currentSyncEl ? currentSyncEl.textContent : "";
-    } catch (e) {
-        currentSyncText = "";
-    }
-    if (currentSyncText !== "Uploading portfolio images...") {
-        setDriveSyncStatus('syncing', 'Uploading to Google Drive...', 90, 'Sending file to Drive.');
-    }
+    setDriveSyncStatus('syncing', 'Syncing...');
     ensureDriveFolder(function(folderId) {
         var boundary = '----WFTBinaryBoundary' + Date.now();
         var metadata = JSON.stringify({ name: filename, parents: [folderId] });
@@ -7963,11 +6290,8 @@ function applyLoadedSettings(settings) {
     if (settings.useWordCountTarget != null && document.getElementById("useWordCountTarget")) document.getElementById("useWordCountTarget").checked = settings.useWordCountTarget;
     if (settings.grammarStrictness && document.getElementById("grammarStrictness")) {
         document.getElementById("grammarStrictness").value = settings.grammarStrictness;
-        if (typeof updateGrammarStrictnessDisplay === "function") updateGrammarStrictnessDisplay(settings.grammarStrictness);
-        else {
-            var valEl = document.getElementById("grammarStrictnessVal");
-            if (valEl) valEl.textContent = settings.grammarStrictness;
-        }
+        var valEl = document.getElementById("grammarStrictnessVal");
+        if (valEl) valEl.textContent = settings.grammarStrictness;
     }
     if (settings.assessScriptQuality != null && document.getElementById("assessScriptQuality")) {
         document.getElementById("assessScriptQuality").checked = settings.assessScriptQuality;
@@ -7976,11 +6300,15 @@ function applyLoadedSettings(settings) {
         var loadedClassGrade = parseGradeLevelValue(settings.classGradeLevel) || 5;
         document.getElementById("classGradeLevelSelect").value = String(loadedClassGrade);
     }
-    wftStudentGradeLevelOverride = false;
-    if (document.getElementById("gradeLevelSelect")) {
-        document.getElementById("gradeLevelSelect").value = String(getClassGradeLevel() || 5);
+    wftStudentGradeLevelOverride = settings.studentGradeLevelOverride === true;
+    if (settings.studentGradeLevelOverride == null && settings.gradeLevel != null && settings.classGradeLevel != null) {
+        wftStudentGradeLevelOverride = (parseGradeLevelValue(settings.gradeLevel) !== (parseGradeLevelValue(settings.classGradeLevel) || 5));
     }
-    maybeApplyClassDefaultsForLegacyGradeSettings(settings);
+    if (document.getElementById("gradeLevelSelect")) {
+        var loadedStudentGrade = parseGradeLevelValue(settings.gradeLevel);
+        var effectiveLoadedStudentGrade = wftStudentGradeLevelOverride && loadedStudentGrade ? loadedStudentGrade : getClassGradeLevel();
+        document.getElementById("gradeLevelSelect").value = String(effectiveLoadedStudentGrade || 5);
+    }
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
@@ -7994,11 +6322,14 @@ function applyLoadedSettings(settings) {
 
         students = mergedStudents;
 
-        withWftSuppressedDirtyMarks(function () {
-            try { saveStudents(); } catch (e) {
-                wftDebugWarn("[WFT Sync] Could not save merged roster locally:", e);
-            }
-        });
+        try {
+            wftSuppressDirtyMarks = true;
+            saveStudents();
+        } catch (e) {
+            wftDebugWarn("[WFT Sync] Could not save merged roster locally:", e);
+        } finally {
+            wftSuppressDirtyMarks = previousSuppress;
+        }
 
         renderStudentList();
         populateStudentDropdown();
@@ -8070,7 +6401,7 @@ function normalizePortfolioData(portfolio) {
 function getPortfolioData() {
     var raw = localStorage.getItem('wft_portfolio');
     if (!raw) return {};
-    try { return normalizePortfolioShape(JSON.parse(raw)); } catch (e) { return {}; }
+    try { return normalizePortfolioData(JSON.parse(raw)); } catch (e) { return {}; }
 }
 
 function stripPortfolioHeavyFields(data) {
@@ -8164,13 +6495,11 @@ function savePortfolioData(data) {
         }
     }
     // ── WFT Sync V2: use dirty flags + debounced sync instead of direct upload ──
-    if (WFT_SYNC_ENGINE_V2 && !wftSafeModeActive && !WFT_SYNC_ENGINE_V2_SAFE_MODE) {
+    if (WFT_SYNC_ENGINE_V2 && !wftSafeModeActive) {
         markWftPortfolioDirty("portfolio-change");
-        if (typeof markWftPortfolioIndexDirty === "function") {
-            markWftPortfolioIndexDirty("portfolio-change");  // Patch 6
-        }
+        markWftPortfolioIndexDirty("portfolio-change");  // Patch 6
         scheduleWftCloudSync("portfolio-change");
-    } else if (!WFT_SYNC_ENGINE_V2 && driveAccessToken) {
+    } else if (driveAccessToken) {
         saveFileToDrive('wft-portfolio.json', JSON.stringify(savedData, null, 2), 'application/json');
     }
     return savedData;
@@ -8192,7 +6521,29 @@ function loadPortfolioFromDrive() {
 }
 
 function mergePortfolioData(base, incoming) {
-    return mergeWftPortfolios(base || {}, incoming || {});
+    var merged = normalizePortfolioData(base || {});
+    var next = normalizePortfolioData(incoming || {});
+    Object.keys(next).forEach(function(studentName) {
+        if (!merged[studentName]) {
+            merged[studentName] = next[studentName];
+            return;
+        }
+        var byId = {};
+        merged[studentName].sessions.forEach(function(session) {
+            byId[session.id] = session;
+        });
+        next[studentName].sessions.forEach(function(session) {
+            if (!byId[session.id]) {
+                merged[studentName].sessions.push(session);
+            }
+        });
+        merged[studentName].sessions.sort(function(a, b) {
+            var aTime = a.createdAt ? Date.parse(a.createdAt) : 0;
+            var bTime = b.createdAt ? Date.parse(b.createdAt) : 0;
+            return aTime - bTime;
+        });
+    });
+    return merged;
 }
 
 function scoreBadgeColor(score) {
@@ -8452,6 +6803,17 @@ function buildPortfolioDetailedFeedback(analysisData) {
 function saveStudentSession(studentName, sessionData) {
     if (!studentName) return;
     try { if (typeof normalizeWftSessionForStorage === "function") normalizeWftSessionForStorage(sessionData); } catch (e) {}
+    // WFT_LAMPORT_V1 — stamp every new/changed session with the device lamport clock
+    // so merge logic can resolve conflicts deterministically across devices.
+    if (WFT_LAMPORT_V1) {
+        try {
+            sessionData.lamportClock = (typeof incrementDeviceLamport === "function")
+                ? incrementDeviceLamport()
+                : ((typeof getDeviceLamport === "function" ? getDeviceLamport() : 0) + 1);
+        } catch (eLam) {
+            // Non-fatal — fall back to timestamp-only merge
+        }
+    }
     var portfolio = getPortfolioData();
     if (!portfolio[studentName]) portfolio[studentName] = { sessions: [] };
     portfolio[studentName].sessions.push(sessionData);
@@ -8475,36 +6837,21 @@ function saveStudentSession(studentName, sessionData) {
 }
 
 function removeStudentSession(studentName, sessionId) {
-    if (!studentName || sessionId === undefined || sessionId === null || String(sessionId).trim() === "") return;
+    if (!studentName || !sessionId) return;
     var portfolio = getPortfolioData();
     if (!portfolio[studentName] || !Array.isArray(portfolio[studentName].sessions)) return;
-    var originalSessions = portfolio[studentName].sessions;
-    var sessions = originalSessions;
+    var sessions = portfolio[studentName].sessions;
     var originalLength = sessions.length;
-    var targetSession = null;
-    var sessionKey = String(sessionId);
-
-    // Capture the session before removing it so deletion sync can record every stable identity.
-    for (var t = 0; t < originalSessions.length; t += 1) {
-        var candidate = originalSessions[t];
-        if (candidate && (String(candidate.id || "") === sessionKey || String(candidate.createdAt || "") === sessionKey)) {
-            targetSession = candidate;
-            break;
-        }
-    }
-
-    // Prefer removing by the unique id assigned to each session, with createdAt as a legacy fallback.
-    sessions = originalSessions.filter(function(session) {
-        return session && String(session.id || "") !== sessionKey && String(session.createdAt || "") !== sessionKey;
+    // Prefer removing by the unique id assigned to each session
+    sessions = sessions.filter(function(session) {
+        return session && session.id !== sessionId && session.createdAt !== sessionId;
     });
-
-    // If nothing was removed (perhaps legacy sessions without an id), fall back to removing by index.
+    // If nothing was removed (perhaps legacy sessions without an id), fall back to removing by index
     if (sessions.length === originalLength) {
         var idx = -1;
-        for (var i = 0; i < sessions.length; i += 1) {
-            if (String(i) === sessionKey) {
+        for (var i = 0; i < sessions.length; i++) {
+            if (String(i) === String(sessionId)) {
                 idx = i;
-                targetSession = sessions[i] || targetSession;
                 break;
             }
         }
@@ -8512,9 +6859,8 @@ function removeStudentSession(studentName, sessionId) {
             sessions.splice(idx, 1);
         }
     }
-
     if (sessions.length !== originalLength) {
-        recordPortfolioSessionDeletion(studentName, sessionId, targetSession);
+        recordSessionDeletion(studentName, sessionId);
     }
     portfolio[studentName].sessions = sessions;
     savePortfolioData(portfolio);
@@ -8555,51 +6901,37 @@ function toggleRosterVisibility() {
 }
 
 function syncAllToDrive(callback) {
-    if (!WFT_SYNC_ENGINE_V2) {
-        if (!driveAccessToken) {
-            if (callback) callback(false);
-            return;
-        }
-        saveSettingsToDrive();
-        savePortfolioData(getPortfolioData());
-        syncPendingPortfolioMedia(function() {
-            savePortfolioData(getPortfolioData());
-            if (callback) callback(true);
-        });
-        return;
-    }
-
-    if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
-        showDriveSyncPausedForSafety();
-        if (callback) callback(false);
-        return;
-    }
-
     if (!driveAccessToken) {
-        setDriveSyncStatus("error", "Please sign in to Google Drive first.", null, "Local data is still saved on this device.");
         if (callback) callback(false);
         return;
     }
 
-    markWftSettingsDirty("sync-all");
-    markWftDeletionsDirty("sync-all");
-    markWftPortfolioDirty("sync-all");
-    if (typeof markWftPortfolioIndexDirty === "function") {
-        markWftPortfolioIndexDirty("sync-all");
+    // ── WFT Sync V2: use immediate flush ──
+    if (WFT_SYNC_ENGINE_V2) {
+        markWftSettingsDirty("sync-all");
+        markWftDeletionsDirty("sync-all");
+        markWftPortfolioDirty("sync-all");
+        syncPendingPortfolioMedia(function() {
+            try {
+                var normalized = normalizePortfolioData(getPortfolioData());
+                localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
+            } catch (e) { }
+            flushWftCloudSyncNow("sync-all").then(function(result) {
+                if (callback) callback(!!result);
+            }).catch(function(e) {
+                wftDebugError("syncAllToDrive flush failed:", normalizeWftAsyncErrorForLog(e));
+                setDriveSyncStatus("error", "Drive sync failed - please retry");
+                if (callback) callback(false);
+            });
+        });
+        return;
     }
 
+    saveSettingsToDrive();
+    savePortfolioData(getPortfolioData());
     syncPendingPortfolioMedia(function() {
-        try {
-            var normalized = normalizePortfolioData(getPortfolioData());
-            localStorage.setItem('wft_portfolio', JSON.stringify(normalized));
-        } catch (e) { }
-        flushWftCloudSyncNow("sync-all").then(function(result) {
-            if (callback) callback(!!result);
-        }).catch(function(e) {
-            wftDebugError("syncAllToDrive flush failed:", normalizeWftAsyncErrorForLog(e));
-            setDriveSyncStatus("error", "Drive sync failed", null, "Local data is still saved. Try syncing again.");
-            if (callback) callback(false);
-        });
+        savePortfolioData(getPortfolioData());
+        if (callback) callback(true);
     });
 }
 
@@ -8651,15 +6983,6 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
             if (callback) callback();
             return;
         }
-        var imageNumber = index + 1;
-        var imageProgress = 88 + Math.min(6, Math.floor(((imageNumber - 1) / remaining.length) * 6));
-        setDriveSyncStatus("syncing", "Uploading portfolio images...", imageProgress, "Image " + imageNumber + " of " + remaining.length);
-        // Capture the index BEFORE the post-increment below so the
-        // fallback filename uses this image's 1-based slot, not the
-        // next image's. Previously `index` was read inside
-        // doUploadImage() after the increment, which produced an
-        // off-by-one (first image named "image2", second "image3", ...).
-        var currentIndex = index;
         var image = remaining[index++];
         // ── PATCH 3: Image compression before Drive upload ──
         if (WFT_IMAGE_COMPRESSION_V1) {
@@ -8675,16 +6998,7 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
         function doUploadImage(blob) {
             var uploadMimeType = blob && blob.type ? blob.type : (image.mimeType || 'application/octet-stream');
             var extension = uploadMimeType.indexOf('png') !== -1 ? '.png' : '.jpg';
-            // Include a stable imageId-derived suffix so two images in
-            // the same session with identical sanitized `name` (e.g.
-            // "photo") no longer collapse to the same Drive filename
-            // and silently overwrite each other. The last 8 chars of
-            // imageId give us 8 hex chars of entropy from createWftId,
-            // which is enough to be unique per session while staying
-            // within Drive's filename length budget.
-            var rawId = (image.imageId || '').toString();
-            var idSuffix = rawId.replace(/[^a-zA-Z0-9_-]/g, '').slice(-8) || ('i' + (currentIndex + 1));
-            var filename = sanitizeDriveName(studentName) + '__' + sanitizeDriveName(sessionData.date || 'session') + '__' + idSuffix + '__' + sanitizeDriveName(image.name || ('image' + (currentIndex + 1))) + extension;
+            var filename = sanitizeDriveName(studentName) + '__' + sanitizeDriveName(sessionData.date || 'session') + '__' + sanitizeDriveName(image.name || ('image' + index)) + extension;
             uploadBlobToDrive(filename, blob, uploadMimeType, function(result) {
                 if (result && result.id) {
                     image.driveFileId = result.id;
@@ -9159,17 +7473,12 @@ function renderStudentPortfolio() {
                     + '</div>';
             }).join('') + '</div>';
         }
-        var sessClassGradeLabel = sess.classGradeLabel || (sess.assessmentSettings && sess.assessmentSettings.classGradeLabel) || sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5));
-        var sessGrammarValue = sess.grammarStrictness || (sess.assessmentSettings && sess.assessmentSettings.grammarStrictness) || 3;
-        var sessGrammarLabel = (sess.assessmentSettings && sess.assessmentSettings.grammarStrictnessLabel) || (typeof formatGrammarStrictnessLabel === 'function' ? formatGrammarStrictnessLabel(sessGrammarValue) : ('Level ' + sessGrammarValue));
-        var sessTargetValue = sess.targetWords != null ? sess.targetWords : (sess.assessmentSettings && sess.assessmentSettings.targetWordCount);
-        var sessTargetLabel = typeof formatTargetWordCountLabel === 'function' ? formatTargetWordCountLabel(sessTargetValue, sessTargetValue > 0) : (sessTargetValue > 0 ? (sessTargetValue + ' words') : 'Not used');
         sessionCardsHtml += '<div class="session-card">'
             + '<div class="session-card-header">'
             + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
             + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>'
             + '</div>'
-            + '<div class="session-meta">Class grade: ' + escapeHtml(sessClassGradeLabel) + ' - Grammar: ' + escapeHtml(sessGrammarLabel) + ' - Target: ' + escapeHtml(sessTargetLabel) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
+            + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'
             + detailedFeedbackButtonHtml
             + '<div class="session-artifact-grid">'
@@ -9260,11 +7569,6 @@ function saveCurrentSessionToPortfolio(analysisData) {
     var now = new Date();
     var savedCategoryScores = analysisData.categoryScores || {};
     var neatnessAssessed = !!(savedCategoryScores["Neatness"] != null);
-    var notebookDecisions = analysisData._notebookDecisions;
-    if (!(typeof isNotebookDecisionsV1 === "function" && isNotebookDecisionsV1(notebookDecisions))) {
-        notebookDecisions = typeof buildNotebookDecisions === "function" ? buildNotebookDecisions(analysisData) : null;
-        if (notebookDecisions) analysisData._notebookDecisions = notebookDecisions;
-    }
     var sessionData = {
         id: 'sess_' + now.getTime() + '_' + Math.random().toString(36).slice(2, 8),
         createdAt: now.toISOString(),
@@ -9278,12 +7582,6 @@ function saveCurrentSessionToPortfolio(analysisData) {
         gradeLabel: analysisData.gradeLabel || (getGradeProfile().gradeLabel || getGradeProfile().label),
         gradeTier: analysisData.gradeTier || getGradeProfile().tier,
         gradeProfileVersion: analysisData.gradeProfileVersion || GRADE_PROFILE_VERSION,
-        classGradeLevel: analysisData.classGradeLevel || (analysisData.assessmentSettings && analysisData.assessmentSettings.classGradeLevel) || (typeof getClassGradeLevel === "function" ? getClassGradeLevel() : analysisData.gradeLevel),
-        classGradeLabel: analysisData.classGradeLabel || (analysisData.assessmentSettings && analysisData.assessmentSettings.classGradeLabel) || (typeof formatGradeLevelLabel === "function" ? formatGradeLevelLabel(analysisData.classGradeLevel || analysisData.gradeLevel || 5) : (analysisData.gradeLabel || "Grade 5")),
-        grammarStrictness: analysisData.grammarStrictness || (analysisData.assessmentSettings && analysisData.assessmentSettings.grammarStrictness) || (typeof getGrammarStrictness === "function" ? getGrammarStrictness() : 3),
-        targetWords: analysisData.targetWords || 0,
-        actualWords: analysisData.actualWords || countWords(String((document.getElementById('studentWriting') || {}).value || '')),
-        assessmentSettings: cloneWftJson(analysisData.assessmentSettings || {}),
         categoryScores: savedCategoryScores,
         assessScriptQuality: neatnessAssessed,
         neatnessAssessed: neatnessAssessed,
@@ -9298,48 +7596,20 @@ function saveCurrentSessionToPortfolio(analysisData) {
         genreConfidence: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).confidence,
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
-        notebookDecisions: notebookDecisions ? cloneWftJson(notebookDecisions) : null,
-        notebookGuide: cloneWftJson(analysisData.notebookGuide || null),
-        notebookGuideVersion: analysisData.notebookGuideVersion || (typeof NOTEBOOK_GUIDE_VERSION !== "undefined" ? NOTEBOOK_GUIDE_VERSION : 2),
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
         images: getSessionImagePayloads(),
         notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
     };
-    var replaceSource = activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null;
-    if (replaceSource) {
-        var sourceStudentName = replaceSource.sourceStudentName || replaceSource.studentName || "";
-        var sourceSessionId = replaceSource.sourceSessionId || replaceSource.sessionId || "";
-        if (sourceStudentName && sourceStudentName !== student) {
-            clearActivePortfolioReassessmentState("student-changed-before-save");
-            setDriveSyncStatus('error', 'Reassessment was not saved because the selected student changed');
-            alert('The reassessment was not saved because the selected student changed. This prevents creating a duplicate portfolio entry.');
-            return;
-        }
-        var sourcePortfolio = getPortfolioData();
-        var sourceMatch = getPortfolioSessionMatchFromData(sourcePortfolio, sourceStudentName, sourceSessionId, replaceSource.sourceCreatedAt);
-        if (!sourceMatch) {
-            clearActivePortfolioReassessmentState("source-missing-before-save");
-            setDriveSyncStatus('error', 'Original portfolio entry not found');
-            alert('The original portfolio entry could not be found, so the reassessment was not saved. This prevents creating a duplicate entry.');
-            return;
-        }
-        replaceSource.sourceOriginalId = sourceMatch.session.id || replaceSource.sourceOriginalId || "";
-        replaceSource.sourceCreatedAt = sourceMatch.session.createdAt || replaceSource.sourceCreatedAt || "";
-        replaceSource.sourceOriginalText = Object.prototype.hasOwnProperty.call(replaceSource, 'sourceOriginalText') ? replaceSource.sourceOriginalText : (sourceMatch.session.originalText || "");
-        replaceSource.sourceTargetWords = sourceMatch.session.targetWords != null ? sourceMatch.session.targetWords : replaceSource.sourceTargetWords;
-        replaceSource.sourceAssessmentSettings = cloneWftJson(sourceMatch.session.assessmentSettings || replaceSource.sourceAssessmentSettings || {});
-    }
-
     pendingPortfolioSync = {
         studentName: student,
         sessionData: sessionData,
         signature: getCurrentPortfolioSessionSignature(),
-        replaceSource: replaceSource
+        replaceSource: activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null
     };
-    clearActivePortfolioReassessmentState("pending-sync-created");
+    activePortfolioReassessmentSource = null;
     persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
-    setDriveSyncStatus('syncing', replaceSource ? 'Ready to replace portfolio entry' : 'Ready to sync to portfolio');
+    setDriveSyncStatus('syncing', 'Ready to sync to portfolio');
 }
 
 var manualSyncInProgress = false;
@@ -9428,7 +7698,7 @@ function uploadPendingPortfolioMediaBeforeCommit(callback) {
         sessionId: pending.sessionData.id || pending.sessionData.createdAt || '',
         imageCount: pending.sessionData.images ? pending.sessionData.images.length : 0
     });
-    setDriveSyncStatus('syncing', 'Preparing portfolio images...', 88, 'Images are being saved to Drive before the portfolio record is synced.');
+    setDriveSyncStatus('syncing', 'Uploading portfolio image...');
     uploadSessionImagesToDrive(pending.studentName, pending.sessionData, function() {
         // Persist the updated pending session after successful media upload metadata is added.
         // At this point uploaded images have driveFileId values and their dataUrl values have been cleared.
@@ -9455,19 +7725,18 @@ function manualSaveToDrive() {
         setDriveSyncStatus('error', 'Could not prepare portfolio sync');
         return;
     }
-    if (WFT_SYNC_ENGINE_V2 && (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()))) {
-        showDriveSyncPausedForSafety();
-        return;
-    }
-
-    if (!ensureFreshWftDriveTokenBeforeSync("explicit-sync-to-portfolio")) {
-        wftSyncLog("[WFT Sync] manualSaveToDrive waiting for fresh Drive access");
+    if (!driveAccessToken) {
+        wftSyncLog("[WFT Sync] manualSaveToDrive needs Drive access");
+        setDriveSyncStatus('syncing', 'Connecting to Drive...');
+        requestDriveAccess(function() {
+            manualSaveToDrive();
+        });
         return;
     }
 
     manualSyncInProgress = true;
     setSyncButtonsBusy(true, 'Syncing...');
-    setDriveSyncStatus('syncing', 'Syncing saved work...', 5, 'Saving the current writing record to Drive.');
+    setDriveSyncStatus('syncing', 'Syncing saved work...');
 
     var hadPendingBeforeCommit = !!getPendingPortfolioSync();
     var committedPending = false;
@@ -9498,40 +7767,27 @@ function manualSaveToDrive() {
 
         // ── WFT Sync V2: use immediate flush for explicit Sync to Portfolio ──
         if (WFT_SYNC_ENGINE_V2) {
-            if (WFT_SYNC_ENGINE_V2_SAFE_MODE || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
+            markWftPortfolioDirty("explicit-sync-to-portfolio");
+            flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
+                wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
+                manualSyncInProgress = false;
+                if (!result) {
+                    setSyncButtonsFailure('Retry Sync to Portfolio');
+                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
+                } else {
+                    setSyncButtonsBusy(false);
+                    setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
+                }
+            }).catch(function (e) {
+                wftDebugError('Manual Drive flush failed:', e);
+                wftSyncLog("[WFT Sync] manualSaveToDrive flush threw", {
+                    name: e && e.name ? e.name : '',
+                    message: e && e.message ? e.message : String(e),
+                    stack: e && e.stack ? e.stack : ''
+                }, getWftSyncDebugSnapshot());
                 manualSyncInProgress = false;
                 setSyncButtonsFailure('Retry Sync to Portfolio');
-                showDriveSyncPausedForSafety();
-                return;
-            }
-            markWftSettingsDirty("explicit-sync-to-portfolio");
-            markWftDeletionsDirty("explicit-sync-to-portfolio");
-            markWftPortfolioDirty("explicit-sync-to-portfolio");
-            if (typeof markWftPortfolioIndexDirty === "function") {
-                markWftPortfolioIndexDirty("explicit-sync-to-portfolio");
-            }
-            syncPendingPortfolioMedia(function() {
-                flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
-                    wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
-                    manualSyncInProgress = false;
-                    if (!result) {
-                        setSyncButtonsFailure('Retry Sync to Portfolio');
-                        setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed', null, 'Local data is still saved. Try syncing again.');
-                    } else {
-                        setSyncButtonsBusy(false);
-                        finishDriveSyncProgress(committedPending ? 'Portfolio synced' : 'Manual sync complete');
-                    }
-                }).catch(function (e) {
-                    wftDebugError('Manual Drive flush failed:', e);
-                    wftSyncLog("[WFT Sync] manualSaveToDrive flush threw", {
-                        name: e && e.name ? e.name : '',
-                        message: e && e.message ? e.message : String(e),
-                        stack: e && e.stack ? e.stack : ''
-                    }, getWftSyncDebugSnapshot());
-                    manualSyncInProgress = false;
-                    setSyncButtonsFailure('Retry Sync to Portfolio');
-                    setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed', null, 'Local data is still saved. Try syncing again.');
-                });
+                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
             });
             return;
         }
@@ -9540,11 +7796,11 @@ function manualSaveToDrive() {
             manualSyncInProgress = false;
             if (success === false) {
                 setSyncButtonsFailure('Retry Sync to Portfolio');
-                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed', null, 'Local data is still saved. Try syncing again.');
+                setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
                 return;
             }
             setSyncButtonsBusy(false);
-            finishDriveSyncProgress(committedPending ? 'Portfolio synced' : 'Manual sync complete');
+            setDriveSyncStatus('synced', committedPending ? 'Portfolio synced' : 'Manual sync complete');
         });
     }
 
@@ -9573,16 +7829,13 @@ function toggleZenMode() {
         if (btn) { btn.textContent = 'Expand'; }
         checkExpandBtnVisibility();
     }
-    if (typeof autoResizeStudentWriting === 'function') {
-        autoResizeStudentWriting();
-    }
 }
 function checkExpandBtnVisibility() {
     var ta = document.getElementById('studentWriting');
     var btn = document.getElementById('expandTextBtn');
     if (!ta || !btn) return;
     if (zenModeActive) { btn.style.display = 'block'; return; }
-    btn.style.display = (ta.scrollHeight > ta.clientHeight + 8) ? 'block' : 'none';
+    btn.style.display = (ta.scrollHeight > ta.clientHeight + 2) ? 'block' : 'none';
 }
 
 /* =============================================
@@ -9663,92 +7916,6 @@ var PENDING_PORTFOLIO_SYNC_KEY = 'wft_pending_portfolio_sync_v1';
 var pendingPortfolioSync = null;
 var activePortfolioReassessmentSource = null;
 var lastSyncedPortfolioSessionSignature = "";
-
-function clearActivePortfolioReassessmentState(reason) {
-    activePortfolioReassessmentSource = null;
-}
-
-function normalizePortfolioReassessmentText(text) {
-    return String(text || "").replace(/\r\n?/g, "\n");
-}
-
-function getPortfolioSessionMatchFromData(portfolio, studentName, sessionId, sourceCreatedAt) {
-    if (!portfolio || !studentName) return null;
-    var studentData = portfolio[studentName];
-    var sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
-    for (var i = 0; i < sessions.length; i++) {
-        var session = sessions[i] || {};
-        if (String(session.id || "") === String(sessionId) || String(session.createdAt || "") === String(sessionId) || String(i) === String(sessionId) || (sourceCreatedAt && String(session.createdAt || "") === String(sourceCreatedAt))) {
-            return { session: session, index: i, sessions: sessions };
-        }
-    }
-    return null;
-}
-
-function getPreservedPortfolioTargetWords(oldSession, source, newSession) {
-    if (oldSession && oldSession.targetWords != null) return oldSession.targetWords;
-    if (source && source.sourceTargetWords != null) return source.sourceTargetWords;
-    if (oldSession && oldSession.assessmentSettings && oldSession.assessmentSettings.targetWordCount != null) return oldSession.assessmentSettings.targetWordCount;
-    if (source && source.sourceAssessmentSettings && source.sourceAssessmentSettings.targetWordCount != null) return source.sourceAssessmentSettings.targetWordCount;
-    return newSession && newSession.targetWords != null ? newSession.targetWords : 0;
-}
-
-function buildPortfolioReassessmentReplacementSession(oldSession, newSession, source) {
-    oldSession = oldSession || {};
-    newSession = newSession || {};
-    source = source || {};
-    var replacement = cloneWftJson(oldSession);
-    var overwriteFields = [
-        'title', 'overall', 'gradeLevel', 'gradeLabel', 'gradeTier', 'gradeProfileVersion',
-        'classGradeLevel', 'classGradeLabel', 'grammarStrictness', 'actualWords',
-        'categoryScores', 'assessScriptQuality', 'neatnessAssessed', 'correctedHtml',
-        'correctedMarkup', 'correctedPlainText', 'writingGenreInfo', 'writingGenre',
-        'writingSubtype', 'writingSafeReference', 'genreConfidence', 'feedbackSummary',
-        'detailedFeedback', 'notebookDecisions', 'notebookGuide', 'notebookGuideVersion', 'sourceType', 'notebookPrintHtml'
-    ];
-    for (var i = 0; i < overwriteFields.length; i++) {
-        var field = overwriteFields[i];
-        if (Object.prototype.hasOwnProperty.call(newSession, field)) replacement[field] = cloneWftJson(newSession[field]);
-    }
-
-    if (Array.isArray(newSession.images) && newSession.images.length) {
-        replacement.images = cloneWftJson(newSession.images);
-    } else if (Array.isArray(oldSession.images)) {
-        replacement.images = cloneWftJson(oldSession.images);
-    } else {
-        replacement.images = [];
-    }
-
-    replacement.id = oldSession.id || source.sourceOriginalId || source.sourceSessionId || newSession.id;
-    replacement.createdAt = oldSession.createdAt || source.sourceCreatedAt || newSession.createdAt;
-    replacement.date = oldSession.date || newSession.date;
-
-    var preservedTargetWords = getPreservedPortfolioTargetWords(oldSession, source, newSession);
-    replacement.targetWords = preservedTargetWords;
-
-    var settings = cloneWftJson(newSession.assessmentSettings || oldSession.assessmentSettings || {});
-    if (!settings || typeof settings !== 'object') settings = {};
-    if (oldSession.assessmentSettings && oldSession.assessmentSettings.targetWordCount != null) {
-        settings.targetWordCount = oldSession.assessmentSettings.targetWordCount;
-    } else if (source.sourceAssessmentSettings && source.sourceAssessmentSettings.targetWordCount != null) {
-        settings.targetWordCount = source.sourceAssessmentSettings.targetWordCount;
-    } else if (preservedTargetWords != null) {
-        settings.targetWordCount = preservedTargetWords;
-    }
-    replacement.assessmentSettings = settings;
-
-    var sourceOriginalText = Object.prototype.hasOwnProperty.call(source, 'sourceOriginalText') ? source.sourceOriginalText : oldSession.originalText;
-    var newOriginalText = Object.prototype.hasOwnProperty.call(newSession, 'originalText') ? newSession.originalText : '';
-    var textEdited = normalizePortfolioReassessmentText(sourceOriginalText) !== normalizePortfolioReassessmentText(newOriginalText);
-    replacement.originalText = textEdited ? String(newOriginalText || '') : String(oldSession.originalText || sourceOriginalText || newOriginalText || '');
-    replacement.reassessmentTextEdited = !!textEdited;
-
-    replacement.lastReassessedAt = new Date().toISOString();
-    replacement.updatedAt = replacement.lastReassessedAt;
-    replacement.reassessmentCount = (Number(oldSession.reassessmentCount) || 0) + 1;
-    replacement.reassessedFromSessionId = oldSession.id || source.sourceSessionId || '';
-    return replacement;
-}
 
 function getActivePortfolioStudentName() {
     var select = document.getElementById("studentSelect");
@@ -9898,23 +8065,50 @@ function commitPendingPortfolioReplacement(pending) {
     var newSession = pending.sessionData;
     if (!sourceStudent || !sourceSessionId || !targetStudent || !newSession) return false;
 
-    if (sourceStudent !== targetStudent) {
-        wftDebugWarn('[Portfolio] Reassessment replacement aborted because the target student changed.', { sourceStudent: sourceStudent, targetStudent: targetStudent });
-        if (driveAccessToken) setDriveSyncStatus('error', 'Reassessment was not saved because the selected student changed');
-        return false;
-    }
-
     var portfolio = getPortfolioData();
     if (!portfolio[sourceStudent]) portfolio[sourceStudent] = { sessions: [] };
-    var match = getPortfolioSessionMatchFromData(portfolio, sourceStudent, sourceSessionId, source.sourceCreatedAt);
-    if (!match) {
-        wftDebugWarn('[Portfolio] Reassessment replacement aborted because the source session was not found.', { sourceStudent: sourceStudent, sourceSessionId: sourceSessionId });
-        if (driveAccessToken) setDriveSyncStatus('error', 'Original portfolio entry not found');
-        return false;
+    if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
+
+    var sourceSessions = Array.isArray(portfolio[sourceStudent].sessions) ? portfolio[sourceStudent].sessions : [];
+    var removed = false;
+    var replaceIndex = -1;
+    for (var i = 0; i < sourceSessions.length; i++) {
+        var session = sourceSessions[i] || {};
+        if (String(session.id || "") === String(sourceSessionId) || String(session.createdAt || "") === String(sourceSessionId) || String(i) === String(sourceSessionId)) {
+            replaceIndex = i;
+            break;
+        }
     }
 
-    var replacement = buildPortfolioReassessmentReplacementSession(match.session, newSession, source);
-    match.sessions[match.index] = replacement;
+    if (sourceStudent === targetStudent && replaceIndex >= 0) {
+        var oldSession = sourceSessions[replaceIndex] || {};
+        if ((oldSession.id || oldSession.createdAt) && (oldSession.id || oldSession.createdAt) !== newSession.id) {
+            recordSessionDeletion(sourceStudent, oldSession.id || oldSession.createdAt);
+        }
+        sourceSessions[replaceIndex] = newSession;
+        removed = true;
+    } else {
+        var filtered = [];
+        for (var j = 0; j < sourceSessions.length; j++) {
+            var old = sourceSessions[j] || {};
+            var isMatch = (String(old.id || "") === String(sourceSessionId) || String(old.createdAt || "") === String(sourceSessionId) || String(j) === String(sourceSessionId));
+            if (isMatch) {
+                removed = true;
+                recordSessionDeletion(sourceStudent, old.id || old.createdAt || sourceSessionId);
+            } else {
+                filtered.push(old);
+            }
+        }
+        portfolio[sourceStudent].sessions = filtered;
+        portfolio[targetStudent].sessions.push(newSession);
+        if (portfolio[targetStudent].sessions.length > 50) {
+            portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
+        }
+    }
+
+    if (!removed && sourceStudent !== targetStudent) {
+        portfolio[targetStudent].sessions.push(newSession);
+    }
 
     savePortfolioData(portfolio);
     try { renderStudentPortfolio(); } catch (e) { wftDebugError('Portfolio saved, but portfolio rendering failed:', e); }

@@ -53,6 +53,25 @@ function getWftDeviceId() {
     return meta.deviceId;
 }
 
+// ── Lamport clock (deviceLamport) for WFT_LAMPORT_V1 ──
+// Persistent counter stored in wft_storage_meta. ES5 compatible.
+function getDeviceLamport() {
+    var meta = getWftStorageMeta();
+    if (typeof meta.deviceLamport !== "number" || isNaN(meta.deviceLamport)) {
+        meta.deviceLamport = 0;
+        setWftStorageMeta(meta);
+    }
+    return meta.deviceLamport;
+}
+
+function incrementDeviceLamport() {
+    var meta = getWftStorageMeta();
+    var current = (typeof meta.deviceLamport === "number" && !isNaN(meta.deviceLamport)) ? meta.deviceLamport : 0;
+    meta.deviceLamport = current + 1;
+    setWftStorageMeta(meta);
+    return meta.deviceLamport;
+}
+
 // ── Default metadata ──
 
 function getDefaultWftStorageMeta() {
