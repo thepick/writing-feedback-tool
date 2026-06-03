@@ -5765,34 +5765,93 @@ function clearStudentDeletion(studentName) {
     }
 }
 
+function getWftStudentIdForDeletion(studentName) {
+    var name = String(studentName || "").trim();
+    var studentId = "";
+    if (!name) return "";
+
+    try {
+        var settings = getRawSettings ? getRawSettings() : {};
+        studentId = settings.studentIdMap && settings.studentIdMap[name] ? settings.studentIdMap[name] : "";
+    } catch (e) {}
+
+    return studentId;
+}
+
+function addSessionDeletionRecord(deletions, studentName, sessionId, deletedAt, studentId) {
+    var name = String(studentName || "").trim();
+    var id = String(sessionId || "").trim();
+    var record;
+
+    if (!name || !id || !deletions) return null;
+
+    if (!deletions.deletedSessions || typeof deletions.deletedSessions !== "object") {
+        deletions.deletedSessions = {};
+    }
+    if (!Array.isArray(deletions.records)) { deletions.records = []; }
+
+    record = {
+        id: createWftId("del"),
+        type: "session",
+        studentId: studentId || "",
+        studentName: name,
+        sessionId: id,
+        deletedAt: deletedAt || new Date().toISOString(),
+        deviceId: getWftDeviceId(),
+        reason: "teacher_delete"
+    };
+
+    deletions.deletedSessions[getDeletedSessionKey(name, id)] = cloneWftJson(record);
+    if (studentId) {
+        deletions.deletedSessions["session:" + studentId + ":" + id] = cloneWftJson(record);
+    }
+    deletions.records.push(record);
+    return record;
+}
+
 function recordSessionDeletion(studentName, sessionId) {
     var name = String(studentName || "").trim();
     var id = String(sessionId || "").trim();
     if (!name || !id) return;
 
     var deletions = getDeletionsData();
-    var now = new Date().toISOString();
-    var studentId = "";
-    try {
-        var settings = getRawSettings ? getRawSettings() : {};
-        studentId = settings.studentIdMap && settings.studentIdMap[name] ? settings.studentIdMap[name] : "";
-    } catch (e) {}
-    var record = {
-        id: createWftId("del"),
-        type: "session",
-        studentId: studentId,
-        studentName: name,
-        sessionId: id,
-        deletedAt: now,
-        deviceId: getWftDeviceId(),
-        reason: "teacher_delete"
-    };
-    deletions.deletedSessions[getDeletedSessionKey(name, id)] = cloneWftJson(record);
-    if (studentId) {
-        deletions.deletedSessions["session:" + studentId + ":" + id] = cloneWftJson(record);
+    addSessionDeletionRecord(deletions, name, id, new Date().toISOString(), getWftStudentIdForDeletion(name));
+    saveDeletionsData(deletions);
+}
+
+function recordPortfolioSessionDeletion(studentName, sessionId, session) {
+    var name = String(studentName || "").trim();
+    var ids = [];
+    var seen = {};
+    var deletions;
+    var now;
+    var studentId;
+
+    function addId(value) {
+        var id = String(value || "").trim();
+        if (!id || seen[id]) return;
+        seen[id] = true;
+        ids.push(id);
     }
-    if (!Array.isArray(deletions.records)) { deletions.records = []; }
-    deletions.records.push(record);
+
+    if (!name) return;
+
+    addId(sessionId);
+    if (session) {
+        addId(session.id);
+        addId(session.createdAt);
+    }
+
+    if (!ids.length) return;
+
+    deletions = getDeletionsData();
+    now = new Date().toISOString();
+    studentId = getWftStudentIdForDeletion(name);
+
+    for (var i = 0; i < ids.length; i += 1) {
+        addSessionDeletionRecord(deletions, name, ids[i], now, studentId);
+    }
+
     saveDeletionsData(deletions);
 }
 
@@ -6576,6 +6635,7 @@ function syncWftDeletionsIfNeeded(reason) {
 
                 if (mergedHash !== localHash) {
                     saveDeletionsLocalOnly(merged, "cloud-merge");
+                    applyWftDeletionsToLocalPortfolio(merged, "deletions-cloud-merge");
                 }
 
                 if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
@@ -6766,6 +6826,34 @@ function savePortfolioLocalOnly(portfolio, reason) {
     }
 }
 
+function applyWftDeletionsToLocalPortfolio(deletions, reason) {
+    var rawPortfolio;
+    var filteredPortfolio;
+    var rawHash;
+    var filteredHash;
+
+    try {
+        rawPortfolio = getLocalPortfolioSnapshot();
+        filteredPortfolio = applyDeletionsToPortfolio(rawPortfolio, deletions || getDeletionsData());
+        rawHash = getPortfolioFingerprint(rawPortfolio);
+        filteredHash = getPortfolioFingerprint(filteredPortfolio);
+
+        if (rawHash !== filteredHash) {
+            savePortfolioLocalOnly(filteredPortfolio, reason || "apply-deletions");
+            if (typeof markWftPortfolioIndexDirty === "function") {
+                markWftPortfolioIndexDirty(reason || "apply-deletions");
+            }
+            refreshPortfolioUiAfterCloudMerge();
+            wftSyncLog("[WFT Sync][PORTFOLIO] applied deletion cleanup", { reason: reason || "apply-deletions", rawHash: rawHash, filteredHash: filteredHash });
+            return true;
+        }
+    } catch (e) {
+        wftDebugWarn("[WFT Sync] Could not apply deletion cleanup to local portfolio:", e);
+    }
+
+    return false;
+}
+
 function refreshPortfolioUiAfterCloudMerge() {
     try {
         if (typeof renderStudentPortfolio === "function") renderStudentPortfolio();
@@ -6778,10 +6866,22 @@ function refreshPortfolioUiAfterCloudMerge() {
 function syncWftPortfolioIfNeeded(reason) {
     wftSyncLog("[WFT Sync] portfolio sync start", reason);
     var deletions = getDeletionsData();
-    var localPortfolio = applyDeletionsToPortfolio(getLocalPortfolioSnapshot(), deletions);
+    var rawLocalPortfolio = getLocalPortfolioSnapshot();
+    var rawLocalHash = getPortfolioFingerprint(rawLocalPortfolio);
+    var localPortfolio = applyDeletionsToPortfolio(rawLocalPortfolio, deletions);
     var localHash = getPortfolioFingerprint(localPortfolio);
     var counterSnapshot = wftSyncState.localPortfolioCounter;
     var hadPending = wftSyncState.pendingPortfolioPush;
+
+    if (rawLocalHash !== localHash) {
+        savePortfolioLocalOnly(localPortfolio, "apply-deletions-before-sync");
+        if (typeof markWftPortfolioIndexDirty === "function") {
+            markWftPortfolioIndexDirty("apply-deletions-before-sync");
+        }
+        refreshPortfolioUiAfterCloudMerge();
+        wftSyncLog("[WFT Sync][PORTFOLIO] local deletion cleanup before sync", { rawHash: rawLocalHash, filteredHash: localHash });
+    }
+
     wftSyncLog("[WFT Sync] portfolio local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: Object.keys(localPortfolio || {}).length });
 
     return findWftFilesByNamePromise(WFT_PORTFOLIO_FILENAME)
@@ -7981,21 +8081,36 @@ function saveStudentSession(studentName, sessionData) {
 }
 
 function removeStudentSession(studentName, sessionId) {
-    if (!studentName || !sessionId) return;
+    if (!studentName || sessionId === undefined || sessionId === null || String(sessionId).trim() === "") return;
     var portfolio = getPortfolioData();
     if (!portfolio[studentName] || !Array.isArray(portfolio[studentName].sessions)) return;
-    var sessions = portfolio[studentName].sessions;
+    var originalSessions = portfolio[studentName].sessions;
+    var sessions = originalSessions;
     var originalLength = sessions.length;
-    // Prefer removing by the unique id assigned to each session
-    sessions = sessions.filter(function(session) {
-        return session && session.id !== sessionId && session.createdAt !== sessionId;
+    var targetSession = null;
+    var sessionKey = String(sessionId);
+
+    // Capture the session before removing it so deletion sync can record every stable identity.
+    for (var t = 0; t < originalSessions.length; t += 1) {
+        var candidate = originalSessions[t];
+        if (candidate && (String(candidate.id || "") === sessionKey || String(candidate.createdAt || "") === sessionKey)) {
+            targetSession = candidate;
+            break;
+        }
+    }
+
+    // Prefer removing by the unique id assigned to each session, with createdAt as a legacy fallback.
+    sessions = originalSessions.filter(function(session) {
+        return session && String(session.id || "") !== sessionKey && String(session.createdAt || "") !== sessionKey;
     });
-    // If nothing was removed (perhaps legacy sessions without an id), fall back to removing by index
+
+    // If nothing was removed (perhaps legacy sessions without an id), fall back to removing by index.
     if (sessions.length === originalLength) {
         var idx = -1;
-        for (var i = 0; i < sessions.length; i++) {
-            if (String(i) === String(sessionId)) {
+        for (var i = 0; i < sessions.length; i += 1) {
+            if (String(i) === sessionKey) {
                 idx = i;
+                targetSession = sessions[i] || targetSession;
                 break;
             }
         }
@@ -8003,8 +8118,9 @@ function removeStudentSession(studentName, sessionId) {
             sessions.splice(idx, 1);
         }
     }
+
     if (sessions.length !== originalLength) {
-        recordSessionDeletion(studentName, sessionId);
+        recordPortfolioSessionDeletion(studentName, sessionId, targetSession);
     }
     portfolio[studentName].sessions = sessions;
     savePortfolioData(portfolio);
