@@ -905,6 +905,12 @@ var WFT_IMAGE_IDEMPOTENCY_V2 = true;
 var WFT_SESSION_TOKEN_STORAGE_V2 = true;
 var WFT_GIS_AUTH_V2 = true;
 
+// Sync lifecycle feature flags used by this runtime bundle.
+// Keep these declared here because index.html loads this bundle directly;
+// js/core/config.js is a source-module copy and is not loaded on the page.
+var WFT_LAMPORT_V1 = true;
+var WFT_BROADCAST_CHANNEL_V1 = true;
+
 
 function isWftDebugLoggingEnabled() {
     return WFT_DEBUG === true || WFT_SYNC_DEBUG === true;
@@ -1081,6 +1087,25 @@ function getWftDeviceId() {
     return meta.deviceId;
 }
 
+// ── Lamport clock helpers ──
+// Persistent per-device counter used to order deletes and edits across devices.
+function getDeviceLamport() {
+    var meta = getWftStorageMeta();
+    if (typeof meta.deviceLamport !== "number" || isNaN(meta.deviceLamport)) {
+        meta.deviceLamport = 0;
+        setWftStorageMeta(meta);
+    }
+    return meta.deviceLamport;
+}
+
+function incrementDeviceLamport() {
+    var meta = getWftStorageMeta();
+    var current = (typeof meta.deviceLamport === "number" && !isNaN(meta.deviceLamport)) ? meta.deviceLamport : 0;
+    meta.deviceLamport = current + 1;
+    setWftStorageMeta(meta);
+    return meta.deviceLamport;
+}
+
 // ── Safe Mode ──
 function enterWftStorageSafeMode(reason) {
     var meta = getWftStorageMeta();
@@ -1131,7 +1156,10 @@ function buildWftEmergencyBackupObject() {
             WFT_SPLIT_STUDENT_FILES_V1: WFT_SPLIT_STUDENT_FILES_V1,
             WFT_LAZY_PORTFOLIO_LOAD_V1: WFT_LAZY_PORTFOLIO_LOAD_V1,
             WFT_STORAGE_HEALTH_UI_V1: WFT_STORAGE_HEALTH_UI_V1,
-            WFT_SYNC_ENGINE_V2: WFT_SYNC_ENGINE_V2
+            WFT_SYNC_ENGINE_V2: WFT_SYNC_ENGINE_V2,
+            WFT_GIS_AUTH_V2: WFT_GIS_AUTH_V2,
+            WFT_LAMPORT_V1: WFT_LAMPORT_V1,
+            WFT_BROADCAST_CHANNEL_V1: WFT_BROADCAST_CHANNEL_V1
         },
         contents: {}
     };

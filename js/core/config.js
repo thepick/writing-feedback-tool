@@ -17,7 +17,7 @@ var WFT_STUDENT_ID_MAP_V1 = false;
 var WFT_SPLIT_STUDENT_FILES_V1 = true;
 var WFT_LAZY_PORTFOLIO_LOAD_V1 = false;
 var WFT_STORAGE_HEALTH_UI_V1 = false;
-var WFT_LAMPORT_V1 = false;
+var WFT_LAMPORT_V1 = true;
 // Phase B — Tombstone compaction (90-day window, disabled pending validation)
 var WFT_TOMBSTONE_COMPACTION_V1 = false;
 // Phase D — BroadcastChannel coordination for multi-tab sync (low risk, improves behavior)
