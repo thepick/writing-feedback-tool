@@ -110,9 +110,10 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
             if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
             var deletedMs = d.deletedAt && !isNaN(Date.parse(d.deletedAt)) ? Date.parse(d.deletedAt) : 0;
             if (!deletedMs) { continue; }
-            // Deletion wins only when it is strictly newer than the session.
-            // Equal timestamps can happen during sync batches and should not delete live data.
-            if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
+            // TOMBSTONE FIX: A deletion record always wins, regardless of timestamps.
+            // The old code let sessions with equal or newer timestamps survive a deletion,
+            // which caused deleted sessions to be re-uploaded by other devices.
+            return true;
         }
     }
     return false;

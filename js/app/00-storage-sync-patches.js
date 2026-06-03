@@ -3015,9 +3015,10 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
             if (normalizedStudentId && rec.studentId && String(rec.studentId) !== normalizedStudentId) { continue; }
             var deletedMs = rec.deletedAt && !isNaN(Date.parse(rec.deletedAt)) ? Date.parse(rec.deletedAt) : 0;
             if (!deletedMs) { continue; }
-            // Deletion wins only when it is strictly newer than the session.
-            // Equal timestamps can happen during sync batches and should not delete live data.
-            if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
+            // TOMBSTONE FIX: A deletion record always wins, regardless of timestamps.
+            // The old code let sessions with equal or newer timestamps survive a deletion,
+            // which caused deleted sessions to be re-uploaded by other devices.
+            return true;
         }
     }
     return false;
@@ -7144,6 +7145,19 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
 
     // DO NOT add root-level metadata keys (like updatedAt) - normalizePortfolioData
     // treats every top-level key as a student name, so metadata would become a fake student.
+    // TOMBSTONE FIX: After the union-merge is complete, re-apply the deletion
+    // filter to the merged result. This guarantees that even if a remote device
+    // uploaded a session that is in our local deletion log, it gets stripped out
+    // before the merged portfolio is ever saved or uploaded.
+    var currentDeletions;
+    try {
+        currentDeletions = (typeof getDeletionsData === 'function') ? getDeletionsData() : null;
+    } catch(e) {
+        currentDeletions = null;
+    }
+    if (currentDeletions) {
+        merged = applyDeletionsToPortfolio(merged, currentDeletions);
+    }
     return rebuildWftPortfolioDerivedStats(merged);
 }
 
@@ -7314,6 +7328,10 @@ function syncWftPortfolioIfNeeded(reason) {
 
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
                         wftSyncLog("[WFT Sync][PORTFOLIO] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
+                        // TOMBSTONE FIX: Always re-apply deletions to the final merged result
+                        // right before uploading. This is a last-chance filter so Device B never
+                        // accidentally re-uploads a session that this device just deleted.
+                        merged = applyDeletionsToPortfolio(merged, getDeletionsData());
                         return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, merged).then(function () {
                             wftSyncState.lastSyncedPortfolioHash = mergedHash;
                             wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
