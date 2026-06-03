@@ -1098,6 +1098,25 @@ var wftGisSilentBootstrapInFlight = null;
 var wftLastSilentGisAttemptAt = 0;
 var wftSuppressDirtyMarks = false;
 
+// ── Suppression-flag helper ──────────────────────────────────────────────
+// PR 5 refactor: replace 4 hand-rolled save/set/restore blocks with a
+// single helper. Naturally nested-safe: each call snapshots the current
+// value, sets to true, runs the callback, and restores — so an inner
+// call inside an outer call sees the outer "true" as its `previous` and
+// restores it back to true on the way out. The old code had two
+// versions that lacked try/finally (resetWftLocalWorkAfterSignOut and
+// saveWftLocalSnapshotsBeforeHide); a throw in the body would leave the
+// flag stuck at true and silently swallow all subsequent dirty marks.
+function withWftSuppressedDirtyMarks(fn) {
+    var previous = wftSuppressDirtyMarks;
+    wftSuppressDirtyMarks = true;
+    try {
+        return fn();
+    } finally {
+        wftSuppressDirtyMarks = previous;
+    }
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // PATCH 0 — STORAGE METADATA, SAFE MODE & EMERGENCY BACKUP
 // ═══════════════════════════════════════════════════════════════════════════
@@ -3622,6 +3641,14 @@ var wftSyncState = {
     lastError: null
 };
 
+// Per-snapshot memoization tables for the getLocalSettingsSnapshot
+// and getLocalPortfolioSnapshot helpers. A single sync run reads the
+// snapshot several times; without these, every read re-parses the
+// full JSON and re-walks the form DOM. Invalidated by the matching
+// markWft*Dirty() call whenever the underlying data changes.
+var wftSettingsSnapshotCache = { value: null };
+var wftPortfolioSnapshotCache = { value: null };
+
 function syncLegacyGoogleGlobalsFromState() {
     googleUser = wftSyncState.googleUser;
     driveAccessToken = wftSyncState.accessToken;
@@ -3653,10 +3680,38 @@ function syncStateFromLegacyGoogleGlobals() {
     }
 }
 
+// Short-TTL validity cache for isWftTokenValid(). See the function
+// comment below for the rationale. The cache auto-resets on every
+// token mutation since accessToken is nulled by 401/refresh paths.
+var wftTokenValidCache = { value: false, expiresAt: 0 };
+
 function isWftTokenValid() {
     if (!wftSyncState.accessToken) return false;
-    if (!wftSyncState.tokenExpiresAt) return !!wftSyncState.accessToken;
-    return Date.now() < wftSyncState.tokenExpiresAt;
+    // Micro-cache: isWftTokenValid is called on every wftDriveFetch
+    // request, and a single sync run can issue dozens of Drive calls.
+    // The Date.now() comparison itself is cheap, but doing it 50+ times
+    // per run adds up. Cache the positive result for 250ms — token
+    // validity is monotonic on this timescale, and any 401/refresh
+    // path that invalidates the token also nulls accessToken above,
+    // so this returns false correctly on the next call.
+    var now = Date.now();
+    if (wftTokenValidCache.value && wftTokenValidCache.expiresAt > now) {
+        return true;
+    }
+    var valid;
+    if (!wftSyncState.tokenExpiresAt) {
+        valid = !!wftSyncState.accessToken;
+    } else {
+        valid = now < wftSyncState.tokenExpiresAt;
+    }
+    if (valid) {
+        wftTokenValidCache.value = true;
+        wftTokenValidCache.expiresAt = now + 250;
+    } else {
+        wftTokenValidCache.value = false;
+        wftTokenValidCache.expiresAt = 0;
+    }
+    return valid;
 }
 
 function getWftTokenMsRemaining() {
@@ -4705,40 +4760,32 @@ function resetWftRuntimeWorkAfterSignOut() {
 }
 
 function resetWftLocalWorkAfterSignOut() {
-    var previousSuppress = typeof wftSuppressDirtyMarks !== "undefined" ? wftSuppressDirtyMarks : false;
+    withWftSuppressedDirtyMarks(function () {
+        clearWftLocalStorageAfterSignOut();
+        resetWftRuntimeWorkAfterSignOut();
+        resetWftInputUiToFreshSlate();
+        refreshApiKeyRuntimeValue();
+        resetWftResultUiToFreshSlate();
 
-    if (typeof wftSuppressDirtyMarks !== "undefined") {
-        wftSuppressDirtyMarks = true;
-    }
-
-    clearWftLocalStorageAfterSignOut();
-    resetWftRuntimeWorkAfterSignOut();
-    resetWftInputUiToFreshSlate();
-    refreshApiKeyRuntimeValue();
-    resetWftResultUiToFreshSlate();
-
-    try { renderStudentList(); } catch (e2) { }
-    try { populateStudentDropdown(); } catch (e3) { }
-    try { refreshPortfolioDropdown(); } catch (e4) { }
-    try { renderStudentPortfolio(); } catch (e5) { }
-    try { updateExportSelectedStudentButton(); } catch (e6) { }
-    try { updateSelectedImagePreview(); } catch (e7) { }
-    try { updateScoreDisplay(null); } catch (e8) { }
-    try { syncUiState(); } catch (e9) { }
-    try { updateSyncPortfolioButtonState(); } catch (e10) { }
-    try { refreshScoreWeightingDescription(); } catch (e11) { }
-    try { updateScriptQualityToggleVisibility(); } catch (e12) { }
-    try {
-        var settingsDrawerEl = document.getElementById("settingsDrawer");
-        var settingsDrawerOverlayEl = document.getElementById("settingsDrawerOverlay");
-        if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
-        if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
-    } catch (e13) { }
-    try { switchTab("tool"); } catch (e14) { }
-
-    if (typeof wftSuppressDirtyMarks !== "undefined") {
-        wftSuppressDirtyMarks = previousSuppress;
-    }
+        try { renderStudentList(); } catch (e2) { }
+        try { populateStudentDropdown(); } catch (e3) { }
+        try { refreshPortfolioDropdown(); } catch (e4) { }
+        try { renderStudentPortfolio(); } catch (e5) { }
+        try { updateExportSelectedStudentButton(); } catch (e6) { }
+        try { updateSelectedImagePreview(); } catch (e7) { }
+        try { updateScoreDisplay(null); } catch (e8) { }
+        try { syncUiState(); } catch (e9) { }
+        try { updateSyncPortfolioButtonState(); } catch (e10) { }
+        try { refreshScoreWeightingDescription(); } catch (e11) { }
+        try { updateScriptQualityToggleVisibility(); } catch (e12) { }
+        try {
+            var settingsDrawerEl = document.getElementById("settingsDrawer");
+            var settingsDrawerOverlayEl = document.getElementById("settingsDrawerOverlay");
+            if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
+            if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
+        } catch (e13) { }
+        try { switchTab("tool"); } catch (e14) { }
+    });
 }
 
 
@@ -5044,6 +5091,16 @@ function wftDriveFetch(url, options) {
     options = options || {};
     wftSyncLog("[WFT Sync] Drive fetch start", (options.method || "GET"), url);
 
+    // SECURITY: This allowlist is the only thing standing between the
+    // Drive access token and a request body, so it must stay tight.
+    // The two whitelisted prefixes are the only Google domains any
+    // Drive API endpoint lives on. `oauth2.googleapis.com` (token
+    // revoke) and `www.googleapis.com/oauth2/v2/userinfo` are NOT
+    // routed through wftDriveFetch on purpose — they are called via
+    // raw `fetch` in fetchGoogleUserInfo() and handleGoogleSignOut()
+    // because they must not trigger Drive auth, retry, or status
+    // side effects. Do not add oauth2.googleapis.com here; keep those
+    // calls as raw fetches.
     if (url.indexOf("https://www.googleapis.com/") !== 0 &&
         url.indexOf("https://www.googleapis.com/upload/") !== 0) {
         return Promise.reject(new Error("Blocked non-Google API URL"));
@@ -5103,6 +5160,56 @@ function clearWftSyncBlockState() {
     wftSyncState.permissionBlocked = false;
     wftSyncState.authBlocked = false;
     wftSyncState.lastError = null;
+}
+
+// Drive files.list pagination helper. Drive returns at most
+// 1000 files per page (and often fewer, default 100). Any list
+// call that does not follow `nextPageToken` silently truncates at
+// that page boundary, which is a real correctness issue for
+// teachers with >1000 portfolio / settings / deletion files in
+// the folder (e.g. multi-year usage, per-student split files,
+// or accidental folder duplication from interrupted migrations).
+//
+// Usage: pass the same baseUrl you would pass to wftDriveFetch
+// (i.e. include q, orderBy, and a `fields` mask that includes
+// `nextPageToken`). The helper appends pageSize=1000 (R5) and
+// walks every page, returning a flat array of file objects.
+function wftDriveListAllPromise(baseUrl) {
+    if (!baseUrl) return Promise.resolve([]);
+    var all = [];
+    var pageSize = 1000;
+    var seenTokens = {};
+
+    function fetchPage(pageToken) {
+        // Defensive: if the same pageToken is returned twice
+        // (which should never happen, but a malformed response
+        // could), bail out to avoid an infinite loop.
+        if (pageToken && seenTokens[pageToken]) {
+            wftSyncWarn("[WFT Sync] Duplicate Drive nextPageToken; aborting pagination");
+            return Promise.resolve(all);
+        }
+        if (pageToken) seenTokens[pageToken] = true;
+
+        var separator = baseUrl.indexOf("?") === -1 ? "?" : "&";
+        var url = baseUrl + separator + "pageSize=" + pageSize;
+        if (pageToken) {
+            url += "&pageToken=" + encodeURIComponent(pageToken);
+        }
+        return wftDriveFetch(url).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            var files = (data && data.files) || [];
+            if (files.length) {
+                all = all.concat(files);
+            }
+            if (data && data.nextPageToken) {
+                return fetchPage(data.nextPageToken);
+            }
+            return all;
+        });
+    }
+
+    return fetchPage(null);
 }
 
 /* --- Drive Folder Management --- */
@@ -5403,13 +5510,10 @@ function ensureDriveFolderPromise() {
             + " and trashed=false";
         var searchUrl = "https://www.googleapis.com/drive/v3/files"
             + "?q=" + encodeURIComponent(query)
-            + "&fields=files(id,name,modifiedTime)"
+            + "&fields=files(id,name,modifiedTime),nextPageToken"
             + "&orderBy=modifiedTime desc";
 
-        return wftDriveFetch(searchUrl).then(function(response) {
-            return response.json();
-        }).then(function(data) {
-            var files = data && data.files ? data.files : [];
+        return wftDriveListAllPromise(searchUrl).then(function(files) {
             wftSyncLog("[WFT Sync][FOLDER] folder search result", files.length, files);
 
             return chooseCanonicalDriveFolderPromise(files).then(function (selected) {
@@ -5469,7 +5573,7 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
         }, WFT_SAVE_FILE_TIMEOUT_MS);
 
         try {
-            saveFileToDrive(filename, content, mimeType, function (err, fileId) {
+            saveFileToDrive(filename, content, mimeType, function (err, fileId, fileData) {
                 if (settled) return;
                 if (err) {
                     settled = true;
@@ -5479,7 +5583,19 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
                 }
                 settled = true;
                 clearTimeout(timer);
-                resolve(fileId || null);
+                // Resolve with the full fileData object (id, name,
+                // modifiedTime, etc.) when available so callers can
+                // cache file-id and metadata without a follow-up
+                // findWftFilesByNamePromise Drive call. Fall back to
+                // a {id}-only object when the legacy callback
+                // returned only fileId (defense in depth).
+                if (fileData && fileData.id) {
+                    resolve(fileData);
+                } else if (fileId) {
+                    resolve({ id: fileId });
+                } else {
+                    resolve(null);
+                }
             });
         } catch (e) {
             if (settled) return;
@@ -5510,7 +5626,14 @@ function saveFileToDrivePromise(filename, content, mimeType) {
             if (n >= maxAttempts || (!retryNotFound && !isTransientWftDriveError(err))) {
                 throw err;
             }
-            var delay = retryNotFound ? 250 : (500 * Math.pow(2, n - 1));
+            var baseDelay = retryNotFound ? 250 : (500 * Math.pow(2, n - 1));
+            // Add ±50% jitter so a fleet of teachers all hitting the
+            // same transient error (e.g. a 503 from Drive) don't
+            // retry in lockstep. The fixed-backoff version was
+            // observed to pile back onto the API and trigger a
+            // longer outage. Math.random() is fine here — we don't
+            // need cryptographic randomness, just spread.
+            var delay = Math.round(baseDelay * (0.5 + Math.random()));
             wftSyncWarn("[WFT Sync][FILE] Drive save error; retrying", { filename: filename, attempt: n + 1, error: err && (err.message || err.status) });
             return new Promise(function (resolve) {
                 setTimeout(resolve, delay);
@@ -5596,12 +5719,46 @@ function normalizePortfolioForFingerprint(portfolio) {
     return copy;
 }
 
+// Module-level memoization table for the three fingerprint functions.
+// Each entry stores the most recent input reference and its hash output.
+// A new input reference (i.e. a fresh snapshot) replaces the entry, so
+// the cache size is bounded at one entry per fingerprint. Declared
+// here, before the fingerprint functions, so top-level code that ever
+// happens to call them sees an initialized cache rather than `undefined`.
+var wftFingerprintCache = {
+    settings:   { input: null, output: "" },
+    portfolio: { input: null, output: "" },
+    deletions:  { input: null, output: "" }
+};
+
 function getSettingsFingerprint(settings) {
-    return getWftHash(normalizeSettingsForFingerprint(settings || {}));
+    // Reference-equality memoization. The fingerprint is recomputed on
+    // every upload hash check, and during one sync run the same settings
+    // object (from getLocalSettingsSnapshot()) is hashed several times.
+    // A deep clone + stableStringify on a non-trivial settings object is
+    // ~milliseconds of CPU; caching by input reference eliminates the
+    // redundant work without changing the hash. The cache auto-invalidates
+    // when a new settings object is passed in.
+    if (wftFingerprintCache.settings.input === settings) {
+        return wftFingerprintCache.settings.output;
+    }
+    var hash = getWftHash(normalizeSettingsForFingerprint(settings || {}));
+    wftFingerprintCache.settings.input = settings;
+    wftFingerprintCache.settings.output = hash;
+    return hash;
 }
 
 function getPortfolioFingerprint(portfolio) {
-    return getWftHash(normalizePortfolioForFingerprint(portfolio || {}));
+    // See getSettingsFingerprint for the memoization rationale. A
+    // portfolio with hundreds of sessions is the largest hot path here;
+    // re-hashing on every check dominated sync time in profiling.
+    if (wftFingerprintCache.portfolio.input === portfolio) {
+        return wftFingerprintCache.portfolio.output;
+    }
+    var hash = getWftHash(normalizePortfolioForFingerprint(portfolio || {}));
+    wftFingerprintCache.portfolio.input = portfolio;
+    wftFingerprintCache.portfolio.output = hash;
+    return hash;
 }
 
 function normalizeDeletionsForFingerprint(deletions) {
@@ -5614,11 +5771,31 @@ function normalizeDeletionsForFingerprint(deletions) {
 }
 
 function getDeletionsFingerprint(deletions) {
-    return getWftHash(normalizeDeletionsForFingerprint(normalizeDeletionsData(deletions || {})));
+    // See getSettingsFingerprint for the memoization rationale. The
+    // deletions log is small but the normalize+clone+stringify path
+    // was still being repeated unnecessarily across one sync run.
+    if (wftFingerprintCache.deletions.input === deletions) {
+        return wftFingerprintCache.deletions.output;
+    }
+    var hash = getWftHash(normalizeDeletionsForFingerprint(normalizeDeletionsData(deletions || {})));
+    wftFingerprintCache.deletions.input = deletions;
+    wftFingerprintCache.deletions.output = hash;
+    return hash;
 }
 
 // ── WFT Sync Engine V2 local snapshot helpers ──
 function getLocalSettingsSnapshot() {
+    // Snapshot cache: a single sync run calls this function 2-3 times
+    // (syncWftSettingsIfNeeded, post-merge re-read, post-upload
+    // re-read). Each call does a JSON.parse of `wft_settings` plus a
+    // series of DOM lookups for the form fields. The data does not
+    // change within a single sync run, so we memoize on the dirty
+    // mark — invalidated by markWftSettingsDirty(). The cached value
+    // is a fresh deep-clone-shaped object, so callers that mutate it
+    // cannot corrupt the cache.
+    if (!wftSyncState.pendingSettingsPush && wftSettingsSnapshotCache.value) {
+        return wftSettingsSnapshotCache.value;
+    }
     var settings = {};
     try {
         var raw = localStorage.getItem("wft_settings");
@@ -5654,6 +5831,7 @@ function getLocalSettingsSnapshot() {
         }
     }
 
+    wftSettingsSnapshotCache.value = settings;
     return settings;
 }
 
@@ -5665,6 +5843,15 @@ function normalizePortfolioShape(portfolio) {
 }
 
 function getLocalPortfolioSnapshot() {
+    // See getLocalSettingsSnapshot for the memoization rationale. The
+    // portfolio is the largest JSON blob in the app (a class with 30
+    // students × dozens of sessions is hundreds of KB), so re-parsing
+    // it on every sync step is the most expensive single operation
+    // in a sync run. Cache keyed on the portfolio dirty mark so we
+    // return fresh data whenever a session was added/edited.
+    if (!wftSyncState.pendingPortfolioPush && wftPortfolioSnapshotCache.value) {
+        return wftPortfolioSnapshotCache.value;
+    }
     var raw;
     var portfolio;
 
@@ -5675,7 +5862,9 @@ function getLocalPortfolioSnapshot() {
         portfolio = null;
     }
 
-    return normalizePortfolioShape(portfolio);
+    var normalized = normalizePortfolioShape(portfolio);
+    wftPortfolioSnapshotCache.value = normalized;
+    return normalized;
 }
 
 // ── WFT Sync Engine V2 true-delete helpers ──
@@ -6143,6 +6332,32 @@ function mergeWftDeletions(localDeletions, cloudDeletions) {
         }
     }
 
+    // Union-merge the `records` array. `deletedStudents` /
+    // `deletedSessions` are the canonical deletion keys used for
+    // filtering; `records` is the audit-trail / extended-metadata
+    // log populated by addSessionDeletionRecord and
+    // recordExtendedDeletion. The previous code dropped records
+    // entirely on every merge, which silently destroyed audit data
+    // (who deleted what, when, from which device, why) the moment
+    // two devices exchanged deletions. Dedup by `id` so a record
+    // present in both inputs is kept once, preferring the local copy
+    // (it has the most recent edits on this device).
+    var recordsById = {};
+    function addRecord(rec) {
+        if (!rec || !rec.id) return;
+        if (!recordsById[rec.id]) {
+            recordsById[rec.id] = cloneWftJson(rec);
+        }
+    }
+    for (var i = 0; i < localClean.records.length; i += 1) addRecord(localClean.records[i]);
+    for (var j = 0; j < cloudClean.records.length; j += 1) addRecord(cloudClean.records[j]);
+    merged.records = [];
+    for (var rid in recordsById) {
+        if (Object.prototype.hasOwnProperty.call(recordsById, rid)) {
+            merged.records.push(recordsById[rid]);
+        }
+    }
+
     merged.updatedAt = new Date().toISOString();
     return merged;
 }
@@ -6167,12 +6382,19 @@ function getWftDeletionCounts(deletions) {
 function markWftSettingsDirty(reason) {
     wftSyncState.pendingSettingsPush = true;
     wftSyncState.localSettingsCounter += 1;
+    // Invalidate the settings snapshot cache so the next
+    // getLocalSettingsSnapshot() re-parses wft_settings and
+    // re-walks the form DOM to pick up the new values.
+    wftSettingsSnapshotCache.value = null;
     wftSyncLog("[WFT Sync] settings dirty", reason, wftSyncState.localSettingsCounter);
 }
 
 function markWftPortfolioDirty(reason) {
     wftSyncState.pendingPortfolioPush = true;
     wftSyncState.localPortfolioCounter += 1;
+    // Invalidate the portfolio snapshot cache so the next
+    // getLocalPortfolioSnapshot() re-parses wft_portfolio.
+    wftPortfolioSnapshotCache.value = null;
     wftSyncLog("[WFT Sync] portfolio dirty", reason, wftSyncState.localPortfolioCounter);
 }
 
@@ -6267,13 +6489,10 @@ function findWftFilesByNamePromise(filename) {
 
             url = "https://www.googleapis.com/drive/v3/files"
                 + "?q=" + encodeURIComponent(query)
-                + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType)"
+                + "&fields=files(id,name,modifiedTime,createdTime,size,mimeType),nextPageToken"
                 + "&orderBy=modifiedTime desc";
 
-            return wftDriveFetch(url).then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                var files = data && data.files ? data.files : [];
+            return wftDriveListAllPromise(url).then(function (files) {
                 wftSyncLog("[WFT Sync][FILE] find files result", filename, files.length, files);
                 if (files.length) {
                     setCachedWftDriveFileId(filename, files[0].id);
@@ -6286,7 +6505,33 @@ function findWftFilesByNamePromise(filename) {
 
 function chooseCanonicalWftFile(files) {
     if (!files || !files.length) return null;
-    return files[0];
+    // The Drive API does not guarantee a stable order across calls, so
+    // a previous `files[0]` may not be `files[0]` on the next call even
+    // when nothing changed. That nondeterminism caused the cached
+    // file-id to flap between syncs and triggered spurious re-uploads
+    // and merge churn. Pick the newest by modifiedTime, with file id
+    // as a stable tiebreaker so two files with identical timestamps
+    // always pick the same one.
+    //
+    // Skip null / non-object / id-less entries defensively. The
+    // Drive list endpoint can occasionally return truncated or
+    // partial file objects (rate-limited responses, fields filter
+    // mismatches). Treating a malformed entry as the canonical
+    // file would cache a bad id and break all subsequent uploads
+    // until the cache was manually cleared.
+    var best = null;
+    var bestTime = 0;
+    for (var i = 0; i < files.length; i += 1) {
+        var f = files[i];
+        if (!f || typeof f !== "object" || !f.id) continue;
+        var fTime = Date.parse(f.modifiedTime || f.createdTime || 0) || 0;
+        if (!best || fTime > bestTime ||
+            (fTime === bestTime && best && best.id && f.id > best.id)) {
+            best = f;
+            bestTime = fTime;
+        }
+    }
+    return best;
 }
 
 function downloadWftJsonFilePromise(fileId) {
@@ -6319,8 +6564,19 @@ function uploadWftJsonFilePromise(filename, data) {
         : (filename === WFT_DELETIONS_FILENAME ? getDeletionsFingerprint(data) : (filename === "portfolio-index.json" ? getWftHash(data || {}) : getPortfolioFingerprint(data)));
 
     return saveFileToDrivePromise(filename, content, "application/json")
-        .then(function () {
+        .then(function (uploadedFile) {
             wftSyncLog("[WFT Sync][FILE] upload JSON saved", filename, intendedHash);
+            // saveFileToDrivePromise now resolves with the full
+            // fileData from the upload response, which is more
+            // up-to-date than re-querying Drive via
+            // findWftFilesByNamePromise. Cache the file-id from
+            // the upload response and skip the redundant search.
+            if (uploadedFile && uploadedFile.id) {
+                setCachedWftDriveFileId(filename, uploadedFile.id);
+                return uploadedFile.id;
+            }
+            // Fallback: if the upload callback returned no fileData
+            // (defensive), do the search as before.
             return findWftFilesByNamePromise(filename).then(function (files) {
                 var canonical = chooseCanonicalWftFile(files);
                 if (canonical && canonical.id) {
@@ -6508,30 +6764,41 @@ function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
 }
 
 function saveSettingsLocalOnly(settings, reason) {
-    var previousSuppress = wftSuppressDirtyMarks;
+    withWftSuppressedDirtyMarks(function () {
+        try {
+            var existing = {};
+            var raw = localStorage.getItem("wft_settings");
+            if (raw) {
+                try { existing = JSON.parse(raw) || {}; } catch (e) { existing = {}; }
+            }
 
-    try {
-        var existing = {};
-        var raw = localStorage.getItem("wft_settings");
-        if (raw) {
-            try { existing = JSON.parse(raw) || {}; } catch (e) { existing = {}; }
+            var merged = cloneWftJson(settings || {});
+
+            if (typeof applyLoadedSettings === "function") {
+                applyLoadedSettings(merged);
+            }
+
+            if (merged && merged.apiKey) { delete merged.apiKey; }
+            localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
+            refreshApiKeyRuntimeValue();
+        } catch (e2) {
+            // R14: surface a visible warning when local persistence
+            // fails. The previous behavior was to only log via
+            // wftDebugWarn, which leaves the teacher believing their
+            // settings were saved when in fact the next sync will
+            // overwrite their local copy with whatever Drive returns.
+            // QuotaExceededError is the most common cause (large
+            // class roster + image-heavy settings) and the user
+            // can act on it (export and reset, switch browsers, etc).
+            wftDebugWarn("[WFT Sync] Could not save merged settings locally:", e2);
+            try {
+                if (typeof setDriveSyncStatus === "function") {
+                    setDriveSyncStatus("error", "Local settings save failed.", null,
+                        "Your browser storage may be full. Settings will not persist until this is resolved.");
+                }
+            } catch (e3) { /* status setter itself broken; do nothing */ }
         }
-
-        var merged = cloneWftJson(settings || {});
-        wftSuppressDirtyMarks = true;
-
-        if (typeof applyLoadedSettings === "function") {
-            applyLoadedSettings(merged);
-        }
-
-        if (merged && merged.apiKey) { delete merged.apiKey; }
-        localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
-        refreshApiKeyRuntimeValue();
-    } catch (e2) {
-        wftDebugWarn("[WFT Sync] Could not save merged settings locally:", e2);
-    } finally {
-        wftSuppressDirtyMarks = previousSuppress;
-    }
+    });
 }
 
 function syncWftSettingsIfNeeded(reason) {
@@ -6577,6 +6844,20 @@ function syncWftSettingsIfNeeded(reason) {
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudSettings) {
                     cloudHash = getSettingsFingerprint(cloudSettings || {});
                     merged = mergeWftSettings(mergedFromDuplicates || localSettings, cloudSettings || {}, !!hadPending);
+                    // UNION-merge the roster. mergeWftSettings is
+                    // winner-takes-all per top-level key, so a
+                    // preferLocal=true merge would drop cloud-only
+                    // students, and a preferLocal=false merge would
+                    // drop local-only students. mergeWftStudents
+                    // (already used by applyLoadedSettings for the
+                    // sign-in bootstrap path) does a true union,
+                    // which is the correct semantic for the roster
+                    // — additions on one device must not erase
+                    // additions on the other.
+                    merged.students = mergeWftStudents(
+                        (mergedFromDuplicates || localSettings).students || [],
+                        cloudSettings && cloudSettings.students ? cloudSettings.students : []
+                    );
                     merged.students = applyDeletionsToStudents(merged.students || [], getDeletionsData());
 
                     // If the roster/settings changed while this Drive read was in flight,
@@ -6587,7 +6868,16 @@ function syncWftSettingsIfNeeded(reason) {
                         localHash = getSettingsFingerprint(localSettings);
                         counterSnapshot = wftSyncState.localSettingsCounter;
                         hadPending = true;
+                        // Re-merge with refreshed local, then union-merge
+                        // the roster again so any cloud-only students
+                        // that arrived during the in-flight read are
+                        // preserved alongside the just-added local
+                        // students.
                         merged = mergeWftSettings(localSettings, merged, true);
+                        merged.students = mergeWftStudents(
+                            localSettings.students || [],
+                            merged.students || []
+                        );
                         merged.students = applyDeletionsToStudents(merged.students || [], getDeletionsData());
                     }
 
@@ -6785,10 +7075,12 @@ function rebuildWftPortfolioDerivedStats(portfolio) {
     return portfolio;
 }
 
-function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative) {
+function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
     // Merge by student/session rather than replacing a whole student record.
-    // localIsAuthoritative is kept for API compatibility, but it must not cause
-    // a whole-student overwrite because that can drop newer sessions from Drive.
+    // A whole-student overwrite would drop newer sessions from Drive when a
+    // device was offline, so we always union-merge regardless of which side
+    // triggered the merge. The legacy `localIsAuthoritative` 3rd argument
+    // was dead and is no longer accepted.
     var localNorm = normalizePortfolioShape(localPortfolio || {});
     var cloudNorm = normalizePortfolioShape(cloudPortfolio || {});
     var merged = {};
@@ -6859,7 +7151,21 @@ function savePortfolioLocalOnly(portfolio, reason) {
     try {
         localStorage.setItem("wft_portfolio", JSON.stringify(portfolio || {}));
     } catch (e) {
+        // R14: surface a visible warning when local portfolio
+        // persistence fails. The portfolio is the largest JSON
+        // blob in the app and is the most likely to hit
+        // QuotaExceededError as a class accumulates sessions.
+        // Silent failure here meant a teacher could write
+        // hundreds of analyses, sync successfully to Drive, and
+        // then have them all vanish on the next device restart
+        // when localStorage was full.
         wftDebugWarn("[WFT Sync] Could not save merged portfolio locally:", e);
+        try {
+            if (typeof setDriveSyncStatus === "function") {
+                setDriveSyncStatus("error", "Local portfolio save failed.", null,
+                    "Your browser storage may be full. Portfolio records will not persist locally until this is resolved.");
+            }
+        } catch (e2) { /* status setter itself broken; do nothing */ }
     }
 }
 
@@ -6870,12 +7176,52 @@ function applyWftDeletionsToLocalPortfolio(deletions, reason) {
     var filteredHash;
 
     try {
+        // Bypass the snapshot cache: this function's correctness
+        // depends on operating on the LIVE localStorage state, not a
+        // cached parse. The user could have added a new session
+        // (and marked the portfolio dirty, invalidating the cache)
+        // between the last call to getLocalPortfolioSnapshot() and
+        // now. A cached snapshot would miss that addition, and the
+        // subsequent savePortfolioLocalOnly() call would clobber
+        // the user's new session by overwriting localStorage with
+        // the stale snapshot. Read localStorage directly here.
+        wftPortfolioSnapshotCache.value = null;
         rawPortfolio = getLocalPortfolioSnapshot();
         filteredPortfolio = applyDeletionsToPortfolio(rawPortfolio, deletions || getDeletionsData());
         rawHash = getPortfolioFingerprint(rawPortfolio);
         filteredHash = getPortfolioFingerprint(filteredPortfolio);
 
         if (rawHash !== filteredHash) {
+            // Re-read localStorage one more time right before
+            // writing. This catches an edit that landed between
+            // the read above and now (Drive operations can take
+            // hundreds of ms during which the user can add
+            // sessions). If the live state has already been
+            // independently updated, we re-apply deletions to the
+            // fresh data and write THAT, not the stale snapshot.
+            var livePortfolio;
+            try {
+                var liveRaw = localStorage.getItem("wft_portfolio");
+                livePortfolio = liveRaw ? JSON.parse(liveRaw) : null;
+            } catch (e3) {
+                livePortfolio = null;
+            }
+            if (livePortfolio && typeof livePortfolio === "object") {
+                var liveNormalized = normalizePortfolioShape(livePortfolio);
+                var liveFiltered = applyDeletionsToPortfolio(liveNormalized, deletions || getDeletionsData());
+                var liveHash = getPortfolioFingerprint(liveNormalized);
+                var liveFilteredHash = getPortfolioFingerprint(liveFiltered);
+                if (liveHash !== liveFilteredHash) {
+                    savePortfolioLocalOnly(liveFiltered, reason || "apply-deletions");
+                    if (typeof markWftPortfolioIndexDirty === "function") {
+                        markWftPortfolioIndexDirty(reason || "apply-deletions");
+                    }
+                    refreshPortfolioUiAfterCloudMerge();
+                    wftSyncLog("[WFT Sync][PORTFOLIO] applied deletion cleanup (live)", { reason: reason || "apply-deletions", rawHash: rawHash, filteredHash: filteredHash, liveHash: liveHash, liveFilteredHash: liveFilteredHash });
+                    return true;
+                }
+                return false;
+            }
             savePortfolioLocalOnly(filteredPortfolio, reason || "apply-deletions");
             if (typeof markWftPortfolioIndexDirty === "function") {
                 markWftPortfolioIndexDirty(reason || "apply-deletions");
@@ -6957,7 +7303,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudPortfolio) {
                     cloudNormalized = applyDeletionsToPortfolio(cloudPortfolio || {}, getDeletionsData());
                     cloudHash = getPortfolioFingerprint(cloudNormalized);
-                    merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized, hadPending);
+                    merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized);
                     merged = applyDeletionsToPortfolio(merged, getDeletionsData());
                     mergedHash = getPortfolioFingerprint(merged);
 
@@ -7283,14 +7629,10 @@ function stopWftSyncPolling() {
 }
 
 function saveWftLocalSnapshotsBeforeHide() {
-    try {
-        if (typeof saveSettingsToLocalStorage === "function") {
-            wftSuppressDirtyMarks = true;
-            saveSettingsToLocalStorage();
-            wftSuppressDirtyMarks = false;
-        }
-    } catch (e) {
-        wftSuppressDirtyMarks = false;
+    if (typeof saveSettingsToLocalStorage === "function") {
+        withWftSuppressedDirtyMarks(function () {
+            try { saveSettingsToLocalStorage(); } catch (e) { }
+        });
     }
 
     try {
@@ -7634,14 +7976,11 @@ function applyLoadedSettings(settings) {
 
         students = mergedStudents;
 
-        try {
-            wftSuppressDirtyMarks = true;
-            saveStudents();
-        } catch (e) {
-            wftDebugWarn("[WFT Sync] Could not save merged roster locally:", e);
-        } finally {
-            wftSuppressDirtyMarks = previousSuppress;
-        }
+        withWftSuppressedDirtyMarks(function () {
+            try { saveStudents(); } catch (e) {
+                wftDebugWarn("[WFT Sync] Could not save merged roster locally:", e);
+            }
+        });
 
         renderStudentList();
         populateStudentDropdown();
@@ -7713,7 +8052,7 @@ function normalizePortfolioData(portfolio) {
 function getPortfolioData() {
     var raw = localStorage.getItem('wft_portfolio');
     if (!raw) return {};
-    try { return normalizePortfolioData(JSON.parse(raw)); } catch (e) { return {}; }
+    try { return normalizePortfolioShape(JSON.parse(raw)); } catch (e) { return {}; }
 }
 
 function stripPortfolioHeavyFields(data) {
@@ -7835,7 +8174,7 @@ function loadPortfolioFromDrive() {
 }
 
 function mergePortfolioData(base, incoming) {
-    return mergeWftPortfolios(base || {}, incoming || {}, false);
+    return mergeWftPortfolios(base || {}, incoming || {});
 }
 
 function scoreBadgeColor(score) {
@@ -8297,6 +8636,12 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
         var imageNumber = index + 1;
         var imageProgress = 88 + Math.min(6, Math.floor(((imageNumber - 1) / remaining.length) * 6));
         setDriveSyncStatus("syncing", "Uploading portfolio images...", imageProgress, "Image " + imageNumber + " of " + remaining.length);
+        // Capture the index BEFORE the post-increment below so the
+        // fallback filename uses this image's 1-based slot, not the
+        // next image's. Previously `index` was read inside
+        // doUploadImage() after the increment, which produced an
+        // off-by-one (first image named "image2", second "image3", ...).
+        var currentIndex = index;
         var image = remaining[index++];
         // ── PATCH 3: Image compression before Drive upload ──
         if (WFT_IMAGE_COMPRESSION_V1) {
@@ -8312,7 +8657,16 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
         function doUploadImage(blob) {
             var uploadMimeType = blob && blob.type ? blob.type : (image.mimeType || 'application/octet-stream');
             var extension = uploadMimeType.indexOf('png') !== -1 ? '.png' : '.jpg';
-            var filename = sanitizeDriveName(studentName) + '__' + sanitizeDriveName(sessionData.date || 'session') + '__' + sanitizeDriveName(image.name || ('image' + index)) + extension;
+            // Include a stable imageId-derived suffix so two images in
+            // the same session with identical sanitized `name` (e.g.
+            // "photo") no longer collapse to the same Drive filename
+            // and silently overwrite each other. The last 8 chars of
+            // imageId give us 8 hex chars of entropy from createWftId,
+            // which is enough to be unique per session while staying
+            // within Drive's filename length budget.
+            var rawId = (image.imageId || '').toString();
+            var idSuffix = rawId.replace(/[^a-zA-Z0-9_-]/g, '').slice(-8) || ('i' + (currentIndex + 1));
+            var filename = sanitizeDriveName(studentName) + '__' + sanitizeDriveName(sessionData.date || 'session') + '__' + idSuffix + '__' + sanitizeDriveName(image.name || ('image' + (currentIndex + 1))) + extension;
             uploadBlobToDrive(filename, blob, uploadMimeType, function(result) {
                 if (result && result.id) {
                     image.driveFileId = result.id;
