@@ -111,11 +111,15 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
         var type = d.type || "session";
         if ((type === "session" || type === "archive-remove") && String(d.sessionId || "") === String(sessionId)) {
             if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
-            // Deletions always win over live sessions (preserve behavior)
-            // When WFT_LAMPORT_V1, deletions are identified by lamportClock on the deletion record
+            // When WFT_LAMPORT_V1, deletion record carries a lamportClock.
+            // The deletion wins unconditionally because isStudentSessionDeleted()
+            // has no access to the live session's lamportClock for comparison.
+            // TODO: add sessionLamportClock parameter to function signature
+            // when WFT_LAMPORT_V1 is activated, then compare clocks here.
             var useLamport = WFT_LAMPORT_V1 && (typeof d.lamportClock === "number" && !isNaN(d.lamportClock));
             if (useLamport) {
-                // Deletion record has lamport; any deletion record wins (live sessions have no lamport or lower)
+                // Deletion record has lamport; live sessions carry no lamport or lower.
+                // For now, a lamport-stamped deletion wins over any session.
                 return true;
             }
             var deletedMs = d.deletedAt && !isNaN(Date.parse(d.deletedAt)) ? Date.parse(d.deletedAt) : 0;
@@ -169,7 +173,7 @@ function applyDeletionsToFile(file, deletions) {
         displayName: file.displayName,
         legacyNameKeys: file.legacyNameKeys || [],
         createdAt: file.createdAt,
-        updatedAt: file.updatedAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         sessions: []
     };
 
@@ -202,7 +206,7 @@ function recordExtendedDeletion(type, studentId, sessionId, reason) {
         try {
             record.lamportClock = incrementDeviceLamport();
         } catch (eLam) {
-            record.lamportClock = 0;
+            record.lamportClock = null;
         }
     }
     deletions.records.push(record);
