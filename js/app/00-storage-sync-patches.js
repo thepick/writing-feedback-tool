@@ -4409,16 +4409,52 @@ function fetchGoogleUserInfo(token) {
     });
 }
 
+function toWftTitleCaseNamePart(part) {
+    part = String(part || "").trim();
+    if (!part) return "";
+    if (part.indexOf("@") !== -1) return part;
+    return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+}
+
+function formatGoogleDisplayNameForHeader(displayName) {
+    var raw = String(displayName || "").trim();
+    var parts;
+    var first;
+    var last;
+    var initials = [];
+    var i;
+
+    if (!raw) return "Connected";
+    if (raw.indexOf("@") !== -1) return raw;
+
+    parts = raw.split(/\s+/).filter(function(part) { return !!part; });
+    if (parts.length === 1) return toWftTitleCaseNamePart(parts[0]);
+    if (parts.length === 2) {
+        return toWftTitleCaseNamePart(parts[0]) + " " + toWftTitleCaseNamePart(parts[1]);
+    }
+
+    first = toWftTitleCaseNamePart(parts[0]);
+    last = toWftTitleCaseNamePart(parts[parts.length - 1]);
+    for (i = 1; i < parts.length - 1; i++) {
+        if (parts[i]) initials.push(parts[i].charAt(0).toUpperCase() + ".");
+    }
+    return first + " " + initials.join(" ") + (initials.length ? " " : "") + last;
+}
+
 function showSignedInState(info) {
     var signInBtnHeader = document.getElementById("googleSignInBtnHeader");
     var userInfoHeader = document.getElementById("googleUserInfoHeader");
     if (signInBtnHeader) signInBtnHeader.style.display = "none";
     if (userInfoHeader) userInfoHeader.style.display = "flex";
     var displayName = (info && (info.name || info.email)) ? (info.name || info.email) : "Connected";
+    var compactDisplayName = formatGoogleDisplayNameForHeader(displayName);
     var photoUrl = (info && (info.picture || info.photoURL)) ? (info.picture || info.photoURL) : "";
     setDuplicateSyncMaintenanceStatus("Google Drive is connected. Use Check now if you want to look for older duplicate sync files.", 0, false);
     var nameElHeader = document.getElementById("googleUserNameHeader");
-    if (nameElHeader) nameElHeader.textContent = displayName;
+    if (nameElHeader) {
+        nameElHeader.textContent = compactDisplayName;
+        nameElHeader.title = displayName;
+    }
     var avatarHeader = document.getElementById("googleUserAvatarHeader");
     if (avatarHeader) {
         if (photoUrl) {
@@ -4772,6 +4808,30 @@ function clampWftSyncProgress(progress) {
     return numeric;
 }
 
+function getCompactDriveSyncText(state, text) {
+    var raw = String(text || "");
+    var lower = raw.toLowerCase();
+
+    if (state === "syncing") return "Syncing...";
+    if (state === "synced" || state === "success") return "Synced";
+    if (state === "paused") return "Paused";
+    if (state === "error") {
+        if (lower.indexOf("offline") !== -1) return "Offline";
+        if (lower.indexOf("expired") !== -1 || lower.indexOf("reconnect") !== -1 || lower.indexOf("disconnected") !== -1) return "Reconnect";
+        return "Sync issue";
+    }
+
+    return raw || "Not synced";
+}
+
+function shouldShowDriveSyncPanel(state, progress, detail) {
+    if (state === "syncing") return true;
+    if (state === "synced" && progress !== null) return true;
+    if (state === "error" && (detail || progress !== null)) return true;
+    if (state === "paused" && detail) return true;
+    return false;
+}
+
 function updateWftSyncProgressDisplay(wrapId, barId, detailId, state, progress, detail) {
     var wrap = document.getElementById(wrapId);
     var bar = document.getElementById(barId);
@@ -4805,9 +4865,33 @@ function updateWftSyncProgressDisplay(wrapId, barId, detailId, state, progress, 
     }
 }
 
+function updateDriveSyncPanel(state, text, progress, detail) {
+    var panel = document.getElementById("driveSyncPanel");
+    var title = document.getElementById("driveSyncPanelTitle");
+    var dot = document.getElementById("driveSyncDotPanel");
+    var pct = clampWftSyncProgress(progress);
+    var safeText = text || getCompactDriveSyncText(state, text);
+    var shouldShow = shouldShowDriveSyncPanel(state, pct, detail);
+
+    if (title) title.textContent = safeText;
+    if (dot) dot.className = "drive-sync-dot" + (state ? " " + state : "");
+    updateWftSyncProgressDisplay("driveSyncProgressWrapPanel", "driveSyncProgressBarPanel", "driveSyncDetailPanel", state, progress, detail || "");
+
+    if (panel) {
+        if (shouldShow) {
+            panel.classList.add("is-visible");
+            panel.setAttribute("aria-hidden", "false");
+        } else {
+            panel.classList.remove("is-visible");
+            panel.setAttribute("aria-hidden", "true");
+        }
+    }
+}
+
 function hideDriveSyncProgressBars() {
     updateWftSyncProgressDisplay("driveSyncProgressWrap", "driveSyncProgressBar", "driveSyncDetail", "", null, "");
-    updateWftSyncProgressDisplay("driveSyncProgressWrapHeader", "driveSyncProgressBarHeader", "driveSyncDetailHeader", "", null, "");
+    updateWftSyncProgressDisplay("driveSyncProgressWrapPanel", "driveSyncProgressBarPanel", "driveSyncDetailPanel", "", null, "");
+    updateDriveSyncPanel("", "", null, "");
 }
 
 function setDriveSyncStatus(state, text, progress, detail) {
@@ -4822,6 +4906,7 @@ function setDriveSyncStatus(state, text, progress, detail) {
     var dotHeader = document.getElementById("driveSyncDotHeader");
     var txtHeader = document.getElementById("driveSyncTextHeader");
     var dotClass = "drive-sync-dot" + (state ? " " + state : "");
+    var compactText = getCompactDriveSyncText(state, text);
 
     if (state === "synced" && text !== "Ready") {
         recordWftDriveSyncSuccess(text || "drive-sync");
@@ -4829,10 +4914,11 @@ function setDriveSyncStatus(state, text, progress, detail) {
     if (dot) { dot.className = dotClass; }
     if (dotHeader) { dotHeader.className = dotClass; }
     if (txt) txt.textContent = text || "";
-    if (txtHeader) txtHeader.textContent = text || "";
+    if (txtHeader) txtHeader.textContent = compactText;
+    if (txtHeader) txtHeader.title = text || compactText;
 
     updateWftSyncProgressDisplay("driveSyncProgressWrap", "driveSyncProgressBar", "driveSyncDetail", state, progress, detail);
-    updateWftSyncProgressDisplay("driveSyncProgressWrapHeader", "driveSyncProgressBarHeader", "driveSyncDetailHeader", state, progress, detail);
+    updateDriveSyncPanel(state, text, progress, detail || "");
 }
 
 function setDriveSyncProgress(text, progress, detail) {
@@ -4846,6 +4932,7 @@ function finishDriveSyncProgress(text, detail) {
         hideDriveSyncProgressBars();
     }, 450);
 }
+
 
 function getWftSyncProgressDetail(reason) {
     reason = String(reason || "");

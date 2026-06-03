@@ -195,6 +195,7 @@
         gap: 10px;
         box-sizing: border-box;
         width: auto;
+        position: relative;
     }
     .app-header-left h1 {
         font-size: 1.8rem;
@@ -386,26 +387,53 @@
     #googleAuthBarHeader .auth-status strong {
         color: white;
     }
+    #googleAuthBarHeader {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+    #googleUserInfoHeader {
+        min-width: 0;
+        flex-wrap: nowrap !important;
+    }
+    #googleUserInfoHeader .auth-status {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    #googleUserInfoHeader .auth-status strong {
+        white-space: nowrap;
+    }
 
     .drive-sync-status {
         font-size: 12px;
         color: var(--text-secondary);
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 6px;
+        white-space: nowrap;
     }
     .drive-sync-status-rich {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 3px;
-        min-width: 120px;
-        max-width: 210px;
+        flex: 0 0 104px;
+        width: 104px;
+        min-width: 104px;
+        max-width: 104px;
+        justify-content: flex-start;
+        overflow: hidden;
     }
     .drive-sync-line {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 6px;
+        min-width: 0;
+        width: 100%;
+        white-space: nowrap;
+    }
+    #driveSyncTextHeader {
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
     }
     .drive-sync-dot {
@@ -424,11 +452,10 @@
     .drive-sync-dot.warning { background: #f59e0b; }
     .drive-sync-progress-wrap {
         width: 100%;
-        max-width: 170px;
-        height: 4px;
+        height: 5px;
         border-radius: 999px;
         overflow: hidden;
-        background: rgba(255,255,255,0.22);
+        background: rgba(37,99,235,0.16);
         display: none;
     }
     .drive-sync-progress-wrap.is-visible {
@@ -438,19 +465,55 @@
         height: 100%;
         width: 0%;
         border-radius: inherit;
-        background: rgba(255,255,255,0.9);
+        background: var(--primary-color);
         transition: width 260ms ease;
     }
     .drive-sync-detail {
         display: none;
-        font-size: 10.5px;
-        line-height: 1.2;
-        opacity: 0.82;
-        max-width: 210px;
+        font-size: 11px;
+        line-height: 1.25;
+        color: var(--text-secondary);
         white-space: normal;
     }
     .drive-sync-detail.is-visible {
         display: block;
+    }
+    .drive-sync-panel {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: min(320px, calc(100vw - 32px));
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.97);
+        color: var(--text-primary);
+        border: 1px solid rgba(148,163,184,0.32);
+        box-shadow: 0 12px 30px rgba(15,23,42,0.16);
+        z-index: 120;
+        opacity: 0;
+        transform: translateY(-6px);
+        pointer-events: none;
+        transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .drive-sync-panel.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .drive-sync-panel-title {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 5px;
+    }
+    .drive-sync-panel .drive-sync-progress-wrap {
+        margin-top: 8px;
+    }
+    .drive-sync-panel .drive-sync-detail {
+        display: block;
+        min-height: 14px;
     }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
 
@@ -3619,12 +3682,19 @@
                 font-size: 11px;
             }
             #googleUserInfoHeader .drive-sync-status-rich {
-                min-width: auto;
-                max-width: 115px;
+                flex-basis: 88px;
+                width: 88px;
+                min-width: 88px;
+                max-width: 88px;
             }
-            #googleUserInfoHeader .drive-sync-progress-wrap,
-            #googleUserInfoHeader .drive-sync-detail {
-                display: none !important;
+            .drive-sync-panel {
+                position: fixed;
+                top: auto;
+                right: 10px;
+                left: 10px;
+                bottom: 12px;
+                width: auto;
+                padding: 10px 12px;
             }
             #googleUserInfoHeader .btn-google-signout {
                 padding: 5px 8px;
@@ -3873,20 +3943,26 @@
             <div id="googleUserInfoHeader" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
                 <img id="googleUserAvatarHeader" src="" width="28" height="28" alt="" style="border-radius:50%;display:none;" onerror="this.style.display='none'">
                 <span class="auth-status" style="color:white;font-size:13px;">Signed in as <strong id="googleUserNameHeader"></strong></span>
-                <div class="drive-sync-status drive-sync-status-rich" style="color:rgba(255,255,255,0.85);">
+                <div class="drive-sync-status drive-sync-status-rich" style="color:rgba(255,255,255,0.85);" title="Google Drive sync status">
                     <div class="drive-sync-line">
                         <span class="drive-sync-dot" id="driveSyncDotHeader"></span>
                         <span id="driveSyncTextHeader">Not synced</span>
                     </div>
-                    <div class="drive-sync-progress-wrap" id="driveSyncProgressWrapHeader" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                        <div class="drive-sync-progress-bar" id="driveSyncProgressBarHeader"></div>
-                    </div>
-                    <div class="drive-sync-detail" id="driveSyncDetailHeader"></div>
                 </div>
                 <button type="button" class="btn-google-signout" onclick="handleGoogleSignOut()" style="color:white;border-color:rgba(255,255,255,0.5);">Sign Out</button>
             </div>
         </div>
         <button type="button" class="settings-gear-btn" onclick="openSettingsDrawer()" title="System settings" aria-label="Open system settings">&#9881;</button>
+        <div class="drive-sync-panel" id="driveSyncPanel" aria-live="polite" aria-hidden="true">
+            <div class="drive-sync-panel-title">
+                <span class="drive-sync-dot" id="driveSyncDotPanel"></span>
+                <span id="driveSyncPanelTitle">Sync status</span>
+            </div>
+            <div class="drive-sync-detail" id="driveSyncDetailPanel"></div>
+            <div class="drive-sync-progress-wrap" id="driveSyncProgressWrapPanel" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="drive-sync-progress-bar" id="driveSyncProgressBarPanel"></div>
+            </div>
+        </div>
     </div>
 
     <div class="app-inner">
