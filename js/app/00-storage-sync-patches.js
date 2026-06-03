@@ -883,10 +883,9 @@ Example:
  * The Google OAuth Client ID is embedded below so users do not need
  * to enter it in the Settings panel.
  *
- * TODO WFT_GIS_AUTH_V2:
- * After Sync Engine V2 is stable, replace the OAuth implicit redirect flow
- * with Google Identity Services token client. Do not combine that migration
- * with the sync engine patch.
+ * Google sign-in uses Google Identity Services token client when available.
+ * The older OAuth implicit redirect flow remains as a fallback for browsers
+ * where the GIS script is blocked or unavailable.
  */
 var WFT_APP_VERSION = "v9";
 var GOOGLE_CLIENT_ID = "546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com";
@@ -904,7 +903,7 @@ var WFT_DUPLICATE_DETECTION_V2 = true;
 var WFT_DUPLICATE_CLEANUP_V2 = false;
 var WFT_IMAGE_IDEMPOTENCY_V2 = true;
 var WFT_SESSION_TOKEN_STORAGE_V2 = true;
-var WFT_GIS_AUTH_V2 = false;
+var WFT_GIS_AUTH_V2 = true;
 
 
 function isWftDebugLoggingEnabled() {
@@ -3507,35 +3506,98 @@ function hasPersistedGoogleConnection() {
     return localStorage.getItem(GOOGLE_CONNECTED_CACHE_KEY) === "1";
 }
 
+function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess) {
+    if (!accessToken) return false;
+
+    var expiresSeconds = parseInt(expiresIn || '3600', 10);
+    if (!expiresSeconds || isNaN(expiresSeconds)) expiresSeconds = 3600;
+    var expiresAt = Date.now() + Math.max(60, (expiresSeconds - 30)) * 1000;
+
+    saveWftTokenSession(accessToken, expiresAt);
+    try {
+        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
+        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
+        localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, '1');
+    } catch (storageErr) { }
+
+    wftSyncState.accessToken = accessToken;
+    wftSyncState.tokenExpiresAt = expiresAt;
+    wftSyncState.signedIn = true;
+    wftSyncState.authBlocked = false;
+    wftSyncState.permissionBlocked = false;
+    wftSyncState.lastError = null;
+    driveAccessToken = accessToken;
+    try { localStorage.removeItem("wft_oauth_pending_action"); } catch (e0) { }
+    syncStateFromLegacyGoogleGlobals();
+
+    // Give immediate visible feedback. User info fetch may take a moment or fail
+    // independently, but a valid token means the app is connected.
+    googleUser = getCachedGoogleUser() || { name: "Connected" };
+    showSignedInState(googleUser);
+
+    wftSyncLog("[WFT Sync][AUTH] OAuth token received", {
+        hasAccessToken: true,
+        expiresIn: expiresSeconds,
+        scope: scope || "",
+        source: source || "unknown"
+    });
+
+    fetchGoogleUserInfo(accessToken);
+
+    if (typeof onSuccess === "function") {
+        setTimeout(function() {
+            try { onSuccess(); } catch (e) { wftDebugError("Google sign-in success callback failed:", e); }
+        }, 0);
+    }
+
+    return true;
+}
+
+function getWftOAuthRedirectUri() {
+    try {
+        var path = window.location.pathname || "/";
+        if (!/\/$/.test(path)) {
+            path = path.replace(/\/[^\/]*$/, "/");
+            if (!path) path = "/";
+        }
+        return window.location.origin + path;
+    } catch (e) {
+        return "https://thepick.github.io/writing-feedback-tool/";
+    }
+}
+
+function isWftGisTokenClientAvailable() {
+    return !!(typeof window !== "undefined"
+        && window.google
+        && window.google.accounts
+        && window.google.accounts.oauth2
+        && typeof window.google.accounts.oauth2.initTokenClient === "function");
+}
+
 // Read OAuth tokens delivered via the URL fragment (#) after Google redirects
-// back to the GitHub Pages app using the implicit grant flow.
+// back to the app using the implicit grant fallback flow.
 function checkHashForOAuthTokens() {
     var hash = window.location.hash;
     if (!hash) return false;
 
     try {
         var params = new URLSearchParams(hash.substring(1));
+        var authError = params.get('error');
+        if (authError) {
+            var errorDescription = params.get('error_description') || authError;
+            setDriveSyncStatus("error", "Google sign-in did not complete: " + errorDescription);
+            try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e1) { }
+            return false;
+        }
+
         var accessToken = params.get('access_token');
         var expiresIn = parseInt(params.get('expires_in') || '3600', 10);
 
         if (!accessToken) return false;
 
-        var expiresAt = Date.now() + Math.max(60, (expiresIn - 30)) * 1000;
-        saveWftTokenSession(accessToken, expiresAt);
-        try {
-            localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-            localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-            localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, '1');
-        } catch (storageErr) { }
-
-        wftSyncState.accessToken = accessToken;
-        wftSyncState.tokenExpiresAt = expiresAt;
-        wftSyncState.signedIn = true;
-        driveAccessToken = accessToken;
-        wftSyncLog("[WFT Sync][AUTH] OAuth token received", { hasAccessToken: true, expiresIn: expiresIn, scope: params.get("scope") || "" });
-
-        history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
-        return true;
+        var handled = finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, params.get("scope") || "", "oauth-redirect", null);
+        try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e2) { }
+        return handled;
     } catch (e) {
         wftDebugError('[WFT Auth] Error reading OAuth tokens from hash:', e);
         return false;
@@ -3639,17 +3701,49 @@ function restoreWftOAuthDraftAfterRedirect() {
 
 function requestDriveAccess(onSuccess, options) {
     var scope = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
-    var redirectUri = "https://thepick.github.io/writing-feedback-tool/";
+    var opts = options || {};
 
-    var authUrl = "https://accounts.google.com/o/oauth2/auth"
+    if (typeof onSuccess === "function") {
+        try { localStorage.setItem("wft_oauth_pending_action", "sync"); } catch (e1) { }
+    }
+
+    if (WFT_GIS_AUTH_V2 && isWftGisTokenClientAvailable()) {
+        try {
+            setDriveSyncStatus("syncing", "Opening Google sign-in...");
+            var tokenClient = window.google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: scope,
+                include_granted_scopes: true,
+                callback: function(response) {
+                    if (!response || response.error) {
+                        var msg = response && (response.error_description || response.error) ? (response.error_description || response.error) : "Google sign-in was cancelled or blocked.";
+                        setDriveSyncStatus("error", msg);
+                        return;
+                    }
+                    finishWftGoogleSignInWithAccessToken(response.access_token, response.expires_in || 3600, response.scope || scope, "gis-popup", onSuccess);
+                },
+                error_callback: function(error) {
+                    var errMsg = error && (error.message || error.type) ? (error.message || error.type) : "Google sign-in popup could not open.";
+                    setDriveSyncStatus("error", errMsg);
+                }
+            });
+            tokenClient.requestAccessToken({ prompt: opts.prompt || "select_account" });
+            return;
+        } catch (gisErr) {
+            wftDebugError("[WFT Auth] GIS sign-in failed; falling back to redirect:", gisErr);
+        }
+    }
+
+    // Fallback: older implicit redirect flow. Use the current deployed URL
+    // instead of a hardcoded GitHub URL so custom domains can complete auth.
+    var redirectUri = getWftOAuthRedirectUri();
+    var authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
         + "?client_id=" + encodeURIComponent(GOOGLE_CLIENT_ID)
         + "&redirect_uri=" + encodeURIComponent(redirectUri)
         + "&response_type=token"
+        + "&include_granted_scopes=true"
+        + "&prompt=" + encodeURIComponent(opts.prompt || "select_account")
         + "&scope=" + encodeURIComponent(scope);
-
-    if (typeof onSuccess === "function") {
-        localStorage.setItem("wft_oauth_pending_action", "sync");
-    }
 
     saveWftOAuthDraftBeforeRedirect(typeof onSuccess === "function" ? "sync" : "sign-in");
     window.location.href = authUrl;
