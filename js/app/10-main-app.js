@@ -136,9 +136,13 @@ function addStudent() {
     input.focus();
 }
 
-function removeStudent(name) {
+async function removeStudent(name) {
     if (!name) return;
-    if (!window.confirm("Delete this student from the current class and portfolio? This student will not be restored from backups.")) return;
+    if (!(await wftConfirm("Delete this student from the current class and portfolio? This student will not be restored from backups.", {
+        title: "Delete Student",
+        confirmText: "Delete Student",
+        danger: true
+    }))) return;
 
     recordStudentDeletion(name);
 
@@ -161,9 +165,13 @@ function removeStudent(name) {
     try { renderStudentPortfolio(); } catch (e2) { }
 }
 
-function clearAllStudents() {
+async function clearAllStudents() {
     if (!students.length) return;
-    if (!window.confirm("Clear the entire student list?")) return;
+    if (!(await wftConfirm("Clear the entire student list? This will remove every student from the active class list.", {
+        title: "Clear Student List",
+        confirmText: "Clear All",
+        danger: true
+    }))) return;
     for (var i = 0; i < students.length; i += 1) {
         recordStudentDeletion(students[i]);
     }
@@ -3690,9 +3698,13 @@ function clearCurrentClassAfterSuccessfulArchive() {
     }
 }
 
-function archiveCurrentSchoolYear() {
+async function archiveCurrentSchoolYear() {
     var defaultYear = suggestSchoolYear();
-    var schoolYear = window.prompt("Enter the school year for this archive:", defaultYear);
+    var schoolYear = await wftPrompt("Enter the school year for this archive:", defaultYear, {
+        title: "School Year",
+        inputLabel: "School year",
+        confirmText: "Continue"
+    });
     var includeImagesEl = document.getElementById("archiveIncludeImages");
     var includeImages = !!(includeImagesEl && includeImagesEl.checked);
 
@@ -3703,7 +3715,11 @@ function archiveCurrentSchoolYear() {
         return;
     }
 
-    if (!window.confirm("Archive current school year? The app will create a zip organized by student name, save it to Google Drive, download a copy, and then clear the active class list and portfolio after the archive is saved.")) {
+    if (!(await wftConfirm("Archive current school year? The app will create a zip organized by student name, save it to Google Drive, download a copy, and then clear the active class list and portfolio after the archive is saved.", {
+        title: "Archive Current School Year",
+        confirmText: "Create Archive",
+        danger: true
+    }))) {
         return;
     }
 
@@ -3880,13 +3896,17 @@ function backupDuplicateFilesForNamePromise(filename, backupFolderId, rootFolder
     });
 }
 
-function moveDuplicateSyncFilesToBackup() {
+async function moveDuplicateSyncFilesToBackup() {
     if (!driveAccessToken) {
         alert("Please sign in with Google before cleaning up duplicate sync files.");
         return;
     }
 
-    if (!window.confirm("Move duplicate sync files to a 'Duplicate Backups' folder? The newest file for each sync type will remain active. This is safer than deleting duplicates.")) {
+    if (!(await wftConfirm("Move duplicate sync files to a 'Duplicate Backups' folder? The newest file for each sync type will remain active. This is safer than deleting duplicates.", {
+        title: "Move Duplicate Sync Files",
+        confirmText: "Move Files",
+        danger: false
+    }))) {
         return;
     }
 
@@ -3917,11 +3937,12 @@ function moveDuplicateSyncFilesToBackup() {
     });
 }
 
-function resetCurrentClassData() {
-    if (!window.confirm("Reset the current class? This will clear the student list and active portfolio. Use this only if you already have an archive or backup.")) {
-        return;
-    }
-    if (!window.confirm("Are you sure? This does not create an archive.")) {
+async function resetCurrentClassData() {
+    if (!(await wftConfirm("Reset the current class? This will clear the student list and active portfolio. Use this only if you already have an archive or backup.\n\nThis does not create an archive.", {
+        title: "Reset Current Class",
+        confirmText: "Reset Class",
+        danger: true
+    }))) {
         return;
     }
 
@@ -7126,7 +7147,7 @@ function restorePortfolioSessionImagesForReassessment(session) {
     });
 }
 
-function reassessPortfolioSession(studentName, sessionId) {
+async function reassessPortfolioSession(studentName, sessionId) {
     var session = findPortfolioSession(studentName, sessionId);
     if (!session) {
         alert("Could not find that saved portfolio entry.");
@@ -7145,7 +7166,11 @@ function reassessPortfolioSession(studentName, sessionId) {
     if (getPendingPortfolioSync && getPendingPortfolioSync()) {
         message += "\n\nNote: there is already an unsynced portfolio result. Reassessing will replace the current pending result.";
     }
-    if (!window.confirm(message)) return;
+    if (!(await wftConfirm(message, {
+        title: "Reassess Saved Writing",
+        confirmText: "Load for Reassessment",
+        danger: false
+    }))) return;
 
     activePortfolioReassessmentSource = {
         sourceStudentName: studentName,

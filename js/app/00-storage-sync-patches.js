@@ -378,6 +378,211 @@
 
 
 /* =============================================
+   APP CONFIRMATION DIALOG
+   - Replaces native browser confirm() for important actions.
+   - Native dialogs can be suppressed by the browser after "Don't show again",
+     which makes destructive actions fail silently.
+============================================= */
+function ensureWftConfirmStyles() {
+    if (document.getElementById('wftConfirmDialogStyles')) return;
+    var style = document.createElement('style');
+    style.id = 'wftConfirmDialogStyles';
+    style.textContent = ''
+        + '.wft-confirm-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.46);z-index:99999;display:flex;align-items:center;justify-content:center;padding:18px;}'
+        + '.wft-confirm-dialog{width:min(460px,100%);background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(15,23,42,.28);border:1px solid rgba(148,163,184,.35);overflow:hidden;font-family:inherit;}'
+        + '.wft-confirm-header{padding:18px 20px 8px;font-weight:800;font-size:1.05rem;color:#0f172a;}'
+        + '.wft-confirm-body{padding:0 20px 18px;color:#334155;font-size:.95rem;line-height:1.45;white-space:pre-wrap;}'
+        + '.wft-confirm-actions{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px 18px;background:#f8fafc;border-top:1px solid #e2e8f0;}'
+        + '.wft-confirm-actions button{border:0;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer;font-family:inherit;}'
+        + '.wft-confirm-cancel{background:#e2e8f0;color:#0f172a;}'
+        + '.wft-confirm-ok{background:#2563eb;color:#fff;}'
+        + '.wft-confirm-ok.danger{background:#dc2626;color:#fff;}'
+        + '.wft-confirm-actions button:focus{outline:3px solid rgba(37,99,235,.28);outline-offset:2px;}'
+        + '.wft-prompt-input{box-sizing:border-box;width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font:inherit;margin-top:12px;color:#0f172a;}'
+        + '.wft-prompt-input:focus{outline:3px solid rgba(37,99,235,.22);border-color:#2563eb;}';
+    document.head.appendChild(style);
+}
+
+function wftConfirm(message, options) {
+    options = options || {};
+    return new Promise(function(resolve) {
+        if (!document.body) {
+            resolve(false);
+            return;
+        }
+
+        ensureWftConfirmStyles();
+
+        var backdrop = document.createElement('div');
+        backdrop.className = 'wft-confirm-backdrop';
+        backdrop.setAttribute('role', 'presentation');
+
+        var dialog = document.createElement('div');
+        dialog.className = 'wft-confirm-dialog';
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+        dialog.setAttribute('aria-labelledby', 'wftConfirmTitle');
+        dialog.setAttribute('aria-describedby', 'wftConfirmBody');
+
+        var title = document.createElement('div');
+        title.className = 'wft-confirm-header';
+        title.id = 'wftConfirmTitle';
+        title.textContent = options.title || 'Please confirm';
+
+        var body = document.createElement('div');
+        body.className = 'wft-confirm-body';
+        body.id = 'wftConfirmBody';
+        body.textContent = message || 'Are you sure?';
+
+        var actions = document.createElement('div');
+        actions.className = 'wft-confirm-actions';
+
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'wft-confirm-cancel';
+        cancelBtn.textContent = options.cancelText || 'Cancel';
+
+        var okBtn = document.createElement('button');
+        okBtn.type = 'button';
+        okBtn.className = 'wft-confirm-ok' + (options.danger ? ' danger' : '');
+        okBtn.textContent = options.confirmText || 'Continue';
+
+        actions.appendChild(cancelBtn);
+        actions.appendChild(okBtn);
+        dialog.appendChild(title);
+        dialog.appendChild(body);
+        dialog.appendChild(actions);
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
+
+        var settled = false;
+        function close(result) {
+            if (settled) return;
+            settled = true;
+            document.removeEventListener('keydown', onKeyDown);
+            if (backdrop.parentNode) {
+                backdrop.parentNode.removeChild(backdrop);
+            }
+            resolve(!!result);
+        }
+
+        function onKeyDown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                close(false);
+            }
+        }
+
+        cancelBtn.addEventListener('click', function() { close(false); });
+        okBtn.addEventListener('click', function() { close(true); });
+        backdrop.addEventListener('click', function(event) {
+            if (event.target === backdrop) close(false);
+        });
+        document.addEventListener('keydown', onKeyDown);
+
+        setTimeout(function() {
+            try { cancelBtn.focus(); } catch (e) { }
+        }, 0);
+    });
+}
+
+function wftPrompt(message, defaultValue, options) {
+    options = options || {};
+    return new Promise(function(resolve) {
+        if (!document.body) {
+            resolve(null);
+            return;
+        }
+
+        ensureWftConfirmStyles();
+
+        var backdrop = document.createElement('div');
+        backdrop.className = 'wft-confirm-backdrop';
+        backdrop.setAttribute('role', 'presentation');
+
+        var dialog = document.createElement('form');
+        dialog.className = 'wft-confirm-dialog';
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+        dialog.setAttribute('aria-labelledby', 'wftPromptTitle');
+        dialog.setAttribute('aria-describedby', 'wftPromptBody');
+
+        var title = document.createElement('div');
+        title.className = 'wft-confirm-header';
+        title.id = 'wftPromptTitle';
+        title.textContent = options.title || 'Enter information';
+
+        var body = document.createElement('div');
+        body.className = 'wft-confirm-body';
+        body.id = 'wftPromptBody';
+        body.textContent = message || '';
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'wft-prompt-input';
+        input.value = defaultValue || '';
+        input.setAttribute('aria-label', options.inputLabel || options.title || 'Input');
+        body.appendChild(input);
+
+        var actions = document.createElement('div');
+        actions.className = 'wft-confirm-actions';
+
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'wft-confirm-cancel';
+        cancelBtn.textContent = options.cancelText || 'Cancel';
+
+        var okBtn = document.createElement('button');
+        okBtn.type = 'submit';
+        okBtn.className = 'wft-confirm-ok';
+        okBtn.textContent = options.confirmText || 'Continue';
+
+        actions.appendChild(cancelBtn);
+        actions.appendChild(okBtn);
+        dialog.appendChild(title);
+        dialog.appendChild(body);
+        dialog.appendChild(actions);
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
+
+        var settled = false;
+        function close(result) {
+            if (settled) return;
+            settled = true;
+            document.removeEventListener('keydown', onKeyDown);
+            if (backdrop.parentNode) {
+                backdrop.parentNode.removeChild(backdrop);
+            }
+            resolve(result);
+        }
+
+        function onKeyDown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                close(null);
+            }
+        }
+
+        cancelBtn.addEventListener('click', function() { close(null); });
+        dialog.addEventListener('submit', function(event) {
+            event.preventDefault();
+            close(input.value);
+        });
+        backdrop.addEventListener('click', function(event) {
+            if (event.target === backdrop) close(null);
+        });
+        document.addEventListener('keydown', onKeyDown);
+
+        setTimeout(function() {
+            try {
+                input.focus();
+                input.select();
+            } catch (e) { }
+        }, 0);
+    });
+}
+
+/* =============================================
    SETTINGS DRAWER
 ============================================= */
 function openSettingsDrawer() {
@@ -2105,8 +2310,12 @@ function checkIndexedDbAvailable() {
     }
 }
 
-function clearWftLocalCache() {
-    if (!confirm("Clear all local cache (IndexedDB and localStorage portfolio)?\n\nThis will NOT delete your Google Drive data. You can reload from Drive after clearing.")) {
+async function clearWftLocalCache() {
+    if (!(await wftConfirm("Clear all local cache (IndexedDB and localStorage portfolio)?\n\nThis will NOT delete your Google Drive data. You can reload from Drive after clearing.", {
+        title: "Clear Local Cache",
+        confirmText: "Clear Cache",
+        danger: true
+    }))) {
         return;
     }
 
@@ -7108,9 +7317,13 @@ function removeStudentSession(studentName, sessionId) {
     }
 }
 
-function deletePortfolioSession(studentName, sessionId) {
+async function deletePortfolioSession(studentName, sessionId) {
     if (!studentName || !sessionId) return;
-    if (!window.confirm('Remove this piece of writing from the portfolio?')) return;
+    if (!(await wftConfirm('Remove this piece of writing from the portfolio?', {
+        title: 'Delete Portfolio Entry',
+        confirmText: 'Remove Entry',
+        danger: true
+    }))) return;
     removeStudentSession(studentName, sessionId);
 }
 
