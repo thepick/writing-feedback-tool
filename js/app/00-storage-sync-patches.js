@@ -398,8 +398,11 @@ function ensureWftConfirmStyles() {
         + '.wft-confirm-ok{background:#2563eb;color:#fff;}'
         + '.wft-confirm-ok.danger{background:#dc2626;color:#fff;}'
         + '.wft-confirm-actions button:focus{outline:3px solid rgba(37,99,235,.28);outline-offset:2px;}'
-        + '.wft-prompt-input{box-sizing:border-box;width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font:inherit;margin-top:12px;color:#0f172a;}'
-        + '.wft-prompt-input:focus{outline:3px solid rgba(37,99,235,.22);border-color:#2563eb;}';
+        + '.wft-modal-field{padding:0 20px 18px;}'
+        + '.wft-modal-label{display:block;font-weight:800;color:#0f172a;margin-bottom:8px;font-size:.92rem;}'
+        + '.wft-modal-input,.wft-modal-select{width:100%;box-sizing:border-box;border:2px solid #cbd5e1;border-radius:10px;padding:11px 12px;font:inherit;color:#0f172a;background:#fff;}'
+        + '.wft-modal-input:focus,.wft-modal-select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.14);}'
+        + '.wft-modal-help{margin-top:8px;color:#64748b;font-size:.86rem;line-height:1.35;}';
     document.head.appendChild(style);
 }
 
@@ -486,7 +489,8 @@ function wftConfirm(message, options) {
     });
 }
 
-function wftPrompt(message, defaultValue, options) {
+
+function wftTextInput(message, options) {
     options = options || {};
     return new Promise(function(resolve) {
         if (!document.body) {
@@ -500,29 +504,48 @@ function wftPrompt(message, defaultValue, options) {
         backdrop.className = 'wft-confirm-backdrop';
         backdrop.setAttribute('role', 'presentation');
 
-        var dialog = document.createElement('form');
+        var dialog = document.createElement('div');
         dialog.className = 'wft-confirm-dialog';
         dialog.setAttribute('role', 'dialog');
         dialog.setAttribute('aria-modal', 'true');
-        dialog.setAttribute('aria-labelledby', 'wftPromptTitle');
-        dialog.setAttribute('aria-describedby', 'wftPromptBody');
+        dialog.setAttribute('aria-labelledby', 'wftTextInputTitle');
+        dialog.setAttribute('aria-describedby', 'wftTextInputBody');
 
         var title = document.createElement('div');
         title.className = 'wft-confirm-header';
-        title.id = 'wftPromptTitle';
-        title.textContent = options.title || 'Enter information';
+        title.id = 'wftTextInputTitle';
+        title.textContent = options.title || 'Enter a value';
 
         var body = document.createElement('div');
         body.className = 'wft-confirm-body';
-        body.id = 'wftPromptBody';
+        body.id = 'wftTextInputBody';
         body.textContent = message || '';
+
+        var fieldWrap = document.createElement('div');
+        fieldWrap.className = 'wft-modal-field';
+
+        var label = document.createElement('label');
+        label.className = 'wft-modal-label';
+        label.setAttribute('for', 'wftTextInputField');
+        label.textContent = options.label || 'Value';
 
         var input = document.createElement('input');
         input.type = 'text';
-        input.className = 'wft-prompt-input';
-        input.value = defaultValue || '';
-        input.setAttribute('aria-label', options.inputLabel || options.title || 'Input');
-        body.appendChild(input);
+        input.className = 'wft-modal-input';
+        input.id = 'wftTextInputField';
+        input.value = options.defaultValue != null ? String(options.defaultValue) : '';
+        input.placeholder = options.placeholder || '';
+        input.setAttribute('autocomplete', 'off');
+
+        fieldWrap.appendChild(label);
+        fieldWrap.appendChild(input);
+
+        if (options.helpText) {
+            var help = document.createElement('div');
+            help.className = 'wft-modal-help';
+            help.textContent = options.helpText;
+            fieldWrap.appendChild(help);
+        }
 
         var actions = document.createElement('div');
         actions.className = 'wft-confirm-actions';
@@ -533,14 +556,15 @@ function wftPrompt(message, defaultValue, options) {
         cancelBtn.textContent = options.cancelText || 'Cancel';
 
         var okBtn = document.createElement('button');
-        okBtn.type = 'submit';
-        okBtn.className = 'wft-confirm-ok';
+        okBtn.type = 'button';
+        okBtn.className = 'wft-confirm-ok' + (options.danger ? ' danger' : '');
         okBtn.textContent = options.confirmText || 'Continue';
 
         actions.appendChild(cancelBtn);
         actions.appendChild(okBtn);
         dialog.appendChild(title);
-        dialog.appendChild(body);
+        if (message) dialog.appendChild(body);
+        dialog.appendChild(fieldWrap);
         dialog.appendChild(actions);
         backdrop.appendChild(dialog);
         document.body.appendChild(backdrop);
@@ -556,28 +580,29 @@ function wftPrompt(message, defaultValue, options) {
             resolve(result);
         }
 
+        function submit() {
+            close(input.value);
+        }
+
         function onKeyDown(event) {
             if (event.key === 'Escape') {
                 event.preventDefault();
                 close(null);
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                submit();
             }
         }
 
         cancelBtn.addEventListener('click', function() { close(null); });
-        dialog.addEventListener('submit', function(event) {
-            event.preventDefault();
-            close(input.value);
-        });
+        okBtn.addEventListener('click', submit);
         backdrop.addEventListener('click', function(event) {
             if (event.target === backdrop) close(null);
         });
         document.addEventListener('keydown', onKeyDown);
 
         setTimeout(function() {
-            try {
-                input.focus();
-                input.select();
-            } catch (e) { }
+            try { input.focus(); input.select(); } catch (e) { }
         }, 0);
     });
 }
@@ -5177,9 +5202,10 @@ function getLocalPortfolioSnapshot() {
 // ── WFT Sync Engine V2 true-delete helpers ──
 function getEmptyDeletionsData() {
     return {
-        schemaVersion: 1,
+        schemaVersion: 2,
         updatedAt: new Date().toISOString(),
         deletedStudents: {},
+        restoredStudents: {},
         deletedSessions: {},
         records: []
     };
@@ -5239,8 +5265,10 @@ function normalizeDeletionsData(data) {
 
     if (data && typeof data === "object") {
         clean.schemaVersion = data.schemaVersion || 1;
+        if (clean.schemaVersion < 2) { clean.schemaVersion = 2; }
         clean.updatedAt = data.updatedAt || clean.updatedAt;
         clean.deletedStudents = data.deletedStudents && typeof data.deletedStudents === "object" ? data.deletedStudents : {};
+        clean.restoredStudents = data.restoredStudents && typeof data.restoredStudents === "object" ? data.restoredStudents : {};
         clean.deletedSessions = data.deletedSessions && typeof data.deletedSessions === "object" ? data.deletedSessions : {};
         clean.records = Array.isArray(data.records) ? data.records.slice(0) : [];
     }
@@ -5299,16 +5327,73 @@ function recordStudentDeletion(studentName) {
     saveDeletionsData(deletions);
 }
 
-function clearStudentDeletion(studentName) {
+function getWftTombstoneTimeMs(record, fieldName) {
+    var parsed;
+    if (!record || !record[fieldName]) return 0;
+    parsed = Date.parse(record[fieldName]);
+    return isNaN(parsed) ? 0 : parsed;
+}
+
+function isStudentDeletedByTombstone(studentName, deletions) {
     var name = String(studentName || "").trim();
+    var clean;
+    var key;
+    var deletedEntry;
+    var restoredEntry;
+    var deletedMs;
+    var restoredMs;
+
+    if (!name) return false;
+    clean = normalizeDeletionsData(deletions || {});
+    key = getDeletedStudentKey(name);
+    deletedEntry = clean.deletedStudents[key];
+    if (!deletedEntry) return false;
+
+    restoredEntry = clean.restoredStudents && clean.restoredStudents[key];
+    if (!restoredEntry) return true;
+
+    deletedMs = getWftTombstoneTimeMs(deletedEntry, "deletedAt");
+    restoredMs = getWftTombstoneTimeMs(restoredEntry, "restoredAt");
+
+    if (!deletedMs && restoredMs) return false;
+    if (deletedMs && !restoredMs) return true;
+
+    // A restore at the same time or after a deletion means the teacher intentionally
+    // re-added the student, usually through import after a mistaken reset/clear.
+    return deletedMs > restoredMs;
+}
+
+function restoreStudentDeletion(studentName, reason) {
+    var name = String(studentName || "").trim();
+    var deletions;
+    var key;
+    var now;
+
     if (!name) return;
 
-    var deletions = getDeletionsData();
-    var key = getDeletedStudentKey(name);
+    deletions = getDeletionsData();
+    key = getDeletedStudentKey(name);
+    now = new Date().toISOString();
+
     if (deletions.deletedStudents[key]) {
         delete deletions.deletedStudents[key];
-        saveDeletionsData(deletions);
     }
+
+    if (!deletions.restoredStudents || typeof deletions.restoredStudents !== "object") {
+        deletions.restoredStudents = {};
+    }
+
+    deletions.restoredStudents[key] = {
+        studentName: name,
+        restoredAt: now,
+        reason: reason || "teacher_restore"
+    };
+
+    saveDeletionsData(deletions);
+}
+
+function clearStudentDeletion(studentName) {
+    restoreStudentDeletion(studentName, "teacher_readd");
 }
 
 function recordSessionDeletion(studentName, sessionId) {
@@ -5352,7 +5437,7 @@ function applyDeletionsToStudents(studentList, deletions) {
     for (i = 0; i < source.length; i += 1) {
         name = getWftStudentName(source[i]);
         if (!name) continue;
-        if (cleanDeletions.deletedStudents[getDeletedStudentKey(name)]) continue;
+        if (isStudentDeletedByTombstone(name, cleanDeletions)) continue;
         result.push(source[i]);
     }
 
@@ -5368,7 +5453,7 @@ function applyDeletionsToPortfolio(portfolio, deletions) {
     for (studentName in cleanPortfolio) {
         if (!Object.prototype.hasOwnProperty.call(cleanPortfolio, studentName)) continue;
 
-        if (cleanDeletions.deletedStudents[getDeletedStudentKey(studentName)]) {
+        if (isStudentDeletedByTombstone(studentName, cleanDeletions)) {
             continue;
         }
 
@@ -5409,6 +5494,16 @@ function mergeWftDeletions(localDeletions, cloudDeletions) {
             merged.deletedStudents[key] = cloneWftJson(localClean.deletedStudents[key]);
         }
     }
+    for (key in cloudClean.restoredStudents) {
+        if (Object.prototype.hasOwnProperty.call(cloudClean.restoredStudents, key)) {
+            merged.restoredStudents[key] = cloneWftJson(cloudClean.restoredStudents[key]);
+        }
+    }
+    for (key in localClean.restoredStudents) {
+        if (Object.prototype.hasOwnProperty.call(localClean.restoredStudents, key)) {
+            merged.restoredStudents[key] = cloneWftJson(localClean.restoredStudents[key]);
+        }
+    }
     for (key in cloudClean.deletedSessions) {
         if (Object.prototype.hasOwnProperty.call(cloudClean.deletedSessions, key)) {
             merged.deletedSessions[key] = cloneWftJson(cloudClean.deletedSessions[key]);
@@ -5436,6 +5531,7 @@ function getWftDeletionCounts(deletions) {
     var clean = normalizeDeletionsData(deletions || {});
     return {
         students: Object.keys(clean.deletedStudents || {}).length,
+        restores: Object.keys(clean.restoredStudents || {}).length,
         sessions: Object.keys(clean.deletedSessions || {}).length
     };
 }
@@ -5735,7 +5831,7 @@ function mergeWftStudents(localStudents, cloudStudents) {
     for (key in byKey) {
         if (Object.prototype.hasOwnProperty.call(byKey, key)) {
             name = byKey[key];
-            if (deletions.deletedStudents[getDeletedStudentKey(name)]) continue;
+            if (isStudentDeletedByTombstone(name, deletions)) continue;
             result.push(name);
         }
     }
@@ -5902,7 +5998,7 @@ function syncWftDeletionsIfNeeded(reason) {
     var hadPending = wftSyncState.pendingDeletionsPush;
     var counts = getWftDeletionCounts(localDeletions);
 
-    wftSyncLog("[WFT Sync] deletions local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, deletedStudents: counts.students, deletedSessions: counts.sessions });
+    wftSyncLog("[WFT Sync] deletions local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, deletedStudents: counts.students, restoredStudents: counts.restores, deletedSessions: counts.sessions });
 
     return findWftFilesByNamePromise(WFT_DELETIONS_FILENAME)
         .then(function (files) {
@@ -5916,7 +6012,7 @@ function syncWftDeletionsIfNeeded(reason) {
             }
 
             if (!canonical) {
-                if (!hadPending && counts.students === 0 && counts.sessions === 0) {
+                if (!hadPending && counts.students === 0 && counts.restores === 0 && counts.sessions === 0) {
                     wftSyncLog("[WFT Sync][DELETIONS] decision", "skip-no-cloud-no-local-deletions", { localHash: localHash });
                     return false;
                 }
@@ -7529,6 +7625,10 @@ function updateExportSelectedStudentButton() {
 
 function openStudentPortfolio(name) {
     if (!name) return;
+    selectedStudent = name;
+    try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) { }
+    var studentSelect = document.getElementById('studentSelect');
+    if (studentSelect) studentSelect.value = name;
     switchTab('admin');
     var sel = document.getElementById('portfolioStudentSelect');
     if (!sel) return;

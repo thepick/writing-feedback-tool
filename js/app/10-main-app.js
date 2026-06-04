@@ -165,6 +165,267 @@ async function removeStudent(name) {
     try { renderStudentPortfolio(); } catch (e2) { }
 }
 
+
+function getPreferredStudentForManagement() {
+    var portfolioSelect = document.getElementById("portfolioStudentSelect");
+    if (portfolioSelect && portfolioSelect.value && students.indexOf(portfolioSelect.value) !== -1) {
+        return portfolioSelect.value;
+    }
+
+    var select = document.getElementById("studentSelect");
+    if (select && select.value && students.indexOf(select.value) !== -1) {
+        return select.value;
+    }
+
+    if (selectedStudent && students.indexOf(selectedStudent) !== -1) {
+        return selectedStudent;
+    }
+
+    return students.length ? students[0] : "";
+}
+
+function chooseStudentToManage(defaultName) {
+    return new Promise(function(resolve) {
+        if (!document.body) {
+            resolve("");
+            return;
+        }
+
+        if (!students.length) {
+            alert("No students are currently in the roster.");
+            resolve("");
+            return;
+        }
+
+        ensureWftConfirmStyles();
+
+        var backdrop = document.createElement('div');
+        backdrop.className = 'wft-confirm-backdrop';
+        backdrop.setAttribute('role', 'presentation');
+
+        var dialog = document.createElement('div');
+        dialog.className = 'wft-confirm-dialog';
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+        dialog.setAttribute('aria-labelledby', 'wftManageStudentTitle');
+        dialog.setAttribute('aria-describedby', 'wftManageStudentBody');
+
+        var title = document.createElement('div');
+        title.className = 'wft-confirm-header';
+        title.id = 'wftManageStudentTitle';
+        title.textContent = 'Manage Student';
+
+        var body = document.createElement('div');
+        body.className = 'wft-confirm-body';
+        body.id = 'wftManageStudentBody';
+        body.textContent = 'Choose the student you want to rename. This keeps the student portfolio connected to the corrected name.';
+
+        var fieldWrap = document.createElement('div');
+        fieldWrap.className = 'wft-modal-field';
+
+        var label = document.createElement('label');
+        label.className = 'wft-modal-label';
+        label.setAttribute('for', 'wftManageStudentSelect');
+        label.textContent = 'Student';
+
+        var studentSelect = document.createElement('select');
+        studentSelect.className = 'wft-modal-select';
+        studentSelect.id = 'wftManageStudentSelect';
+
+        students.forEach(function(name) {
+            var option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            studentSelect.appendChild(option);
+        });
+
+        if (defaultName && students.indexOf(defaultName) !== -1) {
+            studentSelect.value = defaultName;
+        }
+
+        var help = document.createElement('div');
+        help.className = 'wft-modal-help';
+        help.textContent = 'Renaming is intended for occasional corrections, such as fixing a spelling mistake in a name.';
+
+        fieldWrap.appendChild(label);
+        fieldWrap.appendChild(studentSelect);
+        fieldWrap.appendChild(help);
+
+        var actions = document.createElement('div');
+        actions.className = 'wft-confirm-actions';
+
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'wft-confirm-cancel';
+        cancelBtn.textContent = 'Cancel';
+
+        var renameBtn = document.createElement('button');
+        renameBtn.type = 'button';
+        renameBtn.className = 'wft-confirm-ok';
+        renameBtn.textContent = 'Rename Student';
+
+        actions.appendChild(cancelBtn);
+        actions.appendChild(renameBtn);
+        dialog.appendChild(title);
+        dialog.appendChild(body);
+        dialog.appendChild(fieldWrap);
+        dialog.appendChild(actions);
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
+
+        var settled = false;
+        function close(result) {
+            if (settled) return;
+            settled = true;
+            document.removeEventListener('keydown', onKeyDown);
+            if (backdrop.parentNode) {
+                backdrop.parentNode.removeChild(backdrop);
+            }
+            resolve(result || "");
+        }
+
+        function onKeyDown(event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                close("");
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                close(studentSelect.value || "");
+            }
+        }
+
+        cancelBtn.addEventListener('click', function() { close(""); });
+        renameBtn.addEventListener('click', function() { close(studentSelect.value || ""); });
+        backdrop.addEventListener('click', function(event) {
+            if (event.target === backdrop) close("");
+        });
+        document.addEventListener('keydown', onKeyDown);
+
+        setTimeout(function() {
+            try { studentSelect.focus(); } catch (e) { }
+        }, 0);
+    });
+}
+
+async function manageSelectedStudent() {
+    if (!students.length) {
+        alert("No students are currently in the roster.");
+        return;
+    }
+
+    var oldName = await chooseStudentToManage(getPreferredStudentForManagement());
+    if (!oldName) return;
+    await renameStudent(oldName);
+}
+
+async function renameStudent(oldName) {
+    oldName = String(oldName || "").trim();
+    if (!oldName || students.indexOf(oldName) === -1) {
+        alert("Please choose a student from the current roster.");
+        return;
+    }
+
+    var inputValue = await wftTextInput("Enter the corrected student name.", {
+        title: "Rename Student",
+        label: "New student name",
+        defaultValue: oldName,
+        confirmText: "Save Name",
+        helpText: "The roster name and this student's portfolio entries will be updated together."
+    });
+
+    if (inputValue === null) return;
+
+    var newName = String(inputValue || "").trim();
+    if (!newName) {
+        alert("Please enter a student name.");
+        return;
+    }
+
+    if (newName === oldName) {
+        return;
+    }
+
+    var duplicate = students.some(function(name) {
+        return name !== oldName && String(name).toLowerCase() === newName.toLowerCase();
+    });
+    if (duplicate) {
+        alert("That student name is already in the roster.");
+        return;
+    }
+
+    var portfolio = getPortfolioData();
+    var portfolioNameConflict = false;
+    if (portfolio) {
+        var portfolioNames = Object.keys(portfolio).filter(function(key) {
+            return key !== "_meta" && key !== "updatedAt" && key !== "__syncMeta" && key !== "syncMeta" && key !== "lastSyncedAt" && key !== "lastSyncStatus";
+        });
+        portfolioNameConflict = portfolioNames.some(function(key) {
+            return key !== oldName && String(key).toLowerCase() === newName.toLowerCase();
+        });
+    }
+    if (portfolioNameConflict) {
+        alert("A portfolio already exists for that name. Choose a different name so no student work is overwritten.");
+        return;
+    }
+
+    if (!(await wftConfirm("Rename " + oldName + " to " + newName + "? The roster and portfolio will both be updated.", {
+        title: "Confirm Rename",
+        confirmText: "Rename Student"
+    }))) {
+        return;
+    }
+
+    try {
+        clearStudentDeletion(newName);
+    } catch (e1) { }
+
+    if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
+        try { recordStudentDeletion(oldName); } catch (e2) { }
+    }
+
+    if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
+        portfolio[newName] = portfolio[oldName];
+        delete portfolio[oldName];
+        savePortfolioData(portfolio);
+    }
+
+    students = students.map(function(name) {
+        return name === oldName ? newName : name;
+    });
+    students.sort(function(a, b) { return a.localeCompare(b); });
+
+    if (typeof updateStudentRecordOnRename === "function") {
+        try { updateStudentRecordOnRename(oldName, newName); } catch (e3) { }
+    }
+
+    if (selectedStudent === oldName) {
+        selectedStudent = newName;
+        localStorage.setItem("wft_selectedStudent", newName);
+    }
+
+    saveStudents();
+    renderStudentList();
+    populateStudentDropdown();
+
+    var studentSelect = document.getElementById("studentSelect");
+    if (studentSelect && students.indexOf(newName) !== -1) {
+        studentSelect.value = newName;
+        selectedStudent = newName;
+        localStorage.setItem("wft_selectedStudent", newName);
+    }
+
+    try { refreshPortfolioDropdown(); } catch (e4) { }
+
+    var portfolioSelect = document.getElementById("portfolioStudentSelect");
+    if (portfolioSelect && students.indexOf(newName) !== -1) {
+        portfolioSelect.value = newName;
+    }
+
+    try { renderStudentPortfolio(); } catch (e5) { }
+    try { updateExportSelectedStudentButton(); } catch (e6) { }
+    alert("Student renamed to " + newName + ".");
+}
+
 async function clearAllStudents() {
     if (!students.length) return;
     if (!(await wftConfirm("Clear the entire student list? This will remove every student from the active class list.", {
@@ -204,21 +465,41 @@ function importStudents(event) {
     var reader = new FileReader();
     reader.onload = function(e) {
         var content = String(e.target.result || "");
-        var names = content.split(/\r?\n|,/).map(function(n) { return n.trim(); }).filter(function(n) { return n.length > 0; });
+        var rawNames = content.split(/\r?\n|,/).map(function(n) { return n.trim(); }).filter(function(n) { return n.length > 0; });
+        var names = [];
+        var seenImportNames = {};
         var added = 0;
+
+        rawNames.forEach(function(name) {
+            var key = name.toLowerCase();
+            if (!seenImportNames[key]) {
+                seenImportNames[key] = true;
+                names.push(name);
+            }
+        });
+
         names.forEach(function(name) {
             var exists = students.some(function(s) { return s.toLowerCase() === name.toLowerCase(); });
+
+            // Import is an explicit teacher action. If this name was tombstoned by
+            // an earlier mistaken import/reset/clear, mark it active again so Drive
+            // sync cannot immediately filter it out during the next merge.
+            clearStudentDeletion(name);
+
             if (!exists) {
-                clearStudentDeletion(name);
                 students.push(name);
                 added += 1;
             }
         });
+
         students.sort(function(a, b) { return a.localeCompare(b); });
         saveStudents();
+        if (typeof saveSettingsToLocalStorage === "function") {
+            saveSettingsToLocalStorage({ students: students });
+        }
         renderStudentList();
         populateStudentDropdown();
-        alert(added > 0 ? ("Added " + added + " new student(s).") : "No new students found in the file.");
+        alert(added > 0 ? ("Added " + added + " new student(s).") : "No new students found in the file. Existing imported names were still marked active for sync.");
     };
     reader.readAsText(file);
     event.target.value = "";
@@ -3700,9 +3981,10 @@ function clearCurrentClassAfterSuccessfulArchive() {
 
 async function archiveCurrentSchoolYear() {
     var defaultYear = suggestSchoolYear();
-    var schoolYear = await wftPrompt("Enter the school year for this archive:", defaultYear, {
-        title: "School Year",
-        inputLabel: "School year",
+    var schoolYear = await wftTextInput("Enter the school year for this archive.", {
+        title: "Archive Current School Year",
+        label: "School year",
+        defaultValue: defaultYear,
         confirmText: "Continue"
     });
     var includeImagesEl = document.getElementById("archiveIncludeImages");
