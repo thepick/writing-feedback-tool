@@ -78,9 +78,16 @@ const artifactDir = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'wft-g
  await page.emulateMedia({media:'print'});
  const layout=await page.locator('.page').evaluateAll(pages=>pages.map(p=>({height:p.clientHeight,scroll:p.scrollHeight,warning:p.classList.contains('fit-warning')})));
  assert.equal(layout.length,2);
+ assert.ok(layout.every(p=>Math.abs(p.height-1123)<=1),'A4 pages should be 297 mm tall');
+ assert.match(result.html, /size: A4 portrait/);
+ const paperWidth=await page.locator('.page').first().evaluate(p=>p.getBoundingClientRect().width);
+ assert.ok(Math.abs(paperWidth-794)<=1,'A4 pages should be 210 mm wide');
+ const guideFont=await page.locator('.example-after').first().evaluate(p=>parseFloat(getComputedStyle(p).fontSize));
+ assert.ok(guideFont>=12,'A4 guide text should be enlarged, not just the paper');
  assert.ok(layout.every(p=>!p.warning && p.scroll<=p.height+1),JSON.stringify(layout));
  await page.locator('.page').nth(1).screenshot({path:path.join(artifactDir,'guide-page2.png')});
  await page.pdf({path:path.join(artifactDir,'guide-test.pdf'),preferCSSPageSize:true,printBackground:true});
+ console.log('Print preview artifacts: '+artifactDir);
  await page.setContent(result.portfolioHtml,{waitUntil:'domcontentloaded'});
  await page.evaluate(()=>window.fitAllNotebookPages());
  assert.equal(await page.locator('.guide-example').count(),3);
