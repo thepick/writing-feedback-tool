@@ -2326,7 +2326,7 @@ function parseWhatINoticedRowsFromBody(body) {
     return rows;
 }
 
-function parseDetailedAssessment(step3Text) {
+function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
     var result = {
         categories: {},
         strength: "",
@@ -2535,6 +2535,7 @@ function parseDetailedAssessment(step3Text) {
     var t1 = step3Text.match(/\*\*Writing Title:\*\*\s*([^\n]+)/i);
     if (t1) result.titleSuggestion = t1[1].trim();
 
+    result.notebookGuideCandidates = parseNotebookGuideCandidatesFromStep3Text(step3Text, originalText, optGenreInfo);
     return result;
 }
 
@@ -4962,7 +4963,8 @@ function buildStep2Prompt(originalText, correctedText, targetWords, actualWords,
     ].join("\n");
 }
 
-function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile, optGenreInfo) {
+function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, optGradeProfile, optGenreInfo, originalText, notebookGuidePriorities) {
+    var notebookGuidePriorityPromptText = buildNotebookGuidePriorityPromptText(notebookGuidePriorities);
     var profile = optGradeProfile || getGradeProfile();
     var audience = profile.audience || "5th-grade student";
     var bilingualGuide = profile.bilingualGuidance || "";
@@ -4981,6 +4983,9 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "",
         "Writing genre for feedback:",
         buildWritingGenrePromptText(genreInfo),
+        "",
+        "Original student writing for Notebook Guide landmark quotes:",
+        originalText || correctedText,
         "",
         "Input text:",
         correctedText,
@@ -5081,7 +5086,51 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
         "",
         "**Keep Writing!** [one warm, natural, specific sentence tied to this student's writing and genre]",
         "",
-        "**Writing Title:** [2-5 word title capturing the topic or theme of this writing, suitable as a notebook label]"
+        "**Writing Title:** [2-5 word title capturing the topic or theme of this writing, suitable as a notebook label]",
+        "",
+        "## Notebook Guide Candidate JSON",
+        "",
+        "After the detailed assessment, return one JSON object for candidate examples that could be used on page 2 of the notebook printout.",
+        "Do not make the final page 2 guide here. The app will assemble the final guide after Page 1 feedback is finalized.",
+        "Important rules for candidates:",
+        "- The student already has the original writing in the notebook. Do not rewrite the full piece.",
+        "- Generate 5 to 7 short candidate examples from the original writing.",
+        "- Each originalQuote must be an exact quote from the original student writing above. Do not invent, paraphrase, or silently correct the quote.",
+        "- Each nextTimeExample must be a concrete revised version or short model based directly on originalQuote.",
+        "- Use the student's own words as much as possible in each nextTimeExample.",
+        "- Do not give generic advice by itself. Do not write examples like Try splitting this sentence, Check your punctuation, Use stronger words, Make sure to proofread, or Add more details.",
+        "- If the issue is grammar, spelling, punctuation, word forms, sentence flow, organization, details, or word choice, still show what the improvement could look like using the student's actual sentence or phrase.",
+        "- The area and skill labels must match the actual change shown in nextTimeExample.",
+        "- Each candidate must connect to one of these Page 1 priority areas when possible:",
+        notebookGuidePriorityPromptText,
+        "- Tag each candidate with page1Connection: Flow, Grammar, Spelling & Punctuation, Organization, Ideas & Details, or Word Choice.",
+        "- First, provide one candidate for each Page 1 priority area when the original writing gives a clear, exact quote.",
+        "- You may reorder the candidates to put the strongest examples first.",
+        "- Then, if you have fewer than 7 candidates, add extra examples for the most important areas.",
+        "- If Flow is listed as a priority above, include at least one candidate that actually improves sentence flow, such as varying repeated sentence openings, sentence rhythm, or transitions.",
+        "- If Grammar is listed as a priority above, include at least one candidate that actually shows a grammar improvement.",
+        "- If Spelling & Punctuation is listed as a priority above, include at least one candidate that actually shows a convention improvement.",
+        "- Use 'Next time' style suggestions. Do not tell the student to rewrite this piece now.",
+        "- Keep each whyThisWorks explanation short, clear, and student-friendly.",
+        "- Each candidate should focus on one main skill. Make the smallest useful revision instead of fixing many unrelated issues at once.",
+        "- Do not label a candidate as paragraphing unless the paragraph break is visible in nextTimeExample. If a paragraphing example cannot be shown clearly in a short quote, choose a different Organization example instead.",
+        "- For y-to-ies spelling examples, do not say all words ending in y change to ies. Use wording like: For bunny, change the y to ies to make bunnies.",
+        "- Use the genre information above. Do not call the writing a story unless it is clearly narrative.",
+        "",
+        "Return exactly this JSON shape after the heading:",
+        "{",
+        '  "writingLabel": "story",',
+        '  "candidates": [',
+        "    {",
+        '      "area": "Sentence Flow",',
+        '      "skill": "Varying Sentence Openings",',
+        '      "page1Connection": "Flow",',
+        '      "originalQuote": "exact quote from original writing",',
+        '      "nextTimeExample": "a concrete revised version or short model based directly on originalQuote",',
+        '      "whyThisWorks": "short explanation"',
+        "    }",
+        "  ]",
+        "}"
     ].join("\n");
 }
 
@@ -7032,6 +7081,1126 @@ function wrapCorrectedHtmlForNotebookPrint(html) {
     return sanitizeWftHtmlFragment(value);
 }
 
+function toNotebookTitleCase(value) {
+    value = String(value || "piece of writing").replace(/\s+/g, " ").trim();
+    if (!value) return "Piece of Writing";
+    return value.split(" ").map(function(word) {
+        if (!word) return word;
+        if (/^how-to$/i.test(word)) return "How-to";
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+}
+
+function parseFirstJsonObject(text) {
+    var value = String(text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+    try { return JSON.parse(value); } catch (e) { }
+    var start = value.indexOf("{");
+    var end = value.lastIndexOf("}");
+    if (start !== -1 && end > start) {
+        try { return JSON.parse(value.slice(start, end + 1)); } catch (e) { }
+    }
+    return null;
+}
+
+function clarifyYToIesGuideText(text) {
+    var value = String(text || "");
+    if (/\by\s*(?:-|to|into)\s*ies\b/i.test(value) || (/\bends?\s+in\s+y\b/i.test(value) && /\bies\b/i.test(value))) {
+        return "For bunny, the consonant before y changes y to ies: bunny -> bunnies. A vowel before y usually just adds s: key -> keys.";
+    }
+    return value;
+}
+
+var NOTEBOOK_GUIDE_VERSION = 3;
+
+var NOTEBOOK_GUIDE_CATEGORY_ALIASES = {
+    "flow": ["flow", "sentence flow", "sentence opening", "sentence starter", "sentence variety", "sentence rhythm", "transition", "smooth"],
+    "grammar": ["grammar", "verb tense", "tense", "sentence break", "sentence boundary", "run-on", "complete sentence", "agreement", "sentence correctness"],
+    "spelling & punctuation": ["spelling", "punctuation", "capitalization", "conventions", "word form", "plural"],
+    "organization": ["organization", "paragraph", "beginning", "middle", "ending", "sequence", "structure", "order"],
+    "ideas & details": ["ideas", "details", "description", "evidence", "development", "specific detail"],
+    "word choice": ["word choice", "vocabulary", "precise word", "strong word", "strong verb"],
+    "neatness": ["neatness", "handwriting", "spacing"]
+};
+
+function normalizeNotebookGuideCategoryName(value) {
+    var text = String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
+    if (!text) return "";
+    if (text.indexOf("spelling") !== -1 || text.indexOf("punctuation") !== -1 || text.indexOf("convention") !== -1 || text.indexOf("capital") !== -1 || text.indexOf("word form") !== -1) return "Spelling & Punctuation";
+    if (text.indexOf("ideas") !== -1 || text.indexOf("details") !== -1 || text.indexOf("description") !== -1 || text.indexOf("evidence") !== -1) return "Ideas & Details";
+    if (text.indexOf("word choice") !== -1 || text.indexOf("vocabulary") !== -1 || text.indexOf("precise") !== -1) return "Word Choice";
+    if (text.indexOf("organization") !== -1 || text.indexOf("paragraph") !== -1 || text.indexOf("structure") !== -1 || text.indexOf("sequence") !== -1 || text.indexOf("order") !== -1) return "Organization";
+    if (text.indexOf("flow") !== -1 || text.indexOf("sentence opening") !== -1 || text.indexOf("sentence starter") !== -1 || text.indexOf("sentence rhythm") !== -1 || text.indexOf("sentence variety") !== -1 || text.indexOf("transition") !== -1 || text.indexOf("smooth") !== -1) return "Flow";
+    if (text.indexOf("grammar") !== -1 || text.indexOf("tense") !== -1 || text.indexOf("run-on") !== -1 || text.indexOf("sentence break") !== -1 || text.indexOf("sentence boundary") !== -1 || text.indexOf("complete sentence") !== -1 || text.indexOf("agreement") !== -1) return "Grammar";
+    if (text.indexOf("neatness") !== -1 || text.indexOf("handwriting") !== -1 || text.indexOf("spacing") !== -1) return "Neatness";
+    return "";
+}
+
+function getNotebookGuideWritingLabel(genreInfo) {
+    var info = normalizeWritingGenreInfo(genreInfo || currentWritingGenreInfo || {});
+    var genre = info.mainGenre || "Other / Unsure";
+    if (genre === "Narrative / Story") return "story";
+    if (genre === "Informational / Explanatory") return "report";
+    if (genre === "Opinion / Argument") return "opinion writing";
+    if (genre === "Letter / Email") return "letter";
+    if (genre === "Procedural / How-To") return "how-to piece";
+    if (genre === "Poem / Creative Writing") return info.safeReference || "poem";
+    if (genre === "Literary Analysis / Text Response" || genre === "Academic Short Response") return "response";
+    if (genre === "Journal / Reflection") return "reflection";
+    if (genre === "Speech / Presentation") return "speech";
+    return info.safeReference || "piece of writing";
+}
+
+function cleanNotebookGuideText(value) {
+    return String(value || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}
+
+function getNotebookGuideContentWords(text) {
+    var cleaned = cleanNotebookGuideText(text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ");
+    var parts = cleaned.split(/\s+/);
+    var words = [];
+    var stopWords = {
+        "the": true,
+        "and": true,
+        "but": true,
+        "for": true,
+        "with": true,
+        "this": true,
+        "that": true,
+        "you": true,
+        "your": true,
+        "are": true,
+        "was": true,
+        "were": true,
+        "have": true,
+        "has": true,
+        "had": true,
+        "not": true,
+        "from": true,
+        "into": true,
+        "about": true,
+        "then": true,
+        "than": true,
+        "when": true,
+        "while": true,
+        "because": true
+    };
+    for (var i = 0; i < parts.length; i += 1) {
+        if (parts[i].length > 2 && !stopWords[parts[i]]) {
+            words.push(parts[i]);
+        }
+    }
+    return words;
+}
+
+function normalizeNotebookGuideCompareText(text) {
+    return cleanNotebookGuideText(text || "")
+        .replace(/[“”]/g, '"')
+        .replace(/[‘’]/g, "'")
+        .replace(/\s+/g, " ")
+        .replace(/^\s+|\s+$/g, "");
+}
+
+function isGenericNotebookNextTimeExample(text) {
+    var value = cleanNotebookGuideText(text || "").toLowerCase();
+    if (!value) return true;
+    return (
+        /\btry\s+(splitting|breaking|dividing|making|using|adding|checking)/.test(value) ||
+        /\bcheck\s+(your|capital|capitals|spelling|punctuation|plurals|grammar|conventions)/.test(value) ||
+        /\buse this sentence\b/.test(value) ||
+        /\bremember to\b/.test(value) ||
+        /\bmake sure\b/.test(value) ||
+        /\bproofread\b/.test(value) ||
+        value.indexOf("before turning in") !== -1 ||
+        value.indexOf("at the place where") !== -1 ||
+        value.indexOf("focus skill") !== -1
+    );
+}
+
+function notebookGuideExampleHasTextConnection(originalQuote, nextTimeExample) {
+    var originalWords = getNotebookGuideContentWords(originalQuote);
+    var nextWords = getNotebookGuideContentWords(nextTimeExample);
+    var matches = 0;
+    // Short quotes must be able to change a verb or replace a vague word.
+    var needed = Math.min(3, Math.max(1, Math.ceil(originalWords.length / 2)));
+    if (!originalWords.length || !nextWords.length) return false;
+    for (var i = 0; i < originalWords.length; i += 1) {
+        if (nextWords.indexOf(originalWords[i]) !== -1) {
+            matches += 1;
+        }
+    }
+    return matches >= needed;
+}
+
+function isConcreteNotebookGuideRevision(originalQuote, nextTimeExample) {
+    var original = normalizeNotebookGuideCompareText(originalQuote);
+    var next = normalizeNotebookGuideCompareText(nextTimeExample);
+    if (!original || !next) return false;
+    return original !== next;
+}
+
+function isValidNotebookGuideExample(example) {
+    if (!example) return false;
+    if (isGenericNotebookNextTimeExample(example.nextTimeExample)) return false;
+    if (!notebookGuideExampleHasTextConnection(example.originalQuote, example.nextTimeExample)) return false;
+    if (!isConcreteNotebookGuideRevision(example.originalQuote, example.nextTimeExample)) return false;
+    return true;
+}
+
+function truncateNotebookGuideText(text, maxChars) {
+    var s = cleanNotebookGuideText(text);
+    maxChars = parseInt(maxChars, 10);
+    if (!isFinite(maxChars) || maxChars < 10) maxChars = 120;
+    if (s.length <= maxChars) return s;
+    return s.substring(0, Math.max(0, maxChars - 3)).replace(/\s+\S*$/, "") + "...";
+}
+
+function normalizeNotebookQuoteText(text) {
+    return String(text || "").replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/\s+/g, " ").trim();
+}
+
+function originalTextContainsNotebookQuote(originalText, quote) {
+    var a = normalizeNotebookQuoteText(originalText).toLowerCase();
+    var b = normalizeNotebookQuoteText(quote).toLowerCase();
+    return !!(b && a.indexOf(b) !== -1);
+}
+
+function inferNotebookGuideCategoryFromText(text) {
+    var category = normalizeNotebookGuideCategoryName(text);
+    if (category) return category;
+    return "";
+}
+
+function getNotebookGuideDefaultFocus(category, sourceText) {
+    var value = cleanNotebookGuideText(sourceText).toLowerCase();
+    if (category === "Flow") {
+        if (value.indexOf("opening") !== -1 || value.indexOf("starter") !== -1 || value.indexOf("start") !== -1) return "Make sentence openings less repetitive";
+        if (value.indexOf("transition") !== -1) return "Use transitions to connect ideas smoothly";
+        return "Make sentence flow smoother";
+    }
+    if (category === "Grammar") {
+        if (value.indexOf("tense") !== -1 || /\bverb\b|\bverbs\b/.test(value)) return "Keep verb tense consistent";
+        if (value.indexOf("run-on") !== -1 || value.indexOf("break") !== -1 || value.indexOf("complete sentence") !== -1) return "Break long sentences into clearer parts";
+        return "Keep grammar and sentence breaks clear";
+    }
+    if (category === "Spelling & Punctuation") return "Check spelling, punctuation, and word forms";
+    if (category === "Organization") {
+        if (value.indexOf("ending") !== -1 || value.indexOf("conclusion") !== -1 || value.indexOf("reflect") !== -1) return "Add a clearer ending or reflection";
+        if (value.indexOf("paragraph") !== -1) return "Use paragraph breaks to organize new parts";
+        if (value.indexOf("transition") !== -1) return "Use transitions to connect ideas clearly";
+        return "Organize ideas in a clear order";
+    }
+    if (category === "Ideas & Details") return "Add specific details that develop the main idea";
+    if (category === "Word Choice") return "Choose precise words that fit the meaning";
+    return cleanNotebookGuideText(sourceText) || "Check one important writing skill";
+}
+
+function getNotebookGuideCategoryFocusSource(category, data) {
+    data = data || {};
+    var detailed = data.detailedFeedback || data.detailed || {};
+    var categories = detailed.categories || {};
+    var item = categories[category] || {};
+
+    return cleanNotebookGuideText([
+        item.growthTip || "",
+        item.evidence || "",
+        item.teacherComment || "",
+        item.sentenceVariety || "",
+        item.flowPattern || "",
+        item.rawBody || ""
+    ].join(" "));
+}
+
+function getNotebookDecisionFocusText(categoryDetails, key) {
+    var detail = categoryDetails && categoryDetails[key];
+    if (!detail) return "";
+    if (detail.guideFocusText) return detail.guideFocusText;
+    if (detail.focusArea) return detail.focusArea;
+    if (detail.teacherComment) return detail.teacherComment;
+    if (detail.noticed) return detail.noticed;
+    if (detail.tip) return detail.tip;
+    return "";
+}
+
+function buildNotebookGuidePriorities(data) {
+    return buildNotebookGuidePrioritiesFromRawInput(data);
+}
+
+function buildNotebookGuidePrioritiesFromRawInput(data) {
+    data = data || {};
+    var categoryScores = data.categoryScores || {};
+    var detailed = data.detailedFeedback || data.detailed || {};
+    var priorities = [];
+    var labels = ["Ideas & Details", "Grammar", "Word Choice", "Organization", "Flow", "Spelling & Punctuation"];
+    var ranked = [];
+    var j;
+
+    function addPriority(category, text, source) {
+        category = normalizeNotebookGuideCategoryName(category || text);
+        if (!category || category === "Neatness") return;
+        for (var i = 0; i < priorities.length; i += 1) {
+            if (priorities[i].category === category) {
+                if (!priorities[i].priority && text) priorities[i].priority = getNotebookGuideDefaultFocus(category, text);
+                return;
+            }
+        }
+        priorities.push({
+            category: category,
+            priority: getNotebookGuideDefaultFocus(category, text),
+            source: source || "feedback"
+        });
+    }
+
+    for (j = 0; j < labels.length; j += 1) {
+        var key = labels[j];
+        var score = categoryScores && categoryScores[key] != null ? Number(categoryScores[key]) : null;
+        if (score == null || !isFinite(score)) continue;
+        ranked.push({ key: key, score: score });
+    }
+    ranked.sort(function(a, b) {
+        if (a.score !== b.score) return a.score - b.score;
+        return labels.indexOf(a.key) - labels.indexOf(b.key);
+    });
+
+    if (ranked.length) {
+        addPriority(ranked[0].key, getNotebookGuideCategoryFocusSource(ranked[0].key, data) || ranked[0].key, "lowestScore");
+    }
+
+    addPriority(inferNotebookGuideCategoryFromText(data.growGoal || (detailed && detailed.growGoal) || ""), data.growGoal || (detailed && detailed.growGoal) || "", "growGoal");
+    addPriority(inferNotebookGuideCategoryFromText(data.nextTime || (detailed && detailed.nextTime) || ""), data.nextTime || (detailed && detailed.nextTime) || "", "nextTime");
+
+    for (var r = 0; r < ranked.length && priorities.length < 4; r += 1) {
+        if (ranked[r].score <= 8 || priorities.length < 2) {
+            addPriority(ranked[r].key, getNotebookGuideCategoryFocusSource(ranked[r].key, data) || ranked[r].key, "score");
+        }
+    }
+
+    if (data.flowData && priorities.length < 4) {
+        var flowScore = data.flowData.varietyScore != null ? Number(data.flowData.varietyScore) : 100;
+        if (isFinite(flowScore) && flowScore < 70) addPriority("Flow", getNotebookGuideCategoryFocusSource("Flow", data) || "sentence flow", "computedFlow");
+    }
+
+    if (!priorities.length) {
+        addPriority("Grammar", "Keep grammar and sentence breaks clear", "fallback");
+        addPriority("Spelling & Punctuation", "Check spelling and punctuation", "fallback");
+    }
+    return priorities.slice(0, 4);
+}
+
+function buildNotebookGuidePriorityPromptText(priorities) {
+    priorities = Array.isArray(priorities) ? priorities : [];
+    if (!priorities.length) return "- Grammar: Keep grammar and sentence breaks clear";
+    var lines = [];
+    for (var i = 0; i < priorities.length; i += 1) {
+        lines.push("- " + (priorities[i].category || "Writing") + ": " + (priorities[i].priority || "Check this skill"));
+    }
+    return lines.join("\n");
+}
+
+function extractNotebookGuideJsonBlock(step3Text) {
+    var text = String(step3Text || "");
+    var marker = text.match(/##\s*Notebook Guide Candidate JSON\s*([\s\S]*)$/i);
+    if (!marker) marker = text.match(/##\s*Notebook Guide JSON\s*([\s\S]*)$/i);
+    if (!marker) return "";
+    return marker[1] || "";
+}
+
+function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, notebookGuidePriorities) {
+    candidate = candidate || {};
+    var originalQuote = truncateNotebookGuideText(candidate.originalQuote || candidate.before || candidate.quote || "", 180);
+    if (!originalTextContainsNotebookQuote(originalText, originalQuote)) return null;
+    var area = truncateNotebookGuideText(candidate.area || "", 50);
+    var skill = truncateNotebookGuideText(candidate.skill || "", 70);
+    var connection = normalizeNotebookGuideCategoryName(candidate.page1Connection || area || skill);
+    if (!connection) connection = normalizeNotebookGuideCategoryName(area || skill);
+    if (!connection || connection === "Neatness") return null;
+    if (Array.isArray(notebookGuidePriorities) && notebookGuidePriorities.length && !notebookGuideExampleMatchesPriority({ page1Connection: connection, area: area, skill: skill }, notebookGuidePriorities)) {
+        return null;
+    }
+    var rawNextTimeExample = String(candidate.nextTimeExample || candidate.after || candidate.revision || "");
+    var nextTimeExample = truncateNotebookGuideText(rawNextTimeExample, 220);
+    var whyThisWorksRaw = clarifyYToIesGuideText(candidate.whyThisWorks || candidate.explanation || candidate.why || "");
+    var whyThisWorks = truncateNotebookGuideText(whyThisWorksRaw, 130);
+    var combinedLabel = cleanNotebookGuideText(area + " " + skill + " " + connection).toLowerCase();
+    var originalTokenCount = cleanNotebookGuideText(originalQuote).split(/\s+/).length;
+    var nextTokenCount = cleanNotebookGuideText(nextTimeExample).split(/\s+/).length;
+    var originalSentenceCount = getNotebookGuideSentenceList(originalQuote).length;
+    var nextSentenceCount = getNotebookGuideSentenceList(nextTimeExample).length;
+
+    if (!nextTimeExample || !whyThisWorks) return null;
+    if (combinedLabel.indexOf("paragraph") !== -1 && !(new RegExp("\\n\\s*\\n|<\\s*br\\b|<\\s*p\\b", "i").test(rawNextTimeExample))) return null;
+    if (originalTokenCount > 4 && nextTokenCount > Math.max(Math.ceil(originalTokenCount * 1.8), originalTokenCount + 12)) return null;
+    if (originalSentenceCount > 0 && nextSentenceCount > originalSentenceCount + 1) return null;
+    if (isGenericNotebookNextTimeExample(nextTimeExample)) return null;
+    if (!notebookGuideExampleHasTextConnection(originalQuote, nextTimeExample)) return null;
+    if (!isConcreteNotebookGuideRevision(originalQuote, nextTimeExample)) return null;
+    if (!area) area = categoryDisplayLabel(connection);
+    if (!skill) skill = getNotebookGuideDefaultFocus(connection, "");
+    return {
+        area: area,
+        skill: skill,
+        page1Connection: connection,
+        originalQuote: originalQuote,
+        nextTimeExample: nextTimeExample,
+        whyThisWorks: whyThisWorks
+    };
+}
+
+function parseNotebookGuideCandidatesFromStep3Text(step3Text, originalText, optGenreInfo, notebookGuidePriorities) {
+    var block = extractNotebookGuideJsonBlock(step3Text);
+    var parsed = parseFirstJsonObject(block);
+    var rawCandidates = [];
+    var candidates = [];
+    if (parsed) {
+        if (Array.isArray(parsed)) rawCandidates = parsed;
+        else if (Array.isArray(parsed.candidates)) rawCandidates = parsed.candidates;
+        else if (Array.isArray(parsed.examples)) rawCandidates = parsed.examples;
+    }
+    for (var i = 0; i < rawCandidates.length && candidates.length < 8; i += 1) {
+        var item = sanitizeNotebookGuideCandidate(rawCandidates[i], originalText, optGenreInfo, null);
+        if (item) candidates.push(item);
+    }
+    return candidates;
+}
+
+function notebookGuideExampleMatchesPriority(example, notebookGuidePriorities) {
+    if (!Array.isArray(notebookGuidePriorities) || !notebookGuidePriorities.length) return true;
+    var category = normalizeNotebookGuideCategoryName((example && example.page1Connection) || (example && example.area) || (example && example.skill) || "");
+    if (!category) return false;
+    for (var i = 0; i < notebookGuidePriorities.length; i += 1) {
+        if (normalizeNotebookGuideCategoryName(notebookGuidePriorities[i].category) === category) return true;
+    }
+    return false;
+}
+
+function normalizeNotebookGuideQuickCheckKey(text) {
+    var value = cleanNotebookGuideText(text).toLowerCase();
+
+    if (
+        value.indexOf("spelling") !== -1 ||
+        value.indexOf("punctuation") !== -1 ||
+        value.indexOf("capital") !== -1 ||
+        value.indexOf("comma") !== -1 ||
+        value.indexOf("plural") !== -1 ||
+        value.indexOf("word form") !== -1
+    ) {
+        return "conventions";
+    }
+
+    if (value.indexOf("read") !== -1 && value.indexOf("out loud") !== -1) {
+        return "read-aloud";
+    }
+
+    if (value.indexOf("sentence") !== -1 && value.indexOf("same way") !== -1) {
+        return "sentence-openings";
+    }
+
+    if (/\bverb\b|\bverbs\b|\btense\b/.test(value)) {
+        return "verb-tense";
+    }
+
+    return value.replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function getNotebookGuideQuickCheckForPriority(priority, writingLabel) {
+    var category = normalizeNotebookGuideCategoryName(priority && priority.category);
+    var text = cleanNotebookGuideText(priority && priority.priority).toLowerCase();
+    if (category === "Flow") {
+        if (text.indexOf("opening") !== -1 || text.indexOf("starter") !== -1) return "Did I start too many sentences the same way?";
+        if (text.indexOf("transition") !== -1) return "Did I use transition words to connect my ideas?";
+        return "Does my writing sound smooth when I read it out loud?";
+    }
+    if (category === "Grammar") {
+        if (text.indexOf("tense") !== -1 || /\bverb\b|\bverbs\b/.test(text)) return "Did I keep my writing in one main tense?";
+        return "Did I break long sentences into clear parts?";
+    }
+    if (category === "Spelling & Punctuation") return "Did I check spelling, punctuation, and word forms?";
+    if (category === "Organization") return "Are my ideas in an order that is easy to follow?";
+    if (category === "Ideas & Details") return "Did I add specific details to support my main idea?";
+    if (category === "Word Choice") return "Did I choose words that clearly show what I mean?";
+    return "Did I check one important skill before turning in my next " + (writingLabel || "piece of writing") + "?";
+}
+
+function buildNotebookGuideQuickChecks(priorities, writingLabel) {
+    var checks = [];
+    var seenChecks = {};
+
+    function addCheck(text) {
+        var key;
+        text = truncateNotebookGuideText(text, 100);
+        key = normalizeNotebookGuideQuickCheckKey(text);
+        if (!text || seenChecks[key]) return;
+        seenChecks[key] = true;
+        checks.push(text);
+    }
+
+    priorities = Array.isArray(priorities) ? priorities : [];
+    for (var i = 0; i < priorities.length && checks.length < 5; i += 1) {
+        addCheck(getNotebookGuideQuickCheckForPriority(priorities[i], writingLabel));
+    }
+    addCheck("Did I read my writing out loud to hear how it sounds?");
+    if (!seenChecks.conventions) addCheck("Did I check spelling and punctuation before turning it in?");
+    return checks.slice(0, 5);
+}
+
+function getNotebookGuideFocusItems(priorities) {
+    var items = [];
+    priorities = Array.isArray(priorities) ? priorities : [];
+    for (var i = 0; i < priorities.length && items.length < 4; i += 1) {
+        var item = truncateNotebookGuideText(priorities[i].priority || getNotebookGuideDefaultFocus(priorities[i].category, ""), 90);
+        if (item && items.indexOf(item) === -1) items.push(item);
+    }
+    if (!items.length) items.push("Check one important writing skill next time");
+    return items;
+}
+
+function getNotebookGuideExampleCategory(example) {
+    return normalizeNotebookGuideCategoryName(
+        (example && example.page1Connection) ||
+        (example && example.area) ||
+        (example && example.skill) ||
+        ""
+    );
+}
+
+function getNotebookGuideRequiredCategories(priorities, maxExamples) {
+    var required = [];
+    var seen = {};
+    priorities = Array.isArray(priorities) ? priorities : [];
+    maxExamples = parseInt(maxExamples, 10);
+    if (!isFinite(maxExamples) || maxExamples < 1) maxExamples = 3;
+
+    for (var i = 0; i < priorities.length && required.length < maxExamples; i += 1) {
+        var category = normalizeNotebookGuideCategoryName(priorities[i].category);
+        if (!category || category === "Neatness" || seen[category]) continue;
+        seen[category] = true;
+        required.push(category);
+    }
+
+    return required;
+}
+
+function getNotebookGuideMaxExamples(priorities) {
+    return getNotebookGuideRequiredCategories(priorities, 4).length > 3 ? 4 : 3;
+}
+
+function notebookGuideHasCategory(examples, category) {
+    examples = Array.isArray(examples) ? examples : [];
+    category = normalizeNotebookGuideCategoryName(category);
+
+    for (var i = 0; i < examples.length; i += 1) {
+        if (getNotebookGuideExampleCategory(examples[i]) === category) return true;
+    }
+
+    return false;
+}
+
+function notebookGuideHasRequiredCoverage(guide, priorities) {
+    guide = guide || {};
+    var examples = Array.isArray(guide.examples) ? guide.examples : [];
+    var maxExamples = getNotebookGuideMaxExamples(priorities);
+    var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
+
+    if (!examples.length) return false;
+
+    for (var i = 0; i < requiredCategories.length && i < maxExamples; i += 1) {
+        if (!notebookGuideHasCategory(examples, requiredCategories[i])) return false;
+    }
+
+    return true;
+}
+
+function getNotebookGuideSentenceList(text) {
+    var value = String(text || "").replace(/\r\n?/g, "\n").replace(/\s+/g, " ").trim();
+    if (!value) return [];
+    var parts = value.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+    var out = [];
+    for (var i = 0; i < parts.length; i += 1) {
+        var sentence = parts[i].replace(/\s+/g, " ").trim();
+        if (sentence) out.push(sentence);
+    }
+    return out;
+}
+
+function getNotebookGuideSentenceStarter(sentence) {
+    var s = cleanNotebookGuideText(sentence).replace(/^['\"]+/, "");
+    var m = s.match(/^([A-Za-z]+)/);
+    return m ? m[1].toLowerCase() : "";
+}
+
+function getNotebookGuideTokenOverlapScore(a, b) {
+    var wordsA = getNotebookGuideContentWords(a);
+    var wordsB = getNotebookGuideContentWords(b);
+    var matches = 0;
+    if (!wordsA.length || !wordsB.length) return 0;
+    for (var i = 0; i < wordsA.length; i += 1) {
+        if (wordsB.indexOf(wordsA[i]) !== -1) {
+            matches += 1;
+        }
+    }
+    return matches / Math.max(wordsA.length, wordsB.length);
+}
+
+function findBestCorrectedMatchForQuote(originalQuote, correctedText) {
+    var correctedSentences = getNotebookGuideSentenceList(stripCorrectionMarkdown(correctedText || ""));
+    var best = "";
+    var bestScore = 0;
+    var score;
+    for (var i = 0; i < correctedSentences.length; i += 1) {
+        score = getNotebookGuideTokenOverlapScore(originalQuote, correctedSentences[i]);
+        if (score > bestScore) {
+            bestScore = score;
+            best = correctedSentences[i];
+        }
+    }
+    if (bestScore >= 0.45 && isConcreteNotebookGuideRevision(originalQuote, best)) {
+        return best;
+    }
+    return "";
+}
+
+function isRunOnNotebookGuideCandidate(sentence) {
+    var cleaned = cleanNotebookGuideText(sentence || "");
+    var words = cleaned ? cleaned.split(/\s+/) : [];
+    var joiners = sentence.match(/\b(and|but|so|then|or|because|while)\b/gi);
+    var clauses = sentence.split(/[,;]\s+/);
+    if (words.length < 20) return false;
+    if (!joiners || joiners.length < 2) return false;
+    return clauses.length < joiners.length + 1;
+}
+
+function hasLikelyMissingCommaAfterOpener(originalQuote, correctedMatch) {
+    var original = cleanNotebookGuideText(originalQuote || "");
+    var corrected = cleanNotebookGuideText(correctedMatch || "");
+    if (!original || !corrected || original === corrected) return false;
+    return (
+        /^(finally|first|next|then|after|before|when|while|because|although|later|soon)\s/i.test(original) &&
+        /^(finally|first|next|then|after|before|when|while|because|although|later|soon),/i.test(corrected)
+    );
+}
+
+function buildSimpleOpenerCommaModel(sentence) {
+    var s = cleanNotebookGuideText(sentence || "");
+    if (/^(finally|first|next|then|later|soon)\s+/i.test(s)) {
+        return s.replace(/^(finally|first|next|then|later|soon)\s+/i, function(match, opener) {
+            return opener + ", ";
+        });
+    }
+    return "";
+}
+
+function buildSimpleRunOnSentenceBreakModel(sentence) {
+    var s = cleanNotebookGuideText(sentence || "");
+    var model = s.replace(/\s+(but|so|then)\s+/i, function(match, joiner) {
+        return ". " + joiner.charAt(0).toUpperCase() + joiner.slice(1).toLowerCase() + " ";
+    });
+    if (model === s) {
+        model = s.replace(/\s+and\s+/i, ". And ");
+    }
+    return isConcreteNotebookGuideRevision(s, model) ? model : "";
+}
+
+function buildSimpleConventionModel(sentence) {
+    var model = cleanNotebookGuideText(sentence || "");
+    if (!model) return "";
+    model = model.replace(/\bbunnys\b/g, "bunnies").replace(/\bBunnys\b/g, "Bunnies");
+    model = model.replace(/\bchilds\b/g, "children").replace(/\bChilds\b/g, "Children");
+    model = model.replace(/\bwomans\b/g, "women").replace(/\bWomans\b/g, "Women");
+    model = model.replace(/\bmans\b/g, "men").replace(/\bMans\b/g, "Men");
+    model = model.replace(/(^|[.!?]\s+)i\b/g, function(match, prefix) {
+        return prefix + "I";
+    });
+    model = model.replace(/\bi\b/g, "I");
+    return isConcreteNotebookGuideRevision(sentence, model) ? model : "";
+}
+
+function inferConventionSkill(originalQuote, correctedMatch) {
+    var original = cleanNotebookGuideText(originalQuote || "").toLowerCase();
+    var corrected = cleanNotebookGuideText(correctedMatch || "").toLowerCase();
+    if (original.indexOf("bunnys") !== -1 && corrected.indexOf("bunnies") !== -1) {
+        if (/\bplaying catch\b/.test(original) && /\bare playing catch\b/.test(corrected)) {
+            return "Fixing Plurals and Complete Verbs";
+        }
+        return "Fixing Plurals";
+    }
+    if (/\bplaying catch\b/.test(original) && /\bare playing catch\b/.test(corrected)) {
+        return "Making Sentences Complete";
+    }
+    if (original.replace(/[.,!?]/g, "") !== corrected.replace(/[.,!?]/g, "")) {
+        return "Checking Punctuation";
+    }
+    return "Checking Conventions";
+}
+
+function hasLikelyConventionMarker(sentence) {
+    sentence = sentence || "";
+    return /\bi\b/.test(sentence) || /\b(bunnys|childs|womans|mans)\b/i.test(sentence);
+}
+
+function looksLikeConventionRevision(originalQuote, correctedMatch) {
+    var original = cleanNotebookGuideText(originalQuote || "");
+    var corrected = cleanNotebookGuideText(correctedMatch || "");
+    var originalNoPunct;
+    var correctedNoPunct;
+    if (!original || !corrected || original === corrected) return false;
+    originalNoPunct = original.replace(/[.,!?;:'"-]/g, "").toLowerCase();
+    correctedNoPunct = corrected.replace(/[.,!?;:'"-]/g, "").toLowerCase();
+    return originalNoPunct === correctedNoPunct;
+}
+
+function makeNotebookGuideExample(area, skill, page1Connection, originalQuote, nextTimeExample, whyThisWorks) {
+    var ex = {
+        area: area,
+        skill: skill,
+        page1Connection: page1Connection,
+        originalQuote: truncateNotebookGuideText(originalQuote, 180),
+        nextTimeExample: truncateNotebookGuideText(nextTimeExample, 220),
+        whyThisWorks: truncateNotebookGuideText(whyThisWorks, 130)
+    };
+    return isValidNotebookGuideExample(ex) ? ex : null;
+}
+
+function buildFallbackExampleForPriority(priority, originalText, correctedText) {
+    var category = normalizeNotebookGuideCategoryName(priority && priority.category);
+    var sentences = getNotebookGuideSentenceList(originalText);
+    var originalQuote;
+    var correctedMatch;
+    var modelSentence;
+    var i;
+
+    if (!sentences.length) return null;
+
+    if (category === "Flow") {
+        // Flow revisions can be too subtle for a safe mechanical fallback. Do not
+        // generate sentence-opening examples from hardcoded opener templates.
+        // Flow examples may still be used when they come from validated Step 3 candidates.
+        return null;
+    }
+
+    if (category === "Grammar") {
+        for (i = 0; i < sentences.length; i += 1) {
+            originalQuote = sentences[i];
+            correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
+            if (correctedMatch && hasLikelyMissingCommaAfterOpener(originalQuote, correctedMatch)) {
+                return makeNotebookGuideExample(
+                    "Grammar",
+                    "Adding Commas After Openers",
+                    "Grammar",
+                    originalQuote,
+                    correctedMatch,
+                    "The comma after the opener helps the sentence read more clearly."
+                );
+            }
+            modelSentence = buildSimpleOpenerCommaModel(originalQuote);
+            if (modelSentence) {
+                return makeNotebookGuideExample(
+                    "Grammar",
+                    "Adding Commas After Openers",
+                    "Grammar",
+                    originalQuote,
+                    modelSentence,
+                    "The comma after the opener helps the sentence read more clearly."
+                );
+            }
+        }
+
+        for (i = 0; i < sentences.length; i += 1) {
+            originalQuote = sentences[i];
+            correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
+            if (correctedMatch && isRunOnNotebookGuideCandidate(originalQuote)) {
+                return makeNotebookGuideExample(
+                    "Grammar",
+                    "Breaking Long Sentences",
+                    "Grammar",
+                    originalQuote,
+                    correctedMatch,
+                    "Breaking the long idea into clearer sentence parts makes it easier to follow."
+                );
+            }
+            if (isRunOnNotebookGuideCandidate(originalQuote)) {
+                modelSentence = buildSimpleRunOnSentenceBreakModel(originalQuote);
+                if (modelSentence) {
+                    return makeNotebookGuideExample(
+                        "Grammar",
+                        "Breaking Long Sentences",
+                        "Grammar",
+                        originalQuote,
+                        modelSentence,
+                        "Breaking the long idea into clearer sentence parts makes it easier to follow."
+                    );
+                }
+            }
+            if (correctedMatch) {
+                return makeNotebookGuideExample(
+                    "Grammar",
+                    "Making Sentences Clearer",
+                    "Grammar",
+                    originalQuote,
+                    correctedMatch,
+                    "This version fixes the grammar in the sentence while keeping your idea."
+                );
+            }
+        }
+        return null;
+    }
+
+    if (category === "Spelling & Punctuation") {
+        for (i = 0; i < sentences.length; i += 1) {
+            originalQuote = sentences[i];
+            if (!hasLikelyConventionMarker(originalQuote)) continue;
+            correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
+            modelSentence = correctedMatch || buildSimpleConventionModel(originalQuote);
+            if (modelSentence) {
+                return makeNotebookGuideExample(
+                    "Spelling and Word Forms",
+                    inferConventionSkill(originalQuote, modelSentence),
+                    "Spelling & Punctuation",
+                    originalQuote,
+                    modelSentence,
+                    "Fixing spelling, word forms, and punctuation makes the sentence clearer and more polished."
+                );
+            }
+        }
+
+        for (i = 0; i < sentences.length; i += 1) {
+            originalQuote = sentences[i];
+            correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
+            if (correctedMatch && looksLikeConventionRevision(originalQuote, correctedMatch)) {
+                return makeNotebookGuideExample(
+                    "Spelling and Word Forms",
+                    inferConventionSkill(originalQuote, correctedMatch),
+                    "Spelling & Punctuation",
+                    originalQuote,
+                    correctedMatch,
+                    "Fixing spelling, word forms, and punctuation makes the sentence clearer and more polished."
+                );
+            }
+        }
+        return null;
+    }
+
+    return null;
+}
+
+function addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, allowDuplicateQuote) {
+    var qKey;
+    var category;
+
+    if (!ex || !ex.originalQuote) return false;
+    if (!isValidNotebookGuideExample(ex)) return false;
+
+    qKey = normalizeNotebookQuoteText(ex.originalQuote).toLowerCase();
+    category = getNotebookGuideExampleCategory(ex);
+    if (!qKey) return false;
+    if (seenQuotes[qKey] && (!allowDuplicateQuote || seenCategories[category])) return false;
+    if (!originalTextContainsNotebookQuote(originalText, ex.originalQuote)) return false;
+
+    seenQuotes[qKey] = true;
+    if (category) seenCategories[category] = true;
+    examples.push(ex);
+
+    return true;
+}
+
+function buildNotebookGuideFocusItemsFromExamples(examples, fallbackPriorities) {
+    var items = [];
+    var used = {};
+    var i;
+
+    examples = Array.isArray(examples) ? examples : [];
+    for (i = 0; i < examples.length; i += 1) {
+        var ex = examples[i] || {};
+        var category = getNotebookGuideExampleCategory(ex);
+        var focus = ex.skill || getNotebookGuideDefaultFocus(category, "") || categoryDisplayLabel(category || "Writing");
+        focus = truncateNotebookGuideText(focus, 90);
+        if (!focus || used[focus]) continue;
+        used[focus] = true;
+        items.push(focus);
+    }
+
+    if (!items.length) items = getNotebookGuideFocusItems(fallbackPriorities || []);
+    return items;
+}
+
+
+function buildNotebookGuideFallback(originalText, correctedText, analysisData, optGenreInfo, notebookGuidePriorities) {
+    var genreInfo = normalizeWritingGenreInfo(optGenreInfo || (analysisData && analysisData.writingGenre) || currentWritingGenreInfo || detectWritingGenreInfo(originalText || correctedText || ""));
+    var writingLabel = getNotebookGuideWritingLabel(genreInfo);
+    var priorities = Array.isArray(notebookGuidePriorities) && notebookGuidePriorities.length ? notebookGuidePriorities : buildNotebookGuidePriorities(analysisData || {});
+    var maxExamples = getNotebookGuideMaxExamples(priorities);
+    var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
+    var examples = [];
+    var seenQuotes = {};
+    var seenCategories = {};
+    var i;
+    var p;
+    var ex;
+
+    for (i = 0; i < requiredCategories.length && examples.length < maxExamples; i += 1) {
+        for (p = 0; p < priorities.length; p += 1) {
+            if (normalizeNotebookGuideCategoryName(priorities[p].category) !== requiredCategories[i]) continue;
+            ex = buildFallbackExampleForPriority(priorities[p], originalText, correctedText);
+            if (addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, true)) break;
+        }
+    }
+
+    for (i = 0; i < priorities.length && examples.length < maxExamples; i += 1) {
+        ex = buildFallbackExampleForPriority(priorities[i], originalText, correctedText);
+        addNotebookGuideFallbackExample(ex, originalText, examples, seenQuotes, seenCategories, false);
+    }
+
+    var finalExamples = examples.slice(0, maxExamples);
+    return {
+        version: NOTEBOOK_GUIDE_VERSION,
+        writingLabel: writingLabel,
+        focusItems: buildNotebookGuideFocusItemsFromExamples(finalExamples, priorities),
+        examples: finalExamples,
+        quickChecks: buildNotebookGuideQuickChecks(priorities, writingLabel)
+    };
+}
+
+function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreInfo, notebookGuidePriorities, analysisData) {
+    var genreInfo = normalizeWritingGenreInfo(optGenreInfo || currentWritingGenreInfo || detectWritingGenreInfo(originalText || ""));
+    var writingLabel = getNotebookGuideWritingLabel(genreInfo);
+    var priorities = Array.isArray(notebookGuidePriorities) && notebookGuidePriorities.length ? notebookGuidePriorities : buildNotebookGuidePriorities(analysisData || {});
+    var maxExamples = getNotebookGuideMaxExamples(priorities);
+    var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
+    var sanitized = [];
+    var selected = [];
+    var seen = {};
+    var selectedCategories = {};
+    var i;
+
+    candidates = Array.isArray(candidates) ? candidates : [];
+    for (i = 0; i < candidates.length; i += 1) {
+        var c = sanitizeNotebookGuideCandidate(candidates[i], originalText, optGenreInfo, priorities);
+        if (c) sanitized.push(c);
+    }
+
+    function addExample(ex, allowDuplicateCategory, allowDuplicateQuote) {
+        var key;
+        var category;
+
+        if (!ex || selected.length >= maxExamples) return false;
+        if (!isValidNotebookGuideExample(ex)) return false;
+        key = normalizeNotebookQuoteText(ex.originalQuote).toLowerCase();
+        if (!key) return false;
+        if (!originalTextContainsNotebookQuote(originalText, ex.originalQuote)) return false;
+        if (!notebookGuideExampleMatchesPriority(ex, priorities)) return false;
+
+        category = getNotebookGuideExampleCategory(ex);
+        if (!category) return false;
+        if (!allowDuplicateCategory && selectedCategories[category]) return false;
+        if (seen[key] && (!allowDuplicateQuote || selectedCategories[category])) return false;
+
+        seen[key] = true;
+        selectedCategories[category] = true;
+        selected.push(ex);
+        return true;
+    }
+
+    for (i = 0; i < requiredCategories.length && selected.length < maxExamples; i += 1) {
+        var requiredCategory = requiredCategories[i];
+        var found = false;
+
+        for (var j = 0; j < sanitized.length; j += 1) {
+            if (getNotebookGuideExampleCategory(sanitized[j]) === requiredCategory) {
+                found = addExample(sanitized[j], true, false);
+                if (found) break;
+            }
+        }
+
+        if (!found) {
+            for (var p = 0; p < priorities.length; p += 1) {
+                if (normalizeNotebookGuideCategoryName(priorities[p].category) === requiredCategory) {
+                    var fallbackExample = buildFallbackExampleForPriority(
+                        priorities[p],
+                        originalText,
+                        analysisData && analysisData.correctedText || originalText
+                    );
+                    addExample(fallbackExample, true, true);
+                    break;
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < sanitized.length && selected.length < maxExamples; i += 1) {
+        addExample(sanitized[i], false, false);
+    }
+
+    for (i = 0; i < sanitized.length && selected.length < Math.min(3, maxExamples); i += 1) {
+        addExample(sanitized[i], true, false);
+    }
+
+    if (!notebookGuideHasRequiredCoverage({ examples: selected }, priorities) || selected.length < Math.min(3, priorities.length)) {
+        var fallback = buildNotebookGuideFallback(originalText, analysisData && analysisData.correctedText || originalText, analysisData || {}, genreInfo, priorities);
+        for (i = 0; fallback.examples && i < fallback.examples.length && selected.length < maxExamples; i += 1) addExample(fallback.examples[i], true, true);
+        if (!selected.length) return fallback;
+    }
+
+    var finalSelectedExamples = selected.slice(0, maxExamples);
+    return {
+        version: NOTEBOOK_GUIDE_VERSION,
+        writingLabel: writingLabel,
+        focusItems: buildNotebookGuideFocusItemsFromExamples(finalSelectedExamples, priorities),
+        examples: finalSelectedExamples,
+        quickChecks: buildNotebookGuideQuickChecks(priorities, writingLabel)
+    };
+}
+
+function getNotebookGuideIntro(guide) {
+    var label = guide && guide.writingLabel ? guide.writingLabel : "piece of writing";
+    return "Use these examples to help you with your next " + label + ". These are not the only ways to write the sentences, but they show how small changes can make writing clearer and smoother.";
+}
+
+function getNotebookGuideQuickCheckTitle(guide) {
+    var label = guide && guide.writingLabel ? guide.writingLabel : "piece of writing";
+    return "Quick Check for Your Next " + toNotebookTitleCase(label);
+}
+
+function normalizeNotebookGuideRenderOptions(options) {
+    options = options || {};
+    var maxItems = parseInt(options.maxGuideItems != null ? options.maxGuideItems : options.maxItems, 10);
+    if (!isFinite(maxItems) || maxItems < 1) maxItems = options.isPrint ? 3 : 4;
+    if (maxItems > 4) maxItems = 4;
+    return {
+        isPrint: !!options.isPrint,
+        maxGuideItems: maxItems,
+        showQuickCheck: options.showQuickCheck === false ? false : !options.isPrint
+    };
+}
+
+function getNotebookPrintGuideRenderOptions() {
+    return { isPrint: true, maxGuideItems: 3, showQuickCheck: false };
+}
+
+function renderNotebookGuideFocusList(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
+    var items = guide && Array.isArray(guide.focusItems) ? guide.focusItems : ["Check one important writing skill next time"];
+    var html = "";
+    for (var i = 0; i < items.length && i < options.maxGuideItems; i += 1) {
+        html += "<li>" + escapeHtml(truncateNotebookGuideText(items[i], 90)) + "</li>";
+    }
+    return html || "<li>Check one important writing skill next time.</li>";
+}
+
+function renderNotebookGuideExamples(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
+    var examples = guide && Array.isArray(guide.examples) ? guide.examples : [];
+    var html = "";
+    for (var i = 0; i < examples.length && i < options.maxGuideItems; i += 1) {
+        var ex = examples[i] || {};
+        html += '<div class="guide-example">';
+        html += '<div class="example-heading">EXAMPLE ' + (i + 1) + '</div>';
+        html += '<div class="example-skill">' + escapeHtml(truncateNotebookGuideText(ex.area || "Writing", 50)) + ': ' + escapeHtml(truncateNotebookGuideText(ex.skill || "Try one focused improvement", 70)) + '</div>';
+        html += '<div class="example-label">In this piece, you wrote:</div>';
+        html += '<div class="example-quote">"' + escapeHtml(truncateNotebookGuideText(ex.originalQuote || "", 180)) + '"</div>';
+        html += '<div class="example-label">Next time, you could try:</div>';
+        html += '<div class="example-after">"' + escapeHtml(truncateNotebookGuideText(ex.nextTimeExample || "", 220)) + '"</div>';
+        html += '<div class="example-label">Why this works:</div>';
+        html += '<div class="example-why">' + escapeHtml(truncateNotebookGuideText(ex.whyThisWorks || "", 130)) + '</div>';
+        html += '</div>';
+    }
+    if (!html) {
+        html = '<div class="guide-no-examples">Use the focus list' + (options.showQuickCheck ? ' and quick check below' : '') + ' with your next piece of writing.</div>';
+    }
+    return html;
+}
+
+function renderNotebookQuickCheckList(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
+    if (!options.showQuickCheck) return "";
+    var checks = guide && Array.isArray(guide.quickChecks) ? guide.quickChecks : [];
+    var html = "";
+    for (var i = 0; i < checks.length && i < 5; i += 1) {
+        html += "<li>" + escapeHtml(truncateNotebookGuideText(checks[i], 100)) + "</li>";
+    }
+    return html || "<li>Did I check one important skill before turning in my next piece?</li>";
+}
+
+function renderNotebookGuideHtml(guide, options) {
+    options = normalizeNotebookGuideRenderOptions(options);
+    guide = guide || buildNotebookGuideFallback("", "", {}, currentWritingGenreInfo, []);
+    var quickCheckHtml = "";
+    if (options.showQuickCheck) {
+        quickCheckHtml = '<div class="quick-check"><div class="quick-check-title">' + escapeHtml(getNotebookGuideQuickCheckTitle(guide)) + '</div>'
+            + '<div class="quick-check-intro">Before turning in your next ' + escapeHtml(guide.writingLabel || "piece of writing") + ', ask yourself:</div>'
+            + '<ul>' + renderNotebookQuickCheckList(guide, options) + '</ul></div>';
+    }
+    return ''
+        + '<div class="section-title">Next Time Writing Guide</div>'
+        + '<div class="guide-intro">' + escapeHtml(getNotebookGuideIntro(guide)) + '</div>'
+        + '<div class="next-time-focus"><div class="next-time-focus-title">Next Time Focus</div><ul>' + renderNotebookGuideFocusList(guide, options) + '</ul></div>'
+        + '<div class="guide-examples">' + renderNotebookGuideExamples(guide, options) + '</div>'
+        + quickCheckHtml;
+}
+
+// Preserve saved examples. Build missing guides from available assessment evidence.
+function ensureNotebookGuide(data, originalText) {
+    data = data || {};
+    if (data.notebookGuide && Number(data.notebookGuide.version || data.notebookGuideVersion) >= NOTEBOOK_GUIDE_VERSION) return data.notebookGuide;
+    if (data.sampleStatus && data.sampleStatus.status !== "scorable") {
+        var goal = getGoalPlan(data);
+        data.notebookGuide = {
+            version: NOTEBOOK_GUIDE_VERSION,
+            writingLabel: getNotebookGuideWritingLabel(data.writingGenreInfo || data.writingGenre),
+            focusItems: [goal.nextTime],
+            examples: [],
+            quickChecks: goal.checklist
+        };
+        data.notebookGuideVersion = NOTEBOOK_GUIDE_VERSION;
+        return data.notebookGuide;
+    }
+    var priorities = buildNotebookGuidePriorities(data);
+    var genreInfo = data.writingGenreInfo || data.writingGenre || detectWritingGenreInfo(originalText || "");
+    var source = Object.assign({}, data, { correctedText: data.correctedStory || data.correctedText || originalText });
+    var candidates = data.detailed && data.detailed.notebookGuideCandidates || [];
+    data.notebookGuide = assembleNotebookGuideFromCandidates(candidates, originalText, genreInfo, priorities, source);
+    data.notebookGuideVersion = NOTEBOOK_GUIDE_VERSION;
+    return data.notebookGuide;
+}
+
+function getNotebookGuideFromPortfolioSession(session) {
+    var data = buildNotebookReconstructionDataFromSession(session);
+    data.notebookGuide = session.notebookGuide;
+    data.notebookGuideVersion = session.notebookGuideVersion;
+    return ensureNotebookGuide(data, session.originalText || "");
+}
+
+function buildNotebookReconstructionDataFromSession(session) {
+    session = session || {};
+    var detailedFeedback = session.detailedFeedback || {};
+    var feedback = session.feedbackSummary || {};
+    var rawGrowGoal = detailedFeedback.growGoal;
+    var savedGrowGoal = typeof rawGrowGoal === "string"
+        ? { growGoal: rawGrowGoal, nextTime: detailedFeedback.nextTime || feedback.nextTime || "" }
+        : (rawGrowGoal || {});
+
+    return {
+        detailed: {
+            categories: detailedFeedback.categories || {},
+            growGoal: savedGrowGoal.growGoal || feedback.growGoal || "",
+            nextTime: savedGrowGoal.nextTime || feedback.nextTime || "",
+            strength: savedGrowGoal.strength || detailedFeedback.strength || feedback.strength || "",
+            titleSuggestion: detailedFeedback.titleSuggestion || session.title || ""
+        },
+        categoryScores: session.categoryScores || {},
+        flowData: session.flowData || null,
+        writingGenreInfo: getWritingGenreInfoFromSession(session),
+        writingGenre: session.writingGenre || "",
+        writingSubtype: session.writingSubtype || "",
+        writingSafeReference: session.writingSafeReference || "",
+        originalText: session.originalText || "",
+        correctedText: session.correctedPlainText || stripCorrectionMarkdown(session.correctedMarkup || "") || "",
+        teacherCommentFallback: feedback.closing || feedback.nextTime || "",
+        sampleStatus: session.sampleStatus || null,
+        overall: session.overall,
+        isPortfolioReconstruction: true
+    };
+}
+
 function fillNotebookSummary() {
     if (!latestAnalysisData) {
         alert("Please analyze the writing first.");
@@ -7075,7 +8244,7 @@ function fillNotebookSummary() {
         setWftSanitizedInnerHtml(nbDetailed, renderNotebookDetailedAssessment(latestAnalysisData.detailed));
     }
     document.getElementById("notebookTeacherComment").textContent = pickTeacherComment(latestAnalysisData);
-    setWftSanitizedInnerHtml("notebookCorrectedText", wrapCorrectedHtmlForNotebookPrint(renderCorrected(text, latestAnalysisData.correctedStory || text)));
+    setWftSanitizedInnerHtml("notebookPage2Content", renderNotebookGuideHtml(ensureNotebookGuide(latestAnalysisData, text), getNotebookPrintGuideRenderOptions()));
     return true;
 }
 
@@ -7125,6 +8294,19 @@ function getNotebookPrintCss() {
         ".corrected-writing p:last-child { margin-bottom: 0; }",
         ".corrected-writing b, .corrected-writing .corrected-highlight { font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; background: transparent; color: #111111; padding: 0; border-radius: 0; }",
         ".corrected-writing .story-title-line { display: block; font-weight: 700; margin-bottom: 3mm; color: #111111; }",
+        ".next-time-guide { border: 1px solid #cccccc; border-top: 3px solid #3b2f45; border-radius: 4px; padding: 2.5mm 3mm; font-size: 9.2px; line-height: 1.28; color: #111111; }",
+        ".next-time-guide .section-title { color: #3b2f45; border-bottom-color: #d6d3d1; margin-bottom: 1.8mm; }",
+        ".guide-intro { font-size: 9px; line-height: 1.28; color: #374151; margin-bottom: 2mm; }",
+        ".next-time-focus, .quick-check { font-size: 8.6px; color: #374151; background: #fafaf9; border-left: 2px solid #d97706; padding: 1.5mm 2mm; margin-bottom: 2mm; line-height: 1.25; }",
+        ".next-time-focus-title, .quick-check-title, .example-heading { font-size: 7.8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #92400e; margin-bottom: 0.8mm; }",
+        ".next-time-focus ul, .quick-check ul { margin: 0; padding-left: 3.5mm; }",
+        ".next-time-focus li, .quick-check li { margin: 0 0 0.4mm; }",
+        ".guide-example { border: 1px solid #e5e7eb; border-radius: 3px; padding: 1.5mm 1.8mm; margin-bottom: 1.7mm; break-inside: avoid; page-break-inside: avoid; }",
+        ".example-skill { font-size: 9px; font-weight: 700; color: #111827; margin-bottom: 1mm; }",
+        ".example-label { font-size: 7.8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-top: 0.7mm; }",
+        ".example-quote, .example-after, .example-why, .guide-no-examples, .quick-check-intro { font-size: 8.7px; line-height: 1.26; color: #111111; }",
+        ".example-quote, .example-after { background: #ffffff; border-left: 2px solid #d6d3d1; padding: 0.6mm 1.2mm; margin-top: 0.4mm; }",
+        ".example-why { margin-top: 0.4mm; }",
         ".auto-fit-page { --fit-scale: 1; }",
         ".auto-fit-page .page-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(5px * var(--fit-scale)); }",
         ".auto-fit-page .page-label { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(2px * var(--fit-scale)); }",
@@ -7148,6 +8330,23 @@ function getNotebookPrintCss() {
         ".auto-fit-page .evidence-block, .auto-fit-page .tip-block { font-size: calc(9.3px * var(--fit-scale)); line-height: 1.32; }",
         ".auto-fit-page .evidence-block { margin-bottom: calc(3px * var(--fit-scale)); }",
         ".auto-fit-page .tip-block { padding-top: calc(3px * var(--fit-scale)); }",
+        ".auto-fit-page .page2-header { padding-bottom: calc(4px * var(--fit-scale)); margin-bottom: calc(3mm * var(--fit-scale)); }",
+        ".auto-fit-page .page2-meta { font-size: calc(8px * var(--fit-scale)); margin-bottom: calc(2px * var(--fit-scale)); }",
+        ".auto-fit-page .page2-title { font-size: calc(14px * var(--fit-scale)); }",
+        ".auto-fit-page .page2-date { font-size: calc(8.5px * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-guide { padding: calc(2.5mm * var(--fit-scale)) calc(3mm * var(--fit-scale)); font-size: calc(9.2px * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-guide .section-title { margin-bottom: calc(1.8mm * var(--fit-scale)); }",
+        ".auto-fit-page .guide-intro { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(2mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus, .auto-fit-page .quick-check { font-size: calc(8.6px * var(--fit-scale)); padding: calc(1.5mm * var(--fit-scale)) calc(2mm * var(--fit-scale)); margin-bottom: calc(2mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus-title, .auto-fit-page .quick-check-title, .auto-fit-page .example-heading { font-size: calc(7.8px * var(--fit-scale)); margin-bottom: calc(0.8mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus ul, .auto-fit-page .quick-check ul { padding-left: calc(3.5mm * var(--fit-scale)); }",
+        ".auto-fit-page .next-time-focus li, .auto-fit-page .quick-check li { margin-bottom: calc(0.4mm * var(--fit-scale)); }",
+        ".auto-fit-page .guide-example { padding: calc(1.5mm * var(--fit-scale)) calc(1.8mm * var(--fit-scale)); margin-bottom: calc(1.7mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-skill { font-size: calc(9px * var(--fit-scale)); margin-bottom: calc(1mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-label { font-size: calc(7.8px * var(--fit-scale)); margin-top: calc(0.7mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-quote, .auto-fit-page .example-after, .auto-fit-page .example-why, .auto-fit-page .guide-no-examples, .auto-fit-page .quick-check-intro { font-size: calc(8.7px * var(--fit-scale)); }",
+        ".auto-fit-page .example-quote, .auto-fit-page .example-after { padding: calc(0.6mm * var(--fit-scale)) calc(1.2mm * var(--fit-scale)); margin-top: calc(0.4mm * var(--fit-scale)); }",
+        ".auto-fit-page .example-why { margin-top: calc(0.4mm * var(--fit-scale)); }",
         "@media print { body { background: white; } .screen-controls { display: none; } .page { margin: 0; box-shadow: none; width: 148mm; min-height: 210mm; } .auto-fit-page { height: 210mm; min-height: 210mm; max-height: 210mm; overflow: hidden; } }"
     ].join("\n");
 }
@@ -7158,10 +8357,11 @@ function getNotebookPrintFitScript() {
         'function mmToPx(mm){var probe=document.createElement("div");probe.style.position="absolute";probe.style.visibility="hidden";probe.style.height=mm+"mm";document.body.appendChild(probe);var px=probe.getBoundingClientRect().height;document.body.removeChild(probe);return px;}' +
         'function each(page,sel,fn){var nodes=page.querySelectorAll(sel);for(var i=0;i<nodes.length;i++){fn(nodes[i]);}}' +
         'function setPx(page,sel,prop,value){each(page,sel,function(node){node.style[prop]=(Math.max(0,value)).toFixed(2)+"px";});}' +
-        'function applyScale(page,scale){page.style.setProperty("--fit-scale",String(scale));var rules=[[".page-header","paddingBottom",4],[".page-header","marginBottom",5],[".page-label","fontSize",9],[".page-label","marginBottom",2],[".page-title","fontSize",18.5],[".overall-label","fontSize",8.5],[".overall-value","fontSize",26.5],[".meta-row","gap",14],[".meta-row","fontSize",10.3],[".meta-row","paddingTop",3],[".meta-row","paddingBottom",4],[".meta-row","marginBottom",5],[".top-boxes","gap",5],[".top-boxes","marginBottom",5],[".box-label","fontSize",9],[".box-label","marginBottom",2],[".section-title","fontSize",9],[".section-title","paddingBottom",2],[".section-title","marginBottom",5],[".assessment-grid","rowGap",4],[".assessment-grid","columnGap",6],[".category","paddingTop",4],[".category","paddingRight",5],[".category","paddingBottom",4],[".category","paddingLeft",5],[".category-header","marginBottom",2],[".category-name","fontSize",10.3],[".score-badge","fontSize",9.3],[".score-badge","paddingLeft",5],[".score-badge","paddingRight",5],[".score-bar-track","marginBottom",4],[".evidence-block","fontSize",9.3],[".evidence-block","marginBottom",3],[".tip-block","fontSize",9.3],[".tip-block","paddingTop",3]];for(var i=0;i<rules.length;i++){setPx(page,rules[i][0],rules[i][1],rules[i][2]*scale);}each(page,".info-box,.teacher-comment",function(node){node.style.paddingTop=(4*scale).toFixed(2)+"px";node.style.paddingRight=(5*scale).toFixed(2)+"px";node.style.paddingBottom=(4*scale).toFixed(2)+"px";node.style.paddingLeft=(5*scale).toFixed(2)+"px";});setPx(page,".teacher-comment","marginBottom",6*scale);each(page,".score-bar-track",function(node){node.style.display="block";node.style.width="100%";node.style.minWidth="0";node.style.height="3.5px";node.style.minHeight="3.5px";});each(page,".score-bar-fill",function(node){node.style.display="block";node.style.height="100%";node.style.minHeight="100%";});each(page,".info-box p,.teacher-comment p,.evidence-block,.tip-block",function(node){node.style.lineHeight="1.32";});}' +
+        'function applyScale(page,scale){page.style.setProperty("--fit-scale",String(scale));var rules=[[".page-header","paddingBottom",4],[".page-header","marginBottom",5],[".page-label","fontSize",9],[".page-label","marginBottom",2],[".page-title","fontSize",18.5],[".overall-label","fontSize",8.5],[".overall-value","fontSize",26.5],[".meta-row","rowGap",4],[".meta-row","columnGap",12],[".meta-row","fontSize",10.3],[".meta-row","paddingTop",3],[".meta-row","paddingBottom",4],[".meta-row","marginBottom",5],[".top-boxes","gap",5],[".top-boxes","marginBottom",5],[".box-label","fontSize",9],[".box-label","marginBottom",2],[".section-title","fontSize",9],[".section-title","paddingBottom",2],[".section-title","marginBottom",5],[".assessment-grid","rowGap",4],[".assessment-grid","columnGap",6],[".assessment-column","rowGap",5],[".category","paddingTop",4],[".category","paddingRight",5],[".category","paddingBottom",4],[".category","paddingLeft",5],[".category-header","marginBottom",2],[".category-name","fontSize",10.3],[".score-badge","fontSize",9.3],[".score-badge","paddingLeft",5],[".score-badge","paddingRight",5],[".score-bar-track","marginBottom",4],[".evidence-block","fontSize",9.3],[".evidence-block","marginBottom",3],[".tip-block","fontSize",9.3],[".tip-block","paddingTop",3]];for(var i=0;i<rules.length;i++){setPx(page,rules[i][0],rules[i][1],rules[i][2]*scale);}each(page,".info-box,.teacher-comment",function(node){node.style.paddingTop=(4*scale).toFixed(2)+"px";node.style.paddingRight=(5*scale).toFixed(2)+"px";node.style.paddingBottom=(4*scale).toFixed(2)+"px";node.style.paddingLeft=(5*scale).toFixed(2)+"px";});setPx(page,".teacher-comment","marginBottom",6*scale);each(page,".score-bar-track",function(node){node.style.display="block";node.style.width="100%";node.style.minWidth="0";node.style.height="3.5px";node.style.minHeight="3.5px";});each(page,".score-bar-fill",function(node){node.style.display="block";node.style.height="100%";node.style.minHeight="100%";});each(page,".info-box p,.teacher-comment p,.evidence-block,.tip-block",function(node){node.style.lineHeight="1.32";});}' +
         'function pageOverflows(page){return page.scrollHeight>page.clientHeight+1;}' +
-        'function fitPageOne(){var page=document.querySelector(".auto-fit-page");if(!page)return;var targetHeight=mmToPx(210)-mmToPx(5);var originalHeight=page.style.height;var originalMinHeight=page.style.minHeight;var originalMaxHeight=page.style.maxHeight;var originalOverflow=page.style.overflow;page.style.height=targetHeight+"px";page.style.minHeight=targetHeight+"px";page.style.maxHeight=targetHeight+"px";page.style.overflow="hidden";applyScale(page,1);var minScale=0.62;var low=minScale;var high=1;var best=1;if(pageOverflows(page)){best=minScale;for(var i=0;i<24;i++){var mid=(low+high)/2;applyScale(page,mid);if(pageOverflows(page)){high=mid;}else{best=mid;low=mid;}}applyScale(page,Math.floor(best*1000)/1000);}if(pageOverflows(page)){page.classList.add("fit-warning");}else{page.classList.remove("fit-warning");}page.style.height=originalHeight;page.style.minHeight=originalMinHeight;page.style.maxHeight=originalMaxHeight;page.style.overflow=originalOverflow;}' +
-        'window.fitNotebookPageOne=fitPageOne;window.addEventListener("load",function(){var run=function(){fitPageOne();setTimeout(fitPageOne,120);setTimeout(fitPageOne,400);};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(run);}else{run();}});window.addEventListener("resize",fitPageOne);window.addEventListener("beforeprint",fitPageOne);' +
+        'function fitNotebookPage(page){if(!page)return;var targetHeight=mmToPx(210)-mmToPx(5);var originalHeight=page.style.height;var originalMinHeight=page.style.minHeight;var originalMaxHeight=page.style.maxHeight;var originalOverflow=page.style.overflow;page.style.height=targetHeight+"px";page.style.minHeight=targetHeight+"px";page.style.maxHeight=targetHeight+"px";page.style.overflow="hidden";applyScale(page,1);var minScale=0.62;var low=minScale;var high=1;var best=1;if(pageOverflows(page)){best=minScale;for(var i=0;i<24;i++){var mid=(low+high)/2;applyScale(page,mid);if(pageOverflows(page)){high=mid;}else{best=mid;low=mid;}}applyScale(page,Math.floor(best*1000)/1000);}if(pageOverflows(page)){page.classList.add("fit-warning");}else{page.classList.remove("fit-warning");}page.style.height=originalHeight;page.style.minHeight=originalMinHeight;page.style.maxHeight=originalMaxHeight;page.style.overflow=originalOverflow;}' +
+        'function fitAllNotebookPages(){var pages=document.querySelectorAll(".auto-fit-page");for(var i=0;i<pages.length;i++){fitNotebookPage(pages[i]);}}' +
+        'window.fitAllNotebookPages=fitAllNotebookPages;window.fitNotebookPageOne=fitAllNotebookPages;window.addEventListener("load",function(){var run=function(){fitAllNotebookPages();setTimeout(fitAllNotebookPages,120);setTimeout(fitAllNotebookPages,400);};if(document.fonts&&document.fonts.ready){document.fonts.ready.then(run);}else{run();}});window.addEventListener("resize",fitAllNotebookPages);window.addEventListener("beforeprint",fitAllNotebookPages);' +
         '})();' +
         '<\/script>';
 }
@@ -7310,8 +8510,8 @@ function buildNotebookPrintHtmlFromPortfolioSession(studentName, session) {
         + '<div class="teacher-comment"><div class="box-label">Teacher Comment</div><p>' + escapeHtml(teacherComment) + '</p></div>'
         + '<div class="section-title">Detailed Writing Assessment</div><div class="assessment-grid">' + renderNotebookDetailedAssessmentFromSavedSession(session) + '</div>'
         + '</div>'
-        + '<div class="page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
-        + '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div></div>';
+        + '<div class="page auto-fit-page"><div class="page2-header"><div><div class="page2-meta">Writing Notebook Summary - Page 2</div><div class="page2-title">' + escapeHtml(title) + '</div></div><div class="page2-date">' + escapeHtml(dateText) + '</div></div>'
+        + '<div class="next-time-guide">' + renderNotebookGuideHtml(getNotebookGuideFromPortfolioSession(session), getNotebookPrintGuideRenderOptions()) + '</div></div>';
 }
 
 
@@ -7499,13 +8699,20 @@ async function reassessPortfolioSession(studentName, sessionId) {
     });
 }
 
-function refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session) {
-    var html = String(printContentHtml || "");
-    var correctedHtml = getPortfolioCorrectedHtml(session) || escapeHtml((session && session.correctedPlainText) || (session && session.originalText) || "-");
-    var replacement = '<div class="corrected-writing"><div class="section-title">Corrected Writing</div><div class="notebook-corrected-text">' + wrapCorrectedHtmlForNotebookPrint(correctedHtml) + '</div></div>';
-    var pattern = /<div class="corrected-writing"><div class="section-title">Corrected Writing<\/div><div class="notebook-corrected-text">[\s\S]*?<\/div><\/div>/;
-    if (pattern.test(html)) return html.replace(pattern, replacement);
-    return buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
+function refreshNotebookPage2Guide(printContentHtml, studentName, session) {
+    var template = document.createElement("template");
+    template.innerHTML = sanitizeWftHtmlFragment(String(printContentHtml || ""));
+    var pages = template.content.querySelectorAll(".page");
+    var page2 = pages[1];
+    var content = page2 && page2.querySelector(".next-time-guide, .corrected-writing");
+    if (!content) return buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
+    page2.classList.add("auto-fit-page");
+    // Keep a historical guide when no structured guide was saved with that snapshot.
+    if (content.classList.contains("next-time-guide") && !session.notebookGuide) return template.innerHTML;
+    content.className = "next-time-guide";
+    content.id = "notebookPage2Content";
+    content.innerHTML = renderNotebookGuideHtml(getNotebookGuideFromPortfolioSession(session), getNotebookPrintGuideRenderOptions());
+    return template.innerHTML;
 }
 
 function printPortfolioNotebookSummary(studentName, sessionId) {
@@ -7515,7 +8722,7 @@ function printPortfolioNotebookSummary(studentName, sessionId) {
         return;
     }
     var printContentHtml = session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session);
-    printContentHtml = refreshNotebookPage2CorrectedWriting(printContentHtml, studentName, session);
+    printContentHtml = refreshNotebookPage2Guide(printContentHtml, studentName, session);
     var printWindow = window.open("", "_blank", "width=1200,height=900");
     if (!printWindow) {
         alert("Please allow pop-ups for this page to re-print the notebook summary.");
@@ -7646,7 +8853,8 @@ async function analyzeWriting() {
                 categoryEligibility: null
             };
 
-            updateScoreDisplay(latestAnalysisData);
+            ensureNotebookGuide(latestAnalysisData, text);
+        updateScoreDisplay(latestAnalysisData);
             setWftSanitizedInnerHtml("correctedStory", renderCorrected(text, text));
             // quickRubric display removed
             renderDetailedAssessment(lowSample.detailed);
@@ -7716,9 +8924,15 @@ async function analyzeWriting() {
         }
 
         var quickRubricText = buildQuickRubricText(parsed1.quickRubric);
-        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo);
+        var notebookGuidePriorities = buildNotebookGuidePriorities({
+            categoryScores: Object.fromEntries(Object.keys(parsed1.quickRubric).map(function(key) {
+                return [key, parsed1.quickRubric[key].score];
+            })),
+            flowData: flowData
+        });
+        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo, text, notebookGuidePriorities);
         var step3 = await callOpenRouter(model, step3Prompt);
-        var detailed = parseDetailedAssessment(step3);
+        var detailed = parseDetailedAssessment(step3, text, writingGenreInfo);
         detailed.writingGenre = writingGenreInfo;
         if (detailed.keepWriting) detailed.keepWriting = sanitizeGenreReferenceInFeedback(detailed.keepWriting, writingGenreInfo);
         if (pendingNeatnessDetail) {
@@ -7892,6 +9106,7 @@ async function analyzeWriting() {
             }
         };
 
+        ensureNotebookGuide(latestAnalysisData, text);
         updateScoreDisplay(latestAnalysisData);
 
         setWftSanitizedInnerHtml("correctedStory", renderCorrected(text, parsed1.correctedStory || text));

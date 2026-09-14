@@ -8148,6 +8148,8 @@ function saveCurrentSessionToPortfolio(analysisData) {
         genreConfidence: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).confidence,
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
+        notebookGuide: ensureNotebookGuide(analysisData, String((document.getElementById('studentWriting') || {}).value || '')),
+        notebookGuideVersion: NOTEBOOK_GUIDE_VERSION,
         sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
         images: getSessionImagePayloads(),
         notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
