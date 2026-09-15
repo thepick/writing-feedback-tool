@@ -8251,6 +8251,8 @@ function fillNotebookSummary() {
 function getNotebookPrintCss() {
     return [
         "@page { size: A4 portrait; margin: 0; }",
+        // Preserve notebook accents even when the browser omits ordinary backgrounds.
+        ".page { -webkit-print-color-adjust: exact; print-color-adjust: exact; }",
         "*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }",
         "html { -webkit-font-smoothing: antialiased; }",
         "body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; font-size: 17.537px; color: #111111; background: #e0e0e0; line-height: 1.4; }",
@@ -8347,6 +8349,20 @@ function getNotebookPrintCss() {
         ".auto-fit-page .example-quote, .auto-fit-page .example-after, .auto-fit-page .example-why, .auto-fit-page .guide-no-examples, .auto-fit-page .quick-check-intro { font-size: calc(12.304px * var(--fit-scale)); }",
         ".auto-fit-page .example-quote, .auto-fit-page .example-after { padding: calc(0.849mm * var(--fit-scale)) calc(1.697mm * var(--fit-scale)); margin-top: calc(0.566mm * var(--fit-scale)); }",
         ".auto-fit-page .example-why { margin-top: calc(0.566mm * var(--fit-scale)); }",
+        ".page-header, .page2-header { border-bottom-color: #2563eb; }",
+        ".page-label, .overall-value, .category-name, .section-title { color: #1d4ed8; }",
+        ".section-title { border-bottom-color: #93c5fd; }",
+        ".info-box { background: #eff6ff; border-color: #bfdbfe; }",
+        ".info-box .box-label { color: #1d4ed8; }",
+        ".info-box:first-child { background: #ecfdf5; border-color: #a7f3d0; }",
+        ".info-box:first-child .box-label { color: #047857; }",
+        ".teacher-comment { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }",
+        ".teacher-comment .box-label { color: #1d4ed8; }",
+        ".score-badge { color: #1e40af; background: #dbeafe; border-color: #93c5fd; }",
+        ".score-bar-track { background: #dbeafe; }",
+        ".score-bar-fill { background: #2563eb; }",
+        ".next-time-focus, .quick-check { background: #fffbeb; }",
+        ".example-after { background: #ecfdf5; border-left-color: #10b981; }",
         "@media print { body { background: white; } .screen-controls { display: none; } .page { margin: 0; box-shadow: none; width: 210mm; min-height: 297mm; } .auto-fit-page { height: 297mm; min-height: 297mm; max-height: 297mm; overflow: hidden; } }"
     ].join("\n");
 }
@@ -9742,4 +9758,3 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 // ── END Re-extract & Crop ──────────────────
-
