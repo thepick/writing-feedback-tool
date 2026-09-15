@@ -5,6 +5,23 @@ const path = require('node:path');
 const repoRoot = path.resolve(__dirname, '..');
 const artifactDir = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'wft-guide-test-'));
 
+async function assertNotebookPrintColors(page) {
+ const colors = await page.evaluate(() => {
+  const style = selector => getComputedStyle(document.querySelector(selector));
+  return {
+   adjustment: style('.score-bar-fill').printColorAdjust,
+   bar: style('.score-bar-fill').backgroundColor,
+   badge: style('.score-badge').backgroundColor,
+   strength: style('.info-box').backgroundColor,
+   revision: style('.example-after').backgroundColor
+  };
+ });
+ assert.deepEqual(colors, {
+  adjustment: 'exact', bar: 'rgb(37, 99, 235)', badge: 'rgb(219, 234, 254)',
+  strength: 'rgb(236, 253, 245)', revision: 'rgb(236, 253, 245)'
+ });
+}
+
 (async () => {
  const browser = await chromium.launch({channel: 'msedge', headless: true});
  try {
@@ -76,6 +93,7 @@ const artifactDir = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'wft-g
  await page.setContent(result.html,{waitUntil:'domcontentloaded'});
  await page.evaluate(()=>window.fitAllNotebookPages());
  await page.emulateMedia({media:'print'});
+ await assertNotebookPrintColors(page);
  const layout=await page.locator('.page').evaluateAll(pages=>pages.map(p=>({height:p.clientHeight,scroll:p.scrollHeight,warning:p.classList.contains('fit-warning')})));
  assert.equal(layout.length,2);
  assert.ok(layout.every(p=>Math.abs(p.height-1123)<=1),'A4 pages should be 297 mm tall');
@@ -85,11 +103,14 @@ const artifactDir = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'wft-g
  const guideFont=await page.locator('.example-after').first().evaluate(p=>parseFloat(getComputedStyle(p).fontSize));
  assert.ok(guideFont>=12,'A4 guide text should be enlarged, not just the paper');
  assert.ok(layout.every(p=>!p.warning && p.scroll<=p.height+1),JSON.stringify(layout));
+ await page.locator('.page').first().screenshot({path:path.join(artifactDir,'guide-page1.png')});
  await page.locator('.page').nth(1).screenshot({path:path.join(artifactDir,'guide-page2.png')});
  await page.pdf({path:path.join(artifactDir,'guide-test.pdf'),preferCSSPageSize:true,printBackground:true});
+ await page.pdf({path:path.join(artifactDir,'guide-no-backgrounds.pdf'),preferCSSPageSize:true,printBackground:false});
  console.log('Print preview artifacts: '+artifactDir);
  await page.setContent(result.portfolioHtml,{waitUntil:'domcontentloaded'});
  await page.evaluate(()=>window.fitAllNotebookPages());
+ await assertNotebookPrintColors(page);
  assert.equal(await page.locator('.guide-example').count(),3);
  assert.equal(await page.locator('.fit-warning').count(),0);
  console.log(JSON.stringify({passed:true,examples:result.count,areas:result.areas,layout,checks:['candidate parsing','exact source quotes','generic advice rejection','malformed response fallback','low sample coaching','missing scores','new assessment rendering','saved portfolio rendering','legacy snapshot preservation','two-page print fit','no browser exceptions']}));
