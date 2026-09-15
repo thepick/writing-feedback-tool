@@ -13,12 +13,15 @@ async function assertNotebookPrintColors(page) {
    bar: style('.score-bar-fill').backgroundColor,
    badge: style('.score-badge').backgroundColor,
    strength: style('.info-box').backgroundColor,
+   goal: style('.info-box:nth-child(2)').backgroundColor,
+   focus: style('.next-time-focus').backgroundColor,
    revision: style('.example-after').backgroundColor
   };
  });
  assert.deepEqual(colors, {
-  adjustment: 'exact', bar: 'rgb(37, 99, 235)', badge: 'rgb(219, 234, 254)',
-  strength: 'rgb(236, 253, 245)', revision: 'rgb(236, 253, 245)'
+  adjustment: 'exact', bar: 'rgb(113, 136, 140)', badge: 'rgb(240, 243, 243)',
+  strength: 'rgb(237, 245, 242)', goal: 'rgb(250, 244, 233)',
+  focus: 'rgb(250, 244, 233)', revision: 'rgb(237, 245, 242)'
  });
 }
 
