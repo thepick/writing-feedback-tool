@@ -1213,7 +1213,7 @@ Example for handwritten work:
  * where the GIS script is blocked or unavailable.
  */
 var WFT_APP_VERSION = "v9";
-var GOOGLE_CLIENT_ID = "546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com";
+var GOOGLE_CLIENT_ID = "828630395554-8b5k5lbpjfekr8bhvk090ckm71klq0n2.apps.googleusercontent.com";
 var DRIVE_FOLDER_NAME = "WritingFeedbackTool";
 var GOOGLE_USER_CACHE_KEY = "wft_google_user";
 var DRIVE_TOKEN_CACHE_KEY = "wft_drive_access_token";
@@ -1320,7 +1320,7 @@ var WFT_PORTFOLIO_INDEX_FILE_ID_CACHE_KEY = "wft_drive_portfolio_index_file_id";
 var WFT_SYNC_DEBOUNCE_MS = 2500;
 var WFT_POLL_INTERVAL_MS = 60000;
 var WFT_SAVE_FILE_TIMEOUT_MS = 30000;
-var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session";
+var DRIVE_TOKEN_SESSION_KEY = "wft_drive_token_session_gmail_v1";
 var wftSuppressDirtyMarks = false;
 
 // WFT_TOMBSTONE_V1 — compaction flag (disabled by default)
@@ -3864,6 +3864,54 @@ function hasPersistedGoogleConnection() {
 }
 
 function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess) {
+    setDriveSyncStatus('syncing', 'Checking saved Google work...');
+    window.GoogleDriveMigration.ensure({
+        oldClient: '546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com',
+        newClient: GOOGLE_CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+        folderName: 'WritingFeedbackTool'
+    }, accessToken).then(async function(result) {
+        // Retire inaccessible old file IDs while keeping drafts, portfolios and settings.
+        var keys = Object.keys(localStorage).filter(function(key) {return /^wft_drive_.*(?:file_id|folder_id|folder_)/.test(key);});
+        keys.forEach(function(key) {localStorage.removeItem(key);});
+        if (result.ids) {
+            Object.keys(localStorage).filter(function(key) {return key.indexOf('wft_') === 0;}).forEach(function(key) {
+                var raw = localStorage.getItem(key);
+                if (raw && /^[\[{]/.test(raw)) localStorage.setItem(key, JSON.stringify(window.GoogleDriveMigration.remap(JSON.parse(raw), result.ids)));
+            });
+            if (typeof pendingPortfolioSync !== 'undefined') pendingPortfolioSync = window.GoogleDriveMigration.remap(pendingPortfolioSync, result.ids);
+            if (window.indexedDB) {
+                var db = await WftIndexedDb.open();
+                var stores = Array.from(db.objectStoreNames);
+                if (stores.length) await new Promise(function(resolve, reject) {
+                    var tx = db.transaction(stores, 'readwrite');
+                    tx.oncomplete = resolve;
+                    tx.onerror = tx.onabort = function() {reject(tx.error || new Error('Local portfolio recovery failed.'));};
+                    stores.forEach(function(store) {
+                        var cursor = tx.objectStore(store).openCursor();
+                        cursor.onsuccess = function() {
+                            var record = cursor.result;
+                            if (!record) return;
+                            record.update(window.GoogleDriveMigration.remap(record.value, result.ids));
+                            record.continue();
+                        };
+                    });
+                });
+            }
+        }
+        driveFolderId = null;
+        wftSyncState.folderId = null;
+        wftSyncState.settingsFileId = null;
+        wftSyncState.portfolioFileId = null;
+        wftSyncState.deletionsFileId = null;
+        googleUser = result.user;
+        localStorage.setItem(GOOGLE_USER_CACHE_KEY, JSON.stringify(result.user));
+        completeWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess);
+    }).catch(function(error) {setDriveSyncStatus('error', error.message);});
+    return true;
+}
+
+function completeWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess) {
     if (!accessToken) return false;
 
     var expiresSeconds = parseInt(expiresIn || '3600', 10);
@@ -6708,33 +6756,8 @@ function getWftSessionTokenExpiry() {
 }
 
 function migrateOldWftTokenToSessionStorage() {
-    var token;
-    var expiry;
-
-    try {
-        token = localStorage.getItem(DRIVE_TOKEN_CACHE_KEY);
-        expiry = Number(localStorage.getItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY) || 0);
-    } catch (e) {
-        return false;
-    }
-
-    if (!token || !expiry || expiry <= Date.now()) {
-        return false;
-    }
-
-    saveWftTokenSession(token, expiry);
-
-    try {
-        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-    } catch (e2) { }
-
-    wftSyncState.accessToken = token;
-    wftSyncState.tokenExpiresAt = expiry;
-    wftSyncState.signedIn = true;
-    driveAccessToken = token;
-
-    return true;
+    // Old-client tokens must not be labelled as the replacement client.
+    return false;
 }
 
 function readJsonFileFromDrive(filename, callback) {
@@ -8691,4 +8714,3 @@ function commitPendingPortfolioSync() {
         return false;
     }
 }
-
