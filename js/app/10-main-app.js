@@ -1054,7 +1054,7 @@ function updateGradeLevelResultNote() {
     var el = document.getElementById("gradeLevelResultNote");
     if (!el) return;
     var profile = getGradeProfile();
-    el.textContent = "Scored using " + (profile.gradeLabel || profile.label) + " expectations. " + getWeightDescriptionText(profile);
+    el.textContent = "Scored using " + (profile.gradeLabel || profile.label) + " expectations.";
 }
 
 function updateScoreDisplay(data) {
