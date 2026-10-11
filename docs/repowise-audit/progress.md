@@ -1,6 +1,6 @@
 # Repowise audit progress
 
-Updated 2026-10-11T18:08:00.051Z; timezone Asia/Bangkok. All 662 original IDs retained, 959 total tracked rows. Original outcomes: {"no_code_change":349,"confirmed_awaiting_fix":167,"behavior_fixed_metric_review_pending":11,"pending":111,"fixed_in_draft_pr":24}. Scanner absence does not imply resolution.
+Updated 2026-10-11T18:25:58.499Z; timezone Asia/Bangkok. All 662 original IDs retained, 964 total tracked rows. Original outcomes: {"no_code_change":372,"confirmed_awaiting_fix":164,"behavior_fixed_metric_review_pending":11,"pending":91,"fixed_in_draft_pr":24}. Scanner absence does not imply resolution.
 
 - SYNC-001: Older settings/deletion uploads clear newer pending changes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/41)
 - ANALYSIS-001: Async analysis reads changed student and writing at completion. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/42)
@@ -9,7 +9,10 @@ Updated 2026-10-11T18:08:00.051Z; timezone Asia/Bangkok. All 662 original IDs re
 - STORAGE-002: Unreadable existing portfolio is overwritten as an empty portfolio. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/45)
 - SECURITY-001: Student portfolio HTML export executes untrusted score and photo markup. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/46)
 - PHOTO-001: Delayed crop callback changes another student/photo after cancellation. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/47)
+- SYNC-003: Same-image merge overwrites newer photo reference with older metadata. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
+- SECURITY-002: Inherited identity keys drop records and mutate shared object properties. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
+- FLOW-001: Inherited token names break repetition, grammar and title keyword lookups. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - PENDING-001: Photo completion commits and clears a newer pending assessment. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
 - PHOTO-002: Cropped uploaded photo keeps the original Drive reference and loses its changed bytes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
 
@@ -17,8 +20,6 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 
 - FEEDBACK-001: Missing scores are described as poor performance
 - CLEANUP-001: Remove unshipped helper copies and unused bundled helper islands
-- SYNC-003: Same-image merge overwrites newer photo reference with older metadata
-- SECURITY-002: Inherited identity keys drop records and mutate shared object properties
 - ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy
 - SETTINGS-001: Failed preference save is acknowledged and schedules sync
 - ARCHIVE-001: Unused archive-removal helper writes a mismatched legacy session marker
@@ -34,14 +35,13 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - STORAGE-003: Corrupt deletion history is overwritten as empty
 - DELETIONS-001: Enabled experimental deletion compaction recurses indefinitely
 - FEEDBACK-002: Flow adjustment converts an explicitly missing detailed score to zero
-- FLOW-001: Inherited token names break repetition, grammar and title keyword lookups
 - GUIDE-003: Separate notebook action lines are collapsed into one checklist item
 - KEY-001: Failed credential storage migration loses a key and failed forgetting silently restores it
 - SETTINGS-002: Unreadable existing preferences are replaced with current defaults
 - STORAGE-004: Adding a student overwrites unreadable existing roster history
 - EXPORT-001: Same-day photos with the same name share one export filename
 
-Current indexed source 2897358574960b8077fd51a445d50014cf0b3eee: 705 health rows, 149 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies. No coverage was ingested from the preparation run.
+Current indexed source 7a3c639945747d4e9368aa9a61bffa3dc4b580da: 708 health rows, 150 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies. No coverage was ingested from the preparation run.
 
 No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
