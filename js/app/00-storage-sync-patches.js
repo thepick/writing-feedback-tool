@@ -904,7 +904,7 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
     }
 
     function parseNeatnessSourceType(responseText) {
-        var text = String(responseText || '');
+        var text = String(responseText || '').replace(/\*\*/g, '');
         var sourceMatch = text.match(/(?:\*\*)?Source\s*Type(?:\*\*)?\s*:\s*(HANDWRITTEN|TYPED_OR_PRINTED|MIXED|NOT_SCORABLE)/i);
         if (sourceMatch) return sourceMatch[1].toUpperCase();
         if (/\b(TYPED_OR_PRINTED|typed\s+or\s+printed|typed\s+work|printed\s+work|appears\s+to\s+be\s+typed|mostly\s+typed|computer\s+typed)\b/i.test(text)) return 'TYPED_OR_PRINTED';
@@ -913,7 +913,7 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
     }
 
     function parseNeatnessSourceReason(responseText) {
-        var text = String(responseText || '');
+        var text = String(responseText || '').replace(/\*\*/g, '');
         var reasonMatch = text.match(/(?:\*\*)?Source\s*Type\s*Reason(?:\*\*)?\s*:\s*([^\n]+)/i);
         return reasonMatch ? reasonMatch[1].trim() : '';
     }
@@ -961,7 +961,7 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
             subScores.pageLayoutParagraphs
         ];
         for (var i = 0; i < values.length; i++) {
-            if (!isFinite(Number(values[i]))) return null;
+            if (!Number.isFinite(values[i])) return null;
         }
         return (Number(subScores.letterFormation) * 0.20) +
                (Number(subScores.spacing) * 0.15) +
@@ -5529,38 +5529,30 @@ function mergeWftDeletions(localDeletions, cloudDeletions) {
     var localClean = normalizeDeletionsData(localDeletions || {});
     var cloudClean = normalizeDeletionsData(cloudDeletions || {});
     var merged = getEmptyDeletionsData();
-    var key;
+    var recordsByKey = {};
 
-    for (key in cloudClean.deletedStudents) {
-        if (Object.prototype.hasOwnProperty.call(cloudClean.deletedStudents, key)) {
-            merged.deletedStudents[key] = cloneWftJson(cloudClean.deletedStudents[key]);
+    ['deletedStudents', 'restoredStudents', 'deletedSessions'].forEach(function (collection) {
+        var timeField = collection === 'restoredStudents' ? 'restoredAt' : 'deletedAt';
+        [cloudClean, localClean].forEach(function (source) {
+            Object.keys(source[collection]).forEach(function (key) {
+                var incoming = source[collection][key];
+                var current = merged[collection][key];
+                if (!current || getWftTombstoneTimeMs(incoming, timeField) >= getWftTombstoneTimeMs(current, timeField)) {
+                    merged[collection][key] = cloneWftJson(incoming);
+                }
+            });
+        });
+    });
+
+    cloudClean.records.concat(localClean.records).forEach(function (record) {
+        if (!record || typeof record !== 'object') return;
+        var key = record.id ? 'id:' + record.id : 'content:' + stableStringify(record);
+        var current = recordsByKey[key];
+        if (!current || getWftTombstoneTimeMs(record, 'deletedAt') >= getWftTombstoneTimeMs(current, 'deletedAt')) {
+            recordsByKey[key] = cloneWftJson(record);
         }
-    }
-    for (key in localClean.deletedStudents) {
-        if (Object.prototype.hasOwnProperty.call(localClean.deletedStudents, key)) {
-            merged.deletedStudents[key] = cloneWftJson(localClean.deletedStudents[key]);
-        }
-    }
-    for (key in cloudClean.restoredStudents) {
-        if (Object.prototype.hasOwnProperty.call(cloudClean.restoredStudents, key)) {
-            merged.restoredStudents[key] = cloneWftJson(cloudClean.restoredStudents[key]);
-        }
-    }
-    for (key in localClean.restoredStudents) {
-        if (Object.prototype.hasOwnProperty.call(localClean.restoredStudents, key)) {
-            merged.restoredStudents[key] = cloneWftJson(localClean.restoredStudents[key]);
-        }
-    }
-    for (key in cloudClean.deletedSessions) {
-        if (Object.prototype.hasOwnProperty.call(cloudClean.deletedSessions, key)) {
-            merged.deletedSessions[key] = cloneWftJson(cloudClean.deletedSessions[key]);
-        }
-    }
-    for (key in localClean.deletedSessions) {
-        if (Object.prototype.hasOwnProperty.call(localClean.deletedSessions, key)) {
-            merged.deletedSessions[key] = cloneWftJson(localClean.deletedSessions[key]);
-        }
-    }
+    });
+    merged.records = Object.keys(recordsByKey).map(function (key) { return recordsByKey[key]; });
 
     merged.updatedAt = new Date().toISOString();
     return merged;
@@ -7397,36 +7389,21 @@ function saveStudentSession(studentName, sessionData) {
 }
 
 function removeStudentSession(studentName, sessionId) {
-    if (!studentName || !sessionId) return;
+    if (!studentName || !sessionId) return false;
     var portfolio = getPortfolioData();
-    if (!portfolio[studentName] || !Array.isArray(portfolio[studentName].sessions)) return;
+    if (!portfolio[studentName] || !Array.isArray(portfolio[studentName].sessions)) return false;
     var sessions = portfolio[studentName].sessions;
-    var originalLength = sessions.length;
-    // Prefer removing by the unique id assigned to each session
-    sessions = sessions.filter(function(session) {
-        return session && session.id !== sessionId && session.createdAt !== sessionId;
-    });
-    // If nothing was removed (perhaps legacy sessions without an id), fall back to removing by index
-    if (sessions.length === originalLength) {
-        var idx = -1;
-        for (var i = 0; i < sessions.length; i++) {
-            if (String(i) === String(sessionId)) {
-                idx = i;
-                break;
-            }
-        }
-        if (idx >= 0) {
-            sessions.splice(idx, 1);
-        }
-    }
-    if (sessions.length !== originalLength) {
-        recordSessionDeletion(studentName, sessionId);
-    }
-    portfolio[studentName].sessions = sessions;
+    var index = findPortfolioSessionIndex(sessions, sessionId);
+    if (index < 0) return false;
+    var removedSession = sessions.splice(index, 1)[0];
     savePortfolioData(portfolio);
-    if (document.getElementById('portfolioStudentSelect') && document.getElementById('portfolioStudentSelect').value === studentName) {
-        renderStudentPortfolio();
-    }
+    // Use the removed entry's sync identity, after its removal has saved.
+    recordSessionDeletion(studentName, getSessionKey(removedSession));
+    try {
+        var select = document.getElementById('portfolioStudentSelect');
+        if (select && select.value === studentName) renderStudentPortfolio();
+    } catch (e) { wftDebugError('Portfolio entry removed, but portfolio rendering failed:', e); }
+    return true;
 }
 
 async function deletePortfolioSession(studentName, sessionId) {
@@ -7436,7 +7413,14 @@ async function deletePortfolioSession(studentName, sessionId) {
         confirmText: 'Remove Entry',
         danger: true
     }))) return;
-    removeStudentSession(studentName, sessionId);
+    try {
+        if (!removeStudentSession(studentName, sessionId)) {
+            alert('This portfolio entry could not be found. Please refresh the portfolio before trying again.');
+        }
+    } catch (e) {
+        wftDebugError('Portfolio entry removal failed:', e);
+        alert('The writing could not be removed. Please try again.');
+    }
 }
 
 /*
@@ -8559,8 +8543,10 @@ function persistPendingPortfolioSync() {
         } catch (e) {
             wftDebugWarn('Pending portfolio save exceeded localStorage; saving without embedded image data.', e);
             try {
-                pendingPortfolioSync = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
-                localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(pendingPortfolioSync));
+                // Keep the full in-memory photos available for the pending Drive upload.
+                // shortcut: quota fallback cannot restore unuploaded photos after reload; add durable media storage if reload recovery is needed.
+                var cleaned = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
+                localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(cleaned));
             } catch (e2) {
                 wftDebugError('Pending portfolio save retry also failed:', e2);
                 throw e2;
