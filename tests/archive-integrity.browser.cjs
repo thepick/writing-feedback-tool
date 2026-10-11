@@ -86,6 +86,26 @@ const check = (name, value, expected) => {
         check('included only available written bytes', photos.runs[0].included, [true, true, true, true, true, true, true, false, true, true]);
         check('extension added despite date/stem periods', photos.runs[0].names[2].endsWith('.png'), true);
         check('hostile writing escaped in standalone HTML', photos.runs[0].html.includes('<img src=x'), false);
+        const folderCase = await page.evaluate(async () => {
+            seedArchive();
+            const names = ['Alice', 'ALICE', 'Alice (2)', 'Al/ice', 'Al:ice', '__proto__', 'constructor'];
+            localStorage.setItem('wft_portfolio', JSON.stringify(Object.fromEntries(names.map((name, i) => [name, { sessions: [{ id: 'folder-' + i, originalText: 'Synthetic folder essay #' + i }] }]))));
+            const exports = [];
+            let bytes;
+            for (let i = 0; i < 2; i++) {
+                const result = await createSchoolYearArchiveZip('Synthetic folder year', { includeImages: false });
+                bytes = Array.from(new Uint8Array(await result.blob.arrayBuffer()));
+                const files = await readArchive(result.blob), paths = Object.keys(files);
+                const html = paths.filter(n => /\/Students\/[^/]+\/Portfolio\.html$/.test(n)).map(n => new TextDecoder().decode(new Uint8Array(files[n])));
+                exports.push({ paths, individualEssays: names.map((name, j) => html.filter(text => text.includes('Synthetic folder essay #' + j)).length), studentFolders: html.length });
+            }
+            return { exports, bytes };
+        });
+        check('student folder paths survive case-insensitive extraction', new Set(folderCase.exports[0].paths.map(n => n.toLowerCase())).size, folderCase.exports[0].paths.length);
+        check('distinct case/sanitized/explicit-suffix/ordinary-key student folders', folderCase.exports[0].studentFolders, 7);
+        check('each real ZIP individual portfolio retains its own essay', folderCase.exports[0].individualEssays, [1, 1, 1, 1, 1, 1, 1]);
+        check('student folder paths deterministic across identical exports', folderCase.exports[0].paths, folderCase.exports[1].paths);
+        if (process.env.WFT_TEST_ARTIFACT_DIR) fs.writeFileSync(path.join(process.env.WFT_TEST_ARTIFACT_DIR, 'synthetic-student-folders.zip'), Buffer.from(folderCase.bytes));
         for (const name of ['constructor', 'toString', 'hasOwnProperty', 'Alice <img src=x onerror=alert(1)>']) {
             const result = await page.evaluate(async name => { seedArchive([], name); const zip = await createSingleStudentArchiveZip(name); const files = await readArchive(zip.blob); return { count: Object.keys(files).length, safe: !new TextDecoder().decode(new Uint8Array(Object.values(files)[0])).includes('<img src=x') }; }, name);
             check(`ordinary identity/${name}`, result, { count: 1, safe: true });

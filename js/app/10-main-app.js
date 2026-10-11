@@ -3144,12 +3144,12 @@ function getUniqueFolderName(baseName, usedNames) {
     var candidate = safeBase;
     var counter = 2;
 
-    while (usedNames[candidate]) {
+    while (Object.prototype.hasOwnProperty.call(usedNames, candidate.toLowerCase())) {
         candidate = safeBase + " (" + counter + ")";
         counter += 1;
     }
 
-    usedNames[candidate] = true;
+    usedNames[candidate.toLowerCase()] = true;
     return candidate;
 }
 
@@ -3707,9 +3707,7 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
             image = images[j] || {};
             var baseName = sanitizeFileName((getSessionDate(session) || ("Session " + (i + 1))) + " - " + (image.name || ("Image " + (j + 1))));
             var extension = /\.(png|jpe?g|gif|webp)$/i.exec(baseName);
-            var safeStem = sanitizeFileName(extension ? baseName.slice(0, -extension[0].length) : baseName);
-            var uniqueStem = getUniqueFolderName(safeStem.toLowerCase(), usedNames);
-            var stem = safeStem + uniqueStem.slice(safeStem.length);
+            var stem = getUniqueFolderName(extension ? baseName.slice(0, -extension[0].length) : baseName, usedNames);
             var mimeType = /^data:(image\/[a-z]+);/i.exec(image.dataUrl || image.originalDataUrl || "");
             var imageType = mimeType ? mimeType[1].toLowerCase() : image.mimeType;
             fileName = stem + (extension ? extension[0] : imageType === "image/png" ? ".png" : imageType === "image/gif" ? ".gif" : imageType === "image/webp" ? ".webp" : ".jpg");
@@ -3808,7 +3806,7 @@ function createSchoolYearArchiveZip(schoolYear, options) {
             var zip = new JSZip();
             var root = zip.folder(sanitizeFileName(schoolYear));
             var studentsFolder = root.folder("Students");
-            var usedFolderNames = {};
+            var usedFolderNames = Object.create(null);
             var archiveInfo = {
                 schemaVersion: 1,
                 archiveType: "WritingFeedbackToolYearEndArchive",
