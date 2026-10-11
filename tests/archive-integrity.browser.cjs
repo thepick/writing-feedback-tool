@@ -195,8 +195,10 @@ const check = (name, value, expected) => {
             const result = await page.evaluate(async boundary => {
                 seedArchive(); const original = globalThis[boundary];
                 wftSyncState.pendingPortfolioPush = wftSyncState.pendingSettingsPush = wftSyncState.pendingDeletionsPush = false;
-                globalThis[boundary] = () => { throw Error('Synthetic postcommit ' + boundary + ' failure'); };
-                await archiveCurrentSchoolYear(); await settleArchive(); globalThis[boundary] = original;
+                const fail = () => { throw Error('Synthetic postcommit ' + boundary + ' failure'); };
+                if (boundary === 'closeCropModal') _cropLastFocusedEl = { focus: fail };
+                else globalThis[boundary] = fail;
+                await archiveCurrentSchoolYear(); await settleArchive(); globalThis[boundary] = original; _cropLastFocusedEl = null;
                 return { cleared: Object.keys(getLocalPortfolioSnapshot()).length === 0 && localStorage.getItem('wft_students') === '[]', runtime: [students.length, selectedStudent], calls: archiveCalls, dirty: [wftSyncState.pendingPortfolioPush, wftSyncState.pendingSettingsPush, wftSyncState.pendingDeletionsPush] };
             }, boundary);
             check(`postcommit/${boundary}/committed clear`, [result.cleared, result.runtime], [true, [0, '']]);
