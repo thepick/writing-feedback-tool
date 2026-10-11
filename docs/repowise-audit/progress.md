@@ -1,6 +1,6 @@
 # Repowise audit progress
 
-Updated 2026-10-11T18:41:00.722Z; timezone Asia/Bangkok. All 662 original IDs retained, 975 total tracked rows. Original outcomes: {"no_code_change":394,"confirmed_awaiting_fix":178,"pending":66,"fixed_in_draft_pr":24}. Scanner absence does not imply resolution.
+Updated 2026-10-11T19:13:19.233Z; timezone Asia/Bangkok. All 662 original IDs retained, 1003 total tracked rows. Original outcomes: {"no_code_change":406,"confirmed_awaiting_fix":176,"pending":55,"fixed_in_draft_pr":25}. Scanner absence does not imply resolution.
 
 - SYNC-001: Older settings/deletion uploads clear newer pending changes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/41)
 - ANALYSIS-001: Async analysis reads changed student and writing at completion. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/42)
@@ -13,9 +13,14 @@ Updated 2026-10-11T18:41:00.722Z; timezone Asia/Bangkok. All 662 original IDs re
 - SECURITY-002: Inherited identity keys drop records and mutate shared object properties. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/50)
 - SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
+- STORAGE-003: Corrupt deletion history is overwritten as empty. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/51)
+- DELETIONS-001: Enabled experimental deletion compaction recurses indefinitely. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/51)
 - FLOW-001: Inherited token names break repetition, grammar and title keyword lookups. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - PENDING-001: Photo completion commits and clears a newer pending assessment. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
 - PHOTO-002: Cropped uploaded photo keeps the original Drive reference and loses its changed bytes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
+- SETTINGS-002: Unreadable existing preferences are replaced with current defaults. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/51)
+- STORAGE-004: Adding a student overwrites unreadable existing roster history. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/51)
+- DELETIONS-002: Main portfolio removes newer writing with an older session deletion marker. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/51)
 
 Confirmed remaining queue; one repair chat and repository writer at a time:
 
@@ -32,22 +37,21 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores
 - GUIDE-001: Notebook punctuation and spelling changes receive incorrect teaching labels
 - GUIDE-002: Notebook paragraph revisions lose their separation before display
-- STORAGE-003: Corrupt deletion history is overwritten as empty
-- DELETIONS-001: Enabled experimental deletion compaction recurses indefinitely
 - FEEDBACK-002: Flow adjustment converts an explicitly missing detailed score to zero
 - GUIDE-003: Separate notebook action lines are collapsed into one checklist item
 - KEY-001: Failed credential storage migration loses a key and failed forgetting silently restores it
-- SETTINGS-002: Unreadable existing preferences are replaced with current defaults
-- STORAGE-004: Adding a student overwrites unreadable existing roster history
 - EXPORT-001: Same-day photos with the same name share one export filename
-- DELETIONS-002: Main portfolio removes newer writing with an older session deletion marker
+- EXPORT-002: Failed photo downloads are acknowledged as included before the class is cleared
+- ARCHIVE-002: Archive completion clears writing saved after its snapshot
+- EXPORT-003: Single-student export ignores the request to include available photos
+- SETTINGS-003: Settings merge drops valid own metadata fields
 
-Current indexed source b76d691d8a9710f6610c2d77e179441fdf148a40: 714 health rows, 151 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies. No coverage was ingested from the preparation run.
+Current indexed source 0266c1af9a989790f575aa8432df44a96cece75a: 723 health rows, 153 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
 
 No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
-Source-specific reviews and validation scopes are recorded per finding. Recent independent checks include crop38/38, safe portfolio/export HTML25/25, analysis identity22/22, feedback rendering19 checks, flow/grammar10 checks, export output equality and buffer/join timings at10/100/500 sessions, native keyboard/word-count/selection display, handwriting13 outcomes, photo eligibility5, archive dates7, and pending/replacement storage/Sync failure tests. These checks support individual dispositions, not universal correctness or teaching calibration. Newly reproduced roster corruption, inherited-name import and duplicate photo export paths remain queued. Cleanup covers112 original findings; derived extraction suggestions are assessed using their linked source evidence.
+Source-specific reviews and validation scopes are recorded per finding. Recent independent checks include crop38/38, safe portfolio/export HTML25/25, analysis identity22/22, feedback rendering19 checks, flow/grammar10 checks, export output equality and buffer/join timings at10/100/500 sessions, native keyboard/word-count/selection display, handwriting13 outcomes, photo eligibility5, archive dates7, and pending/replacement storage/Sync failure tests. These checks support individual dispositions, not universal correctness or teaching calibration. Confirmed archive/export, settings acknowledgements, authentication, assessment, parser and cleanup work remains in the queue above; the ledger records the evidence for each. Cleanup covers113 original findings; derived extraction suggestions are assessed using their linked source evidence.
 
-Known limits: localStorage writes across multiple keys are not crash-atomic. A failed rollback keeps recovery bytes in the open tab; forced closing can lose that buffer. Quota fallback preserves in-memory unuploaded photos but cannot restore those bytes after reload. Corrupt primary bytes are protected by reviewed strict readers where repaired and still require recovery; remaining required-reader defects are queued. Normal Google sign-out retains local writing. Experimental split/identity/compaction flags are scoped separately in the evidence. Browser checks use synthetic data and intercepted services. No live Drive writes, real student records, paid AI, merge or deployment.
+Known limits: localStorage writes across multiple keys are not crash-atomic. A failed rollback keeps recovery bytes in the open tab; forced closing can lose that buffer. Quota fallback preserves in-memory unuploaded photos but cannot restore those bytes after reload. Corrupt primary bytes are protected by reviewed strict readers where repaired and still require recovery; remaining required-reader defects are queued. Normal Google sign-out retains local writing. Split student files are enabled by default; ID mapping, lazy loading, IndexedDB caching and deletion compaction remain disabled by default and are tested explicitly where relevant. Browser checks use synthetic data and intercepted services. No live Drive writes, real student records, paid AI, merge or deployment.
 
 Platform restrictions, if encountered, are recorded for the specific check. Other authorized repairs continue without bypassing restrictions.
