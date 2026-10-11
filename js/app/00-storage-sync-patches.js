@@ -6228,6 +6228,8 @@ function mergeSessionImageRefs(primary, secondary) {
             byKey[key] = cloneWftJson(img);
             result.push(byKey[key]);
         } else {
+            // A crop/reset revision belongs to the newer session; old media must not replace it.
+            if ((byKey[key].imageRevision || img.imageRevision) && byKey[key].imageRevision !== img.imageRevision) return;
             // Manual field merge (ES5 compat)
             for (var f in img) {
                 if (Object.prototype.hasOwnProperty.call(img, f)) {
@@ -7094,6 +7096,8 @@ function stripPortfolioHeavyFields(data, localOnly) {
                     image = image || {};
                     return {
                         id: image.id || ('img_' + (index + 1)),
+                        imageId: image.imageId || '',
+                        imageRevision: image.imageRevision || '',
                         name: image.name || ('image-' + (index + 1) + '.jpg'),
                         mimeType: image.mimeType || '',
                         driveFileId: image.driveFileId || '',
@@ -7250,6 +7254,8 @@ function getSessionImagePayloads() {
     return selectedImages.map(function(image, index) {
         return {
             id: 'img_' + (index + 1),
+            imageId: image.imageId || '',
+            imageRevision: image.imageRevision || '',
             name: image.name || ('image-' + (index + 1) + '.jpg'),
             mimeType: image.mimeType || 'image/jpeg',
             dataUrl: image.dataUrl || '',
@@ -7640,6 +7646,9 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
         return;
     }
 
+    var uploadToken = driveAccessToken;
+    var sourceImages = sessionData.images.slice();
+    var expectedImages = cloneWftJson(sessionData.images);
     // ── WFT Sync V2 image idempotency ──
     var sessionId = sessionData.id || sessionData.createdAt || "";
     var i;
@@ -7660,48 +7669,88 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
         return;
     }
     var index = 0;
+    function findCurrentImage(portfolio, image) {
+        var sessions = portfolio[studentName] ? portfolio[studentName].sessions : [];
+        var session = sessions.filter(function(entry) { return getSessionKey(entry) === getSessionKey(sessionData); })[0];
+        if (!session) return null;
+        var imageIndex = sessionData.images.indexOf(image);
+        var current = image.imageId ? session.images.filter(function(entry) { return entry && entry.imageId === image.imageId; })[0] : null;
+        current = current || session.images[imageIndex];
+        if (!current) return null;
+        var expected = cloneWftJson(expectedImages[imageIndex]);
+        var actual = cloneWftJson(current);
+        // An unrelated save may trim these same bytes for storage while the upload is held.
+        if (!actual.dataUrl && actual.dataUrlRemovedForStorage) {
+            delete actual.dataUrl;
+            delete actual.originalDataUrl;
+            delete actual.dataUrlRemovedForStorage;
+            delete expected.dataUrl;
+            delete expected.originalDataUrl;
+            delete expected.dataUrlRemovedForStorage;
+        }
+        return stableStringify(actual) === stableStringify(expected) ? current : null;
+    }
     function nextUpload() {
+        if (driveAccessToken !== uploadToken || sessionData.images.length !== sourceImages.length || sourceImages.some(function(image, index) { return sessionData.images[index] !== image; })) {
+            if (callback) callback(new Error('Photo or Drive access changed during upload. Please retry.'));
+            return;
+        }
         if (!skipPortfolioSave) {
-            try { getLocalPortfolioSnapshot(); }
+            try {
+                if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+                getLocalPortfolioSnapshot();
+            }
             catch (e) { if (callback) callback(e); return; }
         }
         if (index >= remaining.length) {
-            try { if (!skipPortfolioSave) savePortfolioData(getLocalPortfolioSnapshot()); }
-            catch (e) { if (callback) callback(e); return; }
             if (callback) callback();
             return;
         }
         var image = remaining[index++];
+        var expectedSource = stableStringify(image);
+        var uploadImage = cloneWftJson(image);
+        if (!skipPortfolioSave && !findCurrentImage(getLocalPortfolioSnapshot(), image)) { nextUpload(); return; }
         // ── PATCH 3: Image compression before Drive upload ──
-        if (WFT_IMAGE_COMPRESSION_V1) {
-            compressPortfolioImageForDrive(image, function(compressErr, compressedBlob) {
-                var blob = compressedBlob || dataUrlToBlob(image.dataUrl);
-                doUploadImage(blob);
-            });
-        } else {
-            var blob = dataUrlToBlob(image.dataUrl);
-            doUploadImage(blob);
-        }
+        try {
+            if (WFT_IMAGE_COMPRESSION_V1) {
+                compressPortfolioImageForDrive(uploadImage, function(compressErr, compressedBlob) {
+                    try { doUploadImage(compressedBlob || dataUrlToBlob(uploadImage.dataUrl)); }
+                    catch (e) { if (callback) callback(e); }
+                });
+            } else {
+                doUploadImage(dataUrlToBlob(uploadImage.dataUrl));
+            }
+        } catch (e) { if (callback) callback(e); }
 
         function doUploadImage(blob) {
             var uploadMimeType = blob && blob.type ? blob.type : (image.mimeType || 'application/octet-stream');
             var extension = uploadMimeType.indexOf('png') !== -1 ? '.png' : '.jpg';
             var filename = sanitizeDriveName(studentName) + '__' + sanitizeDriveName(sessionData.date || 'session') + '__' + sanitizeDriveName(image.name || ('image' + index)) + extension;
             uploadBlobToDrive(filename, blob, uploadMimeType, function(result) {
-                if (result && result.id) {
-                    image.driveFileId = result.id;
-                    image.driveName = result.name || image.driveName || filename;
-                    image.driveUploadedAt = new Date().toISOString();
-                    image.pendingDriveUpload = false;
-                    image.dataUrl = '';
-                    image.dataUrlRemovedForStorage = true;
-                    if (image.originalDataUrl) delete image.originalDataUrl;
-                    if (image.extractedText) delete image.extractedText;
-                    wftSyncLog("[WFT Media] image uploaded", { imageId: image.imageId || image.id || '', driveFileId: image.driveFileId });
-                } else {
-                    image.pendingDriveUpload = true;
-                    wftSyncLog("[WFT Media] image upload skipped or failed", { imageId: image.imageId || image.id || '', name: image.name || '' });
+                if (driveAccessToken !== uploadToken || sessionData.images.indexOf(image) < 0 || stableStringify(image) !== expectedSource) {
+                    if (callback) callback(new Error('Photo or Drive access changed during upload. Please retry.'));
+                    return;
                 }
+                if (!result || !result.id) { if (callback) callback(new Error('Photo upload failed. Please retry.')); return; }
+                try {
+                    var portfolio = !skipPortfolioSave ? getLocalPortfolioSnapshot() : null;
+                    var current = portfolio ? findCurrentImage(portfolio, image) : image;
+                    if (current) {
+                        current.imageId = image.imageId;
+                        current.driveFileId = result.id;
+                        current.driveName = result.name || filename;
+                        current.driveUploadedAt = new Date().toISOString();
+                        current.pendingDriveUpload = false;
+                        current.dataUrl = '';
+                        current.dataUrlRemovedForStorage = true;
+                        delete current.originalDataUrl;
+                        delete current.extractedText;
+                        if (portfolio) {
+                            savePortfolioLocalOnly(portfolio, 'media-upload');
+                            syncSavedPortfolioData(portfolio);
+                        }
+                    }
+                } catch (e) { if (callback) callback(e); return; }
                 nextUpload();
             });
         }
@@ -7710,18 +7759,27 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
 }
 
 function syncPendingPortfolioMedia(callback) {
+    callback = callback || function(error) {
+        if (error) {
+            wftDebugWarn('Portfolio photo sync failed:', error);
+            setDriveSyncStatus('error', 'Photo sync failed - please retry');
+        }
+    };
     if (!driveAccessToken) {
         if (callback) callback();
         return;
     }
     var portfolio;
-    try { portfolio = getLocalPortfolioSnapshot(); }
+    try {
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        portfolio = getLocalPortfolioSnapshot();
+    }
     catch (e) { if (callback) callback(e); return; }
     var studentNames = Object.keys(portfolio);
     var i = 0;
     function nextStudent() {
         if (i >= studentNames.length) {
-            try { savePortfolioData(portfolio); }
+            try { getLocalPortfolioSnapshot(); }
             catch (e) { if (callback) callback(e); return; }
             if (callback) callback();
             return;
@@ -8378,8 +8436,20 @@ function pendingPortfolioSessionHasUploadableImages(pending) {
     return false;
 }
 
+function getPendingPortfolioOwnerSignature(pending) {
+    var owner = cloneWftJson(pending);
+    if (owner && owner.sessionData) delete owner.sessionData.images;
+    if (owner && owner.studentName) {
+        var deletions = getDeletionsData();
+        if (isStudentDeletedByTombstone(owner.studentName, deletions)) throw new Error('This student was deleted. Pending writing has been kept for recovery.');
+        owner.studentDeletion = deletions.deletedStudents[getDeletedStudentKey(owner.studentName)] || null;
+    }
+    return stableStringify(owner);
+}
+
 function uploadPendingPortfolioMediaBeforeCommit(callback) {
     var pending = getPendingPortfolioSync();
+    var ownerSignature = getPendingPortfolioOwnerSignature(pending);
     if (!pending || !pending.studentName || !pending.sessionData) {
         if (callback) callback(false);
         return;
@@ -8399,13 +8469,16 @@ function uploadPendingPortfolioMediaBeforeCommit(callback) {
         imageCount: pending.sessionData.images ? pending.sessionData.images.length : 0
     });
     setDriveSyncStatus('syncing', 'Uploading portfolio image...');
-    uploadSessionImagesToDrive(pending.studentName, pending.sessionData, function() {
+    uploadSessionImagesToDrive(pending.studentName, pending.sessionData, function(error) {
+        if (error) { if (callback) callback(false, error); return; }
         // Persist the updated pending session after successful media upload metadata is added.
         // At this point uploaded images have driveFileId values and their dataUrl values have been cleared.
         try {
+            if (getPendingPortfolioSync() !== pending || getPendingPortfolioOwnerSignature(pending) !== ownerSignature) throw new Error('Pending writing changed during photo upload. Please sync the current writing.');
             persistPendingPortfolioSync();
         } catch (e) {
-            wftDebugWarn('Could not persist pending portfolio after media upload; continuing with in-memory data.', e);
+            if (callback) callback(false, e);
+            return;
         }
         if (callback) callback(true);
     }, true);
@@ -8417,8 +8490,12 @@ function manualSaveToDrive() {
         wftSyncLog("[WFT Sync] manualSaveToDrive ignored - already in progress");
         return;
     }
+    var pendingBeforeCommit;
+    var pendingOwnerSignature;
     try {
         prepareCurrentAnalysisForPortfolioSync();
+        pendingBeforeCommit = getPendingPortfolioSync();
+        pendingOwnerSignature = getPendingPortfolioOwnerSignature(pendingBeforeCommit);
     } catch (ePrepareBeforeDrive) {
         wftDebugError('Could not prepare portfolio sync:', ePrepareBeforeDrive);
         setSyncButtonsFailure('Retry Sync to Portfolio');
@@ -8438,12 +8515,14 @@ function manualSaveToDrive() {
     setSyncButtonsBusy(true, 'Syncing...');
     setDriveSyncStatus('syncing', 'Syncing saved work...');
 
-    var hadPendingBeforeCommit = !!getPendingPortfolioSync();
+    var hadPendingBeforeCommit = !!pendingBeforeCommit;
+    var manualDriveToken = driveAccessToken;
     var committedPending = false;
 
     function finishManualSaveToDrive() {
         try {
-            committedPending = commitPendingPortfolioSync();
+            if (getPendingPortfolioSync() !== pendingBeforeCommit || getPendingPortfolioOwnerSignature(pendingBeforeCommit) !== pendingOwnerSignature) throw new Error('Pending writing changed. Please sync the current writing.');
+            committedPending = commitPendingPortfolioSync(pendingBeforeCommit);
             wftSyncLog("[WFT Sync] manualSaveToDrive committed pending portfolio", committedPending);
         } catch (e) {
             wftDebugError('Portfolio commit failed before Drive sync:', e);
@@ -8471,6 +8550,12 @@ function manualSaveToDrive() {
             flushWftCloudSyncNow("explicit-sync-to-portfolio").then(function (result) {
                 wftSyncLog("[WFT Sync] manualSaveToDrive flush result", result, getWftSyncDebugSnapshot());
                 manualSyncInProgress = false;
+                if (driveAccessToken !== manualDriveToken) { updateSyncPortfolioButtonState(); return; }
+                if (getPendingPortfolioSync()) {
+                    updateSyncPortfolioButtonState();
+                    setDriveSyncStatus('syncing', 'New writing is ready to sync to portfolio');
+                    return;
+                }
                 if (!result) {
                     setSyncButtonsFailure('Retry Sync to Portfolio');
                     setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
@@ -8486,6 +8571,7 @@ function manualSaveToDrive() {
                     stack: e && e.stack ? e.stack : ''
                 }, getWftSyncDebugSnapshot());
                 manualSyncInProgress = false;
+                if (driveAccessToken !== manualDriveToken) { updateSyncPortfolioButtonState(); return; }
                 setSyncButtonsFailure('Retry Sync to Portfolio');
                 setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
             });
@@ -8494,6 +8580,12 @@ function manualSaveToDrive() {
 
         syncAllToDrive(function(success) {
             manualSyncInProgress = false;
+            if (driveAccessToken !== manualDriveToken) { updateSyncPortfolioButtonState(); return; }
+            if (getPendingPortfolioSync()) {
+                updateSyncPortfolioButtonState();
+                setDriveSyncStatus('syncing', 'New writing is ready to sync to portfolio');
+                return;
+            }
             if (success === false) {
                 setSyncButtonsFailure('Retry Sync to Portfolio');
                 setDriveSyncStatus('error', committedPending ? 'Saved locally - Drive sync failed' : 'Manual sync failed');
@@ -8505,7 +8597,13 @@ function manualSaveToDrive() {
     }
 
     if (hadPendingBeforeCommit && pendingPortfolioSessionHasUploadableImages(getPendingPortfolioSync())) {
-        uploadPendingPortfolioMediaBeforeCommit(function() {
+        uploadPendingPortfolioMediaBeforeCommit(function(uploaded, error) {
+            if (error) {
+                manualSyncInProgress = false;
+                setSyncButtonsFailure('Retry Sync to Portfolio');
+                setDriveSyncStatus('error', error.message || 'Portfolio photo upload failed');
+                return;
+            }
             finishManualSaveToDrive();
         });
     } else {
@@ -8730,8 +8828,8 @@ function getPendingPortfolioSync() {
 }
 
 function clearPendingPortfolioSync() {
-    pendingPortfolioSync = null;
     localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
+    pendingPortfolioSync = null;
     updateSyncPortfolioButtonState();
 }
 
@@ -8813,19 +8911,29 @@ function commitPendingPortfolioReplacement(pending) {
     return true;
 }
 
-function commitPendingPortfolioSync() {
+function commitPendingPortfolioSync(expectedPending) {
     var pending = getPendingPortfolioSync();
+    if (arguments.length && pending !== expectedPending) return false;
     if (!pending || !pending.studentName || !pending.sessionData) return false;
+    var previous;
     try {
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        previous = { wft_portfolio: localStorage.getItem('wft_portfolio'), wft_deletions: localStorage.getItem(WFT_DELETIONS_STORAGE_KEY) };
         if (pending.replaceSource) {
             if (!commitPendingPortfolioReplacement(pending)) return false;
         } else {
             saveStudentSession(pending.studentName, pending.sessionData);
         }
-        lastSyncedPortfolioSessionSignature = pending.signature || getCurrentPortfolioSessionSignature();
+        if (getPendingPortfolioSync() !== pending) return false;
         clearPendingPortfolioSync();
+        lastSyncedPortfolioSessionSignature = pending.signature || getCurrentPortfolioSessionSignature();
         return true;
     } catch (e) {
+        // A failed pending clear must not leave a saved copy that would be appended again on retry.
+        if (previous && !restoreWftStudentChangeStorage(previous)) {
+            wftStudentChangeRecovery = previous;
+            e = getWftStudentChangeRecoveryError();
+        }
         wftDebugError('saveStudentSession failed during pending portfolio commit:', e);
         if (e.wftStudentChangeRecovery) alert(e.message);
         wftSyncLog("[WFT Sync] pending portfolio commit failed", {

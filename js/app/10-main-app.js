@@ -4558,7 +4558,7 @@ function bindPreviewReorderHandlers() {
         if (resetBtn2) {
             var ridx = parseInt(resetBtn2.getAttribute("data-index"), 10);
             if (!isNaN(ridx) && selectedImages[ridx] && selectedImages[ridx].originalDataUrl) {
-                selectedImages[ridx].dataUrl = selectedImages[ridx].originalDataUrl;
+                setWftPhotoBytes(selectedImages[ridx], selectedImages[ridx].originalDataUrl);
                 selectedImages[ridx].originalDataUrl = null;
                 selectedImages[ridx].extractedText = "";
                 selectedImages[ridx].extractionPromise = null;
@@ -8688,7 +8688,9 @@ function restorePortfolioSessionImagesForReassessment(session) {
                         mimeType: image.mimeType || "image/jpeg",
                         extractedText: "",
                         extractionPromise: null,
-                        driveFileId: image.driveFileId || ""
+                        driveFileId: image.driveFileId || "",
+                        imageId: image.imageId || image.driveFileId || "",
+                        imageRevision: image.imageRevision || ""
                     });
                 }).catch(function(e) {
                     wftDebugWarn("Could not restore portfolio image for reassessment:", e);
@@ -9758,6 +9760,19 @@ function getCropPos(e, el) {
     };
 }
 
+function setWftPhotoBytes(photo, dataUrl) {
+    if (photo.dataUrl === dataUrl) return;
+    photo.imageId = photo.imageId || photo.driveFileId || '';
+    ensureWftImageId(photo, 'photo', selectedImages.indexOf(photo));
+    photo.imageRevision = Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+    photo.dataUrl = dataUrl;
+    photo.driveFileId = '';
+    delete photo.driveName;
+    delete photo.driveUploadedAt;
+    delete photo.dataUrlRemovedForStorage;
+    photo.pendingDriveUpload = true;
+}
+
 function applyCrop() {
     var session = _cropSession;
     if (!isCurrentCropSession(session)) return;
@@ -9796,7 +9811,7 @@ function applyCrop() {
         if (!session.photo.originalDataUrl) {
             session.photo.originalDataUrl = session.photo.dataUrl;
         }
-        session.photo.dataUrl = croppedUrl;
+        setWftPhotoBytes(session.photo, croppedUrl);
         session.photo.extractedText = "";
         session.photo.extractionPromise = null;
         selectedImageExtractedText = "";
@@ -9825,7 +9840,7 @@ function resetCrop() {
     var session = _cropSession;
     if (!isCurrentCropSession(session)) return;
     if (session.photo.originalDataUrl) {
-        session.photo.dataUrl = session.photo.originalDataUrl;
+        setWftPhotoBytes(session.photo, session.photo.originalDataUrl);
         session.photo.originalDataUrl = null;
         session.photo.extractedText = "";
         session.photo.extractionPromise = null;
