@@ -6894,13 +6894,16 @@ function sanitizeDriveName(value) {
     return String(value || 'item').replace(/[\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').trim();
 }
 
-function uploadBlobToDrive(filename, blob, mimeType, callback) {
+function uploadBlobToDrive(filename, blob, mimeType, callback, validateOwner) {
     if (!driveAccessToken || !blob) {
         if (callback) callback(null);
         return;
     }
+    var uploadToken = driveAccessToken;
     setDriveSyncStatus('syncing', 'Syncing...');
-    ensureDriveFolder(function(folderId) {
+    ensureDriveFolderPromise().then(function(folderId) {
+        if (driveAccessToken !== uploadToken) throw new Error('Drive access changed before photo upload. Please retry.');
+        if (validateOwner) validateOwner();
         var boundary = '----WFTBinaryBoundary' + Date.now();
         var metadata = JSON.stringify({ name: filename, parents: [folderId] });
         var preamble = '--' + boundary + '\r\n'
@@ -6910,18 +6913,18 @@ function uploadBlobToDrive(filename, blob, mimeType, callback) {
             + 'Content-Type: ' + (mimeType || blob.type || 'application/octet-stream') + '\r\n\r\n';
         var closing = '\r\n--' + boundary + '--';
         var body = new Blob([preamble, blob, closing], { type: 'multipart/related; boundary=' + boundary });
-        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+        return fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
             method: 'POST',
-            headers: { Authorization: 'Bearer ' + driveAccessToken, 'Content-Type': 'multipart/related; boundary=' + boundary },
+            headers: { Authorization: 'Bearer ' + uploadToken, 'Content-Type': 'multipart/related; boundary=' + boundary },
             body: body
-        }).then(function(r) { return r.json(); }).then(function(data) {
+        });
+    }).then(function(r) { return r.json(); }).then(function(data) {
             if (callback) callback(data || null);
         }).catch(function(e) {
             wftDebugError('Drive binary upload error:', e);
             setDriveSyncStatus('error', 'Sync failed');
-            if (callback) callback(null);
+            if (callback) callback(null, e);
         });
-    });
 }
 
 function loadSettingsFromDrive() {
@@ -7640,13 +7643,14 @@ function ensureWftImageId(image, sessionId, index) {
     return image;
 }
 
-function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPortfolioSave) {
+function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPortfolioSave, pendingOwner) {
     if (!driveAccessToken || !studentName || !sessionData || !sessionData.images || !sessionData.images.length) {
         if (callback) callback();
         return;
     }
 
     var uploadToken = driveAccessToken;
+    var pendingOwnerSignature = pendingOwner ? getPendingPortfolioOwnerSignature(pendingOwner) : '';
     var sourceImages = sessionData.images.slice();
     var expectedImages = cloneWftJson(sessionData.images);
     // ── WFT Sync V2 image idempotency ──
@@ -7723,10 +7727,24 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
         } catch (e) { if (callback) callback(e); }
 
         function doUploadImage(blob) {
+            function validateCurrentUpload() {
+                if (driveAccessToken !== uploadToken || sessionData.images.length !== sourceImages.length ||
+                    sourceImages.some(function(entry, index) { return sessionData.images[index] !== entry; }) || stableStringify(image) !== expectedSource) {
+                    throw new Error('Photo or Drive access changed before upload. Please retry.');
+                }
+                if (pendingOwner && (getPendingPortfolioSync() !== pendingOwner || getPendingPortfolioOwnerSignature(pendingOwner) !== pendingOwnerSignature)) {
+                    throw new Error('Pending writing changed before photo upload. Please sync the current writing.');
+                }
+                if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+                var portfolio = getLocalPortfolioSnapshot();
+                if (!skipPortfolioSave && !findCurrentImage(portfolio, image)) throw new Error('Saved photo changed or was deleted before upload. Please retry.');
+            }
+            validateCurrentUpload();
             var uploadMimeType = blob && blob.type ? blob.type : (image.mimeType || 'application/octet-stream');
             var extension = uploadMimeType.indexOf('png') !== -1 ? '.png' : '.jpg';
             var filename = sanitizeDriveName(studentName) + '__' + sanitizeDriveName(sessionData.date || 'session') + '__' + sanitizeDriveName(image.name || ('image' + index)) + extension;
-            uploadBlobToDrive(filename, blob, uploadMimeType, function(result) {
+            uploadBlobToDrive(filename, blob, uploadMimeType, function(result, uploadError) {
+                if (uploadError) { if (callback) callback(uploadError); return; }
                 if (driveAccessToken !== uploadToken || sessionData.images.indexOf(image) < 0 || stableStringify(image) !== expectedSource) {
                     if (callback) callback(new Error('Photo or Drive access changed during upload. Please retry.'));
                     return;
@@ -7752,7 +7770,7 @@ function uploadSessionImagesToDrive(studentName, sessionData, callback, skipPort
                     }
                 } catch (e) { if (callback) callback(e); return; }
                 nextUpload();
-            });
+            }, validateCurrentUpload);
         }
     }
     nextUpload();
@@ -8481,7 +8499,7 @@ function uploadPendingPortfolioMediaBeforeCommit(callback) {
             return;
         }
         if (callback) callback(true);
-    }, true);
+    }, true, pending);
 }
 
 function manualSaveToDrive() {
