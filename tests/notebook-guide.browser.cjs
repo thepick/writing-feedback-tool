@@ -61,6 +61,9 @@ async function assertNotebookPrintColors(page) {
   document.getElementById('studentWriting').value=original;
   latestAnalysisData=data;
   selectedStudent='Test Student';
+  students=['Test Student'];
+  populateStudentDropdown();
+  data.inputContext=captureCurrentWritingContext();
   fillNotebookSummary();
   const prompt=buildStep3Prompt(data.correctedStory,'',{},100,24,getGradeProfile(),data.writingGenre,original,buildNotebookGuidePriorities(data));
   saveCurrentSessionToPortfolio(data);

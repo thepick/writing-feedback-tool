@@ -1,21 +1,18 @@
 # Repowise audit progress
 
-Updated 2026-10-11T14:45:36.643Z; display timezone Asia/Bangkok.
+Updated 2026-10-11T15:06:19.834Z; timezone Asia/Bangkok. All 662 original finding IDs retained. Current baseline outcomes: {"no_code_change":104,"pending":535,"behavior_fixed_metric_review_pending":4,"confirmed_awaiting_fix":16,"fixed_in_draft_pr":3}. Behavioral fixes do not close remaining metric review. Ledger rows: 843.
 
-Every one of the 662 original Code Health IDs is retained. Original severities: 37 critical, 85 high, 201 medium, 339 low. Baseline outcomes: {"no_code_change":35,"pending":620,"confirmed_awaiting_fix":4,"fixed_in_draft_pr":3}. No unresolved entry is treated as finished.
+Reviewed draft repairs:
 
-Initial broader inventory: 15 dead-code findings, zero security findings, zero documentation-drift findings, 135 refactoring plans, 20 performance opportunity groups and one coverage action. Derived suggestions retain their IDs and links to underlying evidence. Current total ledger rows: 834; refresh may add/change IDs, which must be reconciled rather than substituted.
+- [PR41 settings/deletion sync races](https://github.com/thepick/writing-feedback-tool/pull/41), cd35543: 14 Node cases, eight browser cases, all 23 suites pass.
+- [PR42 analysis attribution](https://github.com/thepick/writing-feedback-tool/pull/42), ef41631: baseline fails 19/22 focused cases; repaired 22/22 and all 24 suites pass. Coordinator reviewed the production diff and independently reran attribution plus notebook reconstruction/print layout. Shape review on four original complexity/length markers remains open.
 
-SYNC-001 is fixed in draft PR41 (https://github.com/thepick/writing-feedback-tool/pull/41), commit cd3554386b183ea92eb03e18c8b186fe09adee54. Four upload races and four local-write failure cases reproduced before repair. Node 14/14, browser 8/8, and all 23 suites pass; coordinator reviewed the diff and reran new suites. No merge or deployment.
+Confirmed next repair queue: SYNC-002 (same-student distinct cloud essays overwritten during pending local push); STORAGE-001 (silent failed deletion markers, with rename callers to investigate); STORAGE-002 (unreadable raw portfolio overwritten by save/lifecycle snapshots); FEEDBACK-001 (missing handwriting criterion produces worst-band feedback). All use synthetic data and intercepted services.
 
-ANALYSIS-001 is next: real browser reproductions prove Alice's analysis can be queued under Bob with Bob original writing in both delayed OCR and normal three-step typed analysis. Associated baseline IDs: fdce5e811b24426c88169b006c463684, afe3a3fdc15848728ff9f04b8ebdb29f, 9a5ed076e1164e089ad9979be4d5088e, 2407c7a070dc40d8948ceddd30d098fb.
+No-change decisions include historical metrics, false assertion-free callbacks, sequential dependent IO, focused test matrices, short ordered category dispatch, sixteen optional UI/parser catches and 45 findings in explicitly bounded guide/category renderers. Every original row retains its individual evidence; no blanket helper/test exclusion. Unshipped helper copies, data-sized loops, other source groups, derived plans and coverage action remain under review.
 
-One repair chat writes at a time. Later branches/PRs stack on reviewed prior batches so repairs are not lost. Canonical ledger is exported in this coordinator's outputs before each handoff and copied into the repository between writers.
+All issue surfaces are inventoried: Code Health including zero-impact/all-scope; dead code 15; security 0; documentation drift 0; refactoring plans 135; full performance queue 23 including investigate; coverage action 1. Refresh aliases are reconciled by stable identity, never treated as fixes.
 
-Remaining queue: identity repair; ordinary deletion-save failure/transaction concerns need reproduction; unreachable helper-copy maintenance; all other unreviewed source-symbol groups and derived plans; coverage-signal action. Experimental bundled helpers such as removeArchivedSessionsFromPortfolio have no current caller found; do not claim their behavior ships without reachability evidence.
+One repair chat writes the repository at a time. Coordinator checkpoints between writers; PRs stack on reviewed previous repairs. No merge/deployment, real student data, paid AI or live Drive writes. Scores are not regression evidence.
 
-Limits: no live Drive writes, paid AI, real student data, merge or deployment. Score changes are not regression evidence.
-
-Latest reconciliation at cd35543: 663 current Code Health findings. All 662 originals retained; 659 stable identity matches, one unchanged diagnostic catch explicitly matched across a one-line shift, two fixed helper markers no longer detected, and three new browser-test shape findings reviewed. Storage UUID churn is recorded as aliases, never as completed work. Full performance inventory is 23 after explicitly including the three investigate opportunities excluded by the default queue. Total ledger rows: 841.
-
-Next branch: codex/repowise-analysis-identity, stacked against codex/repowise-audit-repairs (draft PR41). ANALYSIS-001 now also includes stale completed analysis reused for a different student/text after the original assessment was committed. All three reproductions are saved in coordinator work/reproduce-analysis-identity.cjs.
+Refresh at ef41631: 662 current health rows; 658 canonical matches, seven absent (five history-score omissions and two previously simplified settings markers), four new warnings reviewed. Refactoring plans 136: 25 aliases and 3 new semantic plan. Full performance 23, dead code 15, security/doc drift zero and coverage action one verified again. All originals retained.

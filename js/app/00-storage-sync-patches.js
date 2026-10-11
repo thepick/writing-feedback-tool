@@ -4496,6 +4496,8 @@ function resetWftRuntimeWorkAfterSignOut() {
     selectedImageExtractedText = "";
     selectedImageExtractionPromise = null;
     latestAnalysisData = null;
+    activeAnalysisContext = null;
+    activePortfolioReassessmentSource = null;
     originalTextForDiff = "";
     correctedHtmlForDiff = "";
     manualSyncInProgress = false;
@@ -8108,10 +8110,10 @@ function renderStudentPortfolio() {
 }
 
 function saveCurrentSessionToPortfolio(analysisData) {
-    if (!analysisData) return;
-    var student = getActivePortfolioStudentName() || null;
+    if (!analysisData || !isCurrentWritingContext(analysisData.inputContext)) return;
+    var input = analysisData.inputContext;
+    var student = input.studentName || null;
     if (!student) {
-        clearPendingPortfolioSync();
         if (driveAccessToken) {
             setDriveSyncStatus('error', 'Select a student before syncing');
         }
@@ -8125,7 +8127,7 @@ function saveCurrentSessionToPortfolio(analysisData) {
         createdAt: now.toISOString(),
         date: now.toLocaleDateString('en-GB'),
         title: getPreferredWritingTitle(
-            (document.getElementById('studentWriting') || {}).value || '',
+            input.writingText,
             analysisData.detailed && analysisData.detailed.titleSuggestion
         ) || 'Untitled',
         overall: analysisData.overall,
@@ -8136,10 +8138,10 @@ function saveCurrentSessionToPortfolio(analysisData) {
         categoryScores: savedCategoryScores,
         assessScriptQuality: neatnessAssessed,
         neatnessAssessed: neatnessAssessed,
-        originalText: String((document.getElementById('studentWriting') || {}).value || ''),
-        correctedHtml: correctedHtmlForDiff || '',
+        originalText: input.writingText,
+        correctedHtml: sanitizeWftHtmlFragment(renderCorrected(input.writingText, analysisData.correctedStory || '')),
         correctedMarkup: analysisData.correctedStory || '',
-        correctedPlainText: getSessionPlainCorrectedText(),
+        correctedPlainText: stripCorrectionMarkdown(analysisData.correctedStory || '').trim(),
         writingGenreInfo: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || detectWritingGenreInfo(String((document.getElementById('studentWriting') || {}).value || ''))),
         writingGenre: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).mainGenre,
         writingSubtype: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).subtype,
@@ -8147,19 +8149,20 @@ function saveCurrentSessionToPortfolio(analysisData) {
         genreConfidence: normalizeWritingGenreInfo(analysisData.writingGenre || currentWritingGenreInfo || {}).confidence,
         feedbackSummary: buildSessionFeedbackSummary(analysisData),
         detailedFeedback: buildPortfolioDetailedFeedback(analysisData),
-        notebookGuide: ensureNotebookGuide(analysisData, String((document.getElementById('studentWriting') || {}).value || '')),
+        notebookGuide: ensureNotebookGuide(analysisData, input.writingText),
         notebookGuideVersion: NOTEBOOK_GUIDE_VERSION,
-        sourceType: selectedImages && selectedImages.length ? 'typed+photo' : 'typed',
-        images: getSessionImagePayloads(),
-        notebookPrintHtml: captureNotebookPrintSnapshotForCurrentAnalysis()
+        sourceType: input.images.length ? 'typed+photo' : 'typed',
+        images: cloneWftJson(input.images),
+        notebookPrintHtml: analysisData === latestAnalysisData ? captureNotebookPrintSnapshotForCurrentAnalysis() : ''
     };
     pendingPortfolioSync = {
         studentName: student,
         sessionData: sessionData,
         signature: getCurrentPortfolioSessionSignature(),
-        replaceSource: activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null
+        replaceSource: input.reassessmentSource ? cloneWftJson(input.reassessmentSource) : null
     };
     activePortfolioReassessmentSource = null;
+    analysisData.inputContext.reassessmentSource = null;
     persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
     setDriveSyncStatus('syncing', 'Ready to sync to portfolio');
@@ -8474,7 +8477,7 @@ function getActivePortfolioStudentName() {
     var select = document.getElementById("studentSelect");
     var selectValue = select ? String(select.value || "").trim() : "";
     var storedValue = String(selectedStudent || "").trim();
-    if (selectValue) {
+    if (select) {
         selectedStudent = selectValue;
         try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) {}
         return selectValue;
@@ -8482,14 +8485,33 @@ function getActivePortfolioStudentName() {
     return storedValue;
 }
 
+function captureCurrentWritingContext() {
+    var studentName = getActivePortfolioStudentName();
+    if (activePortfolioReassessmentSource && activePortfolioReassessmentSource.sourceStudentName !== studentName) {
+        activePortfolioReassessmentSource = null;
+    }
+    return {
+        studentName: studentName,
+        writingText: String((document.getElementById("studentWriting") || {}).value || ""),
+        images: getSessionImagePayloads(),
+        primaryImage: selectedImageDataUrl || "",
+        reassessmentSource: activePortfolioReassessmentSource ? cloneWftJson(activePortfolioReassessmentSource) : null
+    };
+}
+
+function isCurrentWritingContext(context) {
+    return !!context && JSON.stringify(context) === JSON.stringify(captureCurrentWritingContext());
+}
+
 function getCurrentPortfolioSessionSignature() {
     var student = getActivePortfolioStudentName();
-    if (!latestAnalysisData || !student) return "";
+    if (!latestAnalysisData || !student || !isCurrentWritingContext(latestAnalysisData.inputContext)) return "";
     var writingEl = document.getElementById("studentWriting");
     var writingText = writingEl ? String(writingEl.value || "") : "";
     var createdFrom = {
         studentName: student,
         writingText: writingText,
+        images: latestAnalysisData.inputContext.images,
         overall: latestAnalysisData.overall,
         categoryScores: latestAnalysisData.categoryScores || {},
         correctedStory: latestAnalysisData.correctedStory || ""
@@ -8499,7 +8521,7 @@ function getCurrentPortfolioSessionSignature() {
 
 function prepareCurrentAnalysisForPortfolioSync() {
     if (getPendingPortfolioSync()) return true;
-    if (!latestAnalysisData) return false;
+    if (!latestAnalysisData || !isCurrentWritingContext(latestAnalysisData.inputContext)) return false;
     var signature = getCurrentPortfolioSessionSignature();
     if (signature && lastSyncedPortfolioSessionSignature === signature) return false;
     saveCurrentSessionToPortfolio(latestAnalysisData);
