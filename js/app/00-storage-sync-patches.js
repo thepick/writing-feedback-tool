@@ -5530,6 +5530,7 @@ function saveWftStudentChange(change) {
     }
     if (rosterChanged) {
         students = change.students;
+        if (selectedStudent !== change.selectedStudent && typeof closeCropModal === "function") closeCropModal();
         selectedStudent = change.selectedStudent;
     }
     if (!wftSuppressDirtyMarks) {
@@ -7768,6 +7769,7 @@ function updateExportSelectedStudentButton() {
 
 function openStudentPortfolio(name) {
     if (!name) return;
+    if (selectedStudent !== name) closeCropModal();
     selectedStudent = name;
     try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) { }
     var studentSelect = document.getElementById('studentSelect');
