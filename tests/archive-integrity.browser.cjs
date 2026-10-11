@@ -191,7 +191,7 @@ const check = (name, value, expected) => {
             return { failedKept, cleared: Object.keys(getLocalPortfolioSnapshot()).length === 0, bytes: new TextDecoder().decode(new Uint8Array(files[photo])), calls: [archiveCalls.uploads, archiveCalls.downloads] };
         });
         check('failed requested photo retry recovers bytes and normal clear', retry, { failedKept: true, cleared: true, bytes: 'recovered photo bytes', calls: [1, 1] });
-        for (const boundary of ['renderStudentList', 'populateStudentDropdown', 'refreshPortfolioDropdown', 'renderStudentPortfolio', 'scheduleWftDriveSync', 'scheduleWftCloudSync']) {
+        for (const boundary of ['renderStudentList', 'populateStudentDropdown', 'refreshPortfolioDropdown', 'renderStudentPortfolio', 'scheduleWftDriveSync', 'scheduleWftCloudSync', 'closeCropModal']) {
             const result = await page.evaluate(async boundary => {
                 seedArchive(); const original = globalThis[boundary];
                 wftSyncState.pendingPortfolioPush = wftSyncState.pendingSettingsPush = wftSyncState.pendingDeletionsPush = false;

@@ -5600,7 +5600,11 @@ function saveWftStudentChange(change) {
     change.committed = true;
     if (rosterChanged) {
         students = change.students;
-        if (selectedStudent !== change.selectedStudent && typeof closeCropModal === "function") closeCropModal();
+        try {
+            if (selectedStudent !== change.selectedStudent && typeof closeCropModal === "function") closeCropModal();
+        } catch (e) {
+            wftDebugWarn('Class change saved; crop UI could not close:', e);
+        }
         selectedStudent = change.selectedStudent;
     }
     if (!wftSuppressDirtyMarks) {
