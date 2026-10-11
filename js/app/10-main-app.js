@@ -3633,9 +3633,9 @@ function dataUrlToBlobPromise(dataUrl) {
     });
 }
 
-function downloadDriveFileAsBlobPromise(fileId) {
+function downloadDriveFileAsBlobPromise(fileId, archiveConnection) {
     var url = "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(fileId) + "?alt=media";
-    return wftDriveFetch(url).then(function(response) {
+    return wftDriveFetch(url, undefined, archiveConnection).then(function(response) {
         return response.blob();
     });
 }
@@ -3656,7 +3656,7 @@ function runTasksWithConcurrency(tasks, limit, progressCallback) {
             while (active < limit && index < tasks.length) {
                 (function(taskIndex) {
                     active += 1;
-                    tasks[taskIndex]().then(function(result) {
+                    Promise.resolve().then(tasks[taskIndex]).then(function(result) {
                         results[taskIndex] = result;
                     }).catch(function(e) {
                         results[taskIndex] = { error: String(e && e.message ? e.message : e) };
@@ -3685,6 +3685,7 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
     var manifest = [];
     var tasks = [];
     var includeImages = options && options.includeImages;
+    var usedNames = Object.create(null);
     var i;
     var j;
     var session;
@@ -3699,15 +3700,19 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
 
     for (i = 0; i < sessions.length; i += 1) {
         session = sessions[i] || {};
-        images = session.images || session.photos || [];
+        images = Array.isArray(session.images) && session.images.length ? session.images : session.photos || [];
         if (!Array.isArray(images)) images = [];
 
         for (j = 0; j < images.length; j += 1) {
             image = images[j] || {};
-            fileName = sanitizeFileName((getSessionDate(session) || ("Session " + (i + 1))) + " - " + (image.name || ("Image " + (j + 1))));
-            if (fileName.indexOf(".") === -1) {
-                fileName += image.mimeType === "image/png" ? ".png" : ".jpg";
-            }
+            var baseName = sanitizeFileName((getSessionDate(session) || ("Session " + (i + 1))) + " - " + (image.name || ("Image " + (j + 1))));
+            var extension = /\.(png|jpe?g|gif|webp)$/i.exec(baseName);
+            var safeStem = sanitizeFileName(extension ? baseName.slice(0, -extension[0].length) : baseName);
+            var uniqueStem = getUniqueFolderName(safeStem.toLowerCase(), usedNames);
+            var stem = safeStem + uniqueStem.slice(safeStem.length);
+            var mimeType = /^data:(image\/[a-z]+);/i.exec(image.dataUrl || image.originalDataUrl || "");
+            var imageType = mimeType ? mimeType[1].toLowerCase() : image.mimeType;
+            fileName = stem + (extension ? extension[0] : imageType === "image/png" ? ".png" : imageType === "image/gif" ? ".gif" : imageType === "image/webp" ? ".webp" : ".jpg");
 
             manifest.push({
                 sessionIndex: i + 1,
@@ -3715,38 +3720,46 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
                 originalName: image.name || "",
                 exportedName: fileName,
                 driveFileId: image.driveFileId || "",
-                included: !!(image.dataUrl || image.originalDataUrl || image.driveFileId)
+                included: false
             });
 
             if (image.dataUrl || image.originalDataUrl || image.driveFileId) {
-                (function(img, exportName) {
+                (function(img, exportName, exportStem, entry) {
                     tasks.push(function() {
+                        assertWftArchiveConnection(options && options.archiveConnection);
                         var blobPromise;
                         if (img.dataUrl || img.originalDataUrl) {
                             blobPromise = dataUrlToBlobPromise(img.dataUrl || img.originalDataUrl);
                         } else {
-                            blobPromise = downloadDriveFileAsBlobPromise(img.driveFileId);
+                            blobPromise = downloadDriveFileAsBlobPromise(img.driveFileId, options && options.archiveConnection);
                         }
                         return blobPromise.then(function(blob) {
+                            assertWftArchiveConnection(options && options.archiveConnection);
+                            var type = /^image\/(png|jpe?g|gif|webp)$/i.exec(blob.type || "");
+                            if (type) exportName = exportStem + "." + type[1].toLowerCase().replace("jpeg", "jpg");
                             imageFolder.file(exportName, blob);
+                            entry.exportedName = exportName;
+                            entry.included = true;
                             return true;
                         });
                     });
-                }(image, fileName));
+                }(image, fileName, stem, manifest[manifest.length - 1]));
             }
         }
     }
 
     if (!tasks.length) {
-        imageFolder.file("No available photos.txt", "No locally available images or downloadable Drive image IDs were found for this student.");
+        imageFolder.file("No available photos.txt", "No locally available images or downloadable Drive image IDs were found for this student. Historical photos without bytes or a Drive ID are metadata-only; included=false in photos-manifest.json.");
         imageFolder.file("photos-manifest.json", JSON.stringify(manifest, null, 2));
         return Promise.resolve();
     }
 
     return runTasksWithConcurrency(tasks, 3, function(done, total) {
         setWftArchiveStatus("Downloading images for " + studentName + " (" + done + " of " + total + ")...");
-    }).then(function() {
+    }).then(function(results) {
         imageFolder.file("photos-manifest.json", JSON.stringify(manifest, null, 2));
+        var failed = results.find(function(result) { return result && result.error; });
+        if (failed) throw new Error("A requested available photo could not be exported for " + studentName + ": " + failed.error);
     });
 }
 
@@ -3773,8 +3786,9 @@ function suggestSchoolYear() {
 }
 
 function getActivePortfolioForExport() {
-    var deletions = typeof getDeletionsData === "function" ? getDeletionsData() : {};
-    var portfolio = getPortfolioData();
+    preflightWftRequiredStorage();
+    var deletions = normalizeDeletionsData(readWftRequiredStorage(WFT_DELETIONS_STORAGE_KEY));
+    var portfolio = getLocalPortfolioSnapshot();
     if (typeof applyDeletionsToPortfolio === "function") {
         portfolio = applyDeletionsToPortfolio(portfolio, deletions);
     }
@@ -3802,7 +3816,8 @@ function createSchoolYearArchiveZip(schoolYear, options) {
                 createdAt: new Date().toISOString(),
                 studentCount: studentNames.length,
                 appVersion: (typeof WFT_APP_VERSION !== "undefined" ? WFT_APP_VERSION : "v9"),
-                imagesIncluded: !!(options && options.includeImages)
+                imagesIncluded: !!(options && options.includeImages),
+                imageScope: "Available local bytes and Drive image IDs only. Historical photos without either are metadata-only; see each photos-manifest.json included flag."
             };
             var chain = Promise.resolve();
             var i;
@@ -3870,11 +3885,12 @@ function createSingleStudentArchiveZip(studentName, options) {
 
             zip.file(portfolioFileName, buildStudentPortfolioHtml(studentName, studentData, suggestSchoolYear()));
 
-            zip.generateAsync({
+            var photos = options && options.includeImages ? addAvailableImagesToStudentFolder(zip, studentName, studentData, options) : Promise.resolve();
+            photos.then(function() { return zip.generateAsync({
                 type: "blob",
                 compression: "DEFLATE",
                 compressionOptions: { level: 6 }
-            }).then(function(blob) {
+            }); }).then(function(blob) {
                 fileName = safeStudentName + " - Writing Portfolio.zip";
                 resolve({ blob: blob, fileName: fileName, portfolioFileName: portfolioFileName });
             }).catch(function(e) {
@@ -3899,7 +3915,7 @@ function downloadBlob(blob, fileName) {
     }, 0);
 }
 
-function ensureDriveSubfolderPromise(parentFolderId, folderName) {
+function ensureDriveSubfolderPromise(parentFolderId, folderName, archiveConnection) {
     var query = "name='" + escapeDriveQueryValue(folderName) + "'"
         + " and mimeType='application/vnd.google-apps.folder'"
         + " and '" + escapeDriveQueryValue(parentFolderId) + "' in parents"
@@ -3909,9 +3925,10 @@ function ensureDriveSubfolderPromise(parentFolderId, folderName) {
         + "&fields=files(id,name,modifiedTime)"
         + "&orderBy=modifiedTime desc";
 
-    return wftDriveFetch(searchUrl).then(function(response) {
+    return wftDriveFetch(searchUrl, undefined, archiveConnection).then(function(response) {
         return response.json();
     }).then(function(data) {
+        assertWftArchiveConnection(archiveConnection);
         var files = data && data.files ? data.files : [];
         if (files.length && files[0].id) {
             return files[0].id;
@@ -3924,9 +3941,10 @@ function ensureDriveSubfolderPromise(parentFolderId, folderName) {
                 mimeType: "application/vnd.google-apps.folder",
                 parents: [parentFolderId]
             })
-        }).then(function(createResponse) {
+        }, archiveConnection).then(function(createResponse) {
             return createResponse.json();
         }).then(function(folder) {
+            assertWftArchiveConnection(archiveConnection);
             if (!folder || !folder.id) {
                 throw new Error("Could not create Drive folder: " + folderName);
             }
@@ -3935,15 +3953,18 @@ function ensureDriveSubfolderPromise(parentFolderId, folderName) {
     });
 }
 
-function ensureArchiveYearFolderPromise(schoolYear) {
-    return ensureDriveFolderPromise().then(function(rootFolderId) {
-        return ensureDriveSubfolderPromise(rootFolderId, "Archives");
+function ensureArchiveYearFolderPromise(schoolYear, archiveConnection) {
+    assertWftArchiveConnection(archiveConnection);
+    return ensureDriveFolderPromise(archiveConnection).then(function(rootFolderId) {
+        assertWftArchiveConnection(archiveConnection);
+        return ensureDriveSubfolderPromise(rootFolderId, "Archives", archiveConnection);
     }).then(function(archivesFolderId) {
-        return ensureDriveSubfolderPromise(archivesFolderId, sanitizeFileName(schoolYear));
+        assertWftArchiveConnection(archiveConnection);
+        return ensureDriveSubfolderPromise(archivesFolderId, sanitizeFileName(schoolYear), archiveConnection);
     });
 }
 
-function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId) {
+function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId, archiveConnection) {
     var boundary = "----WFTArchiveBoundary" + Date.now();
     var metadata = JSON.stringify({
         name: fileName,
@@ -3961,7 +3982,7 @@ function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId) {
         method: "POST",
         headers: { "Content-Type": "multipart/related; boundary=" + boundary },
         body: body
-    }).then(function(response) {
+    }, archiveConnection).then(function(response) {
         return response.json();
     }).then(function(fileData) {
         if (!fileData || !fileData.id) {
@@ -3971,16 +3992,40 @@ function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId) {
     });
 }
 
-function saveArchiveZipToDrive(fileName, blob, schoolYear) {
+function saveArchiveZipToDrive(fileName, blob, schoolYear, archiveConnection) {
     if (!driveAccessToken) {
         return Promise.reject(new Error("Please sign in with Google before saving an archive to Drive."));
     }
-    return ensureArchiveYearFolderPromise(schoolYear).then(function(folderId) {
-        return uploadBlobToDrivePromise(fileName, blob, "application/zip", folderId);
+    archiveConnection = archiveConnection || captureWftArchiveConnection();
+    assertWftArchiveConnection(archiveConnection);
+    return ensureArchiveYearFolderPromise(schoolYear, archiveConnection).then(function(folderId) {
+        assertWftArchiveConnection(archiveConnection);
+        return uploadBlobToDrivePromise(fileName, blob, "application/zip", folderId, archiveConnection);
     });
 }
 
-function clearCurrentClassAfterSuccessfulArchive() {
+function captureWftArchiveClassState() {
+    preflightWftRequiredStorage();
+    getLocalPortfolioSnapshot();
+    if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+    return stableStringify({
+        stored: ['wft_portfolio', 'wft_students', 'wft_settings', WFT_DELETIONS_STORAGE_KEY, 'wft_selectedStudent', PENDING_PORTFOLIO_SYNC_KEY].map(function(key) { return localStorage.getItem(key); }),
+        settings: getLocalSettingsSnapshot(),
+        students: students,
+        selectedStudent: selectedStudent,
+        counters: [wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter],
+        pending: pendingPortfolioSync,
+        writing: String((document.getElementById('studentWriting') || {}).value || ''),
+        images: getSessionImagePayloads(),
+        reassessmentSource: activePortfolioReassessmentSource,
+        analysis: latestAnalysisData,
+        analysisInput: activeAnalysisContext && activeAnalysisContext.input
+    });
+}
+
+function clearCurrentClassAfterSuccessfulArchive(expectedState) {
+    if (expectedState !== undefined && captureWftArchiveClassState() !== expectedState) return false;
+    getLocalPortfolioSnapshot();
     saveWftStudentChange({ portfolio: {}, deletions: getEmptyDeletionsData(), students: [], selectedStudent: "" });
 
     renderStudentList();
@@ -3996,6 +4041,7 @@ function clearCurrentClassAfterSuccessfulArchive() {
     if (typeof scheduleWftDriveSync === "function") {
         scheduleWftDriveSync("archive-clear-current-class");
     }
+    return true;
 }
 
 async function archiveCurrentSchoolYear() {
@@ -4026,24 +4072,46 @@ async function archiveCurrentSchoolYear() {
 
     setWftArchiveStatus("Starting archive...");
 
-    createSchoolYearArchiveZip(schoolYear, { includeImages: includeImages })
+    var archiveSaved = false;
+    var archiveDownloaded = false;
+    var classState;
+    var archiveConnection = captureWftArchiveConnection();
+    return Promise.resolve().then(function() {
+        classState = captureWftArchiveClassState();
+        assertWftArchiveConnection(archiveConnection);
+        return createSchoolYearArchiveZip(schoolYear, { includeImages: includeImages, archiveConnection: archiveConnection });
+    })
         .then(function(result) {
+            assertWftArchiveConnection(archiveConnection);
             if (!result.blob || result.blob.size < 1000) {
                 throw new Error("Archive file appears to be empty or invalid.");
             }
             setWftArchiveStatus("Saving archive to Google Drive...");
-            return saveArchiveZipToDrive(result.fileName, result.blob, schoolYear).then(function() {
+            return saveArchiveZipToDrive(result.fileName, result.blob, schoolYear, archiveConnection).then(function() {
+                archiveSaved = true;
                 return result;
             });
         })
         .then(function(result) {
+            assertWftArchiveConnection(archiveConnection);
             downloadBlob(result.blob, result.fileName);
-            clearCurrentClassAfterSuccessfulArchive();
+            archiveDownloaded = true;
+            assertWftArchiveConnection(archiveConnection);
+            if (clearCurrentClassAfterSuccessfulArchive(classState) === false) {
+                setWftArchiveStatus("Snapshot archive saved and downloaded. Current class retained because work changed during the archive.");
+                alert("The snapshot archive was saved to Drive and downloaded. The current class was retained because writing, photos, roster, settings or pending work changed. Review the changes before archiving again.");
+                return;
+            }
             setWftArchiveStatus("Archive complete. Current class was cleared.");
             alert("Archive created, saved to Drive, downloaded, and current class cleared.");
         })
         .catch(function(e) {
             wftDebugError("[WFT Archive] Archive failed:", e);
+            if (archiveSaved) {
+                setWftArchiveStatus("Archive saved to Drive" + (archiveDownloaded ? " and downloaded" : "") + ". Current class retained; local completion needs attention.");
+                alert("The snapshot archive was saved to Drive" + (archiveDownloaded ? " and downloaded" : "") + ". The current class was retained. " + e.message);
+                return;
+            }
             setWftArchiveStatus(e.wftStudentChangeRecovery ? "Archive saved. Local class recovery needed." : "Archive failed. Current class was not cleared.");
             alert(e.wftStudentChangeRecovery ? e.message : "The archive could not be completed. The current class was not cleared. " + (e && e.message ? e.message : e));
         });
@@ -4061,7 +4129,7 @@ function exportSelectedStudentPortfolio() {
         return;
     }
 
-    createSingleStudentArchiveZip(studentName, { includeImages: includeImages })
+    return createSingleStudentArchiveZip(studentName, { includeImages: includeImages })
         .then(function(result) {
             if (!result.blob || result.blob.size < 500) {
                 throw new Error("Student export appears to be empty or invalid.");
