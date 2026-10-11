@@ -132,7 +132,7 @@ function buildEnhancedArchiveZip(archiveData, options, callback) {
         manifest.sessionCount += sessions.length;
         csvLines.push(name + "," + sessions.length + "," + (options.dateRange || "All"));
 
-        summaryHtml.push("<tr><td>" + escapeHtml(name) + "</td><td>" + sessions.length + "</td><td>" + (options.dateRange || "All") + "</td></tr>");
+        summaryHtml.push("<tr><td>" + escapeHtml(name) + "</td><td>" + sessions.length + "</td><td>" + escapeHtml(options.dateRange || "All") + "</td></tr>");
 
         // Add student data as JSON
         zip.file("student-" + sanitizeDriveName(name) + ".json", JSON.stringify(studentData, null, 2));

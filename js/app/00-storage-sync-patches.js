@@ -3549,7 +3549,7 @@ function buildEnhancedArchiveZip(archiveData, options, callback) {
         var sessions = (archiveData[name] && archiveData[name].sessions) ? archiveData[name].sessions : [];
         manifest.sessionCount += sessions.length;
         csvLines.push(name + "," + sessions.length + "," + (options.dateRange || "All"));
-        summaryHtml.push("<tr><td>" + escapeWftHtml(name) + "</td><td>" + sessions.length + "</td><td>" + (options.dateRange || "All") + "</td></tr>");
+        summaryHtml.push("<tr><td>" + escapeWftHtml(name) + "</td><td>" + sessions.length + "</td><td>" + escapeWftHtml(options.dateRange || "All") + "</td></tr>");
         zip.file("student-" + sanitizeDriveName(name) + ".json", JSON.stringify(archiveData[name], null, 2));
     }
     summaryHtml.push("</table>");
@@ -7303,7 +7303,8 @@ function sanitizeWftHtmlFragment(html) {
         "TH": true, "THEAD": true, "TR": true, "U": true, "UL": true
     };
     var allowedAttrs = { "class": true, "title": true, "aria-label": true, "role": true, "colspan": true, "rowspan": true };
-    var wrapper = document.createElement("div");
+    // Parse imported HTML inertly before removing unsafe elements and attributes.
+    var wrapper = document.createElement("template");
     wrapper.innerHTML = value;
 
     function cleanNode(node) {
@@ -7343,7 +7344,7 @@ function sanitizeWftHtmlFragment(html) {
         }
     }
 
-    cleanNode(wrapper);
+    cleanNode(wrapper.content);
     return wrapper.innerHTML;
 }
 
@@ -7368,9 +7369,9 @@ function stripInlineTextColorStyles(html) {
     if (typeof document === "undefined" || !document.createElement) {
         return value.replace(/\sstyle=("|')[^"']*\bcolor\s*:[^"']*("|')/gi, "");
     }
-    var wrapper = document.createElement("div");
+    var wrapper = document.createElement("template");
     wrapper.innerHTML = value;
-    var nodes = wrapper.querySelectorAll("[style]");
+    var nodes = wrapper.content.querySelectorAll("[style]");
     for (var i = 0; i < nodes.length; i++) {
         var style = nodes[i].getAttribute("style") || "";
         var kept = style.split(";").map(function(part) {
@@ -8170,7 +8171,7 @@ function renderStudentPortfolio() {
         sessionCardsHtml += '<div class="session-card">'
             + '<div class="session-card-header">'
             + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
-            + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>'
+            + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>'
             + '</div>'
             + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
             + '<div class="session-chip-row">' + chipsHtml + '</div>'

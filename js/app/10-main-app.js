@@ -3159,9 +3159,9 @@ function stripHtmlToText(html) {
     var tmp;
     if (!html) return "";
     try {
-        tmp = document.createElement("div");
+        tmp = document.createElement("template");
         tmp.innerHTML = String(html || "");
-        return tmp.textContent || tmp.innerText || "";
+        return tmp.content.textContent || "";
     } catch (e) {
         return String(html || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     }
@@ -3375,7 +3375,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         } else if (sess.correctedMarkup) {
             correctedDisplayHtml = renderCorrectionMarkdown(sess.correctedMarkup);
         } else if (sess.correctedHtml) {
-            correctedDisplayHtml = sess.correctedHtml;
+            correctedDisplayHtml = sanitizeWftHtmlFragment(sess.correctedHtml);
         } else {
             correctedDisplayHtml = '<pre>' + escapeHtml(getSessionCorrectedText(sess)) + '</pre>';
         }
@@ -3384,7 +3384,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         // Header row
         html += '<div class="session-card-header">';
         html += '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(getSessionDate(sess) || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(getSessionTitle(sess) || 'Untitled') + '</span></div>';
-        html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? sess.overall + '%' : 'N/A') + '</div>';
+        html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>';
         html += '</div>';
         // Meta
         html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
@@ -3402,8 +3402,8 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
             html += '<div class="photo-strip">';
             for (var imi = 0; imi < sess.images.length; imi++) {
                 var img = sess.images[imi];
-                if (img.dataUrl) {
-                    html += '<div class="photo-thumb"><img src="' + img.dataUrl + '" alt="' + escapeHtml(img.name || 'Image') + '" class="export-image"><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
+                if (isSafeWftImageDataUrl(img.dataUrl)) {
+                    html += '<div class="photo-thumb"><img src="' + escapeHtmlAttr(img.dataUrl) + '" alt="' + escapeHtmlAttr(img.name || 'Image') + '" class="export-image"><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
                 } else {
                     html += '<div class="photo-thumb"><div class="photo-placeholder">&#128247; Image not available in export</div><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
                 }
@@ -3619,6 +3619,9 @@ function buildClassSummaryCsv(portfolio, schoolYear) {
 }
 
 function dataUrlToBlobPromise(dataUrl) {
+    if (!isSafeWftImageDataUrl(dataUrl)) {
+        return Promise.reject(new Error("Invalid image data URL."));
+    }
     return fetch(dataUrl).then(function(response) {
         return response.blob();
     });
@@ -4314,7 +4317,7 @@ function updateSelectedImagePreview() {
         for (var i = 0; i < selectedImages.length; i++) {
             var item = selectedImages[i];
             html += '<div class="ocr-preview-card' + (i === 0 ? ' primary' : '') + '" draggable="true" data-index="' + i + '">' +
-                '<img class="ocr-preview" draggable="false" src="' + item.dataUrl + '" alt="' + escapeHtml((i === 0 ? "First selected writing sample preview" : "Selected writing sample preview " + (i + 1))) + '" data-caption="' + escapeHtml(item.name || ("Image " + (i + 1))) + '" onclick="openImageLightbox(this)" title="Click to enlarge">' +
+                '<img class="ocr-preview" draggable="false"' + (isSafeWftImageDataUrl(item.dataUrl) ? ' src="' + escapeHtmlAttr(item.dataUrl) + '"' : '') + ' alt="' + escapeHtmlAttr((i === 0 ? "First selected writing sample preview" : "Selected writing sample preview " + (i + 1))) + '" data-caption="' + escapeHtmlAttr(item.name || ("Image " + (i + 1))) + '" onclick="openImageLightbox(this)" title="Click to enlarge">' +
                 '<div class="ocr-preview-details">' +
                 '<div class="ocr-preview-meta"><div class="ocr-preview-order">Image ' + (i + 1) + ' of ' + selectedImages.length + '</div>' +
                 '<div>' + escapeHtml(item.name || ("image " + (i + 1))) + '</div></div>' +
@@ -8641,12 +8644,13 @@ function dataUrlFromBlobForReassessment(blob) {
 
 function getPortfolioImageDataUrlForReassessment(image) {
     image = image || {};
-    if (image.dataUrl || image.originalDataUrl) {
-        return Promise.resolve(image.dataUrl || image.originalDataUrl);
-    }
+    if (isSafeWftImageDataUrl(image.dataUrl)) return Promise.resolve(image.dataUrl);
+    if (isSafeWftImageDataUrl(image.originalDataUrl)) return Promise.resolve(image.originalDataUrl);
     if (image.driveFileId && driveAccessToken && typeof downloadDriveFileAsBlobPromise === "function") {
         return downloadDriveFileAsBlobPromise(image.driveFileId).then(function(blob) {
             return dataUrlFromBlobForReassessment(blob);
+        }).then(function(dataUrl) {
+            return isSafeWftImageDataUrl(dataUrl) ? dataUrl : "";
         });
     }
     return Promise.resolve("");
