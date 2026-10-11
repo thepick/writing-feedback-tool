@@ -188,7 +188,7 @@ function loadStudentFileFromDrive(studentId, callback) {
         var canonical = typeof chooseCanonicalWftFile === "function" ? chooseCanonicalWftFile(files) : (files && files[0]);
         if (canonical && canonical.id) {
             try { localStorage.setItem("wft_drive_student_file_" + studentId, canonical.id); } catch (e) {}
-            return downloadWftJsonFilePromise(canonical.id);
+            return downloadWftJsonFilePromise(canonical.id, 'student');
         }
         return null;
     }).then(function(data) {
@@ -225,6 +225,8 @@ function migrateLegacyPortfolioToStudentFiles(callback) {
         if (callback) { callback(null, "safe-mode"); }
         return;
     }
+    try { getLocalPortfolioSnapshot(); }
+    catch (e) { if (callback) callback(e, null); return; }
 
     // Step 1: emergency backup
     console.log("[Migration] Step 1: Creating emergency backup...");
@@ -238,7 +240,9 @@ function migrateLegacyPortfolioToStudentFiles(callback) {
         ensureStudentRecordsForRoster();
 
         // Step 3: get portfolio
-        var portfolio = getPortfolioData();
+        var portfolio;
+        try { portfolio = getLocalPortfolioSnapshot(); }
+        catch (e) { if (callback) callback(e, null); return; }
         var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
 
         // Step 4: ensure folders

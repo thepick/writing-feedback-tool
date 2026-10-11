@@ -16,6 +16,8 @@ function setup(flags = {}) {
         isWftStorageSafeMode: () => false,
         normalizeWftPortfolioForSchemaV1: data => data,
         normalizePortfolioData: data => data,
+        getLocalPortfolioSnapshot: () => JSON.parse(stored),
+        validateWftPortfolioShape: data => { assert.ok(data && typeof data === 'object'); },
         makePortfolioLocalStorageSafe: data => ({ ...data, proactivelyStripped: true }),
         stripPortfolioHeavyFields: data => ({ ...data, retryStripped: true }),
         localStorage: { setItem(key, value) { assert.equal(key, 'wft_portfolio'); stored = value; events.push('write'); } },
