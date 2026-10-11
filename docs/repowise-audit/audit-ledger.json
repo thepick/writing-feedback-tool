@@ -4,7 +4,7 @@
   "repository_id": "90c828ccda574e32806ddbca888e1723",
   "baseline_commit": "0f6dee278fa6ef23527ac327f6a81a56f4952533",
   "branch": "codex/repowise-audit-repairs",
-  "updated_at": "2026-10-11T14:46:15.127Z",
+  "updated_at": "2026-10-11T14:47:57.638Z",
   "user_timezone": "Asia/Bangkok",
   "scan_surfaces": {
     "code_health": {
@@ -30,10 +30,12 @@
       "complete": true
     },
     "performance_opportunities": {
-      "count": 20,
-      "total": 20,
+      "count": 23,
+      "total": 23,
       "context": "all",
-      "has_more": false
+      "has_more": false,
+      "actionability": "default queue + explicit investigate",
+      "expected_total": 0
     },
     "doc_drift": {
       "count": 0,
@@ -90,7 +92,7 @@
       "id": "ANALYSIS-001",
       "status": "confirmed_awaiting_fix",
       "title": "Async analysis reads changed student and writing at completion",
-      "evidence": "Two real-browser simulated-service reproductions: OCR and normal typed analysis",
+      "evidence": "Three real-browser reproductions: OCR race, typed-analysis race and stale completed assessment reused after commit/student/input change.",
       "writer_chat": null
     }
   ],
@@ -56464,6 +56466,386 @@
       "commit": "cd3554386b183ea92eb03e18c8b186fe09adee54",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/41",
       "final_outcome": "no_code_change"
+    },
+    {
+      "id": "perf3_52e43eaf91397530b3f3",
+      "surface": "performance_opportunity",
+      "original_baseline": false,
+      "file": "js/app/10-main-app.js",
+      "symbol": "js/app/10-main-app.js::requestOpenRouterWithFallback",
+      "marker": "io_in_loop",
+      "severity": null,
+      "group": "js/app/10-main-app.js::requestOpenRouterWithFallback",
+      "scanner_reason": "no_supported_strategy",
+      "scanner_details": {
+        "opportunity_id": "perf3_52e43eaf91397530b3f3",
+        "performance_model_version": 3,
+        "biomarker_type": "io_in_loop",
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "boundary_kind": "network",
+        "execution_context": "production",
+        "terminal_sink": null,
+        "intervention_symbol": "js/app/10-main-app.js::requestOpenRouterWithFallback",
+        "intervention_kind": "function",
+        "file_path": "js/app/10-main-app.js",
+        "affected_call_sites_total": 1,
+        "affected_files_total": 1,
+        "observations_total": 1,
+        "confidence": "high",
+        "actionability_state": "investigate",
+        "rank_score": 17,
+        "rank_position": 3,
+        "why_ranked": [
+          {
+            "factor": "boundary_kind",
+            "value": "network",
+            "points": 4
+          },
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "execution_context",
+            "value": "production",
+            "points": 3
+          }
+        ],
+        "may_lead": true,
+        "plan_id": null,
+        "plan_status": "no_safe_plan",
+        "plan_reason": "The analysis found the shared cause but could not prove one coherent intervention without guessing.",
+        "lower_priority": "lower priority: nothing shows the loop grows with the data",
+        "terminal_sinks": [],
+        "shared_path_suffix": [],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "direct",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown"
+        },
+        "gain_text": "one network call per loop iteration; loop size unknown",
+        "actionability_reason": "no_supported_strategy",
+        "prerequisites": [
+          "per_key_call"
+        ],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 4,
+          "execution_context": 3,
+          "entry_reachability": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 1
+        },
+        "siblings": [],
+        "fix": null,
+        "evidence": [
+          {
+            "finding_id": "finding_c4c431b46e92a1c07926",
+            "file_path": "js/app/10-main-app.js",
+            "biomarker_type": "io_in_loop",
+            "function_name": "requestOpenRouterWithFallback",
+            "line_start": 2925,
+            "line_end": 2925,
+            "reason": "a network call runs once per loop iteration (I/O call inside a loop)",
+            "path": [],
+            "provenance": "direct"
+          }
+        ],
+        "evidence_total": 1,
+        "evidence_emitted": 1,
+        "evidence_truncated": false
+      },
+      "present_in_latest_scan": true,
+      "related_finding_ids": [
+        "5823badd7ec04251ad24ac691a4f36e2"
+      ],
+      "evidence": [
+        "Default performance queue hides investigate opportunities even with context=all; explicitly queried actionability=investigate. Underlying sequential dependency/retry findings already inspected."
+      ],
+      "classification": "derived_suggestion_no_change",
+      "related_issue": null,
+      "validation": [
+        "See linked Code Health no-change evidence."
+      ],
+      "commit": null,
+      "pr": null,
+      "final_outcome": "no_code_change"
+    },
+    {
+      "id": "perf3_6c4aaefa84bb482f1ec3",
+      "surface": "performance_opportunity",
+      "original_baseline": false,
+      "file": "google-drive-migration.js",
+      "symbol": "google-drive-migration.js::recoverFolder",
+      "marker": "io_in_loop",
+      "severity": null,
+      "group": "google-drive-migration.js::recoverFolder",
+      "scanner_reason": "no_supported_strategy",
+      "scanner_details": {
+        "opportunity_id": "perf3_6c4aaefa84bb482f1ec3",
+        "performance_model_version": 3,
+        "biomarker_type": "io_in_loop",
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "boundary_kind": "network",
+        "execution_context": "unknown",
+        "terminal_sink": "google-drive-migration.js::request",
+        "intervention_symbol": "google-drive-migration.js::recoverFolder",
+        "intervention_kind": "function",
+        "file_path": "google-drive-migration.js",
+        "affected_call_sites_total": 1,
+        "affected_files_total": 1,
+        "observations_total": 1,
+        "confidence": "high",
+        "actionability_state": "investigate",
+        "rank_score": 15,
+        "rank_position": 10,
+        "why_ranked": [
+          {
+            "factor": "boundary_kind",
+            "value": "network",
+            "points": 4
+          },
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          }
+        ],
+        "may_lead": true,
+        "plan_id": null,
+        "plan_status": "no_safe_plan",
+        "plan_reason": "The analysis found the shared cause but could not prove one coherent intervention without guessing.",
+        "lower_priority": "lower priority: where this code runs is unknown",
+        "terminal_sinks": [
+          "google-drive-migration.js::request"
+        ],
+        "shared_path_suffix": [
+          "google-drive-migration.js::recoverFolder",
+          "google-drive-migration.js::request"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown"
+        },
+        "gain_text": "one network call per loop iteration; loop size unknown",
+        "actionability_reason": "no_supported_strategy",
+        "prerequisites": [
+          "per_key_call"
+        ],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 4,
+          "execution_context": 1,
+          "entry_reachability": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 1
+        },
+        "siblings": [],
+        "fix": null,
+        "evidence": [
+          {
+            "finding_id": "finding_f75b3edb6ed61b536a1b",
+            "file_path": "google-drive-migration.js",
+            "biomarker_type": "io_in_loop",
+            "function_name": "recoverFolder",
+            "line_start": 103,
+            "line_end": 103,
+            "reason": "a network call is reached once per loop iteration through recoverFolder -> request (cross-function I/O call inside a loop)",
+            "path": [
+              "google-drive-migration.js::recoverFolder",
+              "google-drive-migration.js::request"
+            ],
+            "provenance": "call-site"
+          }
+        ],
+        "evidence_total": 1,
+        "evidence_emitted": 1,
+        "evidence_truncated": false
+      },
+      "present_in_latest_scan": true,
+      "related_finding_ids": [
+        "aa1af5d766a84990afda267b37576462"
+      ],
+      "evidence": [
+        "Default performance queue hides investigate opportunities even with context=all; explicitly queried actionability=investigate. Underlying sequential dependency/retry findings already inspected."
+      ],
+      "classification": "derived_suggestion_no_change",
+      "related_issue": null,
+      "validation": [
+        "See linked Code Health no-change evidence."
+      ],
+      "commit": null,
+      "pr": null,
+      "final_outcome": "no_code_change"
+    },
+    {
+      "id": "perf3_6e6ddf87f62d29bfa493",
+      "surface": "performance_opportunity",
+      "original_baseline": false,
+      "file": "google-drive-migration.js",
+      "symbol": "google-drive-migration.js::list",
+      "marker": "io_in_loop",
+      "severity": null,
+      "group": "google-drive-migration.js::list",
+      "scanner_reason": "no_supported_strategy",
+      "scanner_details": {
+        "opportunity_id": "perf3_6e6ddf87f62d29bfa493",
+        "performance_model_version": 3,
+        "biomarker_type": "io_in_loop",
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "boundary_kind": "network",
+        "execution_context": "unknown",
+        "terminal_sink": "google-drive-migration.js::request",
+        "intervention_symbol": "google-drive-migration.js::list",
+        "intervention_kind": "function",
+        "file_path": "google-drive-migration.js",
+        "affected_call_sites_total": 1,
+        "affected_files_total": 1,
+        "observations_total": 1,
+        "confidence": "high",
+        "actionability_state": "investigate",
+        "rank_score": 15,
+        "rank_position": 11,
+        "why_ranked": [
+          {
+            "factor": "boundary_kind",
+            "value": "network",
+            "points": 4
+          },
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          }
+        ],
+        "may_lead": true,
+        "plan_id": null,
+        "plan_status": "no_safe_plan",
+        "plan_reason": "The analysis found the shared cause but could not prove one coherent intervention without guessing.",
+        "lower_priority": "lower priority: where this code runs is unknown",
+        "terminal_sinks": [
+          "google-drive-migration.js::request"
+        ],
+        "shared_path_suffix": [
+          "google-drive-migration.js::list",
+          "google-drive-migration.js::request"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown"
+        },
+        "gain_text": "one network call per loop iteration; loop size unknown",
+        "actionability_reason": "no_supported_strategy",
+        "prerequisites": [
+          "per_key_call"
+        ],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 4,
+          "execution_context": 1,
+          "entry_reachability": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 1
+        },
+        "siblings": [],
+        "fix": null,
+        "evidence": [
+          {
+            "finding_id": "finding_3000c4aba37a225994a3",
+            "file_path": "google-drive-migration.js",
+            "biomarker_type": "io_in_loop",
+            "function_name": "list",
+            "line_start": 18,
+            "line_end": 18,
+            "reason": "a network call is reached once per loop iteration through list -> request (cross-function I/O call inside a loop)",
+            "path": [
+              "google-drive-migration.js::list",
+              "google-drive-migration.js::request"
+            ],
+            "provenance": "call-site"
+          }
+        ],
+        "evidence_total": 1,
+        "evidence_emitted": 1,
+        "evidence_truncated": false
+      },
+      "present_in_latest_scan": true,
+      "related_finding_ids": [
+        "7978b439b3be408f968bc0ff79355e3e"
+      ],
+      "evidence": [
+        "Default performance queue hides investigate opportunities even with context=all; explicitly queried actionability=investigate. Underlying sequential dependency/retry findings already inspected."
+      ],
+      "classification": "derived_suggestion_no_change",
+      "related_issue": null,
+      "validation": [
+        "See linked Code Health no-change evidence."
+      ],
+      "commit": null,
+      "pr": null,
+      "final_outcome": "no_code_change"
+    },
+    {
+      "id": "audit:ANALYSIS-001:stale-preparation",
+      "surface": "manual_behavior",
+      "original_baseline": false,
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "prepareCurrentAnalysisForPortfolioSync",
+      "marker": "stale_analysis_reuse",
+      "severity": "high",
+      "group": "ANALYSIS-001",
+      "loading": "shipped_script",
+      "evidence": [
+        "Analyze short Alice writing and commit Alice pending record; select Bob and change/input Bob writing; prepareCurrentAnalysisForPortfolioSync creates a new Bob pending record with Alice correctedMarkup."
+      ],
+      "classification": "behavioral_bug",
+      "related_issue": "ANALYSIS-001",
+      "validation": [
+        "Coordinator real-browser reproduction passed baseline bug assertions, fully intercepted network."
+      ],
+      "commit": null,
+      "pr": null,
+      "final_outcome": "confirmed_awaiting_fix"
     }
   ],
   "last_verified_commit": "cd3554386b183ea92eb03e18c8b186fe09adee54"

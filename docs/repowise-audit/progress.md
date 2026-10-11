@@ -15,3 +15,7 @@ One repair chat writes at a time. Later branches/PRs stack on reviewed prior bat
 Remaining queue: identity repair; ordinary deletion-save failure/transaction concerns need reproduction; unreachable helper-copy maintenance; all other unreviewed source-symbol groups and derived plans; coverage-signal action. Experimental bundled helpers such as removeArchivedSessionsFromPortfolio have no current caller found; do not claim their behavior ships without reachability evidence.
 
 Limits: no live Drive writes, paid AI, real student data, merge or deployment. Score changes are not regression evidence.
+
+Latest reconciliation at cd35543: 663 current Code Health findings. All 662 originals retained; 659 stable identity matches, one unchanged diagnostic catch explicitly matched across a one-line shift, two fixed helper markers no longer detected, and three new browser-test shape findings reviewed. Storage UUID churn is recorded as aliases, never as completed work. Full performance inventory is 23 after explicitly including the three investigate opportunities excluded by the default queue. Total ledger rows: 841.
+
+Next branch: codex/repowise-analysis-identity, stacked against codex/repowise-audit-repairs (draft PR41). ANALYSIS-001 now also includes stale completed analysis reused for a different student/text after the original assessment was committed. All three reproductions are saved in coordinator work/reproduce-analysis-identity.cjs.
