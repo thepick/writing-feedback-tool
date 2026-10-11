@@ -18,20 +18,11 @@ function wftPromiseCallback(promise, callback) {
 // ── Async wrappers (initially pass-through to localStorage) ──
 
 function loadPortfolioAsync() {
-    if (!WFT_ASYNC_PORTFOLIO_ACCESS_V1 || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
-        return Promise.resolve(getPortfolioData());
-    }
-    // In future patches, this will use IndexedDB or Drive
-    return Promise.resolve(getPortfolioData());
+    return Promise.resolve().then(function() { return getPortfolioData(); });
 }
 
 function savePortfolioAsync(portfolio) {
-    if (!WFT_ASYNC_PORTFOLIO_ACCESS_V1 || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
-        var result = savePortfolioData(portfolio);
-        return Promise.resolve(result);
-    }
-    var result = savePortfolioData(portfolio);
-    return Promise.resolve(result);
+    return Promise.resolve().then(function() { return savePortfolioData(portfolio); });
 }
 
 function loadStudentPortfolioAsync(studentNameOrId) {
@@ -42,17 +33,15 @@ function loadStudentPortfolioAsync(studentNameOrId) {
         }
         // Try legacy name key lookup via studentIdMap
         if (WFT_STUDENT_ID_MAP_V1) {
-            try {
-                var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap) {
-                    var keys = Object.keys(settings.studentIdMap);
-                    for (var i = 0; i < keys.length; i++) {
-                        if (settings.studentIdMap[keys[i]] === studentNameOrId) {
-                            return portfolio[keys[i]] || { sessions: [] };
-                        }
+            var settings = getRawSettings ? getRawSettings() : {};
+            if (settings.studentIdMap) {
+                var keys = Object.keys(settings.studentIdMap);
+                for (var i = 0; i < keys.length; i++) {
+                    if (settings.studentIdMap[keys[i]] === studentNameOrId) {
+                        return portfolio[keys[i]] || { sessions: [] };
                     }
                 }
-            } catch (e) {}
+            }
         }
         return { sessions: [] };
     });
@@ -63,18 +52,16 @@ function saveStudentPortfolioAsync(studentNameOrId, studentData) {
         // Resolve actual name key
         var targetKey = studentNameOrId;
         if (WFT_STUDENT_ID_MAP_V1 && !portfolio[studentNameOrId]) {
-            try {
-                var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap) {
-                    var keys = Object.keys(settings.studentIdMap);
-                    for (var i = 0; i < keys.length; i++) {
-                        if (settings.studentIdMap[keys[i]] === studentNameOrId) {
-                            targetKey = keys[i];
-                            break;
-                        }
+            var settings = getRawSettings ? getRawSettings() : {};
+            if (settings.studentIdMap) {
+                var keys = Object.keys(settings.studentIdMap);
+                for (var i = 0; i < keys.length; i++) {
+                    if (settings.studentIdMap[keys[i]] === studentNameOrId) {
+                        targetKey = keys[i];
+                        break;
                     }
                 }
-            } catch (e) {}
+            }
         }
         portfolio[targetKey] = studentData;
         return savePortfolioAsync(portfolio);

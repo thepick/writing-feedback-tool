@@ -1466,6 +1466,11 @@ function isWftStorageSafeMode() {
 }
 
 // ── Emergency Backup ──
+function parseWftBackupValue(raw) {
+    try { return JSON.parse(raw); }
+    catch (e) { return raw; }
+}
+
 function buildWftEmergencyBackupObject() {
     var backup = {
         timestamp: new Date().toISOString(),
@@ -1502,8 +1507,7 @@ function buildWftEmergencyBackupObject() {
         try {
             var raw = localStorage.getItem(bk);
             if (raw !== null) {
-                try { backup.contents[bk] = JSON.parse(raw); }
-                catch (pe) { backup.contents[bk] = raw; }
+                backup.contents[bk] = parseWftBackupValue(raw);
             }
         } catch (e) { backup.contents[bk] = null; }
     }
@@ -2387,12 +2391,11 @@ function wftPromiseCallback(promise, callback) {
 }
 
 function loadPortfolioAsync() {
-    return Promise.resolve(getPortfolioData());
+    return Promise.resolve().then(function() { return getPortfolioData(); });
 }
 
 function savePortfolioAsync(portfolio) {
-    var result = savePortfolioData(portfolio);
-    return Promise.resolve(result);
+    return Promise.resolve().then(function() { return savePortfolioData(portfolio); });
 }
 
 function loadStudentPortfolioAsync(studentNameOrId) {
@@ -2401,17 +2404,15 @@ function loadStudentPortfolioAsync(studentNameOrId) {
             return portfolio[studentNameOrId];
         }
         if (WFT_STUDENT_ID_MAP_V1) {
-            try {
-                var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap) {
-                    var keys = Object.keys(settings.studentIdMap);
-                    for (var lsi = 0; lsi < keys.length; lsi++) {
-                        if (settings.studentIdMap[keys[lsi]] === studentNameOrId) {
-                            return portfolio[keys[lsi]] || { sessions: [] };
-                        }
+            var settings = getRawSettings ? getRawSettings() : {};
+            if (settings.studentIdMap) {
+                var keys = Object.keys(settings.studentIdMap);
+                for (var lsi = 0; lsi < keys.length; lsi++) {
+                    if (settings.studentIdMap[keys[lsi]] === studentNameOrId) {
+                        return portfolio[keys[lsi]] || { sessions: [] };
                     }
                 }
-            } catch (e) {}
+            }
         }
         return { sessions: [] };
     });
@@ -2421,18 +2422,16 @@ function saveStudentPortfolioAsync(studentNameOrId, studentData) {
     return loadPortfolioAsync().then(function(portfolio) {
         var targetKey = studentNameOrId;
         if (WFT_STUDENT_ID_MAP_V1 && !portfolio[studentNameOrId]) {
-            try {
-                var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap) {
-                    var keys = Object.keys(settings.studentIdMap);
-                    for (var ssi = 0; ssi < keys.length; ssi++) {
-                        if (settings.studentIdMap[keys[ssi]] === studentNameOrId) {
-                            targetKey = keys[ssi];
-                            break;
-                        }
+            var settings = getRawSettings ? getRawSettings() : {};
+            if (settings.studentIdMap) {
+                var keys = Object.keys(settings.studentIdMap);
+                for (var ssi = 0; ssi < keys.length; ssi++) {
+                    if (settings.studentIdMap[keys[ssi]] === studentNameOrId) {
+                        targetKey = keys[ssi];
+                        break;
                     }
                 }
-            } catch (e) {}
+            }
         }
         portfolio[targetKey] = studentData;
         return savePortfolioAsync(portfolio);
