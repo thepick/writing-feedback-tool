@@ -223,11 +223,7 @@ function syncStudentFileWithMerge(studentId, localData, callback) {
     loadStudentFileFromDrive(studentId, function(err, remoteFile) {
         if (err) {
             console.warn("[Merge] Could not load remote file for", studentId, ":", err.message);
-            // Save local as authoritative
-            saveStudentFileToDrive(studentId, localData, function(saveErr, fileId) {
-                if (saveErr) { console.warn("[Merge] Could not save local student file after remote load failure for", studentId, ":", saveErr.message || saveErr); }
-                if (callback) { callback(saveErr, localData); }
-            });
+            if (callback) { callback(err, null); }
             return;
         }
 

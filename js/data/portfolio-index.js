@@ -243,7 +243,7 @@ function rebuildPortfolioIndex(callback) {
 
     var portfolio;
     try {
-        portfolio = getPortfolioData();
+        portfolio = getLocalPortfolioSnapshot();
     } catch (e) {
         console.error("[PortfolioIndex] Failed to get portfolio:", e);
         if (callback) { callback(e, null); }
