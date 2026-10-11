@@ -8461,19 +8461,28 @@ function captureNotebookPrintSnapshotForCurrentAnalysis() {
     }
 }
 
+function findPortfolioSessionIndex(sessions, sessionId) {
+    if (!sessionId) return -1;
+    var key = String(sessionId);
+    // Stable IDs must win over legacy timestamps and list positions.
+    var index = sessions.findIndex(function(session) {
+        return session && String(session.id || "") === key;
+    });
+    if (index >= 0) return index;
+    return sessions.findIndex(function(session, position) {
+        if (!session) return false;
+        if (session.createdAt) return String(session.createdAt) === key;
+        return !session.id && String(position) === key;
+    });
+}
+
 function findPortfolioSession(studentName, sessionId) {
     if (!studentName || !sessionId) return null;
     var portfolio = getPortfolioData();
     var studentData = portfolio && portfolio[studentName];
     var sessions = studentData && Array.isArray(studentData.sessions) ? studentData.sessions : [];
-    for (var i = 0; i < sessions.length; i++) {
-        var session = sessions[i];
-        if (!session) continue;
-        if (String(session.id || "") === String(sessionId) || String(session.createdAt || "") === String(sessionId) || String(i) === String(sessionId)) {
-            return session;
-        }
-    }
-    return null;
+    var index = findPortfolioSessionIndex(sessions, sessionId);
+    return index >= 0 ? sessions[index] : null;
 }
 
 function renderNotebookDetailedAssessmentFromSavedSession(session) {

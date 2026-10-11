@@ -8642,51 +8642,27 @@ function commitPendingPortfolioReplacement(pending) {
     if (!sourceStudent || !sourceSessionId || !targetStudent || !newSession) return false;
 
     var portfolio = getPortfolioData();
-    if (!portfolio[sourceStudent]) portfolio[sourceStudent] = { sessions: [] };
-    if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
+    var sourceData = portfolio[sourceStudent];
+    var sourceSessions = sourceData && Array.isArray(sourceData.sessions) ? sourceData.sessions : [];
+    var replaceIndex = findPortfolioSessionIndex(sourceSessions, sourceSessionId);
+    if (replaceIndex < 0) return false;
+    var oldSession = sourceSessions[replaceIndex];
 
-    var sourceSessions = Array.isArray(portfolio[sourceStudent].sessions) ? portfolio[sourceStudent].sessions : [];
-    var removed = false;
-    var replaceIndex = -1;
-    for (var i = 0; i < sourceSessions.length; i++) {
-        var session = sourceSessions[i] || {};
-        if (String(session.id || "") === String(sourceSessionId) || String(session.createdAt || "") === String(sourceSessionId) || String(i) === String(sourceSessionId)) {
-            replaceIndex = i;
-            break;
-        }
-    }
-
-    if (sourceStudent === targetStudent && replaceIndex >= 0) {
-        var oldSession = sourceSessions[replaceIndex] || {};
-        if ((oldSession.id || oldSession.createdAt) && (oldSession.id || oldSession.createdAt) !== newSession.id) {
-            recordSessionDeletion(sourceStudent, oldSession.id || oldSession.createdAt);
-        }
+    if (sourceStudent === targetStudent) {
         sourceSessions[replaceIndex] = newSession;
-        removed = true;
     } else {
-        var filtered = [];
-        for (var j = 0; j < sourceSessions.length; j++) {
-            var old = sourceSessions[j] || {};
-            var isMatch = (String(old.id || "") === String(sourceSessionId) || String(old.createdAt || "") === String(sourceSessionId) || String(j) === String(sourceSessionId));
-            if (isMatch) {
-                removed = true;
-                recordSessionDeletion(sourceStudent, old.id || old.createdAt || sourceSessionId);
-            } else {
-                filtered.push(old);
-            }
-        }
-        portfolio[sourceStudent].sessions = filtered;
+        if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
+        sourceSessions.splice(replaceIndex, 1);
         portfolio[targetStudent].sessions.push(newSession);
-        if (portfolio[targetStudent].sessions.length > 50) {
-            portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
-        }
-    }
-
-    if (!removed && sourceStudent !== targetStudent) {
-        portfolio[targetStudent].sessions.push(newSession);
+        portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
     }
 
     savePortfolioData(portfolio);
+    // A failed save must leave the still-saved original free of deletion markers.
+    var oldSessionId = oldSession.id || oldSession.createdAt || sourceSessionId;
+    if (sourceStudent !== targetStudent || String(oldSessionId) !== String(newSession.id || newSession.createdAt || "")) {
+        recordSessionDeletion(sourceStudent, oldSessionId);
+    }
     try { renderStudentPortfolio(); } catch (e) { wftDebugError('Portfolio saved, but portfolio rendering failed:', e); }
     return true;
 }
