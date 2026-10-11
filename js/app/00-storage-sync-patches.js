@@ -7397,36 +7397,21 @@ function saveStudentSession(studentName, sessionData) {
 }
 
 function removeStudentSession(studentName, sessionId) {
-    if (!studentName || !sessionId) return;
+    if (!studentName || !sessionId) return false;
     var portfolio = getPortfolioData();
-    if (!portfolio[studentName] || !Array.isArray(portfolio[studentName].sessions)) return;
+    if (!portfolio[studentName] || !Array.isArray(portfolio[studentName].sessions)) return false;
     var sessions = portfolio[studentName].sessions;
-    var originalLength = sessions.length;
-    // Prefer removing by the unique id assigned to each session
-    sessions = sessions.filter(function(session) {
-        return session && session.id !== sessionId && session.createdAt !== sessionId;
-    });
-    // If nothing was removed (perhaps legacy sessions without an id), fall back to removing by index
-    if (sessions.length === originalLength) {
-        var idx = -1;
-        for (var i = 0; i < sessions.length; i++) {
-            if (String(i) === String(sessionId)) {
-                idx = i;
-                break;
-            }
-        }
-        if (idx >= 0) {
-            sessions.splice(idx, 1);
-        }
-    }
-    if (sessions.length !== originalLength) {
-        recordSessionDeletion(studentName, sessionId);
-    }
-    portfolio[studentName].sessions = sessions;
+    var index = findPortfolioSessionIndex(sessions, sessionId);
+    if (index < 0) return false;
+    var removedSession = sessions.splice(index, 1)[0];
     savePortfolioData(portfolio);
-    if (document.getElementById('portfolioStudentSelect') && document.getElementById('portfolioStudentSelect').value === studentName) {
-        renderStudentPortfolio();
-    }
+    // Use the removed entry's sync identity, after its removal has saved.
+    recordSessionDeletion(studentName, getSessionKey(removedSession));
+    try {
+        var select = document.getElementById('portfolioStudentSelect');
+        if (select && select.value === studentName) renderStudentPortfolio();
+    } catch (e) { wftDebugError('Portfolio entry removed, but portfolio rendering failed:', e); }
+    return true;
 }
 
 async function deletePortfolioSession(studentName, sessionId) {
@@ -7436,7 +7421,14 @@ async function deletePortfolioSession(studentName, sessionId) {
         confirmText: 'Remove Entry',
         danger: true
     }))) return;
-    removeStudentSession(studentName, sessionId);
+    try {
+        if (!removeStudentSession(studentName, sessionId)) {
+            alert('This portfolio entry could not be found. Please refresh the portfolio before trying again.');
+        }
+    } catch (e) {
+        wftDebugError('Portfolio entry removal failed:', e);
+        alert('The writing could not be removed. Please try again.');
+    }
 }
 
 /*
