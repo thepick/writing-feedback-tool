@@ -375,18 +375,25 @@ async function renameStudent(oldName) {
         return;
     }
 
+    if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
+        portfolio[newName] = portfolio[oldName];
+        delete portfolio[oldName];
+        try {
+            savePortfolioData(portfolio);
+        } catch (e) {
+            wftDebugError('Student rename failed while saving portfolio:', e);
+            alert('The student could not be renamed because the portfolio could not be saved. The original name and writing have been kept.');
+            return;
+        }
+    }
+
+    // Do not hide the old portfolio during sync until its replacement has been saved.
     try {
         clearStudentDeletion(newName);
     } catch (e1) { }
 
     if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
         try { recordStudentDeletion(oldName); } catch (e2) { }
-    }
-
-    if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
-        portfolio[newName] = portfolio[oldName];
-        delete portfolio[oldName];
-        savePortfolioData(portfolio);
     }
 
     students = students.map(function(name) {
