@@ -1,21 +1,19 @@
 # Repowise audit progress
 
-Updated 2026-10-11T16:40:47.733Z; timezone Asia/Bangkok. All 662 original IDs retained. Baseline outcomes: {"no_code_change":244,"confirmed_awaiting_fix":129,"behavior_fixed_metric_review_pending":14,"pending":251,"fixed_in_draft_pr":24}. Ledger rows 914. Each disposition carries source evidence; missing scanner rows never imply resolution.
+Updated 2026-10-11T17:12:25.654Z; timezone Asia/Bangkok. All662 original IDs retained, 933 total individually tracked rows. Original outcomes: {"no_code_change":267,"confirmed_awaiting_fix":146,"behavior_fixed_metric_review_pending":14,"pending":211,"fixed_in_draft_pr":24}. Scanner absence never implies resolution.
 
-Reviewed draft repairs:
+- [SYNC-001](https://github.com/thepick/writing-feedback-tool/pull/41), cd35543: Older settings/deletion uploads clear newer pending changes. Worker all23 suites; coordinator focused independent review/verification.
+- [ANALYSIS-001](https://github.com/thepick/writing-feedback-tool/pull/42), ef41631: Async analysis reads changed student and writing at completion. Worker all24 suites; coordinator focused independent review/verification.
+- [SYNC-002](https://github.com/thepick/writing-feedback-tool/pull/43), 9b8254f: Pending portfolio push overwrites distinct remote sessions for the same student. Worker all24 suites; coordinator focused independent review/verification.
+- [STORAGE-001](https://github.com/thepick/writing-feedback-tool/pull/44), 9c26ded: Failed deletion marker write reports a successful student removal. Worker all26 suites; coordinator focused independent review/verification.
+- [STORAGE-002](https://github.com/thepick/writing-feedback-tool/pull/45), 882e045: Unreadable existing portfolio is overwritten as an empty portfolio. Worker all27 suites; coordinator focused independent review/verification.
+- [SECURITY-001](https://github.com/thepick/writing-feedback-tool/pull/46), 842ec61: Student portfolio HTML export executes untrusted score and photo markup. Worker all28 suites; coordinator focused independent review/verification.
+- [PHOTO-001](https://github.com/thepick/writing-feedback-tool/pull/47), a4e8ba6: Delayed crop callback changes another student/photo after cancellation. Worker all29 suites; coordinator focused independent review/verification.
 
-- [SYNC-001](https://github.com/thepick/writing-feedback-tool/pull/41), cd35543: Older settings/deletion uploads clear newer pending changes. Worker all 23 suites pass; coordinator independently reviewed and reran focused evidence.
-- [ANALYSIS-001](https://github.com/thepick/writing-feedback-tool/pull/42), ef41631: Async analysis reads changed student and writing at completion. Worker all 24 suites pass; coordinator independently reviewed and reran focused evidence.
-- [SYNC-002](https://github.com/thepick/writing-feedback-tool/pull/43), 9b8254f: Pending portfolio push overwrites distinct remote sessions for the same student. Worker all 24 suites pass; coordinator independently reviewed and reran focused evidence.
-- [STORAGE-001](https://github.com/thepick/writing-feedback-tool/pull/44), 9c26ded: Failed deletion marker write reports a successful student removal. Worker all 26 suites pass; coordinator independently reviewed and reran focused evidence.
-- [STORAGE-002](https://github.com/thepick/writing-feedback-tool/pull/45), 882e045: Unreadable existing portfolio is overwritten as an empty portfolio. Worker all 27 suites pass; coordinator independently reviewed and reran focused evidence.
-- [SECURITY-001](https://github.com/thepick/writing-feedback-tool/pull/46), 842ec61: Student portfolio HTML export executes untrusted score and photo markup. Worker all 28 suites pass; coordinator independently reviewed and reran focused evidence.
+Confirmed remaining queue; one repair chat and repository writer at a time:
 
-Confirmed queue, one repository writer at a time:
-
-- FEEDBACK-001: Missing handwriting criterion is described as worst performance
+- FEEDBACK-001: Missing scores are described as poor performance
 - CLEANUP-001: Remove unshipped helper copies and unused bundled helper islands
-- PHOTO-001: Delayed crop callback changes another student/photo after cancellation
 - SYNC-003: Same-image merge overwrites newer photo reference with older metadata
 - SECURITY-002: Untrusted photo identity key mutates Object.prototype during sync
 - ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy
@@ -33,13 +31,16 @@ Confirmed queue, one repository writer at a time:
 - GUIDE-002: Notebook paragraph revisions lose their separation before display
 - STORAGE-003: Corrupt deletion history is overwritten as empty
 - DELETIONS-001: Enabled experimental deletion compaction recurses indefinitely
+- FEEDBACK-002: Flow adjustment converts an explicitly missing detailed score to zero
+- FLOW-001: Inherited token name breaks sentence-starter repetition counting
+- PENDING-001: Photo completion commits and clears a newer pending assessment
+- GUIDE-003: Separate notebook action lines are collapsed into one checklist item
+- PHOTO-002: Cropped uploaded photo keeps the original Drive reference and loses its changed bytes
 
-Source reviews cover bounded UI/parser/guide helpers, optional diagnostics/cache/lookups, historical signals and focused regression matrices with individual checks. Remaining large data paths, source shapes, derived plans and coverage action stay open. Concrete cleanup covers 91 original unused-copy/helper findings.
+Current indexed commit a4e8ba6:696 health rows,147 refactoring plans,24 performance opportunities including explicit investigate,15 dead-code entries; scanner security/doc drift0. Two derived actions tracked, including coverage report ingestion still pending. All source shapes and derived suggestions require concrete individual evidence; repaired behavior does not automatically close shape metrics. CLEANUP-001 now covers103 original findings, including unreachable helper copies/islands and exact redundant parser fallback.
 
-Current refresh842ec61:689 health findings;144 refactoring plans;23 performance opportunities (including investigate);15 dead-code entries; scanner security/doc drift zero; derived actions reconciled. Manual defects remain despite empty scanner security results.
+Coordinator source reviews include actual bounded sample/feedback/notebook/record dependencies, optional UI/cache boundaries and independent regression matrices. Individual details and scope limits are in audit-ledger.json. PHOTO-001 complete:38 crop cases pass independently,33 fail on base. PHOTO-002 reproduced separately: changed uploaded photo bytes skipped by uploader and stripped from storage while old Drive ID survives. Next related repair is SYNC-004/PENDING-001/PHOTO-002.
 
-PR44 browser multi-key writes are not crash-atomic; rollback failure keeps bytes in the open tab and Emergency Backup until storage recovers. Closing a recovery tab can lose that buffer. PR45 protects damaged portfolio bytes; manual recovery still required. Normal Google sign-out retains local work. PR46 rejects unsafe exported/displayed imports and preserves tested formatting/photos; performance and shape metrics remain open. Experimental deletion compaction flag defaults false.
+Known limits: localStorage multi-key writes are not crash-atomic; if rollback writes fail, preserved bytes remain in the open tab until exported/recovered. Forced closing can lose that buffer. Corrupt portfolio bytes are protected but require manual recovery. Normal Google sign-out retains local writing. Experimental deletion compaction defaults false and its enabled recursion is separately queued. Browser checks use synthetic data and intercepted services; no live Drive writes, real student records, paid AI, merge or deployment. Coverage ingestion and remaining source reviews are open.
 
-All checks use synthetic data and intercepted services. No merge, deployment, real student data, paid AI or live Drive writes. Individual platform restrictions will be recorded; other authorized work continues without attempting bypass.
-
-SECURITY-001 writer stopped. Coordinator refresh/checkpoint complete; next sole writer is PHOTO-001.
+Platform restrictions will be recorded for the particular blocked check; other authorized work continues without bypassing restrictions. PHOTO-001 writer stopped; coordinator checkpoint before next sole writer.
