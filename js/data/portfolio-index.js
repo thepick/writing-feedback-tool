@@ -61,7 +61,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
         format: "portfolio-index-v1",
         updatedAt: new Date().toISOString(),
         source: "legacy-wft-portfolio",
-        students: {}
+        students: Object.create(null)
     };
 
     if (!portfolio) { return index; }
@@ -80,7 +80,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
         if (WFT_STUDENT_ID_MAP_V1) {
             try {
                 var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap && settings.studentIdMap[name]) {
+                if (settings.studentIdMap && Object.prototype.hasOwnProperty.call(settings.studentIdMap, name)) {
                     studentId = settings.studentIdMap[name];
                 }
             } catch (e) {}

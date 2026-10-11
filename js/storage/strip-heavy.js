@@ -73,7 +73,7 @@ function makePortfolioLocalStorageSafe(data) {
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) {
         return data;
     }
-    var safe = {};
+    var safe = Object.create(null);
     var keys = Object.keys(data);
     for (var i = 0; i < keys.length; i++) {
         var k = keys[i];

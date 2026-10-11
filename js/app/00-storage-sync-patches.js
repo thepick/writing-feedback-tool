@@ -1672,7 +1672,7 @@ function getOrCreateStudentId(studentName) {
     try { settings = getRawSettings ? getRawSettings() : {}; }
     catch (e) { settings = {}; }
 
-    if (!settings.studentIdMap) { settings.studentIdMap = {}; }
+    settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
     if (settings.studentIdMap[studentName]) {
         return settings.studentIdMap[studentName];
     }
@@ -1786,7 +1786,7 @@ function normalizeWftPortfolioForSchemaV1(portfolio, skipStudentIds) {
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) {
         return portfolio;
     }
-    var normalized = {};
+    var normalized = Object.create(null);
     var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
 
     for (var npi = 0; npi < names.length; npi++) {
@@ -1877,7 +1877,7 @@ function makePortfolioLocalStorageSafe(data) {
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) {
         return data;
     }
-    var safe = {};
+    var safe = Object.create(null);
     var keys = Object.keys(data);
     for (var pk = 0; pk < keys.length; pk++) {
         var k = keys[pk];
@@ -2035,7 +2035,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
         format: "portfolio-index-v1",
         updatedAt: new Date().toISOString(),
         source: "legacy-wft-portfolio",
-        students: {}
+        students: Object.create(null)
     };
 
     if (!portfolio) { return index; }
@@ -2052,7 +2052,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
         if (WFT_STUDENT_ID_MAP_V1) {
             try {
                 var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap && settings.studentIdMap[name]) {
+                if (settings.studentIdMap && Object.prototype.hasOwnProperty.call(settings.studentIdMap, name)) {
                     studentId = settings.studentIdMap[name];
                 }
             } catch (e) {}
@@ -2780,7 +2780,7 @@ function ensureStudentRecordsForRoster() {
     try {
         var settings = getRawSettings ? getRawSettings() : {};
         if (!settings.studentRecords) { settings.studentRecords = []; }
-        if (!settings.studentIdMap) { settings.studentIdMap = {}; }
+        settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
 
         var rosterStudents = [];
         try {
@@ -2848,7 +2848,7 @@ function resolveStudentPortfolioKey(studentNameOrId) {
 
 function updateStudentRecordOnRename(oldName, newName, settings) {
     if (!WFT_STUDENT_ID_MAP_V1) return;
-    if (!settings.studentIdMap) settings.studentIdMap = {};
+    settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
     if (!settings.studentRecords) settings.studentRecords = [];
     var studentId = settings.studentIdMap[oldName] || createStableStudentId(oldName, settings.studentIdMap);
     settings.studentIdMap[oldName] = studentId;
@@ -3116,7 +3116,7 @@ function mergeStudentPortfolioFiles(localFile, remoteFile, deletions) {
 }
 
 function mergeStudentSessions(localSessions, remoteSessions, deletions, studentId) {
-    var merged = {};
+    var merged = Object.create(null);
     var allSessions = (localSessions || []).concat(remoteSessions || []);
     for (var i = 0; i < allSessions.length; i++) {
         var session = allSessions[i];
@@ -3277,7 +3277,7 @@ function syncStudentFileWithMerge(studentId, localData, callback) {
 
 function rebuildIndexFromStudentFiles(studentFiles) {
     var index = { schemaVersion: 1, format: "portfolio-index-v1", updatedAt: new Date().toISOString(),
-        source: "split-student-files", students: {} };
+        source: "split-student-files", students: Object.create(null) };
     if (!studentFiles) { return index; }
     var keys = Object.keys(studentFiles);
     for (var i = 0; i < keys.length; i++) {
@@ -3298,7 +3298,7 @@ function rebuildIndexFromStudentFiles(studentFiles) {
 }
 
 function mergeWftStringArrays(arr1, arr2) {
-    var seen = {}, result = [];
+    var seen = Object.create(null), result = [];
     for (var i = 0; i < arr1.length; i++) { if (!seen[arr1[i]]) { seen[arr1[i]] = true; result.push(arr1[i]); } }
     for (var j = 0; j < arr2.length; j++) { if (!seen[arr2[j]]) { seen[arr2[j]] = true; result.push(arr2[j]); } }
     return result;
@@ -5474,7 +5474,7 @@ function recordSessionDeletion(studentName, sessionId, deletions) {
     var studentId = "";
     try {
         var settings = getRawSettings ? getRawSettings() : {};
-        studentId = settings.studentIdMap && settings.studentIdMap[name] ? settings.studentIdMap[name] : "";
+        studentId = settings.studentIdMap && Object.prototype.hasOwnProperty.call(settings.studentIdMap, name) ? settings.studentIdMap[name] : "";
     } catch (e) {}
     var record = {
         id: createWftId("del"),
@@ -5563,7 +5563,7 @@ function applyDeletionsToStudents(studentList, deletions) {
 function applyDeletionsToPortfolio(portfolio, deletions) {
     var cleanPortfolio = normalizePortfolioShape(portfolio || {});
     var cleanDeletions = normalizeDeletionsData(deletions || {});
-    var result = {};
+    var result = Object.create(null);
     var studentName;
 
     for (studentName in cleanPortfolio) {
@@ -6209,7 +6209,7 @@ function mergeSessionImageRefs(primary, secondary) {
     var merged = cloneWftJson(primary || {});
     var primaryImages = merged.images || merged.photos || [];
     var secondaryImages = secondary ? (secondary.images || secondary.photos || []) : [];
-    var byKey = {};
+    var byKey = Object.create(null);
     var result = [];
     var i;
 
@@ -6230,12 +6230,15 @@ function mergeSessionImageRefs(primary, secondary) {
         } else {
             // A crop/reset revision belongs to the newer session; old media must not replace it.
             if ((byKey[key].imageRevision || img.imageRevision) && byKey[key].imageRevision !== img.imageRevision) return;
-            // Manual field merge (ES5 compat)
-            for (var f in img) {
-                if (Object.prototype.hasOwnProperty.call(img, f)) {
-                    byKey[key][f] = img[f];
-                }
+            if (byKey[key].driveFileId && img.driveFileId && byKey[key].driveFileId !== img.driveFileId) return;
+            if (byKey[key].dataUrl && img.dataUrl && byKey[key].dataUrl !== img.dataUrl) return;
+            // Older copies can fill missing media references, but cannot replace newer metadata.
+            var refs = ["driveFileId", "dataUrl", "originalDataUrl"];
+            for (var r = 0; r < refs.length; r += 1) {
+                var ref = refs[r];
+                if (!byKey[key][ref] && Object.prototype.hasOwnProperty.call(img, ref) && img[ref]) byKey[key][ref] = img[ref];
             }
+            if (byKey[key].driveFileId) byKey[key].pendingDriveUpload = false;
         }
     }
 
@@ -6267,7 +6270,7 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
     var cloudNorm = normalizePortfolioShape(cloudPortfolio);
 
     // Start with cloud, overlay local
-    var merged = {};
+    var merged = Object.create(null);
     var studentName;
 
     // Copy all cloud students
@@ -6287,7 +6290,7 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
         }
 
         // Merge sessions for this student
-        var byKey = {};
+        var byKey = Object.create(null);
         var cloudSessions = merged[studentName].sessions || [];
         var localSessions = localNorm[studentName].sessions || [];
         var i;
@@ -7031,7 +7034,7 @@ function stopDriveAutoSync() {
 
 function normalizePortfolioData(portfolio) {
     var source = portfolio && typeof portfolio === 'object' ? portfolio : {};
-    var normalized = {};
+    var normalized = Object.create(null);
     Object.keys(source).forEach(function(studentName) {
         if (studentName === 'updatedAt' || studentName === '__syncMeta' || studentName === 'syncMeta' || studentName === 'lastSyncedAt' || studentName === 'lastSyncStatus') {
             return;
@@ -7208,7 +7211,7 @@ function mergePortfolioData(base, incoming) {
             merged[studentName] = next[studentName];
             return;
         }
-        var byId = {};
+        var byId = Object.create(null);
         merged[studentName].sessions.forEach(function(session) {
             byId[session.id] = session;
         });
@@ -7498,7 +7501,7 @@ function saveStudentSession(studentName, sessionData) {
         }
     }
     var portfolio = getPortfolioData();
-    if (!portfolio[studentName]) portfolio[studentName] = { sessions: [] };
+    if (!Object.prototype.hasOwnProperty.call(portfolio, studentName)) portfolio[studentName] = { sessions: [] };
     portfolio[studentName].sessions.push(sessionData);
     if (portfolio[studentName].sessions.length > 50) {
         portfolio[studentName].sessions = portfolio[studentName].sessions.slice(-50);

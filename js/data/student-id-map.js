@@ -39,7 +39,7 @@ function ensureStudentRecordsForRoster() {
     try {
         var settings = getRawSettings ? getRawSettings() : {};
         if (!settings.studentRecords) { settings.studentRecords = []; }
-        if (!settings.studentIdMap) { settings.studentIdMap = {}; }
+        settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
 
         var rosterStudents = [];
         try {
@@ -116,7 +116,7 @@ function updateStudentRecordOnRename(oldName, newName) {
 
     try {
         var settings = getRawSettings ? getRawSettings() : {};
-        if (!settings.studentIdMap) { settings.studentIdMap = {}; }
+        settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
         if (!settings.studentRecords) { settings.studentRecords = []; }
 
         // Keep or create student ID

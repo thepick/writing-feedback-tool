@@ -73,7 +73,7 @@ function getOrCreateStudentId(studentName) {
     } catch (e) {
         settings = {};
     }
-    if (!settings.studentIdMap) { settings.studentIdMap = {}; }
+    settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
 
     if (settings.studentIdMap[studentName]) {
         return settings.studentIdMap[studentName];
@@ -204,7 +204,7 @@ function normalizeWftPortfolioForSchemaV1(portfolio) {
         return portfolio;
     }
 
-    var normalized = {};
+    var normalized = Object.create(null);
     var studentNames = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
 
     for (var i = 0; i < studentNames.length; i++) {

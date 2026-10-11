@@ -465,7 +465,7 @@ function importStudents(event) {
         var content = String(e.target.result || "");
         var rawNames = content.split(/\r?\n|,/).map(function(n) { return n.trim(); }).filter(function(n) { return n.length > 0; });
         var names = [];
-        var seenImportNames = {};
+        var seenImportNames = Object.create(null);
         var added = 0;
         var nextStudents = students.slice();
         var deletions = getDeletionsData();
@@ -1506,7 +1506,7 @@ function getSentenceLengths(text) {
 }
 
 function analyzeSentenceStarters(sentences) {
-    var counts = {};
+    var counts = Object.create(null);
     for (var i = 0; i < sentences.length; i++) {
         var words = sentences[i].match(/\b[\w'-]+\b/g);
         if (!words || !words.length) continue;
@@ -1517,7 +1517,7 @@ function analyzeSentenceStarters(sentences) {
     var maxStarter = 0;
     var mostCommon = "";
     for (var key in counts) {
-        if (counts.hasOwnProperty(key) && counts[key] > maxStarter) {
+        if (Object.prototype.hasOwnProperty.call(counts, key) && counts[key] > maxStarter) {
             maxStarter = counts[key];
             mostCommon = key;
         }
@@ -1964,7 +1964,7 @@ function analyzeGrammarChanges(originalText, correctedText) {
         var aw = tokenizeForDiff(addedWords);
         var combined = rw.concat(aw);
         for (var i = 0; i < combined.length; i++) {
-            if (verbSet[combined[i]]) {
+            if (Object.prototype.hasOwnProperty.call(verbSet, combined[i])) {
                 summary.verbIssues += 1;
                 if (/^(had|have|has|would|will|did|does|do|am|is|are|was|were)$/.test(combined[i])) summary.helperVerbIssues += 1;
                 break;
@@ -6191,7 +6191,7 @@ function titleCaseGeneratedWritingTitle(title) {
             var lower = partText.toLowerCase();
             var isFirstSegment = i === 0;
             var isLastSegment = i === matches.length - 1;
-            var shouldCapitalize = forceCapitalize || !lowercaseWords[lower] || (!isFirstSegment && isLastSegment);
+            var shouldCapitalize = forceCapitalize || !Object.prototype.hasOwnProperty.call(lowercaseWords, lower) || (!isFirstSegment && isLastSegment);
             output += token.slice(lastIndex, part.index);
             output += formatSegment(partText, shouldCapitalize);
             lastIndex = part.index + partText.length;

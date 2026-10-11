@@ -34,7 +34,7 @@ function mergeStudentPortfolioFiles(localFile, remoteFile, deletions) {
 }
 
 function mergeStudentSessions(localSessions, remoteSessions, deletions, studentId) {
-    var merged = {};
+    var merged = Object.create(null);
     var allSessions = (localSessions || []).concat(remoteSessions || []);
 
     for (var i = 0; i < allSessions.length; i++) {
@@ -259,7 +259,7 @@ function rebuildIndexFromStudentFiles(studentFiles) {
         format: "portfolio-index-v1",
         updatedAt: new Date().toISOString(),
         source: "split-student-files",
-        students: {}
+        students: Object.create(null)
     };
 
     if (!studentFiles) { return index; }
@@ -306,7 +306,7 @@ function rebuildIndexFromStudentFiles(studentFiles) {
 // ── Utility ──
 
 function mergeStringArrays(arr1, arr2) {
-    var seen = {};
+    var seen = Object.create(null);
     var result = [];
     for (var i = 0; i < arr1.length; i++) {
         if (!seen[arr1[i]]) {
