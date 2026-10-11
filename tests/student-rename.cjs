@@ -16,7 +16,7 @@ function setup(options = {}) {
     const app = vm.runInNewContext(commitSource + source.slice(start, end) + '\n;globalThis', {
         students: ['Alice', 'Bob'], selectedStudent: 'Alice',
         wftTextInput: async () => Object.hasOwn(options, 'name') ? options.name : 'Alicia', wftConfirm: async () => options.confirm !== false,
-        getPortfolioData: () => JSON.parse(stored),
+        getLocalPortfolioSnapshot: () => JSON.parse(stored),
         savePortfolioData: data => { if (options.failSave) throw new Error('Storage full'); stored = JSON.stringify(data); events.push('portfolio-save'); },
         getDeletionsData: () => ({ events: [] }), getRawSettings: () => ({}),
         clearStudentDeletion: (name, data) => data.events.push('restore:' + name),

@@ -360,21 +360,6 @@ async function renameStudent(oldName) {
         return;
     }
 
-    var portfolio = getPortfolioData();
-    var portfolioNameConflict = false;
-    if (portfolio) {
-        var portfolioNames = Object.keys(portfolio).filter(function(key) {
-            return key !== "_meta" && key !== "updatedAt" && key !== "__syncMeta" && key !== "syncMeta" && key !== "lastSyncedAt" && key !== "lastSyncStatus";
-        });
-        portfolioNameConflict = portfolioNames.some(function(key) {
-            return key !== oldName && String(key).toLowerCase() === newName.toLowerCase();
-        });
-    }
-    if (portfolioNameConflict) {
-        alert("A portfolio already exists for that name. Choose a different name so no student work is overwritten.");
-        return;
-    }
-
     if (!(await wftConfirm("Rename " + oldName + " to " + newName + "? The roster and portfolio will both be updated.", {
         title: "Confirm Rename",
         confirmText: "Rename Student"
@@ -382,18 +367,34 @@ async function renameStudent(oldName) {
         return;
     }
 
-    if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
-        portfolio[newName] = portfolio[oldName];
-        delete portfolio[oldName];
+    // Dialogs yield to saves and sync; validate current state before staging the transaction.
+    if (students.indexOf(oldName) === -1 || students.some(function(name) {
+        return name !== oldName && String(name).toLowerCase() === newName.toLowerCase();
+    })) {
+        alert("The student roster changed while the rename dialog was open. Please reopen Manage Student and try again.");
+        return;
     }
-    var deletions = getDeletionsData();
-    clearStudentDeletion(newName, deletions);
-    if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
-        recordStudentDeletion(oldName, deletions);
-    }
-    var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
-    nextStudents.sort(function(a, b) { return a.localeCompare(b); });
     try {
+        var portfolio = getLocalPortfolioSnapshot();
+        var portfolioNameConflict = Object.keys(portfolio).some(function(key) {
+            return key !== "_meta" && key !== "updatedAt" && key !== "__syncMeta" && key !== "syncMeta" && key !== "lastSyncedAt" && key !== "lastSyncStatus"
+                && key !== oldName && String(key).toLowerCase() === newName.toLowerCase();
+        });
+        if (portfolioNameConflict) {
+            alert("A portfolio already exists for that name. Choose a different name so no student work is overwritten.");
+            return;
+        }
+        if (Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
+            portfolio[newName] = portfolio[oldName];
+            delete portfolio[oldName];
+        }
+        var deletions = getDeletionsData();
+        clearStudentDeletion(newName, deletions);
+        if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
+            recordStudentDeletion(oldName, deletions);
+        }
+        var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
+        nextStudents.sort(function(a, b) { return a.localeCompare(b); });
         var settings = getRawSettings();
         updateStudentRecordOnRename(oldName, newName, settings);
         saveWftStudentChange({ portfolio: portfolio, deletions: deletions, settings: settings,
@@ -410,6 +411,7 @@ async function renameStudent(oldName) {
     if (studentSelect && students.indexOf(newName) !== -1) {
         studentSelect.value = newName;
     }
+    selectedStudent = newName;
 
     try { refreshPortfolioDropdown(); } catch (e4) { }
 
