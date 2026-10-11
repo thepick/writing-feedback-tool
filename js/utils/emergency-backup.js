@@ -5,6 +5,11 @@
 
 // ── Build a comprehensive backup object ──
 
+function parseWftBackupValue(raw) {
+    try { return JSON.parse(raw); }
+    catch (e) { return raw; }
+}
+
 function buildWftEmergencyBackupObject() {
     var backup = {
         timestamp: new Date().toISOString(),
@@ -34,11 +39,7 @@ function buildWftEmergencyBackupObject() {
         try {
             var raw = localStorage.getItem(key);
             if (raw !== null && raw !== undefined) {
-                try {
-                    backup.contents[key] = JSON.parse(raw);
-                } catch (parseErr) {
-                    backup.contents[key] = raw;
-                }
+                backup.contents[key] = parseWftBackupValue(raw);
             }
         } catch (e) {
             backup.contents[key] = null;

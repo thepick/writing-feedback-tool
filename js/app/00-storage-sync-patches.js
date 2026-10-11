@@ -1466,6 +1466,11 @@ function isWftStorageSafeMode() {
 }
 
 // ── Emergency Backup ──
+function parseWftBackupValue(raw) {
+    try { return JSON.parse(raw); }
+    catch (e) { return raw; }
+}
+
 function buildWftEmergencyBackupObject() {
     var backup = {
         timestamp: new Date().toISOString(),
@@ -1502,8 +1507,7 @@ function buildWftEmergencyBackupObject() {
         try {
             var raw = localStorage.getItem(bk);
             if (raw !== null) {
-                try { backup.contents[bk] = JSON.parse(raw); }
-                catch (pe) { backup.contents[bk] = raw; }
+                backup.contents[bk] = parseWftBackupValue(raw);
             }
         } catch (e) { backup.contents[bk] = null; }
     }
@@ -2387,12 +2391,11 @@ function wftPromiseCallback(promise, callback) {
 }
 
 function loadPortfolioAsync() {
-    return Promise.resolve(getPortfolioData());
+    return Promise.resolve().then(function() { return getPortfolioData(); });
 }
 
 function savePortfolioAsync(portfolio) {
-    var result = savePortfolioData(portfolio);
-    return Promise.resolve(result);
+    return Promise.resolve().then(function() { return savePortfolioData(portfolio); });
 }
 
 function loadStudentPortfolioAsync(studentNameOrId) {
@@ -2401,17 +2404,15 @@ function loadStudentPortfolioAsync(studentNameOrId) {
             return portfolio[studentNameOrId];
         }
         if (WFT_STUDENT_ID_MAP_V1) {
-            try {
-                var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap) {
-                    var keys = Object.keys(settings.studentIdMap);
-                    for (var lsi = 0; lsi < keys.length; lsi++) {
-                        if (settings.studentIdMap[keys[lsi]] === studentNameOrId) {
-                            return portfolio[keys[lsi]] || { sessions: [] };
-                        }
+            var settings = getRawSettings ? getRawSettings() : {};
+            if (settings.studentIdMap) {
+                var keys = Object.keys(settings.studentIdMap);
+                for (var lsi = 0; lsi < keys.length; lsi++) {
+                    if (settings.studentIdMap[keys[lsi]] === studentNameOrId) {
+                        return portfolio[keys[lsi]] || { sessions: [] };
                     }
                 }
-            } catch (e) {}
+            }
         }
         return { sessions: [] };
     });
@@ -2421,18 +2422,16 @@ function saveStudentPortfolioAsync(studentNameOrId, studentData) {
     return loadPortfolioAsync().then(function(portfolio) {
         var targetKey = studentNameOrId;
         if (WFT_STUDENT_ID_MAP_V1 && !portfolio[studentNameOrId]) {
-            try {
-                var settings = getRawSettings ? getRawSettings() : {};
-                if (settings.studentIdMap) {
-                    var keys = Object.keys(settings.studentIdMap);
-                    for (var ssi = 0; ssi < keys.length; ssi++) {
-                        if (settings.studentIdMap[keys[ssi]] === studentNameOrId) {
-                            targetKey = keys[ssi];
-                            break;
-                        }
+            var settings = getRawSettings ? getRawSettings() : {};
+            if (settings.studentIdMap) {
+                var keys = Object.keys(settings.studentIdMap);
+                for (var ssi = 0; ssi < keys.length; ssi++) {
+                    if (settings.studentIdMap[keys[ssi]] === studentNameOrId) {
+                        targetKey = keys[ssi];
+                        break;
                     }
                 }
-            } catch (e) {}
+            }
         }
         portfolio[targetKey] = studentData;
         return savePortfolioAsync(portfolio);
@@ -6268,6 +6267,7 @@ function savePortfolioLocalOnly(portfolio, reason) {
         localStorage.setItem("wft_portfolio", JSON.stringify(portfolio || {}));
     } catch (e) {
         wftDebugWarn("[WFT Sync] Could not save merged portfolio locally:", e);
+        throw e;
     }
 }
 
@@ -6289,8 +6289,22 @@ function syncWftPortfolioIfNeeded(reason) {
     var hadPending = wftSyncState.pendingPortfolioPush;
     wftSyncLog("[WFT Sync] portfolio local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: Object.keys(localPortfolio || {}).length });
 
+    function hasNewerLocalPortfolio() {
+        if (wftSyncState.localPortfolioCounter === counterSnapshot) return false;
+        // A slow Drive response must not overwrite or acknowledge a newer local save.
+        wftSyncState.needsSyncAfterCurrent = true;
+        return true;
+    }
+
+    function recordPortfolioSync(hash) {
+        wftSyncState.lastSyncedPortfolioHash = hash;
+        wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
+        wftSyncState.pendingPortfolioPush = hasNewerLocalPortfolio();
+    }
+
     return findWftFilesByNamePromise(WFT_PORTFOLIO_FILENAME)
         .then(function (files) {
+            if (hasNewerLocalPortfolio()) return false;
             var canonical;
 
             noteDuplicateWftFiles(WFT_PORTFOLIO_FILENAME, files);
@@ -6309,9 +6323,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 wftSyncLog("[WFT Sync][PORTFOLIO] decision", "create-remote", { localHash: localHash });
                 return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, applyDeletionsToPortfolio(localPortfolio, getDeletionsData())).then(function (fileId) {
                     wftSyncState.portfolioFileId = fileId || wftSyncState.portfolioFileId;
-                    wftSyncState.lastSyncedPortfolioHash = localHash;
-                    wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
-                    wftSyncState.pendingPortfolioPush = false;
+                    recordPortfolioSync(localHash);
                     return true;
                 });
             }
@@ -6323,6 +6335,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 var mergedHash;
 
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudPortfolio) {
+                    if (hasNewerLocalPortfolio()) return false;
                     cloudNormalized = applyDeletionsToPortfolio(cloudPortfolio || {}, getDeletionsData());
                     cloudHash = getPortfolioFingerprint(cloudNormalized);
                     merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized, hadPending);
@@ -6337,17 +6350,13 @@ function syncWftPortfolioIfNeeded(reason) {
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
                         wftSyncLog("[WFT Sync][PORTFOLIO] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
                         return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, merged).then(function () {
-                            wftSyncState.lastSyncedPortfolioHash = mergedHash;
-                            wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
-                            wftSyncState.pendingPortfolioPush = false;
+                            recordPortfolioSync(mergedHash);
                             return true;
                         });
                     }
 
                     wftSyncLog("[WFT Sync][PORTFOLIO] decision", mergedHash !== localHash ? "pull-remote" : "skip-same-hash", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending });
-                    wftSyncState.lastSyncedPortfolioHash = mergedHash;
-                    wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
-                    wftSyncState.pendingPortfolioPush = false;
+                    recordPortfolioSync(mergedHash);
                     return false;
                 });
             });
@@ -7026,39 +7035,23 @@ function savePortfolioData(data) {
         normalized = normalizePortfolioData((!wftSafeModeActive && WFT_STORAGE_SCHEMA_VERSION >= 1 && typeof normalizeWftPortfolioForSchemaV1 === 'function') ? normalizeWftPortfolioForSchemaV1(data || {}) : (data || {}));
     } catch (e) {
         wftDebugError('normalizePortfolioData failed while saving portfolio:', e);
-        normalized = {};
+        throw e;
     }
 
     // ── PATCH 2: Proactive heavy-field stripping ──
-    if (!wftSafeModeActive && WFT_PROACTIVE_STRIP_V1) {
+    try {
+        savedData = (!wftSafeModeActive && WFT_PROACTIVE_STRIP_V1) ? makePortfolioLocalStorageSafe(normalized) : normalized;
+        localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
+    } catch (e) {
+        // Large photo data URLs can exceed the browser's localStorage quota.
+        // Keep the portfolio session, scores, and notes by retrying without embedded image data.
+        wftDebugWarn('Portfolio localStorage save failed; retrying without heavy embedded fields.', e);
         try {
-            savedData = makePortfolioLocalStorageSafe(normalized);
+            savedData = stripPortfolioHeavyFields(normalized);
             localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-        } catch (e) {
-            wftDebugWarn('Portfolio localStorage save failed (proactive strip active); retrying.', e);
-            try {
-                savedData = stripPortfolioHeavyFields(normalized);
-                localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-            } catch (e2) {
-                wftDebugError('Portfolio save retry without heavy fields also failed:', e2);
-                throw e2;
-            }
-        }
-    } else {
-        try {
-            savedData = normalized;
-            localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-        } catch (e) {
-            // Large photo data URLs can exceed the browser's localStorage quota.
-            // Keep the portfolio session, scores, and notes by retrying without embedded image data.
-            wftDebugWarn('Portfolio localStorage save failed; retrying without heavy embedded fields.', e);
-            try {
-                savedData = stripPortfolioHeavyFields(normalized);
-                localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-            } catch (e2) {
-                wftDebugError('Portfolio save retry without heavy fields also failed:', e2);
-                throw e2;
-            }
+        } catch (e2) {
+            wftDebugError('Portfolio save retry without heavy fields also failed:', e2);
+            throw e2;
         }
     }
     // ── WFT Sync V2: use dirty flags + debounced sync instead of direct upload ──
@@ -8643,51 +8636,27 @@ function commitPendingPortfolioReplacement(pending) {
     if (!sourceStudent || !sourceSessionId || !targetStudent || !newSession) return false;
 
     var portfolio = getPortfolioData();
-    if (!portfolio[sourceStudent]) portfolio[sourceStudent] = { sessions: [] };
-    if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
+    var sourceData = portfolio[sourceStudent];
+    var sourceSessions = sourceData && Array.isArray(sourceData.sessions) ? sourceData.sessions : [];
+    var replaceIndex = findPortfolioSessionIndex(sourceSessions, sourceSessionId);
+    if (replaceIndex < 0) return false;
+    var oldSession = sourceSessions[replaceIndex];
 
-    var sourceSessions = Array.isArray(portfolio[sourceStudent].sessions) ? portfolio[sourceStudent].sessions : [];
-    var removed = false;
-    var replaceIndex = -1;
-    for (var i = 0; i < sourceSessions.length; i++) {
-        var session = sourceSessions[i] || {};
-        if (String(session.id || "") === String(sourceSessionId) || String(session.createdAt || "") === String(sourceSessionId) || String(i) === String(sourceSessionId)) {
-            replaceIndex = i;
-            break;
-        }
-    }
-
-    if (sourceStudent === targetStudent && replaceIndex >= 0) {
-        var oldSession = sourceSessions[replaceIndex] || {};
-        if ((oldSession.id || oldSession.createdAt) && (oldSession.id || oldSession.createdAt) !== newSession.id) {
-            recordSessionDeletion(sourceStudent, oldSession.id || oldSession.createdAt);
-        }
+    if (sourceStudent === targetStudent) {
         sourceSessions[replaceIndex] = newSession;
-        removed = true;
     } else {
-        var filtered = [];
-        for (var j = 0; j < sourceSessions.length; j++) {
-            var old = sourceSessions[j] || {};
-            var isMatch = (String(old.id || "") === String(sourceSessionId) || String(old.createdAt || "") === String(sourceSessionId) || String(j) === String(sourceSessionId));
-            if (isMatch) {
-                removed = true;
-                recordSessionDeletion(sourceStudent, old.id || old.createdAt || sourceSessionId);
-            } else {
-                filtered.push(old);
-            }
-        }
-        portfolio[sourceStudent].sessions = filtered;
+        if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
+        sourceSessions.splice(replaceIndex, 1);
         portfolio[targetStudent].sessions.push(newSession);
-        if (portfolio[targetStudent].sessions.length > 50) {
-            portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
-        }
-    }
-
-    if (!removed && sourceStudent !== targetStudent) {
-        portfolio[targetStudent].sessions.push(newSession);
+        portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
     }
 
     savePortfolioData(portfolio);
+    // A failed save must leave the still-saved original free of deletion markers.
+    var oldSessionId = oldSession.id || oldSession.createdAt || sourceSessionId;
+    if (sourceStudent !== targetStudent || String(oldSessionId) !== String(newSession.id || newSession.createdAt || "")) {
+        recordSessionDeletion(sourceStudent, oldSessionId);
+    }
     try { renderStudentPortfolio(); } catch (e) { wftDebugError('Portfolio saved, but portfolio rendering failed:', e); }
     return true;
 }
