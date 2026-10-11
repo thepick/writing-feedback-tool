@@ -7025,39 +7025,23 @@ function savePortfolioData(data) {
         normalized = normalizePortfolioData((!wftSafeModeActive && WFT_STORAGE_SCHEMA_VERSION >= 1 && typeof normalizeWftPortfolioForSchemaV1 === 'function') ? normalizeWftPortfolioForSchemaV1(data || {}) : (data || {}));
     } catch (e) {
         wftDebugError('normalizePortfolioData failed while saving portfolio:', e);
-        normalized = {};
+        throw e;
     }
 
     // ── PATCH 2: Proactive heavy-field stripping ──
-    if (!wftSafeModeActive && WFT_PROACTIVE_STRIP_V1) {
+    try {
+        savedData = (!wftSafeModeActive && WFT_PROACTIVE_STRIP_V1) ? makePortfolioLocalStorageSafe(normalized) : normalized;
+        localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
+    } catch (e) {
+        // Large photo data URLs can exceed the browser's localStorage quota.
+        // Keep the portfolio session, scores, and notes by retrying without embedded image data.
+        wftDebugWarn('Portfolio localStorage save failed; retrying without heavy embedded fields.', e);
         try {
-            savedData = makePortfolioLocalStorageSafe(normalized);
+            savedData = stripPortfolioHeavyFields(normalized);
             localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-        } catch (e) {
-            wftDebugWarn('Portfolio localStorage save failed (proactive strip active); retrying.', e);
-            try {
-                savedData = stripPortfolioHeavyFields(normalized);
-                localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-            } catch (e2) {
-                wftDebugError('Portfolio save retry without heavy fields also failed:', e2);
-                throw e2;
-            }
-        }
-    } else {
-        try {
-            savedData = normalized;
-            localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-        } catch (e) {
-            // Large photo data URLs can exceed the browser's localStorage quota.
-            // Keep the portfolio session, scores, and notes by retrying without embedded image data.
-            wftDebugWarn('Portfolio localStorage save failed; retrying without heavy embedded fields.', e);
-            try {
-                savedData = stripPortfolioHeavyFields(normalized);
-                localStorage.setItem('wft_portfolio', JSON.stringify(savedData));
-            } catch (e2) {
-                wftDebugError('Portfolio save retry without heavy fields also failed:', e2);
-                throw e2;
-            }
+        } catch (e2) {
+            wftDebugError('Portfolio save retry without heavy fields also failed:', e2);
+            throw e2;
         }
     }
     // ── WFT Sync V2: use dirty flags + debounced sync instead of direct upload ──

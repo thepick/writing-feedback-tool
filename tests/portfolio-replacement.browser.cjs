@@ -42,7 +42,38 @@ const root = path.resolve(__dirname, '..');
             try {
                 failed = { committed: commitPendingPortfolioSync(), portfolio: getPortfolioData(), pending: !!getPendingPortfolioSync(), persistedPending: !!localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY), deleted: getDeletionsData().deletedSessions };
             } finally { Storage.prototype.setItem = originalSetItem; }
-            return { successful, missing, failed };
+            prepare();
+            const savedBeforeNormalization = localStorage.getItem('wft_portfolio');
+            const countersBeforeNormalization = [wftSyncState.localPortfolioCounter, wftSyncState.localDeletionsCounter];
+            let normalizationError = '';
+            try {
+                savePortfolioData({ Alice: { sessions: [null, entry('new')] } });
+            } catch (error) { normalizationError = error.name; }
+            const normalization = {
+                error: normalizationError,
+                preserved: localStorage.getItem('wft_portfolio') === savedBeforeNormalization,
+                countersUnchanged: JSON.stringify(countersBeforeNormalization) === JSON.stringify([wftSyncState.localPortfolioCounter, wftSyncState.localDeletionsCounter]),
+                pending: !!localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY)
+            };
+            const recovered = [];
+            const originalProactiveFlag = WFT_PROACTIVE_STRIP_V1;
+            try {
+                for (const proactive of [false, true]) {
+                    WFT_PROACTIVE_STRIP_V1 = proactive;
+                    let writes = 0;
+                    Storage.prototype.setItem = function(key, value) {
+                        if (key === 'wft_portfolio' && ++writes === 1) throw new DOMException('Storage full', 'QuotaExceededError');
+                        return originalSetItem.call(this, key, value);
+                    };
+                    const session = { ...entry('photo'), categoryScores: { Grammar: 8 }, images: [{ id: 'image', driveFileId: 'drive-image', dataUrl: 'data:image/jpeg;base64,AAAA', mimeType: 'image/jpeg' }] };
+                    const saved = savePortfolioData({ Alice: { sessions: [session] } });
+                    recovered.push({ writes, session: saved.Alice.sessions[0], matchesStorage: JSON.stringify(saved) === localStorage.getItem('wft_portfolio') });
+                }
+            } finally {
+                Storage.prototype.setItem = originalSetItem;
+                WFT_PROACTIVE_STRIP_V1 = originalProactiveFlag;
+            }
+            return { successful, missing, failed, normalization, recovered };
         });
         assert.equal(result.successful.moved, true);
         assert.deepEqual(result.successful.portfolio.Alice.sessions.map(session => session.id), ['keep']);
@@ -57,7 +88,19 @@ const root = path.resolve(__dirname, '..');
             assert.deepEqual(state.deleted, {});
         }
         assert.equal(result.failed.persistedPending, true);
+        assert.equal(result.normalization.error, 'TypeError');
+        assert.equal(result.normalization.preserved, true, 'A real schema normalization failure must not erase saved history');
+        assert.equal(result.normalization.countersUnchanged, true);
+        assert.equal(result.normalization.pending, true);
+        for (const recovered of result.recovered) {
+            assert.equal(recovered.writes, 2);
+            assert.equal(recovered.matchesStorage, true);
+            assert.equal(recovered.session.originalText, 'Writing to keep');
+            assert.equal(recovered.session.categoryScores.Grammar, 8);
+            assert.equal(recovered.session.images[0].driveFileId, 'drive-image');
+            assert.equal(recovered.session.images[0].dataUrl, undefined);
+        }
         assert.deepEqual(errors, []);
-        console.log('Browser portfolio replacement tests passed with real app storage: single move, missing source, quota failure, pending-work preservation and no premature deletion.');
+        console.log('Browser portfolio save/replacement tests passed with real app storage: single move, missing source, normalization failure, quota recovery in both modes, pending-work preservation and no premature deletion.');
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
