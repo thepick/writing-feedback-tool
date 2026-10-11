@@ -2,6 +2,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const patches = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-patches.js'), 'utf8');
+const commitSource = patches.slice(patches.indexOf('function restoreWftStudentChangeStorage('), patches.indexOf('function parseWftBackupValue('))
+    + patches.slice(patches.indexOf('function saveWftStudentChange('), patches.indexOf('function applyDeletionsToStudents('));
 const source = fs.readFileSync(path.join(__dirname, '../js/app/10-main-app.js'), 'utf8');
 const start = source.indexOf('async function renameStudent(');
 const end = source.indexOf('async function clearAllStudents(', start);
@@ -10,15 +13,18 @@ function setup(options = {}) {
     const original = options.portfolio || { Alice: { sessions: [{ id: 'saved', originalText: 'Keep this writing' }] }, Bob: { sessions: [{ id: 'other' }] } };
     let stored = JSON.stringify(original);
     const events = [], alerts = [], writes = [];
-    const app = vm.runInNewContext(source.slice(start, end) + '\n;globalThis', {
+    const app = vm.runInNewContext(commitSource + source.slice(start, end) + '\n;globalThis', {
         students: ['Alice', 'Bob'], selectedStudent: 'Alice',
         wftTextInput: async () => Object.hasOwn(options, 'name') ? options.name : 'Alicia', wftConfirm: async () => options.confirm !== false,
         getPortfolioData: () => JSON.parse(stored),
         savePortfolioData: data => { if (options.failSave) throw new Error('Storage full'); stored = JSON.stringify(data); events.push('portfolio-save'); },
-        clearStudentDeletion: name => events.push('restore:' + name),
-        recordStudentDeletion: name => events.push('delete:' + name),
-        updateStudentRecordOnRename: (oldName, newName) => events.push('record:' + oldName + ':' + newName),
-        localStorage: { setItem: (key, value) => writes.push([key, value]) },
+        getDeletionsData: () => ({ events: [] }), getRawSettings: () => ({}),
+        clearStudentDeletion: (name, data) => data.events.push('restore:' + name),
+        recordStudentDeletion: (name, data) => data.events.push('delete:' + name),
+        saveDeletionsData: data => events.push(...data.events),
+        updateStudentRecordOnRename: (oldName, newName, settings) => { settings.recordEvent = 'record:' + oldName + ':' + newName; },
+        syncSavedPortfolioData() {}, wftSuppressDirtyMarks: true, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions',
+        localStorage: { getItem: () => null, setItem: (key, value) => { writes.push([key, value]); if (key === 'wft_students') events.push('roster-save'); if (key === 'wft_settings') events.push(JSON.parse(value).recordEvent); } },
         saveStudents: () => events.push('roster-save'),
         document: { getElementById: () => null }, renderStudentList() {}, populateStudentDropdown() {},
         refreshPortfolioDropdown() {}, renderStudentPortfolio() {}, updateExportSelectedStudentButton() {},
@@ -44,7 +50,7 @@ function setup(options = {}) {
     assert.equal(saved.Alicia.sessions[0].originalText, 'Keep this writing');
     assert.equal(saved.Alice, undefined);
     assert.deepEqual(saved.Bob, success.original.Bob);
-    assert.deepEqual(success.events, ['portfolio-save', 'restore:Alicia', 'delete:Alice', 'record:Alice:Alicia', 'roster-save']);
+    assert.deepEqual(success.events, ['portfolio-save', 'restore:Alicia', 'delete:Alice', 'roster-save', 'record:Alice:Alicia']);
     assert.deepEqual(Array.from(success.app.students), ['Alicia', 'Bob']);
     assert.equal(success.app.selectedStudent, 'Alicia');
     const casing = setup({ name: 'ALICE' });
