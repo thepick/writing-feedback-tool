@@ -1,21 +1,24 @@
 # Repowise audit progress
 
-Updated 2026-10-11T17:12:25.654Z; timezone Asia/Bangkok. All662 original IDs retained, 933 total individually tracked rows. Original outcomes: {"no_code_change":267,"confirmed_awaiting_fix":146,"behavior_fixed_metric_review_pending":14,"pending":211,"fixed_in_draft_pr":24}. Scanner absence never implies resolution.
+Updated 2026-10-11T18:08:00.051Z; timezone Asia/Bangkok. All 662 original IDs retained, 959 total tracked rows. Original outcomes: {"no_code_change":349,"confirmed_awaiting_fix":167,"behavior_fixed_metric_review_pending":11,"pending":111,"fixed_in_draft_pr":24}. Scanner absence does not imply resolution.
 
-- [SYNC-001](https://github.com/thepick/writing-feedback-tool/pull/41), cd35543: Older settings/deletion uploads clear newer pending changes. Worker all23 suites; coordinator focused independent review/verification.
-- [ANALYSIS-001](https://github.com/thepick/writing-feedback-tool/pull/42), ef41631: Async analysis reads changed student and writing at completion. Worker all24 suites; coordinator focused independent review/verification.
-- [SYNC-002](https://github.com/thepick/writing-feedback-tool/pull/43), 9b8254f: Pending portfolio push overwrites distinct remote sessions for the same student. Worker all24 suites; coordinator focused independent review/verification.
-- [STORAGE-001](https://github.com/thepick/writing-feedback-tool/pull/44), 9c26ded: Failed deletion marker write reports a successful student removal. Worker all26 suites; coordinator focused independent review/verification.
-- [STORAGE-002](https://github.com/thepick/writing-feedback-tool/pull/45), 882e045: Unreadable existing portfolio is overwritten as an empty portfolio. Worker all27 suites; coordinator focused independent review/verification.
-- [SECURITY-001](https://github.com/thepick/writing-feedback-tool/pull/46), 842ec61: Student portfolio HTML export executes untrusted score and photo markup. Worker all28 suites; coordinator focused independent review/verification.
-- [PHOTO-001](https://github.com/thepick/writing-feedback-tool/pull/47), a4e8ba6: Delayed crop callback changes another student/photo after cancellation. Worker all29 suites; coordinator focused independent review/verification.
+- SYNC-001: Older settings/deletion uploads clear newer pending changes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/41)
+- ANALYSIS-001: Async analysis reads changed student and writing at completion. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/42)
+- SYNC-002: Pending portfolio push overwrites distinct remote sessions for the same student. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/43)
+- STORAGE-001: Failed deletion marker write reports a successful student removal. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/44)
+- STORAGE-002: Unreadable existing portfolio is overwritten as an empty portfolio. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/45)
+- SECURITY-001: Student portfolio HTML export executes untrusted score and photo markup. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/46)
+- PHOTO-001: Delayed crop callback changes another student/photo after cancellation. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/47)
+- SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
+- PENDING-001: Photo completion commits and clears a newer pending assessment. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
+- PHOTO-002: Cropped uploaded photo keeps the original Drive reference and loses its changed bytes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
 
 Confirmed remaining queue; one repair chat and repository writer at a time:
 
 - FEEDBACK-001: Missing scores are described as poor performance
 - CLEANUP-001: Remove unshipped helper copies and unused bundled helper islands
 - SYNC-003: Same-image merge overwrites newer photo reference with older metadata
-- SECURITY-002: Untrusted photo identity key mutates Object.prototype during sync
+- SECURITY-002: Inherited identity keys drop records and mutate shared object properties
 - ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy
 - SETTINGS-001: Failed preference save is acknowledged and schedules sync
 - ARCHIVE-001: Unused archive-removal helper writes a mismatched legacy session marker
@@ -25,22 +28,25 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - PERF-001: Correction comparison blocks the UI with a full repeated token matrix
 - API-001: Missing API key triggers futile fallback retries and delayed error
 - STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing
-- SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing
 - PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores
 - GUIDE-001: Notebook punctuation and spelling changes receive incorrect teaching labels
 - GUIDE-002: Notebook paragraph revisions lose their separation before display
 - STORAGE-003: Corrupt deletion history is overwritten as empty
 - DELETIONS-001: Enabled experimental deletion compaction recurses indefinitely
 - FEEDBACK-002: Flow adjustment converts an explicitly missing detailed score to zero
-- FLOW-001: Inherited token name breaks sentence-starter repetition counting
-- PENDING-001: Photo completion commits and clears a newer pending assessment
+- FLOW-001: Inherited token names break repetition, grammar and title keyword lookups
 - GUIDE-003: Separate notebook action lines are collapsed into one checklist item
-- PHOTO-002: Cropped uploaded photo keeps the original Drive reference and loses its changed bytes
+- KEY-001: Failed credential storage migration loses a key and failed forgetting silently restores it
+- SETTINGS-002: Unreadable existing preferences are replaced with current defaults
+- STORAGE-004: Adding a student overwrites unreadable existing roster history
+- EXPORT-001: Same-day photos with the same name share one export filename
 
-Current indexed commit a4e8ba6:696 health rows,147 refactoring plans,24 performance opportunities including explicit investigate,15 dead-code entries; scanner security/doc drift0. Two derived actions tracked, including coverage report ingestion still pending. All source shapes and derived suggestions require concrete individual evidence; repaired behavior does not automatically close shape metrics. CLEANUP-001 now covers103 original findings, including unreachable helper copies/islands and exact redundant parser fallback.
+Current indexed source 2897358574960b8077fd51a445d50014cf0b3eee: 705 health rows, 149 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies. No coverage was ingested from the preparation run.
 
-Coordinator source reviews include actual bounded sample/feedback/notebook/record dependencies, optional UI/cache boundaries and independent regression matrices. Individual details and scope limits are in audit-ledger.json. PHOTO-001 complete:38 crop cases pass independently,33 fail on base. PHOTO-002 reproduced separately: changed uploaded photo bytes skipped by uploader and stripped from storage while old Drive ID survives. Next related repair is SYNC-004/PENDING-001/PHOTO-002.
+No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
-Known limits: localStorage multi-key writes are not crash-atomic; if rollback writes fail, preserved bytes remain in the open tab until exported/recovered. Forced closing can lose that buffer. Corrupt portfolio bytes are protected but require manual recovery. Normal Google sign-out retains local writing. Experimental deletion compaction defaults false and its enabled recursion is separately queued. Browser checks use synthetic data and intercepted services; no live Drive writes, real student records, paid AI, merge or deployment. Coverage ingestion and remaining source reviews are open.
+Source-specific reviews and validation scopes are recorded per finding. Recent independent checks include crop38/38, safe portfolio/export HTML25/25, analysis identity22/22, feedback rendering19 checks, flow/grammar10 checks, export output equality and buffer/join timings at10/100/500 sessions, native keyboard/word-count/selection display, handwriting13 outcomes, photo eligibility5, archive dates7, and pending/replacement storage/Sync failure tests. These checks support individual dispositions, not universal correctness or teaching calibration. Newly reproduced roster corruption, inherited-name import and duplicate photo export paths remain queued. Cleanup covers103 original findings; derived extraction suggestions are assessed using their linked source evidence.
 
-Platform restrictions will be recorded for the particular blocked check; other authorized work continues without bypassing restrictions. PHOTO-001 writer stopped; coordinator checkpoint before next sole writer.
+Known limits: localStorage writes across multiple keys are not crash-atomic. A failed rollback keeps recovery bytes in the open tab; forced closing can lose that buffer. Quota fallback preserves in-memory unuploaded photos but cannot restore those bytes after reload. Corrupt primary bytes are protected by reviewed strict readers where repaired and still require recovery; remaining required-reader defects are queued. Normal Google sign-out retains local writing. Experimental split/identity/compaction flags are scoped separately in the evidence. Browser checks use synthetic data and intercepted services. No live Drive writes, real student records, paid AI, merge or deployment.
+
+Platform restrictions, if encountered, are recorded for the specific check. Other authorized repairs continue without bypassing restrictions.
