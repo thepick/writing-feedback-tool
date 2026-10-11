@@ -4026,20 +4026,31 @@ function captureWftArchiveClassState() {
 function clearCurrentClassAfterSuccessfulArchive(expectedState) {
     if (expectedState !== undefined && captureWftArchiveClassState() !== expectedState) return false;
     getLocalPortfolioSnapshot();
-    saveWftStudentChange({ portfolio: {}, deletions: getEmptyDeletionsData(), students: [], selectedStudent: "" });
-
-    renderStudentList();
-    populateStudentDropdown();
+    var change = { portfolio: {}, deletions: getEmptyDeletionsData(), students: [], selectedStudent: "" };
+    try {
+        saveWftStudentChange(change);
+    } catch (e) {
+        if (!change.committed) throw e;
+        students = change.students;
+        selectedStudent = change.selectedStudent;
+        wftDebugWarn("[WFT Archive] Class cleared; sync publication needs retry:", e);
+    }
 
     try {
+        renderStudentList();
+        populateStudentDropdown();
         refreshPortfolioDropdown();
         renderStudentPortfolio();
     } catch (e) {
         wftDebugWarn("[WFT Archive] Could not refresh UI after clearing class:", e);
     }
 
-    if (typeof scheduleWftDriveSync === "function") {
-        scheduleWftDriveSync("archive-clear-current-class");
+    try {
+        if (typeof scheduleWftDriveSync === "function") {
+            scheduleWftDriveSync("archive-clear-current-class");
+        }
+    } catch (e) {
+        wftDebugWarn("[WFT Archive] Class cleared; sync scheduling needs retry:", e);
     }
     return true;
 }

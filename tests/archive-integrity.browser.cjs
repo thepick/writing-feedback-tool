@@ -191,6 +191,18 @@ const check = (name, value, expected) => {
             return { failedKept, cleared: Object.keys(getLocalPortfolioSnapshot()).length === 0, bytes: new TextDecoder().decode(new Uint8Array(files[photo])), calls: [archiveCalls.uploads, archiveCalls.downloads] };
         });
         check('failed requested photo retry recovers bytes and normal clear', retry, { failedKept: true, cleared: true, bytes: 'recovered photo bytes', calls: [1, 1] });
+        for (const boundary of ['renderStudentList', 'populateStudentDropdown', 'refreshPortfolioDropdown', 'renderStudentPortfolio', 'scheduleWftDriveSync', 'scheduleWftCloudSync']) {
+            const result = await page.evaluate(async boundary => {
+                seedArchive(); const original = globalThis[boundary];
+                wftSyncState.pendingPortfolioPush = wftSyncState.pendingSettingsPush = wftSyncState.pendingDeletionsPush = false;
+                globalThis[boundary] = () => { throw Error('Synthetic postcommit ' + boundary + ' failure'); };
+                await archiveCurrentSchoolYear(); await settleArchive(); globalThis[boundary] = original;
+                return { cleared: Object.keys(getLocalPortfolioSnapshot()).length === 0 && localStorage.getItem('wft_students') === '[]', runtime: [students.length, selectedStudent], calls: archiveCalls, dirty: [wftSyncState.pendingPortfolioPush, wftSyncState.pendingSettingsPush, wftSyncState.pendingDeletionsPush] };
+            }, boundary);
+            check(`postcommit/${boundary}/committed clear`, [result.cleared, result.runtime], [true, [0, '']]);
+            check(`postcommit/${boundary}/truthful clear message`, result.calls.alerts.some(x => /current class cleared/.test(x) && !/retain/i.test(x)), true);
+            check(`postcommit/${boundary}/dirty streams retained for retry`, result.dirty, [true, true, true]);
+        }
         // Exercise actual app name/confirmation dialogs: changes before the snapshot belong in it.
         for (const stage of ['input', 'confirmation']) {
             await page.evaluate(() => { seedArchive(); wftTextInput = realArchiveInput; wftConfirm = realArchiveConfirm; globalThis.dialogArchiveDone = false; archiveCurrentSchoolYear().finally(() => dialogArchiveDone = true); });

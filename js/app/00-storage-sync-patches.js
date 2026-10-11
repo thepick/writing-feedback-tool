@@ -5562,6 +5562,7 @@ function recordSessionDeletion(studentName, sessionId, deletions) {
 }
 
 function saveWftStudentChange(change) {
+    change.committed = false;
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) {
         if (!restoreWftStudentChangeStorage(wftStudentChangeRecovery)) throw getWftStudentChangeRecoveryError();
         wftStudentChangeRecovery = null;
@@ -5595,16 +5596,20 @@ function saveWftStudentChange(change) {
         }
         throw e;
     }
+    // Publication/refresh errors after this point cannot roll back the committed class change.
+    change.committed = true;
     if (rosterChanged) {
         students = change.students;
         if (selectedStudent !== change.selectedStudent && typeof closeCropModal === "function") closeCropModal();
         selectedStudent = change.selectedStudent;
     }
     if (!wftSuppressDirtyMarks) {
-        if (savedPortfolio !== undefined) syncSavedPortfolioData(savedPortfolio);
         if (WFT_SYNC_ENGINE_V2) {
             if (rosterChanged) markWftSettingsDirty('roster-change');
             if (change.deletions !== undefined) markWftDeletionsDirty('deletions-change');
+        }
+        if (savedPortfolio !== undefined) syncSavedPortfolioData(savedPortfolio);
+        if (WFT_SYNC_ENGINE_V2) {
             scheduleWftCloudSync('student-change');
         }
     }
