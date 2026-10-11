@@ -8551,8 +8551,10 @@ function persistPendingPortfolioSync() {
         } catch (e) {
             wftDebugWarn('Pending portfolio save exceeded localStorage; saving without embedded image data.', e);
             try {
-                pendingPortfolioSync = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
-                localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(pendingPortfolioSync));
+                // Keep the full in-memory photos available for the pending Drive upload.
+                // shortcut: quota fallback cannot restore unuploaded photos after reload; add durable media storage if reload recovery is needed.
+                var cleaned = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
+                localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(cleaned));
             } catch (e2) {
                 wftDebugError('Pending portfolio save retry also failed:', e2);
                 throw e2;
