@@ -97,7 +97,8 @@ const check = (name, value, expected) => {
                 bytes = Array.from(new Uint8Array(await result.blob.arrayBuffer()));
                 const files = await readArchive(result.blob), paths = Object.keys(files);
                 const html = paths.filter(n => /\/Students\/[^/]+\/Portfolio\.html$/.test(n)).map(n => new TextDecoder().decode(new Uint8Array(files[n])));
-                exports.push({ paths, individualEssays: names.map((name, j) => html.filter(text => text.includes('Synthetic folder essay #' + j)).length), studentFolders: html.length });
+                const portfolio = JSON.parse(new TextDecoder().decode(new Uint8Array(files[paths.find(n => n.endsWith('Complete Portfolio.json'))])));
+                exports.push({ paths, individualEssays: names.map((name, j) => html.filter(text => text.includes('Synthetic folder essay #' + j)).length), studentFolders: html.length, labelsPreserved: names.every(name => Object.hasOwn(portfolio, name) && html.some(text => text.includes('<h1>' + escapeHtml(name) + ' &mdash;'))) });
             }
             return { exports, bytes };
         });
@@ -105,6 +106,7 @@ const check = (name, value, expected) => {
         check('distinct case/sanitized/explicit-suffix/trailing-dot/CON-vs-_CON/ordinary-key student folders', folderCase.exports[0].studentFolders, 10);
         check('each real ZIP individual portfolio retains its own essay', folderCase.exports[0].individualEssays, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
         check('student folder paths deterministic across identical exports', folderCase.exports[0].paths, folderCase.exports[1].paths);
+        check('Windows-safe paths preserve original HTML and JSON student labels', folderCase.exports[0].labelsPreserved, true);
         if (process.env.WFT_TEST_ARTIFACT_DIR) fs.writeFileSync(path.join(process.env.WFT_TEST_ARTIFACT_DIR, 'synthetic-student-folders.zip'), Buffer.from(folderCase.bytes));
         for (const name of ['constructor', 'toString', 'hasOwnProperty', 'Alice <img src=x onerror=alert(1)>']) {
             const result = await page.evaluate(async name => { seedArchive([], name); const zip = await createSingleStudentArchiveZip(name); const files = await readArchive(zip.blob); return { count: Object.keys(files).length, safe: !new TextDecoder().decode(new Uint8Array(Object.values(files)[0])).includes('<img src=x') }; }, name);
