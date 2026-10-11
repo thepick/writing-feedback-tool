@@ -106,6 +106,7 @@ function updateSelectedStudent() {
     var select = document.getElementById("studentSelect");
     selectedStudent = select ? select.value : "";
     localStorage.setItem("wft_selectedStudent", selectedStudent);
+    syncUiState();
     try { updateSyncPortfolioButtonState(); } catch (e) {}
 }
 
@@ -571,6 +572,16 @@ function parseRubricScore(raw) {
 var isAnalyzing = false;
 var cancelAnalysis = false;
 var analysisAbortController = null;
+var activeAnalysisContext = null;
+
+function assertCurrentAnalysisContext(context) {
+    if (activeAnalysisContext !== context || context.cancelled || cancelAnalysis) {
+        throw new Error("Analysis cancelled by user.");
+    }
+    if (!isCurrentWritingContext(context.input)) {
+        throw new Error("Writing changed. Analyze the current writing again.");
+    }
+}
 
 var SAMPLE_STATUS_CONFIG = {
     insufficient: {
@@ -2900,6 +2911,7 @@ function normalizeOpenRouterError(prefix, err, attempts) {
 }
 
 async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, options) {
+    var requestContext = typeof activeAnalysisContext !== "undefined" ? activeAnalysisContext : null;
     if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
     if (!analysisAbortController) analysisAbortController = new AbortController();
 
@@ -2912,9 +2924,11 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
     for (var m = 0; m < models.length; m++) {
         var model = models[m];
         for (var attempt = 0; attempt <= maxRetriesPerModel; attempt++) {
+            if (requestContext) assertCurrentAnalysisContext(requestContext);
             if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
+            var requestController = analysisAbortController;
             var timeoutId = setTimeout(function() {
-                if (analysisAbortController) analysisAbortController.abort();
+                requestController.abort();
             }, 90000);
             try {
                 var payload = payloadBuilder(model);
@@ -2931,11 +2945,12 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                         "X-OpenRouter-Title": "Writing Feedback Tool"
                     },
                     body: JSON.stringify(payload),
-                    signal: analysisAbortController.signal
+                    signal: requestController.signal
                 });
                 // Headers can arrive while the body stalls; keep the timeout through the body read.
                 var rawText = await res.text();
                 clearTimeout(timeoutId);
+                if (requestContext) assertCurrentAnalysisContext(requestContext);
                 var data;
                 try {
                     data = JSON.parse(rawText);
@@ -2969,6 +2984,7 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                 return data.choices[0].message.content;
             } catch (e) {
                 clearTimeout(timeoutId);
+                if (requestContext) assertCurrentAnalysisContext(requestContext);
                 if (e && e.name === "AbortError") {
                     if (cancelAnalysis) {
                         throw new Error("Analysis cancelled by user.");
@@ -4357,7 +4373,7 @@ function updateSelectedImagePreview() {
         if (panelBody) panelBody.classList.remove("has-photos");
         setOcrStatus("Upload or drag an image, then extract the text.", "");
     }
-    updateOcrControls();
+    syncUiState();
 }
 
 function fileToDataUrl(file) {
@@ -4413,6 +4429,7 @@ async function handleSelectedImages(files) {
     }
 
     var existingCount = selectedImages.length;
+    var context = captureCurrentWritingContext();
     setOcrStatus(imageFiles.length === 1 ? "Preparing image..." : "Preparing " + imageFiles.length + " images...", "");
     updateOcrControls();
 
@@ -4429,6 +4446,7 @@ async function handleSelectedImages(files) {
                 driveFileId: ''
             });
         }
+        if (!isCurrentWritingContext(context)) return;
         selectedImages = selectedImages.concat(prepared);
         syncSelectedImageState();
         updateSelectedImagePreview();
@@ -4440,6 +4458,7 @@ async function handleSelectedImages(files) {
             setOcrStatus(String(prepared.length) + " images added. " + String(selectedImages.length) + " images are now queued in the order shown.", "");
         }
     } catch (e) {
+        if (!isCurrentWritingContext(context)) return;
         syncSelectedImageState();
         updateSelectedImagePreview();
         syncUiState();
@@ -4739,6 +4758,7 @@ async function extractTextFromSelectedImage(isAutomatic) {
     // a MouseEvent as the first argument. Treat only a literal true as automatic.
     // This keeps the OCR path independent from button events and Google Drive sign-in.
     isAutomatic = isAutomatic === true;
+    if (isAnalyzing && !isAutomatic) return "";
 
     if (!selectedImages.length) {
         setOcrStatus("Choose an image first.", "error");
@@ -4757,6 +4777,13 @@ async function extractTextFromSelectedImage(isAutomatic) {
         if (selectedImageExtractedText) return selectedImageExtractedText;
     }
 
+    var context = isAutomatic ? activeAnalysisContext : { input: captureCurrentWritingContext(), cancelled: false };
+    if (!isAutomatic) {
+        activeAnalysisContext = context;
+        cancelAnalysis = false;
+        analysisAbortController = new AbortController();
+    }
+    var images = selectedImages.slice();
     isAnalyzing = true;
     syncUiState();
     var extractBtn = document.getElementById("extractTextBtn");
@@ -4778,8 +4805,9 @@ async function extractTextFromSelectedImage(isAutomatic) {
     selectedImageExtractionPromise = (async function() {
         try {
             var combinedParts = [];
-            for (var i = 0; i < selectedImages.length; i++) {
-                var item = selectedImages[i];
+            for (var i = 0; i < images.length; i++) {
+                assertCurrentAnalysisContext(context);
+                var item = images[i];
                 var extracted = "";
                 if (item.extractedText) {
                     extracted = item.extractedText;
@@ -4791,6 +4819,7 @@ async function extractTextFromSelectedImage(isAutomatic) {
                         ""
                     );
                     extracted = await callOpenRouterImage(OCR_MODEL, prompt, item.dataUrl || "");
+                    assertCurrentAnalysisContext(context);
                     extracted = String(extracted || "").replace(/^```[a-zA-Z]*\n?/, "").replace(/```$/, "").trim();
                     item.extractedText = extracted;
                 }
@@ -4800,9 +4829,11 @@ async function extractTextFromSelectedImage(isAutomatic) {
             }
 
             var combinedText = combinedParts.join("\n\n").trim();
+            assertCurrentAnalysisContext(context);
             syncSelectedImageState();
             selectedImageExtractedText = selectedImages.length === 1 ? combinedText : "";
             document.getElementById("studentWriting").value = combinedText;
+            context.input.writingText = combinedText;
             syncUiState();
             setOcrStatus(
                 selectedImages.length > 1
@@ -4813,13 +4844,20 @@ async function extractTextFromSelectedImage(isAutomatic) {
             document.getElementById("studentWriting").focus();
             return combinedText;
         } catch (e) {
-            setOcrStatus(e.message || "Text extraction failed.", "error");
+            if (activeAnalysisContext === context) setOcrStatus(e.message || "Text extraction failed.", "error");
             throw e;
         } finally {
-            selectedImageExtractionPromise = null;
-            isAnalyzing = false;
-            setLoadingButtonState(document.getElementById("extractTextBtn"), false);
-            syncUiState();
+            if (activeAnalysisContext === context) {
+                selectedImageExtractionPromise = null;
+                if (!isAutomatic) {
+                    activeAnalysisContext = null;
+                    isAnalyzing = false;
+                    cancelAnalysis = false;
+                    analysisAbortController = null;
+                }
+                setLoadingButtonState(document.getElementById("extractTextBtn"), false);
+                syncUiState();
+            }
         }
     })();
 
@@ -8223,7 +8261,7 @@ function buildNotebookReconstructionDataFromSession(session) {
 }
 
 function fillNotebookSummary() {
-    if (!latestAnalysisData) {
+    if (!latestAnalysisData || !isCurrentWritingContext(latestAnalysisData.inputContext)) {
         alert("Please analyze the writing first.");
         return false;
     }
@@ -8644,6 +8682,8 @@ function getPortfolioImageDataUrlForReassessment(image) {
 function restorePortfolioSessionImagesForReassessment(session) {
     var images = session && Array.isArray(session.images) ? session.images : [];
     selectedImages = [];
+    syncSelectedImageState();
+    var context = captureCurrentWritingContext();
     if (!images.length) {
         syncSelectedImageState();
         updateSelectedImagePreview();
@@ -8678,6 +8718,7 @@ function restorePortfolioSessionImagesForReassessment(session) {
     }
 
     return chain.then(function() {
+        if (!isCurrentWritingContext(context)) return null;
         selectedImages = restored;
         syncSelectedImageState();
         updateSelectedImagePreview();
@@ -8734,6 +8775,7 @@ async function reassessPortfolioSession(studentName, sessionId) {
     syncUiState();
 
     restorePortfolioSessionImagesForReassessment(session).then(function(result) {
+        if (!result) return;
         var shouldUseNeatness = !!(result && result.restored > 0 && (session.neatnessAssessed || session.assessScriptQuality || session.sourceType === "typed+photo"));
         setNeatnessForPortfolioReassessment(shouldUseNeatness);
         if (result && result.total > 0 && result.restored === 0) {
@@ -8812,6 +8854,16 @@ function syncUiState() {
     var btn = document.getElementById("analyzeBtn");
     var stopBtn = document.getElementById("stopAnalysisBtn");
     if (!ta || !btn) return;
+    if (latestAnalysisData && !isCurrentWritingContext(latestAnalysisData.inputContext)) {
+        latestAnalysisData = null;
+        correctedHtmlForDiff = "";
+        originalTextForDiff = "";
+        updateScoreDisplay(null);
+        document.getElementById("correctedStory").textContent = "No corrected story yet.";
+        document.getElementById("detailedAssessment").textContent = "Analyze the current writing for feedback.";
+        document.getElementById("growGoalBox").textContent = "No grow goal yet.";
+        renderTeacherAuditView(null);
+    }
     var hasText = ta.value.trim().length > 0;
     btn.disabled = isAnalyzing || !hasText;
     if (stopBtn) stopBtn.disabled = !isAnalyzing;
@@ -8822,6 +8874,7 @@ function syncUiState() {
     updateGenreReviewBox();
     // Also update analyze button pulse animation
     updateAnalyzeBtnState();
+    updateSyncPortfolioButtonState();
 }
 
 
@@ -8852,19 +8905,13 @@ function setLoadingButtonState(button, isLoading, busyLabel) {
 
 
 async function analyzeWriting() {
+    if (isAnalyzing) return;
     var text = document.getElementById("studentWriting").value.trim();
     var targetWords = getEffectiveTargetWordCount();
     var model = document.getElementById("modelSelect").value;
     // FIX O2: Resolve grade profile right at the start, before any early exits.
     var gradeProfile = getGradeProfile();
-    if (!text && selectedImages && selectedImages.length) {
-        try {
-            text = String(await extractTextFromSelectedImage(true) || "").trim();
-        } catch (e) {
-            wftDebugError("Automatic text extraction before analysis failed:", e);
-        }
-    }
-    if (!text) {
+    if (!text && !(selectedImages && selectedImages.length)) {
         alert("Please paste student writing first.");
         return;
     }
@@ -8874,6 +8921,9 @@ async function analyzeWriting() {
     isAnalyzing = true;
     cancelAnalysis = false;
     analysisAbortController = new AbortController();
+    syncSelectedImageState();
+    var context = { input: captureCurrentWritingContext(), cancelled: false };
+    activeAnalysisContext = context;
     btn.disabled = true;
     btn.classList.remove('pulse-ready');  // Stop pulse during analysis
     setLoadingButtonState(btn, true, "Analyzing...");
@@ -8882,6 +8932,18 @@ async function analyzeWriting() {
     stopBtn.disabled = false;
 
     try {
+        if (!text) {
+            text = String(await extractTextFromSelectedImage(true) || "").trim();
+            assertCurrentAnalysisContext(context);
+            if (!text) {
+                alert("Please paste student writing first.");
+                return;
+            }
+            document.getElementById("studentWriting").value = text;
+            context.input.writingText = text;
+        }
+        assertCurrentAnalysisContext(context);
+        originalTextForDiff = context.input.writingText;
         var actualWords = countWords(text);
         var writingGenreInfo = getWritingGenreInfoFromUi(text);
         currentWritingGenreInfo = writingGenreInfo;
@@ -8891,6 +8953,7 @@ async function analyzeWriting() {
         if (sampleStatus.status !== "scorable") {
             var lowSample = buildLowSampleAnalysis(text, sampleStatus);
             latestAnalysisData = {
+                inputContext: context.input,
                 overall: null,
                 gradeLevel: gradeProfile.grade,
                 gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
@@ -8935,6 +8998,7 @@ async function analyzeWriting() {
 
         var step1Prompt = buildStep1Prompt(text, gradeProfile);
         var step1 = await callOpenRouter(model, step1Prompt);
+        assertCurrentAnalysisContext(context);
         var parsed1 = parseStep1(step1, text, targetWords);
 
         var correctedText = parsed1.correctedStory || text;
@@ -8952,6 +9016,7 @@ async function analyzeWriting() {
 
         var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, writingGenreInfo);
         var step2 = await callOpenRouter(model, step2Prompt);
+        assertCurrentAnalysisContext(context);
         parsed1.quickRubric = parseStep2QuickRubric(step2, text, targetWords);
         var eligibility = getCategoryEligibility(sampleStatus);
         applyEligibilityToQuickRubric(parsed1.quickRubric, eligibility);
@@ -8961,6 +9026,7 @@ async function analyzeWriting() {
         var pendingNeatnessDetail = null;
         if (shouldAssessNeatness() && selectedImageDataUrl) {
             var neatnessResult = await assessNeatnessFromImage(selectedImageDataUrl, model);
+            assertCurrentAnalysisContext(context);
             if (neatnessResult) {
                 parsed1.quickRubric["Neatness"] = neatnessResult.quickRubric;
                 var nqr = neatnessResult.quickRubric || {};
@@ -8988,6 +9054,7 @@ async function analyzeWriting() {
         });
         var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo, text, notebookGuidePriorities);
         var step3 = await callOpenRouter(model, step3Prompt);
+        assertCurrentAnalysisContext(context);
         var detailed = parseDetailedAssessment(step3, text, writingGenreInfo);
         detailed.writingGenre = writingGenreInfo;
         if (detailed.keepWriting) detailed.keepWriting = sanitizeGenreReferenceInFeedback(detailed.keepWriting, writingGenreInfo);
@@ -9138,6 +9205,7 @@ async function analyzeWriting() {
         detailed.nextTime = goalPlan.nextTime;
 
         latestAnalysisData = {
+            inputContext: context.input,
             overall: overall,
             gradeLevel: gradeProfile.grade,
             gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
@@ -9225,15 +9293,19 @@ async function analyzeWriting() {
             "Word count adjustment:\n" + JSON.stringify(adjustment, null, 2);
 
     } catch (e) {
+        if (activeAnalysisContext !== context) return;
         if (e.message === "Analysis cancelled by user.") {
             document.getElementById("debugRaw").textContent = "Analysis stopped by user.";
-            renderTeacherAuditView(null);
+        } else if (!isCurrentWritingContext(context.input)) {
+            document.getElementById("debugRaw").textContent = "Writing changed. Analyze the current writing again.";
         } else {
             document.getElementById("debugRaw").textContent = "Error:\n" + e.message;
             alert("Analysis failed. See Debug for details.");
             showTeacherReview();
         }
     } finally {
+        if (activeAnalysisContext !== context) return;
+        activeAnalysisContext = null;
         isAnalyzing = false;
         cancelAnalysis = false;
         analysisAbortController = null;
@@ -9252,6 +9324,7 @@ async function analyzeWriting() {
 function requestStopAnalysis() {
     if (!isAnalyzing) return;
     cancelAnalysis = true;
+    if (activeAnalysisContext) activeAnalysisContext.cancelled = true;
     var debugEl = document.getElementById("debugRaw");
     if (debugEl) debugEl.textContent = "Stopping analysis...";
     var stopBtn = document.getElementById("stopAnalysisBtn");
@@ -9265,6 +9338,7 @@ function requestStopAnalysis() {
 }
 
 function clearWritingArea() {
+    activePortfolioReassessmentSource = null;
     var ta = document.getElementById("studentWriting");
     if (ta) {
         ta.value = '';
