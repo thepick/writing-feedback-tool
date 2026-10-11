@@ -3135,8 +3135,9 @@ function sanitizeFileName(name) {
         .replace(/[\\\/:*?"<>|]/g, "-")
         .replace(/\s+/g, " ")
         .trim();
-    if (!safe) safe = "Untitled";
-    return safe.substring(0, 120);
+    if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(safe)) safe = "_" + safe;
+    safe = safe.substring(0, 120).replace(/[. ]+$/, "");
+    return safe || "Untitled";
 }
 
 function getUniqueFolderName(baseName, usedNames) {

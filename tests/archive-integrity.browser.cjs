@@ -88,7 +88,7 @@ const check = (name, value, expected) => {
         check('hostile writing escaped in standalone HTML', photos.runs[0].html.includes('<img src=x'), false);
         const folderCase = await page.evaluate(async () => {
             seedArchive();
-            const names = ['Alice', 'ALICE', 'Alice (2)', 'Al/ice', 'Al:ice', '__proto__', 'constructor'];
+            const names = ['Alice', 'ALICE', 'Alice (2)', 'Al/ice', 'Al:ice', '__proto__', 'constructor', 'Alice.', 'CON', '_CON'];
             localStorage.setItem('wft_portfolio', JSON.stringify(Object.fromEntries(names.map((name, i) => [name, { sessions: [{ id: 'folder-' + i, originalText: 'Synthetic folder essay #' + i }] }]))));
             const exports = [];
             let bytes;
@@ -102,8 +102,8 @@ const check = (name, value, expected) => {
             return { exports, bytes };
         });
         check('student folder paths survive case-insensitive extraction', new Set(folderCase.exports[0].paths.map(n => n.toLowerCase())).size, folderCase.exports[0].paths.length);
-        check('distinct case/sanitized/explicit-suffix/ordinary-key student folders', folderCase.exports[0].studentFolders, 7);
-        check('each real ZIP individual portfolio retains its own essay', folderCase.exports[0].individualEssays, [1, 1, 1, 1, 1, 1, 1]);
+        check('distinct case/sanitized/explicit-suffix/trailing-dot/CON-vs-_CON/ordinary-key student folders', folderCase.exports[0].studentFolders, 10);
+        check('each real ZIP individual portfolio retains its own essay', folderCase.exports[0].individualEssays, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
         check('student folder paths deterministic across identical exports', folderCase.exports[0].paths, folderCase.exports[1].paths);
         if (process.env.WFT_TEST_ARTIFACT_DIR) fs.writeFileSync(path.join(process.env.WFT_TEST_ARTIFACT_DIR, 'synthetic-student-folders.zip'), Buffer.from(folderCase.bytes));
         for (const name of ['constructor', 'toString', 'hasOwnProperty', 'Alice <img src=x onerror=alert(1)>']) {
