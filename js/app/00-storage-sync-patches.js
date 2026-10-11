@@ -6267,6 +6267,7 @@ function savePortfolioLocalOnly(portfolio, reason) {
         localStorage.setItem("wft_portfolio", JSON.stringify(portfolio || {}));
     } catch (e) {
         wftDebugWarn("[WFT Sync] Could not save merged portfolio locally:", e);
+        throw e;
     }
 }
 
@@ -6288,8 +6289,22 @@ function syncWftPortfolioIfNeeded(reason) {
     var hadPending = wftSyncState.pendingPortfolioPush;
     wftSyncLog("[WFT Sync] portfolio local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: Object.keys(localPortfolio || {}).length });
 
+    function hasNewerLocalPortfolio() {
+        if (wftSyncState.localPortfolioCounter === counterSnapshot) return false;
+        // A slow Drive response must not overwrite or acknowledge a newer local save.
+        wftSyncState.needsSyncAfterCurrent = true;
+        return true;
+    }
+
+    function recordPortfolioSync(hash) {
+        wftSyncState.lastSyncedPortfolioHash = hash;
+        wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
+        wftSyncState.pendingPortfolioPush = hasNewerLocalPortfolio();
+    }
+
     return findWftFilesByNamePromise(WFT_PORTFOLIO_FILENAME)
         .then(function (files) {
+            if (hasNewerLocalPortfolio()) return false;
             var canonical;
 
             noteDuplicateWftFiles(WFT_PORTFOLIO_FILENAME, files);
@@ -6308,9 +6323,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 wftSyncLog("[WFT Sync][PORTFOLIO] decision", "create-remote", { localHash: localHash });
                 return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, applyDeletionsToPortfolio(localPortfolio, getDeletionsData())).then(function (fileId) {
                     wftSyncState.portfolioFileId = fileId || wftSyncState.portfolioFileId;
-                    wftSyncState.lastSyncedPortfolioHash = localHash;
-                    wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
-                    wftSyncState.pendingPortfolioPush = false;
+                    recordPortfolioSync(localHash);
                     return true;
                 });
             }
@@ -6322,6 +6335,7 @@ function syncWftPortfolioIfNeeded(reason) {
                 var mergedHash;
 
                 return downloadWftJsonFilePromise(canonical.id).then(function (cloudPortfolio) {
+                    if (hasNewerLocalPortfolio()) return false;
                     cloudNormalized = applyDeletionsToPortfolio(cloudPortfolio || {}, getDeletionsData());
                     cloudHash = getPortfolioFingerprint(cloudNormalized);
                     merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized, hadPending);
@@ -6336,17 +6350,13 @@ function syncWftPortfolioIfNeeded(reason) {
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
                         wftSyncLog("[WFT Sync][PORTFOLIO] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
                         return uploadWftJsonFilePromise(WFT_PORTFOLIO_FILENAME, merged).then(function () {
-                            wftSyncState.lastSyncedPortfolioHash = mergedHash;
-                            wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
-                            wftSyncState.pendingPortfolioPush = false;
+                            recordPortfolioSync(mergedHash);
                             return true;
                         });
                     }
 
                     wftSyncLog("[WFT Sync][PORTFOLIO] decision", mergedHash !== localHash ? "pull-remote" : "skip-same-hash", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending });
-                    wftSyncState.lastSyncedPortfolioHash = mergedHash;
-                    wftSyncState.lastSyncedPortfolioCounter = counterSnapshot;
-                    wftSyncState.pendingPortfolioPush = false;
+                    recordPortfolioSync(mergedHash);
                     return false;
                 });
             });
