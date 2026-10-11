@@ -5563,6 +5563,7 @@ function saveDeletionsLocalOnly(deletions, reason) {
         localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify(normalizeDeletionsData(deletions || {})));
     } catch (e) {
         wftDebugWarn("[WFT Sync] Could not save merged deletions locally:", e);
+        throw e;
     }
 }
 
@@ -5922,24 +5923,20 @@ function saveSettingsLocalOnly(settings, reason) {
     var previousSuppress = wftSuppressDirtyMarks;
 
     try {
-        var existing = {};
-        var raw = localStorage.getItem("wft_settings");
-        if (raw) {
-            try { existing = JSON.parse(raw) || {}; } catch (e) { existing = {}; }
-        }
-
         var merged = cloneWftJson(settings || {});
         wftSuppressDirtyMarks = true;
+
+        if (merged && merged.apiKey) { delete merged.apiKey; }
+        localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
 
         if (typeof applyLoadedSettings === "function") {
             applyLoadedSettings(merged);
         }
 
-        if (merged && merged.apiKey) { delete merged.apiKey; }
-        localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
         refreshApiKeyRuntimeValue();
     } catch (e2) {
         wftDebugWarn("[WFT Sync] Could not save merged settings locally:", e2);
+        throw e2;
     } finally {
         wftSuppressDirtyMarks = previousSuppress;
     }
@@ -5952,6 +5949,13 @@ function syncWftSettingsIfNeeded(reason) {
     var counterSnapshot = wftSyncState.localSettingsCounter;
     var hadPending = wftSyncState.pendingSettingsPush;
     wftSyncLog("[WFT Sync] settings local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, studentCount: localSettings && localSettings.students ? localSettings.students.length : 0 });
+
+    function recordSettingsSync(hash) {
+        wftSyncState.lastSyncedSettingsHash = hash;
+        wftSyncState.lastSyncedSettingsCounter = counterSnapshot;
+        wftSyncState.pendingSettingsPush = wftSyncState.localSettingsCounter !== counterSnapshot;
+        if (wftSyncState.pendingSettingsPush) wftSyncState.needsSyncAfterCurrent = true;
+    }
 
     return findWftFilesByNamePromise(WFT_SETTINGS_FILENAME)
         .then(function (files) {
@@ -5973,9 +5977,7 @@ function syncWftSettingsIfNeeded(reason) {
                 wftSyncLog("[WFT Sync][SETTINGS] decision", "create-remote", { localHash: localHash });
                 return uploadWftJsonFilePromise(WFT_SETTINGS_FILENAME, localSettings).then(function (fileId) {
                     wftSyncState.settingsFileId = fileId || wftSyncState.settingsFileId;
-                    wftSyncState.lastSyncedSettingsHash = localHash;
-                    wftSyncState.lastSyncedSettingsCounter = counterSnapshot;
-                    wftSyncState.pendingSettingsPush = false;
+                    recordSettingsSync(localHash);
                     return true;
                 });
             }
@@ -6011,17 +6013,13 @@ function syncWftSettingsIfNeeded(reason) {
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
                         wftSyncLog("[WFT Sync][SETTINGS] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
                         return uploadWftJsonFilePromise(WFT_SETTINGS_FILENAME, merged).then(function () {
-                            wftSyncState.lastSyncedSettingsHash = mergedHash;
-                            wftSyncState.lastSyncedSettingsCounter = counterSnapshot;
-                            wftSyncState.pendingSettingsPush = false;
+                            recordSettingsSync(mergedHash);
                             return true;
                         });
                     }
 
                     wftSyncLog("[WFT Sync][SETTINGS] decision", mergedHash !== localHash ? "pull-remote" : "skip-same-hash", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending });
-                    wftSyncState.lastSyncedSettingsHash = mergedHash;
-                    wftSyncState.lastSyncedSettingsCounter = counterSnapshot;
-                    wftSyncState.pendingSettingsPush = false;
+                    recordSettingsSync(mergedHash);
                     return false;
                 });
             });
@@ -6038,6 +6036,13 @@ function syncWftDeletionsIfNeeded(reason) {
     var counts = getWftDeletionCounts(localDeletions);
 
     wftSyncLog("[WFT Sync] deletions local snapshot", { hash: localHash, counter: counterSnapshot, hadPending: hadPending, deletedStudents: counts.students, restoredStudents: counts.restores, deletedSessions: counts.sessions });
+
+    function recordDeletionsSync(hash) {
+        wftSyncState.lastSyncedDeletionsHash = hash;
+        wftSyncState.lastSyncedDeletionsCounter = counterSnapshot;
+        wftSyncState.pendingDeletionsPush = wftSyncState.localDeletionsCounter !== counterSnapshot;
+        if (wftSyncState.pendingDeletionsPush) wftSyncState.needsSyncAfterCurrent = true;
+    }
 
     return findWftFilesByNamePromise(WFT_DELETIONS_FILENAME)
         .then(function (files) {
@@ -6059,9 +6064,7 @@ function syncWftDeletionsIfNeeded(reason) {
                 wftSyncLog("[WFT Sync][DELETIONS] decision", "create-remote", { localHash: localHash });
                 return uploadWftJsonFilePromise(WFT_DELETIONS_FILENAME, localDeletions).then(function (fileId) {
                     wftSyncState.deletionsFileId = fileId || wftSyncState.deletionsFileId;
-                    wftSyncState.lastSyncedDeletionsHash = localHash;
-                    wftSyncState.lastSyncedDeletionsCounter = counterSnapshot;
-                    wftSyncState.pendingDeletionsPush = false;
+                    recordDeletionsSync(localHash);
                     return true;
                 });
             }
@@ -6088,17 +6091,13 @@ function syncWftDeletionsIfNeeded(reason) {
                 if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
                     wftSyncLog("[WFT Sync][DELETIONS] decision", "push-local", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending, duplicateCount: files.length });
                     return uploadWftJsonFilePromise(WFT_DELETIONS_FILENAME, merged).then(function () {
-                        wftSyncState.lastSyncedDeletionsHash = mergedHash;
-                        wftSyncState.lastSyncedDeletionsCounter = counterSnapshot;
-                        wftSyncState.pendingDeletionsPush = false;
+                        recordDeletionsSync(mergedHash);
                         return true;
                     });
                 }
 
                 wftSyncLog("[WFT Sync][DELETIONS] decision", mergedHash !== localHash ? "pull-remote" : "skip-same-hash", { localHash: localHash, cloudHash: cloudHash, mergedHash: mergedHash, hadPending: hadPending });
-                wftSyncState.lastSyncedDeletionsHash = mergedHash;
-                wftSyncState.lastSyncedDeletionsCounter = counterSnapshot;
-                wftSyncState.pendingDeletionsPush = false;
+                recordDeletionsSync(mergedHash);
                 return false;
             });
         });
