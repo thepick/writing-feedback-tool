@@ -2917,9 +2917,9 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                     body: JSON.stringify(payload),
                     signal: analysisAbortController.signal
                 });
-                clearTimeout(timeoutId);
-
+                // Headers can arrive while the body stalls; keep the timeout through the body read.
                 var rawText = await res.text();
+                clearTimeout(timeoutId);
                 var data;
                 try {
                     data = JSON.parse(rawText);
