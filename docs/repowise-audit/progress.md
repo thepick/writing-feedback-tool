@@ -1,13 +1,17 @@
 # Repowise audit progress
 
-Updated: 2026-10-11T14:34:39.621Z (display timezone Asia/Bangkok).
+Updated 2026-10-11T14:45:36.643Z; display timezone Asia/Bangkok.
 
-Baseline: 662 Code Health findings (37 critical, 85 high, 201 medium, 339 low). Every original ID is retained in audit-ledger.json. Current scan has the same IDs. Additional surfaces: 15 open dead-code findings, 0 security findings; one manually discovered deletion-sync bug tracked.
+Every one of the 662 original Code Health IDs is retained. Original severities: 37 critical, 85 high, 201 medium, 339 low. Baseline outcomes: {"no_code_change":35,"pending":620,"confirmed_awaiting_fix":4,"fixed_in_draft_pr":3}. No unresolved entry is treated as finished.
 
-Status: 1 baseline finding tied to a confirmed behavioral bug, 661 baseline findings still awaiting evidence-based assessment. No final dispositions yet. Similar markers are grouped by file and symbol; grouping never removes IDs.
+Initial broader inventory: 15 dead-code findings, zero security findings, zero documentation-drift findings, 135 refactoring plans, 20 performance opportunity groups and one coverage action. Derived suggestions retain their IDs and links to underlying evidence. Current total ledger rows: 834; refresh may add/change IDs, which must be reconciled rather than substituted.
 
-First batch SYNC-001: confirmed settings/deletion upload race in four create/update cases. Also investigate failed local merge writes in these same paths; do not mark that concern fixed without a reproduction.
+SYNC-001 is fixed in draft PR41 (https://github.com/thepick/writing-feedback-tool/pull/41), commit cd3554386b183ea92eb03e18c8b186fe09adee54. Four upload races and four local-write failure cases reproduced before repair. Node 14/14, browser 8/8, and all 23 suites pass; coordinator reviewed the diff and reran new suites. No merge or deployment.
 
-Boundaries: no merge, deployment, real student data, paid AI calls or live Drive writes. One repair writer at a time. Repowise scores are not regression evidence.
+ANALYSIS-001 is next: real browser reproductions prove Alice's analysis can be queued under Bob with Bob original writing in both delayed OCR and normal three-step typed analysis. Associated baseline IDs: fdce5e811b24426c88169b006c463684, afe3a3fdc15848728ff9f04b8ebdb29f, 9a5ed076e1164e089ad9979be4d5088e, 2407c7a070dc40d8948ceddd30d098fb.
 
-Next: dispatch the first repair chat; review its diff/tests and update this ledger before the next writer. All remaining findings stay explicitly unreviewed.
+One repair chat writes at a time. Later branches/PRs stack on reviewed prior batches so repairs are not lost. Canonical ledger is exported in this coordinator's outputs before each handoff and copied into the repository between writers.
+
+Remaining queue: identity repair; ordinary deletion-save failure/transaction concerns need reproduction; unreachable helper-copy maintenance; all other unreviewed source-symbol groups and derived plans; coverage-signal action. Experimental bundled helpers such as removeArchivedSessionsFromPortfolio have no current caller found; do not claim their behavior ships without reachability evidence.
+
+Limits: no live Drive writes, paid AI, real student data, merge or deployment. Score changes are not regression evidence.
