@@ -22,7 +22,7 @@ const root = path.resolve(__dirname, '..');
         for (const action of ['student', 'rename', 'casing', 'emptyRename', 'clear', 'reset', 'archiveClear', 'add', 'import']) {
             cases.push([action, 'roster'], [action, 'settings']);
         }
-        for (const action of ['idRename', 'rosterOnlyRename']) {
+        for (const action of ['idRename', 'idRenameMissingMap', 'rosterOnlyRename']) {
             for (const key of ['portfolio', 'markers', 'roster', 'settings', 'selection']) cases.push([action, key]);
         }
         for (const [action, failedKey] of cases) {
@@ -47,9 +47,9 @@ const root = path.resolve(__dirname, '..');
                 localStorage.setItem('wft_portfolio', original);
                 localStorage.setItem('wft_students', JSON.stringify(['Alice', 'Bob']));
                 localStorage.setItem('wft_selectedStudent', 'Alice');
-                localStorage.setItem('wft_settings', JSON.stringify({ students: ['Alice', 'Bob'], studentIdMap: { Alice: 'student-alice' }, studentRecords: [{ studentId: 'student-alice', displayName: 'Alice', legacyNameKeys: ['Alice'] }], unknown: 'keep' }));
+                localStorage.setItem('wft_settings', JSON.stringify({ students: ['Alice', 'Bob'], studentIdMap: action === 'idRenameMissingMap' ? {} : { Alice: 'student-alice' }, studentRecords: [{ studentId: 'student-alice', displayName: 'Alice', legacyNameKeys: ['Alice'] }], unknown: 'keep' }));
                 const originalSettings = localStorage.getItem('wft_settings');
-                if (action === 'idRename') WFT_STUDENT_ID_MAP_V1 = true;
+                if (['idRename', 'idRenameMissingMap'].includes(action)) WFT_STUDENT_ID_MAP_V1 = true;
                 const deletedName = ['add', 'import', 'restore', 'rename'].includes(action) ? 'Alicia' : 'Earlier';
                 localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify({ deletedStudents: { ['student:' + deletedName.toLowerCase()]: { studentName: deletedName, deletedAt: '2026-10-01T00:00:00Z' } } }));
                 const originalMarkers = localStorage.getItem(WFT_DELETIONS_STORAGE_KEY);
@@ -68,7 +68,7 @@ const root = path.resolve(__dirname, '..');
                 const invoke = async () => {
                     if (action === 'student') await removeStudent('Alice');
                     if (action === 'session') await deletePortfolioSession('Alice', 'a');
-                    if (['rename', 'casing', 'emptyRename', 'idRename', 'rosterOnlyRename'].includes(action)) await renameStudent('Alice');
+                    if (['rename', 'casing', 'emptyRename', 'idRename', 'idRenameMissingMap', 'rosterOnlyRename'].includes(action)) await renameStudent('Alice');
                     if (action === 'clear') await clearAllStudents();
                     if (action === 'reset') await resetCurrentClassData();
                     if (action === 'replacement') return commitPendingPortfolioSync();
@@ -130,13 +130,19 @@ const root = path.resolve(__dirname, '..');
                 if (failedKey === 'markers') assert.equal(failed.markerWrites, 1, 'one batch marker write');
                 if (action === 'student') assert.equal(result.portfolio.Alice, undefined);
                 if (action === 'session') assert.deepEqual(result.portfolio.Alice.sessions.map(s => s.id), ['keep']);
-                if (['rename', 'emptyRename', 'casing', 'idRename'].includes(action)) {
+                if (['rename', 'emptyRename', 'casing', 'idRename', 'idRenameMissingMap'].includes(action)) {
                     assert.equal(result.portfolio.Alice, undefined);
                     assert.ok(result.portfolio[action === 'casing' ? 'ALICE' : 'Alicia']);
                 }
                 if (action === 'idRename') {
                     assert.equal(result.settings.studentIdMap.Alicia, 'student-alice');
                     assert.equal(result.settings.studentIdMap.Alice, 'student-alice');
+                    assert.equal(result.settings.studentRecords[0].displayName, 'Alicia');
+                }
+                if (action === 'idRenameMissingMap') {
+                    assert.ok(result.settings.studentIdMap.Alicia);
+                    assert.equal(result.settings.studentIdMap.Alice, result.settings.studentIdMap.Alicia);
+                    assert.equal(result.settings.studentRecords[0].studentId, result.settings.studentIdMap.Alicia);
                     assert.equal(result.settings.studentRecords[0].displayName, 'Alicia');
                 }
                 if (action === 'rosterOnlyRename') { assert.equal(result.portfolio.Alice, undefined); assert.deepEqual(result.roster, ['Alicia', 'Bob']); }

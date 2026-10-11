@@ -2858,6 +2858,7 @@ function updateStudentRecordOnRename(oldName, newName, settings) {
     for (var rni = 0; rni < settings.studentRecords.length; rni++) {
         var rec = settings.studentRecords[rni];
         if (rec.studentId === studentId || rec.displayName === oldName) {
+            rec.studentId = studentId;
             rec.displayName = newName;
             if (!rec.legacyNameKeys) rec.legacyNameKeys = [];
             if (rec.legacyNameKeys.indexOf(oldName) === -1) rec.legacyNameKeys.push(oldName);
