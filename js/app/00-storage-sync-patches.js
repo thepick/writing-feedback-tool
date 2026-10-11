@@ -5529,38 +5529,30 @@ function mergeWftDeletions(localDeletions, cloudDeletions) {
     var localClean = normalizeDeletionsData(localDeletions || {});
     var cloudClean = normalizeDeletionsData(cloudDeletions || {});
     var merged = getEmptyDeletionsData();
-    var key;
+    var recordsByKey = {};
 
-    for (key in cloudClean.deletedStudents) {
-        if (Object.prototype.hasOwnProperty.call(cloudClean.deletedStudents, key)) {
-            merged.deletedStudents[key] = cloneWftJson(cloudClean.deletedStudents[key]);
+    ['deletedStudents', 'restoredStudents', 'deletedSessions'].forEach(function (collection) {
+        var timeField = collection === 'restoredStudents' ? 'restoredAt' : 'deletedAt';
+        [cloudClean, localClean].forEach(function (source) {
+            Object.keys(source[collection]).forEach(function (key) {
+                var incoming = source[collection][key];
+                var current = merged[collection][key];
+                if (!current || getWftTombstoneTimeMs(incoming, timeField) >= getWftTombstoneTimeMs(current, timeField)) {
+                    merged[collection][key] = cloneWftJson(incoming);
+                }
+            });
+        });
+    });
+
+    cloudClean.records.concat(localClean.records).forEach(function (record) {
+        if (!record || typeof record !== 'object') return;
+        var key = record.id ? 'id:' + record.id : 'content:' + stableStringify(record);
+        var current = recordsByKey[key];
+        if (!current || getWftTombstoneTimeMs(record, 'deletedAt') >= getWftTombstoneTimeMs(current, 'deletedAt')) {
+            recordsByKey[key] = cloneWftJson(record);
         }
-    }
-    for (key in localClean.deletedStudents) {
-        if (Object.prototype.hasOwnProperty.call(localClean.deletedStudents, key)) {
-            merged.deletedStudents[key] = cloneWftJson(localClean.deletedStudents[key]);
-        }
-    }
-    for (key in cloudClean.restoredStudents) {
-        if (Object.prototype.hasOwnProperty.call(cloudClean.restoredStudents, key)) {
-            merged.restoredStudents[key] = cloneWftJson(cloudClean.restoredStudents[key]);
-        }
-    }
-    for (key in localClean.restoredStudents) {
-        if (Object.prototype.hasOwnProperty.call(localClean.restoredStudents, key)) {
-            merged.restoredStudents[key] = cloneWftJson(localClean.restoredStudents[key]);
-        }
-    }
-    for (key in cloudClean.deletedSessions) {
-        if (Object.prototype.hasOwnProperty.call(cloudClean.deletedSessions, key)) {
-            merged.deletedSessions[key] = cloneWftJson(cloudClean.deletedSessions[key]);
-        }
-    }
-    for (key in localClean.deletedSessions) {
-        if (Object.prototype.hasOwnProperty.call(localClean.deletedSessions, key)) {
-            merged.deletedSessions[key] = cloneWftJson(localClean.deletedSessions[key]);
-        }
-    }
+    });
+    merged.records = Object.keys(recordsByKey).map(function (key) { return recordsByKey[key]; });
 
     merged.updatedAt = new Date().toISOString();
     return merged;
