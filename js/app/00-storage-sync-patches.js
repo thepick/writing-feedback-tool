@@ -904,7 +904,7 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
     }
 
     function parseNeatnessSourceType(responseText) {
-        var text = String(responseText || '');
+        var text = String(responseText || '').replace(/\*\*/g, '');
         var sourceMatch = text.match(/(?:\*\*)?Source\s*Type(?:\*\*)?\s*:\s*(HANDWRITTEN|TYPED_OR_PRINTED|MIXED|NOT_SCORABLE)/i);
         if (sourceMatch) return sourceMatch[1].toUpperCase();
         if (/\b(TYPED_OR_PRINTED|typed\s+or\s+printed|typed\s+work|printed\s+work|appears\s+to\s+be\s+typed|mostly\s+typed|computer\s+typed)\b/i.test(text)) return 'TYPED_OR_PRINTED';
@@ -913,7 +913,7 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
     }
 
     function parseNeatnessSourceReason(responseText) {
-        var text = String(responseText || '');
+        var text = String(responseText || '').replace(/\*\*/g, '');
         var reasonMatch = text.match(/(?:\*\*)?Source\s*Type\s*Reason(?:\*\*)?\s*:\s*([^\n]+)/i);
         return reasonMatch ? reasonMatch[1].trim() : '';
     }
@@ -961,7 +961,7 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
             subScores.pageLayoutParagraphs
         ];
         for (var i = 0; i < values.length; i++) {
-            if (!isFinite(Number(values[i]))) return null;
+            if (!Number.isFinite(values[i])) return null;
         }
         return (Number(subScores.letterFormation) * 0.20) +
                (Number(subScores.spacing) * 0.15) +
