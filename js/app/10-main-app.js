@@ -12,6 +12,7 @@ function loadStudents() {
 }
 
 function saveStudents() {
+    if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
     students = applyDeletionsToStudents(students, getDeletionsData());
     localStorage.setItem("wft_students", JSON.stringify(students));
     // ── WFT Sync V2: roster change marks settings dirty unless we are applying cloud data locally ──
@@ -123,14 +124,18 @@ function addStudent() {
         alert("That student is already in the list.");
         return;
     }
-    clearStudentDeletion(name);
-    students.push(name);
-    students.sort(function(a, b) { return a.localeCompare(b); });
-    saveStudents();
+    var deletions = getDeletionsData();
+    clearStudentDeletion(name, deletions);
+    var nextStudents = students.concat(name).sort(function(a, b) { return a.localeCompare(b); });
+    try {
+        saveWftStudentChange({ students: nextStudents, selectedStudent: name, deletions: deletions });
+    } catch (e) {
+        wftDebugError('Student addition failed:', e);
+        alert(e.wftStudentChangeRecovery ? e.message : 'The student could not be added. The student list has been kept. Please try again.');
+        return;
+    }
     renderStudentList();
     populateStudentDropdown();
-    selectedStudent = name;
-    localStorage.setItem("wft_selectedStudent", selectedStudent);
     var select = document.getElementById("studentSelect");
     if (select) select.value = name;
     input.value = "";
@@ -149,20 +154,17 @@ async function removeStudent(name) {
     if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, name)) {
         delete portfolio[name];
     }
+    var deletions = getDeletionsData();
+    recordStudentDeletion(name, deletions);
     try {
-        savePortfolioData(portfolio);
+        saveWftStudentChange({ portfolio: portfolio, deletions: deletions,
+            students: students.filter(function(s) { return s !== name; }),
+            selectedStudent: selectedStudent === name ? "" : selectedStudent });
     } catch (e) {
-        wftDebugError('Student deletion failed while saving portfolio:', e);
-        alert('The student could not be deleted because the portfolio could not be saved. The student list and writing have been kept.');
+        wftDebugError('Student deletion failed while saving changes:', e);
+        alert(e.wftStudentChangeRecovery ? e.message : 'The student could not be deleted because the changes could not be saved. The student list and writing have been kept. Please try again.');
         return;
     }
-    recordStudentDeletion(name);
-    students = students.filter(function(s) { return s !== name; });
-    if (selectedStudent === name) {
-        selectedStudent = "";
-        localStorage.setItem("wft_selectedStudent", "");
-    }
-    saveStudents();
     renderStudentList();
     populateStudentDropdown();
     try { refreshPortfolioDropdown(); } catch (e) { }
@@ -382,47 +384,30 @@ async function renameStudent(oldName) {
     if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
         portfolio[newName] = portfolio[oldName];
         delete portfolio[oldName];
-        try {
-            savePortfolioData(portfolio);
-        } catch (e) {
-            wftDebugError('Student rename failed while saving portfolio:', e);
-            alert('The student could not be renamed because the portfolio could not be saved. The original name and writing have been kept.');
-            return;
-        }
     }
-
-    // Do not hide the old portfolio during sync until its replacement has been saved.
-    try {
-        clearStudentDeletion(newName);
-    } catch (e1) { }
-
+    var deletions = getDeletionsData();
+    clearStudentDeletion(newName, deletions);
     if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
-        try { recordStudentDeletion(oldName); } catch (e2) { }
+        recordStudentDeletion(oldName, deletions);
     }
-
-    students = students.map(function(name) {
-        return name === oldName ? newName : name;
-    });
-    students.sort(function(a, b) { return a.localeCompare(b); });
-
-    if (typeof updateStudentRecordOnRename === "function") {
-        try { updateStudentRecordOnRename(oldName, newName); } catch (e3) { }
+    var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
+    nextStudents.sort(function(a, b) { return a.localeCompare(b); });
+    try {
+        var settings = getRawSettings();
+        updateStudentRecordOnRename(oldName, newName, settings);
+        saveWftStudentChange({ portfolio: portfolio, deletions: deletions, settings: settings,
+            students: nextStudents, selectedStudent: newName });
+    } catch (e) {
+        wftDebugError('Student rename failed while saving changes:', e);
+        alert(e.wftStudentChangeRecovery ? e.message : 'The student could not be renamed because the changes could not be saved. The original name and writing have been kept. Please try again.');
+        return;
     }
-
-    if (selectedStudent === oldName) {
-        selectedStudent = newName;
-        localStorage.setItem("wft_selectedStudent", newName);
-    }
-
-    saveStudents();
     renderStudentList();
     populateStudentDropdown();
 
     var studentSelect = document.getElementById("studentSelect");
     if (studentSelect && students.indexOf(newName) !== -1) {
         studentSelect.value = newName;
-        selectedStudent = newName;
-        localStorage.setItem("wft_selectedStudent", newName);
     }
 
     try { refreshPortfolioDropdown(); } catch (e4) { }
@@ -444,20 +429,15 @@ async function clearAllStudents() {
         confirmText: "Clear All",
         danger: true
     }))) return;
+    var deletions = getDeletionsData();
+    students.forEach(function(name) { recordStudentDeletion(name, deletions); });
     try {
-        savePortfolioData({});
+        saveWftStudentChange({ portfolio: {}, deletions: deletions, students: [], selectedStudent: "" });
     } catch (e) {
-        wftDebugError('Clear student list failed while saving portfolio:', e);
-        alert('The student list could not be cleared because the portfolio could not be saved. The student list and writing have been kept.');
+        wftDebugError('Clear student list failed while saving changes:', e);
+        alert(e.wftStudentChangeRecovery ? e.message : 'The student list could not be cleared because the changes could not be saved. The student list and writing have been kept. Please try again.');
         return;
     }
-    for (var i = 0; i < students.length; i += 1) {
-        recordStudentDeletion(students[i]);
-    }
-    students = [];
-    selectedStudent = "";
-    saveStudents();
-    localStorage.setItem("wft_selectedStudent", "");
     renderStudentList();
     populateStudentDropdown();
 }
@@ -486,6 +466,8 @@ function importStudents(event) {
         var names = [];
         var seenImportNames = {};
         var added = 0;
+        var nextStudents = students.slice();
+        var deletions = getDeletionsData();
 
         rawNames.forEach(function(name) {
             var key = name.toLowerCase();
@@ -501,18 +483,21 @@ function importStudents(event) {
             // Import is an explicit teacher action. If this name was tombstoned by
             // an earlier mistaken import/reset/clear, mark it active again so Drive
             // sync cannot immediately filter it out during the next merge.
-            clearStudentDeletion(name);
+            clearStudentDeletion(name, deletions);
 
             if (!exists) {
-                students.push(name);
+                nextStudents.push(name);
                 added += 1;
             }
         });
 
-        students.sort(function(a, b) { return a.localeCompare(b); });
-        saveStudents();
-        if (typeof saveSettingsToLocalStorage === "function") {
-            saveSettingsToLocalStorage({ students: students });
+        nextStudents.sort(function(a, b) { return a.localeCompare(b); });
+        try {
+            saveWftStudentChange({ students: nextStudents, selectedStudent: selectedStudent, deletions: deletions });
+        } catch (error) {
+            wftDebugError('Student import failed:', error);
+            alert(error.wftStudentChangeRecovery ? error.message : 'The students could not be imported. The student list has been kept. Please try again.');
+            return;
         }
         renderStudentList();
         populateStudentDropdown();
@@ -3987,15 +3972,7 @@ function saveArchiveZipToDrive(fileName, blob, schoolYear) {
 }
 
 function clearCurrentClassAfterSuccessfulArchive() {
-    students = [];
-    selectedStudent = "";
-    localStorage.setItem("wft_selectedStudent", "");
-    saveStudents();
-    savePortfolioData({});
-
-    if (typeof saveDeletionsData === "function" && typeof getEmptyDeletionsData === "function") {
-        saveDeletionsData(getEmptyDeletionsData());
-    }
+    saveWftStudentChange({ portfolio: {}, deletions: getEmptyDeletionsData(), students: [], selectedStudent: "" });
 
     renderStudentList();
     populateStudentDropdown();
@@ -4058,8 +4035,8 @@ async function archiveCurrentSchoolYear() {
         })
         .catch(function(e) {
             wftDebugError("[WFT Archive] Archive failed:", e);
-            setWftArchiveStatus("Archive failed. Current class was not cleared.");
-            alert("The archive could not be completed. The current class was not cleared. " + (e && e.message ? e.message : e));
+            setWftArchiveStatus(e.wftStudentChangeRecovery ? "Archive saved. Local class recovery needed." : "Archive failed. Current class was not cleared.");
+            alert(e.wftStudentChangeRecovery ? e.message : "The archive could not be completed. The current class was not cleared. " + (e && e.message ? e.message : e));
         });
 }
 
@@ -4270,16 +4247,9 @@ async function resetCurrentClassData() {
     var sessions;
     var sessionId;
 
-    try {
-        savePortfolioData({});
-    } catch (e) {
-        wftDebugError('[WFT Reset] Failed while saving portfolio:', e);
-        alert('The class could not be reset because the portfolio could not be saved. The student list and writing have been kept.');
-        return;
-    }
-    // Record deletions only after saving, so a failed reset cannot hide saved writing during sync.
+    var deletions = getDeletionsData();
     for (i = 0; i < currentStudents.length; i += 1) {
-        recordStudentDeletion(currentStudents[i]);
+        recordStudentDeletion(currentStudents[i], deletions);
     }
 
     // Also protect portfolio-only entries and each saved writing session.
@@ -4288,20 +4258,23 @@ async function resetCurrentClassData() {
     // portfolio sessions do not silently come back from Drive.
     for (s = 0; s < studentNames.length; s += 1) {
         name = studentNames[s];
-        recordStudentDeletion(name);
+        recordStudentDeletion(name, deletions);
         sessions = portfolio[name] && Array.isArray(portfolio[name].sessions) ? portfolio[name].sessions : [];
         for (i = 0; i < sessions.length; i += 1) {
             sessionId = getSessionKey(sessions[i]);
             if (sessionId) {
-                recordSessionDeletion(name, sessionId);
+                recordSessionDeletion(name, sessionId, deletions);
             }
         }
     }
 
-    students = [];
-    selectedStudent = "";
-    localStorage.setItem("wft_selectedStudent", "");
-    saveStudents();
+    try {
+        saveWftStudentChange({ portfolio: {}, deletions: deletions, students: [], selectedStudent: "" });
+    } catch (e) {
+        wftDebugError('[WFT Reset] Failed while saving changes:', e);
+        alert(e.wftStudentChangeRecovery ? e.message : 'The class could not be reset because the changes could not be saved. The student list and writing have been kept. Please try again.');
+        return;
+    }
 
     renderStudentList();
     populateStudentDropdown();

@@ -3,7 +3,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const source = fs.readFileSync(path.join(__dirname, '../js/app/10-main-app.js'), 'utf8');
-const extracted = [
+const patches = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-patches.js'), 'utf8');
+const commitSource = patches.slice(patches.indexOf('function restoreWftStudentChangeStorage('), patches.indexOf('function parseWftBackupValue('))
+    + patches.slice(patches.indexOf('function saveWftStudentChange('), patches.indexOf('function applyDeletionsToStudents('));
+const extracted = commitSource + [
     ['removeStudent', 'getPreferredStudentForManagement'],
     ['clearAllStudents', 'exportStudents'],
     ['resetCurrentClassData', 'updateSelectedImagePreview']
@@ -21,10 +24,14 @@ function setup(options = {}) {
         wftConfirm: async message => { confirmations.push(message); return options.confirm !== false; },
         getPortfolioData: () => JSON.parse(stored),
         savePortfolioData: value => { if (options.failSave) throw new Error('Storage full'); stored = JSON.stringify(value); events.push('portfolio-save'); },
-        recordStudentDeletion: name => { markers.push(['student', name]); events.push('marker'); },
-        recordSessionDeletion: (name, id) => { markers.push(['session', name, id]); events.push('marker'); },
+        getDeletionsData: () => ({ markers: [] }), getRawSettings: () => ({}),
+        recordStudentDeletion: (name, data) => data.markers.push(['student', name]),
+        recordSessionDeletion: (name, id, data) => data.markers.push(['session', name, id]),
+        saveDeletionsData: data => { markers.push(...data.markers); data.markers.forEach(() => events.push('marker')); },
+        syncSavedPortfolioData() {}, wftSuppressDirtyMarks: true,
         getSessionKey: session => session.id,
-        localStorage: { setItem: (key, value) => writes.push([key, value]) },
+        localStorage: { getItem: () => null, setItem: (key, value) => { writes.push([key, value]); if (key === 'wft_students') events.push('roster-save'); } },
+        WFT_DELETIONS_STORAGE_KEY: 'wft_deletions',
         saveStudents: () => events.push('roster-save'),
         renderStudentList: () => events.push('render'), populateStudentDropdown() {},
         refreshPortfolioDropdown() {}, renderStudentPortfolio() {},
@@ -88,6 +95,6 @@ function setup(options = {}) {
     const nonselected = setup();
     await nonselected.app.removeStudent('Bob');
     assert.equal(nonselected.app.selectedStudent, 'Alice');
-    assert.deepEqual(nonselected.writes, []);
+    assert.equal(nonselected.writes.find(([key]) => key === 'wft_selectedStudent')[1], 'Alice');
     console.log('Class deletion tests passed: reset, clear and individual deletion preserve writing, roster, selection and markers on failed saves; successful deletion order, reset sync and cancellation remain intact.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

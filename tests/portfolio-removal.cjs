@@ -11,6 +11,8 @@ function functions(file, first, last) {
     return source.slice(start, end);
 }
 const source = functions('js/app/10-main-app.js', 'findPortfolioSessionIndex', 'findPortfolioSession')
+    + functions('js/app/00-storage-sync-patches.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
+    + functions('js/app/00-storage-sync-patches.js', 'saveWftStudentChange', 'applyDeletionsToStudents')
     + functions('js/app/00-storage-sync-patches.js', 'getSessionKey', 'getTimeMs')
     + functions('js/app/00-storage-sync-patches.js', 'removeStudentSession', 'toggleRosterVisibility');
 function setup(sessions, options = {}) {
@@ -19,7 +21,11 @@ function setup(sessions, options = {}) {
     const app = vm.runInNewContext(source + '\n;globalThis', {
         getPortfolioData: () => JSON.parse(stored),
         savePortfolioData: value => { if (options.failSave) throw new Error('Storage full'); stored = JSON.stringify(value); events.push('save'); },
-        recordSessionDeletion: (student, id) => { markers.push([student, id]); events.push('marker'); },
+        getDeletionsData: () => ({ markers: [] }),
+        recordSessionDeletion: (student, id, data) => data.markers.push([student, id]),
+        saveDeletionsData: data => { markers.push(...data.markers); data.markers.forEach(() => events.push('marker')); },
+        localStorage: { getItem: () => null }, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions', wftSuppressDirtyMarks: true,
+        syncSavedPortfolioData() {},
         document: { getElementById: () => ({ value: 'Alice' }) },
         renderStudentPortfolio: () => { if (options.failRender) throw new Error('Display failed'); events.push('render'); },
         wftConfirm: async () => options.confirm !== false,

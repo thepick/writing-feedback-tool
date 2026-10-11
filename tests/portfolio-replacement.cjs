@@ -12,16 +12,22 @@ function functions(file, first, last) {
     return source.slice(start, end);
 }
 const source = functions('js/app/10-main-app.js', 'findPortfolioSessionIndex', 'renderNotebookDetailedAssessmentFromSavedSession')
+    + functions('js/app/00-storage-sync-patches.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
+    + functions('js/app/00-storage-sync-patches.js', 'saveWftStudentChange', 'applyDeletionsToStudents')
     + functions('js/app/00-storage-sync-patches.js', 'commitPendingPortfolioReplacement');
 const copy = value => JSON.parse(JSON.stringify(value));
 function setup(portfolio, sourceId = 'old', target = 'Alice') {
-    let stored = copy(portfolio), saves = 0, renders = 0;
+    let stored = copy(portfolio), saves = 0, renders = 0, deletionSaves = 0;
     const events = [], deletions = [];
     const pending = { studentName: target, sessionData: { id: 'new', originalText: 'Keep my writing' }, replaceSource: { sourceStudentName: 'Alice', sourceSessionId: sourceId }, signature: 'new-signature' };
     const app = vm.runInNewContext(source + '\n;globalThis', {
         getPortfolioData: () => copy(stored),
         savePortfolioData: value => { stored = copy(value); saves++; events.push('save'); },
-        recordSessionDeletion: (student, id) => { deletions.push([student, id]); events.push('delete'); },
+        getDeletionsData: () => ({ markers: [] }),
+        recordSessionDeletion: (student, id, data) => data.markers.push([student, id]),
+        saveDeletionsData: data => { deletionSaves++; deletions.push(...data.markers); data.markers.forEach(() => events.push('delete')); },
+        localStorage: { getItem: () => null }, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions', wftSuppressDirtyMarks: true,
+        syncSavedPortfolioData() {},
         renderStudentPortfolio: () => { renders++; },
         wftDebugError() {}, wftSyncLog() {},
         getPendingPortfolioSync: () => pending,
@@ -29,7 +35,7 @@ function setup(portfolio, sourceId = 'old', target = 'Alice') {
         getCurrentPortfolioSessionSignature: () => 'current-signature',
         lastSyncedPortfolioSessionSignature: 'previous-signature'
     });
-    return { app, pending, events, deletions, get stored() { return stored; }, get saves() { return saves; }, get renders() { return renders; } };
+    return { app, pending, events, deletions, get stored() { return stored; }, get saves() { return saves; }, get renders() { return renders; }, get deletionSaves() { return deletionSaves; } };
 }
 
 let test = setup({ Alice: { sessions: [{ id: 'old' }, { id: 'keep' }] } });
@@ -81,6 +87,7 @@ test = setup({ Alice: { sessions: [{ id: 'old' }] } });
 test.pending.sessionData.id = 'old';
 assert.equal(test.app.commitPendingPortfolioSync(), true);
 assert.deepEqual(test.deletions, [], 'Replacing in place with the same ID must not tombstone the replacement');
+assert.equal(test.deletionSaves, 0, 'An in-place update does not need a deletion-log write');
 
 test = setup({ Alice: { sessions: [{ id: 'old' }] } }, 'old', 'Bob');
 test.pending.sessionData.id = 'old';
