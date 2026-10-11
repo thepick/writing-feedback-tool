@@ -6177,7 +6177,7 @@ function rebuildWftPortfolioDerivedStats(portfolio) {
     return portfolio;
 }
 
-function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative) {
+function mergeWftPortfolios(localPortfolio, cloudPortfolio) {
     // WFT portfolio is keyed by student name; use WFT's existing merge logic as base
     var localNorm = normalizePortfolioShape(localPortfolio);
     var cloudNorm = normalizePortfolioShape(cloudPortfolio);
@@ -6198,17 +6198,6 @@ function mergeWftPortfolios(localPortfolio, cloudPortfolio, localIsAuthoritative
         if (!Object.prototype.hasOwnProperty.call(localNorm, studentName)) continue;
 
         if (!merged[studentName]) {
-            merged[studentName] = cloneWftJson(localNorm[studentName]);
-            continue;
-        }
-
-        if (localIsAuthoritative) {
-            wftSyncLog("[WFT Sync][PORTFOLIO] merge local-authoritative", {
-                studentName: studentName,
-                localSessions: (localNorm[studentName].sessions || []).length,
-                cloudSessions: (merged[studentName].sessions || []).length
-            });
-
             merged[studentName] = cloneWftJson(localNorm[studentName]);
             continue;
         }
@@ -6331,7 +6320,7 @@ function syncWftPortfolioIfNeeded(reason) {
                     if (hasNewerLocalPortfolio()) return false;
                     cloudNormalized = applyDeletionsToPortfolio(cloudPortfolio || {}, getDeletionsData());
                     cloudHash = getPortfolioFingerprint(cloudNormalized);
-                    merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized, hadPending);
+                    merged = mergeWftPortfolios(applyDeletionsToPortfolio(mergedFromDuplicates || localPortfolio, getDeletionsData()), cloudNormalized);
                     merged = applyDeletionsToPortfolio(merged, getDeletionsData());
                     mergedHash = getPortfolioFingerprint(merged);
 
