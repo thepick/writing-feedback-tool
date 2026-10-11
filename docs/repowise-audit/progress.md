@@ -1,6 +1,6 @@
 # Repowise audit progress
 
-Updated 2026-10-11T18:25:58.499Z; timezone Asia/Bangkok. All 662 original IDs retained, 964 total tracked rows. Original outcomes: {"no_code_change":372,"confirmed_awaiting_fix":164,"behavior_fixed_metric_review_pending":11,"pending":91,"fixed_in_draft_pr":24}. Scanner absence does not imply resolution.
+Updated 2026-10-11T18:41:00.722Z; timezone Asia/Bangkok. All 662 original IDs retained, 975 total tracked rows. Original outcomes: {"no_code_change":394,"confirmed_awaiting_fix":178,"pending":66,"fixed_in_draft_pr":24}. Scanner absence does not imply resolution.
 
 - SYNC-001: Older settings/deletion uploads clear newer pending changes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/41)
 - ANALYSIS-001: Async analysis reads changed student and writing at completion. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/42)
@@ -11,6 +11,7 @@ Updated 2026-10-11T18:25:58.499Z; timezone Asia/Bangkok. All 662 original IDs re
 - PHOTO-001: Delayed crop callback changes another student/photo after cancellation. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/47)
 - SYNC-003: Same-image merge overwrites newer photo reference with older metadata. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - SECURITY-002: Inherited identity keys drop records and mutate shared object properties. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
+- STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/50)
 - SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
 - FLOW-001: Inherited token names break repetition, grammar and title keyword lookups. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - PENDING-001: Photo completion commits and clears a newer pending assessment. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
@@ -28,7 +29,6 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - AUTH-001: Sign-out reports success while a retained session token can restore sign-in
 - PERF-001: Correction comparison blocks the UI with a full repeated token matrix
 - API-001: Missing API key triggers futile fallback retries and delayed error
-- STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing
 - PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores
 - GUIDE-001: Notebook punctuation and spelling changes receive incorrect teaching labels
 - GUIDE-002: Notebook paragraph revisions lose their separation before display
@@ -40,12 +40,13 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - SETTINGS-002: Unreadable existing preferences are replaced with current defaults
 - STORAGE-004: Adding a student overwrites unreadable existing roster history
 - EXPORT-001: Same-day photos with the same name share one export filename
+- DELETIONS-002: Main portfolio removes newer writing with an older session deletion marker
 
-Current indexed source 7a3c639945747d4e9368aa9a61bffa3dc4b580da: 708 health rows, 150 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies. No coverage was ingested from the preparation run.
+Current indexed source b76d691d8a9710f6610c2d77e179441fdf148a40: 714 health rows, 151 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies. No coverage was ingested from the preparation run.
 
 No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
-Source-specific reviews and validation scopes are recorded per finding. Recent independent checks include crop38/38, safe portfolio/export HTML25/25, analysis identity22/22, feedback rendering19 checks, flow/grammar10 checks, export output equality and buffer/join timings at10/100/500 sessions, native keyboard/word-count/selection display, handwriting13 outcomes, photo eligibility5, archive dates7, and pending/replacement storage/Sync failure tests. These checks support individual dispositions, not universal correctness or teaching calibration. Newly reproduced roster corruption, inherited-name import and duplicate photo export paths remain queued. Cleanup covers103 original findings; derived extraction suggestions are assessed using their linked source evidence.
+Source-specific reviews and validation scopes are recorded per finding. Recent independent checks include crop38/38, safe portfolio/export HTML25/25, analysis identity22/22, feedback rendering19 checks, flow/grammar10 checks, export output equality and buffer/join timings at10/100/500 sessions, native keyboard/word-count/selection display, handwriting13 outcomes, photo eligibility5, archive dates7, and pending/replacement storage/Sync failure tests. These checks support individual dispositions, not universal correctness or teaching calibration. Newly reproduced roster corruption, inherited-name import and duplicate photo export paths remain queued. Cleanup covers112 original findings; derived extraction suggestions are assessed using their linked source evidence.
 
 Known limits: localStorage writes across multiple keys are not crash-atomic. A failed rollback keeps recovery bytes in the open tab; forced closing can lose that buffer. Quota fallback preserves in-memory unuploaded photos but cannot restore those bytes after reload. Corrupt primary bytes are protected by reviewed strict readers where repaired and still require recovery; remaining required-reader defects are queued. Normal Google sign-out retains local writing. Experimental split/identity/compaction flags are scoped separately in the evidence. Browser checks use synthetic data and intercepted services. No live Drive writes, real student records, paid AI, merge or deployment.
 
