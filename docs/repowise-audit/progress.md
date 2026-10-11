@@ -11,14 +11,14 @@ Reviewed draft repairs:
 
 Remaining confirmed repair queue, one chat writing at a time:
 
-- STORAGE-002: Unreadable existing portfolio is overwritten as an empty portfolio. 
-- FEEDBACK-001: Missing handwriting criterion is described as worst performance. 
-- SECURITY-001: Student portfolio HTML export executes untrusted score and photo markup. 
-- CLEANUP-001: Remove unshipped helper copies and unused bundled helper islands. 
-- PHOTO-001: Delayed crop callback changes another student/photo after cancellation. 
-- SYNC-003: Same-image merge overwrites newer photo reference with older metadata. 
-- SECURITY-002: Untrusted photo identity key mutates Object.prototype during sync. 
-- ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy. 
+- STORAGE-002: Unreadable existing portfolio is overwritten as an empty portfolio.
+- FEEDBACK-001: Missing handwriting criterion is described as worst performance.
+- SECURITY-001: Student portfolio HTML export executes untrusted score and photo markup.
+- CLEANUP-001: Remove unshipped helper copies and unused bundled helper islands.
+- PHOTO-001: Delayed crop callback changes another student/photo after cancellation.
+- SYNC-003: Same-image merge overwrites newer photo reference with older metadata.
+- SECURITY-002: Untrusted photo identity key mutates Object.prototype during sync.
+- ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy.
 - SETTINGS-001: Failed preference save is acknowledged and schedules sync. Ordinary preference saving outside the repaired student operations, when no recovery buffer is active.
 - ARCHIVE-001: Unused archive-removal helper writes a mismatched legacy session marker. The shipped auxiliary helper has no shipped caller; the current school-year archive UI uses clearCurrentClassAfterSuccessfulArchive instead.
 
