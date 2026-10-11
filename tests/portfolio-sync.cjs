@@ -6,7 +6,7 @@ const source = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-p
 const start = source.indexOf('function getSessionKey(');
 const end = source.indexOf('// ── WFT Sync Engine V2 portfolio index sync', start);
 assert.ok(start >= 0 && end > start);
-const helpers = ['stableStringify', 'cloneWftJson', 'normalizePortfolioData', 'normalizePortfolioShape', 'validateWftPortfolioShape', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData', 'getDeletedStudentKey', 'getDeletedSessionKey', 'getWftTombstoneTimeMs', 'isStudentDeletedByTombstone', 'applyDeletionsToPortfolio', 'downloadAndMergeDuplicatePortfolios'].map(name => {
+const helpers = ['stableStringify', 'cloneWftJson', 'normalizePortfolioData', 'normalizePortfolioShape', 'validateWftPortfolioShape', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData', 'getDeletedStudentKey', 'getDeletedSessionKey', 'getWftTombstoneTimeMs', 'getWftDeletionRecords', 'isStudentSessionDeleted', 'isStudentDeletedByTombstone', 'applyDeletionsToPortfolio', 'downloadAndMergeDuplicatePortfolios'].map(name => {
     const from = source.indexOf('function ' + name + '(');
     const to = source.indexOf('\nfunction ', from + 1);
     assert.ok(from >= 0 && to > from, name);
@@ -25,6 +25,7 @@ function setup({ files = [{ id: 'canonical' }], pending = true, findGate, downlo
     const writes = [], uploads = [];
     const state = { localPortfolioCounter: 1, pendingPortfolioPush: pending, lastSyncedPortfolioCounter: 0, lastSyncedPortfolioHash: 'previous', needsSyncAfterCurrent: false };
     const app = vm.runInNewContext(helpers + '\n' + source.slice(start, end) + '\n;globalThis', {
+        preflightWftRequiredStorage() {}, getRawSettings: () => ({}), WFT_LAMPORT_V1: false,
         wftSyncState: state, WFT_PORTFOLIO_FILENAME: 'portfolio.json',
         WFT_TOMBSTONE_COMPACTION_V1: false, getDeletionsData: () => clone(deletions),
         getLocalPortfolioSnapshot: () => clone(local), getPortfolioFingerprint: JSON.stringify,

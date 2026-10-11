@@ -13,8 +13,10 @@ function loadStudents() {
 
 function saveStudents() {
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
-    students = applyDeletionsToStudents(students, getDeletionsData());
-    localStorage.setItem("wft_students", JSON.stringify(students));
+    preflightWftRequiredStorage();
+    var nextStudents = applyDeletionsToStudents(students, getDeletionsData());
+    localStorage.setItem("wft_students", JSON.stringify(nextStudents));
+    students = nextStudents;
     // ── WFT Sync V2: roster change marks settings dirty unless we are applying cloud data locally ──
     if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks) {
         markWftSettingsDirty("roster-change");

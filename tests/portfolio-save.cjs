@@ -20,6 +20,8 @@ function setup(flags = {}) {
         validateWftPortfolioShape: data => { assert.ok(data && typeof data === 'object'); },
         makePortfolioLocalStorageSafe: data => ({ ...data, proactivelyStripped: true }),
         stripPortfolioHeavyFields: data => ({ ...data, retryStripped: true }),
+        // Required-read failures are exercised with the full native storage-integrity fixture.
+        preflightWftRequiredStorage() {}, readWftRequiredStorage: () => ({}),
         localStorage: { setItem(key, value) { assert.equal(key, 'wft_portfolio'); stored = value; events.push('write'); } },
         markWftPortfolioDirty: () => events.push('portfolio-dirty'),
         markWftPortfolioIndexDirty: () => events.push('index-dirty'),

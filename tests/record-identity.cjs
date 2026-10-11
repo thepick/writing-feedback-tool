@@ -81,7 +81,7 @@ check('migration-valid-unusual-own-mapping-and-blob', () => {
 // Retained modular implementations are checked with their actual deletion and ID dependencies.
 for (const file of ['js/sync/merge.js', 'js/app/00-storage-sync-patches.js']) {
     const c = vm.createContext({ WFT_LAMPORT_V1: false, WFT_TOMBSTONE_COMPACTION_V1: false });
-    load(c, patch, ['getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData']);
+    load(c, patch, ['cloneWftJson', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData']);
     const source = read(file);
     const names = ['getWftDeletionRecords', 'isStudentSessionDeleted', 'chooseNewerSession', 'mergeStudentSessions', file.includes('app/') ? 'mergeWftStringArrays' : 'mergeStringArrays'];
     load(c, source, names);

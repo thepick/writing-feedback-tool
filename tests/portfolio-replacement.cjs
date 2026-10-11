@@ -26,6 +26,8 @@ function setup(portfolio, sourceId = 'old', target = 'Alice') {
         getDeletionsData: () => ({ markers: [] }),
         recordSessionDeletion: (student, id, data) => data.markers.push([student, id]),
         saveDeletionsData: data => { deletionSaves++; deletions.push(...data.markers); data.markers.forEach(() => events.push('delete')); },
+        // Required-read failures are exercised with the full native storage-integrity fixture.
+        preflightWftRequiredStorage() {}, readWftRequiredStorage: () => ({}),
         localStorage: { getItem: () => null }, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions', wftSuppressDirtyMarks: true,
         syncSavedPortfolioData() {},
         renderStudentPortfolio: () => { renders++; },
