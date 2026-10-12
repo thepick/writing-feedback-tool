@@ -97,7 +97,7 @@ for (const file of ['js/sync/merge.js', 'js/app/00-storage-sync-patches.js']) {
 }
 for (const file of ['js/data/data-model.js', 'js/app/00-storage-sync-patches.js']) {
     let stored = {};
-    const c = vm.createContext({ getRawSettings: () => plain(stored), saveSettingsToLocalStorage: settings => { stored = plain(settings); } });
+    const c = vm.createContext({ readWftRequiredStorage: () => plain(stored), getRawSettings: () => plain(stored), saveSettingsToLocalStorage: settings => { stored = plain(settings); } });
     load(c, read(file), ['getWftShortIdPart', 'sanitizeStudentIdPart', 'createStableStudentId', 'getOrCreateStudentId']);
     for (const name of ['constructor', '__proto__', 'toString']) {
         check(file + ':student-id-' + name, () => { const a = c.getOrCreateStudentId(name); assert.equal(typeof a, 'string'); assert.equal(c.getOrCreateStudentId(name), a); assert.ok(Object.hasOwn(stored.studentIdMap, name)); });
@@ -127,7 +127,7 @@ check('retained-split-index-own-student-key', () => {
 });
 check('retained-roster-ensure-and-rename-own-student-key', () => {
     let settings = {};
-    const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: true, students: ['constructor', '__proto__'], getRawSettings: () => plain(settings), saveSettingsToLocalStorage: value => { settings = plain(value); }, getPortfolioData: () => ({}) });
+    const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: true, students: ['constructor', '__proto__'], readWftRequiredStorage: () => plain(settings), getRawSettings: () => plain(settings), saveSettingsToLocalStorage: value => { settings = plain(value); }, getPortfolioData: () => ({}) });
     load(c, read('js/data/data-model.js'), ['getWftShortIdPart', 'sanitizeStudentIdPart', 'createStableStudentId', 'getOrCreateStudentId']);
     load(c, read('js/data/student-id-map.js'), ['getStudentRecordByName', 'ensureStudentRecordsForRoster', 'updateStudentRecordOnRename']);
     c.ensureStudentRecordsForRoster();

@@ -831,30 +831,27 @@ function applyGradeDefaultNeatness() {
     var el = document.getElementById("assessScriptQuality");
     if (!el || typeof profile.neatnessDefaultEnabled !== "boolean") return;
     el.checked = profile.neatnessDefaultEnabled;
-    try { el.dispatchEvent(new Event("change", { bubbles: true })); } catch (e) {}
 }
 function applyGradeDefaults() {
     applyGradeDefaultStrictness();
     applyGradeDefaultTargetWordCount();
     applyGradeDefaultNeatness();
+    var saved = saveWftPreferencesFromForm();
     refreshGradeProfileDescription();
-    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
-    if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
-    if (typeof syncUiState === "function") syncUiState();
-    if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-defaults");
+    if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
+    if (typeof syncUiState === 'function') syncUiState();
+    return saved;
 }
-function onGradeLevelChanged(source) {
-    if (source === "class") {
-        syncStudentGradeToClassIfNeeded();
-    } else if (source === "student" || source === "settings") {
-        wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
-    }
+function onGradeLevelChanged(source, required) {
+    if (source === 'class') syncStudentGradeToClassIfNeeded();
+    else if (source === 'student' || source === 'settings') wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
+    if (required) saveSettingsToLocalStorage();
+    else if (!saveWftPreferencesFromForm()) return false;
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
-    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
-    if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
-    if (typeof syncUiState === "function") syncUiState();
-    if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-change-" + source);
+    if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
+    if (typeof syncUiState === 'function') syncUiState();
+    return true;
 }
 function initializeGradeLevelFeature() {
     syncStudentGradeToClassIfNeeded();
@@ -8708,13 +8705,13 @@ function setGradeLevelForPortfolioReassessment(session) {
     if (!grade || !gradeSelect) return;
     gradeSelect.value = String(grade);
     wftStudentGradeLevelOverride = grade !== getClassGradeLevel();
-    try { onGradeLevelChanged("student"); } catch (e) { }
+    onGradeLevelChanged("student", true);
 }
 
 function setNeatnessForPortfolioReassessment(enabled) {
     var el = document.getElementById("assessScriptQuality");
     if (el) el.checked = !!enabled;
-    try { saveSettingsToLocalStorage(); } catch (e) { }
+    saveSettingsToLocalStorage();
     try { refreshScoreWeightingDescription(); } catch (e2) { }
 }
 
@@ -8815,6 +8812,12 @@ async function reassessPortfolioSession(studentName, sessionId) {
         danger: false
     }))) return;
 
+    try { setGradeLevelForPortfolioReassessment(session); }
+    catch (e) {
+        alert('Reassessment could not load because its grade setting could not be saved. Your current writing was kept. Check browser storage and retry.');
+        return;
+    }
+
     activePortfolioReassessmentSource = {
         sourceStudentName: studentName,
         sourceSessionId: sessionId
@@ -8822,7 +8825,6 @@ async function reassessPortfolioSession(studentName, sessionId) {
 
     switchTab("tool");
     setActiveStudentForPortfolioReassessment(studentName);
-    setGradeLevelForPortfolioReassessment(session);
 
     var writingEl = document.getElementById("studentWriting");
     if (writingEl) writingEl.value = reassessText;
@@ -8841,7 +8843,13 @@ async function reassessPortfolioSession(studentName, sessionId) {
     restorePortfolioSessionImagesForReassessment(session).then(function(result) {
         if (!result) return;
         var shouldUseNeatness = !!(result && result.restored > 0 && (session.neatnessAssessed || session.assessScriptQuality || session.sourceType === "typed+photo"));
-        setNeatnessForPortfolioReassessment(shouldUseNeatness);
+        try { setNeatnessForPortfolioReassessment(shouldUseNeatness); }
+        catch (e) {
+            alert('Saved writing loaded, but its neatness preference could not be saved. The saved preference is still active. Check Settings before analyzing.');
+            setOcrStatus('Saved writing loaded. Check Settings before analyzing; the neatness preference could not be saved.', 'error');
+            syncUiState();
+            return;
+        }
         if (result && result.total > 0 && result.restored === 0) {
             setOcrStatus("Saved writing loaded. The original photo could not be restored, so reassessment will run without photo-based neatness.", "error");
             alert("The saved writing was loaded, but the original photo could not be restored. The reassessment will run without photo-based neatness.");
@@ -8855,7 +8863,8 @@ async function reassessPortfolioSession(studentName, sessionId) {
         syncUiState();
     }).catch(function(e) {
         wftDebugError("Could not restore saved portfolio entry for reassessment:", e);
-        setNeatnessForPortfolioReassessment(false);
+        try { setNeatnessForPortfolioReassessment(false); }
+        catch (saveError) { alert('Saved writing loaded, but the neatness preference could not be saved. The saved preference is still active. Check Settings before analyzing.'); }
         setOcrStatus("Saved writing loaded, but photos could not be restored. Press Analyze Writing when you are ready.", "error");
         syncUiState();
     });
@@ -9446,11 +9455,11 @@ if (useWordCountTargetInput) {
     });
     targetWordCountInput.disabled = !useWordCountTargetInput.checked;
 }
-modelSelect.addEventListener("change", function() { updateMeter(); saveSettingsToLocalStorage(); });
+modelSelect.addEventListener("change", function() { saveWftPreferencesFromForm(); updateMeter(); });
 var assessScriptQualityInput = document.getElementById("assessScriptQuality");
 if (assessScriptQualityInput) {
     assessScriptQualityInput.addEventListener("change", function() {
-        saveSettingsToLocalStorage();
+        saveWftPreferencesFromForm();
         refreshScoreWeightingDescription();
     });
 }
@@ -9458,15 +9467,13 @@ var apiKeyInput = document.getElementById("apiKeyInput");
 var toggleApiKeyBtn = document.getElementById("toggleApiKeyBtn");
 if (apiKeyInput) {
     apiKeyInput.addEventListener("input", function() {
-        persistApiKeyStorageFromInput();
-        refreshApiKeyRuntimeValue();
+        saveWftApiKeyFromForm();
     });
 }
 var rememberApiKeyOnDeviceInput = document.getElementById("rememberApiKeyOnDevice");
 if (rememberApiKeyOnDeviceInput) {
     rememberApiKeyOnDeviceInput.addEventListener("change", function() {
-        persistApiKeyStorageFromInput();
-        refreshApiKeyRuntimeValue();
+        saveWftApiKeyFromForm();
     });
 }
 var writingGenreSelect = document.getElementById("writingGenreSelect");

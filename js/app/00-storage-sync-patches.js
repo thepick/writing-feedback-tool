@@ -615,9 +615,9 @@ function openSettingsDrawer() {
     document.getElementById('settingsDrawerOverlay').classList.add('open');
 }
 function closeSettingsDrawer() {
+    if (!saveWftPreferencesFromForm()) return;
     document.getElementById('settingsDrawer').classList.remove('open');
     document.getElementById('settingsDrawerOverlay').classList.remove('open');
-    saveSettingsToLocalStorage();
 }
 
 var WFT_API_KEY_SESSION_STORAGE_KEY = "wft_api_key_session";
@@ -629,90 +629,164 @@ function getApiKeyInputValue() {
     return apiKeyInput ? String(apiKeyInput.value || '').trim() : '';
 }
 
+// Key before-images stay separate from settings and Emergency Backup.
+var wftApiKeyStorageRecovery = null;
+var wftCommittedApiKeyInput = { key: '', remember: false };
+
+function restoreWftApiKeyStorage(entries) {
+    var pending = [];
+    entries.slice().reverse().forEach(function(entry) {
+        try {
+            if (entry.storage.getItem(entry.key) !== entry.value) {
+                if (entry.value === null) entry.storage.removeItem(entry.key);
+                else entry.storage.setItem(entry.key, entry.value);
+            }
+            if (entry.storage.getItem(entry.key) !== entry.value) pending.push(entry);
+        } catch (e) { pending.push(entry); }
+    });
+    // Retry only unresolved keys so later preference/class saves cannot be reverted.
+    entries.splice.apply(entries, [0, entries.length].concat(pending.reverse()));
+    return entries.length === 0;
+}
+
+function getWftApiKeyStorageError() {
+    return new Error(wftApiKeyStorageRecovery
+        ? 'The API key change could not be saved or fully restored. The original key is retained in this tab. Keep this tab open and retry when browser storage is working.'
+        : 'The API key change could not be saved. The previous key and remember setting were kept. Check browser storage and retry.');
+}
+
+function applyWftApiKeyInputState(state) {
+    var input = document.getElementById('apiKeyInput');
+    var remember = document.getElementById('rememberApiKeyOnDevice');
+    if (input) input.value = state.key;
+    if (remember) remember.checked = state.remember;
+    API_KEY = state.key || EMBEDDED_API_KEY;
+}
+
+function saveWftApiKeyFromForm() {
+    try { persistApiKeyStorageFromInput(); return true; }
+    catch (e) { alert(e.message); return false; }
+}
+
 function migrateLegacyApiKeyStorage() {
     try {
+        if (wftApiKeyStorageRecovery) throw getWftApiKeyStorageError();
+        if (wftStudentChangeRecovery && Object.prototype.hasOwnProperty.call(wftStudentChangeRecovery, 'wft_settings')) throw getWftApiKeyStorageError();
         var raw = localStorage.getItem('wft_settings');
-        if (!raw) { return; }
-        var s = JSON.parse(raw) || {};
-        if (s.apiKey) {
-            try {
-                if (!sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY)) {
-                    sessionStorage.setItem(WFT_API_KEY_SESSION_STORAGE_KEY, String(s.apiKey).trim());
-                }
-            } catch (e1) {}
-            delete s.apiKey;
-            localStorage.setItem('wft_settings', JSON.stringify(s));
+        if (!raw) return;
+        var settings = JSON.parse(raw);
+        if (!Object.prototype.hasOwnProperty.call(settings, 'apiKey')) return;
+        var key = String(settings.apiKey || '').trim();
+        if (key) {
+            var sessionKey = sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY);
+            if (sessionKey && String(sessionKey).trim() !== key) {
+                // A different active key must not erase the only legacy copy.
+                if (String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim() !== key) throw getWftApiKeyStorageError();
+            } else if (!sessionKey) {
+                sessionStorage.setItem(WFT_API_KEY_SESSION_STORAGE_KEY, key);
+            }
+            var copied = String(sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) || '').trim() === key
+                || String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim() === key;
+            if (!copied) throw getWftApiKeyStorageError();
         }
-    } catch (e) {}
+        delete settings.apiKey;
+        localStorage.setItem('wft_settings', JSON.stringify(settings));
+    } catch (e) { throw getWftApiKeyStorageError(); }
 }
 
 function isRememberApiKeyEnabled() {
     var rememberEl = document.getElementById('rememberApiKeyOnDevice');
-    if (rememberEl) { return rememberEl.checked === true; }
-    try { return localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) === 'true'; } catch (e) {}
-    return false;
+    return rememberEl ? rememberEl.checked === true : localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) === 'true';
 }
 
 function setRememberApiKeyEnabled(enabled) {
-    try { localStorage.setItem(WFT_API_KEY_REMEMBER_PREF_KEY, enabled ? 'true' : 'false'); } catch (e) {}
+    localStorage.setItem(WFT_API_KEY_REMEMBER_PREF_KEY, enabled ? 'true' : 'false');
 }
 
 function getStoredApiKey() {
-    migrateLegacyApiKeyStorage();
     try {
+        if (wftApiKeyStorageRecovery) throw getWftApiKeyStorageError();
+        migrateLegacyApiKeyStorage();
         var sessionKey = sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) || '';
-        if (sessionKey) { return String(sessionKey).trim(); }
-    } catch (e1) {}
-    try {
-        if (isRememberApiKeyEnabled()) {
+        if (sessionKey) return String(sessionKey).trim();
+        if (localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) === 'true') {
             return String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim();
         }
-    } catch (e2) {}
-    return '';
+        return '';
+    } catch (e) { throw getWftApiKeyStorageError(); }
 }
 
 function persistApiKeyStorageFromInput() {
-    var key = getApiKeyInputValue();
-    var remember = isRememberApiKeyEnabled();
-    setRememberApiKeyEnabled(remember);
+    var key = getApiKeyInputValue(), remember, previous;
     try {
-        if (key) { sessionStorage.setItem(WFT_API_KEY_SESSION_STORAGE_KEY, key); }
-        else { sessionStorage.removeItem(WFT_API_KEY_SESSION_STORAGE_KEY); }
-    } catch (e1) {}
-    try {
-        if (remember && key) { localStorage.setItem(WFT_API_KEY_LOCAL_STORAGE_KEY, key); }
-        else { localStorage.removeItem(WFT_API_KEY_LOCAL_STORAGE_KEY); }
-    } catch (e2) {}
+        remember = isRememberApiKeyEnabled();
+        if (wftStudentChangeRecovery && Object.prototype.hasOwnProperty.call(wftStudentChangeRecovery, 'wft_settings')) throw getWftApiKeyStorageError();
+        if (wftApiKeyStorageRecovery) {
+            if (!restoreWftApiKeyStorage(wftApiKeyStorageRecovery)) throw getWftApiKeyStorageError();
+            wftApiKeyStorageRecovery = null;
+        }
+        previous = [
+            { storage: sessionStorage, key: WFT_API_KEY_SESSION_STORAGE_KEY },
+            { storage: localStorage, key: WFT_API_KEY_LOCAL_STORAGE_KEY },
+            { storage: localStorage, key: WFT_API_KEY_REMEMBER_PREF_KEY },
+            { storage: localStorage, key: 'wft_settings' }
+        ];
+        previous.forEach(function(entry) { entry.value = entry.storage.getItem(entry.key); });
+        var settings = previous[3].value === null ? {} : JSON.parse(previous[3].value);
+        validateWftRequiredStorage('wft_settings', settings);
+        var oldRemember = previous[2].value === 'true';
+        var oldKey = previous[0].value || (oldRemember ? previous[1].value : '') || settings.apiKey || '';
+        wftCommittedApiKeyInput = { key: String(oldKey).trim(), remember: oldRemember };
+        if (key) sessionStorage.setItem(WFT_API_KEY_SESSION_STORAGE_KEY, key);
+        else sessionStorage.removeItem(WFT_API_KEY_SESSION_STORAGE_KEY);
+        if (remember && key) localStorage.setItem(WFT_API_KEY_LOCAL_STORAGE_KEY, key);
+        else localStorage.removeItem(WFT_API_KEY_LOCAL_STORAGE_KEY);
+        setRememberApiKeyEnabled(remember);
+        if (sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) !== (key || null)
+            || localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) !== (remember && key ? key : null)
+            || localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) !== (remember ? 'true' : 'false')) throw getWftApiKeyStorageError();
+        if (Object.prototype.hasOwnProperty.call(settings, 'apiKey')) {
+            delete settings.apiKey;
+            localStorage.setItem('wft_settings', JSON.stringify(settings));
+        }
+        wftCommittedApiKeyInput = { key: key, remember: remember };
+        applyWftApiKeyInputState(wftCommittedApiKeyInput);
+        return true;
+    } catch (e) {
+        if (previous && previous.every(function(entry) { return Object.prototype.hasOwnProperty.call(entry, 'value'); })
+            && !restoreWftApiKeyStorage(previous)) wftApiKeyStorageRecovery = previous;
+        applyWftApiKeyInputState(wftCommittedApiKeyInput);
+        throw getWftApiKeyStorageError();
+    }
 }
 
 function refreshApiKeyRuntimeValue() {
-    API_KEY = getApiKeyInputValue() || getStoredApiKey() || EMBEDDED_API_KEY;
+    try {
+        if (wftApiKeyStorageRecovery) throw getWftApiKeyStorageError();
+        API_KEY = getApiKeyInputValue() || getStoredApiKey() || EMBEDDED_API_KEY;
+        return true;
+    } catch (e) {
+        API_KEY = '';
+        alert(e.message);
+        return false;
+    }
 }
 
 function saveSettingsToLocalStorage(settingsOverride) {
-    if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
-    preflightWftRequiredStorage();
-    var settings = {};
     var existing = readWftRequiredStorage('wft_settings');
-
-    settings = cloneWftJson(existing || {});
+    var settings = Object.assign(Object.create(null), cloneWftJson(existing));
     if (settingsOverride && typeof settingsOverride === 'object') {
-        if (settingsOverride.apiKey) { delete settingsOverride.apiKey; }
-        var overrideKeys = Object.keys(settingsOverride);
-        for (var oi = 0; oi < overrideKeys.length; oi++) {
-            settings[overrideKeys[oi]] = settingsOverride[overrideKeys[oi]];
-        }
+        Object.keys(settingsOverride).forEach(function(key) {
+            if (key !== 'apiKey') settings[key] = cloneWftJson(settingsOverride[key]);
+        });
     }
-
     try {
-        var apiKeyInput = document.getElementById('apiKeyInput');
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        preflightWftRequiredStorage();
         var modelSelect = document.getElementById('modelSelect');
         var targetWordCountEl = document.getElementById('targetWordCount');
         var useWordCountTargetEl = document.getElementById('useWordCountTarget');
         var assessScriptQualityEl = document.getElementById('assessScriptQuality');
-
-        if (apiKeyInput) { persistApiKeyStorageFromInput(); }
-        delete settings.apiKey;
         if (modelSelect) settings.model = modelSelect.value || '';
         if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
         if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
@@ -721,77 +795,40 @@ function saveSettingsToLocalStorage(settingsOverride) {
         if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
         settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
-
-        if (typeof students !== "undefined" && Array.isArray(students)) {
-            settings.students = applyDeletionsToStudents(students, getDeletionsData());
-        }
-
-        delete settings.apiKey;
+        if (typeof students !== 'undefined' && Array.isArray(students)) settings.students = applyDeletionsToStudents(students, getDeletionsData());
+        validateWftRequiredStorage('wft_settings', settings);
         localStorage.setItem('wft_settings', JSON.stringify(settings));
-        refreshApiKeyRuntimeValue();
-    } catch(e) {}
-    // ── WFT Sync V2: mark settings dirty for background sync ──
-    if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks && !(typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) {
-        markWftSettingsDirty("settings-change");
-        scheduleWftCloudSync("settings-change");
-    } else if ((typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === "function") {
-        try { saveSettingsToDrive(); } catch (e) {}
+    } catch (e) {
+        applyWftPreferenceForm(existing);
+        throw e;
     }
+    if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks && !(typeof isWftStorageSafeMode === 'function' && isWftStorageSafeMode())) {
+        markWftSettingsDirty('settings-change');
+        scheduleWftCloudSync('settings-change');
+    } else if ((typeof isWftStorageSafeMode === 'function' && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === 'function') {
+        saveSettingsToDrive();
+    }
+    delete settings.apiKey;
     return settings;
+}
+
+function saveWftPreferencesFromForm() {
+    try { saveSettingsToLocalStorage(); return true; }
+    catch (e) {
+        alert(e.wftStudentChangeRecovery ? e.message : 'Settings could not be saved. The saved preferences were kept. Check browser storage and retry.');
+        return false;
+    }
 }
 
 function loadSettingsFromLocalStorage() {
     try {
-        migrateLegacyApiKeyStorage();
-        var rememberApiKeyEl = document.getElementById('rememberApiKeyOnDevice');
-        if (rememberApiKeyEl) { rememberApiKeyEl.checked = isRememberApiKeyEnabled(); }
-        if (document.getElementById('apiKeyInput')) {
-            document.getElementById('apiKeyInput').value = getStoredApiKey();
-        }
-        var raw = localStorage.getItem('wft_settings');
-        if (raw) {
-            var s = JSON.parse(raw);
-            if (s.model && document.getElementById('modelSelect')) {
-                document.getElementById('modelSelect').value = s.model;
-            }
-            if (s.targetWordCount && document.getElementById('targetWordCount')) {
-                document.getElementById('targetWordCount').value = s.targetWordCount;
-            }
-            if (s.useWordCountTarget != null && document.getElementById('useWordCountTarget')) {
-                document.getElementById('useWordCountTarget').checked = s.useWordCountTarget;
-                var twc = document.getElementById('targetWordCount');
-                if (twc) twc.disabled = !s.useWordCountTarget;
-            }
-            if (s.grammarStrictness != null) {
-                var slider = document.getElementById('grammarStrictness');
-                var valEl = document.getElementById('grammarStrictnessVal');
-                if (slider) slider.value = s.grammarStrictness;
-                if (valEl) valEl.textContent = s.grammarStrictness;
-            }
-            if (s.assessScriptQuality != null && document.getElementById('assessScriptQuality')) {
-                document.getElementById('assessScriptQuality').checked = s.assessScriptQuality;
-            }
-            if (document.getElementById('classGradeLevelSelect')) {
-                var savedClassGrade = parseGradeLevelValue(s.classGradeLevel) || 5;
-                document.getElementById('classGradeLevelSelect').value = String(savedClassGrade);
-            }
-            wftStudentGradeLevelOverride = s.studentGradeLevelOverride === true;
-            if (s.studentGradeLevelOverride == null && s.gradeLevel != null && s.classGradeLevel != null) {
-                wftStudentGradeLevelOverride = (parseGradeLevelValue(s.gradeLevel) !== (parseGradeLevelValue(s.classGradeLevel) || 5));
-            }
-            if (document.getElementById('gradeLevelSelect')) {
-                var savedStudentGrade = parseGradeLevelValue(s.gradeLevel);
-                var effectiveStudentGrade = wftStudentGradeLevelOverride && savedStudentGrade ? savedStudentGrade : getClassGradeLevel();
-                document.getElementById('gradeLevelSelect').value = String(effectiveStudentGrade || 5);
-            }
-            applyGradeWordCountRange();
-            refreshGradeProfileDescription();
-            if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
-            // Update script quality toggle visibility based on whether photos exist
-            updateScriptQualityToggleVisibility();
-        }
-        refreshApiKeyRuntimeValue();
-    } catch(e) {}
+        var key = getStoredApiKey();
+        var remember = localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) === 'true';
+        wftCommittedApiKeyInput = { key: key, remember: remember };
+        applyWftApiKeyInputState(wftCommittedApiKeyInput);
+    } catch (e) { alert(e.message); }
+    try { applyWftPreferenceForm(readWftRequiredStorage('wft_settings')); }
+    catch (e) { alert('Saved settings could not be read. Download Emergency Backup before repairing browser storage.'); }
 }
 
 /* =============================================
@@ -1499,6 +1536,7 @@ function validateWftRequiredStorage(key, data) {
 }
 
 function preflightWftRequiredStorage() {
+    if (wftApiKeyStorageRecovery && wftApiKeyStorageRecovery.some(function(entry) { return entry.key === 'wft_settings'; })) throw getWftApiKeyStorageError();
     readWftRequiredStorage('wft_settings');
     readWftRequiredStorage('wft_students');
     normalizeDeletionsData(readWftRequiredStorage(WFT_DELETIONS_STORAGE_KEY));
@@ -1567,12 +1605,18 @@ function buildWftEmergencyBackupObject() {
             var raw = readWftStudentChangeStorage(bk);
             if (raw !== null) {
                 backup.contents[bk] = parseWftBackupValue(raw);
+                if (bk === 'wft_settings' && backup.contents[bk] && typeof backup.contents[bk] === 'object') delete backup.contents[bk].apiKey;
             }
         } catch (e) { backup.contents[bk] = null; }
     }
 
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) {
         backup.studentChangeRecovery = Object.assign({}, wftStudentChangeRecovery);
+        var recoveredSettings = parseWftBackupValue(backup.studentChangeRecovery.wft_settings);
+        if (recoveredSettings && typeof recoveredSettings === 'object') {
+            delete recoveredSettings.apiKey;
+            backup.studentChangeRecovery.wft_settings = JSON.stringify(recoveredSettings);
+        }
     }
 
     // Add student/session counts from portfolio
@@ -1696,9 +1740,7 @@ function createStableStudentId(studentName, existingMap) {
 }
 
 function getOrCreateStudentId(studentName) {
-    var settings;
-    try { settings = getRawSettings ? getRawSettings() : {}; }
-    catch (e) { settings = {}; }
+    var settings = readWftRequiredStorage('wft_settings');
 
     settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
     if (settings.studentIdMap[studentName]) {
@@ -1728,9 +1770,8 @@ function getOrCreateStudentId(studentName) {
         });
     }
 
-    if (typeof saveSettingsToLocalStorage === "function") {
-        try { saveSettingsToLocalStorage(settings); } catch (e) {}
-    }
+    if (typeof saveSettingsToLocalStorage !== 'function') throw new Error('Student identity could not be saved.');
+    saveSettingsToLocalStorage(settings);
     return newId;
 }
 
@@ -4527,7 +4568,10 @@ function resetWftInputUiToFreshSlate() {
     if (assessScriptQualityEl) assessScriptQualityEl.checked = false;
 
     var apiKeyInputEl = document.getElementById("apiKeyInput");
-    if (apiKeyInputEl) apiKeyInputEl.value = getStoredApiKey();
+    if (apiKeyInputEl) {
+        try { apiKeyInputEl.value = getStoredApiKey(); }
+        catch (e) { apiKeyInputEl.value = ''; alert(e.message); }
+    }
 
     var ocrPanelEl = document.getElementById("ocrPanel");
     if (ocrPanelEl) ocrPanelEl.open = false;
@@ -4982,7 +5026,15 @@ function ensureDriveFolder(callback) {
 
 function saveFileToDrive(filename, content, mimeType, callback) {
     if (!driveAccessToken) return;
-    try { preflightWftRequiredStorage(); }
+    try {
+        preflightWftRequiredStorage();
+        if (filename === WFT_SETTINGS_FILENAME) {
+            var settings = JSON.parse(content);
+            validateWftRequiredStorage('wft_settings', settings);
+            delete settings.apiKey;
+            content = JSON.stringify(settings);
+        }
+    }
     catch (e) { if (callback) callback(e, null, null); return; }
     setDriveSyncStatus("syncing", "Syncing...");
     ensureDriveFolder(function(folderId) {
@@ -5313,6 +5365,7 @@ function getLocalSettingsSnapshot() {
         }
     }
 
+    delete settings.apiKey;
     return settings;
 }
 
@@ -5573,9 +5626,11 @@ function saveWftStudentChange(change) {
     var settings;
     if (rosterChanged) {
         keys.push('wft_students', 'wft_selectedStudent', 'wft_settings');
-        settings = change.settings || readWftRequiredStorage('wft_settings');
+        settings = cloneWftJson(change.settings || readWftRequiredStorage('wft_settings'));
         settings.students = change.students;
-        delete settings.apiKey;
+        var storedSettings = readWftRequiredStorage('wft_settings');
+        if (Object.prototype.hasOwnProperty.call(storedSettings, 'apiKey')) settings.apiKey = storedSettings.apiKey;
+        else delete settings.apiKey;
     }
     var previous = {};
     keys.forEach(function(key) { previous[key] = localStorage.getItem(key); });
@@ -5882,6 +5937,10 @@ function downloadWftJsonFilePromise(fileId, requiredShape) {
 
 function uploadWftJsonFilePromise(filename, data) {
     preflightWftRequiredStorage();
+    if (filename === WFT_SETTINGS_FILENAME) {
+        data = cloneWftJson(data);
+        delete data.apiKey;
+    }
     if (filename === WFT_SETTINGS_FILENAME) validateWftRequiredStorage('wft_settings', data);
     if (filename === WFT_DELETIONS_FILENAME) validateWftRequiredStorage(WFT_DELETIONS_STORAGE_KEY, data);
     if (filename === WFT_PORTFOLIO_FILENAME) {
@@ -6047,7 +6106,7 @@ function mergeWftStudents(localStudents, cloudStudents) {
 function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
     var localCopy = cloneWftJson(localSettings || {});
     var cloudCopy = cloneWftJson(cloudSettings || {});
-    var merged = {};
+    var merged = Object.create(null);
     var key;
 
     if (preferLocal) {
@@ -6084,29 +6143,11 @@ function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
 }
 
 function saveSettingsLocalOnly(settings, reason) {
-    preflightWftRequiredStorage();
-    validateWftRequiredStorage('wft_settings', settings);
-    if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
     var previousSuppress = wftSuppressDirtyMarks;
-
     try {
-        var merged = cloneWftJson(settings || {});
         wftSuppressDirtyMarks = true;
-
-        if (merged && merged.apiKey) { delete merged.apiKey; }
-        localStorage.setItem("wft_settings", JSON.stringify(merged || {}));
-
-        if (typeof applyLoadedSettings === "function") {
-            applyLoadedSettings(merged);
-        }
-
-        refreshApiKeyRuntimeValue();
-    } catch (e2) {
-        wftDebugWarn("[WFT Sync] Could not save merged settings locally:", e2);
-        throw e2;
-    } finally {
-        wftSuppressDirtyMarks = previousSuppress;
-    }
+        return applyLoadedSettings(settings);
+    } finally { wftSuppressDirtyMarks = previousSuppress; }
 }
 
 function syncWftSettingsIfNeeded(reason) {
@@ -6178,7 +6219,8 @@ function syncWftSettingsIfNeeded(reason) {
                     mergedHash = getSettingsFingerprint(merged);
 
                     if (mergedHash !== localHash) {
-                        saveSettingsLocalOnly(merged, "cloud-merge");
+                        merged = saveSettingsLocalOnly(merged, "cloud-merge");
+                        mergedHash = getSettingsFingerprint(merged);
                     }
 
                     if ((hadPending || files.length > 1) && mergedHash !== cloudHash) {
@@ -6570,6 +6612,15 @@ function handleWftSyncError(e) {
         return;
     }
 
+    if (e.wftStudentChangeRecovery) {
+        setDriveSyncStatus('error', 'Drive sync needs attention: recovery needed. Download Emergency Backup and keep this tab open.');
+        return;
+    }
+    if (e.wftSettingsApply) {
+        setDriveSyncStatus('error', 'Drive sync needs attention: settings could not be saved locally. Check browser storage and retry.');
+        return;
+    }
+
     if (e.message === "OFFLINE") {
         setDriveSyncStatus("error", "Offline - will sync later");
         return;
@@ -6802,15 +6853,14 @@ function saveWftLocalSnapshotsBeforeHide() {
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) return;
     try { preflightWftRequiredStorage(); }
     catch (e) { wftDebugWarn('[WFT Storage] Page-hide save stopped; saved bytes were preserved:', e); return; }
+    var previousSuppress = wftSuppressDirtyMarks;
     try {
         if (typeof saveSettingsToLocalStorage === "function") {
             wftSuppressDirtyMarks = true;
             saveSettingsToLocalStorage();
-            wftSuppressDirtyMarks = false;
         }
-    } catch (e) {
-        wftSuppressDirtyMarks = false;
-    }
+    } catch (e) { wftDebugWarn('[WFT Storage] Page-hide preferences could not be saved; saved preferences kept.'); }
+    finally { wftSuppressDirtyMarks = previousSuppress; }
 
     try {
         if (typeof getLocalPortfolioSnapshot === "function") {
@@ -7044,13 +7094,16 @@ function loadSettingsFromDrive() {
             } else {
                 setDriveSyncStatus("synced", "Ready");
             }
-        }).catch(function(e) { wftDebugError("Load settings error:", e); });
+        }).catch(function(e) {
+            setDriveSyncStatus('error', 'Settings could not be saved locally');
+            alert(e.wftStudentChangeRecovery ? e.message : 'Cloud settings could not be saved locally. The saved preferences and roster were kept. Retry when browser storage is working.');
+        });
     });
 }
 
-function applyLoadedSettings(settings) {
-    if (!settings) return;
-    preflightWftRequiredStorage();
+function applyWftPreferenceForm(settings) {
+    var defaults = { model: document.getElementById('modelSelect') ? document.getElementById('modelSelect').options[0].value : '', targetWordCount: '200', useWordCountTarget: true, grammarStrictness: 3, assessScriptQuality: false };
+    settings = Object.assign(Object.create(null), defaults, settings || {});
     if (settings.model && document.getElementById("modelSelect")) document.getElementById("modelSelect").value = settings.model;
     if (settings.targetWordCount && document.getElementById("targetWordCount")) document.getElementById("targetWordCount").value = settings.targetWordCount;
     if (settings.useWordCountTarget != null && document.getElementById("useWordCountTarget")) document.getElementById("useWordCountTarget").checked = settings.useWordCountTarget;
@@ -7078,38 +7131,50 @@ function applyLoadedSettings(settings) {
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
-    if (settings.students && Array.isArray(settings.students)) {
-        var incomingStudents = cloneWftJson(settings.students);
-        var localStudents = Array.isArray(students) ? cloneWftJson(students) : [];
-        var mergedStudents = mergeWftStudents(localStudents, incomingStudents);
-        var incomingHash = getSettingsFingerprint({ students: incomingStudents });
-        var mergedHash = getSettingsFingerprint({ students: mergedStudents });
-        var previousSuppress = wftSuppressDirtyMarks;
+    var target = document.getElementById('targetWordCount');
+    if (target) target.disabled = !settings.useWordCountTarget;
+    refreshScoreWeightingDescription();
+    updateScriptQualityToggleVisibility();
+    updateMeter();
+}
 
-        var previousStudents = students;
-        students = mergedStudents;
-
-        try {
-            wftSuppressDirtyMarks = true;
-            saveStudents();
-        } catch (e) {
-            students = previousStudents;
-            wftDebugWarn("[WFT Sync] Could not save merged roster locally:", e);
-            throw e;
-        } finally {
-            wftSuppressDirtyMarks = previousSuppress;
+function applyLoadedSettings(settings) {
+    if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+    preflightWftRequiredStorage();
+    validateWftRequiredStorage('wft_settings', settings);
+    var existing = readWftRequiredStorage('wft_settings');
+    var merged = mergeWftSettings(existing, settings, false);
+    var rosterChanged = Array.isArray(merged.students);
+    var incomingHash = getSettingsFingerprint({ students: merged.students || [] });
+    if (rosterChanged) merged.students = mergeWftStudents(mergeWftStudents(readWftRequiredStorage('wft_students'), students), merged.students);
+    var previous = { wft_settings: localStorage.getItem('wft_settings') };
+    if (rosterChanged) previous.wft_students = localStorage.getItem('wft_students');
+    try {
+        var durableSettings = cloneWftJson(merged);
+        if (Object.prototype.hasOwnProperty.call(existing, 'apiKey')) durableSettings.apiKey = existing.apiKey;
+        localStorage.setItem('wft_settings', JSON.stringify(durableSettings));
+        if (rosterChanged) localStorage.setItem('wft_students', JSON.stringify(merged.students));
+    } catch (e) {
+        e.wftSettingsApply = true;
+        if (!restoreWftStudentChangeStorage(previous)) {
+            wftStudentChangeRecovery = previous;
+            throw getWftStudentChangeRecoveryError();
         }
-
+        throw e;
+    }
+    // Required writes are committed before any runtime/form publication.
+    if (rosterChanged) students = merged.students;
+    applyWftPreferenceForm(merged);
+    if (rosterChanged) {
         renderStudentList();
         populateStudentDropdown();
         refreshPortfolioDropdown();
-
-        if (!previousSuppress && incomingHash !== mergedHash) {
-            markWftSettingsDirty("roster-merge-preserved-local");
-            scheduleWftCloudSync("roster-merge-preserved-local");
+        if (!wftSuppressDirtyMarks && incomingHash !== getSettingsFingerprint({ students: merged.students })) {
+            markWftSettingsDirty('roster-merge-preserved-local');
+            scheduleWftCloudSync('roster-merge-preserved-local');
         }
     }
-    refreshScoreWeightingDescription();
+    return merged;
 }
 
 function saveSettingsToDrive() {

@@ -104,9 +104,8 @@ function getOrCreateStudentId(studentName) {
     }
 
     // Persist settings
-    if (typeof saveSettingsToLocalStorage === "function") {
-        try { saveSettingsToLocalStorage(settings); } catch (e) {}
-    }
+    if (typeof saveSettingsToLocalStorage !== 'function') throw new Error('Student identity could not be saved.');
+    saveSettingsToLocalStorage(settings);
 
     return newId;
 }

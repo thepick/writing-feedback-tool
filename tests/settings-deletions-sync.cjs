@@ -53,7 +53,11 @@ function setup(stream, { files = [{ id: 'canonical' }], pending = true, uploadGa
                 writes.push(clone(local));
             }
         },
-        applyLoadedSettings(data) { ui = clone(data); }, refreshApiKeyRuntimeValue() {}, wftSyncLog() {}, wftDebugWarn() {}
+        applyLoadedSettings(data) {
+            if (failSave) throw new Error('Storage full');
+            stored = JSON.stringify(data); local = clone(data); writes.push(clone(data)); ui = clone(data);
+            return data;
+        }, refreshApiKeyRuntimeValue() {}, wftSyncLog() {}, wftDebugWarn() {}
     });
     return {
         app, state, uploads, writes, sync: () => app['syncWft' + stream + 'IfNeeded']('test'),

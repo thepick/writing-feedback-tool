@@ -26,6 +26,7 @@ function setup(options = {}) {
         syncSavedPortfolioData() {}, wftSuppressDirtyMarks: true, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions',
         // Required-read failures are exercised with the full native storage-integrity fixture.
         preflightWftRequiredStorage() {}, readWftRequiredStorage: () => ({}),
+        cloneWftJson: value => JSON.parse(JSON.stringify(value)),
         localStorage: { getItem: () => null, setItem: (key, value) => { writes.push([key, value]); if (key === 'wft_students') events.push('roster-save'); if (key === 'wft_settings') events.push(JSON.parse(value).recordEvent); } },
         saveStudents: () => events.push('roster-save'),
         document: { getElementById: () => null }, renderStudentList() {}, populateStudentDropdown() {},
