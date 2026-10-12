@@ -4356,7 +4356,7 @@ function assertWftArchiveConnection(connection) {
     }
 }
 
-function wftDriveFetch(url, options, archiveConnection) {
+function wftDriveFetch(url, options, archiveConnection, isCurrentRequest) {
     options = options || {};
     wftSyncLog("[WFT Sync] Drive fetch start", (options.method || "GET"), url);
 
@@ -4392,6 +4392,8 @@ function wftDriveFetch(url, options, archiveConnection) {
             err.status = response.status;
             err.reason = parsed.reason;
             err.raw = parsed.raw;
+
+            if (isCurrentRequest && !isCurrentRequest()) throw err;
 
             if (response.status === 401) {
                 wftSyncState.authBlocked = true;
@@ -4647,7 +4649,7 @@ function ensureDriveFolder(callback, onError) {
         });
 }
 
-function saveFileToDrive(filename, content, mimeType, callback, deferSyncStatus) {
+function saveFileToDrive(filename, content, mimeType, callback, isCurrentSave) {
     if (!driveAccessToken) { if (callback) callback(new Error("Not signed in"), null, null); return; }
     var connection = captureWftArchiveConnection();
     try {
@@ -4660,7 +4662,7 @@ function saveFileToDrive(filename, content, mimeType, callback, deferSyncStatus)
         }
     }
     catch (e) { if (callback) callback(e, null, null); return; }
-    if (!deferSyncStatus) setDriveSyncStatus("syncing", "Syncing...");
+    if (!isCurrentSave) setDriveSyncStatus("syncing", "Syncing...");
     ensureDriveFolder(function(folderId) {
         findWftFilesByNamePromise(filename).then(function(data) {
             assertWftArchiveConnection(connection);
@@ -4686,7 +4688,7 @@ function saveFileToDrive(filename, content, mimeType, callback, deferSyncStatus)
                 method: method,
                 headers: { "Content-Type": "multipart/related; boundary=" + boundary },
                 body: body
-            }).then(function (r) {
+            }, connection, isCurrentSave).then(function (r) {
                 return r.json();
             }).then(function (fileData) {
                 assertWftArchiveConnection(connection);
@@ -4700,15 +4702,16 @@ function saveFileToDrive(filename, content, mimeType, callback, deferSyncStatus)
             preflightWftRequiredStorage();
             var now = new Date();
             var fileId = fileData && fileData.id ? fileData.id : getCachedWftDriveFileId(filename);
-            if (!deferSyncStatus) setDriveSyncStatus("synced", "Synced " + now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
+            if (!isCurrentSave) setDriveSyncStatus("synced", "Synced " + now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
             if (callback) callback(null, fileId, fileData || null);
         }).catch(function(e) {
             wftDebugError("Drive save error:", e);
+            if (isCurrentSave && !isCurrentSave()) { if (callback) callback(e, null, null); return; }
             if (e && e.status === 404) {
                 clearCachedWftDriveFileId(filename);
-                if (!deferSyncStatus) setDriveSyncStatus("error", "Drive file not found - retrying will recreate it.");
+                if (!isCurrentSave) setDriveSyncStatus("error", "Drive file not found - retrying will recreate it.");
             } else {
-                if (!deferSyncStatus) setDriveSyncStatus("error", "Sync failed");
+                if (!isCurrentSave) setDriveSyncStatus("error", "Sync failed");
             }
             if (callback) callback(e, null, null);
         });
@@ -4826,7 +4829,7 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
                 settled = true;
                 clearTimeout(timer);
                 resolve(fileId || null);
-            }, true); // The V2 caller owns status, including after this request times out.
+            }, function () { return !settled; }); // The V2 caller owns status, including after timeout.
         } catch (e) {
             if (settled) return;
             settled = true;
