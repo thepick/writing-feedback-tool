@@ -1,8 +1,8 @@
 # Repowise audit progress
 
-Updated 2026-10-12T05:59:02.992Z; timezone Asia/Bangkok. All 662 original IDs retained, 1113 total tracked rows. Original outcomes: {"no_code_change":468,"confirmed_awaiting_fix":128,"fixed_in_draft_pr":4,"fixed_and_deployed":60,"pending":2}. Scanner absence does not imply resolution. Ledger review dispositions retain their historical names; publication fields record current live status.
+Updated 2026-10-12T06:41:24.757Z; timezone Asia/Bangkok. All 662 original IDs retained, 1123 total tracked rows. Original outcomes: {"no_code_change":468,"confirmed_awaiting_fix":120,"fixed_in_draft_pr":10,"fixed_and_deployed":64}. Scanner absence does not imply resolution. Ledger review dispositions retain their historical names; publication fields record current live status.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T05:29:39Z, commit 5bfaa2bd52cb94f6d76cd6a7cb4752725d5e38fe. All five shipped files match the reviewed source byte for byte. Rollback backup and file hashes are recorded in the ledger.
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T06:00:57Z, commit 40e6e39d14da2f717ea792f5567aa2c508032cb4. All five shipped files match the reviewed source byte for byte. Rollback backup and file hashes are recorded in the ledger.
 
 - SYNC-001: Older settings/deletion uploads clear newer pending changes. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/41)
 - ANALYSIS-001: Async analysis reads changed student and writing at completion. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/42)
@@ -16,11 +16,12 @@ Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), b
 - SECURITY-002: Inherited identity keys drop records and mutate shared object properties. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/49)
 - ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/56)
 - SETTINGS-001: Failed preference save is acknowledged and schedules sync. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/53)
+- INDEX-001: Portfolio summary reads wrong score field and acknowledges stale or offline saves. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/60)
 - OAUTH-001: OAuth redirect proceeds after failing to preserve unsaved writing. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/55)
 - AUTH-001: Sign-out reports success while a retained session token can restore sign-in. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/55)
 - STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/50)
 - SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/48)
-- PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/59)
+- PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/59)
 - GUIDE-001: Notebook punctuation and spelling changes receive incorrect teaching labels. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/58)
 - GUIDE-002: Notebook paragraph revisions lose their separation before display. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/58)
 - STORAGE-003: Corrupt deletion history is overwritten as empty. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/51)
@@ -49,11 +50,10 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 
 - CLEANUP-001: Remove unshipped helper copies and unused bundled helper islands
 - ARCHIVE-001: Unused archive-removal helper writes a mismatched legacy session marker
-- INDEX-001: Portfolio summary reads wrong score field and acknowledges stale or offline saves
 - PERF-001: Correction comparison blocks the UI with a full repeated token matrix
 - API-001: Missing API key triggers futile fallback retries and delayed error
 
-Current indexed source 20430f869b3c1f49223fba680d2d65a260e2bb93: 766 health rows, 157 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
+Current indexed source b8a0f665094c944308e128155ac74fc8d8cda986: 760 health rows, 157 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
 
 No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
