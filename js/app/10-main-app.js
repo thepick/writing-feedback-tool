@@ -6978,7 +6978,7 @@ function isGenericNotebookGuidance(text) {
 
 function extractNotebookActionItems(text) {
     var items = [];
-    var nextText = cleanNotebookSentence(text);
+    var nextText = String(text || "").trim();
     if (!nextText) return items;
 
     var normalized = nextText
@@ -6994,8 +6994,9 @@ function extractNotebookActionItems(text) {
         .replace(/\.\s+(After each sentence|Then|Next|Finally)\b/g, "\n$1");
 
     var rawParts = normalized.split(/\n+/);
+    if (rawParts.length === 1) rawParts = normalized.split(/;\s*/);
     for (var i = 0; i < rawParts.length; i++) {
-        var rawPart = cleanNotebookSentence(rawParts[i]);
+        var rawPart = cleanNotebookSentence(normalizeGrowGoalStrategyForSentence(rawParts[i]));
         if (!rawPart) continue;
         var part = compressChecklistItem(rawPart);
         if (part && items.indexOf(part) === -1) {
@@ -7027,7 +7028,6 @@ function buildNotebookActionChecklist(data, fallbackChecklist, fallbackNextTime,
 
     function pushItemsFromText(text) {
         if (!text) return;
-        text = normalizeGrowGoalStrategyForSentence(text);
         var extracted = extractNotebookActionItems(text);
         for (var i = 0; i < extracted.length; i++) {
             var item = extracted[i];
@@ -7327,6 +7327,17 @@ function cleanNotebookGuideText(value) {
     return String(value || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
+function cleanNotebookGuideExampleText(value) {
+    // Keep paragraph boundaries only in example text; ordinary wrapping remains sentence whitespace.
+    return String(value || "")
+        .replace(/\r\n?/g, "\n")
+        .replace(/<\s*br\b[^>]*>/gi, "\n\n")
+        .replace(/<\/\s*p\s*>/gi, "\n\n")
+        .replace(/<[^>]*>/g, "")
+        .split(/\n[^\S\n]*\n+/)
+        .map(cleanNotebookGuideText).filter(Boolean).join("\n\n");
+}
+
 function getNotebookGuideContentWords(text) {
     var cleaned = cleanNotebookGuideText(text || "")
         .toLowerCase()
@@ -7368,10 +7379,9 @@ function getNotebookGuideContentWords(text) {
 }
 
 function normalizeNotebookGuideCompareText(text) {
-    return cleanNotebookGuideText(text || "")
+    return cleanNotebookGuideExampleText(text || "")
         .replace(/[“”]/g, '"')
         .replace(/[‘’]/g, "'")
-        .replace(/\s+/g, " ")
         .replace(/^\s+|\s+$/g, "");
 }
 
@@ -7421,8 +7431,8 @@ function isValidNotebookGuideExample(example) {
     return true;
 }
 
-function truncateNotebookGuideText(text, maxChars) {
-    var s = cleanNotebookGuideText(text);
+function truncateNotebookGuideText(text, maxChars, preserveParagraphs) {
+    var s = preserveParagraphs ? cleanNotebookGuideExampleText(text) : cleanNotebookGuideText(text);
     maxChars = parseInt(maxChars, 10);
     if (!isFinite(maxChars) || maxChars < 10) maxChars = 120;
     if (s.length <= maxChars) return s;
@@ -7581,7 +7591,7 @@ function extractNotebookGuideJsonBlock(step3Text) {
 
 function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, notebookGuidePriorities) {
     candidate = candidate || {};
-    var originalQuote = truncateNotebookGuideText(candidate.originalQuote || candidate.before || candidate.quote || "", 180);
+    var originalQuote = truncateNotebookGuideText(candidate.originalQuote || candidate.before || candidate.quote || "", 180, true);
     if (!originalTextContainsNotebookQuote(originalText, originalQuote)) return null;
     var area = truncateNotebookGuideText(candidate.area || "", 50);
     var skill = truncateNotebookGuideText(candidate.skill || "", 70);
@@ -7592,7 +7602,7 @@ function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, n
         return null;
     }
     var rawNextTimeExample = String(candidate.nextTimeExample || candidate.after || candidate.revision || "");
-    var nextTimeExample = truncateNotebookGuideText(rawNextTimeExample, 220);
+    var nextTimeExample = truncateNotebookGuideText(rawNextTimeExample, 220, true);
     var whyThisWorksRaw = clarifyYToIesGuideText(candidate.whyThisWorks || candidate.explanation || candidate.why || "");
     var whyThisWorks = truncateNotebookGuideText(whyThisWorksRaw, 130);
     var combinedLabel = cleanNotebookGuideText(area + " " + skill + " " + connection).toLowerCase();
@@ -7602,7 +7612,7 @@ function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, n
     var nextSentenceCount = getNotebookGuideSentenceList(nextTimeExample).length;
 
     if (!nextTimeExample || !whyThisWorks) return null;
-    if (combinedLabel.indexOf("paragraph") !== -1 && !(new RegExp("\\n\\s*\\n|<\\s*br\\b|<\\s*p\\b", "i").test(rawNextTimeExample))) return null;
+    if (combinedLabel.indexOf("paragraph") !== -1 && nextTimeExample.indexOf("\n\n") === -1) return null;
     if (originalTokenCount > 4 && nextTokenCount > Math.max(Math.ceil(originalTokenCount * 1.8), originalTokenCount + 12)) return null;
     if (originalSentenceCount > 0 && nextSentenceCount > originalSentenceCount + 1) return null;
     if (isGenericNotebookNextTimeExample(nextTimeExample)) return null;
@@ -7900,7 +7910,9 @@ function inferConventionSkill(originalQuote, correctedMatch) {
     if (/\bplaying catch\b/.test(original) && /\bare playing catch\b/.test(corrected)) {
         return "Making Sentences Complete";
     }
-    if (original.replace(/[.,!?]/g, "") !== corrected.replace(/[.,!?]/g, "")) {
+    var originalWords = original.replace(/[.,!?;:'"\u2018\u2019\u201c\u201d-]/g, "").replace(/\s+/g, " ").trim();
+    var correctedWords = corrected.replace(/[.,!?;:'"\u2018\u2019\u201c\u201d-]/g, "").replace(/\s+/g, " ").trim();
+    if (original !== corrected && originalWords === correctedWords) {
         return "Checking Punctuation";
     }
     return "Checking Conventions";
@@ -7927,8 +7939,8 @@ function makeNotebookGuideExample(area, skill, page1Connection, originalQuote, n
         area: area,
         skill: skill,
         page1Connection: page1Connection,
-        originalQuote: truncateNotebookGuideText(originalQuote, 180),
-        nextTimeExample: truncateNotebookGuideText(nextTimeExample, 220),
+        originalQuote: truncateNotebookGuideText(originalQuote, 180, true),
+        nextTimeExample: truncateNotebookGuideText(nextTimeExample, 220, true),
         whyThisWorks: truncateNotebookGuideText(whyThisWorks, 130)
     };
     return isValidNotebookGuideExample(ex) ? ex : null;
@@ -7943,6 +7955,19 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
     var i;
 
     if (!sentences.length) return null;
+
+    if (category === "Organization") {
+        if (cleanNotebookGuideExampleText(correctedText).split("\n\n").length <= cleanNotebookGuideExampleText(originalText).split("\n\n").length) return null;
+        // shortcut: this fallback uses the whole 180-character source quote; longer writing needs a grounded shorter span.
+        return sanitizeNotebookGuideCandidate({
+            area: "Organization",
+            skill: "Starting a New Paragraph",
+            page1Connection: category,
+            originalQuote: originalText,
+            nextTimeExample: stripCorrectionMarkdown(correctedText || ""),
+            whyThisWorks: "A new paragraph helps the reader see where a new part begins."
+        }, originalText, null, [priority]);
+    }
 
     if (category === "Flow") {
         // Flow revisions can be too subtle for a safe mechanical fallback. Do not
@@ -8269,9 +8294,9 @@ function renderNotebookGuideExamples(guide, options) {
         html += '<div class="example-heading">EXAMPLE ' + (i + 1) + '</div>';
         html += '<div class="example-skill">' + escapeHtml(truncateNotebookGuideText(ex.area || "Writing", 50)) + ': ' + escapeHtml(truncateNotebookGuideText(ex.skill || "Try one focused improvement", 70)) + '</div>';
         html += '<div class="example-label">In this piece, you wrote:</div>';
-        html += '<div class="example-quote">"' + escapeHtml(truncateNotebookGuideText(ex.originalQuote || "", 180)) + '"</div>';
+        html += '<div class="example-quote">"' + escapeHtml(truncateNotebookGuideText(ex.originalQuote || "", 180, true)).replace(/\n\n/g, "<br><br>") + '"</div>';
         html += '<div class="example-label">Next time, you could try:</div>';
-        html += '<div class="example-after">"' + escapeHtml(truncateNotebookGuideText(ex.nextTimeExample || "", 220)) + '"</div>';
+        html += '<div class="example-after">"' + escapeHtml(truncateNotebookGuideText(ex.nextTimeExample || "", 220, true)).replace(/\n\n/g, "<br><br>") + '"</div>';
         html += '<div class="example-label">Why this works:</div>';
         html += '<div class="example-why">' + escapeHtml(truncateNotebookGuideText(ex.whyThisWorks || "", 130)) + '</div>';
         html += '</div>';
