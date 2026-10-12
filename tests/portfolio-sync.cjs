@@ -25,7 +25,7 @@ function setup({ files = [{ id: 'canonical' }], pending = true, findGate, downlo
     const writes = [], uploads = [];
     const state = { localPortfolioCounter: 1, pendingPortfolioPush: pending, lastSyncedPortfolioCounter: 0, lastSyncedPortfolioHash: 'previous', needsSyncAfterCurrent: false };
     const app = vm.runInNewContext(helpers + '\n' + source.slice(start, end) + '\n;globalThis', {
-        preflightWftRequiredStorage() {}, getRawSettings: () => ({}), WFT_LAMPORT_V1: false,
+        preflightWftRequiredStorage() {}, markWftPortfolioIndexDirty() {}, getRawSettings: () => ({}), WFT_LAMPORT_V1: false,
         wftSyncState: state, WFT_PORTFOLIO_FILENAME: 'portfolio.json',
         WFT_TOMBSTONE_COMPACTION_V1: false, getDeletionsData: () => clone(deletions),
         getLocalPortfolioSnapshot: () => clone(local), getPortfolioFingerprint: JSON.stringify,
