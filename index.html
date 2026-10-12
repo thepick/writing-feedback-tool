@@ -3748,7 +3748,7 @@
                     <button class="secondary-btn" onclick="saveWftPreMigrationBackupToDrive(function(){})" title="Upload a backup to Google Drive">Create Drive Backup</button>
                     <button class="secondary-btn" onclick="rebuildPortfolioIndex(function(){})" title="Rebuild the portfolio index from current data">Rebuild Portfolio Index</button>
                     <button class="secondary-btn" id="btnClearLocalCache" onclick="clearWftLocalCache()" title="Remove IndexedDB and localStorage cache (not Drive data)">Clear Local Cache</button>
-                    <button class="secondary-btn" onclick="loadPortfolioIndexFromDrive(function(err, idx){ if(idx){ alert('Index loaded from Drive: ' + Object.keys(idx.students).length + ' students'); } else { alert('No index found on Drive'); } })" title="Download the index file from Google Drive">Reload Index from Drive</button>
+                    <button class="secondary-btn" onclick="loadPortfolioIndexFromDrive(function(err, idx){ if(err){ alert('Index could not be loaded from Drive. Keep saved writing and retry when connected.'); } else if(idx){ alert('Index loaded from Drive: ' + Object.keys(idx.students).length + ' students'); } else { alert('No index found on Drive'); } })" title="Download the index file from Google Drive">Reload Index from Drive</button>
                     <button class="secondary-btn" id="btnSafeMode" onclick="toggleWftSafeMode()">Enter Safe Mode</button>
                 </div>
             </div>

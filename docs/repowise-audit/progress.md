@@ -1,24 +1,24 @@
 # Repowise audit progress
 
-Updated 2026-10-12T11:12:04.368Z; timezone Asia/Bangkok. All662 original IDs retained; 1143 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
+Updated 2026-10-12T11:51:06.528Z; timezone Asia/Bangkok. All662 original IDs retained; 1155 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
 
 Storage coverage follow-up: in_progress. Prior audit dispositions remain preserved; these additional paths are being checked in sequential repair chats.
 
 - STORAGE-COVERAGE-001: Split student save, folder lifecycle and index reads — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/65)).
-- STORAGE-COVERAGE-002: Recovery backup, safe mode and local cache clearing — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/66)).
-- STORAGE-COVERAGE-003: Drive errors, manual save and polling lifecycle — pending.
+- STORAGE-COVERAGE-002: Recovery backup, safe mode and local cache clearing — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/66)).
+- STORAGE-COVERAGE-003: Drive errors, manual save and polling lifecycle — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/67)).
 - STORAGE-COVERAGE-004: Optional cache and async student portfolio paths — pending.
 - STORAGE-COVERAGE-005: Remaining storage UI and final measured coverage — pending.
 
-Current follow-up source: 05af7921be25b2e2e9e65a7d4a30109dac1909a8. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
+Current follow-up source: a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T10:37:46Z, commit 251c4429b1baccde23367bf67095346cdbd1b45c. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T11:13:54Z, commit 6f0aac839a9ebca15eec0849844a02b662a75b94. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
 
 Confirmed remaining repairs; one repair chat and repository writer at a time:
 
 No confirmed behavioral repair remains in this queue.
 
-Final validation: complete. All baseline, manual, new and derived findings individually reviewed; all confirmed repairs deployed; final stable-source suites, honest measured coverage, native migration/lightbox validation, refreshed reconciliation and residual risk dispositions complete.
+Prior audit validation (historical): complete. All baseline, manual, new and derived findings individually reviewed; all confirmed repairs deployed; final stable-source suites, honest measured coverage, native migration/lightbox validation, refreshed reconciliation and residual risk dispositions complete.
 
 Remaining ledger obligations: 0.
 
@@ -85,12 +85,24 @@ Reviewed repairs:
 - AUTH-002: Delayed Google sign-in or profile response republishes a signed-out or replaced connection. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/55)
 - AUTH-003: Malformed session payload is accepted as a valid Drive connection. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/55)
 - STORAGE-016: Split student upload accepts unusable parent folder IDs. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/65)
-- STORAGE-017: Emergency backup omits pending writing and in-memory photos. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/66)
-- STORAGE-018: Safe-mode controls hide failed persistence. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/66)
-- STORAGE-019: Cache clearing reports success before or after failed storage deletion. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/66)
-- STORAGE-020: Backup controls leave download and synchronous Drive exceptions uncaught. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/66)
+- STORAGE-017: Emergency backup omits pending writing and in-memory photos. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/66)
+- STORAGE-018: Safe-mode controls hide failed persistence. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/66)
+- STORAGE-019: Cache clearing reports success before or after failed storage deletion. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/66)
+- STORAGE-020: Backup controls leave download and synchronous Drive exceptions uncaught. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/66)
+- STORAGE-021: Legacy folder rejection strands backup callback and fallback. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-022: Signed-out legacy read never settles its callback. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-023: Legacy read accepts a Google error object as downloaded data. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-024: Failed manual cloud save disables retry after local commit. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-025: Empty upload acknowledgement reports manual save success. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-026: Students folder cache bypasses remote validation and recovery. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-027: Split save accepts completion after account token changes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-028: Index reload hides service and malformed JSON failures. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-029: Index reload crashes when students is absent or malformed. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-030: Signed-out startup closes the page broadcast channel. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-031: Debug error logger exposes synthetic token text. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
+- STORAGE-032: XHR folder errors discard Google status and reason. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/67)
 
-Measured native coverage: 81.51% (8833/10837 executable lines). All49 suites and8 supplemental native cases passed. The exact source hashes, executable locations, exclusions, test provenance and uncovered lines are recorded with the validation report.
+Historical prior-audit native coverage: 81.51% (8833/10837 executable lines). All49 suites and8 supplemental native cases passed. The exact source hashes, executable locations, exclusions, test provenance and uncovered lines are recorded with the validation report.
 
 | Shipped file | Native coverage |
 | --- | --- |
