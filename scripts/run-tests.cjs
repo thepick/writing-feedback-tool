@@ -24,7 +24,7 @@ function runTests({ root, out, selected = [], timeout = 600000, env = process.en
         childEnv.WFT_TEST_ROOT = root;
         delete childEnv.NODE_OPTIONS; delete childEnv.WFT_COVERAGE_DIR; delete childEnv.WFT_COVERAGE_SOURCE_ROOT;
         if (env.WFT_COVERAGE_PRELOAD && (supplemental || file.endsWith('.browser.cjs'))) {
-            childEnv.NODE_OPTIONS = '--require "' + env.WFT_COVERAGE_PRELOAD + '"';
+            childEnv.NODE_OPTIONS = '--require "' + env.WFT_COVERAGE_PRELOAD.replaceAll('\\', '/') + '"';
             childEnv.WFT_COVERAGE_DIR = path.join(out, 'native-coverage'); childEnv.WFT_COVERAGE_SOURCE_ROOT = root;
         }
         const started = new Date().toISOString(), at = Date.now();

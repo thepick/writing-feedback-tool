@@ -16,6 +16,10 @@ try {
     const missing = run('missing'); assert.equal(missing.passed, false); assert.match(missing.suites[0].error, /missing/);
     fs.writeFileSync(path.join(root, 'out-missing/missing.json'), '{"cases":[{"passed":true}]}');
     assert.equal(run('missing').passed, false, 'Stale report cannot satisfy this run');
+    const preload = path.join(root, 'preload check.cjs');
+    fs.writeFileSync(preload, 'process.env.RUNNER_PRELOADED="yes";');
+    fs.writeFileSync(path.join(root, 'tests/preload.browser.cjs'), 'require("node:assert/strict").equal(process.env.RUNNER_PRELOADED,"yes");');
+    assert.equal(runTests({ root, out: path.join(root, 'out-preload'), selected: ['tests/preload.browser.cjs'], env: { ...process.env, WFT_COVERAGE_PRELOAD: preload } }).passed, true, 'Windows paths and spaces reach native preload');
     assert.throws(() => runTests({ root, out: path.join(root, 'invalid'), selected: [''] }), /Unknown suite/);
     assert.throws(() => runTests({ root, out: path.join(root, 'invalid'), selected: ['tests/absent.cjs'] }), /Unknown suite/);
     const route = require('../tests/support/local-app-route');
