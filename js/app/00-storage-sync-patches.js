@@ -7496,9 +7496,8 @@ function scoreBadgeColor(score) {
 }
 
 function getRubricScoreColorClass(score) {
-    if (score == null || score === '-') return 'score-gray';
-    var value = Number(score);
-    if (isNaN(value)) return 'score-gray';
+    var value = getNumericAssessmentScore(score);
+    if (value == null) return 'score-gray';
     if (value >= 9) return 'score-green';
     if (value >= 7) return 'score-blue';
     if (value >= 5) return 'score-amber';
@@ -7717,10 +7716,11 @@ function buildPortfolioDetailedFeedback(analysisData) {
 
     keys.forEach(function(key) {
         var source = sourceCategories[key] || {};
-        var savedScore = source.score != null ? source.score : (categoryScores[key] != null ? categoryScores[key] : null);
+        var savedScore = getNumericAssessmentScore(source.score);
+        if (savedScore == null) savedScore = getNumericAssessmentScore(categoryScores[key]);
         if (!sourceCategories[key] && savedScore == null) return;
         var displaySource = cloneWftJson(source);
-        if (displaySource.score == null && savedScore != null) displaySource.score = savedScore;
+        displaySource.score = savedScore;
         var feedback = null;
         try {
             if (typeof buildStudentFeedbackForCategory === 'function') {
@@ -8164,8 +8164,8 @@ function getCategoryAverageMap(sessions) {
     for (var c = 0; c < keys.length; c++) {
         var key = keys[c];
         var values = sessions.map(function(session) {
-            return session.categoryScores && session.categoryScores[key] != null ? Number(session.categoryScores[key]) : null;
-        }).filter(function(value) { return value != null && !isNaN(value); });
+            return getNumericAssessmentScore(session.categoryScores && session.categoryScores[key]);
+        }).filter(function(value) { return value != null; });
         averages[key] = values.length ? (values.reduce(function(a, b) { return a + b; }, 0) / values.length) : null;
     }
     return averages;
@@ -8262,7 +8262,7 @@ function renderPortfolioFeedbackRows(rows) {
 
 function renderPortfolioFeedbackCategoryBlock(key, item, isOpen) {
     item = item || {};
-    var scoreText = item.score != null && item.score !== '' ? String(item.score) + '/10' : 'Not scored';
+    var scoreText = getNumericAssessmentScore(item.score) != null ? String(item.score) + '/10' : 'Not scored';
     var teacherComment = item.teacherComment || item.evidence || 'No teacher comment was saved for this category.';
     var growthTip = item.growthTip || 'No growth tip was saved for this category.';
     return ''
@@ -8477,7 +8477,7 @@ function renderStudentPortfolio() {
         return {
             label: key,
             data: sessions.map(function(session) {
-                return session.categoryScores && session.categoryScores[key] != null ? Number(session.categoryScores[key]) : null;
+                return getNumericAssessmentScore(session.categoryScores && session.categoryScores[key]);
             }),
             borderColor: color,
             backgroundColor: color + '22',
@@ -8494,7 +8494,8 @@ function renderStudentPortfolio() {
         var chipsHtml = '';
         var sessionId = sess.id || sess.createdAt || String(si);
         getSessionCategoryKeys(sess).forEach(function(key) {
-            var value = sess.categoryScores && sess.categoryScores[key] != null ? sess.categoryScores[key] : '-';
+            var value = getNumericAssessmentScore(sess.categoryScores && sess.categoryScores[key]);
+            if (value == null) value = '-';
             var chipClass = getRubricScoreColorClass(value);
             chipsHtml += '<button type="button" class="session-chip session-chip-btn ' + chipClass + '" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sessionId) + '" data-category="' + escapeHtml(key) + '" onclick="openPortfolioCategoryFeedback(this.dataset.student, this.dataset.session, this.dataset.category)"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</button>';
         });
