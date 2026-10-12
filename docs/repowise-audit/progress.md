@@ -1,8 +1,18 @@
 # Repowise audit progress
 
-Updated 2026-10-12T09:52:42.411Z; timezone Asia/Bangkok. All662 original IDs retained; 1138 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
+Updated 2026-10-12T10:35:57.517Z; timezone Asia/Bangkok. All662 original IDs retained; 1139 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T08:49:08Z, commit 6289a517a1102692d56f0a45d11e657a39fa83ee. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
+Storage coverage follow-up: in_progress. Prior audit dispositions remain preserved; these additional paths are being checked in sequential repair chats.
+
+- STORAGE-COVERAGE-001: Split student save, folder lifecycle and index reads — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/65)).
+- STORAGE-COVERAGE-002: Recovery backup, safe mode and local cache clearing — pending.
+- STORAGE-COVERAGE-003: Drive errors, manual save and polling lifecycle — pending.
+- STORAGE-COVERAGE-004: Optional cache and async student portfolio paths — pending.
+- STORAGE-COVERAGE-005: Remaining storage UI and final measured coverage — pending.
+
+Current follow-up source: a9d42d37afa7b2c2a337f0e20173698c706828b8. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
+
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T09:57:20Z, commit 6e2c166a0c41d76d85ebb21db9eb9e950906645b. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
 
 Confirmed remaining repairs; one repair chat and repository writer at a time:
 
@@ -25,7 +35,7 @@ Current indexed source: 3c99bf6c62447c3a2325314f70905ff2738cda34.
 | doc_drift | 0 |
 | actions | 2 |
 
-No repair chat is writing. All confirmed repairs and final validation are complete.
+No repair chat is writing. The coordinator is reviewing and checkpointing before the next storage follow-up.
 
 Reviewed repairs:
 
@@ -74,6 +84,7 @@ Reviewed repairs:
 - EXPORT-004: Windows-equivalent student archive folders overwrite on extraction. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/52)
 - AUTH-002: Delayed Google sign-in or profile response republishes a signed-out or replaced connection. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/55)
 - AUTH-003: Malformed session payload is accepted as a valid Drive connection. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/55)
+- STORAGE-016: Split student upload accepts unusable parent folder IDs. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/65)
 
 Measured native coverage: 81.51% (8833/10837 executable lines). All49 suites and8 supplemental native cases passed. The exact source hashes, executable locations, exclusions, test provenance and uncovered lines are recorded with the validation report.
 

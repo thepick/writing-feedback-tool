@@ -4,7 +4,7 @@
   "repository_id": "90c828ccda574e32806ddbca888e1723",
   "baseline_commit": "0f6dee278fa6ef23527ac327f6a81a56f4952533",
   "branch": "codex/repowise-final-validation",
-  "updated_at": "2026-10-12T09:52:42.411Z",
+  "updated_at": "2026-10-12T10:35:57.517Z",
   "user_timezone": "Asia/Bangkok",
   "scan_surfaces": {
     "code_health": {
@@ -1263,6 +1263,20 @@
       "deployed_commit": "372916470c11cc2c25242484abde1d6c6eb7a181",
       "released_at": "2026-10-12T04:13:10Z",
       "live_url": "https://wft.mtomlinson.ca/"
+    },
+    {
+      "id": "STORAGE-016",
+      "title": "Split student upload accepts unusable parent folder IDs",
+      "status": "fixed_in_draft_pr",
+      "severity": "high",
+      "storage_followup_id": "STORAGE-COVERAGE-001",
+      "writer_chat": "01a12f95-1503-73f0-9e9e-fca997de6c7c",
+      "validation": "Coordinator reviewed complete11-line production diff, all167 lines of the full native suite and actual folder/index/merge callers. Identical final driver independently verified against raw-Git baseline reproduces only six invalid-folder/parent scenarios; final33 scenarios/294 assertions pass. Full50 suites/54 syntax checks pass; coordinator independently rehashed all69 tracked snapshot files against raw Git after STOP. Valid create/update/canonical-ID/cache, multipart identity/writing/photo bytes, merge/deletion filtering, upload failures/retry, index reads and default flags checked. Guard rejects malformed folder IDs before caching/upload. Current split-merge caller is the disabled lazy refresh branch; direct shipped public helper tests are not claimed as default user workflow. No new dependencies; synthetic/intercepted services only; old coverage percentages not asserted for changed source.",
+      "commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/65",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 50
     }
   ],
   "findings": [
@@ -150536,9 +150550,28 @@
         "artifact_sha256": "d70043f173e6922f6824674f80d8abf8c33c81e8564e770402245dbb184bb61f",
         "reviewed_at": "2026-10-12T09:52:42.411Z"
       }
+    },
+    {
+      "id": "manual_storage_split_invalid_folder_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "createWftSubfolder / ensureWftSubfolderPromise / saveJsonToDriveFolderPromise",
+      "marker": "native_parent_folder_validation",
+      "original_baseline": false,
+      "issue_id": "STORAGE-016",
+      "storage_followup_id": "STORAGE-COVERAGE-001",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "At merged main6e2c166 baseline, native intercepted folder success responses with empty/numeric/whitespace IDs, discovered folder missing ID, and direct save without parent reach multipart upload. An accepting upload service yields successful callback; no usable target folder is established. Repair chat reports baseline reproduction; coordinator independent review still required.",
+      "discovered_at": "2026-10-12T10:14:40.798Z",
+      "commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/65",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete11-line production diff, all167 lines of the full native suite and actual folder/index/merge callers. Identical final driver independently verified against raw-Git baseline reproduces only six invalid-folder/parent scenarios; final33 scenarios/294 assertions pass. Full50 suites/54 syntax checks pass; coordinator independently rehashed all69 tracked snapshot files against raw Git after STOP. Valid create/update/canonical-ID/cache, multipart identity/writing/photo bytes, merge/deletion filtering, upload failures/retry, index reads and default flags checked. Guard rejects malformed folder IDs before caching/upload. Current split-merge caller is the disabled lazy refresh branch; direct shipped public helper tests are not claimed as default user workflow. No new dependencies; synthetic/intercepted services only; old coverage percentages not asserted for changed source.",
+      "classification": "native_reproduced_storage_boundary_repair",
+      "related_issue": "STORAGE-016"
     }
   ],
-  "last_verified_commit": "3c99bf6c62447c3a2325314f70905ff2738cda34",
+  "last_verified_commit": "2aa2bdd16fb6b7c06be0737c5f292e49b06d8ded",
   "active_writer": null,
   "runtime_flag_scope": {
     "source_commit": "7a3c639945747d4e9368aa9a61bffa3dc4b580da",
@@ -151175,6 +151208,66 @@
         "CLEANUP-001",
         "ARCHIVE-001"
       ]
+    },
+    {
+      "source_commit": "3c99bf6c62447c3a2325314f70905ff2738cda34",
+      "checkpoint_commit": "2aa2bdd16fb6b7c06be0737c5f292e49b06d8ded",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/64",
+      "merged_at": "2026-10-12T09:56:36Z",
+      "live_commit": "6e2c166a0c41d76d85ebb21db9eb9e950906645b",
+      "authorization": "User explicitly requested all completed changes be pushed to the live website; final documentation checkpoint independently reviewed.",
+      "url": "https://wft.mtomlinson.ca/",
+      "built_at": "2026-10-12T09:57:20Z",
+      "verified_at": "2026-10-12T09:57:26.518Z",
+      "files": [
+        {
+          "file": "index.html",
+          "status": 200,
+          "bytes": 208367,
+          "exact_bytes": true,
+          "sha256": "721c98f70f76f6fb75ee9999e930b82f43426ab5896073eac01ff46bc762c67c"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "status": 200,
+          "bytes": 12962,
+          "exact_bytes": true,
+          "sha256": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "status": 200,
+          "bytes": 408189,
+          "exact_bytes": true,
+          "sha256": "3abfe438bb1fc57c2f7e385be2706b799bbda1101a0c1ed5e2c9073bd2e303ec"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "status": 200,
+          "bytes": 484627,
+          "exact_bytes": true,
+          "sha256": "35caec3e3dda4fe054d099cf7dd8f755bcaf1aa5330da9e2fc5c0a249b3bb352"
+        },
+        {
+          "file": "js/app/99-lightbox.js",
+          "status": 200,
+          "bytes": 1101,
+          "exact_bytes": true,
+          "sha256": "ecca84b058aa15666de82877af674d9a4aefe793741b41d780d4fb65fc372b83"
+        }
+      ],
+      "scope": "All five public static files byte-exact against reviewed final documentation checkpoint. Source unchanged from native-tested3c99bf6. No paid AI/live Drive/user records.",
+      "type": "final_audit_documentation_checkpoint",
+      "build_status": "built",
+      "issues": [],
+      "previous_live_commit": "6289a517a1102692d56f0a45d11e657a39fa83ee",
+      "rollback_backup": {
+        "commit": "f77db6f6920c63a222ad1bac5843d26cb06e728b",
+        "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-11\\repowise-writing-feedback-agent\\work\\live-before-f77db6f.zip",
+        "bytes": 889699,
+        "sha256": "9936cb38f7399da92fdf39f0d7898ef33efa1c46442b7aa8d12339ecbfe9f5ff",
+        "created_at": "2026-10-12T04:10:59.825Z"
+      }
     }
   ],
   "resolution_status_note": "All1138 tracked canonical obligations have individual dispositions. No confirmed behavioral repair or unreviewed finding remains. Deliberate source-specific metrics/risk advisories remain, including storage77.88% below its historical80% suggestion; this is not threshold satisfaction or proof of all paths. All662 original IDs retained;194 linked repaired/deployed and468 no-code-change. Final source code is byte-identical to the deployed cleanup release; next checkpoint changes audit documentation only.",
@@ -151242,6 +151335,32 @@
         "url": "https://api.github.com/repos/thepick/writing-feedback-tool",
         "status": 200
       }
+    },
+    {
+      "checked_at": "2026-10-12T09:59:20.584Z",
+      "results": [
+        {
+          "name": "dashboard",
+          "url": "http://127.0.0.1:3000/repos/90c828ccda574e32806ddbca888e1723/code-health",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "name": "findings",
+          "url": "http://127.0.0.1:3000/api/repos/90c828ccda574e32806ddbca888e1723/health/findings?limit=1",
+          "status": 200,
+          "contentType": "application/json"
+        },
+        {
+          "name": "coverage",
+          "url": "http://127.0.0.1:3000/api/repos/90c828ccda574e32806ddbca888e1723/health/coverage?limit=5000&module_limit=5000",
+          "status": 200,
+          "contentType": "application/json",
+          "coverage": 81.51,
+          "indexed_source": "3c99bf6c62447c3a2325314f70905ff2738cda34"
+        }
+      ],
+      "scope": "Dashboard HTML, actual frontend-proxied finding JSON and current measured coverage; all200. Editing proven by clean pushed checkpoint; external HTTPS/GitHub verified by final publication."
     }
   ],
   "final_validation": {
@@ -151353,6 +151472,107 @@
       "outputs/final-coverage-independent-verification.json",
       "outputs/final-source-independent-verification.json"
     ],
-    "third_party_tool_operation_review": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-final-audit-validation/outputs/repowise-operation-review.json"
+    "third_party_tool_operation_review": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-final-audit-validation/outputs/repowise-operation-review.json",
+    "audit_checkpoint": {
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/64",
+      "pr_state": "MERGED",
+      "commit": "2aa2bdd16fb6b7c06be0737c5f292e49b06d8ded",
+      "live_commit": "6e2c166a0c41d76d85ebb21db9eb9e950906645b",
+      "merged_at": "2026-10-12T09:56:36Z",
+      "built_at": "2026-10-12T09:57:20Z",
+      "verified_at": "2026-10-12T09:57:26.518Z",
+      "documentation_only": true,
+      "tested_source_commit": "3c99bf6c62447c3a2325314f70905ff2738cda34",
+      "shipped_source_bytes_unchanged": true
+    },
+    "publication_evidence": "outputs/live-final-checkpoint-verification.json",
+    "final_dashboard_access_verification": "outputs/final-dashboard-access-verification.json",
+    "overall_completion": {
+      "all_confirmed_repairs_deployed": true,
+      "all_findings_individually_reviewed": true,
+      "remaining_unreviewed": 0,
+      "final_checkpoint_merged_and_verified": true,
+      "dashboard_verified": true,
+      "completed_at": "2026-10-12T09:59:20.584Z"
+    }
+  },
+  "storage_followup": {
+    "status": "in_progress",
+    "started_at": "2026-10-12T10:07:34.994Z",
+    "authorization": "User requested remaining storage coverage gaps and untested paths, one repair chat at a time, ledger updated.",
+    "baseline_source": "3c99bf6c62447c3a2325314f70905ff2738cda34",
+    "baseline_checkpoint": "2aa2bdd16fb6b7c06be0737c5f292e49b06d8ded",
+    "baseline_coverage": {
+      "storage_percent": 77.88,
+      "overall_percent": 81.51
+    },
+    "prior_audit_dispositions_preserved": true,
+    "queue": [
+      {
+        "id": "STORAGE-COVERAGE-001",
+        "title": "Split student save, folder lifecycle and index reads",
+        "status": "reviewed_awaiting_publication",
+        "scope": "Native successful split saves, merge then save, folder discovery/create/cache, index reads and callback/network/storage failures.",
+        "thread_id": "01a12f95-1503-73f0-9e9e-fca997de6c7c",
+        "host_id": "local",
+        "started_at": "2026-10-12T10:08:10.120Z",
+        "base_commit": "6e2c166a0c41d76d85ebb21db9eb9e950906645b",
+        "branch": "codex/repowise-storage-split-coverage",
+        "workspace": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-split-coverage",
+        "confirmed_defects": [
+          "STORAGE-016"
+        ],
+        "investigation": "At merged main6e2c166 baseline, native intercepted folder success responses with empty/numeric/whitespace IDs, discovered folder missing ID, and direct save without parent reach multipart upload. An accepting upload service yields successful callback; no usable target folder is established. Repair chat reports baseline reproduction; coordinator independent review still required.",
+        "coordinator_review": "outputs/storage-coverage-001-coordinator-review.json",
+        "tests_passed": true,
+        "source_commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
+        "pr": "https://github.com/thepick/writing-feedback-tool/pull/65",
+        "validation": "Coordinator reviewed complete11-line production diff, all167 lines of the full native suite and actual folder/index/merge callers. Identical final driver independently verified against raw-Git baseline reproduces only six invalid-folder/parent scenarios; final33 scenarios/294 assertions pass. Full50 suites/54 syntax checks pass; coordinator independently rehashed all69 tracked snapshot files against raw Git after STOP. Valid create/update/canonical-ID/cache, multipart identity/writing/photo bytes, merge/deletion filtering, upload failures/retry, index reads and default flags checked. Guard rejects malformed folder IDs before caching/upload. Current split-merge caller is the disabled lazy refresh branch; direct shipped public helper tests are not claimed as default user workflow. No new dependencies; synthetic/intercepted services only; old coverage percentages not asserted for changed source.",
+        "remaining_risks": [
+          "Synthetic accepting responses prove client behavior; no real Drive permission, account or service guarantees are claimed.",
+          "Persisted students/media folder IDs still use their existing cache shortcuts without remote validation; stale/wrong-parent cache recovery and historical poisoned entries were not repaired or tested here.",
+          "Hanging XHR requests, polling/manual-save lifecycle, account changes during split operations and full callback exception behavior are outside this suite.",
+          "Index format mismatch/missing reads intentionally return null; no schema redesign or corrupt index recovery change.",
+          "Crash atomicity, cross-tab coordination and in-memory recovery limitations from prior repairs remain."
+        ],
+        "writer_stopped": true,
+        "reviewed_at": "2026-10-12T10:35:57.514Z"
+      },
+      {
+        "id": "STORAGE-COVERAGE-002",
+        "title": "Recovery backup, safe mode and local cache clearing",
+        "status": "pending",
+        "scope": "Public recovery/safe-mode/cache handlers, backup success and emergency download failures; preserve protected writing and retry state."
+      },
+      {
+        "id": "STORAGE-COVERAGE-003",
+        "title": "Drive errors, manual save and polling lifecycle",
+        "status": "pending",
+        "scope": "Native intercepted fetch/XHR error parsing, manual-save completion/retry, actual polling eligibility/start/stop/lifecycle; preserve pending edits.",
+        "additional_paths": [
+          "Stale cached folder failure and retry; historical poisoned cache values",
+          "Account/token changes during split-folder save and acknowledgement",
+          "Actual index reload button malformed-data and callback-error feedback"
+        ]
+      },
+      {
+        "id": "STORAGE-COVERAGE-004",
+        "title": "Optional cache and async student portfolio paths",
+        "status": "pending",
+        "scope": "Explicit IDB/lazy/identity modes, meaningful async public callers and failed storage; preserve disabled defaults and migration boundaries."
+      },
+      {
+        "id": "STORAGE-COVERAGE-005",
+        "title": "Remaining storage UI and final measured coverage",
+        "status": "pending",
+        "scope": "Meaningful untested storage UI keyboard/export/chooser routes and complete final gap accounting; classify trivial aliases, terminal empty lines and unreachable paths honestly, gather fresh exact-source native coverage.",
+        "additional_paths": [
+          "Media-folder wrapper/cache contracts have no current attachment caller; classify retained role and meaningful tests separately"
+        ]
+      }
+    ],
+    "current_source_commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
+    "current_coverage_status": "fresh final-source coverage pending until stable final phase",
+    "prior_percentages_historical_only": true
   }
 }
