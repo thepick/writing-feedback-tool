@@ -4362,7 +4362,6 @@ function assertWftArchiveConnection(connection) {
 
 function wftDriveFetch(url, options, archiveConnection) {
     options = options || {};
-    archiveConnection = archiveConnection || captureWftArchiveConnection();
     wftSyncLog("[WFT Sync] Drive fetch start", (options.method || "GET"), url);
 
     if (url.indexOf("https://www.googleapis.com/") !== 0 &&
@@ -4387,12 +4386,10 @@ function wftDriveFetch(url, options, archiveConnection) {
     try { assertWftArchiveConnection(archiveConnection); }
     catch (e) { return Promise.reject(e); }
     return fetch(url, options).then(function (response) {
-        assertWftArchiveConnection(archiveConnection);
         wftSyncLog("[WFT Sync] Drive fetch response", response.status, (options.method || "GET"), url);
         if (response.ok) return response;
 
         return response.text().then(function (text) {
-            assertWftArchiveConnection(archiveConnection);
             var parsed = parseWftGoogleApiErrorText(text);
             wftSyncErrorLog("[WFT Sync] Drive fetch error body", response.status, parsed);
             var err = new Error(parsed.message || "Google Drive error");
