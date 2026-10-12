@@ -75,6 +75,7 @@ const scenarios = ['create', 'discover', 'cached', 'root-create', 'root-discover
                     assert.ok(query.includes("name='student-synthetic-id.json'"));
                     return reply({ files: ['update', 'merge', 'merge-download-error', 'merge-corrupt'].includes(scenario) ? [{ id: 'student-newest' }, { id: 'student-older' }] : [] });
                 }
+                if (url.pathname.endsWith('/students-folder')) return reply({ id: 'students-folder', name: 'students', parents: ['root-folder'], mimeType: folderType, trashed: false });
                 return reply({ id: 'root-folder', name: 'WritingFeedbackTool', mimeType: folderType, trashed: false });
             });
             await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
