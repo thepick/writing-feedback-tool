@@ -1777,7 +1777,7 @@ function getOrCreateStudentId(studentName) {
 
 // ── Session Date Normalization ──
 
-function normalizeWftSessionDate(session) {
+function normalizeWftSessionDate(session, fallbackCreatedAt) {
     if (!session) { return; }
 
     if (!session.createdAt || isNaN(Date.parse(session.createdAt))) {
@@ -1786,7 +1786,7 @@ function normalizeWftSessionDate(session) {
         } else if (session.date && !isNaN(Date.parse(session.date))) {
             session.createdAt = session.date;
         } else {
-            session.createdAt = new Date().toISOString();
+            session.createdAt = fallbackCreatedAt || new Date().toISOString();
         }
     }
 
@@ -1830,22 +1830,22 @@ function normalizeWftSessionDate(session) {
     }
 }
 
-function normalizeWftSessionForStorage(session) {
-    normalizeWftSessionDate(session);
+function normalizeWftSessionForStorage(session, fallbackCreatedAt) {
+    normalizeWftSessionDate(session, fallbackCreatedAt);
     return session;
 }
 
 function normalizeWftStudentRecord(studentName, sessions) {
     if (!sessions || !Array.isArray(sessions)) { sessions = []; }
+    // Undated records share one fallback so normalization keeps their existing order.
+    var fallbackCreatedAt = new Date().toISOString();
     for (var nsi = 0; nsi < sessions.length; nsi++) {
-        normalizeWftSessionForStorage(sessions[nsi]);
+        normalizeWftSessionForStorage(sessions[nsi], fallbackCreatedAt);
     }
     sessions.sort(function(a, b) {
         if (!a.createdAt) { return 1; }
         if (!b.createdAt) { return -1; }
-        if (a.createdAt < b.createdAt) { return 1; }
-        if (a.createdAt > b.createdAt) { return -1; }
-        return 0;
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt);
     });
     return sessions;
 }
@@ -2133,7 +2133,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
 
         for (var pj = 0; pj < sessions.length; pj++) {
             var s = sessions[pj];
-            if (s.createdAt && (!latestSessionAt || s.createdAt > latestSessionAt)) {
+            if (s.createdAt && (!latestSessionAt || Date.parse(s.createdAt) > Date.parse(latestSessionAt))) {
                 latestSessionAt = s.createdAt;
             }
             if (typeof s.overallScore === "number" && !isNaN(s.overallScore)) {
@@ -7654,6 +7654,11 @@ function buildPortfolioDetailedFeedback(analysisData) {
     return output;
 }
 
+function retainWftStudentSessions(studentName, sessions, newSession) {
+    // Reserve a place for committed writing even when reassessment keeps an older date.
+    return normalizeWftStudentRecord(studentName, sessions).slice(0, 49).concat([newSession]);
+}
+
 function saveStudentSession(studentName, sessionData) {
     if (!studentName) return;
     try { if (typeof normalizeWftSessionForStorage === "function") normalizeWftSessionForStorage(sessionData); } catch (e) {}
@@ -7670,10 +7675,7 @@ function saveStudentSession(studentName, sessionData) {
     }
     var portfolio = getPortfolioData();
     if (!Object.prototype.hasOwnProperty.call(portfolio, studentName)) portfolio[studentName] = { sessions: [] };
-    portfolio[studentName].sessions.push(sessionData);
-    if (portfolio[studentName].sessions.length > 50) {
-        portfolio[studentName].sessions = portfolio[studentName].sessions.slice(-50);
-    }
+    portfolio[studentName].sessions = retainWftStudentSessions(studentName, portfolio[studentName].sessions, sessionData);
     savePortfolioData(portfolio);
     if (WFT_INDEXEDDB_CACHE_V1 && typeof WftStorage !== "undefined") {
         try {
@@ -9085,8 +9087,7 @@ function commitPendingPortfolioReplacement(pending) {
     } else {
         if (!portfolio[targetStudent]) portfolio[targetStudent] = { sessions: [] };
         sourceSessions.splice(replaceIndex, 1);
-        portfolio[targetStudent].sessions.push(newSession);
-        portfolio[targetStudent].sessions = portfolio[targetStudent].sessions.slice(-50);
+        portfolio[targetStudent].sessions = retainWftStudentSessions(targetStudent, portfolio[targetStudent].sessions, newSession);
     }
 
     var deletions;

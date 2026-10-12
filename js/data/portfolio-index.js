@@ -93,7 +93,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
 
         for (var j = 0; j < sessions.length; j++) {
             var s = sessions[j];
-            if (s.createdAt && (!latestSessionAt || s.createdAt > latestSessionAt)) {
+            if (s.createdAt && (!latestSessionAt || Date.parse(s.createdAt) > Date.parse(latestSessionAt))) {
                 latestSessionAt = s.createdAt;
             }
             if (typeof s.overallScore === "number" && !isNaN(s.overallScore)) {
