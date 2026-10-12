@@ -5,7 +5,10 @@ This project is a static web tool. The important idea is that the live app is ma
 - `index.html` - page layout and most of the visual structure
 - `js/app/00-storage-sync-patches.js` - storage, settings, and sync behavior
 - `js/app/10-main-app.js` - main app logic
-- other `js/` files - smaller helper modules
+- `google-drive-migration.js` - Google Drive file migration support
+- `js/app/99-lightbox.js` - image lightbox
+
+These are the four scripts loaded by `index.html`. The former modular helper copies were retired; update and test the shipped scripts directly.
 
 ## Recommended workflow for future updates
 

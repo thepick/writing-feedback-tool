@@ -8,7 +8,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     const failures = [];
     const cases = ['automatic-student', 'ocr-student', 'typed-student', 'typed-writing', 'step2-images',
-        'neatness-images', 'step3-source', 'stop', 'signout', 'unchanged-ocr', 'unchanged-typed',
+        'neatness-images', 'step3-source', 'stop', 'class-reset-restart', 'unchanged-ocr', 'unchanged-typed',
         'stale-preparation', 'stale-helper', 'stale-writing', 'consecutive-results', 'reassessment-loading',
         'reassessment-student', 'reassessment-unchanged', 'no-student', 'reset', 'ocr-stop', 'image-preparation'];
     try {
@@ -105,7 +105,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                         await analyzeWriting();
                         return state();
                     }
-                    if (scenario === 'signout') {
+                    if (scenario === 'class-reset-restart') {
                         const old = gate();
                         let requests = 0;
                         localStorage.setItem('wft_settings', JSON.stringify({ apiKey: 'fake-test-key' }));
@@ -123,17 +123,21 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                         sleepMs = async () => {};
                         const older = analyzeWriting();
                         await old.started;
-                        resetWftLocalWorkAfterSignOut();
+                        wftConfirm = async () => true; flushWftCloudSyncNow = () => {};
+                        await resetCurrentClassData();
+                        requestStopAnalysis();
+                        const stopped = analysisAbortController.signal.aborted;
+                        old.release(); await older;
+                        const resetKept = students.length === 0 && selectedStudent === '';
                         students = ['Bob']; selectedStudent = 'Bob'; populateStudentDropdown(); select.value = 'Bob';
                         writing.value = text;
                         const newer = gate(); calls = 0;
                         callOpenRouter = async () => { const response = responses[calls++]; if (calls === 1) { newer.enter(); await newer.waiting; } return response; };
                         const running = analyzeWriting(); await newer.started;
                         const controller = analysisAbortController;
-                        old.release(); await older;
                         const protectedNewRun = isAnalyzing && analysisAbortController === controller && !controller.signal.aborted;
                         newer.release(); await running;
-                        return { ...state(), requests, protectedNewRun };
+                        return { ...state(), requests, protectedNewRun, stopped, resetKept };
                     }
 
                     const wait = gate();
@@ -213,8 +217,10 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     assert.doesNotMatch(result.pending.sessionData.correctedHtml, /dog/);
                 } else if (scenario === 'no-student') {
                     assert.equal(result.retained, true, diagnostic);
-                } else if (scenario === 'signout') {
+                } else if (scenario === 'class-reset-restart') {
                     assert.equal(result.requests, 1, diagnostic);
+                    assert.equal(result.stopped, true);
+                    assert.equal(result.resetKept, true);
                     assert.equal(result.protectedNewRun, true);
                     assert.equal(result.pending.studentName, 'Bob');
                     assert.equal(result.analyzing, false);

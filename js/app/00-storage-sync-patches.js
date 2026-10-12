@@ -1265,7 +1265,7 @@ var WFT_GIS_AUTH_V2 = true;
 
 // Sync lifecycle feature flags used by this runtime bundle.
 // Keep these declared here because index.html loads this bundle directly;
-// js/core/config.js is a source-module copy and is not loaded on the page.
+// This bundle owns the runtime configuration.
 var WFT_LAMPORT_V1 = true;
 var WFT_BROADCAST_CHANNEL_V1 = true;
 
@@ -1336,7 +1336,7 @@ var WFT_PORTFOLIO_INDEX_V1 = false;
 var WFT_STUDENT_ID_MAP_V1 = false;
 // Phase 3 — Split student files ENABLED (permanent commitment)
 // Legacy single-portfolio (wft-portfolio.json) support is deprecated
-// See config.js for the authoritative flag definition
+// The flag below controls the shipped split-file path.
 var WFT_SPLIT_STUDENT_FILES_V1 = true;
 var WFT_LAZY_PORTFOLIO_LOAD_V1 = false;
 var WFT_STORAGE_HEALTH_UI_V1 = false;
@@ -1975,8 +1975,6 @@ function makePortfolioLocalStorageSafe(data) {
 
 var WFT_IMAGE_FULL_MAX_WIDTH = 1600;
 var WFT_IMAGE_FULL_JPEG_QUALITY = 0.78;
-var WFT_THUMB_MAX_WIDTH = 300;
-var WFT_THUMB_JPEG_QUALITY = 0.72;
 
 function loadImageElementFromDataUrl(dataUrl, callback) {
     var img = new Image();
@@ -2036,15 +2034,6 @@ function compressPortfolioImageForDrive(image, callback) {
     resizeImageDataUrlToBlob(image.dataUrl, {
         maxWidth: WFT_IMAGE_FULL_MAX_WIDTH,
         quality: WFT_IMAGE_FULL_JPEG_QUALITY,
-        outputType: "image/jpeg"
-    }, callback);
-}
-
-function createPortfolioThumbnailBlob(image, callback) {
-    if (!image || !image.dataUrl) { callback(new Error("No image data URL for thumbnail"), null); return; }
-    resizeImageDataUrlToBlob(image.dataUrl, {
-        maxWidth: WFT_THUMB_MAX_WIDTH,
-        quality: WFT_THUMB_JPEG_QUALITY,
         outputType: "image/jpeg"
     }, callback);
 }
@@ -2790,21 +2779,6 @@ var WftStorage = {
         return Promise.resolve();
     },
 
-    getThumbnail: function(imageId) {
-        if (this.mode === "indexeddb") {
-            return WftIndexedDb.get("thumbnails", imageId).catch(function() { return null; });
-        }
-        return Promise.resolve(null);
-    },
-
-    saveThumbnail: function(imageId, blobOrDataUrl) {
-        if (this.mode === "indexeddb") {
-            var record = { imageId: imageId, data: blobOrDataUrl, cachedAt: new Date().toISOString() };
-            return WftIndexedDb.put("thumbnails", record).catch(function() {});
-        }
-        return Promise.resolve();
-    },
-
     getMetadata: function(key) {
         if (this.mode === "indexeddb") {
             return WftIndexedDb.get("metadata", key).then(function(record) {
@@ -3131,52 +3105,6 @@ function saveStudentFileToDrive(studentId, data, callback) {
     });
 }
 
-function migrateLegacyPortfolioToStudentFiles(callback) {
-    if (!WFT_SPLIT_STUDENT_FILES_V1) { if (callback) { callback(null, "feature-disabled"); } return; }
-    if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) { if (callback) { callback(null, "safe-mode"); } return; }
-    try { getLocalPortfolioSnapshot(); }
-    catch (e) { if (callback) callback(e, null); return; }
-    wftDebugLog("[Migration] Starting legacy → per-student migration...");
-    saveWftPreMigrationBackupToDrive(function() {
-        ensureStudentRecordsForRoster();
-        var portfolio;
-        try { portfolio = getLocalPortfolioSnapshot(); }
-        catch (e) { if (callback) callback(e, null); return; }
-        var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
-        ensureWftStudentsFolderPromise().then(function() {
-            var completed = 0, errors = [];
-            function saveNext() {
-                if (completed >= names.length) {
-                    rebuildPortfolioIndex(function(indexErr) {
-                        if (indexErr) { if (callback) callback(indexErr, null); return; }
-                        var meta = getWftStorageMeta();
-                        meta.activePortfolioFormat = "split-student-files";
-                        meta.migrationCompletedAt = new Date().toISOString();
-                        setWftStorageMeta(meta);
-                        updateWftStorageMeta("patch-9-migration", "completed");
-                        wftDebugLog("[Migration] Complete! " + names.length + " students, " + errors.length + " errors");
-                        if (callback) { callback(errors.length ? errors : null, "completed"); }
-                    });
-                    return;
-                }
-                var name = names[completed];
-                var sessions = (portfolio[name] && portfolio[name].sessions) ? portfolio[name].sessions : [];
-                var studentId = "";
-                try {
-                    var settings = getRawSettings ? getRawSettings() : {};
-                    if (settings.studentIdMap && settings.studentIdMap[name]) { studentId = settings.studentIdMap[name]; }
-                } catch (e) {}
-                if (!studentId) { studentId = createStableStudentId(name, settings.studentIdMap || {}); }
-                saveStudentFileToDrive(studentId, { displayName: name, legacyNameKeys: [name], sessions: sessions }, function(err) {
-                    if (err) { errors.push({ student: name, error: err }); }
-                    completed += 1; saveNext();
-                });
-            }
-            saveNext();
-        }).catch(function(e) { wftDebugError("[Migration] Failed:", e); if (callback) { callback(e, null); } });
-    });
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
 // END PATCH 9
 // ═══════════════════════════════════════════════════════════════════════════
@@ -3288,32 +3216,6 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
     return false;
 }
 
-function isSessionDeleted(sessionId, studentIdOrDeletions, deletionsMaybe, sessionUpdatedAt, sessionLamportClock) {
-    // Backward-compatible wrapper. Prefer isStudentSessionDeleted() for new code.
-    var studentId = "";
-    var deletions = deletionsMaybe;
-    if (deletionsMaybe === undefined && studentIdOrDeletions && typeof studentIdOrDeletions === "object") {
-        deletions = studentIdOrDeletions;
-    } else {
-        studentId = String(studentIdOrDeletions || "");
-    }
-    return isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock);
-}
-
-function chooseNewerSession(sessionA, sessionB) {
-    if (WFT_LAMPORT_V1) {
-        var lamA = (typeof sessionA.lamportClock === "number" && !isNaN(sessionA.lamportClock)) ? sessionA.lamportClock : -1;
-        var lamB = (typeof sessionB.lamportClock === "number" && !isNaN(sessionB.lamportClock)) ? sessionB.lamportClock : -1;
-        if (lamA !== lamB) {
-            return (lamA > lamB) ? sessionA : sessionB;
-        }
-    }
-    var timeA = sessionA.updatedAt ? Date.parse(sessionA.updatedAt) : 0;
-    var timeB = sessionB.updatedAt ? Date.parse(sessionB.updatedAt) : 0;
-    if (isNaN(timeA)) { timeA = 0; } if (isNaN(timeB)) { timeB = 0; }
-    return (timeA >= timeB) ? sessionA : sessionB;
-}
-
 function applyDeletionsToFile(file, deletions) {
     if (!file) { return null; }
     var filtered = { schemaVersion: file.schemaVersion, format: file.format, studentId: file.studentId,
@@ -3324,29 +3226,6 @@ function applyDeletionsToFile(file, deletions) {
         if (!isStudentSessionDeleted(sessions[i].id, file.studentId || "", deletions, sessions[i].updatedAt || sessions[i].createdAt, sessions[i].lamportClock, file.displayName)) { filtered.sessions.push(sessions[i]); }
     }
     return filtered;
-}
-
-function recordExtendedDeletion(type, studentId, sessionId, reason, deletions) {
-    var staged = !!deletions;
-    deletions = deletions || getDeletionsData();
-    if (!Array.isArray(deletions.records)) { deletions.records = []; }
-    var now = new Date().toISOString();
-    var record = { id: createWftId("del"), type: type || "session", studentId: studentId || "",
-        sessionId: sessionId || "", deletedAt: now, deviceId: getWftDeviceId(),
-        reason: reason || "user-delete" };
-    if (WFT_LAMPORT_V1) {
-        try {
-            record.lamportClock = (typeof incrementDeviceLamport === "function") ? incrementDeviceLamport() : null;
-        } catch (eLam) {
-            record.lamportClock = null;
-        }
-    }
-    deletions.records.push(record);
-    if ((record.type === "session" || record.type === "archive-remove") && record.sessionId) {
-        deletions.deletedSessions["session:" + (record.studentId || "") + ":" + record.sessionId] = cloneWftJson(record);
-    }
-    if (!staged) saveDeletionsData(deletions);
-    return record;
 }
 
 function syncStudentFileWithMerge(studentId, localData, callback) {
@@ -3474,234 +3353,10 @@ function loadStudentPortfolioLazy(studentId, displayName, callback) {
     });
 }
 
-function loadPortfolioImageLazy(image, callback) {
-    if (image && image.dataUrl) { callback(null, image.dataUrl); return; }
-    if (!image || !image.driveFileId) { callback(null, null); return; }
-
-    var imageId = image.imageId || image.driveFileId || "";
-    if (imageId && WFT_INDEXEDDB_CACHE_V1) {
-        WftStorage.getThumbnail(imageId).then(function(cached) {
-            if (cached && cached.data) { callback(null, cached.data); return; }
-            fetchWftImageFromDrive(image, callback);
-        }).catch(function() { fetchWftImageFromDrive(image, callback); });
-    } else {
-        fetchWftImageFromDrive(image, callback);
-    }
-}
-
-function fetchWftImageFromDrive(image, callback) {
-    if (!driveAccessToken || !image.driveFileId) { callback(null, null); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/drive/v3/files/" + image.driveFileId + "?alt=media", true);
-    xhr.setRequestHeader("Authorization", "Bearer " + driveAccessToken);
-    xhr.responseType = "blob";
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var dataUrl = reader.result;
-                if (WFT_INDEXEDDB_CACHE_V1 && image.imageId) {
-                    try { createPortfolioThumbnailBlob({ dataUrl: dataUrl }, function(err, tb) {
-                        if (!err && tb) { WftStorage.saveThumbnail(image.imageId, tb); }
-                    }); } catch (e) {}
-                }
-                callback(null, dataUrl);
-            };
-            reader.readAsDataURL(xhr.response);
-        } else { callback(new Error("Drive download failed: " + xhr.status), null); }
-    };
-    xhr.onerror = function() { callback(new Error("Network error"), null); };
-    xhr.send();
-}
-
-function initLazyPortfolioStartup() {
-    if (!WFT_LAZY_PORTFOLIO_LOAD_V1) { return; }
-    wftDebugLog("[LazyLoad] Initializing lazy startup...");
-    loadSettingsFromLocalStorage();
-    if (WFT_INDEXEDDB_CACHE_V1) {
-        WftStorage.init().then(function() { wftDebugLog("[LazyLoad] Storage:", WftStorage.mode); })
-            .catch(function() { wftDebugWarn("[LazyLoad] Storage init failed"); });
-    }
-    if (WFT_PORTFOLIO_INDEX_V1) {
-        loadPortfolioIndexFromDrive(function(err, index) {
-            if (index) {
-                populatePortfolioDropdownFromIndex(index);
-            } else {
-                try {
-                    var portfolio = getPortfolioData();
-                    populatePortfolioDropdownFromIndex(buildPortfolioIndexFromPortfolio(portfolio));
-                } catch (e) { try { refreshPortfolioDropdown(); } catch (e2) {} }
-            }
-        });
-    }
-}
-
-function populatePortfolioDropdownFromIndex(index) {
-    if (!index || !index.students) { return; }
-    var select = document.getElementById("portfolioStudentSelect");
-    if (!select) { return; }
-    var currentValue = select.value;
-    select.innerHTML = "";
-    var option = document.createElement("option");
-    option.value = ""; option.textContent = "-- Select Student --"; select.appendChild(option);
-    var studentIds = Object.keys(index.students);
-    studentIds.sort(function(a, b) { return (index.students[a].displayName || a).localeCompare(index.students[b].displayName || b); });
-    for (var i = 0; i < studentIds.length; i++) {
-        var sid = studentIds[i];
-        var entry = index.students[sid];
-        var opt = document.createElement("option");
-        opt.value = sid; opt.textContent = entry.displayName + " (" + entry.sessionCount + " sessions)";
-        select.appendChild(opt);
-    }
-    if (currentValue) {
-        for (var j = 0; j < select.options.length; j++) {
-            if (select.options[j].value === currentValue) { select.selectedIndex = j; break; }
-        }
-    }
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
 // END PATCH 11
 // ═══════════════════════════════════════════════════════════════════════════
 
-// ═══════════════════════════════════════════════════════════════════════════
-// PATCH 12 — ARCHIVE UPGRADES
-// ═══════════════════════════════════════════════════════════════════════════
-
-var WFT_TERM_DATE_RANGES = {
-    "Term 1 (Aug-Oct)": { start: "08-01", end: "10-31" },
-    "Term 2 (Nov-Mar)": { start: "11-01", end: "03-31" },
-    "Term 3 (Apr-Jun)": { start: "04-01", end: "06-30" }
-};
-
-function normalizeWftArchiveSessionDate(session) {
-    if (!session) { return ""; }
-    if (session.dateIso && /^\d{4}-\d{2}-\d{2}$/.test(String(session.dateIso))) {
-        return String(session.dateIso);
-    }
-    var source = session.createdAt || session.date || session.timestamp || "";
-    if (source && !isNaN(Date.parse(source))) {
-        return new Date(source).toISOString().substring(0, 10);
-    }
-    if (source && /^\d{4}-\d{2}-\d{2}/.test(String(source))) {
-        return String(source).substring(0, 10);
-    }
-    wftDebugWarn("[Archive] Skipping session with no parseable date", session.id || "");
-    return "";
-}
-
-function wftMonthDayToNumber(value) {
-    var parts = String(value || "").split("-");
-    var month = parseInt(parts[0], 10);
-    var day = parseInt(parts[1], 10);
-    if (isNaN(month)) { month = 0; }
-    if (isNaN(day)) { day = 0; }
-    return (month * 100) + day;
-}
-
-function archiveByDateRange(startDate, endDate, studentName, callback) {
-    try {
-        var portfolio = getPortfolioData();
-        var names = studentName ? [studentName] : Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
-        var archiveSessions = {};
-        for (var ni = 0; ni < names.length; ni++) {
-            var name = names[ni];
-            var studentData = portfolio[name];
-            if (!studentData || !studentData.sessions) { continue; }
-            var filtered = [];
-            for (var si = 0; si < studentData.sessions.length; si++) {
-                var session = studentData.sessions[si];
-                var sessionDate = normalizeWftArchiveSessionDate(session);
-                if (sessionDate && sessionDate >= startDate && sessionDate <= endDate) { filtered.push(session); }
-            }
-            if (filtered.length > 0) { archiveSessions[name] = { sessions: filtered }; }
-        }
-        var count = Object.keys(archiveSessions).length;
-        if (callback) { callback(null, archiveSessions, count); }
-        return archiveSessions;
-    } catch (e) { if (callback) { callback(e, null, 0); } return null; }
-}
-
-function archiveByTerm(termKey, year, studentName, callback) {
-    var range = WFT_TERM_DATE_RANGES[termKey];
-    if (!range) { if (callback) { callback(new Error("Unknown term: " + termKey), null, 0); } return; }
-    var startDate = year + "-" + range.start;
-    var endDate = year + "-" + range.end;
-    if (wftMonthDayToNumber(range.start) > wftMonthDayToNumber(range.end)) { endDate = (parseInt(year, 10) + 1) + "-" + range.end; }
-    return archiveByDateRange(startDate, endDate, studentName, callback);
-}
-
-function buildEnhancedArchiveZip(archiveData, options, callback) {
-    if (typeof JSZip === "undefined") { if (callback) { callback(new Error("JSZip not loaded"), null); } return; }
-    options = options || {};
-    var zip = new JSZip();
-    var manifest = { archiveVersion: 2, createdAt: new Date().toISOString(), appVersion: "v9", studentCount: 0, sessionCount: 0, options: options };
-    var names = Object.keys(archiveData);
-    manifest.studentCount = names.length;
-    var csvLines = ["Student,Sessions,Date Range"];
-    var summaryHtml = ["<h2>Archive Summary</h2>", "<p>Generated: " + new Date().toLocaleString() + "</p>",
-        "<table border='1' cellpadding='4' style='border-collapse:collapse'>",
-        "<tr><th>Student</th><th>Sessions</th><th>Date Range</th></tr>"];
-    for (var ni = 0; ni < names.length; ni++) {
-        var name = names[ni];
-        var sessions = (archiveData[name] && archiveData[name].sessions) ? archiveData[name].sessions : [];
-        manifest.sessionCount += sessions.length;
-        csvLines.push(name + "," + sessions.length + "," + (options.dateRange || "All"));
-        summaryHtml.push("<tr><td>" + escapeWftHtml(name) + "</td><td>" + sessions.length + "</td><td>" + escapeWftHtml(options.dateRange || "All") + "</td></tr>");
-        zip.file("student-" + sanitizeDriveName(name) + ".json", JSON.stringify(archiveData[name], null, 2));
-    }
-    summaryHtml.push("</table>");
-    zip.file("archive-manifest.json", JSON.stringify(manifest, null, 2));
-    zip.file("summary.html", "<html><head><meta charset='UTF-8'><title>Archive Summary</title></head><body>" + summaryHtml.join("\n") + "</body></html>");
-    zip.file("summary.csv", csvLines.join("\n"));
-    try { zip.file("portfolio-index.json", JSON.stringify(buildPortfolioIndexFromPortfolio(archiveData), null, 2)); } catch (e) {}
-    zip.generateAsync({ type: "blob" }).then(function(blob) { if (callback) { callback(null, blob, manifest); } })
-        .catch(function(err) { if (callback) { callback(err, null); } });
-}
-
-function removeArchivedSessionsFromPortfolio(archiveData, callback) {
-    try {
-        var portfolio = getPortfolioData();
-        var deletions = getDeletionsData();
-        var names = Object.keys(archiveData);
-        var removedCount = 0;
-        for (var ni = 0; ni < names.length; ni++) {
-            var name = names[ni];
-            var archived = archiveData[name];
-            if (!archived || !archived.sessions) { continue; }
-            var archivedIds = {};
-            for (var ai = 0; ai < archived.sessions.length; ai++) {
-                var sid = archived.sessions[ai].id;
-                if (sid) {
-                    archivedIds[sid] = true;
-                    var studentId = "";
-                    try { if (WFT_STUDENT_ID_MAP_V1) { var s = getRawSettings ? getRawSettings() : {}; studentId = (s.studentIdMap && s.studentIdMap[name]) || ""; } } catch (e) {}
-                    recordExtendedDeletion("archive-remove", studentId, sid, "archived", deletions);
-                }
-            }
-            if (portfolio[name] && portfolio[name].sessions) {
-                var kept = [];
-                for (var si = 0; si < portfolio[name].sessions.length; si++) {
-                    if (!archivedIds[portfolio[name].sessions[si].id]) { kept.push(portfolio[name].sessions[si]); }
-                    else { removedCount += 1; }
-                }
-                portfolio[name].sessions = kept;
-            }
-        }
-        saveWftStudentChange({ portfolio: portfolio, deletions: deletions });
-        wftDebugLog("[Archive] Removed", removedCount, "archived sessions");
-        if (callback) { callback(null, removedCount); }
-    } catch (e) { wftDebugError("[Archive] Removal failed:", e); if (callback) { callback(e, 0); } }
-}
-
-function escapeWftHtml(str) {
-    if (!str) { return ""; }
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// END PATCH 12
-// ═══════════════════════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PATCH 14 — CLEANUP & DEFAULT ENABLEMENT
@@ -4544,190 +4199,6 @@ function clearWftLocalStorageAfterSignOut() {
         } catch (e2) { }
     }
 }
-function resetWftResultUiToFreshSlate() {
-    var correctedStoryEl = document.getElementById("correctedStory");
-    if (correctedStoryEl) correctedStoryEl.innerHTML = "No corrected story yet.";
-
-    var detailedAssessmentEl = document.getElementById("detailedAssessment");
-    if (detailedAssessmentEl) detailedAssessmentEl.innerHTML = '<div class="assessment-item">No detailed assessment data.</div>';
-
-    var growGoalBoxEl = document.getElementById("growGoalBox");
-    if (growGoalBoxEl) growGoalBoxEl.innerHTML = "No grow goal yet.";
-
-    var diffControlsEl = document.getElementById("diffControls");
-    if (diffControlsEl) diffControlsEl.style.display = "none";
-
-    var step1RawEl = document.getElementById("step1Raw");
-    if (step1RawEl) step1RawEl.textContent = "";
-
-    var step3RawEl = document.getElementById("step3Raw");
-    if (step3RawEl) step3RawEl.textContent = "";
-
-    var debugRawEl = document.getElementById("debugRaw");
-    if (debugRawEl) debugRawEl.textContent = "";
-
-    var grammarCalcEl = document.getElementById("grammarCalc");
-    if (grammarCalcEl) grammarCalcEl.innerHTML = "";
-
-    var teacherAuditViewEl = document.getElementById("teacherAuditView");
-    if (teacherAuditViewEl) teacherAuditViewEl.innerHTML = "No teacher audit data yet.";
-
-    var teacherReviewDetailsEl = document.getElementById("teacherReviewDetails");
-    if (teacherReviewDetailsEl) teacherReviewDetailsEl.open = false;
-
-    var notebookDefaults = {
-        notebookTitle: "Untitled Writing",
-        notebookOverallScore: "--%",
-        notebookStudentName: "No student selected",
-        notebookDate: "",
-        notebookWordCount: "0 / 0",
-        notebookStrength: "-",
-        notebookGrowGoal: "-",
-        notebookTeacherComment: "-",
-        notebookPage2Title: "Untitled Writing",
-        notebookPage2Date: ""
-    };
-    Object.keys(notebookDefaults).forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = notebookDefaults[id];
-    });
-
-    var notebookDetailedAssessmentEl = document.getElementById("notebookDetailedAssessment");
-    if (notebookDetailedAssessmentEl) notebookDetailedAssessmentEl.innerHTML = "";
-
-    var notebookCorrectedTextEl = document.getElementById("notebookCorrectedText");
-    if (notebookCorrectedTextEl) notebookCorrectedTextEl.innerHTML = "-";
-
-    var portfolioContentEl = document.getElementById("portfolioContent");
-    if (portfolioContentEl) portfolioContentEl.innerHTML = '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>';
-}
-
-function resetWftInputUiToFreshSlate() {
-    var ta = document.getElementById("studentWriting");
-    if (ta) ta.value = "";
-
-    var studentSelect = document.getElementById("studentSelect");
-    if (studentSelect) studentSelect.value = "";
-
-    var studentNameInput = document.getElementById("studentNameInput");
-    if (studentNameInput) studentNameInput.value = "";
-
-    var portfolioSelect = document.getElementById("portfolioStudentSelect");
-    if (portfolioSelect) portfolioSelect.value = "";
-
-    var importFileEl = document.getElementById("importFile");
-    if (importFileEl) importFileEl.value = "";
-
-    var cameraInputEl = document.getElementById("cameraInput");
-    if (cameraInputEl) cameraInputEl.value = "";
-
-    var imageUploadInputEl = document.getElementById("imageUploadInput");
-    if (imageUploadInputEl) imageUploadInputEl.value = "";
-
-    var modelSelectEl = document.getElementById("modelSelect");
-    if (modelSelectEl) modelSelectEl.value = DEFAULT_MODEL;
-
-    var targetWordCountEl = document.getElementById("targetWordCount");
-    if (targetWordCountEl) targetWordCountEl.value = "200";
-
-    var useWordCountTargetEl = document.getElementById("useWordCountTarget");
-    if (useWordCountTargetEl) useWordCountTargetEl.checked = true;
-    if (targetWordCountEl) targetWordCountEl.disabled = false;
-
-    var grammarStrictnessEl = document.getElementById("grammarStrictness");
-    if (grammarStrictnessEl) grammarStrictnessEl.value = "3";
-
-    var grammarStrictnessValEl = document.getElementById("grammarStrictnessVal");
-    if (grammarStrictnessValEl) grammarStrictnessValEl.textContent = "3";
-
-    var assessScriptQualityEl = document.getElementById("assessScriptQuality");
-    if (assessScriptQualityEl) assessScriptQualityEl.checked = false;
-
-    var apiKeyInputEl = document.getElementById("apiKeyInput");
-    if (apiKeyInputEl) {
-        try { apiKeyInputEl.value = getStoredApiKey(); }
-        catch (e) { apiKeyInputEl.value = ''; alert(e.message); }
-    }
-
-    var ocrPanelEl = document.getElementById("ocrPanel");
-    if (ocrPanelEl) ocrPanelEl.open = false;
-
-    var cropModalEl = document.getElementById("cropModal");
-    if (cropModalEl) cropModalEl.style.display = "none";
-
-    var imgLightboxEl = document.getElementById("imgLightbox");
-    if (imgLightboxEl) imgLightboxEl.style.display = "none";
-
-    var imgLightboxImgEl = document.getElementById("imgLightboxImg");
-    if (imgLightboxImgEl) imgLightboxImgEl.removeAttribute("src");
-
-    var imgLightboxCaptionEl = document.getElementById("imgLightboxCaption");
-    if (imgLightboxCaptionEl) imgLightboxCaptionEl.textContent = "";
-}
-
-function resetWftRuntimeWorkAfterSignOut() {
-    try {
-        if (analysisAbortController) analysisAbortController.abort();
-    } catch (e) { }
-    students = [];
-    selectedStudent = "";
-    pendingPortfolioSync = null;
-    selectedImages = [];
-    selectedImageDataUrl = "";
-    selectedImageName = "";
-    selectedImageExtractedText = "";
-    selectedImageExtractionPromise = null;
-    latestAnalysisData = null;
-    activeAnalysisContext = null;
-    activePortfolioReassessmentSource = null;
-    originalTextForDiff = "";
-    correctedHtmlForDiff = "";
-    manualSyncInProgress = false;
-    cancelAnalysis = false;
-    isAnalyzing = false;
-    analysisAbortController = null;
-    lastSyncedPortfolioSessionSignature = "";
-}
-
-function resetWftLocalWorkAfterSignOut() {
-    var previousSuppress = typeof wftSuppressDirtyMarks !== "undefined" ? wftSuppressDirtyMarks : false;
-
-    if (typeof wftSuppressDirtyMarks !== "undefined") {
-        wftSuppressDirtyMarks = true;
-    }
-
-    clearWftLocalStorageAfterSignOut();
-    resetWftRuntimeWorkAfterSignOut();
-    resetWftInputUiToFreshSlate();
-    refreshApiKeyRuntimeValue();
-    resetWftResultUiToFreshSlate();
-
-    try { renderStudentList(); } catch (e2) { }
-    try { populateStudentDropdown(); } catch (e3) { }
-    try { refreshPortfolioDropdown(); } catch (e4) { }
-    try { renderStudentPortfolio(); } catch (e5) { }
-    try { updateExportSelectedStudentButton(); } catch (e6) { }
-    try { updateSelectedImagePreview(); } catch (e7) { }
-    try { updateScoreDisplay(null); } catch (e8) { }
-    try { syncUiState(); } catch (e9) { }
-    try { updateSyncPortfolioButtonState(); } catch (e10) { }
-    try { refreshScoreWeightingDescription(); } catch (e11) { }
-    try { updateScriptQualityToggleVisibility(); } catch (e12) { }
-    try {
-        var settingsDrawerEl = document.getElementById("settingsDrawer");
-        var settingsDrawerOverlayEl = document.getElementById("settingsDrawerOverlay");
-        if (settingsDrawerEl) settingsDrawerEl.classList.remove("open");
-        if (settingsDrawerOverlayEl) settingsDrawerOverlayEl.classList.remove("open");
-    } catch (e13) { }
-    try { switchTab("tool"); } catch (e14) { }
-
-    if (typeof wftSuppressDirtyMarks !== "undefined") {
-        wftSuppressDirtyMarks = previousSuppress;
-    }
-}
-
-
-
 function handleGoogleSignOut() {
     wftGoogleAuthOperationId += 1;
     var operation = captureWftGoogleAuthOperation();

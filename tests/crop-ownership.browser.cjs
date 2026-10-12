@@ -10,7 +10,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
     const scenarios = ['cancel-switch', 'student-switch', 'student-away-back', 'portfolio-student-away-back',
         'reopen-photo', 'reopen-same', 'second-apply', 'reset-pending-apply', 'preview-reset',
         'move', 'move-away-back', 'drag-reorder', 'remove', 'clear', 'replace-same-bytes', 'changed-bytes',
-        'legacy-runtime-reset', 'reassessment', 'class-reset', 'roster-clear', 'student-delete', 'failed-class-reset-keeps-crop',
+        'native-crop-close', 'reassessment', 'class-reset', 'roster-clear', 'student-delete', 'failed-class-reset-keeps-crop',
         'open-cancel', 'open-reopen', 'open-switch', 'open-reset', 'open-apply-before-load',
         'reset-cancel', 'reset-reopen', 'reset-switch', 'current-crop', 'current-reset',
         'current-reset-apply', 'current-preview-reset', 'current-secondary-crop', 'unrelated-writing-settings', 'reverse-scaled-crop', 'invalid-region'];
@@ -108,8 +108,8 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     if (scenario === 'clear') { removeSelectedImageAt(1); removeSelectedImageAt(0); }
                     if (scenario === 'replace-same-bytes') { selectedImages[0] = { ...alice }; syncSelectedImageState(); updateSelectedImagePreview(); }
                     if (scenario === 'changed-bytes') { alice.dataUrl = blue.src; syncSelectedImageState(); updateSelectedImagePreview(); }
-                    // Dormant helper safety; normal Google sign-out retains local work and does not call this.
-                    if (scenario === 'legacy-runtime-reset') resetWftRuntimeWorkAfterSignOut();
+                    // Closing the live crop UI invalidates pending image callbacks.
+                    if (scenario === 'native-crop-close') closeCropModal();
                     if (['class-reset', 'roster-clear', 'student-delete', 'failed-class-reset-keeps-crop'].includes(scenario)) {
                         localStorage.setItem('wft_portfolio', JSON.stringify({ Alice: { sessions: [{ id: 'synthetic', originalText: 'Synthetic saved writing.' }] } }));
                         if (scenario === 'roster-clear') await clearAllStudents();

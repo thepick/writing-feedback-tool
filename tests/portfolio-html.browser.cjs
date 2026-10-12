@@ -69,17 +69,28 @@ const root = path.resolve(__dirname, '..');
             availableSessions[0].images.forEach(image => { if (image.dataUrl && !isSafeWftImageDataUrl(image.dataUrl)) delete image.dataUrl; });
             localStorage.setItem('wft_portfolio', JSON.stringify({ [name]: { sessions: availableSessions } }));
             await createSchoolYearArchiveZip('Synthetic year with photos', { includeImages: true });
-            await new Promise((resolve, reject) => buildEnhancedArchiveZip({ [name]: { sessions } }, { dateRange: payload }, error => error ? reject(error) : resolve()));
             const media = Object.entries(syntheticArchives[2]).filter(([file, body]) => file.includes('/Photos/') && body instanceof Blob).map(([file, body]) => ({ file, size: body.size }));
             const html = syntheticArchives.flatMap((files, archive) => Object.entries(files).filter(([file]) => file.endsWith('.html')).map(([file, body]) => ({ archive, file, body })));
             html.push({ archive: 'notebook', file: 'notebook.html', body: buildNotebookPrintDocument(refreshNotebookPage2Guide(sessions[0].notebookPrintHtml, name, sessions[0]), name, payload) });
-            return { html, safeImage, payload, media, rejectedBadPhotos };
+            const manifests = syntheticArchives.map(files => ({ names: Object.keys(files), json: Object.entries(files).filter(([file]) => file.endsWith('.json')).map(([file, body]) => ({ file, data: JSON.parse(body) })) }));
+            return { html, safeImage, payload, media, rejectedBadPhotos, manifests };
         });
         await page.waitForTimeout(100);
         const generationInjected = await page.evaluate(() => window.injected === true);
         check('export generation cannot execute imported corrected HTML', () => assert.equal(generationInjected, false));
         check('requested unsafe photo bytes reject archive completion', () => assert.equal(generated.rejectedBadPhotos, true));
         check('year archive with photos includes safe local and Drive image bytes', () => { assert.equal(generated.media.length, 2); assert.ok(generated.media.every(image => image.size > 0)); });
+        check('live single/year ZIP entries preserve student sessions and manifests', () => {
+            assert.equal(generated.manifests.length, 3);
+            for (const [index, archive] of generated.manifests.entries()) {
+                assert.ok(archive.names.some(file => file.endsWith('Portfolio.html')));
+                if (index > 0) {
+                    assert.ok(archive.json.some(({ data }) => data.sessions?.length === 4));
+                    assert.ok(archive.json.some(({ file, data }) => file.endsWith('archive-info.json') && data.studentCount === 1));
+                }
+                if (index === 2) assert.ok(archive.json.some(({ file }) => file.endsWith('photos-manifest.json')));
+            }
+        });
         for (let i = 0; i < generated.html.length; i++) {
             const item = generated.html[i];
             const url = '/generated-' + i + '.html'; documents.set(url, item.body);

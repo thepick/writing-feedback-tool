@@ -16,7 +16,7 @@ function context(source, globals) {
 
 (async () => {
     const production = 'js/app/00-storage-sync-patches.js';
-    for (const file of [production, 'js/storage/async-wrappers.js']) {
+    for (const file of [production]) {
         const source = section(file, 'function loadPortfolioAsync()', 'function renderStudentPortfolioAsync(');
         const portfolio = { Alice: { sessions: [{ id: 'keep' }] } };
         let saves = 0;
@@ -52,7 +52,7 @@ function context(source, globals) {
         await assert.rejects(promise, /write failed/);
     }
 
-    for (const file of [production, 'js/utils/emergency-backup.js']) {
+    for (const file of [production]) {
         const source = section(file, file === production ? '// ── Emergency Backup ──' : '// ── Build a comprehensive backup object ──', 'function downloadWftEmergencyBackup(');
         const flags = Object.fromEntries([...source.matchAll(/\b(WFT_[A-Z0-9_]+)\b/g)].map(match => [match[1], false]));
         const values = { wft_settings: '{"unknown":{"keep":true}}', wft_students: 'null', wft_portfolio: '{invalid', wft_selectedStudent: 'Alice', wft_google_user: '' };
@@ -73,5 +73,5 @@ function context(source, globals) {
         assert.equal(fallback.sessionCount, 0);
         assert.equal(fallback.contents.wft_portfolio, '{invalid', 'Unreadable JSON must remain recoverable');
     }
-    console.log('Storage health tests passed for shipped code and helper copies: ID lookup, no write on lookup failure, promise errors, raw backup preservation, inaccessible keys, metadata exclusion and portfolio fallback.');
+    console.log('Storage health tests passed for shipped code: ID lookup, no write on lookup failure, promise errors, raw backup preservation, inaccessible keys, metadata exclusion and portfolio fallback.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

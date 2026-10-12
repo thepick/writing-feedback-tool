@@ -11,7 +11,7 @@ function load(file, names, globals) {
     }).join('\n') + '\n;globalThis', globals);
 }
 function run(name, fn) { try { fn(); cases.push({ name, passed: true }); } catch (error) { cases.push({ name, passed: false, error: error.message }); } }
-for (const file of ['js/data/data-model.js', 'js/app/00-storage-sync-patches.js']) {
+for (const file of ['js/app/00-storage-sync-patches.js']) {
     let ticks = 0, ids = 0;
     // A ticking clock exposes order changes caused by assigning a different "now" to each undated record.
     class TickingDate extends Date { constructor(...args) { super(...(args.length ? args : [Date.UTC(2026, 9, 12) + ticks++])); } }
@@ -41,7 +41,7 @@ for (const file of ['js/data/data-model.js', 'js/app/00-storage-sync-patches.js'
         app.normalizeWftStudentRecord('Alice', entries); assert.equal(entries[0].id, assigned);
     });
 }
-for (const file of ['js/data/portfolio-index.js', 'js/app/00-storage-sync-patches.js']) run(file + ': index latest uses chronology with legacy dates', () => {
+for (const file of ['js/app/00-storage-sync-patches.js']) run(file + ': index latest uses chronology with legacy dates', () => {
     const app = load(file, ['buildPortfolioIndexFromPortfolio'], { WFT_STUDENT_ID_MAP_V1: false, sanitizeStudentIdPart: value => value, localStorage: { getItem: () => null } });
     const result = app.buildPortfolioIndexFromPortfolio({ Alice: { sessions: [{ createdAt: 'Sun, 01 Feb 2026 00:00:00 GMT' }, { createdAt: '2026-03-01T00:00:00Z' }] } });
     assert.equal(result.students.Alice.latestSessionAt, '2026-03-01T00:00:00Z');
