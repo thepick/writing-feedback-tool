@@ -3,8 +3,8 @@
   "repository": "thepick/writing-feedback-tool",
   "repository_id": "90c828ccda574e32806ddbca888e1723",
   "baseline_commit": "0f6dee278fa6ef23527ac327f6a81a56f4952533",
-  "branch": "codex/repowise-storage-optional-coverage",
-  "updated_at": "2026-10-12T12:57:33.362Z",
+  "branch": "codex/repowise-storage-late-upload",
+  "updated_at": "2026-10-12T13:28:52.673Z",
   "user_timezone": "Asia/Bangkok",
   "scan_surfaces": {
     "code_health": {
@@ -1940,9 +1940,30 @@
       "impact": "Misleading success state may lead a teacher to believe newer writing is backed up and stop retrying. No local data loss or clearing of pending/dirty writing was observed.",
       "commit": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/70",
+      "pr_state": "MERGED",
+      "reviewed_by_coordinator": true,
+      "suites": 14,
+      "deployed_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
+      "merged_at": "2026-10-12T12:58:24Z",
+      "released_at": "2026-10-12T12:59:16Z",
+      "live_url": "https://wft.mtomlinson.ca/"
+    },
+    {
+      "id": "STORAGE-041",
+      "title": "Enter on focused Cancel submits student chooser and text input",
+      "symbol": "wftTextInput.onKeyDown / chooseStudentToManage.onKeyDown",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-007",
+      "writer_chat": "01a1303c-8562-79d2-84ee-305d1541dd58",
+      "validation": "Coordinator reviewed all6 lines of production changes and the full expanded native dialog driver. Enter shortcuts now require the actual input/select target; native focused Cancel/Submit buttons keep their Enter/Space behavior. Two composition guards retain document Escape/Enter for the IME signal. Actual Admin/roster/Manage Student/rename and archive-name routes exercise28 cases159 assertions: cancellation preserves all protected root/pending bytes, roster/selection/dirty state; accepted rename retains every original session field/ID/images and the other student, allowing legitimate normalization metadata. All28 cases pass; identical final driver baseline has11 failed cases15 failed assertions, with pre-invocation raw final Git hash persisted before native execution and verified afterward. Twelve selected connected suites pass. Coordinator independently rehashed150 tracked snapshot files and verified748 focused native records/source hashes and every invoked driver. Failed preparation route and first committed over-strict metadata assertion are preserved separately, not production defects. No full56-suite/current percentage claim; eight composition cases are synthetic native event signals, not physical IME verification.",
+      "baseline_evidence": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/STORAGE-041-native-baseline.json",
+      "impact": "Keyboard users cannot activate Cancel with Enter in either supported dialog. The workflow advances against their explicit cancellation intent. The later confirmation prevents an automatic persisted rename in this reproduction; no unintended persisted change or data loss was observed.",
+      "commit": "b706bb7f3ad3dc8d3203299a6cc8a1f6df3b8ae6",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/72",
       "pr_state": "OPEN",
       "reviewed_by_coordinator": true,
-      "suites": 14
+      "suites": 12
     }
   ],
   "findings": [
@@ -151736,12 +151757,36 @@
       "discovered_at": "2026-10-12T12:36:51.984Z",
       "commit": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/70",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed entire22-line production diff and107-line native ownership driver plus inherited72-line held-request regression. Optional current-attempt predicate guards obsolete multipart HTTP error status/block/cache effects, V2 owns success status, and successful finalizer reports actual uncommitted pending writing. Default flags, retry counts, accepted file callbacks and generic/archive response contracts preserved. Identical final native drivers reproduce6 failing status/eligibility checks across28 assertions on raw baseline; coordinator independently reran both raw final Git drivers with before/after invocation hashes and observed the same6 failures. Both final native regressions pass all28 checks;14 selected storage/archive/manual/auth/pending/recovery/index suites pass. Coordinator raw-Git rehashed baseline73 and candidate74 files and verified644 focused native records and tracked/shadow driver hashes. No full55-suite/current coverage claim. Actual sign-out/reconnection handlers retain writing and queue follow-up; no supported lock-reset race reproduced.",
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7"
+    },
+    {
+      "id": "manual_storage_keyboard_storage_041_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "related_files": [
+        "js/app/10-main-app.js"
+      ],
+      "symbol": "wftTextInput / chooseStudentToManage",
+      "marker": "native_dialog_keyboard",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-041",
+      "related_issue": "STORAGE-041",
+      "storage_followup_id": "STORAGE-COVERAGE-007",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Both document-level Enter handlers override native focused-button semantics. wftConfirm handles only Escape and retains normal native button Enter behavior, as verified by controls.",
+      "discovered_at": "2026-10-12T13:09:59.443Z",
+      "commit": "b706bb7f3ad3dc8d3203299a6cc8a1f6df3b8ae6",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/72",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed all6 lines of production changes and the full expanded native dialog driver. Enter shortcuts now require the actual input/select target; native focused Cancel/Submit buttons keep their Enter/Space behavior. Two composition guards retain document Escape/Enter for the IME signal. Actual Admin/roster/Manage Student/rename and archive-name routes exercise28 cases159 assertions: cancellation preserves all protected root/pending bytes, roster/selection/dirty state; accepted rename retains every original session field/ID/images and the other student, allowing legitimate normalization metadata. All28 cases pass; identical final driver baseline has11 failed cases15 failed assertions, with pre-invocation raw final Git hash persisted before native execution and verified afterward. Twelve selected connected suites pass. Coordinator independently rehashed150 tracked snapshot files and verified748 focused native records/source hashes and every invoked driver. Failed preparation route and first committed over-strict metadata assertion are preserved separately, not production defects. No full56-suite/current percentage claim; eight composition cases are synthetic native event signals, not physical IME verification.",
       "classification": "native_reproduced_storage_boundary_repair"
     }
   ],
-  "last_verified_commit": "22d4d10de07511e6be928d070ab6637a68571866",
+  "last_verified_commit": "e37f25bc0ecf729d655b28c9b1f0ea87fd45d15e",
   "active_writer": null,
   "runtime_flag_scope": {
     "source_commit": "7a3c639945747d4e9368aa9a61bffa3dc4b580da",
@@ -152675,6 +152720,65 @@
       ],
       "build_status": "built",
       "previous_live_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
+    },
+    {
+      "id": "STORAGE-COVERAGE-006",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/70",
+      "source_commit": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+      "checkpoint_commit": "e37f25bc0ecf729d655b28c9b1f0ea87fd45d15e",
+      "branch": "codex/repowise-storage-late-upload",
+      "files": [
+        {
+          "file": "index.html",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 208476,
+          "sha256": "d19136cc67765275b717e77317856c32a12d380a2c73eb32fde89e7db2e851f8"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 12962,
+          "sha256": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 416512,
+          "sha256": "b1fdace62998ee518432b09f2abbbb4cddd9ffb665e394b456adb0c2263eaeea"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 484627,
+          "sha256": "35caec3e3dda4fe054d099cf7dd8f755bcaf1aa5330da9e2fc5c0a249b3bb352"
+        },
+        {
+          "file": "js/app/99-lightbox.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 1101,
+          "sha256": "ecca84b058aa15666de82877af674d9a4aefe793741b41d780d4fb65fc372b83"
+        }
+      ],
+      "review": "outputs/storage-coverage-006-coordinator-review.json",
+      "checked_at": "2026-10-12T12:57:47.731Z",
+      "live_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
+      "merged_at": "2026-10-12T12:58:24Z",
+      "authorization": "User authorized completed changes published to live website; sequential storage follow-up independently reviewed.",
+      "url": "https://wft.mtomlinson.ca/",
+      "built_at": "2026-10-12T12:59:16Z",
+      "verified_at": "2026-10-12T12:59:24.417Z",
+      "scope": "All five shipped files match independently reviewed source; synthetic test services only.",
+      "type": "storage_coverage_followup",
+      "issues": [
+        "STORAGE-COVERAGE-006"
+      ],
+      "build_status": "built",
+      "previous_live_commit": "d0cf96a22e7983d449613fea3d2ffb16eab1deb7"
     }
   ],
   "resolution_status_note": "All1138 tracked canonical obligations have individual dispositions. No confirmed behavioral repair or unreviewed finding remains. Deliberate source-specific metrics/risk advisories remain, including storage77.88% below its historical80% suggestion; this is not threshold satisfaction or proof of all paths. All662 original IDs retained;194 linked repaired/deployed and468 no-code-change. Final source code is byte-identical to the deployed cleanup release; next checkpoint changes audit documentation only.",
@@ -152776,18 +152880,17 @@
     "thread_id": "01a13012-6088-7543-8c7d-414d0a1373fe",
     "workspace": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage",
     "started_at": "2026-10-12T12:24:56.496Z",
-    "base_commit": "d0cf96a22e7983d449613fea3d2ffb16eab1deb7",
+    "base_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
     "scope": "Stable-source complete fresh suite/native corpus, remaining meaningful storage UI checks, independent raw Git/coverage verification, strict coverage ingestion, refreshed current-source reconciliation and reviewed residual risks.",
     "progress": {
       "suites_completed": 0,
       "suites_passed": 0,
-      "current_repository_suite_inventory": 53,
+      "current_repository_suite_inventory": 55,
       "coverage_measured": false,
       "coverage_independently_verified": false,
       "coverage_ingested": false
     },
     "coverage_verified": false,
-    "deferred_reason": "STORAGE-040 requires dedicated repair before stable-source complete validation",
     "diagnostic_attempts": [
       {
         "thread_id": "01a13012-6088-7543-8c7d-414d0a1373fe",
@@ -152804,11 +152907,35 @@
         "stopped_at": "2026-10-12T12:36:51.984Z",
         "source_commit": "fb54bbac3944df53b8453353c4ce80a25bda4151",
         "diagnostic_pr": "https://github.com/thepick/writing-feedback-tool/pull/69",
-        "report": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/report.json",
+        "report": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/archive/STORAGE-040-first-attempt/report.json",
         "coverage_deferred": true,
-        "raw_git_files_independently_verified": 145
+        "raw_git_files_independently_verified": 145,
+        "archive_manifest": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/archive/STORAGE-040-first-attempt/archive-byte-verification.json"
+      },
+      {
+        "thread_id": "01a13012-6088-7543-8c7d-414d0a1373fe",
+        "host_id": "local",
+        "title": "Finish storage UI checks and measured coverage",
+        "branch": "codex/repowise-storage-final-coverage-resumed-01",
+        "base_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
+        "issues": [
+          "STORAGE-COVERAGE-005"
+        ],
+        "scope": "Meaningful untested storage UI keyboard/export/chooser routes and complete final gap accounting; classify trivial aliases, terminal empty lines and unreachable paths honestly, gather fresh exact-source native coverage.",
+        "started_at": "2026-10-12T13:00:37.435Z",
+        "status": "STOPPED_FOR_DEDICATED_REPAIR",
+        "stopped_at": "2026-10-12T13:09:59.443Z",
+        "source_commit": "fd563f15bb917596fb5a135af3e75a2410266b1c",
+        "diagnostic_pr": "https://github.com/thepick/writing-feedback-tool/pull/71",
+        "report": "outputs/storage-coverage-005-storage-041-diagnostic-report.json",
+        "child_report": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/report.json",
+        "coverage_deferred": true,
+        "raw_git_files_independently_verified": 149
       }
-    ]
+    ],
+    "resumed_at": "2026-10-12T13:00:24.165Z",
+    "source_commit": null,
+    "deferred_reason": "STORAGE-041 requires dedicated repair before final coverage"
   },
   "storage_followup": {
     "status": "in_progress",
@@ -153023,7 +153150,7 @@
       {
         "id": "STORAGE-COVERAGE-006",
         "title": "Repair late upload sync acknowledgements",
-        "status": "reviewed_awaiting_publication",
+        "status": "complete",
         "scope": "STORAGE-040: native timed-out uploads must not advertise Synced while newer local writing remains dirty/pending. Minimal shared completion ownership, preserve accepted-upload/archive truth and lifecycle invariants.",
         "confirmed_defects": [
           "STORAGE-040"
@@ -153048,7 +153175,41 @@
           "Error response ownership is guarded only for V2 multipart save attempts; generic response-body/token changes and retained media wrappers remain outside this repair."
         ],
         "writer_stopped": true,
-        "reviewed_at": "2026-10-12T12:57:33.361Z"
+        "reviewed_at": "2026-10-12T12:57:33.361Z",
+        "checkpoint_commit": "e37f25bc0ecf729d655b28c9b1f0ea87fd45d15e",
+        "pr_state": "MERGED",
+        "deployed_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
+        "completed_at": "2026-10-12T12:59:24.417Z",
+        "live_evidence": "outputs/storage-coverage-006-live-verification.json"
+      },
+      {
+        "id": "STORAGE-COVERAGE-007",
+        "title": "Repair keyboard cancellation in student dialogs",
+        "status": "reviewed_awaiting_publication",
+        "scope": "STORAGE-041: Enter on focused Cancel must cancel the public student chooser/text dialog, preserving native button semantics, input submission and protected writing.",
+        "confirmed_defects": [
+          "STORAGE-041"
+        ],
+        "diagnostic_source": "fd563f15bb917596fb5a135af3e75a2410266b1c",
+        "diagnostic_pr": "https://github.com/thepick/writing-feedback-tool/pull/71",
+        "thread_id": "01a1303c-8562-79d2-84ee-305d1541dd58",
+        "host_id": "local",
+        "started_at": "2026-10-12T13:10:43.709Z",
+        "base_commit": "fd563f15bb917596fb5a135af3e75a2410266b1c",
+        "branch": "codex/repowise-storage-keyboard-cancel",
+        "workspace": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-keyboard-cancel",
+        "coordinator_review": "outputs/storage-coverage-007-coordinator-review.json",
+        "tests_passed": true,
+        "source_commit": "b706bb7f3ad3dc8d3203299a6cc8a1f6df3b8ae6",
+        "pr": "https://github.com/thepick/writing-feedback-tool/pull/72",
+        "validation": "Coordinator reviewed all6 lines of production changes and the full expanded native dialog driver. Enter shortcuts now require the actual input/select target; native focused Cancel/Submit buttons keep their Enter/Space behavior. Two composition guards retain document Escape/Enter for the IME signal. Actual Admin/roster/Manage Student/rename and archive-name routes exercise28 cases159 assertions: cancellation preserves all protected root/pending bytes, roster/selection/dirty state; accepted rename retains every original session field/ID/images and the other student, allowing legitimate normalization metadata. All28 cases pass; identical final driver baseline has11 failed cases15 failed assertions, with pre-invocation raw final Git hash persisted before native execution and verified afterward. Twelve selected connected suites pass. Coordinator independently rehashed150 tracked snapshot files and verified748 focused native records/source hashes and every invoked driver. Failed preparation route and first committed over-strict metadata assertion are preserved separately, not production defects. No full56-suite/current percentage claim; eight composition cases are synthetic native event signals, not physical IME verification.",
+        "remaining_risks": [
+          "Physical IME interactions were not tested; eight event-edge cases use synthetic KeyboardEvent signals in native Edge.",
+          "Whole56-suite ordinary/native corpus, both supplemental drivers and source-matching coverage/index/health fold remain coordinator resumed STORAGE-COVERAGE-005 work.",
+          "No broad modal focus containment/restoration audit or new asynchronous race repair. Existing real Drive/cloud durability and crash/cross-tab limitations are unchanged."
+        ],
+        "writer_stopped": true,
+        "reviewed_at": "2026-10-12T13:28:52.672Z"
       },
       {
         "id": "STORAGE-COVERAGE-005",
@@ -153062,9 +153223,9 @@
         ],
         "thread_id": "01a13012-6088-7543-8c7d-414d0a1373fe",
         "host_id": "local",
-        "started_at": "2026-10-12T12:24:54.185Z",
-        "base_commit": "d0cf96a22e7983d449613fea3d2ffb16eab1deb7",
-        "branch": "codex/repowise-storage-final-coverage",
+        "started_at": "2026-10-12T13:00:37.435Z",
+        "base_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
+        "branch": "codex/repowise-storage-final-coverage-resumed-01",
         "workspace": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage",
         "attempts": [
           {
@@ -153082,15 +153243,38 @@
             "stopped_at": "2026-10-12T12:36:51.984Z",
             "source_commit": "fb54bbac3944df53b8453353c4ce80a25bda4151",
             "diagnostic_pr": "https://github.com/thepick/writing-feedback-tool/pull/69",
-            "report": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/report.json",
+            "report": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/archive/STORAGE-040-first-attempt/report.json",
             "coverage_deferred": true,
-            "raw_git_files_independently_verified": 145
+            "raw_git_files_independently_verified": 145,
+            "diagnostic_pr_state": "MERGED",
+            "integrated_via_repair_pr": "https://github.com/thepick/writing-feedback-tool/pull/70",
+            "archive_manifest": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/archive/STORAGE-040-first-attempt/archive-byte-verification.json"
+          },
+          {
+            "thread_id": "01a13012-6088-7543-8c7d-414d0a1373fe",
+            "host_id": "local",
+            "title": "Finish storage UI checks and measured coverage",
+            "branch": "codex/repowise-storage-final-coverage-resumed-01",
+            "base_commit": "469cc25c4699a603faac859a8a4c45d86fe594d7",
+            "issues": [
+              "STORAGE-COVERAGE-005"
+            ],
+            "scope": "Meaningful untested storage UI keyboard/export/chooser routes and complete final gap accounting; classify trivial aliases, terminal empty lines and unreachable paths honestly, gather fresh exact-source native coverage.",
+            "started_at": "2026-10-12T13:00:37.435Z",
+            "status": "STOPPED_FOR_DEDICATED_REPAIR",
+            "stopped_at": "2026-10-12T13:09:59.443Z",
+            "source_commit": "fd563f15bb917596fb5a135af3e75a2410266b1c",
+            "diagnostic_pr": "https://github.com/thepick/writing-feedback-tool/pull/71",
+            "report": "outputs/storage-coverage-005-storage-041-diagnostic-report.json",
+            "child_report": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-final-coverage/outputs/report.json",
+            "coverage_deferred": true,
+            "raw_git_files_independently_verified": 149
           }
         ],
-        "investigation": "Native held upload proves STORAGE-040. Test-only diagnostic PR69 intentionally fails. Full final coverage deferred until dedicated repair; resume the existing final chat after publication."
+        "investigation": "STORAGE-041 confirmed by actual Manage Student native keyboard Cancel; test-only PR71 intentionally fails. Six control scenarios pass. Resume final coverage after dedicated repair."
       }
     ],
-    "current_source_commit": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+    "current_source_commit": "b706bb7f3ad3dc8d3203299a6cc8a1f6df3b8ae6",
     "current_coverage_status": "fresh final-source coverage pending until stable final phase",
     "prior_percentages_historical_only": true
   },
