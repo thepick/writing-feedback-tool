@@ -1274,8 +1274,11 @@ function isSafeWordReplacement(originalWord, correctedWord, prevOriginalWord, pr
 }
 
 function buildLcsMatrix(a, b) {
+    var normalizedA = a.map(normalizeDiffToken);
+    var normalizedB = b.map(normalizeDiffToken);
     var rows = a.length + 1;
     var cols = b.length + 1;
+    // shortcut: the full LCS matrix still uses quadratic space, revisit if longer essays remain slow.
     var dp = [];
     for (var i = 0; i < rows; i++) {
         dp[i] = [];
@@ -1283,7 +1286,7 @@ function buildLcsMatrix(a, b) {
     }
     for (var ai = a.length - 1; ai >= 0; ai--) {
         for (var bi = b.length - 1; bi >= 0; bi--) {
-            if (normalizeDiffToken(a[ai]) === normalizeDiffToken(b[bi])) dp[ai][bi] = dp[ai + 1][bi + 1] + 1;
+            if (normalizedA[ai] === normalizedB[bi]) dp[ai][bi] = dp[ai + 1][bi + 1] + 1;
             else dp[ai][bi] = Math.max(dp[ai + 1][bi], dp[ai][bi + 1]);
         }
     }
