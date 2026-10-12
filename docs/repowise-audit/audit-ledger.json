@@ -3,8 +3,8 @@
   "repository": "thepick/writing-feedback-tool",
   "repository_id": "90c828ccda574e32806ddbca888e1723",
   "baseline_commit": "0f6dee278fa6ef23527ac327f6a81a56f4952533",
-  "branch": "codex/repowise-storage-recovery-coverage",
-  "updated_at": "2026-10-12T11:51:06.528Z",
+  "branch": "codex/repowise-storage-drive-lifecycle",
+  "updated_at": "2026-10-12T12:18:21.456Z",
   "user_timezone": "Asia/Bangkok",
   "scan_surfaces": {
     "code_health": {
@@ -1385,9 +1385,13 @@
       "remaining_limit": "Requests that never settle remain outside this repair.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-022",
@@ -1411,9 +1415,13 @@
       "remaining_limit": "Retained legacy helper; not a default V2 workflow.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-023",
@@ -1437,9 +1445,13 @@
       "remaining_limit": "The legacy callback still uses null for missing files and failures.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-024",
@@ -1469,9 +1481,13 @@
       "remaining_limit": "Pending writing already committed locally is represented by cloud dirty state, not recreated as a second pending object.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-025",
@@ -1496,9 +1512,13 @@
       "remaining_limit": "Synthetic accepting response; no real Google service guarantee.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-026",
@@ -1526,9 +1546,13 @@
       "remaining_limit": "One metadata request per cached resolution; media folder caches and simultaneous create races are unchanged. Wrong-parent and poisoned root cases pass baseline and are preservation/branch observations, not additional confirmed defects.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-027",
@@ -1553,9 +1577,13 @@
       "remaining_limit": "Retained public split helpers are exercised directly; their lazy merge caller is disabled by default. The inherited assertion message mentions archive/class, a scoped UX reuse.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-028",
@@ -1580,9 +1608,13 @@
       "remaining_limit": "Wrong-format or genuinely missing index retains the existing null contract.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-029",
@@ -1606,9 +1638,13 @@
       "remaining_limit": "No broad index schema redesign or recovery format change.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-030",
@@ -1632,9 +1668,13 @@
       "remaining_limit": "Messages remain timestamp-only; this is not cross-tab locking or per-account isolation.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-031",
@@ -1658,9 +1698,13 @@
       "remaining_limit": "Only explicit synthetic token forms were tested; no actual configuration or credentials were exposed.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
     },
     {
       "id": "STORAGE-032",
@@ -1686,9 +1730,174 @@
       "remaining_limit": "XHR has no new timeout, retry framework or automatic block-state policy.",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
+      "pr_state": "MERGED",
+      "reviewed_by_coordinator": true,
+      "suites": 22,
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "released_at": "2026-10-12T11:52:20Z",
+      "live_url": "https://wft.mtomlinson.ca/"
+    },
+    {
+      "id": "STORAGE-033",
+      "title": "IndexedDB operations acknowledge aborted transactions",
+      "symbol": "WftIndexedDb",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "transaction-abort-after-put-success",
+        "transaction-abort-after-get-success",
+        "transaction-abort-after-getAll-success",
+        "transaction-abort-after-delete-success",
+        "transaction-abort-after-clear-success",
+        "native-constraint-error-aborts-after-request-success"
+      ],
+      "fix": "Resolve only at native transaction completion; reject on abort and retain request error handling.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
       "pr_state": "OPEN",
       "reviewed_by_coordinator": true,
-      "suites": 22
+      "suites": 20
+    },
+    {
+      "id": "STORAGE-034",
+      "title": "Async portfolio reads hide unavailable primary data",
+      "symbol": "loadPortfolioAsync / renderStudentPortfolio / loadStudentPortfolioLazy",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "async-protected-read-portfolio-corrupt",
+        "async-protected-read-portfolio-read",
+        "actual-dropdown-unavailable-corrupt",
+        "actual-dropdown-unavailable-read",
+        "lazy-corrupt-primary-refuses-empty-fallback"
+      ],
+      "fix": "Use the existing strict primary snapshot reader. The actual optional dropdown displays its load failure and recovery guidance.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 20
+    },
+    {
+      "id": "STORAGE-035",
+      "title": "Student ID lookup hides unreadable settings",
+      "symbol": "loadStudentPortfolioAsync / resolveStudentPortfolioKey",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "async-protected-read-settings-corrupt",
+        "async-protected-read-settings-read"
+      ],
+      "fix": "Read required settings strictly when resolving IDs; rejected saves do not persist a wrong ID key.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 20
+    },
+    {
+      "id": "STORAGE-036",
+      "title": "Safe mode and disabled flags keep using initialized caches",
+      "symbol": "WftStorage / loadStudentPortfolioLazy / renderStudentPortfolio",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "actual-dropdown-safe-mode-bypass",
+        "existing-cache-facade-bypass-safe",
+        "existing-cache-facade-bypass-disabled",
+        "lazy-safe-mode-bypasses-existing-cache-and-cloud"
+      ],
+      "fix": "Gate cache facade operations on the current flag and safe mode; safe lazy reads and dropdown rendering use the local path.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 20
+    },
+    {
+      "id": "STORAGE-037",
+      "title": "Lazy reads report unavailable cloud and local writing as empty success",
+      "symbol": "loadStudentPortfolioLazy",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "lazy-remote-error-local-false",
+        "lazy-remote-missing-local-false",
+        "lazy-remote-corrupt-local-false",
+        "lazy-remote-invalid-local-false"
+      ],
+      "fix": "Retain a valid local fallback; return an error when neither the requested cloud file nor local student is available.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 20
+    },
+    {
+      "id": "STORAGE-038",
+      "title": "Split reads accept mismatched student ownership",
+      "symbol": "loadStudentFileFromDrive / loadStudentPortfolioLazy",
+      "severity": "high",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "native-lazy-cache-identity-wrong-id",
+        "native-lazy-cache-identity-invalid-sessions",
+        "lazy-remote-wrong-id-local-true",
+        "lazy-remote-wrong-id-local-false",
+        "lazy-remote-missing-id-local-true",
+        "lazy-remote-missing-id-local-false"
+      ],
+      "fix": "Reject mismatched downloaded student IDs at the shared file reader; bypass wrong-ID or invalid-session cache records without modifying primary writing.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 20
+    },
+    {
+      "id": "STORAGE-039",
+      "title": "Concurrent async student saves lose a different student update",
+      "symbol": "saveStudentPortfolioAsync",
+      "severity": "high",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "writer_chat": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "baseline_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-storage-optional-coverage\\outputs\\final-49554bc\\baseline.json",
+      "baseline_cases": [
+        "concurrent-public-student-saves-preserve-both-students"
+      ],
+      "fix": "Read and save synchronously within each existing Promise step; same-student full replacement semantics remain.",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 20
     }
   ],
   "findings": [
@@ -151083,9 +151292,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_022_20261012",
@@ -151103,9 +151313,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_023_20261012",
@@ -151123,9 +151334,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_024_20261012",
@@ -151143,9 +151355,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_025_20261012",
@@ -151163,9 +151376,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_026_20261012",
@@ -151183,9 +151397,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_027_20261012",
@@ -151203,9 +151418,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_028_20261012",
@@ -151223,9 +151439,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_029_20261012",
@@ -151243,9 +151460,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_030_20261012",
@@ -151263,9 +151481,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_031_20261012",
@@ -151283,9 +151502,10 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
-      "classification": "native_reproduced_storage_boundary_repair"
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
     },
     {
       "id": "manual_storage_drive_storage_032_20261012",
@@ -151303,12 +151523,153 @@
       "discovered_at": "2026-10-12T11:49:26.480Z",
       "commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete storage production diff, actual save/retry/folder/index/legacy/broadcast callers, all224 lines of native driver and one fixture metadata routing addition (no removed assertions). Final53 native scenarios/347 assertions pass. Coordinator separately reran the raw-Git final driver against the70-file raw baseline: the same27 scenarios fail across12 distinct defects. All22 selected repository suites plus4 supplemental native migration cases pass at corrected a8bcc9d8; complete52-suite run remains batch005. Coordinator independently rehashed both full70/71-file tracked snapshots against raw Git and checked216 focused native capture records/source hashes with no exclusions. Earlier afdc6af failed archive contract candidate is preserved/excluded; final archive76 assertions pass without weakening accepted-upload acknowledgement/class-retention behavior. Synthetic full-app fetch/XHR/multipart/download, real manual-save UI/retry/pending/newer edits, actual timers/visibility/offline events and two-page broadcast tested. Default flags unchanged; no current native percentage or complete cloud lifecycle claim.",
+      "classification": "native_reproduced_storage_boundary_repair",
+      "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21"
+    },
+    {
+      "id": "manual_storage_optional_storage_033_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "WftIndexedDb",
+      "marker": "native_optional_storage",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-033",
+      "related_issue": "STORAGE-033",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "IDB get/put/getAll/delete/clear resolved at request success before a transaction abort or constraint failure.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_optional_storage_034_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "loadPortfolioAsync / renderStudentPortfolio / loadStudentPortfolioLazy",
+      "marker": "native_optional_storage",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-034",
+      "related_issue": "STORAGE-034",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Async portfolio reads and lazy local fallback hid unreadable primary writing as empty success; the async DOM renderer showed no sessions.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_optional_storage_035_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "loadStudentPortfolioAsync / resolveStudentPortfolioKey",
+      "marker": "native_optional_storage",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-035",
+      "related_issue": "STORAGE-035",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Native unreadable/corrupt settings silently lost ID lookup and returned empty student data.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_optional_storage_036_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "WftStorage / loadStudentPortfolioLazy / renderStudentPortfolio",
+      "marker": "native_optional_storage",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-036",
+      "related_issue": "STORAGE-036",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "An initialized cache still read/wrote after safe mode or its feature flag was disabled. Lazy cache/cloud access and the actual optional dropdown failed safe-mode bypass.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_optional_storage_037_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "loadStudentPortfolioLazy",
+      "marker": "native_optional_storage",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-037",
+      "related_issue": "STORAGE-037",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Lazy failed/missing/corrupt cloud reads with no local student returned successful empty data.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_optional_storage_038_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "loadStudentFileFromDrive / loadStudentPortfolioLazy",
+      "marker": "native_optional_storage",
+      "severity": "high",
+      "original_baseline": false,
+      "issue_id": "STORAGE-038",
+      "related_issue": "STORAGE-038",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "A downloaded file with another or missing student ID could be cached under the requested ID. Wrong-ID or malformed cached records were returned directly.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_optional_storage_039_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "saveStudentPortfolioAsync",
+      "marker": "native_optional_storage",
+      "severity": "high",
+      "original_baseline": false,
+      "issue_id": "STORAGE-039",
+      "related_issue": "STORAGE-039",
+      "storage_followup_id": "STORAGE-COVERAGE-004",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Two concurrent public async saves for different students read old full snapshots and the later whole-portfolio save erased the earlier student change.",
+      "discovered_at": "2026-10-12T12:17:52.278Z",
+      "commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
       "classification": "native_reproduced_storage_boundary_repair"
     }
   ],
-  "last_verified_commit": "5023b78a6572dd7f69e5ed10cfd003d53d2192f2",
+  "last_verified_commit": "0ab2249a07496512e8bc0daa3a4d6e245150c0cb",
   "active_writer": null,
   "runtime_flag_scope": {
     "source_commit": "7a3c639945747d4e9368aa9a61bffa3dc4b580da",
@@ -152124,6 +152485,65 @@
       ],
       "build_status": "built",
       "previous_live_commit": "251c4429b1baccde23367bf67095346cdbd1b45c"
+    },
+    {
+      "id": "STORAGE-COVERAGE-003",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/67",
+      "source_commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
+      "checkpoint_commit": "0ab2249a07496512e8bc0daa3a4d6e245150c0cb",
+      "branch": "codex/repowise-storage-drive-lifecycle",
+      "files": [
+        {
+          "file": "index.html",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 208476,
+          "sha256": "d19136cc67765275b717e77317856c32a12d380a2c73eb32fde89e7db2e851f8"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 12962,
+          "sha256": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 415560,
+          "sha256": "b38f21af74ed4a2373d0d21098129763ad45f4360d70144cd9391808da95344b"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 484627,
+          "sha256": "35caec3e3dda4fe054d099cf7dd8f755bcaf1aa5330da9e2fc5c0a249b3bb352"
+        },
+        {
+          "file": "js/app/99-lightbox.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 1101,
+          "sha256": "ecca84b058aa15666de82877af674d9a4aefe793741b41d780d4fb65fc372b83"
+        }
+      ],
+      "review": "outputs/storage-coverage-003-coordinator-review.json",
+      "checked_at": "2026-10-12T11:51:18.213Z",
+      "live_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+      "merged_at": "2026-10-12T11:51:40Z",
+      "authorization": "User authorized completed changes published to live website; sequential storage follow-up independently reviewed.",
+      "url": "https://wft.mtomlinson.ca/",
+      "built_at": "2026-10-12T11:52:20Z",
+      "verified_at": "2026-10-12T11:52:58.862Z",
+      "scope": "All five shipped files match independently reviewed source; synthetic test services only.",
+      "type": "storage_coverage_followup",
+      "issues": [
+        "STORAGE-COVERAGE-003"
+      ],
+      "build_status": "built",
+      "previous_live_commit": "6f0aac839a9ebca15eec0849844a02b662a75b94"
     }
   ],
   "resolution_status_note": "All1138 tracked canonical obligations have individual dispositions. No confirmed behavioral repair or unreviewed finding remains. Deliberate source-specific metrics/risk advisories remain, including storage77.88% below its historical80% suggestion; this is not threshold satisfaction or proof of all paths. All662 original IDs retained;194 linked repaired/deployed and468 no-code-change. Final source code is byte-identical to the deployed cleanup release; next checkpoint changes audit documentation only.",
@@ -152440,7 +152860,7 @@
       {
         "id": "STORAGE-COVERAGE-003",
         "title": "Drive errors, manual save and polling lifecycle",
-        "status": "reviewed_awaiting_publication",
+        "status": "complete",
         "scope": "Native intercepted fetch/XHR error parsing, manual-save completion/retry, actual polling eligibility/start/stop/lifecycle; preserve pending edits.",
         "additional_paths": [
           "Stale cached folder failure and retry; historical poisoned cache values",
@@ -152493,17 +152913,69 @@
           "No paid AI, live Drive, real students, real OAuth/permissions/quota exhaustion, merge or deployment. No complete suite pass or current native line/branch percentage claim. Historical81.51%/storage77.88% is not coverage of this source."
         ],
         "writer_stopped": true,
-        "reviewed_at": "2026-10-12T11:51:06.525Z"
+        "reviewed_at": "2026-10-12T11:51:06.525Z",
+        "checkpoint_commit": "0ab2249a07496512e8bc0daa3a4d6e245150c0cb",
+        "pr_state": "MERGED",
+        "deployed_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+        "completed_at": "2026-10-12T11:52:58.862Z",
+        "live_evidence": "outputs/storage-coverage-003-live-verification.json"
       },
       {
         "id": "STORAGE-COVERAGE-004",
         "title": "Optional cache and async student portfolio paths",
-        "status": "pending",
+        "status": "reviewed_awaiting_publication",
         "scope": "Explicit IDB/lazy/identity modes, meaningful async public callers and failed storage; preserve disabled defaults and migration boundaries.",
         "additional_paths": [
           "Clarify IDB-only queue/photo/cache ownership and backup expectations; current emergency backup does not export arbitrary IDB stores",
           "Native async student lookup/save with supported own-property names such as constructor and __proto__; source reads/assignments use portfolio[name], so reproduce actual reachable behavior before classifying any defect."
-        ]
+        ],
+        "thread_id": "01a12ff5-b37a-78a1-b355-0a3b97d42c38",
+        "host_id": "local",
+        "started_at": "2026-10-12T11:53:24.678Z",
+        "base_commit": "3083f53525be6af6bbca9d8d1aaf2c54b0a01b21",
+        "branch": "codex/repowise-storage-optional-coverage",
+        "workspace": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-optional-coverage",
+        "investigation": "Final49-case native baseline reproduces28 failures across7 distinct defects; all49 candidate native cases and20 selected suites pass. Coordinator raw-Git/source review and publication pending. Retained API/actual optional dropdown reachability and IDB-only backup limits explicitly recorded.",
+        "preparation_evidence": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-optional-coverage/outputs/baseline-preparation.json",
+        "confirmed_defects": [
+          "STORAGE-033",
+          "STORAGE-034",
+          "STORAGE-035",
+          "STORAGE-036",
+          "STORAGE-037",
+          "STORAGE-038",
+          "STORAGE-039"
+        ],
+        "cache_ownership": {
+          "studentPortfolios": "Secondary cache written after primary local save or intercepted Drive read. Primary writing remains localStorage/Drive; no cache failure acknowledges a failed primary save.",
+          "portfolioIndex_and_metadata": "Cache facade exists; no current shipped facade consumers found. Primary index/settings/storage metadata use their existing localStorage and Drive paths.",
+          "thumbnails_and_syncQueue": "Stores are created by open; no current shipped record producer/consumer. Test-only synthetic records exercise native primitives without claiming durable queue/photo ownership.",
+          "backup": "Emergency Backup exports specified localStorage roots, pending writing and recovery data, not arbitrary IDB stores. Background refresh can replace secondary cache views; IDB-only bytes have no backup/durability guarantee."
+        },
+        "scope_and_reachability": {
+          "actual_UI": "portfolioStudentSelect onchange calls renderStudentPortfolio; optional async access calls loadStudentPortfolioAsync, which reads localStorage in microtasks. saveStudentSession caches only after the required primary save.",
+          "retained_public_APIs": "load/savePortfolioAsync and load/saveStudentPortfolioAsync are shipped retained APIs; student save has no current UI caller. Lazy loader has no current UI caller; native API tests establish its supported optional cache/Drive contracts, not a default user workflow. getStudentRecordById has no current production caller; own-name/ID test inspects retained lookup using persisted records.",
+          "renderStudentPortfolioAsync": "Inspected retained wrapper; no current production caller. No invoke-only-for-percentage test or new delayed helper was introduced.",
+          "same_task_selection": "Actual shipped DOM and Promise sequencing with two programmatic change events produces a transient Alice rendering before final Bob rendering. Final Bob state and primary bytes remain correct. Ordinary separate user events drain this local reader microtask chain first; no supported ordinary user/network race proved, no delayed replacement helper used, no stale-selection repair claimed.",
+          "migrations": "No schema/store ownership or migration changes. Direct migration transactions and final thumbnail lifecycle are unchanged; the two prior supplemental drivers are excluded because their actual paths do not use the changed cache facade/IDB helpers/optional async renderer.",
+          "third_party": "Owned application/tests only, existing previously approved pinned Playwright 1.62.1 with native headless Edge; no new dependency or unfamiliar third-party execution."
+        },
+        "coordinator_review": "outputs/storage-coverage-004-coordinator-review.json",
+        "tests_passed": true,
+        "source_commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
+        "pr": "https://github.com/thepick/writing-feedback-tool/pull/68",
+        "validation": "Coordinator reviewed complete99-line production diff, all237 lines of native driver, actual optional dropdown/local save/cache callers and existing VM dependency substitutions retaining failure/save assertions. Final49 native cases pass; the same final raw-Git driver hash pinned before/after baseline execution reproduces28 scenarios across7 distinct defects. Native request-success-then-abort and real constraint failure reject; concurrent different-student writes retain both; strict reads keep corrupted/unreadable bytes and identity settings; safe/disabled cache operations bypass initialized IDB; wrong/missing student IDs and malformed caches refuse with valid local fallback. Actual optional dropdown errors/selection and real cached callback/background download/upload checked; default flags preserved. Coordinator independently rehashed all215 files across baseline71 and production/final72-file snapshots against raw Git and verified final196-record native capture/source hashes. Final49-case suite plus19 unchanged selected regressions pass: latter reuse a200608 exact source/test bytes, final49554bc changes only the native driver. No complete53-suite or current native percentage claim. Retained lazy/student-save API has no current UI caller; transient same-task programmatic dropdown rendering remains correctly final-selected and is not claimed as ordinary user/network race.",
+        "remaining_risks": [
+          "No live Drive, paid AI, real students, real permissions/quota/device/crash or cross-tab guarantee; all service responses are synthetic and every other external request is blocked.",
+          "WftStorage cache failures intentionally return soft fallback; a closed IDB handle falls back and is not reopened by this change. IDB-only bytes are not emergency-backup exports. Blocked database upgrades, version-change lifecycle and device-level database loss were not exercised.",
+          "Concurrent save protection is within a single JS task and tab. Same-student full replacement, stale caller-supplied whole snapshots, cross-tab conflicts and crash atomicity are not redesigned.",
+          "Retained lazy callback exception, never-settling service requests and account changes during streaming bodies remain incompletely bounded; previous batch risk disclosures remain.",
+          "Safe-mode metadata detection retains the existing fail-soft reader; this is optional-path gating, not a global metadata validation redesign.",
+          "The default synchronous display reader remains intentionally fail-soft while required persistence is strict. Optional async mode now displays truthful read failure.",
+          "Split files with missing/mismatched studentId now reject. A valid local student remains available as fallback; historical malformed files need manual ownership repair."
+        ],
+        "writer_stopped": true,
+        "reviewed_at": "2026-10-12T12:18:21.453Z"
       },
       {
         "id": "STORAGE-COVERAGE-005",
@@ -152511,11 +152983,13 @@
         "status": "pending",
         "scope": "Meaningful untested storage UI keyboard/export/chooser routes and complete final gap accounting; classify trivial aliases, terminal empty lines and unreachable paths honestly, gather fresh exact-source native coverage.",
         "additional_paths": [
-          "Media-folder wrapper/cache contracts have no current attachment caller; classify retained role and meaningful tests separately"
+          "Media-folder wrapper/cache contracts have no current attachment caller; classify retained role and meaningful tests separately",
+          "If still absent from native corpus, exercise the existing V2 save timeout and late-callback guard using a genuinely held intercepted request and real browser test clock; verify pending/dirty writing and completion/retry truth. Classify retained legacy never-settling callback and possible late server effects explicitly; no generic timeout/retry framework or claim of cancelling accepted cloud writes.",
+          "Within the held-request lifecycle check, inspect whether an older V2 sync finishing after sign-out/reconnection can reset or acknowledge a newer run. Use actual syncWftNow/reset/lifecycle and environment token/service boundaries, preserve newer dirty work; no replacement production sync methods. Treat a concrete supported failure as a dedicated new repair before final coverage, and hypothetical future delays as a classified limitation."
         ]
       }
     ],
-    "current_source_commit": "a8bcc9d895bf5f1e89709f7dbf3d3fa7e4bc3db7",
+    "current_source_commit": "49554bc14b5f0770ab10cf0ac4696e1a7825e13f",
     "current_coverage_status": "fresh final-source coverage pending until stable final phase",
     "prior_percentages_historical_only": true
   }
