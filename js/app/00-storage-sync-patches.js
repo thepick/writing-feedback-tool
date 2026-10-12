@@ -906,10 +906,10 @@ function getCategoryWeight(key, optProfile) {
     if (gradeWeights[key] == null) return 0;
     return gradeWeights[key];
 }
-function getWeightDescriptionText(optProfile) {
+function getWeightDescriptionText(optProfile, optNeatnessActive) {
     var profile = optProfile || getGradeProfile();
     var weights = profile.weights || GRADE_PROFILES[5].weights;
-    var neatnessActive = shouldShowNeatnessWeighting ? shouldShowNeatnessWeighting() : shouldAssessNeatness();
+    var neatnessActive = typeof optNeatnessActive === "boolean" ? optNeatnessActive : (shouldShowNeatnessWeighting ? shouldShowNeatnessWeighting() : shouldAssessNeatness());
     var neatnessWeight = neatnessActive ? getNeatnessWeight(profile) : 0;
     var nonNeatScale = 1 - neatnessWeight;
     var order = ["Ideas & Details", "Organization", "Grammar", "Flow", "Word Choice", "Spelling & Punctuation"];
@@ -8618,6 +8618,9 @@ function saveCurrentSessionToPortfolio(analysisData) {
         gradeLabel: analysisData.gradeLabel || (getGradeProfile().gradeLabel || getGradeProfile().label),
         gradeTier: analysisData.gradeTier || getGradeProfile().tier,
         gradeProfileVersion: analysisData.gradeProfileVersion || GRADE_PROFILE_VERSION,
+        assessmentPolicy: analysisData.assessmentPolicy ? cloneWftJson(analysisData.assessmentPolicy) : null,
+        actualWords: analysisData.actualWords,
+        targetWords: analysisData.targetWords,
         categoryScores: savedCategoryScores,
         assessScriptQuality: neatnessAssessed,
         neatnessAssessed: neatnessAssessed,
