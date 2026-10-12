@@ -1419,8 +1419,10 @@ function setWftStorageMeta(meta) {
         meta.updatedAt = new Date().toISOString();
         meta.schemaVersion = WFT_STORAGE_SCHEMA_VERSION;
         localStorage.setItem(WFT_STORAGE_META_KEY, JSON.stringify(meta));
+        return true;
     } catch (e) {
         wftDebugWarn("[StorageMeta] Write failed:", e);
+        return false;
     }
 }
 
@@ -1466,30 +1468,33 @@ function incrementDeviceLamport() {
 
 // ── Safe Mode ──
 function enterWftStorageSafeMode(reason) {
-    var meta = getWftStorageMeta();
+    var meta = readWftRequiredStorage(WFT_STORAGE_META_KEY);
     meta.safeMode = true;
     meta.safeModeReason = reason || "manual";
-    setWftStorageMeta(meta);
+    if (!setWftStorageMeta(meta)) return false;
     wftDebugWarn("[SafeMode] ENTERED — reason:", reason);
     // If a UI notification function exists, show a banner
     if (typeof setDriveSyncStatus === "function") {
         setDriveSyncStatus("warning", "Safe mode active — " + (reason || "manual override"));
     }
+    return true;
 }
 
 function exitWftStorageSafeMode() {
-    var meta = getWftStorageMeta();
+    var meta = readWftRequiredStorage(WFT_STORAGE_META_KEY);
     meta.safeMode = false;
     meta.safeModeReason = "";
-    setWftStorageMeta(meta);
+    if (!setWftStorageMeta(meta)) return false;
     wftDebugLog("[SafeMode] EXITED");
+    return true;
 }
 
 function toggleWftSafeMode() {
-    if (isWftStorageSafeMode()) {
-        exitWftStorageSafeMode();
-    } else {
-        enterWftStorageSafeMode("manual-toggle");
+    try {
+        var changed = isWftStorageSafeMode() ? exitWftStorageSafeMode() : enterWftStorageSafeMode("manual-toggle");
+        if (!changed) throw new Error("Browser storage write failed.");
+    } catch (e) {
+        alert("Safe mode could not be changed. Check browser storage and retry. " + e.message);
     }
     refreshStorageHealthUI();
 }
@@ -1596,7 +1601,7 @@ function buildWftEmergencyBackupObject() {
         "wft_deletions", "wft_storage_meta", "wft_selectedStudent",
         "wft_drive_folder_id", "wft_drive_settings_file_id",
         "wft_drive_portfolio_file_id", "wft_drive_deletions_file_id",
-        "wft_google_user", "wft_google_connected"
+        "wft_google_user", "wft_google_connected", "wft_pending_portfolio_sync_v1"
     ];
 
     for (var bi = 0; bi < keysToBackup.length; bi++) {
@@ -1607,8 +1612,15 @@ function buildWftEmergencyBackupObject() {
                 backup.contents[bk] = parseWftBackupValue(raw);
                 if (bk === 'wft_settings' && backup.contents[bk] && typeof backup.contents[bk] === 'object') delete backup.contents[bk].apiKey;
             }
-        } catch (e) { backup.contents[bk] = null; }
+        } catch (e) {
+            backup.contents[bk] = null;
+            if (!backup.readErrors) backup.readErrors = [];
+            backup.readErrors.push(bk);
+        }
     }
+
+    // The quota fallback may have removed photos from the persisted pending record.
+    if (typeof pendingPortfolioSync !== 'undefined' && pendingPortfolioSync) backup.pendingPortfolioSync = cloneWftJson(pendingPortfolioSync);
 
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) {
         backup.studentChangeRecovery = Object.assign({}, wftStudentChangeRecovery);
@@ -1637,49 +1649,64 @@ function buildWftEmergencyBackupObject() {
     return backup;
 }
 
-function downloadWftEmergencyBackup() {
-    var backup = buildWftEmergencyBackupObject();
-    var json = JSON.stringify(backup, null, 2);
-    var blob = new Blob([json], { type: "application/json" });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url;
-    var ts = backup.timestamp.replace(/[:.]/g, "-");
-    a.download = "wft-emergency-backup-" + ts + ".json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    wftDebugLog("[EmergencyBackup] Downloaded:", a.download);
-    return a.download;
+function downloadWftEmergencyBackup(backup) {
+    var url, a;
+    try {
+        backup = backup || buildWftEmergencyBackupObject();
+        var json = JSON.stringify(backup, null, 2);
+        var blob = new Blob([json], { type: "application/json" });
+        url = URL.createObjectURL(blob);
+        a = document.createElement("a");
+        a.href = url;
+        var ts = backup.timestamp.replace(/[:.]/g, "-");
+        a.download = "wft-emergency-backup-" + ts + ".json";
+        document.body.appendChild(a);
+        a.click();
+        alert("Backup download started. Keep this tab open until you verify the file." + (backup.readErrors ? " Backup is incomplete: some local data could not be read. Verify the file and retry when browser storage is working." : ""));
+        return a.download;
+    } catch (e) {
+        wftDebugError("[EmergencyBackup] Download failed:", e);
+        alert("Emergency backup download failed. Keep this tab open and retry. " + e.message);
+        return false;
+    } finally {
+        if (a && a.parentNode) a.parentNode.removeChild(a);
+        if (url) URL.revokeObjectURL(url);
+    }
 }
 
 function saveWftPreMigrationBackupToDrive(callback) {
-    var backup = buildWftEmergencyBackupObject();
-    var json = JSON.stringify(backup, null, 2);
-    var filename = "wft-pre-migration-" + backup.timestamp.replace(/[:.]/g, "-") + ".json";
-
-    if (!isWftTokenValid || !isWftTokenValid()) {
-        wftDebugWarn("[EmergencyBackup] Not signed in — local download only");
-        downloadWftEmergencyBackup();
-        if (callback) { callback(null, "local-only"); }
-        return;
+    var backup, completed = false;
+    function finish(err, result) {
+        if (completed) return;
+        completed = true;
+        if (callback) callback(err, result);
     }
-
-    if (typeof saveFileToDrive === "function") {
+    function fallback(err) {
+        if (completed) return;
+        if (err && typeof setDriveSyncStatus === "function") setDriveSyncStatus("error", "Drive backup failed; local download attempted.");
+        var downloaded = downloadWftEmergencyBackup(backup);
+        finish(downloaded ? err : new Error("Emergency backup download failed. Keep this tab open and retry."), downloaded ? (err ? "fallback-local" : "local-only") : null);
+    }
+    try {
+        backup = buildWftEmergencyBackupObject();
+        var json = JSON.stringify(backup, null, 2);
+        var filename = "wft-pre-migration-" + backup.timestamp.replace(/[:.]/g, "-") + ".json";
+        if (typeof isWftTokenValid !== "function" || !isWftTokenValid() || typeof saveFileToDrive !== "function") { fallback(null); return; }
         saveFileToDrive(filename, json, "application/json", function(err, fileId) {
+            if (completed) return;
+            if (!err && (typeof fileId !== "string" || !fileId.trim())) err = new Error("Drive did not acknowledge the backup file.");
             if (err) {
                 wftDebugError("[EmergencyBackup] Drive upload failed:", err);
-                downloadWftEmergencyBackup();
-                if (callback) { callback(err, "fallback-local"); }
+                fallback(err);
             } else {
                 wftDebugLog("[EmergencyBackup] Saved to Drive:", filename, fileId);
-                if (callback) { callback(null, fileId); }
+                alert("Backup saved to Google Drive." + (backup.readErrors ? " Backup is incomplete: some local data could not be read. Keep this tab open, verify the file and retry when browser storage is working." : ""));
+                finish(null, fileId);
             }
         });
-    } else {
-        downloadWftEmergencyBackup();
-        if (callback) { callback(null, "local-only"); }
+    } catch (e) {
+        wftDebugError("[EmergencyBackup] Drive backup failed:", e);
+        fallback(e);
     }
 }
 
@@ -2446,7 +2473,7 @@ function checkIndexedDbAvailable() {
 }
 
 async function clearWftLocalCache() {
-    if (!(await wftConfirm("Clear all local cache (IndexedDB and localStorage portfolio)?\n\nThis will NOT delete your Google Drive data. You can reload from Drive after clearing.", {
+    if (!(await wftConfirm("Clear all local cache (IndexedDB and localStorage portfolio)?\n\nLocal-only writing and photos that have not been synced to Drive will be deleted. Download Emergency Backup and verify it contains what you need before clearing.\n\nThis will NOT delete your Google Drive data. You can reload synced data from Drive after clearing. Pending writing awaiting upload is kept.", {
         title: "Clear Local Cache",
         confirmText: "Clear Cache",
         danger: true
@@ -2454,22 +2481,34 @@ async function clearWftLocalCache() {
         return;
     }
 
-    // Clear IndexedDB if WftIndexedDb is available
-    if (typeof WftIndexedDb !== "undefined" && WftIndexedDb.clearAll) {
-        WftIndexedDb.clearAll();
-    }
-
-    // Clear localStorage portfolio (settings and deletions are preserved)
+    var previous, localMutationStarted = false;
     try {
+        if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        preflightWftRequiredStorage();
+        getLocalPortfolioSnapshot();
+        previous = { wft_portfolio: localStorage.getItem("wft_portfolio"), wft_storage_meta: localStorage.getItem("wft_storage_meta") };
+        if (typeof WftIndexedDb !== "undefined" && WftIndexedDb.clearAll) await WftIndexedDb.clearAll();
+        if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        if (Object.keys(previous).some(function(key) { return localStorage.getItem(key) !== previous[key]; })) {
+            throw new Error("Local writing or storage state changed while clearing. Review it before retrying.");
+        }
+        localMutationStarted = true;
         localStorage.removeItem("wft_portfolio");
         localStorage.removeItem("wft_storage_meta");
         wftDebugLog("[StorageHealth] Local cache cleared");
     } catch (e) {
+        if (localMutationStarted && !restoreWftStudentChangeStorage(previous)) {
+            wftStudentChangeRecovery = previous;
+            e = getWftStudentChangeRecoveryError();
+        }
         wftDebugWarn("[StorageHealth] Failed to clear localStorage:", e);
+        alert("Local cache could not be completely cleared. Some cache data may already have been removed. " + e.message + " Keep this tab open and retry when browser storage is working.");
+        return false;
     }
 
     refreshStorageHealthUI();
     alert("Local cache cleared. Sign in to Google Drive and reload portfolio index.");
+    return true;
 }
 
 // Hook into openSettingsDrawer to refresh health UI
@@ -2714,11 +2753,17 @@ var WftIndexedDb = {
             for (var sni = 0; sni < db.objectStoreNames.length; sni++) {
                 storeNames.push(db.objectStoreNames[sni]);
             }
-            var promises = [];
-            for (var sn = 0; sn < storeNames.length; sn++) {
-                promises.push(self.clear(storeNames[sn]));
-            }
-            return Promise.all(promises);
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(storeNames, "readwrite");
+                tx.oncomplete = function() { resolve(); };
+                tx.onabort = function() { reject(tx.error || new Error("IndexedDB cache clear aborted")); };
+                try {
+                    for (var sn = 0; sn < storeNames.length; sn++) tx.objectStore(storeNames[sn]).clear();
+                } catch (e) {
+                    tx.abort();
+                    reject(e);
+                }
+            });
         });
     },
 

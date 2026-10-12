@@ -3,8 +3,8 @@
   "repository": "thepick/writing-feedback-tool",
   "repository_id": "90c828ccda574e32806ddbca888e1723",
   "baseline_commit": "0f6dee278fa6ef23527ac327f6a81a56f4952533",
-  "branch": "codex/repowise-final-validation",
-  "updated_at": "2026-10-12T10:35:57.517Z",
+  "branch": "codex/repowise-storage-split-coverage",
+  "updated_at": "2026-10-12T11:12:04.368Z",
   "user_timezone": "Asia/Bangkok",
   "scan_surfaces": {
     "code_health": {
@@ -1274,9 +1274,78 @@
       "validation": "Coordinator reviewed complete11-line production diff, all167 lines of the full native suite and actual folder/index/merge callers. Identical final driver independently verified against raw-Git baseline reproduces only six invalid-folder/parent scenarios; final33 scenarios/294 assertions pass. Full50 suites/54 syntax checks pass; coordinator independently rehashed all69 tracked snapshot files against raw Git after STOP. Valid create/update/canonical-ID/cache, multipart identity/writing/photo bytes, merge/deletion filtering, upload failures/retry, index reads and default flags checked. Guard rejects malformed folder IDs before caching/upload. Current split-merge caller is the disabled lazy refresh branch; direct shipped public helper tests are not claimed as default user workflow. No new dependencies; synthetic/intercepted services only; old coverage percentages not asserted for changed source.",
       "commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/65",
+      "pr_state": "MERGED",
+      "reviewed_by_coordinator": true,
+      "suites": 50,
+      "deployed_commit": "251c4429b1baccde23367bf67095346cdbd1b45c",
+      "merged_at": "2026-10-12T10:37:06Z",
+      "released_at": "2026-10-12T10:37:46Z",
+      "live_url": "https://wft.mtomlinson.ca/"
+    },
+    {
+      "id": "STORAGE-017",
+      "title": "Emergency backup omits pending writing and in-memory photos",
+      "symbol": "buildWftEmergencyBackupObject / downloadWftEmergencyBackup",
+      "severity": "high",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "writer_chat": "01a12fb1-8f8a-7d40-bd9b-3e98873795f4",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
       "pr_state": "OPEN",
       "reviewed_by_coordinator": true,
-      "suites": 50
+      "suites": 12
+    },
+    {
+      "id": "STORAGE-018",
+      "title": "Safe-mode controls hide failed persistence",
+      "symbol": "enterWftStorageSafeMode / exitWftStorageSafeMode / toggleWftSafeMode",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "writer_chat": "01a12fb1-8f8a-7d40-bd9b-3e98873795f4",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 12
+    },
+    {
+      "id": "STORAGE-019",
+      "title": "Cache clearing reports success before or after failed storage deletion",
+      "symbol": "clearWftLocalCache",
+      "severity": "high",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "writer_chat": "01a12fb1-8f8a-7d40-bd9b-3e98873795f4",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "candidate_review": {
+        "reviewed_at": "2026-10-12T10:55:03.669Z",
+        "observation": "Candidate removed local primary bytes before awaiting IDB and restored old snapshot on failure, risking overwrite of a newer local save during await.",
+        "required_validation": "Delay/abort actual native IDB clear, save newer writing through real saveStudentSession, verify newer bytes retained; check unchanged confirmed snapshot before any local deletion and rollback only own completed mutations."
+      },
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 12
+    },
+    {
+      "id": "STORAGE-020",
+      "title": "Backup controls leave download and synchronous Drive exceptions uncaught",
+      "symbol": "saveWftPreMigrationBackupToDrive / downloadWftEmergencyBackup",
+      "severity": "medium",
+      "status": "fixed_in_draft_pr",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "writer_chat": "01a12fb1-8f8a-7d40-bd9b-3e98873795f4",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "reviewed_by_coordinator": true,
+      "suites": 12
     }
   ],
   "findings": [
@@ -150565,13 +150634,94 @@
       "discovered_at": "2026-10-12T10:14:40.798Z",
       "commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
       "pr": "https://github.com/thepick/writing-feedback-tool/pull/65",
-      "pr_state": "OPEN",
+      "pr_state": "MERGED",
       "validation": "Coordinator reviewed complete11-line production diff, all167 lines of the full native suite and actual folder/index/merge callers. Identical final driver independently verified against raw-Git baseline reproduces only six invalid-folder/parent scenarios; final33 scenarios/294 assertions pass. Full50 suites/54 syntax checks pass; coordinator independently rehashed all69 tracked snapshot files against raw Git after STOP. Valid create/update/canonical-ID/cache, multipart identity/writing/photo bytes, merge/deletion filtering, upload failures/retry, index reads and default flags checked. Guard rejects malformed folder IDs before caching/upload. Current split-merge caller is the disabled lazy refresh branch; direct shipped public helper tests are not claimed as default user workflow. No new dependencies; synthetic/intercepted services only; old coverage percentages not asserted for changed source.",
       "classification": "native_reproduced_storage_boundary_repair",
-      "related_issue": "STORAGE-016"
+      "related_issue": "STORAGE-016",
+      "deployed_commit": "251c4429b1baccde23367bf67095346cdbd1b45c"
+    },
+    {
+      "id": "manual_storage_recovery_storage_017_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "buildWftEmergencyBackupObject / downloadWftEmergencyBackup",
+      "marker": "native_recovery_controls",
+      "severity": "high",
+      "original_baseline": false,
+      "issue_id": "STORAGE-017",
+      "related_issue": "STORAGE-017",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Emergency backup omits pending writing and in-memory photos; Native shipped-control baseline at main251c4429 reproduces this failure in the recovery repair chat. Baseline fixture upload routing was corrected separately; exact final baseline/candidate assertion and coordinator independent review remain required.",
+      "discovered_at": "2026-10-12T10:46:04.730Z",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_recovery_storage_018_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "enterWftStorageSafeMode / exitWftStorageSafeMode / toggleWftSafeMode",
+      "marker": "native_recovery_controls",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-018",
+      "related_issue": "STORAGE-018",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Safe-mode controls hide failed persistence; Native shipped-control baseline at main251c4429 reproduces this failure in the recovery repair chat. Baseline fixture upload routing was corrected separately; exact final baseline/candidate assertion and coordinator independent review remain required.",
+      "discovered_at": "2026-10-12T10:46:04.730Z",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_recovery_storage_019_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "clearWftLocalCache",
+      "marker": "native_recovery_controls",
+      "severity": "high",
+      "original_baseline": false,
+      "issue_id": "STORAGE-019",
+      "related_issue": "STORAGE-019",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Cache clearing reports success before or after failed storage deletion; Native shipped-control baseline at main251c4429 reproduces this failure in the recovery repair chat. Baseline fixture upload routing was corrected separately; exact final baseline/candidate assertion and coordinator independent review remain required.",
+      "discovered_at": "2026-10-12T10:46:04.730Z",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "classification": "native_reproduced_storage_boundary_repair"
+    },
+    {
+      "id": "manual_storage_recovery_storage_020_20261012",
+      "surface": "manual",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "saveWftPreMigrationBackupToDrive / downloadWftEmergencyBackup",
+      "marker": "native_recovery_controls",
+      "severity": "medium",
+      "original_baseline": false,
+      "issue_id": "STORAGE-020",
+      "related_issue": "STORAGE-020",
+      "storage_followup_id": "STORAGE-COVERAGE-002",
+      "final_outcome": "fixed_in_draft_pr",
+      "rationale": "Backup controls leave download and synchronous Drive exceptions uncaught; Native shipped-control baseline at main251c4429 reproduces this failure in the recovery repair chat. Baseline fixture upload routing was corrected separately; exact final baseline/candidate assertion and coordinator independent review remain required.",
+      "discovered_at": "2026-10-12T10:46:04.730Z",
+      "commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+      "pr_state": "OPEN",
+      "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+      "classification": "native_reproduced_storage_boundary_repair"
     }
   ],
-  "last_verified_commit": "2aa2bdd16fb6b7c06be0737c5f292e49b06d8ded",
+  "last_verified_commit": "173d07c0c3b381725dd0771468bc4bc3839ddd90",
   "active_writer": null,
   "runtime_flag_scope": {
     "source_commit": "7a3c639945747d4e9368aa9a61bffa3dc4b580da",
@@ -151268,6 +151418,65 @@
         "sha256": "9936cb38f7399da92fdf39f0d7898ef33efa1c46442b7aa8d12339ecbfe9f5ff",
         "created_at": "2026-10-12T04:10:59.825Z"
       }
+    },
+    {
+      "id": "STORAGE-COVERAGE-001",
+      "pr": "https://github.com/thepick/writing-feedback-tool/pull/65",
+      "source_commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
+      "checkpoint_commit": "173d07c0c3b381725dd0771468bc4bc3839ddd90",
+      "branch": "codex/repowise-storage-split-coverage",
+      "files": [
+        {
+          "file": "index.html",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 208367,
+          "sha256": "721c98f70f76f6fb75ee9999e930b82f43426ab5896073eac01ff46bc762c67c"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 12962,
+          "sha256": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 408877,
+          "sha256": "1ea110b7bff51d4a66dee16cc7c743e776b27d2b6c236abe211dd5356843021f"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 484627,
+          "sha256": "35caec3e3dda4fe054d099cf7dd8f755bcaf1aa5330da9e2fc5c0a249b3bb352"
+        },
+        {
+          "file": "js/app/99-lightbox.js",
+          "status": 200,
+          "exact_bytes": true,
+          "bytes": 1101,
+          "sha256": "ecca84b058aa15666de82877af674d9a4aefe793741b41d780d4fb65fc372b83"
+        }
+      ],
+      "review": "outputs/storage-coverage-001-coordinator-review.json",
+      "checked_at": "2026-10-12T10:36:28.700Z",
+      "live_commit": "251c4429b1baccde23367bf67095346cdbd1b45c",
+      "merged_at": "2026-10-12T10:37:06Z",
+      "authorization": "User authorized completed changes published to live website; sequential storage follow-up independently reviewed.",
+      "url": "https://wft.mtomlinson.ca/",
+      "built_at": "2026-10-12T10:37:46Z",
+      "verified_at": "2026-10-12T10:38:31.558Z",
+      "scope": "All five shipped files match independently reviewed source; synthetic test services only.",
+      "type": "storage_coverage_followup",
+      "issues": [
+        "STORAGE-COVERAGE-001"
+      ],
+      "build_status": "built",
+      "previous_live_commit": "6e2c166a0c41d76d85ebb21db9eb9e950906645b"
     }
   ],
   "resolution_status_note": "All1138 tracked canonical obligations have individual dispositions. No confirmed behavioral repair or unreviewed finding remains. Deliberate source-specific metrics/risk advisories remain, including storage77.88% below its historical80% suggestion; this is not threshold satisfaction or proof of all paths. All662 original IDs retained;194 linked repaired/deployed and468 no-code-change. Final source code is byte-identical to the deployed cleanup release; next checkpoint changes audit documentation only.",
@@ -151511,7 +151720,7 @@
       {
         "id": "STORAGE-COVERAGE-001",
         "title": "Split student save, folder lifecycle and index reads",
-        "status": "reviewed_awaiting_publication",
+        "status": "complete",
         "scope": "Native successful split saves, merge then save, folder discovery/create/cache, index reads and callback/network/storage failures.",
         "thread_id": "01a12f95-1503-73f0-9e9e-fca997de6c7c",
         "host_id": "local",
@@ -151536,13 +151745,45 @@
           "Crash atomicity, cross-tab coordination and in-memory recovery limitations from prior repairs remain."
         ],
         "writer_stopped": true,
-        "reviewed_at": "2026-10-12T10:35:57.514Z"
+        "reviewed_at": "2026-10-12T10:35:57.514Z",
+        "checkpoint_commit": "173d07c0c3b381725dd0771468bc4bc3839ddd90",
+        "pr_state": "MERGED",
+        "deployed_commit": "251c4429b1baccde23367bf67095346cdbd1b45c",
+        "completed_at": "2026-10-12T10:38:31.558Z",
+        "live_evidence": "outputs/storage-coverage-001-live-verification.json"
       },
       {
         "id": "STORAGE-COVERAGE-002",
         "title": "Recovery backup, safe mode and local cache clearing",
-        "status": "pending",
-        "scope": "Public recovery/safe-mode/cache handlers, backup success and emergency download failures; preserve protected writing and retry state."
+        "status": "reviewed_awaiting_publication",
+        "scope": "Public recovery/safe-mode/cache handlers, backup success and emergency download failures; preserve protected writing and retry state.",
+        "thread_id": "01a12fb1-8f8a-7d40-bd9b-3e98873795f4",
+        "host_id": "local",
+        "started_at": "2026-10-12T10:38:57.661Z",
+        "base_commit": "251c4429b1baccde23367bf67095346cdbd1b45c",
+        "branch": "codex/repowise-storage-recovery-coverage",
+        "workspace": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-storage-recovery-coverage",
+        "investigation": "Four distinct confirmed recovery/control failures reproduced in native baseline; focused fixes and independent review pending.",
+        "confirmed_defects": [
+          "STORAGE-017",
+          "STORAGE-018",
+          "STORAGE-019",
+          "STORAGE-020"
+        ],
+        "coordinator_review": "outputs/storage-coverage-002-coordinator-review.json",
+        "tests_passed": true,
+        "source_commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
+        "pr": "https://github.com/thepick/writing-feedback-tool/pull/66",
+        "validation": "Coordinator reviewed complete production diff, all193 lines of new native driver and the existing recovery test adjustment; failed retry invariants retained, alert count now measured before the successful retry. Identical final driver fails33/34 baseline scenarios (overlapping four distinct defects, not33 bugs); final34 scenarios/377 assertions pass through actual settings buttons, confirmation/escape, intercepted upload/actual download bytes, actual quota fallback and native IDB transactions. Candidate race was independently caught and reproduced: delayed transaction plus real new save stays byte-preserved on abort/completion. Atomic IDB clear settles on commit/abort before primary mutation; stale bytes refuse deletion and partial completion disclosed. Eleven relevant existing storage suites plus focused native suite pass on final05af7921; coordinator independently rehashed both complete70-file snapshots against raw Git after STOP. Pending/full photo dataURL and credential redaction, corrupted roots/recovery, failed safe-mode persistence, callback/file-ID truthfulness, rollback/retry and default flags verified. Failed/earlier captures excluded; no whole51-suite or current coverage percentage claim.",
+        "remaining_risks": [
+          "A confirmed clear deliberately deletes cached/local-only portfolio data. IDB and localStorage are not one atomic transaction: committed IDB cache can be gone when a later local delete fails or a newer edit causes refusal; UI reports partial completion, primary writing/pending state survive. IDB-only cache bytes are not restored or included in Emergency Backup.",
+          "Failed rollback before-images and quota-preserved full pending photos are in memory. Keep the tab open and verify the exported backup; no reload/crash durability guarantee. Backup is a JSON snapshot of specified roots, pending work and recovery, not all editor state or arbitrary IDB stores.",
+          "Backup still uses the legacy Drive save/folder callback boundary. Folder-resolution rejection, never-callback/hanging requests, account changes and complete offline/service lifecycle require the next Drive-errors follow-up. No real OAuth/Drive permissions, quota exhaustion or device guarantee.",
+          "Safe-mode mutations now refuse unreadable/corrupt metadata; unrelated existing metadata readers remain fail-soft. No broader fail-closed metadata redesign was attempted.",
+          "The post-IDB same-byte check protects in-tab saves during the await; it does not create cross-tab locking or crash atomicity. Historical coverage percentages do not describe this changed source."
+        ],
+        "writer_stopped": true,
+        "reviewed_at": "2026-10-12T11:12:04.366Z"
       },
       {
         "id": "STORAGE-COVERAGE-003",
@@ -151571,7 +151812,7 @@
         ]
       }
     ],
-    "current_source_commit": "a9d42d37afa7b2c2a337f0e20173698c706828b8",
+    "current_source_commit": "05af7921be25b2e2e9e65a7d4a30109dac1909a8",
     "current_coverage_status": "fresh final-source coverage pending until stable final phase",
     "prior_percentages_historical_only": true
   }
