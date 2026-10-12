@@ -193,17 +193,14 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
                 const result = await direct(index);
                 check(name, !!result.error && !result.fileId && uploads.length === 0, result);
             });
-            await run('migration observes index failure then retries', async name => {
+            await run('live rebuild observes index failure then retries', async name => {
                 saveStudentSession('Synthetic', entry('one'));
-                saveWftPreMigrationBackupToDrive = callback => callback(null, 'synthetic-backup');
-                ensureWftStudentsFolderPromise = async () => 'synthetic-students-folder';
-                saveStudentFileToDrive = (id, data, callback) => callback(null, 'synthetic-student-file');
                 uploadWftJsonFilePromise = async () => { throw new Error('Synthetic index rejection'); };
-                const migrate = () => new Promise(resolve => migrateLegacyPortfolioToStudentFiles((error, status) => resolve({ error: !!error, status })));
-                const failed = await migrate();
-                check(name + ' no completion on failed index', failed.error && failed.status !== 'completed' && !getWftStorageMeta().migrationCompletedAt, failed);
-                uploadWftJsonFilePromise = async () => 'synthetic-index'; const succeeded = await migrate();
-                check(name + ' retry', !succeeded.error && succeeded.status === 'completed' && !!getWftStorageMeta().migrationCompletedAt, succeeded);
+                const rebuild = () => new Promise(resolve => rebuildPortfolioIndex((error, index) => resolve({ error: !!error, index })));
+                const failed = await rebuild();
+                check(name + ' failed upload keeps acknowledgement pending', failed.error && failed.index.students.Synthetic.sessionCount === 1 && isWftPortfolioIndexDirty(), failed);
+                uploadWftJsonFilePromise = async () => 'synthetic-index'; const succeeded = await rebuild();
+                check(name + ' retry', !succeeded.error && succeeded.index.students.Synthetic.sessionCount === 1 && !isWftPortfolioIndexDirty(), succeeded);
             });
             for (const failure of ['settings-read', 'settings-invalid', 'portfolio-read', 'portfolio-invalid', 'roster-read', 'markers-read', 'dirty-write', 'ack-write', 'ack-read', 'remove']) await run('storage failure/' + failure, async name => {
                 saveStudentSession('Synthetic', entry('one')); let release;
@@ -249,8 +246,38 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             await run('explicit lazy local startup path', async name => {
                 saveStudentSession('Synthetic', entry('one')); WFT_LAZY_PORTFOLIO_LOAD_V1 = true;
                 wftSyncState.accessToken = driveAccessToken = ''; wftSyncState.tokenExpiresAt = 0;
-                initLazyPortfolioStartup(); await new Promise(resolve => setTimeout(resolve, 0));
-                check(name, document.querySelector('#portfolioStudentSelect option[value="Synthetic"]')?.textContent.includes('1') && isWftPortfolioIndexDirty());
+                loadSettingsFromLocalStorage(); refreshPortfolioDropdown();
+                const loaded = await new Promise(resolve => loadStudentPortfolioLazy('Synthetic', 'Synthetic', (error, data) => resolve({ error: !!error, data })));
+                check(name, document.querySelector('#portfolioStudentSelect option[value="Synthetic"]')?.textContent === 'Synthetic' && !loaded.error && loaded.data.sessions.length === 1 && isWftPortfolioIndexDirty());
+            });
+            await run('optional native IDB and lazy cache round trip', async name => {
+                const beforeFlags = { idb: WFT_INDEXEDDB_CACHE_V1, lazy: WFT_LAZY_PORTFOLIO_LOAD_V1, split: WFT_SPLIT_STUDENT_FILES_V1 };
+                try {
+                    saveStudentSession('Synthetic', entry('cache'));
+                    const primary = localStorage.getItem('wft_portfolio');
+                    WFT_INDEXEDDB_CACHE_V1 = WFT_LAZY_PORTFOLIO_LOAD_V1 = true;
+                    WFT_SPLIT_STUDENT_FILES_V1 = false;
+                    await WftStorage.init();
+                    check(name + ' real database opened', WftStorage.mode === 'indexeddb' && WftIndexedDb.isReady());
+                    const index = buildPortfolioIndexFromPortfolio(getLocalPortfolioSnapshot());
+                    await WftStorage.savePortfolioIndex(index);
+                    const cachedIndex = await WftStorage.getPortfolioIndex();
+                    check(name + ' actual index data', cachedIndex.data.students.Synthetic.sessionCount === 1 && cachedIndex.data.students.Synthetic.averageScore === 80);
+                    await WftStorage.saveStudentPortfolio('Synthetic', getLocalPortfolioSnapshot().Synthetic);
+                    const cached = await WftStorage.getStudentPortfolio('Synthetic');
+                    check(name + ' actual student data', cached.data.sessions[0].id === 'cache' && !!cached.cachedAt);
+                    const lazy = () => new Promise(resolve => loadStudentPortfolioLazy('Synthetic', 'Synthetic', (error, data) => resolve({ error, data })));
+                    const hit = await lazy();
+                    check(name + ' actual lazy cache hit', !hit.error && hit.data.sessions[0].id === 'cache');
+                    await WftIndexedDb.clearAll();
+                    check(name + ' database cleared', await WftStorage.getStudentPortfolio('Synthetic') == null && await WftStorage.getPortfolioIndex() == null);
+                    const fallback = await lazy();
+                    check(name + ' cache miss local fallback', !fallback.error && fallback.data.sessions[0].id === 'cache');
+                    check(name + ' primary writing preserved', localStorage.getItem('wft_portfolio') === primary);
+                } finally {
+                    WFT_INDEXEDDB_CACHE_V1 = beforeFlags.idb; WFT_LAZY_PORTFOLIO_LOAD_V1 = beforeFlags.lazy; WFT_SPLIT_STUDENT_FILES_V1 = beforeFlags.split;
+                    WftStorage.mode = 'localStorage';
+                }
             });
             await run('full native build upload transport ack', async name => {
                 saveStudentSession('Synthetic', entry('one'));
@@ -283,7 +310,7 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             });
             return cases;
         });
-        const report = { root, scope: 'Full shipped scripts in native Edge; synthetic records and transport seams; all external network requests blocked. Lazy coverage is local index startup only.', passed: cases.filter(c => c.passed).length, failed: cases.filter(c => !c.passed).length, errors, cases };
+        const report = { root, scope: 'Full shipped scripts in native Edge; synthetic records and transport seams; all external network requests blocked. Lazy coverage uses the live settings/dropdown and local portfolio loader.', passed: cases.filter(c => c.passed).length, failed: cases.filter(c => !c.passed).length, errors, cases };
         if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify(report, null, 2));
         console.log(JSON.stringify(report, null, 2));
         assert.deepEqual(errors, []); assert.equal(report.failed, 0);

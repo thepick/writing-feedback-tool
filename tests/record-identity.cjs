@@ -8,7 +8,7 @@ const cases = [];
 const plain = value => JSON.parse(JSON.stringify(value));
 function load(context, source, names) {
     for (const name of names) {
-        const start = source.indexOf('function ' + name + '(');
+        const start = source.lastIndexOf('function ' + name + '(');
         const end = source.indexOf('\n}', start) + 2;
         assert.ok(start >= 0 && end > start, name);
         vm.runInContext(source.slice(start, end), context);
@@ -78,12 +78,12 @@ check('migration-valid-unusual-own-mapping-and-blob', () => {
     assert.equal(output.title, 'new-id'); assert.equal(output.blob, blob);
     assert.deepEqual(plain(migration.window.GoogleDriveMigration.remap(JSON.parse('{"__proto__":"__proto__"}'), ids)), { 'new-other': 'new-other' });
 });
-// Retained modular implementations are checked with their actual deletion and ID dependencies.
-for (const file of ['js/sync/merge.js', 'js/app/00-storage-sync-patches.js']) {
+// Shipped implementations are checked with their actual deletion and ID dependencies.
+for (const file of ['js/app/00-storage-sync-patches.js']) {
     const c = vm.createContext({ WFT_LAMPORT_V1: false, WFT_TOMBSTONE_COMPACTION_V1: false });
-    load(c, patch, ['cloneWftJson', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData']);
+    load(c, patch, ['cloneWftJson', 'stableStringify', 'mergeSessionImageRefs', 'getTimeMs', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData']);
     const source = read(file);
-    const names = ['getWftDeletionRecords', 'isStudentSessionDeleted', 'chooseNewerSession', 'mergeStudentSessions', file.includes('app/') ? 'mergeWftStringArrays' : 'mergeStringArrays'];
+    const names = ['getWftDeletionRecords', 'isStudentSessionDeleted', 'chooseNewerSession', 'mergeStudentSessions', 'mergeWftStringArrays'];
     load(c, source, names);
     for (const id of ['__proto__', 'constructor', 'toString']) {
         check(file + ':session-' + id, () => {
@@ -93,9 +93,9 @@ for (const file of ['js/sync/merge.js', 'js/app/00-storage-sync-patches.js']) {
             assert.equal(c.mergeStudentSessions([sess], [], { records: [{ type: 'session', sessionId: id, deletedAt: '2026-10-02' }] }).length, 0);
         });
     }
-    check(file + ':ordered-own-key-dedupe', () => assert.deepEqual(plain(c[file.includes('app/') ? 'mergeWftStringArrays' : 'mergeStringArrays'](['constructor', '__proto__', 'Alice'], ['Alice', 'toString', 'constructor'])), ['constructor', '__proto__', 'Alice', 'toString']));
+    check(file + ':ordered-own-key-dedupe', () => assert.deepEqual(plain(c.mergeWftStringArrays(['constructor', '__proto__', 'Alice'], ['Alice', 'toString', 'constructor'])), ['constructor', '__proto__', 'Alice', 'toString']));
 }
-for (const file of ['js/data/data-model.js', 'js/app/00-storage-sync-patches.js']) {
+for (const file of ['js/app/00-storage-sync-patches.js']) {
     let stored = {};
     const c = vm.createContext({ readWftRequiredStorage: () => plain(stored), getRawSettings: () => plain(stored), saveSettingsToLocalStorage: settings => { stored = plain(settings); } });
     load(c, read(file), ['getWftShortIdPart', 'sanitizeStudentIdPart', 'createStableStudentId', 'getOrCreateStudentId']);
@@ -103,36 +103,36 @@ for (const file of ['js/data/data-model.js', 'js/app/00-storage-sync-patches.js'
         check(file + ':student-id-' + name, () => { const a = c.getOrCreateStudentId(name); assert.equal(typeof a, 'string'); assert.equal(c.getOrCreateStudentId(name), a); assert.ok(Object.hasOwn(stored.studentIdMap, name)); });
     }
 }
-check('retained-schema-normalization-own-student-key', () => {
+check('shipped-schema-normalization-own-student-key', () => {
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: false });
-    load(c, read('js/data/data-model.js'), ['normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'normalizeWftPortfolioForSchemaV1']);
+    load(c, patch, ['normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'normalizeWftPortfolioForSchemaV1']);
     const data = JSON.parse('{"__proto__":{"sessions":[{"id":"constructor","createdAt":"2026-10-01"}]}}');
     assert.deepEqual(plain(c.normalizeWftPortfolioForSchemaV1(data)), data);
 });
-check('retained-storage-strip-own-student-key', () => {
-    const c = vm.createContext({}); vm.runInContext(read('js/storage/strip-heavy.js'), c);
+check('shipped-storage-strip-own-student-key', () => {
+    const c = vm.createContext({}); load(c, patch, ['makeImageMetadataLocalStorageSafe', 'makeSessionLocalStorageSafe', 'makePortfolioLocalStorageSafe']);
     const result = plain(c.makePortfolioLocalStorageSafe(JSON.parse('{"__proto__":{"sessions":[{"id":"constructor","images":[{"dataUrl":"synthetic","driveFileId":"ref"}]}]}}')));
     assert.ok(Object.hasOwn(result, '__proto__')); assert.equal(result.__proto__.sessions[0].images[0].driveFileId, 'ref'); assert.equal(result.__proto__.sessions[0].images[0].dataUrl, '');
 });
-check('retained-portfolio-index-own-student-key', () => {
+check('shipped-portfolio-index-own-student-key', () => {
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: true, getRawSettings: () => ({ studentIdMap: {} }), localStorage: { getItem: () => null } });
-    load(c, read('js/data/data-model.js'), ['sanitizeStudentIdPart']);
-    load(c, read('js/data/portfolio-index.js'), ['buildPortfolioIndexFromPortfolio']);
+    load(c, patch, ['sanitizeStudentIdPart']);
+    load(c, patch, ['buildPortfolioIndexFromPortfolio']);
     const result = plain(c.buildPortfolioIndexFromPortfolio(JSON.parse('{"__proto__":{"sessions":[]},"constructor":{"sessions":[]}}')));
     assert.ok(Object.hasOwn(result.students, '__proto__')); assert.equal(result.students.constructor.studentId, '');
 });
-check('retained-split-index-own-student-key', () => {
-    const c = vm.createContext({}); load(c, read('js/sync/merge.js'), ['rebuildIndexFromStudentFiles']);
+check('shipped-split-index-own-student-key', () => {
+    const c = vm.createContext({}); load(c, patch, ['rebuildIndexFromStudentFiles']);
     assert.ok(Object.hasOwn(plain(c.rebuildIndexFromStudentFiles({ file: { studentId: '__proto__', format: 'student-portfolio-v1', sessions: [] } })).students, '__proto__'));
 });
-check('retained-roster-ensure-and-rename-own-student-key', () => {
+check('shipped-roster-ensure-and-rename-own-student-key', () => {
     let settings = {};
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: true, students: ['constructor', '__proto__'], readWftRequiredStorage: () => plain(settings), getRawSettings: () => plain(settings), saveSettingsToLocalStorage: value => { settings = plain(value); }, getPortfolioData: () => ({}) });
-    load(c, read('js/data/data-model.js'), ['getWftShortIdPart', 'sanitizeStudentIdPart', 'createStableStudentId', 'getOrCreateStudentId']);
-    load(c, read('js/data/student-id-map.js'), ['getStudentRecordByName', 'ensureStudentRecordsForRoster', 'updateStudentRecordOnRename']);
+    load(c, patch, ['getWftShortIdPart', 'sanitizeStudentIdPart', 'createStableStudentId', 'getOrCreateStudentId']);
+    load(c, patch, ['getStudentRecordByName', 'ensureStudentRecordsForRoster', 'updateStudentRecordOnRename']);
     c.ensureStudentRecordsForRoster();
     assert.equal(typeof settings.studentIdMap.constructor, 'string'); assert.ok(Object.hasOwn(settings.studentIdMap, '__proto__'));
-    const first = settings.studentIdMap.constructor; c.updateStudentRecordOnRename('constructor', '__proto__');
+    const first = settings.studentIdMap.constructor; c.updateStudentRecordOnRename('constructor', '__proto__', settings);
     assert.equal(settings.studentIdMap.__proto__, first);
 });
 if (process.env.WFT_CASE_OUTPUT) fs.writeFileSync(process.env.WFT_CASE_OUTPUT, JSON.stringify({ root, cases }, null, 2) + '\n');

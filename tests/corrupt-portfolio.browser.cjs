@@ -46,7 +46,7 @@ const root = path.resolve(__dirname, '..');
                 WFT_PORTFOLIO_INDEX_V1 = true; WFT_SPLIT_STUDENT_FILES_V1 = true;
                 let indexFailed = false, migrationFailed = false;
                 rebuildPortfolioIndex(error => { indexFailed = !!error; });
-                migrateLegacyPortfolioToStudentFiles(error => { migrationFailed = !!error; });
+                try { savePortfolioData({}); } catch (error) { migrationFailed = !!error; }
                 pendingPortfolioSync = { studentName: 'Bob', sessionData: entry, signature: 'synthetic' };
                 persistPendingPortfolioSync();
                 const committed = commitPendingPortfolioSync();

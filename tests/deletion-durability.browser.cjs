@@ -16,12 +16,13 @@ const root = path.resolve(__dirname, '..');
             const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
             return fs.existsSync(file) ? route.fulfill({ status: 200, contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
         });
-        const destructive = ['student', 'session', 'rename', 'casing', 'emptyRename', 'clear', 'reset', 'replacement', 'archiveClear', 'archiveRemove'];
+        const destructive = ['student', 'session', 'rename', 'casing', 'emptyRename', 'clear', 'reset', 'replacement', 'archiveClear', 'classResetMarkers'];
         const cases = destructive.flatMap(action => ['portfolio', 'markers'].map(key => [action, key]));
         cases.push(['add', 'markers'], ['import', 'markers'], ['restore', 'markers'], ['saveMarkers', 'markers']);
-        for (const action of ['student', 'rename', 'casing', 'emptyRename', 'clear', 'reset', 'archiveClear', 'add', 'import']) {
+        for (const action of ['student', 'rename', 'casing', 'emptyRename', 'clear', 'reset', 'archiveClear', 'classResetMarkers', 'add', 'import']) {
             cases.push([action, 'roster'], [action, 'settings']);
         }
+        cases.push(['classResetMarkers', 'selection']);
         for (const action of ['idRename', 'idRenameMissingMap', 'rosterOnlyRename']) {
             for (const key of ['portfolio', 'markers', 'roster', 'settings', 'selection']) cases.push([action, key]);
         }
@@ -73,7 +74,7 @@ const root = path.resolve(__dirname, '..');
                     if (action === 'reset') await resetCurrentClassData();
                     if (action === 'replacement') return commitPendingPortfolioSync();
                     if (action === 'archiveClear') clearCurrentClassAfterSuccessfulArchive();
-                    if (action === 'archiveRemove') return await new Promise(resolve => removeArchivedSessionsFromPortfolio({ Alice: { sessions: [entry('a')] }, Bob: { sessions: [entry('b')] } }, error => resolve(!error)));
+                    if (action === 'classResetMarkers') return resetCurrentClassData();
                     if (action === 'add') addStudent();
                     if (action === 'import') {
                         importStudents({ target: { files: [new File(['Alicia\nDavid'], 'synthetic.txt')], value: 'synthetic' } });
@@ -149,7 +150,11 @@ const root = path.resolve(__dirname, '..');
                 if (['clear', 'reset', 'archiveClear'].includes(action)) { assert.deepEqual(result.portfolio, {}); assert.deepEqual(result.roster, []); }
                 if (action === 'reset') { assert.ok(result.markers.deletedStudents['student:carol']); assert.ok(result.markers.deletedSessions['session:carol:c']); }
                 if (action === 'replacement') { assert.equal(result.retried, true); assert.equal(result.pending, null); assert.deepEqual(result.portfolio.Alice.sessions.map(s => s.id), ['keep']); assert.deepEqual(result.portfolio.Bob.sessions.map(s => s.id), ['b', 'new']); }
-                if (action === 'archiveRemove') { assert.equal(result.retried, true); assert.deepEqual(result.portfolio.Alice.sessions.map(s => s.id), ['keep']); assert.deepEqual(result.portfolio.Bob.sessions, []); }
+                if (action === 'classResetMarkers') {
+                    assert.deepEqual(result.portfolio, {}); assert.deepEqual(result.roster, []);
+                    for (const key of ['session:alice:a', 'session:alice:keep', 'session:bob:b', 'session:carol:c']) assert.ok(result.markers.deletedSessions[key], key);
+                    assert.ok(result.markers.deletedStudents['student:earlier'], 'Existing markers survive the class reset');
+                }
                 if (['add', 'import', 'restore'].includes(action)) assert.equal(result.markers.deletedStudents['student:alicia'], undefined);
                 if (action === 'add') { assert.ok(result.roster.includes('Alicia')); assert.equal(failed.input, 'Alicia'); assert.equal(result.input, ''); }
                 if (action === 'import') assert.deepEqual(result.roster, ['Alice', 'Alicia', 'Bob', 'David']);

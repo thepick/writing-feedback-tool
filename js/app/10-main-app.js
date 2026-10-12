@@ -1187,91 +1187,12 @@ function levenshteinDistance(a, b) {
     return dp[s.length][t.length];
 }
 
-var HELPER_WORD_SET = {
-    "had": true, "have": true, "has": true,
-    "would": true, "will": true,
-    "did": true, "do": true, "does": true,
-    "am": true, "is": true, "are": true, "was": true, "were": true,
-    "could": true, "should": true,
-    "not": true, "don't": true, "doesn't": true, "didn't": true,
-    "can't": true, "cannot": true
-};
-
 var SAFE_INSERT_WORD_SET = {
     "a": true, "an": true, "the": true,
     "is": true, "are": true, "am": true, "was": true, "were": true,
     "do": true, "does": true, "did": true,
     "to": true
 };
-
-var PAST_TO_BASE_WORD_MAP = {
-    "was": "is",
-    "were": "are",
-    "had": "have",
-    "did": "do",
-    "felt": "feel",
-    "went": "go",
-    "saw": "see",
-    "gave": "give",
-    "made": "make",
-    "said": "say",
-    "ran": "run",
-    "sat": "sit",
-    "woke": "wake",
-    "ate": "eat",
-    "forgot": "forget",
-    "forgave": "forgive",
-    "thought": "think",
-    "brought": "bring",
-    "found": "find",
-    "told": "tell",
-    "came": "come",
-    "left": "leave",
-    "wrote": "write",
-    "took": "take",
-    "stayed": "stay",
-    "shared": "share",
-    "looked": "look",
-    "called": "call",
-    "tried": "try",
-    "realized": "realize",
-    "burned": "burn",
-    "watched": "watch"
-};
-
-function isRiskyBackwardTenseShift(originalWord, correctedWord, prevOriginalWord, prevPrevOriginalWord) {
-    var o = String(originalWord || "").toLowerCase();
-    var c = String(correctedWord || "").toLowerCase();
-    var prev = String(prevOriginalWord || "").toLowerCase();
-    var prevPrev = String(prevPrevOriginalWord || "").toLowerCase();
-    if (!o || !c || o === c) return false;
-    if (PAST_TO_BASE_WORD_MAP[o] === c) return true;
-    if (/ied$/.test(o) && c === o.replace(/ied$/, "y")) return true;
-    if (/ed$/.test(o) && (c === o.slice(0, -2) || c === o.slice(0, -1) || c === (o.slice(0, -2) + "e"))) return true;
-    if (/^(did|does|do)$/.test(prev) || /^(did|does|do)$/.test(prevPrev)) {
-        if (/^(forgot|felt|went|saw|gave|made|said|ran|sat|woke|ate|wrote|took|left|came|thought|found|told|burned|looked|called|shared|stayed|tried|realized|watched)$/.test(c)) return true;
-        if (/ied$/.test(c) || /ed$/.test(c)) return true;
-    }
-    if (HELPER_WORD_SET[o] && HELPER_WORD_SET[c] && o !== c) {
-        if (/^(had|did|was|were|would|could|should|didn't)$/.test(o) && /^(have|do|is|are|will|can|don't)$/.test(c)) return true;
-    }
-    return false;
-}
-
-function isSafeWordReplacement(originalWord, correctedWord, prevOriginalWord, prevPrevOriginalWord) {
-    var o = String(originalWord || "");
-    var c = String(correctedWord || "");
-    var lo = o.toLowerCase();
-    var lc = c.toLowerCase();
-    if (!lo || !lc) return false;
-    if (lo === lc) return true;
-    if (isRiskyBackwardTenseShift(lo, lc, prevOriginalWord, prevPrevOriginalWord)) return false;
-    if (HELPER_WORD_SET[lo] && HELPER_WORD_SET[lc] && lo !== lc) return false;
-    if (lo.replace(/'/g, "") === lc.replace(/'/g, "")) return true;
-    if (levenshteinDistance(lo.replace(/'/g, ""), lc.replace(/'/g, "")) <= 1) return true;
-    if (lo.length > 3 && lc.length > 3 && levenshteinDistance(lo, lc) <= 2 && !isRiskyBackwardTenseShift(lo, lc, prevOriginalWord, prevPrevOriginalWord)) return true;
-    return false;
-}
 
 function buildLcsMatrix(a, b) {
     var normalizedA = a.map(normalizeDiffToken);
@@ -1325,36 +1246,6 @@ function shouldHighlightCorrectionToken(token) {
     if (/^["']$/.test(token)) return false;
     if (/^[.,!?;:%]+$/.test(token)) return false;
     return /[A-Za-z0-9]/.test(token);
-}
-
-function isOpeningQuoteToken(prevPrevToken, prevToken, nextToken) {
-    if (!(prevToken === '"' || prevToken === "'")) return false;
-    if (!/^[A-Za-z0-9]/.test(nextToken || "")) return false;
-    if (!prevPrevToken) return true;
-    if (/^[\(\[\{]$/.test(prevPrevToken)) return true;
-    if (/^[,;:]$/.test(prevPrevToken)) return true;
-    return false;
-}
-
-function needsSpaceBeforeToken(prevPrevToken, prevToken, token, nextToken) {
-    if (!prevToken) return false;
-    if (isNewlineToken(token) || isNewlineToken(prevToken)) return false;
-    if (/^[.,!?;:%\)\]\}]/.test(token)) return false;
-    if (token === "'" && /[A-Za-z0-9]$/.test(prevToken) && /^[A-Za-z0-9]/.test(nextToken || "")) return false;
-
-    if (token === '"' || token === "'") {
-        var nextIsWord = /^[A-Za-z0-9]/.test(nextToken || "");
-        var openingQuote = nextIsWord && (!prevToken || /^[\(\[\{,;:]$/.test(prevToken));
-        return openingQuote;
-    }
-
-    if ((prevToken === '"' || prevToken === "'")) {
-        if (isOpeningQuoteToken(prevPrevToken, prevToken, token)) return false;
-        return true;
-    }
-
-    if (/^[\(\[\{]/.test(token)) return true;
-    return true;
 }
 
 function hasCorrectionMarkdown(text) {
@@ -2242,7 +2133,7 @@ function polishFeedback(quickRubric, detailed, originalText, correctedText, flow
     }
 }
 
-function softFallback(category, score, text, actualWords, targetWords) {
+function softFallback(category, actualWords, targetWords) {
     if (category === "Ideas & Details") {
         var msg = "The writing shares a clear main idea and gives the reader a sense of what is happening.";
         if (targetWords && actualWords < targetWords * 0.8) {
@@ -2361,7 +2252,6 @@ function parseWhatINoticedRowsFromBody(body) {
     var rows = [];
     var text = String(body || "");
     var blockMatch = text.match(/-\s*(?:\*\*)?What I Noticed:?(?:\*\*)?\s*([\s\S]*?)(?=\n-\s*(?:\*\*)?Growth Tip:?|\n\*\*|$)/i);
-    if (!blockMatch) blockMatch = text.match(/-\s*(?:\*\*)?What I noticed:?(?:\*\*)?\s*([\s\S]*?)(?=\n-\s*(?:\*\*)?Growth Tip:?|\n\*\*|$)/i);
     if (!blockMatch) return rows;
     var block = blockMatch[1] || "";
     var pairRegex = /-\s*Area:\s*([^\n]+)\n\s*Comment:\s*([^\n]+)/gi;
@@ -2727,52 +2617,6 @@ function buildComputedFlowQuickNote(flowData) {
     }
     return "A bit more sentence variety would help the writing sound smoother and more polished.";
 }
-
-function buildFlowSentenceVarietyLabel(flowData) {
-    if (!flowData) return "";
-    var counts = "(short: " + flowData.shortCount + ", medium: " + flowData.mediumCount + ", long: " + flowData.longCount + ")";
-    var starterInfo = flowData.starterInfo || { ratio: 0, mostCommonStarter: "" };
-    var starterPct = Math.round((starterInfo.ratio || 0) * 100);
-    var starterWord = starterInfo.mostCommonStarter || "";
-    var starterBad = starterInfo.ratio > 0.25 && starterWord;
-    var starterNote = starterBad ? ' Also, "' + starterWord + '" opens ' + starterPct + '% of sentences, which creates some repetition.' : "";
-    var shortRunBad = (flowData.shortRun || 0) >= 4 && (flowData.shortCount || 0) > 0;
-    var dominant = getDominantSentenceBand(flowData);
-
-    if (flowData.flowRating === "Very Good") {
-        return "Sentence lengths are well varied " + counts + ", which gives the writing a natural rhythm." + starterNote;
-    }
-    if ((flowData.shortCount || 0) === 0) {
-        return "The writing uses medium and long sentences " + counts + ". Adding a few shorter sentences would create more rhythm and contrast." + starterNote;
-    }
-    if ((flowData.longCount || 0) === 0) {
-        return "The writing uses short and medium sentences " + counts + ". Adding one or two longer sentences would make the rhythm smoother." + starterNote;
-    }
-    if ((flowData.mediumCount || 0) === 0) {
-        return "The writing jumps between short and long sentences " + counts + ". Adding some medium-length sentences would make the rhythm more natural." + starterNote;
-    }
-    if (shortRunBad) {
-        return "Several short sentences occur in a row " + counts + ", which can make the rhythm choppy. Combining a few of them would help." + starterNote;
-    }
-    if (dominant.label === "short" && dominant.ratio >= 0.60) {
-        return "Many sentences are short " + counts + ", which can make the rhythm feel choppy. Combining a few ideas into longer sentences would help." + starterNote;
-    }
-    if (dominant.label === "long" && dominant.ratio >= 0.60) {
-        return "Many sentences are long " + counts + ", so adding a few shorter sentences would create clearer rhythm and contrast." + starterNote;
-    }
-    if (dominant.label === "medium" && dominant.ratio >= 0.75) {
-        return "Most sentences are medium length " + counts + ", so adding a few short and long sentences would create more variety." + starterNote;
-    }
-    if (starterBad) {
-        return "Sentence lengths have some variety " + counts + ", but repeated sentence starters make the rhythm sound repetitive." + starterNote;
-    }
-    if (flowData.flowRating === "Good") {
-        return "There is a reasonable mix of sentence lengths " + counts + ". A little more variety would make the rhythm even smoother." + starterNote;
-    }
-    return "The writing has some sentence variety " + counts + ", but the rhythm would be smoother with a wider mix of sentence lengths." + starterNote;
-}
-
-
 
 function buildFlowPatternSummary(flowData) {
     if (!flowData || !flowData.sentenceCount) return "The writing needs more sentence evidence before a clear flow pattern can be described.";
@@ -9221,7 +9065,7 @@ async function analyzeWriting() {
         var errorDensity = correctedWordCount ? (totalErrors / correctedWordCount) * 100 : 0;
         var grammarScore = grammarDensityBand(errorDensity, gradeProfile);
 
-        parsed1.quickRubric["Grammar"] = parsed1.quickRubric["Grammar"] || { score: grammarScore, reason: softFallback("Grammar", grammarScore, text, actualWords, targetWords) };
+        parsed1.quickRubric["Grammar"] = parsed1.quickRubric["Grammar"] || { score: grammarScore, reason: softFallback("Grammar", actualWords, targetWords) };
         parsed1.quickRubric["Grammar"].score = eligibility["Grammar"] ? grammarScore : null;
 
         if (!detailed.categories["Grammar"]) {

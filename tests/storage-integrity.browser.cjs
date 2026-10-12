@@ -62,7 +62,7 @@ const cases = [];
                 if (action === 'record') return recordStudentDeletion('Carol');
                 if (action === 'restore') return restoreStudentDeletion('Earlier');
                 if (action === 'recordSession') return recordSessionDeletion('Alice', 's');
-                if (action === 'extended') return recordExtendedDeletion('session', 'id-alice', 's');
+                if (action === 'archiveClear') return clearCurrentClassAfterSuccessfulArchive();
                 if (action === 'preferences') return saveSettingsToLocalStorage();
                 if (action === 'roster') return saveStudents();
                 if (action === 'localSettings') return saveSettingsLocalOnly({ targetWordCount: '100', students: ['Cloud'] });
@@ -79,7 +79,7 @@ const cases = [];
                 if (action === 'splitPush') return saveJsonToDriveFolderPromise('student-id-alice.json', { sessions: [] }, 'synthetic-folder');
             };
         });
-        const actions = ['save', 'pending', 'add', 'import', 'rename', 'remove', 'session', 'reset', 'clear', 'record', 'restore', 'recordSession', 'extended', 'preferences', 'roster', 'localSettings', 'localDeletions', 'loadedSettings', 'hide', 'visibility', 'unload', 'syncSettings', 'syncDeletions', 'syncPortfolio', 'syncNow', 'legacyPush', 'splitPush'];
+        const actions = ['save', 'pending', 'add', 'import', 'rename', 'remove', 'session', 'reset', 'clear', 'record', 'restore', 'recordSession', 'archiveClear', 'preferences', 'roster', 'localSettings', 'localDeletions', 'loadedSettings', 'hide', 'visibility', 'unload', 'syncSettings', 'syncDeletions', 'syncPortfolio', 'syncNow', 'legacyPush', 'splitPush'];
         for (const key of ['wft_settings', 'wft_students', 'wft_deletions']) {
             const invalid = ['{broken', '', '{"truncated":', 'null', '42', key === 'wft_students' ? '{}' : '[]', ...(key === 'wft_deletions' ? ['{"deletedSessions":[]}', '{"records":{}}', '{"deletedStudents":null}'] : [])];
             for (const raw of [...invalid, 'READ_FAILURE']) for (const action of actions) {

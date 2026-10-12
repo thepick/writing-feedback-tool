@@ -2,6 +2,8 @@
 
 A browser-only writing analysis tool for teachers. It provides rubric scoring, corrected writing, structured feedback, student tracking, and optional Google Drive syncing.
 
+The page loads `google-drive-migration.js`, `js/app/00-storage-sync-patches.js`, `js/app/10-main-app.js`, and `js/app/99-lightbox.js`. Runtime helpers and configuration live in those scripts. Tests under `tests/` exercise the shipped code; historical audit records under `docs/repowise-audit/` may refer to retired helper copies.
+
 ## Features
 
 - Analyze student writing with AI
