@@ -564,12 +564,34 @@ var cancelAnalysis = false;
 var analysisAbortController = null;
 var activeAnalysisContext = null;
 
+function captureAssessmentPolicy() {
+    return {
+        gradeProfile: mergeObjects(getGradeProfile(), {}),
+        gradeProfileVersion: GRADE_PROFILE_VERSION,
+        classGradeLevel: getClassGradeLevel(),
+        studentGradeOverride: wftStudentGradeLevelOverride,
+        targetEnabled: isWordCountTargetEnabled(),
+        targetValue: getTargetWordCountValue(),
+        targetWords: getEffectiveTargetWordCount(),
+        grammarStrictness: getGrammarStrictness(),
+        neatnessEnabled: getRawSettings().assessScriptQuality === true,
+        neatnessShown: shouldShowNeatnessWeighting(),
+        neatnessActive: shouldAssessNeatness(),
+        model: document.getElementById("modelSelect").value,
+        ocrModel: OCR_MODEL,
+        genreChoice: document.getElementById("writingGenreSelect").value
+    };
+}
+
 function assertCurrentAnalysisContext(context) {
     if (activeAnalysisContext !== context || context.cancelled || cancelAnalysis) {
         throw new Error("Analysis cancelled by user.");
     }
     if (!isCurrentWritingContext(context.input)) {
         throw new Error("Writing changed. Analyze the current writing again.");
+    }
+    if (context.policy && JSON.stringify(context.policy) !== JSON.stringify(captureAssessmentPolicy())) {
+        throw new Error("Assessment settings changed. Analyze the current writing again.");
     }
 }
 
@@ -1067,7 +1089,8 @@ function applyEligibilityToDetailed(detailed, eligibility) {
 function updateGradeLevelResultNote() {
     var el = document.getElementById("gradeLevelResultNote");
     if (!el) return;
-    var profile = getGradeProfile();
+    var profile = latestAnalysisData && latestAnalysisData.assessmentPolicy
+        ? latestAnalysisData.assessmentPolicy.gradeProfile : getGradeProfile(latestAnalysisData && latestAnalysisData.gradeLevel);
     el.textContent = "Scored using " + (profile.gradeLabel || profile.label) + " expectations.";
 }
 
@@ -1078,8 +1101,9 @@ function updateScoreDisplay(data) {
     var statusData = data && data.sampleStatus ? data.sampleStatus : null;
     if (!overallScoreEl || !noteEl || !statusEl) return;
 
-    var profile = getGradeProfile();
-    var weightingText = getWeightDescriptionText(profile);
+    var policy = data && data.assessmentPolicy;
+    var profile = policy ? policy.gradeProfile : getGradeProfile(data && data.gradeLevel);
+    var weightingText = getWeightDescriptionText(profile, policy ? policy.neatnessActive && data.categoryScores["Neatness"] != null : undefined);
 
     if (!data) {
         overallScoreEl.textContent = "--";
@@ -2553,7 +2577,7 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
     return result;
 }
 
-function applyWordCountToIdeas(step1Parsed, detailedParsed, actualWords, targetWords) {
+function applyWordCountToIdeas(step1Parsed, detailedParsed, actualWords, targetWords, optGradeProfile) {
     var baseQuick = step1Parsed.quickRubric["Ideas & Details"] ? step1Parsed.quickRubric["Ideas & Details"].score : null;
     var baseDetailed = detailedParsed.categories["Ideas & Details"] ? detailedParsed.categories["Ideas & Details"].score : baseQuick;
     if (baseDetailed == null) {
@@ -2565,7 +2589,7 @@ function applyWordCountToIdeas(step1Parsed, detailedParsed, actualWords, targetW
             note: "Ideas & Details was left unscored because there was not enough clear evidence."
         };
     }
-    var adjustment = calculateWordCountAdjustment(baseDetailed, actualWords, targetWords);
+    var adjustment = calculateWordCountAdjustment(baseDetailed, actualWords, targetWords, optGradeProfile);
 
     if (!step1Parsed.quickRubric["Ideas & Details"]) {
         step1Parsed.quickRubric["Ideas & Details"] = {
@@ -5846,7 +5870,7 @@ function renderDetailedAssessment(detailed) {
         ["Flow", "5. Flow"],
         ["Spelling & Punctuation", "6. Spelling & Punctuation"]
     ];
-    if (shouldAssessNeatness()) {
+    if (detailed.categories["Neatness"]) {
         baseOrder.push(["Neatness", "7. Neatness"]);
     }
     var html = "";
@@ -7159,7 +7183,7 @@ function renderNotebookDetailedAssessment(detailed) {
         ["Spelling & Punctuation", "Spelling & Punctuation"],
         ["Organization", "Organization"]
     ];
-    if (shouldAssessNeatness()) {
+    if (detailed.categories["Neatness"]) {
         baseOrder.push(["Neatness", "Neatness"]);
     }
     baseOrder.push(["Word Choice", "Vocabulary"]);
@@ -8981,10 +9005,10 @@ function setLoadingButtonState(button, isLoading, busyLabel) {
 async function analyzeWriting() {
     if (isAnalyzing) return;
     var text = document.getElementById("studentWriting").value.trim();
-    var targetWords = getEffectiveTargetWordCount();
-    var model = document.getElementById("modelSelect").value;
-    // FIX O2: Resolve grade profile right at the start, before any early exits.
-    var gradeProfile = getGradeProfile();
+    var policy = captureAssessmentPolicy();
+    var targetWords = policy.targetWords;
+    var model = policy.model;
+    var gradeProfile = policy.gradeProfile;
     if (!text && !(selectedImages && selectedImages.length)) {
         alert("Please paste student writing first.");
         return;
@@ -8996,7 +9020,7 @@ async function analyzeWriting() {
     cancelAnalysis = false;
     analysisAbortController = new AbortController();
     syncSelectedImageState();
-    var context = { input: captureCurrentWritingContext(), cancelled: false };
+    var context = { input: captureCurrentWritingContext(), policy: policy, cancelled: false };
     activeAnalysisContext = context;
     btn.disabled = true;
     btn.classList.remove('pulse-ready');  // Stop pulse during analysis
@@ -9028,6 +9052,7 @@ async function analyzeWriting() {
             var lowSample = buildLowSampleAnalysis(text, sampleStatus);
             latestAnalysisData = {
                 inputContext: context.input,
+                assessmentPolicy: policy,
                 overall: null,
                 gradeLevel: gradeProfile.grade,
                 gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
@@ -9136,7 +9161,7 @@ async function analyzeWriting() {
             detailed.categories["Neatness"] = pendingNeatnessDetail;
         }
 
-        var adjustment = applyWordCountToIdeas(parsed1, detailed, actualWords, targetWords);
+        var adjustment = applyWordCountToIdeas(parsed1, detailed, actualWords, targetWords, gradeProfile);
         applyComputedFlowToFlow(parsed1, detailed, flowData);
         applyOrganizationFallback(parsed1, detailed, eligibility);
 
@@ -9278,8 +9303,10 @@ async function analyzeWriting() {
         detailed.growGoal = goalPlan.growGoal;
         detailed.nextTime = goalPlan.nextTime;
 
+        assertCurrentAnalysisContext(context);
         latestAnalysisData = {
             inputContext: context.input,
+            assessmentPolicy: policy,
             overall: overall,
             gradeLevel: gradeProfile.grade,
             gradeLabel: gradeProfile.gradeLabel || gradeProfile.label,
@@ -9370,8 +9397,15 @@ async function analyzeWriting() {
         if (activeAnalysisContext !== context) return;
         if (e.message === "Analysis cancelled by user.") {
             document.getElementById("debugRaw").textContent = "Analysis stopped by user.";
+            showTeacherReview();
         } else if (!isCurrentWritingContext(context.input)) {
             document.getElementById("debugRaw").textContent = "Writing changed. Analyze the current writing again.";
+            alert("Writing changed. Analyze the current writing again.");
+            showTeacherReview();
+        } else if (JSON.stringify(context.policy) !== JSON.stringify(captureAssessmentPolicy())) {
+            document.getElementById("debugRaw").textContent = "Assessment settings changed. Analyze the current writing again.";
+            alert("Assessment settings changed. Analyze the current writing again.");
+            showTeacherReview();
         } else {
             document.getElementById("debugRaw").textContent = "Error:\n" + e.message;
             alert("Analysis failed. See Debug for details.");
