@@ -2305,7 +2305,7 @@ function rebuildPortfolioIndex(callback) {
                 try { entry.studentId = getOrCreateStudentId(entry.displayName); } catch (e) {}
             }
         }
-        index.updatedAt = new Date().toISOString();
+        index = buildPortfolioIndexFromPortfolio(portfolio);
     }
 
     savePortfolioIndexToDrive(index, function(err, fileId) {

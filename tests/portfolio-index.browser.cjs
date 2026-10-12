@@ -78,6 +78,29 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
                 const before = localStorage.getItem('wft_portfolio');
                 check(name + ' uploaded bytes', await sync() === true && uploads[0].students.Synthetic.averageScore === 80 && localStorage.getItem('wft_portfolio') === before);
             });
+            for (const identity of ['new-ID', 'existing-ID', 'failed-allocation']) await run('native rebuild identity/' + identity, async name => {
+                saveStudentSession('Synthetic', entry('one')); WFT_STUDENT_ID_MAP_V1 = true;
+                const expectedId = identity === 'existing-ID' ? 'synthetic-existing-id' : createStableStudentId('Synthetic', {});
+                const settings = JSON.parse(localStorage.getItem('wft_settings'));
+                settings.studentIdMap = identity === 'existing-ID' ? { Synthetic: expectedId } : {};
+                localStorage.setItem('wft_settings', JSON.stringify(settings));
+                localStorage.setItem('wft_drive_student_file_' + expectedId, 'synthetic-file-by-ID');
+                localStorage.setItem('wft_drive_student_file_' + sanitizeStudentIdPart('Synthetic'), 'synthetic-file-by-name');
+                const before = localStorage.getItem('wft_portfolio');
+                const rebuild = () => new Promise(resolve => rebuildPortfolioIndex((error, index) => resolve({ error: error && error.message, index })));
+                if (identity === 'failed-allocation') {
+                    Storage.prototype.setItem = function(key, value) { if (key === 'wft_settings') throw new Error('Synthetic identity persistence failure'); return native.set.call(this, key, value); };
+                    const failed = await rebuild();
+                    check(name + ' honest name fallback', !!failed.error && failed.index.students.Synthetic.studentId === '' && failed.index.students.Synthetic.studentFileId === 'synthetic-file-by-name' && uploads[0].students.Synthetic.averageScore === 80 && isWftPortfolioIndexDirty(), failed);
+                    check(name + ' unstored ID absent', !JSON.parse(localStorage.getItem('wft_settings')).studentIdMap.Synthetic && localStorage.getItem('wft_portfolio') === before);
+                    Storage.prototype.setItem = native.set;
+                }
+                const result = await rebuild(), stored = JSON.parse(localStorage.getItem('wft_settings')), uploaded = uploads.at(-1);
+                const student = result.index.students[expectedId];
+                check(name + ' actual allocation/current index', !result.error && stored.studentIdMap.Synthetic === expectedId && Object.keys(result.index.students).length === 1 && !!student && student.studentId === expectedId && student.displayName === 'Synthetic' && student.legacyNameKey === 'Synthetic', result);
+                check(name + ' correct metadata and uploaded bytes', !!student && student.studentFileId === 'synthetic-file-by-ID' && student.averageScore === 80 && student.sessionCount === 1 && student.latestSessionAt === entry('one').createdAt && JSON.stringify(result.index.students) === JSON.stringify(uploaded.students), uploaded);
+                check(name + ' primary preserved/ack', localStorage.getItem('wft_portfolio') === before && !isWftPortfolioIndexDirty());
+            });
             for (const action of ['save', 'reassessment', 'remove', 'clear', 'reset-class', 'archive-clear', 'cloud-merge', 'same-millisecond-mark']) await run('delayed upload/' + action, async name => {
                 saveStudentSession('Synthetic', entry('one'));
                 let release; uploadWftJsonFilePromise = (filename, index) => { uploads.push(copy(index)); return new Promise(resolve => { release = resolve; }); };
