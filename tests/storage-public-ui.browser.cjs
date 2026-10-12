@@ -60,13 +60,21 @@ const scenarios=['views-export-print','read-success','read-missing','read-malfor
      observed={downloadNames:names,printed};
      await page.locator('#toolTabBtn').click();await page.locator('#studentWriting').fill('Synthetic writing\n'.repeat(60));
      check('Current public writing flow keeps retained Expand button hidden',!await page.locator('#expandTextBtn').isVisible());
+     const zen=await page.evaluate(()=>{
+      const writing=document.getElementById('studentWriting').value;
+      toggleZenMode();const entered=zenModeActive&&document.getElementById('studentWriting').classList.contains('zen-mode')&&document.getElementById('expandTextBtn').textContent==='Collapse';
+      toggleZenMode();return{entered,exited:!zenModeActive&&!document.getElementById('studentWriting').classList.contains('zen-mode'),writingKept:document.getElementById('studentWriting').value===writing};
+     });
+     check('Retained Zen API enters and exits with writing unchanged',zen.entered&&zen.exited&&zen.writingKept);
+     const diagnostics=await page.evaluate(()=>{markWftPortfolioDirty('native-diagnostics-check');return window.WFT_SYNC_DIAGNOSTICS();});
+     check('Public diagnostics truthfully expose dirty state without token bytes',diagnostics.pendingPortfolioPush===true&&!JSON.stringify(diagnostics).includes('synthetic-token'));
      await page.locator('#studentWriting').fill('Original <writing> & exact\nSecond line.');
      await page.locator('#analyzeBtn').click();
      await page.evaluate(()=>{document.getElementById('correctedStory').innerHTML='<p>Corrected exact writing.</p>';});
      await page.locator('#diffControls').waitFor({state:'visible'});
      await page.locator('#diffBtnOriginal').click();check('Original diff uses escaped exact text and active button',await page.locator('#correctedStory').textContent().then(t=>t.includes('Original <writing> & exact'))&&await page.locator('#diffBtnOriginal').evaluate(el=>el.classList.contains('active')));
      await page.locator('#diffBtnCorrected').click();check('Corrected diff restores supplied corrected snapshot',await page.locator('#correctedStory').textContent()==='Corrected exact writing.');
-     observed={downloadNames:names,printed,zenDisposition:'CSS hides initial Expand button; no current caller reveals it before Zen entry. No ordinary Zen UI execution claimed.'};
+     observed={downloadNames:names,printed,zen,diagnostics,zenDisposition:'CSS hides initial Expand button; main-app initialization/input callbacks check overflow. The tested typed flow stays hidden; retained API state/byte contract is tested separately. No ordinary button-entry UI execution claimed.'};
     }else if(scenario.startsWith('read-')){
      observed=await page.evaluate(()=>new Promise(resolve=>readJsonFileFromDrive(WFT_PORTFOLIO_FILENAME,data=>resolve(data))));
      check('Read callback returns truthful parsed success or null',scenario==='read-success'?observed?.Alice?.sessions[0]?.originalText==='Read callback synthetic exact writing':observed===null);
