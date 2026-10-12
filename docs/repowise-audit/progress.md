@@ -1,24 +1,25 @@
 # Repowise audit progress
 
-Updated 2026-10-12T12:18:21.456Z; timezone Asia/Bangkok. All662 original IDs retained; 1162 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
+Updated 2026-10-12T12:57:33.362Z; timezone Asia/Bangkok. All662 original IDs retained; 1163 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
 
 Storage coverage follow-up: in_progress. Prior audit dispositions remain preserved; these additional paths are being checked in sequential repair chats.
 
 - STORAGE-COVERAGE-001: Split student save, folder lifecycle and index reads — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/65)).
 - STORAGE-COVERAGE-002: Recovery backup, safe mode and local cache clearing — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/66)).
 - STORAGE-COVERAGE-003: Drive errors, manual save and polling lifecycle — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/67)).
-- STORAGE-COVERAGE-004: Optional cache and async student portfolio paths — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/68)).
+- STORAGE-COVERAGE-004: Optional cache and async student portfolio paths — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/68)).
+- STORAGE-COVERAGE-006: Repair late upload sync acknowledgements — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/70)).
 - STORAGE-COVERAGE-005: Remaining storage UI and final measured coverage — pending.
 
-Current follow-up source: 49554bc14b5f0770ab10cf0ac4696e1a7825e13f. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
+Current follow-up source: bb2022fd086ea170ea200b0273822ade11c4b8f5. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T11:52:20Z, commit 3083f53525be6af6bbca9d8d1aaf2c54b0a01b21. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T12:21:41Z, commit d0cf96a22e7983d449613fea3d2ffb16eab1deb7. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
 
 Confirmed remaining repairs; one repair chat and repository writer at a time:
 
 No confirmed behavioral repair remains in this queue.
 
-Prior audit validation (historical): complete. All baseline, manual, new and derived findings individually reviewed; all confirmed repairs deployed; final stable-source suites, honest measured coverage, native migration/lightbox validation, refreshed reconciliation and residual risk dispositions complete.
+Current storage follow-up validation: in_progress. Stable-source complete fresh suite/native corpus, remaining meaningful storage UI checks, independent raw Git/coverage verification, strict coverage ingestion, refreshed current-source reconciliation and reviewed residual risks.
 
 Remaining ledger obligations: 0.
 
@@ -101,24 +102,16 @@ Reviewed repairs:
 - STORAGE-030: Signed-out startup closes the page broadcast channel. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/67)
 - STORAGE-031: Debug error logger exposes synthetic token text. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/67)
 - STORAGE-032: XHR folder errors discard Google status and reason. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/67)
-- STORAGE-033: IndexedDB operations acknowledge aborted transactions. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-034: Async portfolio reads hide unavailable primary data. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-035: Student ID lookup hides unreadable settings. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-036: Safe mode and disabled flags keep using initialized caches. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-037: Lazy reads report unavailable cloud and local writing as empty success. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-038: Split reads accept mismatched student ownership. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-039: Concurrent async student saves lose a different student update. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-033: IndexedDB operations acknowledge aborted transactions. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-034: Async portfolio reads hide unavailable primary data. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-035: Student ID lookup hides unreadable settings. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-036: Safe mode and disabled flags keep using initialized caches. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-037: Lazy reads report unavailable cloud and local writing as empty success. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-038: Split reads accept mismatched student ownership. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-039: Concurrent async student saves lose a different student update. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
+- STORAGE-040: Late timed-out upload advertises Synced while newer writing remains dirty. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/70)
 
-Historical prior-audit native coverage: 81.51% (8833/10837 executable lines). All49 suites and8 supplemental native cases passed. The exact source hashes, executable locations, exclusions, test provenance and uncovered lines are recorded with the validation report.
-
-| Shipped file | Native coverage |
-| --- | --- |
-| google-drive-migration.js | 85.93% (116/135) |
-| js/app/00-storage-sync-patches.js | 77.88% (3841/4932) |
-| js/app/10-main-app.js | 84.46% (4852/5745) |
-| js/app/99-lightbox.js | 96% (24/25) |
-
-Storage remains below its historical80% suggestion. The supported folder-migration dialog/copy/corrupt-upload/retry paths now have native evidence; appData recovery still has VM-only evidence. Print popup/chooser, successful split-save wrappers, polling and several service/error paths remain incompletely exercised. These are explicit reviewed residual risks, not a claim that every path is tested.
+Measured coverage ingestion remains open. Collection self-checks validate source hashing, uncovered executable positions, first-page execution before navigation and Windows line endings; preparation runs were not ingested as final coverage.
 
 Known limits: multi-key localStorage writes are not crash-atomic. Failed rollback recovery buffers and unuploaded photo bytes can be lost if the tab is forcibly closed. Corrupt protected primary bytes still require recovery. Normal Google signout retains local writing. Split student files are enabled by default; ID mapping, lazy loading, IndexedDB and deletion compaction remain disabled by default and are tested explicitly where relevant. Browser checks use synthetic records and intercepted services, with no real student records, live Drive writes or paid AI checks. LCS comparison still uses quadratic time and memory. Source-specific metric and proposal dispositions are deliberate reviewed choices, not a claim that every scanner metric has disappeared.
 
