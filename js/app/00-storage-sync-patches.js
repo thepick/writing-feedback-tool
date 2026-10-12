@@ -7015,7 +7015,7 @@ function initWftSyncLifecycleHandlers() {
 // ── WFT Sync Engine V2 session token storage ──
 function isWftTokenPayloadValid(token, expiresAt) {
     return typeof token === 'string' && token.trim().length > 0 && typeof expiresAt === 'number'
-        && Number.isFinite(expiresAt) && expiresAt > Date.now();
+        && Number.isFinite(expiresAt) && Number.isFinite(new Date(expiresAt).getTime()) && expiresAt > Date.now();
 }
 
 function getWftOAuthTokenExpiry(expiresIn) {
