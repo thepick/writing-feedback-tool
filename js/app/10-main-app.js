@@ -545,17 +545,24 @@ var CATEGORY_KEYS = [
     "Spelling & Punctuation"
 ];
 
-function clampRubricScore(score) {
+function getNumericAssessmentScore(score) {
+    if (typeof score !== "number" && typeof score !== "string") return null;
+    if (typeof score === "string" && !score.trim()) return null;
     var n = Number(score);
-    if (!isFinite(n)) return null;
+    return isFinite(n) ? n : null;
+}
+
+function clampRubricScore(score) {
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return null;
     if (n > RUBRIC_MAX) return RUBRIC_MAX;
     if (n < RUBRIC_MIN) return RUBRIC_MIN;
     return n;
 }
 
 function parseRubricScore(raw) {
-    var n = Number(raw);
-    if (!isFinite(n)) return null;
+    var n = getNumericAssessmentScore(raw);
+    if (n == null) return null;
     return RUBRIC_OPTIONS.indexOf(n) !== -1 ? n : null;
 }
 
@@ -951,7 +958,7 @@ function getCategoryEligibility(statusData) {
 
 
 function getEvidenceLabel(score) {
-    if (score == null || score === "") return "Missing";
+    if (getNumericAssessmentScore(score) == null) return "Missing";
     return String(score) + "/" + RUBRIC_MAX;
 }
 
@@ -1792,7 +1799,7 @@ function computeOverallScore(categoryScores, optGradeProfile) {
 
 function softenOverclaim(text, score) {
     var str = String(text || "");
-    if (!str || score == null || Number(score) >= 10) return str;
+    if (!str || getNumericAssessmentScore(score) == null || Number(score) >= 10) return str;
     str = str.replace(/\bperfectly\b/gi, "clearly");
     str = str.replace(/\bperfect\b/gi, "very clear");
     str = str.replace(/\bflawless\b/gi, "strong");
@@ -1834,7 +1841,6 @@ function teacherizeWording(input, category, score) {
     s = s.replace(/\s{2,}/g, " ").trim();
 
     // Category-specific nudges (keep it to one sentence for quick rubric).
-    var n = Number(score);
     if (category === "Word Choice") {
         s = s.replace(/\bvocabulary\b/gi, "word choices");
         if (/works for the topic/i.test(s)) s = s.replace(/works for the topic/i, "fit your topic");
@@ -1845,7 +1851,7 @@ function teacherizeWording(input, category, score) {
     }
 
     // If the sentence is very generic, gently make it more teacher-like.
-    if (category && (s.length < 28 || /^good\b/i.test(s) || /^nice\b/i.test(s))) {
+    if (getNumericAssessmentScore(score) != null && category && (s.length < 28 || /^good\b/i.test(s) || /^nice\b/i.test(s))) {
         if (category === "Flow") s = "Your writing reads smoothly; next, add 1-2 transition words to connect ideas.";
         else if (category === "Organization") s = "Your ideas stay in a clear order; next, add a transition word like First, Next, or Finally.";
         else if (category === "Word Choice") s = "Your word choices fit your topic; next, swap 2 simple words for more specific ones.";
@@ -1854,7 +1860,7 @@ function teacherizeWording(input, category, score) {
         else if (category === "Spelling & Punctuation") s = "Your writing is easy to read; next, proofread for capitals and end punctuation.";
     }
 
-    s = softenOverclaim(s, n);
+    s = softenOverclaim(s, score);
     return s;
 }
 
@@ -1892,7 +1898,9 @@ function detectConventionIssues(text) {
 }
 
 function buildConventionReason(score, issues) {
-    var scoreNum = Number(score);
+    var scoreNum = getNumericAssessmentScore(score);
+    if (scoreNum == null && (!issues || !issues.length)) return getEvidenceNote("Spelling & Punctuation");
+    if (scoreNum == null) return "One convention detail to check is to " + issues[0].message + ".";
     if (!issues || !issues.length) {
         if (scoreNum >= 9) return "Spelling, capitals, and punctuation are strong overall, and a final proofread would help catch any small mistakes.";
         if (scoreNum >= 7) return "Most spelling and punctuation choices work, and a quick proofread would help clean up small mistakes.";
@@ -1905,7 +1913,8 @@ function buildConventionReason(score, issues) {
 }
 
 function buildConventionEvidence(score, issues) {
-    var scoreNum = Number(score);
+    var scoreNum = getNumericAssessmentScore(score);
+    if (scoreNum == null && (!issues || !issues.length)) return getEvidenceNote("Spelling & Punctuation");
     if (!issues || !issues.length) {
         if (scoreNum >= 9) return "Most words are easy to read, and capitals and punctuation are mostly used correctly throughout the piece.";
         return "There are some correct capitals and punctuation marks, but a few places still need a closer proofread.";
@@ -2000,7 +2009,8 @@ function analyzeGrammarChanges(originalText, correctedText) {
 }
 
 function buildGrammarReasonFromData(score, originalText, correctedText) {
-    var n = Number(score);
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "";
     var summary = analyzeGrammarChanges(originalText, correctedText);
     if (n <= 6) {
         if (summary.verbIssues > 0 && summary.helperVerbIssues > 0) {
@@ -2026,7 +2036,8 @@ function buildGrammarReasonFromData(score, originalText, correctedText) {
 }
 
 function buildGrammarEvidenceFromData(score, originalText, correctedText) {
-    var n = Number(score);
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "";
     var summary = analyzeGrammarChanges(originalText, correctedText);
     if (n <= 6) {
         if (summary.verbIssues > 0 && summary.helperVerbIssues > 0) {
@@ -2044,7 +2055,8 @@ function buildGrammarEvidenceFromData(score, originalText, correctedText) {
 }
 
 function buildFlowReasonFromData(score, flowData) {
-    var n = Number(score);
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "";
     if (!flowData) return "";
     var starterPct = flowData.starterInfo ? Math.round(flowData.starterInfo.ratio * 100) : 0;
     var starterWord = flowData.starterInfo ? flowData.starterInfo.mostCommonStarter : "";
@@ -2088,7 +2100,8 @@ function buildFlowReasonFromData(score, flowData) {
 }
 
 function buildFlowEvidenceFromData(score, flowData) {
-    var n = Number(score);
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "";
     if (!flowData) return "";
     var starterPct = flowData.starterInfo ? Math.round(flowData.starterInfo.ratio * 100) : 0;
     var starterWord = flowData.starterInfo ? flowData.starterInfo.mostCommonStarter : "";
@@ -2131,18 +2144,19 @@ function buildGrammarScoreBasis(totalErrors, wordCount, errorDensity) {
 
 function buildGrammarPatternNotes(score, originalText, correctedText) {
     var summary = analyzeGrammarChanges(originalText, correctedText);
+    var n = getNumericAssessmentScore(score);
     var notes = [];
     var total = summary.totalEdits || 0;
     var sentenceLevel = total >= 8 ? "Main issue" : (total >= 4 ? "Moderate issue" : "Minor issue");
     var verbLevel = summary.verbIssues >= 4 ? "Main issue" : (summary.verbIssues > 0 ? "Minor to moderate issue" : "Mostly correct");
     var wordOrderLevel = total >= 6 ? "Moderate issue" : (total >= 3 ? "Minor issue" : "Mostly clear");
     var pronounLevel = /\b(he|she|they|it|him|her|them)\b/i.test(originalText || "") ? "Mostly clear" : "Not a major issue";
-    var clarityLevel = Number(score) >= 7 ? "Mostly clear" : (Number(score) >= 5 ? "Developing" : "Needs support");
+    var clarityLevel = n == null ? "Not assessed" : (n >= 7 ? "Mostly clear" : (n >= 5 ? "Developing" : "Needs support"));
     notes.push({ pattern: "Sentence boundaries / run-ons", level: sentenceLevel, comment: total >= 4 ? "Some sentences need clearer breaks or punctuation." : "Sentence boundaries are mostly manageable." });
     notes.push({ pattern: "Verb tense and agreement", level: verbLevel, comment: summary.verbIssues > 0 ? "Some verb forms or tense choices need checking." : "Verb tense is not the main issue." });
     notes.push({ pattern: "Word order / phrasing", level: wordOrderLevel, comment: total >= 3 ? "A few phrases could be clearer or more natural." : "Word order is mostly clear." });
     notes.push({ pattern: "Pronouns and references", level: pronounLevel, comment: "Pronouns do not appear to be the main reason for the grammar score." });
-    notes.push({ pattern: "Grammar clarity", level: clarityLevel, comment: Number(score) >= 7 ? "The reader can understand the writing most of the time." : "Grammar sometimes interrupts the reader's understanding." });
+    notes.push({ pattern: "Grammar clarity", level: clarityLevel, comment: n == null ? getEvidenceNote("Grammar") : (n >= 7 ? "The reader can understand the writing most of the time." : "Grammar sometimes interrupts the reader's understanding.") });
     return notes;
 }
 
@@ -2190,20 +2204,22 @@ function polishFeedback(quickRubric, detailed, originalText, correctedText, flow
         }
     }
 
-    if (quickRubric["Spelling & Punctuation"]) {
+    if (quickRubric["Spelling & Punctuation"] && (getNumericAssessmentScore(quickRubric["Spelling & Punctuation"].score) != null || issues.length || !quickRubric["Spelling & Punctuation"].reason)) {
         quickRubric["Spelling & Punctuation"].reason = toOneSentence(teacherizeWording(buildConventionReason(quickRubric["Spelling & Punctuation"].score, issues), "Spelling & Punctuation", quickRubric["Spelling & Punctuation"].score));
     }
     if (detailed.categories["Spelling & Punctuation"]) {
-        detailed.categories["Spelling & Punctuation"].evidence = buildConventionEvidence(detailed.categories["Spelling & Punctuation"].score, issues);
+        if (getNumericAssessmentScore(detailed.categories["Spelling & Punctuation"].score) != null || issues.length || !detailed.categories["Spelling & Punctuation"].evidence) {
+            detailed.categories["Spelling & Punctuation"].evidence = buildConventionEvidence(detailed.categories["Spelling & Punctuation"].score, issues);
+        }
         detailed.categories["Spelling & Punctuation"].growthTip = buildConventionGrowthTip(issues);
     }
 
     var grammarQuick = quickRubric["Grammar"];
-    if (grammarQuick && grammarQuick.score != null) {
+    if (grammarQuick && getNumericAssessmentScore(grammarQuick.score) != null) {
         var grammarReason = buildGrammarReasonFromData(grammarQuick.score, originalText, correctedText);
         if (grammarReason) grammarQuick.reason = toOneSentence(teacherizeWording(grammarReason, "Grammar", grammarQuick.score));
     }
-    if (detailed.categories["Grammar"] && detailed.categories["Grammar"].score != null) {
+    if (detailed.categories["Grammar"] && getNumericAssessmentScore(detailed.categories["Grammar"].score) != null) {
         var grammarEvidence = buildGrammarEvidenceFromData(detailed.categories["Grammar"].score, originalText, correctedText);
         if (grammarEvidence) detailed.categories["Grammar"].evidence = toOneSentence(teacherizeWording(grammarEvidence, "Grammar", detailed.categories["Grammar"].score));
         detailed.categories["Grammar"].evidence = alignGrammarWordingWithErrorData(detailed.categories["Grammar"].evidence, detailed.categories["Grammar"]);
@@ -2213,11 +2229,11 @@ function polishFeedback(quickRubric, detailed, originalText, correctedText, flow
     }
 
     var flowQuick = quickRubric["Flow"];
-    if (flowQuick && flowQuick.score != null) {
+    if (flowQuick && getNumericAssessmentScore(flowQuick.score) != null) {
         var flowReason = buildFlowReasonFromData(flowQuick.score, flowData);
         if (flowReason) flowQuick.reason = toOneSentence(teacherizeWording(flowReason, "Flow", flowQuick.score));
     }
-    if (detailed.categories["Flow"] && detailed.categories["Flow"].score != null) {
+    if (detailed.categories["Flow"] && getNumericAssessmentScore(detailed.categories["Flow"].score) != null) {
         var flowEvidence = buildFlowEvidenceFromData(detailed.categories["Flow"].score, flowData);
         if (flowEvidence) detailed.categories["Flow"].evidence = toOneSentence(teacherizeWording(flowEvidence, "Flow", detailed.categories["Flow"].score));
     }
@@ -2579,7 +2595,7 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
 
 function applyWordCountToIdeas(step1Parsed, detailedParsed, actualWords, targetWords, optGradeProfile) {
     var baseQuick = step1Parsed.quickRubric["Ideas & Details"] ? step1Parsed.quickRubric["Ideas & Details"].score : null;
-    var baseDetailed = detailedParsed.categories["Ideas & Details"] ? detailedParsed.categories["Ideas & Details"].score : baseQuick;
+    var baseDetailed = getNumericAssessmentScore(detailedParsed.categories["Ideas & Details"] ? detailedParsed.categories["Ideas & Details"].score : baseQuick);
     if (baseDetailed == null) {
         return {
             adjustedScore: null,
@@ -2826,7 +2842,8 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
     var quickItem = step1Parsed.quickRubric[key] || { score: null, reason: getEvidenceNote(key) };
     var detailedItem = detailedParsed.categories[key];
 
-    if (quickItem.score != null) quickItem.score = Math.max(RUBRIC_MIN, Math.min(Number(quickItem.score), cap));
+    var quickScore = getNumericAssessmentScore(quickItem.score);
+    quickItem.score = quickScore == null ? null : Math.min(quickScore, cap);
     if (flowData && flowData.flowRating && flowData.flowRating !== "Very Good") {
         var baseFlowReason = sanitizeFlowCommentForData(quickItem.reason.replace(/\s*Flow:.*$/i, "").trim(), flowData);
         var computedFlowNote = buildComputedFlowQuickNote(flowData);
@@ -2848,7 +2865,8 @@ function applyComputedFlowToFlow(step1Parsed, detailedParsed, flowData) {
         detailedParsed.categories[key] = detailedItem;
     }
 
-    detailedItem.score = Math.min(Number(detailedItem.score) || quickItem.score, cap);
+    var detailedScore = getNumericAssessmentScore(detailedItem.score);
+    detailedItem.score = detailedScore == null ? null : Math.min(detailedScore, cap);
     if (flowData) {
         detailedItem.evidence = sanitizeFlowCommentForData(detailedItem.evidence, flowData);
         detailedItem.growthTip = sanitizeFlowCommentForData(detailedItem.growthTip, flowData);
@@ -2868,11 +2886,12 @@ function applyOrganizationFallback(step1Parsed, detailedParsed, eligibility) {
     var key = "Organization";
     if (!detailedParsed.categories[key]) {
         var quickItem = step1Parsed.quickRubric[key] || { score: null, reason: getEvidenceNote(key) };
+        var score = eligibility[key] ? getNumericAssessmentScore(quickItem.score) : null;
         detailedParsed.categories[key] = {
-            score: eligibility[key] ? quickItem.score : null,
-            evidence: "The writing presents ideas in a sequence the reader can follow.",
+            score: score,
+            evidence: score == null ? getEvidenceNote(key) : "The writing presents ideas in a sequence the reader can follow.",
             growthTip: quickItem.reason || "Try adding transition words to connect your ideas in a clearer order.",
-            contentOrganization: "The events stay in a clear, logical order.",
+            contentOrganization: score == null ? "" : "The events stay in a clear, logical order.",
             sentenceVariety: "",
             rawBody: ""
         };
@@ -3387,7 +3406,8 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         var chipsHtml = '';
         var sessCategoryKeys = typeof getSessionCategoryKeys === 'function' ? getSessionCategoryKeys(sess) : Object.keys(sess.categoryScores || {});
         sessCategoryKeys.forEach(function(key) {
-            var value = sess.categoryScores && sess.categoryScores[key] != null ? sess.categoryScores[key] : '-';
+            var value = getNumericAssessmentScore(sess.categoryScores && sess.categoryScores[key]);
+            if (value == null) value = '-';
             var chipClass = getRubricScoreColorClass(value);
             chipsHtml += '<span class="chip ' + chipClass + '"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</span>';
         });
@@ -5276,9 +5296,9 @@ function buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords,
 }
 
 function getAssessmentScorePill(score) {
-    var n = Number(score);
+    var n = getNumericAssessmentScore(score);
     var cls = "score-missing";
-    if (isFinite(n)) {
+    if (n != null) {
         if (n >= 9) cls = "score-" + Math.round(n);
         else if (n >= 7) cls = "score-8";
         else if (n >= 5) cls = "score-6";
@@ -5383,9 +5403,7 @@ function isValidTeacherComment(candidate, key, item, rows) {
     if (!text) return false;
     if (countWordsInComment(text) > 38) return false;
     if (commentHasRawScoringData(text)) return false;
-    if (/\b(perfect|perfectly|flawless|always correct)\b/i.test(text) && Number(item.score) < 10) return false;
-    if (Number(item.score) <= 6 && /^your\s+[^.]{0,35}\s+(is|are)\s+(excellent|strong|very strong|polished|very clear)/i.test(text)) return false;
-    if (Number(item.score) >= 8 && /\b(needs support|hard to understand|difficult to follow|very difficult)\b/i.test(text)) return false;
+    if (!scoreBandLanguageOk(text, item.score)) return false;
     if (/\bthere is room to improve\b/i.test(text)) return false;
     if (categoryMismatchInTeacherComment(key, text)) return false;
     if (!commentOverlapsEvidence(text, rows)) return false;
@@ -5451,8 +5469,8 @@ function makeSentence(text) {
 function buildEvidenceBasedTeacherComment(key, item, rows) {
     item = item || {};
     rows = rows || [];
-    var score = Number(item.score);
-    var hasScore = isFinite(score);
+    var score = getNumericAssessmentScore(item.score);
+    var hasScore = score != null;
     var meta = getCategorySkillMeta(key);
     var subject = meta.subject;
     var verb = meta.verb;
@@ -5473,12 +5491,13 @@ function buildEvidenceBasedTeacherComment(key, item, rows) {
         if (need) return makeSentence(subjectStart + " " + verb + " developing, and " + lowerFirstForJoin(need));
         return makeSentence(subjectStart + " " + verb + " developing, and this area needs more attention during revision");
     }
-    return makeSentence("There is not enough evidence to score " + subject + " accurately yet");
+    var unknownNote = makeSentence("There is not enough evidence to score " + subject + " accurately yet");
+    return unknownNote + (need || strength || item.evidence ? " " + makeSentence(need || strength || item.evidence) : "");
 }
 
 function getScoreBandKey(score) {
-    var n = Number(score);
-    if (!isFinite(n)) return "missing";
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "missing";
     if (n >= 10) return "excellent";
     if (n >= 8) return "strong";
     if (n >= 6) return "developing";
@@ -5499,6 +5518,7 @@ function getFeedbackBuilderName(key) {
 function buildTeacherComment(key, item, rows) {
     item = item || {};
     rows = rows || buildNoticeRowsForCategory(key, item);
+    if (getNumericAssessmentScore(item.score) == null) return buildEvidenceBasedTeacherComment(key, item, rows);
     if (item.teacherComment) {
         var candidate = cleanTeacherCommentText(item.teacherComment, key, item.score);
         if (isValidTeacherComment(candidate, key, item, rows)) return candidate;
@@ -5545,9 +5565,11 @@ function isValidGrowthTip(candidate, key, item, rows) {
 function buildActionGrowthTip(key, item, rows) {
     item = item || {};
     rows = rows || [];
-    var score = Number(item.score);
+    var score = getNumericAssessmentScore(item.score);
     var band = getScoreBandKey(score);
     var need = pickNoticeComment(rows, true);
+
+    if (band === "missing" && !need) return "Read your writing with your teacher before choosing a revision focus.";
 
     if (key === "Ideas & Details") {
         if (band === "excellent" || band === "strong") return "Choose one important moment and add one extra detail that shows what the character saw, heard, or felt.";
@@ -5675,8 +5697,8 @@ function buildStudentFeedbackForCategory(key, item) {
 }
 
 function getNeatnessComment(kind, score) {
-    var n = Number(score);
-    if (!isFinite(n)) return "There is not enough clear handwriting evidence to comment on this area.";
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "There is not enough clear handwriting evidence to comment on this area.";
     if (kind === "letterFormation") {
         if (n >= 5) return "Letters are clear, complete, and easy to recognize.";
         if (n >= 4) return "Most letters are clear and easy to read.";
@@ -5768,7 +5790,7 @@ function buildIdeasNoticeRows(item) {
     if (item.evidence) {
         addNoticeRowIfNew(rows, "Main idea and details", item.evidence);
     }
-    if (item.score != null && Number(item.score) >= 9 && !rows.length) {
+    if (getNumericAssessmentScore(item.score) != null && Number(item.score) >= 9 && !rows.length) {
         addNoticeRowIfNew(rows, "Development", "The writing gives the reader clear ideas and useful details.");
     }
     return rows;
@@ -5788,7 +5810,7 @@ function buildVocabularyNoticeRows(item) {
     if (item.noticeRows && item.noticeRows.length) return normalizeNoticeRows(item.noticeRows);
     var rows = [];
     addNoticeRowIfNew(rows, "Vocabulary", item.evidence);
-    if (item.score != null && Number(item.score) < 8 && rows.length === 1) {
+    if (getNumericAssessmentScore(item.score) != null && Number(item.score) < 8 && rows.length === 1) {
         addNoticeRowIfNew(rows, "Word variety", "A few more specific words could make the writing easier to picture.");
     }
     return rows;
@@ -5800,7 +5822,7 @@ function buildOrganizationNoticeRows(item) {
     var rows = [];
     addNoticeRowIfNew(rows, "Content organization", item.contentOrganization);
     addNoticeRowIfNew(rows, "Beginning, middle, and ending", item.evidence);
-    if (item.score != null && Number(item.score) < 8 && rows.length === 1) {
+    if (getNumericAssessmentScore(item.score) != null && Number(item.score) < 8 && rows.length === 1) {
         addNoticeRowIfNew(rows, "Sequence", "The order of events or ideas could be made clearer for the reader.");
     }
     return rows;
@@ -5905,8 +5927,8 @@ function renderDetailedAssessment(detailed) {
 
 
 function getAuditScoreBandLabel(score) {
-    var n = Number(score);
-    if (!isFinite(n)) return "Missing or not scorable";
+    var n = getNumericAssessmentScore(score);
+    if (n == null) return "Missing or not scorable";
     if (n >= 10) return "10 - excellent";
     if (n >= 8) return "8-9 - strong/good with one improvement area";
     if (n >= 6) return "6-7 - developing and encouraging";
@@ -5984,6 +6006,7 @@ function getAuditRawRows(key, item, data) {
 function getAuditTeacherCommentSource(key, item, rows) {
     item = item || {};
     rows = rows || [];
+    if (getNumericAssessmentScore(item.score) == null) return "Neutral unscored comment with available evidence retained.";
     if (item.teacherComment) {
         var candidate = cleanTeacherCommentText(item.teacherComment, key, item.score);
         if (isValidTeacherComment(candidate, key, item, rows)) return "AI teacher comment passed validation.";
@@ -5997,9 +6020,9 @@ function addAuditValidation(checks, label, passed, note) {
 }
 
 function scoreBandLanguageOk(text, score) {
-    var n = Number(score);
+    var n = getNumericAssessmentScore(score);
     var value = String(text || "");
-    if (!isFinite(n)) return true;
+    if (n == null) return true;
     if (n < 10 && /\b(perfect|perfectly|flawless|always correct)\b/i.test(value)) return false;
     if (n <= 6 && /^your\s+[^.]{0,35}\s+(is|are)\s+(excellent|strong|very strong|polished|very clear)/i.test(value)) return false;
     if (n >= 8 && /\b(needs support|hard to understand|difficult to follow|very difficult)\b/i.test(value)) return false;
@@ -6796,6 +6819,9 @@ function buildEncouragingClosing(data) {
     var genre = genreInfo.safeReference || "piece of writing";
     var plan = getGoalPlan(data || {});
     var lowest = getLowestNotebookCategory(data ? data.categoryScores : null);
+    if (!lowest && !(data && data.sampleStatus && data.sampleStatus.status !== "scorable")) {
+        return "Keep writing. Review this " + genre + " with your teacher before choosing a grow goal.";
+    }
     var strength = cleanPrintedStrength(data && data.detailed ? data.detailed.strength || "" : "");
     var nextStep = cleanNotebookSentence(plan.nextTime || "revise one part carefully").replace(/[.!?]+$/, "");
     var closing = "You are building strong writing habits, and your next " + genre + " will be even better when you " + nextStep.toLowerCase() + ".";
@@ -6914,6 +6940,7 @@ function pickTeacherComment(data) {
     var categories = data.detailed.categories;
     var lowest = getLowestNotebookCategory(data.categoryScores);
     var highest = getHighestNotebookCategory(data.categoryScores);
+    if (!lowest && !highest) return "There is not enough assessment evidence to identify a strength or revision priority yet. Review this " + genre + " with your teacher.";
     var overall = Number(data.overall || 0);
     var goalPlan = getGoalPlan(data);
 
@@ -7010,16 +7037,16 @@ function buildNotebookActionChecklist(data, fallbackChecklist, fallbackNextTime,
         }
     }
 
-    var rankedLabels = labels.slice().sort(function(a, b) {
-        var aScore = categoryScores[a] != null ? Number(categoryScores[a]) : 999;
-        var bScore = categoryScores[b] != null ? Number(categoryScores[b]) : 999;
+    var rankedLabels = labels.filter(function(key) { return getNumericAssessmentScore(categoryScores[key]) != null; }).sort(function(a, b) {
+        var aScore = getNumericAssessmentScore(categoryScores[a]);
+        var bScore = getNumericAssessmentScore(categoryScores[b]);
         if (aScore !== bScore) return aScore - bScore;
         return labels.indexOf(a) - labels.indexOf(b);
     });
 
     for (var i = 0; i < rankedLabels.length && items.length < 2; i++) {
         var label = rankedLabels[i];
-        var score = categoryScores[label] != null ? Number(categoryScores[label]) : 999;
+        var score = getNumericAssessmentScore(categoryScores[label]);
         // Only pull growth tips from categories that genuinely need work.
         // A score of 8+ means the category is performing well - its minor tip
         // should not displace feedback about categories with real problems.
@@ -7051,12 +7078,12 @@ function buildNotebookActionChecklist(data, fallbackChecklist, fallbackNextTime,
 
 function getLowestNotebookCategory(categoryScores) {
     var labels = getActiveCategoryKeys();  // Dynamic based on settings + photos
-    var lowest = labels[0];
-    var lowestScore = 999;
+    var lowest = null;
+    var lowestScore = Infinity;
     for (var i = 0; i < labels.length; i++) {
         var key = labels[i];
-        var score = categoryScores && categoryScores[key] != null ? Number(categoryScores[key]) : 999;
-        if (score < lowestScore) {
+        var score = getNumericAssessmentScore(categoryScores && categoryScores[key]);
+        if (score != null && score < lowestScore) {
             lowest = key;
             lowestScore = score;
         }
@@ -7066,12 +7093,12 @@ function getLowestNotebookCategory(categoryScores) {
 
 function getHighestNotebookCategory(categoryScores) {
     var labels = getActiveCategoryKeys();  // Dynamic based on settings + photos
-    var highest = labels[0];
-    var highestScore = -1;
+    var highest = null;
+    var highestScore = -Infinity;
     for (var i = 0; i < labels.length; i++) {
         var key = labels[i];
-        var score = categoryScores && categoryScores[key] != null ? Number(categoryScores[key]) : -1;
-        if (score > highestScore) {
+        var score = getNumericAssessmentScore(categoryScores && categoryScores[key]);
+        if (score != null && score > highestScore) {
             highest = key;
             highestScore = score;
         }
@@ -7117,6 +7144,11 @@ function getGoalPlan(data) {
         };
     }
     var lowest = getLowestNotebookCategory(data ? data.categoryScores : null);
+    if (!lowest) return {
+        growGoal: "Review my writing with my teacher before choosing a grow goal.",
+        nextTime: "Read my writing with my teacher and choose a revision focus.",
+        checklist: ["Read my writing with my teacher.", "Choose a revision focus together."]
+    };
     var detailed = data && data.detailed ? data.detailed : null;
     var categories = data && data.detailed && data.detailed.categories ? data.detailed.categories : {};
     var lowestCategory = categories[lowest] || {};
@@ -7195,8 +7227,8 @@ function renderNotebookDetailedAssessment(detailed) {
         var label = baseOrder[i][1];
         var item = detailed.categories[key];
         if (!item) continue;
-        var hasNumericScore = item.score != null && item.score !== "" && !isNaN(Number(item.score));
-        var score = hasNumericScore ? Number(item.score) : null;
+        var score = getNumericAssessmentScore(item.score);
+        var hasNumericScore = score != null;
         var scoreLabel = hasNumericScore ? (escapeHtml(String(item.score)) + " / " + RUBRIC_MAX) : "Missing";
         var width = score != null ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
         var printData = getNotebookCategoryPrintData(key, item);
@@ -7495,7 +7527,7 @@ function buildNotebookGuidePrioritiesFromRawInput(data) {
 
     for (j = 0; j < labels.length; j += 1) {
         var key = labels[j];
-        var score = categoryScores && categoryScores[key] != null ? Number(categoryScores[key]) : null;
+        var score = getNumericAssessmentScore(categoryScores && categoryScores[key]);
         if (score == null || !isFinite(score)) continue;
         ranked.push({ key: key, score: score });
     }
@@ -7518,8 +7550,8 @@ function buildNotebookGuidePrioritiesFromRawInput(data) {
     }
 
     if (data.flowData && priorities.length < 4) {
-        var flowScore = data.flowData.varietyScore != null ? Number(data.flowData.varietyScore) : 100;
-        if (isFinite(flowScore) && flowScore < 70) addPriority("Flow", getNotebookGuideCategoryFocusSource("Flow", data) || "sentence flow", "computedFlow");
+        var flowScore = getNumericAssessmentScore(data.flowData.varietyScore);
+        if (flowScore != null && flowScore < 70) addPriority("Flow", getNotebookGuideCategoryFocusSource("Flow", data) || "sentence flow", "computedFlow");
     }
 
     if (!priorities.length) {
@@ -8644,9 +8676,9 @@ function renderNotebookDetailedAssessmentFromSavedSession(session) {
         var key = order[i][0];
         var label = order[i][1];
         if (scores[key] == null || scores[key] === "") continue;
-        var score = Number(scores[key]);
-        var hasScore = !isNaN(score);
-        var scoreLabel = hasScore ? (escapeHtml(String(scores[key])) + " / " + RUBRIC_MAX) : escapeHtml(String(scores[key]));
+        var score = getNumericAssessmentScore(scores[key]);
+        var hasScore = score != null;
+        var scoreLabel = hasScore ? (escapeHtml(String(scores[key])) + " / " + RUBRIC_MAX) : "Missing";
         var width = hasScore ? Math.max(0, Math.min(100, Math.round((score / RUBRIC_MAX) * 100))) : 0;
         html += '<div class="category">';
         html += '<div class="category-header"><span class="category-name">' + escapeHtml(label) + '</span><span class="score-badge">' + scoreLabel + '</span></div>';
