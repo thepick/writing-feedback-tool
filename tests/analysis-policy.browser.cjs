@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
+const localAppRoute = require('./support/local-app-route');
 const changes = ['grade', 'class', 'override', 'target', 'target-off', 'grammar', 'neatness', 'model', 'genre'];
 const cases = ['correction', 'rubric', 'detail', 'photo', 'ocr', 'publish'].flatMap(boundary =>
     changes.map(change => ({ boundary, change })));
@@ -22,14 +23,7 @@ for (const mode of ['typed', 'photo', 'ocr', 'reassessment', 'no-neatness', 'tar
             const page = await browser.newPage();
             const errors = [];
             page.on('pageerror', error => errors.push(error.message));
-            await page.route('**/*', route => {
-                const url = new URL(route.request().url());
-                if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-                const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-                return route.fulfill(fs.existsSync(file) ? { status: 200,
-                    contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }
-                    : { status: 404, body: '' });
-            });
+            await page.route('**/*', route => localAppRoute(route, root));
             await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
             await page.waitForFunction(() => typeof analyzeWriting === 'function');
             let result;

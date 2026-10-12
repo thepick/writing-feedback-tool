@@ -165,11 +165,19 @@ const scenarios = ['fetch-401', 'fetch-permission', 'fetch-quota', 'fetch-rate',
                 const available = await page.evaluate(() => !!wftSyncChannel);
                 check('shipped lifecycle retains broadcast channel after signed-out startup', available);
                 if (available) {
+                    await other.evaluate(() => {
+                        window.receivedSyncMessages = [];
+                        wftSyncChannel.addEventListener('message', event => receivedSyncMessages.push(event.data));
+                    });
                     const synced = await page.evaluate(() => syncWftNow('manual', { immediate: true }));
-                    const timestamp = await page.evaluate(() => wftSyncState.lastPollAt);
-                    await other.waitForFunction(ts => wftSyncState.lastPollAt === ts, timestamp);
-                    check('shipped completed sync reaches real same-origin channel', synced && timestamp > 0 && await other.evaluate(ts => wftSyncState.lastPollAt === ts, timestamp));
+                    const senderTimestamp = await page.evaluate(() => wftSyncState.lastPollAt);
+                    check('native sender completes sync with positive local timestamp', synced && senderTimestamp > 0);
+                    await other.waitForFunction(() => receivedSyncMessages.some(message => message?.type === 'sync-complete' && typeof message.ts === 'number' && message.ts > 0))
+                        .catch(() => assert.fail('native sync-complete message was not delivered'));
+                    const timestamp = await other.evaluate(() => receivedSyncMessages.find(message => message?.type === 'sync-complete' && typeof message.ts === 'number' && message.ts > 0).ts);
+                    check('shipped completed sync reaches real same-origin channel', await other.evaluate(ts => wftSyncState.lastPollAt === ts, timestamp));
                     await page.evaluate(() => wftSyncChannel.postMessage({ type: 'sync-complete', ts: 'invalid' }));
+                    await other.waitForFunction(() => receivedSyncMessages.some(message => message?.type === 'sync-complete' && message.ts === 'invalid'));
                     check('invalid broadcast cannot change received timestamp', await other.evaluate(ts => wftSyncState.lastPollAt === ts, timestamp));
                 }
                 await other.close();
