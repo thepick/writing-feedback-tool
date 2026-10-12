@@ -108,6 +108,7 @@ const root = path.resolve(__dirname, '..');
             const downloaded = await downloadPromise;
             const exported = JSON.parse(fs.readFileSync(await downloaded.path(), 'utf8'));
             assert.deepEqual(exported.studentChangeRecovery, failed.original);
+            const alertsBeforeRetry = await page.evaluate(() => recoveryAlerts.length);
             await page.evaluate(() => { Storage.prototype.setItem = recoverySetItem; driveAccessToken = ''; wftSyncState.signedIn = false; wftSyncState.accessToken = ''; });
             await page.evaluate(async scenario => { if (scenario === 'portfolio-restore') await removeStudent('Alice'); else await resetCurrentClassData(); }, scenario);
             const retry = await page.evaluate(() => ({ portfolio: getPortfolioData(), backup: buildWftEmergencyBackupObject(), pending: !!getPendingPortfolioSync(), alerts: recoveryAlerts.length }));
@@ -116,7 +117,7 @@ const root = path.resolve(__dirname, '..');
             else assert.deepEqual(retry.portfolio, {});
             assert.equal(retry.backup.studentChangeRecovery, undefined, 'Clear recovery only after storage is restored');
             assert.equal(retry.pending, true);
-            assert.equal(retry.alerts, 1);
+            assert.equal(retry.alerts, alertsBeforeRetry, 'Successful retry adds no failure alert');
             assert.deepEqual(errors, []);
             await page.close();
         }
