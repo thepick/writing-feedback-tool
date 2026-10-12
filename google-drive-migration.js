@@ -75,9 +75,9 @@
     if (await hash(await read(oldToken, original[0].id)) !== await hash(bytes)) throw new Error('Original progress changed during recovery. Try recovery again before practising.');
   }
   function remap(value, ids) {
-    if (typeof value === 'string') return ids[value] || value;
+    if (typeof value === 'string') return Object.prototype.hasOwnProperty.call(ids, value) ? (ids[value] || value) : value;
     if (Array.isArray(value)) return value.map(item => remap(item, ids));
-    if (Object.prototype.toString.call(value) === '[object Object]') return Object.fromEntries(Object.entries(value).map(([key, item]) => [ids[key] || key, remap(item, ids)]));
+    if (Object.prototype.toString.call(value) === '[object Object]') return Object.fromEntries(Object.entries(value).map(([key, item]) => [Object.prototype.hasOwnProperty.call(ids, key) ? (ids[key] || key) : key, remap(item, ids)]));
     return value;
   }
   async function recoverFolder(config, oldToken, newToken) {

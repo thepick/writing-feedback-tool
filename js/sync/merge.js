@@ -26,15 +26,16 @@ function mergeStudentPortfolioFiles(localFile, remoteFile, deletions) {
             localFile.sessions || [],
             remoteFile.sessions || [],
             deletions || [],
-            localFile.studentId || remoteFile.studentId || ""
+            localFile.studentId || remoteFile.studentId || "",
+            localFile.displayName || remoteFile.displayName || ""
         )
     };
 
     return merged;
 }
 
-function mergeStudentSessions(localSessions, remoteSessions, deletions, studentId) {
-    var merged = {};
+function mergeStudentSessions(localSessions, remoteSessions, deletions, studentId, studentName) {
+    var merged = Object.create(null);
     var allSessions = (localSessions || []).concat(remoteSessions || []);
 
     for (var i = 0; i < allSessions.length; i++) {
@@ -51,7 +52,7 @@ function mergeStudentSessions(localSessions, remoteSessions, deletions, studentI
         }
 
         var sessionStudentId = session.studentId || studentId || "";
-        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt, session.lamportClock)) {
+        if (isStudentSessionDeleted(sessionId, sessionStudentId, deletions, session.updatedAt || session.createdAt, session.lamportClock, studentName)) {
             continue;
         }
 
@@ -91,7 +92,7 @@ function getWftDeletionRecords(deletions) {
         var legacyRecord = {
             id: legacy.id || keys[i], type: legacy.type || "session",
             studentId: legacy.studentId || "", studentName: legacy.studentName || "",
-            sessionId: legacy.sessionId || "", deletedAt: legacy.deletedAt || clean.updatedAt || "",
+            sessionId: legacy.sessionId || "", legacyKey: keys[i], deletedAt: legacy.deletedAt || clean.updatedAt || "",
             deviceId: legacy.deviceId || "", reason: legacy.reason || "teacher_delete"
         };
         // Preserve lamportClock if present (from WFT_LAMPORT_V1 records)
@@ -101,7 +102,7 @@ function getWftDeletionRecords(deletions) {
     return records;
 }
 
-function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock) {
+function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdatedAt, sessionLamportClock, studentName) {
     if (!deletions || !sessionId) { return false; }
     var records = getWftDeletionRecords(deletions);
     var sessionUpdateMs = (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt))) ? Date.parse(sessionUpdatedAt) : 0;
@@ -110,8 +111,17 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
         var d = records[i] || {};
         var type = d.type || "session";
         if (type !== "session" && type !== "archive-remove") { continue; }
-        if (String(d.sessionId || "") !== String(sessionId)) { continue; }
+        var suffix = ':' + String(sessionId);
+        var legacyKey = String(d.legacyKey || '');
+        var keyedSession = legacyKey.indexOf('session:') === 0 && legacyKey.slice(-suffix.length) === suffix;
+        if (String(d.sessionId || "") !== String(sessionId) && (d.sessionId || !keyedSession)) continue;
+        if (keyedSession && !d.studentId && !d.studentName) {
+            var owner = legacyKey.slice(8, -suffix.length);
+            if (owner && owner !== normalizedStudentId && owner.toLowerCase() !== String(studentName || '').trim().toLowerCase()) continue;
+        }
+        if (studentName && d.studentId && !normalizedStudentId && !d.studentName) continue;
         if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
+        if (studentName && d.studentName && !(normalizedStudentId && d.studentId) && String(d.studentName).trim().toLowerCase() !== String(studentName).trim().toLowerCase()) continue;
         var useLamport = WFT_LAMPORT_V1 && typeof d.lamportClock === "number" && !isNaN(d.lamportClock);
         if (useLamport) {
             var sessLam = (typeof sessionLamportClock === "number" && !isNaN(sessionLamportClock)) ? sessionLamportClock : -1;
@@ -175,7 +185,7 @@ function applyDeletionsToFile(file, deletions) {
     var sessions = file.sessions || [];
     for (var i = 0; i < sessions.length; i++) {
         var s = sessions[i];
-        if (!isStudentSessionDeleted(s.id, file.studentId || "", deletions, s.updatedAt || s.createdAt, s.lamportClock)) {
+        if (!isStudentSessionDeleted(s.id, file.studentId || "", deletions, s.updatedAt || s.createdAt, s.lamportClock, file.displayName)) {
             filtered.sessions.push(s);
         }
     }
@@ -186,8 +196,8 @@ function applyDeletionsToFile(file, deletions) {
 // ── Extended deletion records ──
 
 function recordExtendedDeletion(type, studentId, sessionId, reason) {
-    var deletions;
-    try { deletions = getDeletionsData ? getDeletionsData() : {}; } catch (e) { deletions = {}; }
+    preflightWftRequiredStorage();
+    var deletions = normalizeDeletionsData(readWftRequiredStorage(WFT_DELETIONS_STORAGE_KEY));
     if (typeof normalizeDeletionsData === "function") { deletions = normalizeDeletionsData(deletions || {}); }
     if (!deletions.deletedSessions) { deletions.deletedSessions = {}; }
     if (!Array.isArray(deletions.records)) { deletions.records = []; }
@@ -208,7 +218,7 @@ function recordExtendedDeletion(type, studentId, sessionId, reason) {
     if ((record.type === "session" || record.type === "archive-remove") && record.sessionId) {
         deletions.deletedSessions["session:" + (record.studentId || "") + ":" + record.sessionId] = record;
     }
-    try { if (typeof saveDeletionsData === "function") { saveDeletionsData(deletions); } } catch (e2) {}
+    saveDeletionsData(deletions);
     return record;
 }
 
@@ -237,8 +247,9 @@ function syncStudentFileWithMerge(studentId, localData, callback) {
         }
 
         // Get deletions
-        var deletions = [];
-        try { deletions = getDeletionsData ? getDeletionsData() : []; } catch (e) {}
+        var deletions;
+        try { preflightWftRequiredStorage(); deletions = normalizeDeletionsData(readWftRequiredStorage(WFT_DELETIONS_STORAGE_KEY)); }
+        catch (e) { if (callback) callback(e, null); return; }
 
         // Merge
         var merged = mergeStudentPortfolioFiles(localData, remoteFile, deletions);
@@ -259,7 +270,7 @@ function rebuildIndexFromStudentFiles(studentFiles) {
         format: "portfolio-index-v1",
         updatedAt: new Date().toISOString(),
         source: "split-student-files",
-        students: {}
+        students: Object.create(null)
     };
 
     if (!studentFiles) { return index; }
@@ -306,7 +317,7 @@ function rebuildIndexFromStudentFiles(studentFiles) {
 // ── Utility ──
 
 function mergeStringArrays(arr1, arr2) {
-    var seen = {};
+    var seen = Object.create(null);
     var result = [];
     for (var i = 0; i < arr1.length; i++) {
         if (!seen[arr1[i]]) {

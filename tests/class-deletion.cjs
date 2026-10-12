@@ -30,6 +30,9 @@ function setup(options = {}) {
         saveDeletionsData: data => { markers.push(...data.markers); data.markers.forEach(() => events.push('marker')); },
         syncSavedPortfolioData() {}, wftSuppressDirtyMarks: true,
         getSessionKey: session => session.id,
+        // Required-read failures are exercised with the full native storage-integrity fixture.
+        preflightWftRequiredStorage() {}, readWftRequiredStorage: () => ({}),
+        cloneWftJson: value => JSON.parse(JSON.stringify(value)),
         localStorage: { getItem: () => null, setItem: (key, value) => { writes.push([key, value]); if (key === 'wft_students') events.push('roster-save'); } },
         WFT_DELETIONS_STORAGE_KEY: 'wft_deletions',
         saveStudents: () => events.push('roster-save'),

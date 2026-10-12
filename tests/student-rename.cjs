@@ -16,7 +16,7 @@ function setup(options = {}) {
     const app = vm.runInNewContext(commitSource + source.slice(start, end) + '\n;globalThis', {
         students: ['Alice', 'Bob'], selectedStudent: 'Alice',
         wftTextInput: async () => Object.hasOwn(options, 'name') ? options.name : 'Alicia', wftConfirm: async () => options.confirm !== false,
-        getPortfolioData: () => JSON.parse(stored),
+        getLocalPortfolioSnapshot: () => JSON.parse(stored),
         savePortfolioData: data => { if (options.failSave) throw new Error('Storage full'); stored = JSON.stringify(data); events.push('portfolio-save'); },
         getDeletionsData: () => ({ events: [] }), getRawSettings: () => ({}),
         clearStudentDeletion: (name, data) => data.events.push('restore:' + name),
@@ -24,6 +24,9 @@ function setup(options = {}) {
         saveDeletionsData: data => events.push(...data.events),
         updateStudentRecordOnRename: (oldName, newName, settings) => { settings.recordEvent = 'record:' + oldName + ':' + newName; },
         syncSavedPortfolioData() {}, wftSuppressDirtyMarks: true, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions',
+        // Required-read failures are exercised with the full native storage-integrity fixture.
+        preflightWftRequiredStorage() {}, readWftRequiredStorage: () => ({}),
+        cloneWftJson: value => JSON.parse(JSON.stringify(value)),
         localStorage: { getItem: () => null, setItem: (key, value) => { writes.push([key, value]); if (key === 'wft_students') events.push('roster-save'); if (key === 'wft_settings') events.push(JSON.parse(value).recordEvent); } },
         saveStudents: () => events.push('roster-save'),
         document: { getElementById: () => null }, renderStudentList() {}, populateStudentDropdown() {},

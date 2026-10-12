@@ -28,6 +28,7 @@ function setup(stream, { files = [{ id: 'canonical' }], pending = true, uploadGa
     const uploads = [], writes = [];
     const state = { ['local' + stream + 'Counter']: 1, ['pending' + stream + 'Push']: pending, ['lastSynced' + stream + 'Counter']: 0, ['lastSynced' + stream + 'Hash']: 'previous', needsSyncAfterCurrent: false };
     const app = vm.runInNewContext(code + '\n;globalThis', {
+        preflightWftRequiredStorage() {}, validateWftRequiredStorage() {},
         wftSyncState: state, wftSuppressDirtyMarks: false, WFT_TOMBSTONE_COMPACTION_V1: false,
         WFT_SETTINGS_FILENAME: 'settings', WFT_DELETIONS_FILENAME: 'deletions', WFT_DELETIONS_STORAGE_KEY: 'deletions',
         getLocalSettingsSnapshot: () => clone(local), getDeletionsData: () => stream === 'Deletions' ? clone(local) : ({}),
@@ -52,7 +53,11 @@ function setup(stream, { files = [{ id: 'canonical' }], pending = true, uploadGa
                 writes.push(clone(local));
             }
         },
-        applyLoadedSettings(data) { ui = clone(data); }, refreshApiKeyRuntimeValue() {}, wftSyncLog() {}, wftDebugWarn() {}
+        applyLoadedSettings(data) {
+            if (failSave) throw new Error('Storage full');
+            stored = JSON.stringify(data); local = clone(data); writes.push(clone(data)); ui = clone(data);
+            return data;
+        }, refreshApiKeyRuntimeValue() {}, wftSyncLog() {}, wftDebugWarn() {}
     });
     return {
         app, state, uploads, writes, sync: () => app['syncWft' + stream + 'IfNeeded']('test'),

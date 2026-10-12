@@ -60,16 +60,25 @@ const root = path.resolve(__dirname, '..');
             await createSingleStudentArchiveZip(name, {});
             await createSchoolYearArchiveZip('Synthetic year ' + payload, { includeImages: false });
             downloadDriveFileAsBlobPromise = async () => new Blob([Uint8Array.from(atob(safeImage.split(',')[1]), c => c.charCodeAt(0))], { type: 'image/png' });
+            // Requested unsafe photo bytes now fail the archive; HTML-only exports still render safe placeholders.
+            var rejectedBadPhotos = false;
+            try { await createSchoolYearArchiveZip('Invalid requested photos', { includeImages: true }); }
+            catch (e) { rejectedBadPhotos = /requested available photo/.test(e.message); }
+            syntheticArchives.pop();
+            var availableSessions = cloneWftJson(sessions);
+            availableSessions[0].images.forEach(image => { if (image.dataUrl && !isSafeWftImageDataUrl(image.dataUrl)) delete image.dataUrl; });
+            localStorage.setItem('wft_portfolio', JSON.stringify({ [name]: { sessions: availableSessions } }));
             await createSchoolYearArchiveZip('Synthetic year with photos', { includeImages: true });
             await new Promise((resolve, reject) => buildEnhancedArchiveZip({ [name]: { sessions } }, { dateRange: payload }, error => error ? reject(error) : resolve()));
             const media = Object.entries(syntheticArchives[2]).filter(([file, body]) => file.includes('/Photos/') && body instanceof Blob).map(([file, body]) => ({ file, size: body.size }));
             const html = syntheticArchives.flatMap((files, archive) => Object.entries(files).filter(([file]) => file.endsWith('.html')).map(([file, body]) => ({ archive, file, body })));
             html.push({ archive: 'notebook', file: 'notebook.html', body: buildNotebookPrintDocument(refreshNotebookPage2Guide(sessions[0].notebookPrintHtml, name, sessions[0]), name, payload) });
-            return { html, safeImage, payload, media };
+            return { html, safeImage, payload, media, rejectedBadPhotos };
         });
         await page.waitForTimeout(100);
         const generationInjected = await page.evaluate(() => window.injected === true);
         check('export generation cannot execute imported corrected HTML', () => assert.equal(generationInjected, false));
+        check('requested unsafe photo bytes reject archive completion', () => assert.equal(generated.rejectedBadPhotos, true));
         check('year archive with photos includes safe local and Drive image bytes', () => { assert.equal(generated.media.length, 2); assert.ok(generated.media.every(image => image.size > 0)); });
         for (let i = 0; i < generated.html.length; i++) {
             const item = generated.html[i];

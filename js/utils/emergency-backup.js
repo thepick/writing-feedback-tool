@@ -40,6 +40,7 @@ function buildWftEmergencyBackupObject() {
             var raw = localStorage.getItem(key);
             if (raw !== null && raw !== undefined) {
                 backup.contents[key] = parseWftBackupValue(raw);
+                if (key === 'wft_settings' && backup.contents[key] && typeof backup.contents[key] === 'object') delete backup.contents[key].apiKey;
             }
         } catch (e) {
             backup.contents[key] = null;

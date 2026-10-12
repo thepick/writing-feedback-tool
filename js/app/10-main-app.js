@@ -13,8 +13,10 @@ function loadStudents() {
 
 function saveStudents() {
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
-    students = applyDeletionsToStudents(students, getDeletionsData());
-    localStorage.setItem("wft_students", JSON.stringify(students));
+    preflightWftRequiredStorage();
+    var nextStudents = applyDeletionsToStudents(students, getDeletionsData());
+    localStorage.setItem("wft_students", JSON.stringify(nextStudents));
+    students = nextStudents;
     // ── WFT Sync V2: roster change marks settings dirty unless we are applying cloud data locally ──
     if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks) {
         markWftSettingsDirty("roster-change");
@@ -360,21 +362,6 @@ async function renameStudent(oldName) {
         return;
     }
 
-    var portfolio = getPortfolioData();
-    var portfolioNameConflict = false;
-    if (portfolio) {
-        var portfolioNames = Object.keys(portfolio).filter(function(key) {
-            return key !== "_meta" && key !== "updatedAt" && key !== "__syncMeta" && key !== "syncMeta" && key !== "lastSyncedAt" && key !== "lastSyncStatus";
-        });
-        portfolioNameConflict = portfolioNames.some(function(key) {
-            return key !== oldName && String(key).toLowerCase() === newName.toLowerCase();
-        });
-    }
-    if (portfolioNameConflict) {
-        alert("A portfolio already exists for that name. Choose a different name so no student work is overwritten.");
-        return;
-    }
-
     if (!(await wftConfirm("Rename " + oldName + " to " + newName + "? The roster and portfolio will both be updated.", {
         title: "Confirm Rename",
         confirmText: "Rename Student"
@@ -382,18 +369,34 @@ async function renameStudent(oldName) {
         return;
     }
 
-    if (portfolio && Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
-        portfolio[newName] = portfolio[oldName];
-        delete portfolio[oldName];
+    // Dialogs yield to saves and sync; validate current state before staging the transaction.
+    if (students.indexOf(oldName) === -1 || students.some(function(name) {
+        return name !== oldName && String(name).toLowerCase() === newName.toLowerCase();
+    })) {
+        alert("The student roster changed while the rename dialog was open. Please reopen Manage Student and try again.");
+        return;
     }
-    var deletions = getDeletionsData();
-    clearStudentDeletion(newName, deletions);
-    if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
-        recordStudentDeletion(oldName, deletions);
-    }
-    var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
-    nextStudents.sort(function(a, b) { return a.localeCompare(b); });
     try {
+        var portfolio = getLocalPortfolioSnapshot();
+        var portfolioNameConflict = Object.keys(portfolio).some(function(key) {
+            return key !== "_meta" && key !== "updatedAt" && key !== "__syncMeta" && key !== "syncMeta" && key !== "lastSyncedAt" && key !== "lastSyncStatus"
+                && key !== oldName && String(key).toLowerCase() === newName.toLowerCase();
+        });
+        if (portfolioNameConflict) {
+            alert("A portfolio already exists for that name. Choose a different name so no student work is overwritten.");
+            return;
+        }
+        if (Object.prototype.hasOwnProperty.call(portfolio, oldName)) {
+            portfolio[newName] = portfolio[oldName];
+            delete portfolio[oldName];
+        }
+        var deletions = getDeletionsData();
+        clearStudentDeletion(newName, deletions);
+        if (String(oldName).toLowerCase() !== String(newName).toLowerCase()) {
+            recordStudentDeletion(oldName, deletions);
+        }
+        var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
+        nextStudents.sort(function(a, b) { return a.localeCompare(b); });
         var settings = getRawSettings();
         updateStudentRecordOnRename(oldName, newName, settings);
         saveWftStudentChange({ portfolio: portfolio, deletions: deletions, settings: settings,
@@ -410,6 +413,7 @@ async function renameStudent(oldName) {
     if (studentSelect && students.indexOf(newName) !== -1) {
         studentSelect.value = newName;
     }
+    selectedStudent = newName;
 
     try { refreshPortfolioDropdown(); } catch (e4) { }
 
@@ -465,7 +469,7 @@ function importStudents(event) {
         var content = String(e.target.result || "");
         var rawNames = content.split(/\r?\n|,/).map(function(n) { return n.trim(); }).filter(function(n) { return n.length > 0; });
         var names = [];
-        var seenImportNames = {};
+        var seenImportNames = Object.create(null);
         var added = 0;
         var nextStudents = students.slice();
         var deletions = getDeletionsData();
@@ -827,30 +831,27 @@ function applyGradeDefaultNeatness() {
     var el = document.getElementById("assessScriptQuality");
     if (!el || typeof profile.neatnessDefaultEnabled !== "boolean") return;
     el.checked = profile.neatnessDefaultEnabled;
-    try { el.dispatchEvent(new Event("change", { bubbles: true })); } catch (e) {}
 }
 function applyGradeDefaults() {
     applyGradeDefaultStrictness();
     applyGradeDefaultTargetWordCount();
     applyGradeDefaultNeatness();
+    var saved = saveWftPreferencesFromForm();
     refreshGradeProfileDescription();
-    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
-    if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
-    if (typeof syncUiState === "function") syncUiState();
-    if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-defaults");
+    if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
+    if (typeof syncUiState === 'function') syncUiState();
+    return saved;
 }
-function onGradeLevelChanged(source) {
-    if (source === "class") {
-        syncStudentGradeToClassIfNeeded();
-    } else if (source === "student" || source === "settings") {
-        wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
-    }
+function onGradeLevelChanged(source, required) {
+    if (source === 'class') syncStudentGradeToClassIfNeeded();
+    else if (source === 'student' || source === 'settings') wftStudentGradeLevelOverride = getSelectedGradeLevel() !== getClassGradeLevel();
+    if (required) saveSettingsToLocalStorage();
+    else if (!saveWftPreferencesFromForm()) return false;
     applyGradeWordCountRange();
     refreshGradeProfileDescription();
-    if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
-    if (typeof saveSettingsToLocalStorage === "function") saveSettingsToLocalStorage();
-    if (typeof syncUiState === "function") syncUiState();
-    if (typeof markWftSettingsDirty === "function") markWftSettingsDirty("grade-change-" + source);
+    if (typeof updateGradeLevelResultNote === 'function') updateGradeLevelResultNote();
+    if (typeof syncUiState === 'function') syncUiState();
+    return true;
 }
 function initializeGradeLevelFeature() {
     syncStudentGradeToClassIfNeeded();
@@ -1506,7 +1507,7 @@ function getSentenceLengths(text) {
 }
 
 function analyzeSentenceStarters(sentences) {
-    var counts = {};
+    var counts = Object.create(null);
     for (var i = 0; i < sentences.length; i++) {
         var words = sentences[i].match(/\b[\w'-]+\b/g);
         if (!words || !words.length) continue;
@@ -1517,7 +1518,7 @@ function analyzeSentenceStarters(sentences) {
     var maxStarter = 0;
     var mostCommon = "";
     for (var key in counts) {
-        if (counts.hasOwnProperty(key) && counts[key] > maxStarter) {
+        if (Object.prototype.hasOwnProperty.call(counts, key) && counts[key] > maxStarter) {
             maxStarter = counts[key];
             mostCommon = key;
         }
@@ -1964,7 +1965,7 @@ function analyzeGrammarChanges(originalText, correctedText) {
         var aw = tokenizeForDiff(addedWords);
         var combined = rw.concat(aw);
         for (var i = 0; i < combined.length; i++) {
-            if (verbSet[combined[i]]) {
+            if (Object.prototype.hasOwnProperty.call(verbSet, combined[i])) {
                 summary.verbIssues += 1;
                 if (/^(had|have|has|would|will|did|does|do|am|is|are|was|were)$/.test(combined[i])) summary.helperVerbIssues += 1;
                 break;
@@ -3131,8 +3132,9 @@ function sanitizeFileName(name) {
         .replace(/[\\\/:*?"<>|]/g, "-")
         .replace(/\s+/g, " ")
         .trim();
-    if (!safe) safe = "Untitled";
-    return safe.substring(0, 120);
+    if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(safe)) safe = "_" + safe;
+    safe = safe.substring(0, 120).replace(/[. ]+$/, "");
+    return safe || "Untitled";
 }
 
 function getUniqueFolderName(baseName, usedNames) {
@@ -3140,12 +3142,12 @@ function getUniqueFolderName(baseName, usedNames) {
     var candidate = safeBase;
     var counter = 2;
 
-    while (usedNames[candidate]) {
+    while (Object.prototype.hasOwnProperty.call(usedNames, candidate.toLowerCase())) {
         candidate = safeBase + " (" + counter + ")";
         counter += 1;
     }
 
-    usedNames[candidate] = true;
+    usedNames[candidate.toLowerCase()] = true;
     return candidate;
 }
 
@@ -3629,9 +3631,9 @@ function dataUrlToBlobPromise(dataUrl) {
     });
 }
 
-function downloadDriveFileAsBlobPromise(fileId) {
+function downloadDriveFileAsBlobPromise(fileId, archiveConnection) {
     var url = "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(fileId) + "?alt=media";
-    return wftDriveFetch(url).then(function(response) {
+    return wftDriveFetch(url, undefined, archiveConnection).then(function(response) {
         return response.blob();
     });
 }
@@ -3652,7 +3654,7 @@ function runTasksWithConcurrency(tasks, limit, progressCallback) {
             while (active < limit && index < tasks.length) {
                 (function(taskIndex) {
                     active += 1;
-                    tasks[taskIndex]().then(function(result) {
+                    Promise.resolve().then(tasks[taskIndex]).then(function(result) {
                         results[taskIndex] = result;
                     }).catch(function(e) {
                         results[taskIndex] = { error: String(e && e.message ? e.message : e) };
@@ -3681,6 +3683,7 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
     var manifest = [];
     var tasks = [];
     var includeImages = options && options.includeImages;
+    var usedNames = Object.create(null);
     var i;
     var j;
     var session;
@@ -3695,15 +3698,17 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
 
     for (i = 0; i < sessions.length; i += 1) {
         session = sessions[i] || {};
-        images = session.images || session.photos || [];
+        images = Array.isArray(session.images) && session.images.length ? session.images : session.photos || [];
         if (!Array.isArray(images)) images = [];
 
         for (j = 0; j < images.length; j += 1) {
             image = images[j] || {};
-            fileName = sanitizeFileName((getSessionDate(session) || ("Session " + (i + 1))) + " - " + (image.name || ("Image " + (j + 1))));
-            if (fileName.indexOf(".") === -1) {
-                fileName += image.mimeType === "image/png" ? ".png" : ".jpg";
-            }
+            var baseName = sanitizeFileName((getSessionDate(session) || ("Session " + (i + 1))) + " - " + (image.name || ("Image " + (j + 1))));
+            var extension = /\.(png|jpe?g|gif|webp)$/i.exec(baseName);
+            var stem = getUniqueFolderName(extension ? baseName.slice(0, -extension[0].length) : baseName, usedNames);
+            var mimeType = /^data:(image\/[a-z]+);/i.exec(image.dataUrl || image.originalDataUrl || "");
+            var imageType = mimeType ? mimeType[1].toLowerCase() : image.mimeType;
+            fileName = stem + (extension ? extension[0] : imageType === "image/png" ? ".png" : imageType === "image/gif" ? ".gif" : imageType === "image/webp" ? ".webp" : ".jpg");
 
             manifest.push({
                 sessionIndex: i + 1,
@@ -3711,38 +3716,46 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
                 originalName: image.name || "",
                 exportedName: fileName,
                 driveFileId: image.driveFileId || "",
-                included: !!(image.dataUrl || image.originalDataUrl || image.driveFileId)
+                included: false
             });
 
             if (image.dataUrl || image.originalDataUrl || image.driveFileId) {
-                (function(img, exportName) {
+                (function(img, exportName, exportStem, entry) {
                     tasks.push(function() {
+                        assertWftArchiveConnection(options && options.archiveConnection);
                         var blobPromise;
                         if (img.dataUrl || img.originalDataUrl) {
                             blobPromise = dataUrlToBlobPromise(img.dataUrl || img.originalDataUrl);
                         } else {
-                            blobPromise = downloadDriveFileAsBlobPromise(img.driveFileId);
+                            blobPromise = downloadDriveFileAsBlobPromise(img.driveFileId, options && options.archiveConnection);
                         }
                         return blobPromise.then(function(blob) {
+                            assertWftArchiveConnection(options && options.archiveConnection);
+                            var type = /^image\/(png|jpe?g|gif|webp)$/i.exec(blob.type || "");
+                            if (type) exportName = exportStem + "." + type[1].toLowerCase().replace("jpeg", "jpg");
                             imageFolder.file(exportName, blob);
+                            entry.exportedName = exportName;
+                            entry.included = true;
                             return true;
                         });
                     });
-                }(image, fileName));
+                }(image, fileName, stem, manifest[manifest.length - 1]));
             }
         }
     }
 
     if (!tasks.length) {
-        imageFolder.file("No available photos.txt", "No locally available images or downloadable Drive image IDs were found for this student.");
+        imageFolder.file("No available photos.txt", "No locally available images or downloadable Drive image IDs were found for this student. Historical photos without bytes or a Drive ID are metadata-only; included=false in photos-manifest.json.");
         imageFolder.file("photos-manifest.json", JSON.stringify(manifest, null, 2));
         return Promise.resolve();
     }
 
     return runTasksWithConcurrency(tasks, 3, function(done, total) {
         setWftArchiveStatus("Downloading images for " + studentName + " (" + done + " of " + total + ")...");
-    }).then(function() {
+    }).then(function(results) {
         imageFolder.file("photos-manifest.json", JSON.stringify(manifest, null, 2));
+        var failed = results.find(function(result) { return result && result.error; });
+        if (failed) throw new Error("A requested available photo could not be exported for " + studentName + ": " + failed.error);
     });
 }
 
@@ -3769,8 +3782,9 @@ function suggestSchoolYear() {
 }
 
 function getActivePortfolioForExport() {
-    var deletions = typeof getDeletionsData === "function" ? getDeletionsData() : {};
-    var portfolio = getPortfolioData();
+    preflightWftRequiredStorage();
+    var deletions = normalizeDeletionsData(readWftRequiredStorage(WFT_DELETIONS_STORAGE_KEY));
+    var portfolio = getLocalPortfolioSnapshot();
     if (typeof applyDeletionsToPortfolio === "function") {
         portfolio = applyDeletionsToPortfolio(portfolio, deletions);
     }
@@ -3790,7 +3804,7 @@ function createSchoolYearArchiveZip(schoolYear, options) {
             var zip = new JSZip();
             var root = zip.folder(sanitizeFileName(schoolYear));
             var studentsFolder = root.folder("Students");
-            var usedFolderNames = {};
+            var usedFolderNames = Object.create(null);
             var archiveInfo = {
                 schemaVersion: 1,
                 archiveType: "WritingFeedbackToolYearEndArchive",
@@ -3798,7 +3812,8 @@ function createSchoolYearArchiveZip(schoolYear, options) {
                 createdAt: new Date().toISOString(),
                 studentCount: studentNames.length,
                 appVersion: (typeof WFT_APP_VERSION !== "undefined" ? WFT_APP_VERSION : "v9"),
-                imagesIncluded: !!(options && options.includeImages)
+                imagesIncluded: !!(options && options.includeImages),
+                imageScope: "Available local bytes and Drive image IDs only. Historical photos without either are metadata-only; see each photos-manifest.json included flag."
             };
             var chain = Promise.resolve();
             var i;
@@ -3866,11 +3881,12 @@ function createSingleStudentArchiveZip(studentName, options) {
 
             zip.file(portfolioFileName, buildStudentPortfolioHtml(studentName, studentData, suggestSchoolYear()));
 
-            zip.generateAsync({
+            var photos = options && options.includeImages ? addAvailableImagesToStudentFolder(zip, studentName, studentData, options) : Promise.resolve();
+            photos.then(function() { return zip.generateAsync({
                 type: "blob",
                 compression: "DEFLATE",
                 compressionOptions: { level: 6 }
-            }).then(function(blob) {
+            }); }).then(function(blob) {
                 fileName = safeStudentName + " - Writing Portfolio.zip";
                 resolve({ blob: blob, fileName: fileName, portfolioFileName: portfolioFileName });
             }).catch(function(e) {
@@ -3895,7 +3911,7 @@ function downloadBlob(blob, fileName) {
     }, 0);
 }
 
-function ensureDriveSubfolderPromise(parentFolderId, folderName) {
+function ensureDriveSubfolderPromise(parentFolderId, folderName, archiveConnection) {
     var query = "name='" + escapeDriveQueryValue(folderName) + "'"
         + " and mimeType='application/vnd.google-apps.folder'"
         + " and '" + escapeDriveQueryValue(parentFolderId) + "' in parents"
@@ -3905,9 +3921,10 @@ function ensureDriveSubfolderPromise(parentFolderId, folderName) {
         + "&fields=files(id,name,modifiedTime)"
         + "&orderBy=modifiedTime desc";
 
-    return wftDriveFetch(searchUrl).then(function(response) {
+    return wftDriveFetch(searchUrl, undefined, archiveConnection).then(function(response) {
         return response.json();
     }).then(function(data) {
+        assertWftArchiveConnection(archiveConnection);
         var files = data && data.files ? data.files : [];
         if (files.length && files[0].id) {
             return files[0].id;
@@ -3920,9 +3937,10 @@ function ensureDriveSubfolderPromise(parentFolderId, folderName) {
                 mimeType: "application/vnd.google-apps.folder",
                 parents: [parentFolderId]
             })
-        }).then(function(createResponse) {
+        }, archiveConnection).then(function(createResponse) {
             return createResponse.json();
         }).then(function(folder) {
+            assertWftArchiveConnection(archiveConnection);
             if (!folder || !folder.id) {
                 throw new Error("Could not create Drive folder: " + folderName);
             }
@@ -3931,15 +3949,18 @@ function ensureDriveSubfolderPromise(parentFolderId, folderName) {
     });
 }
 
-function ensureArchiveYearFolderPromise(schoolYear) {
-    return ensureDriveFolderPromise().then(function(rootFolderId) {
-        return ensureDriveSubfolderPromise(rootFolderId, "Archives");
+function ensureArchiveYearFolderPromise(schoolYear, archiveConnection) {
+    assertWftArchiveConnection(archiveConnection);
+    return ensureDriveFolderPromise(archiveConnection).then(function(rootFolderId) {
+        assertWftArchiveConnection(archiveConnection);
+        return ensureDriveSubfolderPromise(rootFolderId, "Archives", archiveConnection);
     }).then(function(archivesFolderId) {
-        return ensureDriveSubfolderPromise(archivesFolderId, sanitizeFileName(schoolYear));
+        assertWftArchiveConnection(archiveConnection);
+        return ensureDriveSubfolderPromise(archivesFolderId, sanitizeFileName(schoolYear), archiveConnection);
     });
 }
 
-function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId) {
+function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId, archiveConnection) {
     var boundary = "----WFTArchiveBoundary" + Date.now();
     var metadata = JSON.stringify({
         name: fileName,
@@ -3957,7 +3978,7 @@ function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId) {
         method: "POST",
         headers: { "Content-Type": "multipart/related; boundary=" + boundary },
         body: body
-    }).then(function(response) {
+    }, archiveConnection).then(function(response) {
         return response.json();
     }).then(function(fileData) {
         if (!fileData || !fileData.id) {
@@ -3967,31 +3988,67 @@ function uploadBlobToDrivePromise(fileName, blob, mimeType, folderId) {
     });
 }
 
-function saveArchiveZipToDrive(fileName, blob, schoolYear) {
+function saveArchiveZipToDrive(fileName, blob, schoolYear, archiveConnection) {
     if (!driveAccessToken) {
         return Promise.reject(new Error("Please sign in with Google before saving an archive to Drive."));
     }
-    return ensureArchiveYearFolderPromise(schoolYear).then(function(folderId) {
-        return uploadBlobToDrivePromise(fileName, blob, "application/zip", folderId);
+    archiveConnection = archiveConnection || captureWftArchiveConnection();
+    assertWftArchiveConnection(archiveConnection);
+    return ensureArchiveYearFolderPromise(schoolYear, archiveConnection).then(function(folderId) {
+        assertWftArchiveConnection(archiveConnection);
+        return uploadBlobToDrivePromise(fileName, blob, "application/zip", folderId, archiveConnection);
     });
 }
 
-function clearCurrentClassAfterSuccessfulArchive() {
-    saveWftStudentChange({ portfolio: {}, deletions: getEmptyDeletionsData(), students: [], selectedStudent: "" });
+function captureWftArchiveClassState() {
+    preflightWftRequiredStorage();
+    getLocalPortfolioSnapshot();
+    if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+    return stableStringify({
+        stored: ['wft_portfolio', 'wft_students', 'wft_settings', WFT_DELETIONS_STORAGE_KEY, 'wft_selectedStudent', PENDING_PORTFOLIO_SYNC_KEY].map(function(key) { return localStorage.getItem(key); }),
+        settings: getLocalSettingsSnapshot(),
+        students: students,
+        selectedStudent: selectedStudent,
+        counters: [wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter],
+        pending: pendingPortfolioSync,
+        writing: String((document.getElementById('studentWriting') || {}).value || ''),
+        images: getSessionImagePayloads(),
+        reassessmentSource: activePortfolioReassessmentSource,
+        analysis: latestAnalysisData,
+        analysisInput: activeAnalysisContext && activeAnalysisContext.input
+    });
+}
 
-    renderStudentList();
-    populateStudentDropdown();
+function clearCurrentClassAfterSuccessfulArchive(expectedState) {
+    if (expectedState !== undefined && captureWftArchiveClassState() !== expectedState) return false;
+    getLocalPortfolioSnapshot();
+    var change = { portfolio: {}, deletions: getEmptyDeletionsData(), students: [], selectedStudent: "" };
+    try {
+        saveWftStudentChange(change);
+    } catch (e) {
+        if (!change.committed) throw e;
+        students = change.students;
+        selectedStudent = change.selectedStudent;
+        wftDebugWarn("[WFT Archive] Class cleared; sync publication needs retry:", e);
+    }
 
     try {
+        renderStudentList();
+        populateStudentDropdown();
         refreshPortfolioDropdown();
         renderStudentPortfolio();
     } catch (e) {
         wftDebugWarn("[WFT Archive] Could not refresh UI after clearing class:", e);
     }
 
-    if (typeof scheduleWftDriveSync === "function") {
-        scheduleWftDriveSync("archive-clear-current-class");
+    try {
+        if (typeof scheduleWftDriveSync === "function") {
+            scheduleWftDriveSync("archive-clear-current-class");
+        }
+    } catch (e) {
+        wftDebugWarn("[WFT Archive] Class cleared; sync scheduling needs retry:", e);
     }
+    return true;
 }
 
 async function archiveCurrentSchoolYear() {
@@ -4022,24 +4079,46 @@ async function archiveCurrentSchoolYear() {
 
     setWftArchiveStatus("Starting archive...");
 
-    createSchoolYearArchiveZip(schoolYear, { includeImages: includeImages })
+    var archiveSaved = false;
+    var archiveDownloaded = false;
+    var classState;
+    var archiveConnection = captureWftArchiveConnection();
+    return Promise.resolve().then(function() {
+        classState = captureWftArchiveClassState();
+        assertWftArchiveConnection(archiveConnection);
+        return createSchoolYearArchiveZip(schoolYear, { includeImages: includeImages, archiveConnection: archiveConnection });
+    })
         .then(function(result) {
+            assertWftArchiveConnection(archiveConnection);
             if (!result.blob || result.blob.size < 1000) {
                 throw new Error("Archive file appears to be empty or invalid.");
             }
             setWftArchiveStatus("Saving archive to Google Drive...");
-            return saveArchiveZipToDrive(result.fileName, result.blob, schoolYear).then(function() {
+            return saveArchiveZipToDrive(result.fileName, result.blob, schoolYear, archiveConnection).then(function() {
+                archiveSaved = true;
                 return result;
             });
         })
         .then(function(result) {
+            assertWftArchiveConnection(archiveConnection);
             downloadBlob(result.blob, result.fileName);
-            clearCurrentClassAfterSuccessfulArchive();
+            archiveDownloaded = true;
+            assertWftArchiveConnection(archiveConnection);
+            if (clearCurrentClassAfterSuccessfulArchive(classState) === false) {
+                setWftArchiveStatus("Snapshot archive saved and downloaded. Current class retained because work changed during the archive.");
+                alert("The snapshot archive was saved to Drive and downloaded. The current class was retained because writing, photos, roster, settings or pending work changed. Review the changes before archiving again.");
+                return;
+            }
             setWftArchiveStatus("Archive complete. Current class was cleared.");
             alert("Archive created, saved to Drive, downloaded, and current class cleared.");
         })
         .catch(function(e) {
             wftDebugError("[WFT Archive] Archive failed:", e);
+            if (archiveSaved) {
+                setWftArchiveStatus("Archive saved to Drive" + (archiveDownloaded ? " and downloaded" : "") + ". Current class retained; local completion needs attention.");
+                alert("The snapshot archive was saved to Drive" + (archiveDownloaded ? " and downloaded" : "") + ". The current class was retained. " + e.message);
+                return;
+            }
             setWftArchiveStatus(e.wftStudentChangeRecovery ? "Archive saved. Local class recovery needed." : "Archive failed. Current class was not cleared.");
             alert(e.wftStudentChangeRecovery ? e.message : "The archive could not be completed. The current class was not cleared. " + (e && e.message ? e.message : e));
         });
@@ -4057,7 +4136,7 @@ function exportSelectedStudentPortfolio() {
         return;
     }
 
-    createSingleStudentArchiveZip(studentName, { includeImages: includeImages })
+    return createSingleStudentArchiveZip(studentName, { includeImages: includeImages })
         .then(function(result) {
             if (!result.blob || result.blob.size < 500) {
                 throw new Error("Student export appears to be empty or invalid.");
@@ -4558,7 +4637,7 @@ function bindPreviewReorderHandlers() {
         if (resetBtn2) {
             var ridx = parseInt(resetBtn2.getAttribute("data-index"), 10);
             if (!isNaN(ridx) && selectedImages[ridx] && selectedImages[ridx].originalDataUrl) {
-                selectedImages[ridx].dataUrl = selectedImages[ridx].originalDataUrl;
+                setWftPhotoBytes(selectedImages[ridx], selectedImages[ridx].originalDataUrl);
                 selectedImages[ridx].originalDataUrl = null;
                 selectedImages[ridx].extractedText = "";
                 selectedImages[ridx].extractionPromise = null;
@@ -6191,7 +6270,7 @@ function titleCaseGeneratedWritingTitle(title) {
             var lower = partText.toLowerCase();
             var isFirstSegment = i === 0;
             var isLastSegment = i === matches.length - 1;
-            var shouldCapitalize = forceCapitalize || !lowercaseWords[lower] || (!isFirstSegment && isLastSegment);
+            var shouldCapitalize = forceCapitalize || !Object.prototype.hasOwnProperty.call(lowercaseWords, lower) || (!isFirstSegment && isLastSegment);
             output += token.slice(lastIndex, part.index);
             output += formatSegment(partText, shouldCapitalize);
             lastIndex = part.index + partText.length;
@@ -8626,13 +8705,13 @@ function setGradeLevelForPortfolioReassessment(session) {
     if (!grade || !gradeSelect) return;
     gradeSelect.value = String(grade);
     wftStudentGradeLevelOverride = grade !== getClassGradeLevel();
-    try { onGradeLevelChanged("student"); } catch (e) { }
+    onGradeLevelChanged("student", true);
 }
 
 function setNeatnessForPortfolioReassessment(enabled) {
     var el = document.getElementById("assessScriptQuality");
     if (el) el.checked = !!enabled;
-    try { saveSettingsToLocalStorage(); } catch (e) { }
+    saveSettingsToLocalStorage();
     try { refreshScoreWeightingDescription(); } catch (e2) { }
 }
 
@@ -8688,7 +8767,9 @@ function restorePortfolioSessionImagesForReassessment(session) {
                         mimeType: image.mimeType || "image/jpeg",
                         extractedText: "",
                         extractionPromise: null,
-                        driveFileId: image.driveFileId || ""
+                        driveFileId: image.driveFileId || "",
+                        imageId: image.imageId || image.driveFileId || "",
+                        imageRevision: image.imageRevision || ""
                     });
                 }).catch(function(e) {
                     wftDebugWarn("Could not restore portfolio image for reassessment:", e);
@@ -8731,6 +8812,12 @@ async function reassessPortfolioSession(studentName, sessionId) {
         danger: false
     }))) return;
 
+    try { setGradeLevelForPortfolioReassessment(session); }
+    catch (e) {
+        alert('Reassessment could not load because its grade setting could not be saved. Your current writing was kept. Check browser storage and retry.');
+        return;
+    }
+
     activePortfolioReassessmentSource = {
         sourceStudentName: studentName,
         sourceSessionId: sessionId
@@ -8738,7 +8825,6 @@ async function reassessPortfolioSession(studentName, sessionId) {
 
     switchTab("tool");
     setActiveStudentForPortfolioReassessment(studentName);
-    setGradeLevelForPortfolioReassessment(session);
 
     var writingEl = document.getElementById("studentWriting");
     if (writingEl) writingEl.value = reassessText;
@@ -8757,7 +8843,13 @@ async function reassessPortfolioSession(studentName, sessionId) {
     restorePortfolioSessionImagesForReassessment(session).then(function(result) {
         if (!result) return;
         var shouldUseNeatness = !!(result && result.restored > 0 && (session.neatnessAssessed || session.assessScriptQuality || session.sourceType === "typed+photo"));
-        setNeatnessForPortfolioReassessment(shouldUseNeatness);
+        try { setNeatnessForPortfolioReassessment(shouldUseNeatness); }
+        catch (e) {
+            alert('Saved writing loaded, but its neatness preference could not be saved. The saved preference is still active. Check Settings before analyzing.');
+            setOcrStatus('Saved writing loaded. Check Settings before analyzing; the neatness preference could not be saved.', 'error');
+            syncUiState();
+            return;
+        }
         if (result && result.total > 0 && result.restored === 0) {
             setOcrStatus("Saved writing loaded. The original photo could not be restored, so reassessment will run without photo-based neatness.", "error");
             alert("The saved writing was loaded, but the original photo could not be restored. The reassessment will run without photo-based neatness.");
@@ -8771,7 +8863,8 @@ async function reassessPortfolioSession(studentName, sessionId) {
         syncUiState();
     }).catch(function(e) {
         wftDebugError("Could not restore saved portfolio entry for reassessment:", e);
-        setNeatnessForPortfolioReassessment(false);
+        try { setNeatnessForPortfolioReassessment(false); }
+        catch (saveError) { alert('Saved writing loaded, but the neatness preference could not be saved. The saved preference is still active. Check Settings before analyzing.'); }
         setOcrStatus("Saved writing loaded, but photos could not be restored. Press Analyze Writing when you are ready.", "error");
         syncUiState();
     });
@@ -9362,11 +9455,11 @@ if (useWordCountTargetInput) {
     });
     targetWordCountInput.disabled = !useWordCountTargetInput.checked;
 }
-modelSelect.addEventListener("change", function() { updateMeter(); saveSettingsToLocalStorage(); });
+modelSelect.addEventListener("change", function() { saveWftPreferencesFromForm(); updateMeter(); });
 var assessScriptQualityInput = document.getElementById("assessScriptQuality");
 if (assessScriptQualityInput) {
     assessScriptQualityInput.addEventListener("change", function() {
-        saveSettingsToLocalStorage();
+        saveWftPreferencesFromForm();
         refreshScoreWeightingDescription();
     });
 }
@@ -9374,15 +9467,13 @@ var apiKeyInput = document.getElementById("apiKeyInput");
 var toggleApiKeyBtn = document.getElementById("toggleApiKeyBtn");
 if (apiKeyInput) {
     apiKeyInput.addEventListener("input", function() {
-        persistApiKeyStorageFromInput();
-        refreshApiKeyRuntimeValue();
+        saveWftApiKeyFromForm();
     });
 }
 var rememberApiKeyOnDeviceInput = document.getElementById("rememberApiKeyOnDevice");
 if (rememberApiKeyOnDeviceInput) {
     rememberApiKeyOnDeviceInput.addEventListener("change", function() {
-        persistApiKeyStorageFromInput();
-        refreshApiKeyRuntimeValue();
+        saveWftApiKeyFromForm();
     });
 }
 var writingGenreSelect = document.getElementById("writingGenreSelect");
@@ -9454,6 +9545,7 @@ window.addEventListener("load", function() {
     ta.value = '';
     ta.focus();
     ta.setSelectionRange(ta.value.length, ta.value.length);
+    restoreWftOAuthDraftAfterRedirect();
     syncMobileOcrPanelState();
     syncOcrPanelTitle();
     pendingPortfolioSync = loadPendingPortfolioSyncFromStorage();
@@ -9466,28 +9558,29 @@ window.addEventListener("load", function() {
         initWftSyncLifecycleHandlers();
     }
 
-    // Check if tokens were delivered in the URL fragment after Google sign-in
-    var fromOAuth = checkHashForOAuthTokens();
-
     var restoredFromStorage = restoreGoogleStateFromStorage();
     if (!restoredFromStorage) {
         restoreGoogleSessionOnce();
     }
 
+    // Start redirect completion after session restoration so startup cannot cancel it.
+    var fromOAuth = checkHashForOAuthTokens();
+
     // If we just came back from OAuth, trigger a sync
-    var pendingAction = localStorage.getItem("wft_oauth_pending_action");
-    if (pendingAction === "sync" || fromOAuth) {
-        localStorage.removeItem("wft_oauth_pending_action");
+    var pendingAction;
+    try { pendingAction = localStorage.getItem("wft_oauth_pending_action"); } catch (e) { }
+    if (pendingAction === "sync" && !fromOAuth) {
+        try { localStorage.removeItem("wft_oauth_pending_action"); } catch (e) { }
+        var operation = captureWftGoogleAuthOperation();
         // Small delay to let the token restore finish
         setTimeout(function() {
-            if (driveAccessToken) {
+            if (driveAccessToken && isCurrentWftGoogleAuthOperation(operation)) {
                 manualSaveToDrive();
             }
         }, 1500);
     }
 });
 
-restoreWftOAuthDraftAfterRedirect();
 syncUiState();
 
 // When the browser restores this page from the back/forward cache (bfcache)
@@ -9758,6 +9851,19 @@ function getCropPos(e, el) {
     };
 }
 
+function setWftPhotoBytes(photo, dataUrl) {
+    if (photo.dataUrl === dataUrl) return;
+    photo.imageId = photo.imageId || photo.driveFileId || '';
+    ensureWftImageId(photo, 'photo', selectedImages.indexOf(photo));
+    photo.imageRevision = Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+    photo.dataUrl = dataUrl;
+    photo.driveFileId = '';
+    delete photo.driveName;
+    delete photo.driveUploadedAt;
+    delete photo.dataUrlRemovedForStorage;
+    photo.pendingDriveUpload = true;
+}
+
 function applyCrop() {
     var session = _cropSession;
     if (!isCurrentCropSession(session)) return;
@@ -9796,7 +9902,7 @@ function applyCrop() {
         if (!session.photo.originalDataUrl) {
             session.photo.originalDataUrl = session.photo.dataUrl;
         }
-        session.photo.dataUrl = croppedUrl;
+        setWftPhotoBytes(session.photo, croppedUrl);
         session.photo.extractedText = "";
         session.photo.extractionPromise = null;
         selectedImageExtractedText = "";
@@ -9825,7 +9931,7 @@ function resetCrop() {
     var session = _cropSession;
     if (!isCurrentCropSession(session)) return;
     if (session.photo.originalDataUrl) {
-        session.photo.dataUrl = session.photo.originalDataUrl;
+        setWftPhotoBytes(session.photo, session.photo.originalDataUrl);
         session.photo.originalDataUrl = null;
         session.photo.extractedText = "";
         session.photo.extractionPromise = null;

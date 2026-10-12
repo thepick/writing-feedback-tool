@@ -73,7 +73,7 @@ function getOrCreateStudentId(studentName) {
     } catch (e) {
         settings = {};
     }
-    if (!settings.studentIdMap) { settings.studentIdMap = {}; }
+    settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
 
     if (settings.studentIdMap[studentName]) {
         return settings.studentIdMap[studentName];
@@ -104,16 +104,15 @@ function getOrCreateStudentId(studentName) {
     }
 
     // Persist settings
-    if (typeof saveSettingsToLocalStorage === "function") {
-        try { saveSettingsToLocalStorage(settings); } catch (e) {}
-    }
+    if (typeof saveSettingsToLocalStorage !== 'function') throw new Error('Student identity could not be saved.');
+    saveSettingsToLocalStorage(settings);
 
     return newId;
 }
 
 // ── Session Date Normalization ──
 
-function normalizeWftSessionDate(session) {
+function normalizeWftSessionDate(session, fallbackCreatedAt) {
     if (!session) { return; }
 
     // createdAt
@@ -123,7 +122,7 @@ function normalizeWftSessionDate(session) {
         } else if (session.date && !isNaN(Date.parse(session.date))) {
             session.createdAt = session.date;
         } else {
-            session.createdAt = new Date().toISOString();
+            session.createdAt = fallbackCreatedAt || new Date().toISOString();
         }
     }
 
@@ -169,8 +168,8 @@ function normalizeWftSessionDate(session) {
     }
 }
 
-function normalizeWftSessionForStorage(session) {
-    normalizeWftSessionDate(session);
+function normalizeWftSessionForStorage(session, fallbackCreatedAt) {
+    normalizeWftSessionDate(session, fallbackCreatedAt);
     // Could add additional storage-specific normalization here later
     return session;
 }
@@ -180,17 +179,17 @@ function normalizeWftSessionForStorage(session) {
 function normalizeWftStudentRecord(studentName, sessions) {
     if (!sessions || !Array.isArray(sessions)) { sessions = []; }
 
+    // Undated records share one fallback so normalization keeps their existing order.
+    var fallbackCreatedAt = new Date().toISOString();
     for (var i = 0; i < sessions.length; i++) {
-        normalizeWftSessionForStorage(sessions[i]);
+        normalizeWftSessionForStorage(sessions[i], fallbackCreatedAt);
     }
 
     // Sort sessions by date (newest first)
     sessions.sort(function(a, b) {
         if (!a.createdAt) { return 1; }
         if (!b.createdAt) { return -1; }
-        if (a.createdAt < b.createdAt) { return 1; }
-        if (a.createdAt > b.createdAt) { return -1; }
-        return 0;
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt);
     });
 
     return sessions;
@@ -204,7 +203,7 @@ function normalizeWftPortfolioForSchemaV1(portfolio) {
         return portfolio;
     }
 
-    var normalized = {};
+    var normalized = Object.create(null);
     var studentNames = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
 
     for (var i = 0; i < studentNames.length; i++) {

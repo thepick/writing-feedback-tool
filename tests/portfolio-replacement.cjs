@@ -12,6 +12,8 @@ function functions(file, first, last) {
     return source.slice(start, end);
 }
 const source = functions('js/app/10-main-app.js', 'findPortfolioSessionIndex', 'renderNotebookDetailedAssessmentFromSavedSession')
+    + functions('js/app/00-storage-sync-patches.js', 'normalizeWftSessionDate', 'normalizeWftPortfolioForSchemaV1')
+    + functions('js/app/00-storage-sync-patches.js', 'retainWftStudentSessions', 'saveStudentSession')
     + functions('js/app/00-storage-sync-patches.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
     + functions('js/app/00-storage-sync-patches.js', 'saveWftStudentChange', 'applyDeletionsToStudents')
     + functions('js/app/00-storage-sync-patches.js', 'commitPendingPortfolioReplacement');
@@ -26,6 +28,8 @@ function setup(portfolio, sourceId = 'old', target = 'Alice') {
         getDeletionsData: () => ({ markers: [] }),
         recordSessionDeletion: (student, id, data) => data.markers.push([student, id]),
         saveDeletionsData: data => { deletionSaves++; deletions.push(...data.markers); data.markers.forEach(() => events.push('delete')); },
+        // Required-read failures are exercised with the full native storage-integrity fixture.
+        preflightWftRequiredStorage() {}, readWftRequiredStorage: () => ({}),
         localStorage: { getItem: () => null }, WFT_DELETIONS_STORAGE_KEY: 'wft_deletions', wftSuppressDirtyMarks: true,
         syncSavedPortfolioData() {},
         renderStudentPortfolio: () => { renders++; },
@@ -95,10 +99,12 @@ assert.equal(test.app.commitPendingPortfolioSync(), true);
 assert.deepEqual(test.stored.Bob.sessions.map(session => session.id), ['old']);
 assert.deepEqual(test.deletions, [['Alice', 'old']], 'Moving with the same ID still removes the source student copy');
 
-test = setup({ Alice: { sessions: [{ id: 'old' }] }, Bob: { sessions: Array.from({ length: 50 }, (_, index) => ({ id: 'b' + index })) } }, 'old', 'Bob');
+test = setup({ Alice: { sessions: [{ id: 'old' }] }, Bob: { sessions: Array.from({ length: 50 }, (_, index) => ({ id: 'b' + (49 - index), createdAt: new Date(Date.UTC(2026, 0, 50 - index)).toISOString(), originalText: 'Writing ' + (49 - index) })) } }, 'old', 'Bob');
 assert.equal(test.app.commitPendingPortfolioSync(), true);
 assert.equal(test.stored.Bob.sessions.length, 50);
-assert.equal(test.stored.Bob.sessions[0].id, 'b1');
+assert.equal(test.stored.Bob.sessions[0].id, 'b49');
+assert.equal(test.stored.Bob.sessions[0].originalText, 'Writing 49');
+assert.deepEqual(test.stored.Bob.sessions.slice(0, 49).map(session => session.id), Array.from({ length: 49 }, (_, i) => 'b' + (49 - i)));
 assert.equal(test.stored.Bob.sessions[49].id, 'new');
 
 test = setup({ Alice: { sessions: [{ id: 'old' }] } });

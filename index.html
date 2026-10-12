@@ -3707,7 +3707,7 @@
             <div class="settings-section-title">Grammar & Writing</div>
 
             <label for="grammarStrictness">Grammar Strictness (1 = Lenient, 5 = Strict)</label>
-            <input id="grammarStrictness" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('grammarStrictnessVal').textContent = this.value; saveSettingsToLocalStorage()" style="width:100%; margin-bottom:4px; accent-color: var(--primary-color);">
+            <input id="grammarStrictness" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('grammarStrictnessVal').textContent = this.value; saveWftPreferencesFromForm()" style="width:100%; margin-bottom:4px; accent-color: var(--primary-color);">
             <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
                 <span>1 - Lenient</span>
                 <span id="grammarStrictnessVal" style="font-weight:600; color:var(--primary-color);">3</span>
@@ -3757,9 +3757,9 @@
 </div>
 
 <!-- Modular app scripts extracted from the v9 single-file build. -->
-<script src="google-drive-migration.js?v=gmail-20261009-2"></script>
-<script src="js/app/00-storage-sync-patches.js?v=crop-ownership-20261011"></script>
-<script src="js/app/10-main-app.js?v=crop-ownership-20261011"></script>
+<script src="google-drive-migration.js?v=record-identity-20261012"></script>
+<script src="js/app/00-storage-sync-patches.js?v=auth-integrity-20261012"></script>
+<script src="js/app/10-main-app.js?v=auth-integrity-20261012"></script>
 
 
 
