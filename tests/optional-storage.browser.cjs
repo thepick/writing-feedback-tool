@@ -175,6 +175,21 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             const result = await new Promise(resolve => loadStudentPortfolioLazy('id-Alice', 'Alice', (e, data) => resolve({ error: e && e.message, data })));
             return { result, primary: localStorage.getItem('wft_portfolio') === optionalBefore };
         }, r => { assert.ok(!r.result.error); assert.equal(r.result.data.sessions[0].id, kind === 'valid' ? 'cache' : 'alice'); assert.equal(r.primary, true); }, kind);
+        await run('native-cache-hit-then-real-background-refresh', async () => {
+            WFT_INDEXEDDB_CACHE_V1 = WFT_LAZY_PORTFOLIO_LOAD_V1 = true; await WftStorage.init();
+            await WftIndexedDb.put('studentPortfolios', { studentId: 'id-Alice', cachedAt: '2020-01-01T00:00:00Z', data: { studentId: 'id-Alice', sessions: [{ id: 'cache', originalText: 'Older cached view.' }] } });
+            driveAccessToken = wftSyncState.accessToken = 'synthetic'; driveFolderId = wftSyncState.folderId = 'root-folder'; wftSyncState.tokenExpiresAt = Date.now() + 600000;
+            localStorage.setItem('wft_drive_students_folder_id', 'students-folder');
+            let count = 0;
+            const immediate = await new Promise(resolve => loadStudentPortfolioLazy('id-Alice', 'Alice', (error, data) => { count++; resolve({ error: error && error.message, data }); }));
+            for (let i = 0; i < 200 && localStorage.getItem('wft_drive_student_file_id-Alice') !== 'saved-file'; i++) await new Promise(resolve => setTimeout(resolve, 10));
+            return { immediate, count, refreshed: await WftStorage.getStudentPortfolio('id-Alice'), acknowledged: localStorage.getItem('wft_drive_student_file_id-Alice'), primary: localStorage.getItem('wft_portfolio') === optionalBefore };
+        }, (r, requests) => {
+            assert.ok(!r.immediate.error); assert.equal(r.immediate.data.sessions[0].id, 'cache'); assert.equal(r.count, 1);
+            assert.equal(r.refreshed.data.studentId, 'id-Alice'); assert.equal(r.refreshed.data.sessions[0].id, 'remote'); assert.equal(r.acknowledged, 'saved-file'); assert.equal(r.primary, true);
+            assert.equal(requests.filter(req => req.url.includes('alt=media')).length, 2);
+            const uploads = requests.filter(req => req.url.includes('/upload/')); assert.equal(uploads.length, 1); assert.ok(uploads[0].body.includes('Remote protected writing.')); assert.ok(uploads[0].body.includes('id-Alice'));
+        });
         for (const bypass of ['safe', 'disabled']) await run('existing-cache-facade-bypass-' + bypass, async bypass => {
             WFT_INDEXEDDB_CACHE_V1 = true; await WftStorage.init();
             await WftStorage.setMetadata('keep', 'old'); await WftStorage.savePortfolioIndex({ keep: true }); await WftStorage.saveStudentPortfolio('id-Alice', { sessions: [{ id: 'keep' }] });
