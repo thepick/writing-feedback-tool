@@ -16,6 +16,7 @@ function setup(fetcher, models = ['primary']) {
         cancelAnalysis: false, analysisAbortController: null, AbortController,
         API_KEY: 'test-key', OCR_MODEL: 'ocr', window: { location: { href: 'http://127.0.0.1/' } },
         refreshApiKeyRuntimeValue() {},
+        getWftApiKeyStorageError() { return new Error('Synthetic required key storage failure'); },
         fetch: (url, options) => { assert.equal(url, 'https://openrouter.ai/api/v1/chat/completions'); attempts.push(options); return fetcher(options, attempts.length); },
         setTimeout: (callback, ms) => { assert.equal(ms, 90000); timers.set(++timerId, callback); return timerId; },
         clearTimeout: id => timers.delete(id)
@@ -78,6 +79,19 @@ async function cancelledBody() {
 (async () => {
     await stalledBody();
     await cancelledBody();
+    for (const failure of ['missing', 'recovery', 'throw']) {
+        const test = setup(async () => { throw new Error('Admission must precede transport'); });
+        let payloads = 0;
+        if (failure === 'missing') test.app.API_KEY = '';
+        if (failure === 'recovery') test.app.refreshApiKeyRuntimeValue = () => false;
+        if (failure === 'throw') test.app.refreshApiKeyRuntimeValue = () => { throw new Error('Synthetic required key reader failure'); };
+        await assert.rejects(test.app.requestOpenRouterWithFallback('primary', () => { payloads++; return {}; }),
+            failure === 'missing' ? /No API key/ : /Synthetic required key/);
+        assert.equal(payloads, 0);
+        assert.equal(test.attempts.length, 0);
+        assert.equal(test.sleeps.length, 0);
+        assert.equal(test.timers.size, 0);
+    }
     const success = setup(async () => response(content('done')));
     assert.equal(await success.app.callOpenRouter('primary', 'writing prompt'), 'done');
     assert.equal(await success.app.callOpenRouterImage('primary', 'image prompt', 'data:image/jpeg;base64,AAAA'), 'done');
