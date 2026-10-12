@@ -4647,7 +4647,7 @@ function ensureDriveFolder(callback, onError) {
         });
 }
 
-function saveFileToDrive(filename, content, mimeType, callback) {
+function saveFileToDrive(filename, content, mimeType, callback, deferSyncStatus) {
     if (!driveAccessToken) { if (callback) callback(new Error("Not signed in"), null, null); return; }
     var connection = captureWftArchiveConnection();
     try {
@@ -4660,7 +4660,7 @@ function saveFileToDrive(filename, content, mimeType, callback) {
         }
     }
     catch (e) { if (callback) callback(e, null, null); return; }
-    setDriveSyncStatus("syncing", "Syncing...");
+    if (!deferSyncStatus) setDriveSyncStatus("syncing", "Syncing...");
     ensureDriveFolder(function(folderId) {
         findWftFilesByNamePromise(filename).then(function(data) {
             assertWftArchiveConnection(connection);
@@ -4700,15 +4700,15 @@ function saveFileToDrive(filename, content, mimeType, callback) {
             preflightWftRequiredStorage();
             var now = new Date();
             var fileId = fileData && fileData.id ? fileData.id : getCachedWftDriveFileId(filename);
-            setDriveSyncStatus("synced", "Synced " + now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
+            if (!deferSyncStatus) setDriveSyncStatus("synced", "Synced " + now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
             if (callback) callback(null, fileId, fileData || null);
         }).catch(function(e) {
             wftDebugError("Drive save error:", e);
             if (e && e.status === 404) {
                 clearCachedWftDriveFileId(filename);
-                setDriveSyncStatus("error", "Drive file not found - retrying will recreate it.");
+                if (!deferSyncStatus) setDriveSyncStatus("error", "Drive file not found - retrying will recreate it.");
             } else {
-                setDriveSyncStatus("error", "Sync failed");
+                if (!deferSyncStatus) setDriveSyncStatus("error", "Sync failed");
             }
             if (callback) callback(e, null, null);
         });
@@ -4826,7 +4826,7 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
                 settled = true;
                 clearTimeout(timer);
                 resolve(fileId || null);
-            });
+            }, true); // The V2 caller owns status, including after this request times out.
         } catch (e) {
             if (settled) return;
             settled = true;
@@ -6401,7 +6401,8 @@ function syncWftNow(reason, options) {
             }
 
             if (result) {
-                setDriveSyncStatus("synced", "Synced");
+                if (getPendingPortfolioSync()) setDriveSyncStatus("syncing", "New writing is ready to sync to portfolio");
+                else setDriveSyncStatus("synced", "Synced");
                 checkDuplicateSyncFilesStatus();
             }
 
