@@ -1662,7 +1662,7 @@ function downloadWftEmergencyBackup(backup) {
         a.download = "wft-emergency-backup-" + ts + ".json";
         document.body.appendChild(a);
         a.click();
-        alert("Backup download started. Keep this tab open until you verify the file." + (backup.readErrors ? " Backup is incomplete: some local data could not be read (" + backup.readErrors.join(', ') + "). Retry when browser storage is working." : ""));
+        alert("Backup download started. Keep this tab open until you verify the file." + (backup.readErrors ? " Backup is incomplete: some local data could not be read. Verify the file and retry when browser storage is working." : ""));
         return a.download;
     } catch (e) {
         wftDebugError("[EmergencyBackup] Download failed:", e);
@@ -1700,7 +1700,7 @@ function saveWftPreMigrationBackupToDrive(callback) {
                 fallback(err);
             } else {
                 wftDebugLog("[EmergencyBackup] Saved to Drive:", filename, fileId);
-                alert("Backup saved to Google Drive." + (backup.readErrors ? " Backup is incomplete: some local data could not be read (" + backup.readErrors.join(', ') + "). Keep this tab open and retry when browser storage is working." : ""));
+                alert("Backup saved to Google Drive." + (backup.readErrors ? " Backup is incomplete: some local data could not be read. Keep this tab open, verify the file and retry when browser storage is working." : ""));
                 finish(null, fileId);
             }
         });
