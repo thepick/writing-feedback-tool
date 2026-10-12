@@ -11,7 +11,7 @@ function functions(file, first, last) {
     return source.slice(start, end);
 }
 const source = functions('js/app/10-main-app.js', 'findPortfolioSessionIndex', 'findPortfolioSession')
-    + functions('js/app/00-storage-sync-patches.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
+    + functions('js/app/storage-recovery.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
     + functions('js/app/00-storage-sync-patches.js', 'saveWftStudentChange', 'applyDeletionsToStudents')
     + functions('js/app/00-storage-sync-patches.js', 'getSessionKey', 'getTimeMs')
     + functions('js/app/00-storage-sync-patches.js', 'removeStudentSession', 'toggleRosterVisibility');

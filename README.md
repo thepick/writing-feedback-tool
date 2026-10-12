@@ -2,7 +2,9 @@
 
 A browser-only writing analysis tool for teachers. It provides rubric scoring, corrected writing, structured feedback, student tracking, and optional Google Drive syncing.
 
-The page loads `google-drive-migration.js`, `js/app/00-storage-sync-patches.js`, `js/app/10-main-app.js`, and `js/app/99-lightbox.js`. Runtime helpers and configuration live in those scripts. Tests under `tests/` exercise the shipped code; historical audit records under `docs/repowise-audit/` may refer to retired helper copies.
+The page loads classic browser scripts in this order: `google-drive-migration.js`, `js/app/dialogs.js`, `js/app/storage-recovery.js`, `js/app/00-storage-sync-patches.js`, `js/app/portfolio-export.js`, `js/app/10-main-app.js`, `js/app/photo-crop.js`, then `js/app/99-lightbox.js` after its markup. Keep that order: main initializes the page immediately and retains the crop-state assignments; crop functions bind the modal on DOMContentLoaded.
+
+Dialogs, storage recovery/backup, portfolio exports/archives, and photo cropping each have one source file. The storage script retains settings, configuration, authentication, sync, portfolio persistence and display. Main retains roster, analysis, feedback, notebook printing, image input and page initialization. Public functions and state remain browser globals used by existing handlers. Tests under `tests/` exercise shipped code. See [current script locations](docs/script-locations.md) when following historical audit references, which retain their original source locations.
 
 ## Features
 
