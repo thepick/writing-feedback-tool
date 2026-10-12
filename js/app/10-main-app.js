@@ -2949,16 +2949,16 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
         for (var attempt = 0; attempt <= maxRetriesPerModel; attempt++) {
             if (requestContext) assertCurrentAnalysisContext(requestContext);
             if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
+            if (refreshApiKeyRuntimeValue() === false) throw getWftApiKeyStorageError();
+            if (!API_KEY) {
+                throw new Error('No API key found. Open Settings and paste your OpenRouter API key.');
+            }
             var requestController = analysisAbortController;
             var timeoutId = setTimeout(function() {
                 requestController.abort();
             }, 90000);
             try {
                 var payload = payloadBuilder(model);
-                refreshApiKeyRuntimeValue();
-                if (!API_KEY) {
-                    throw new Error('No API key found. Open Settings and paste your OpenRouter API key.');
-                }
                 var res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
                     headers: {
