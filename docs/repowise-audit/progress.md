@@ -1,6 +1,6 @@
 # Repowise audit progress
 
-Updated 2026-10-12T13:28:52.673Z; timezone Asia/Bangkok. All662 original IDs retained; 1164 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
+Updated 2026-10-12T15:25:29.115Z; timezone Asia/Bangkok. All662 original IDs retained; 1215 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
 
 Storage coverage follow-up: in_progress. Prior audit dispositions remain preserved; these additional paths are being checked in sequential repair chats.
 
@@ -9,33 +9,33 @@ Storage coverage follow-up: in_progress. Prior audit dispositions remain preserv
 - STORAGE-COVERAGE-003: Drive errors, manual save and polling lifecycle — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/67)).
 - STORAGE-COVERAGE-004: Optional cache and async student portfolio paths — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/68)).
 - STORAGE-COVERAGE-006: Repair late upload sync acknowledgements — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/70)).
-- STORAGE-COVERAGE-007: Repair keyboard cancellation in student dialogs — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/72)).
-- STORAGE-COVERAGE-005: Remaining storage UI and final measured coverage — pending.
+- STORAGE-COVERAGE-007: Repair keyboard cancellation in student dialogs — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/72)).
+- STORAGE-COVERAGE-005: Remaining storage UI and final measured coverage — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/73)).
 
-Current follow-up source: b706bb7f3ad3dc8d3203299a6cc8a1f6df3b8ae6. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
+Current follow-up source: e58e2fad504416633d3ced815262c23ab3f7b4b9. Independently verified final-source native coverage and strict ingestion complete:storage89.99%,overall90.62%;all51 refreshed warnings individually reviewed. Validation publication pending. Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T12:59:16Z, commit 469cc25c4699a603faac859a8a4c45d86fe594d7. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T13:30:37Z, commit dd63f2682691a1edfaff4224794b08580218b5e1. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
 
 Confirmed remaining repairs; one repair chat and repository writer at a time:
 
 No confirmed behavioral repair remains in this queue.
 
-Current storage follow-up validation: in_progress. Stable-source complete fresh suite/native corpus, remaining meaningful storage UI checks, independent raw Git/coverage verification, strict coverage ingestion, refreshed current-source reconciliation and reviewed residual risks.
+Current storage follow-up validation: complete. Sequential storage repairs and final exact-source validation complete; all current and historical obligations have individual dispositions and retained residual risks. Final validation PR publication is tracked separately by the storage queue.
 
 Remaining ledger obligations: 0.
 
 
-Current indexed source: 3c99bf6c62447c3a2325314f70905ff2738cda34.
+Current indexed source: e58e2fad504416633d3ced815262c23ab3f7b4b9.
 
 | Surface | Count |
 | --- | --- |
-| code_health | 637 |
+| code_health | 670 |
 | dead_code | 1 |
-| security | 0 |
-| refactoring_plans | 152 |
-| performance_opportunities | 24 |
+| security | 7 |
+| refactoring_plans | 88 |
+| performance_opportunities | 0 |
 | doc_drift | 0 |
-| actions | 2 |
+| actions | 4 |
 
 No repair chat is writing. The coordinator is reviewing and checkpointing before the next storage follow-up.
 
@@ -111,9 +111,18 @@ Reviewed repairs:
 - STORAGE-038: Split reads accept mismatched student ownership. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
 - STORAGE-039: Concurrent async student saves lose a different student update. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
 - STORAGE-040: Late timed-out upload advertises Synced while newer writing remains dirty. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/70)
-- STORAGE-041: Enter on focused Cancel submits student chooser and text input. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/72)
+- STORAGE-041: Enter on focused Cancel submits student chooser and text input. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/72)
 
-Measured coverage ingestion remains open. Collection self-checks validate source hashing, uncovered executable positions, first-page execution before navigation and Windows line endings; preparation runs were not ingested as final coverage.
+Measured current-source native coverage: 90.62% (9888/10911 executable lines). All57 suites and 16 supplemental native cases passed. The exact source hashes, executable locations, exclusions, test provenance and uncovered lines are recorded with the validation report.
+
+| Shipped file | Native coverage |
+| --- | --- |
+| google-drive-migration.js | 85.93% (116/135) |
+| js/app/00-storage-sync-patches.js | 89.99% (4504/5005) |
+| js/app/10-main-app.js | 91.26% (5244/5746) |
+| js/app/99-lightbox.js | 96% (24/25) |
+
+Retained aliases and unused optional interfaces, unhandled-rejection diagnostics, never-settling legacy callbacks, appData native migration, real Drive/OAuth, cross-tab/crash atomicity, in-memory recovery on forced close, physical IME/chooser/printing/touch, large-image OCR and quadratic LCS remain explicitly bounded risks. Ordinary roster export, Clear text, image chooser/reordering, current-analysis print and Settings relative-time controls now have actual-handler evidence.
 
 Known limits: multi-key localStorage writes are not crash-atomic. Failed rollback recovery buffers and unuploaded photo bytes can be lost if the tab is forcibly closed. Corrupt protected primary bytes still require recovery. Normal Google signout retains local writing. Split student files are enabled by default; ID mapping, lazy loading, IndexedDB and deletion compaction remain disabled by default and are tested explicitly where relevant. Browser checks use synthetic records and intercepted services, with no real student records, live Drive writes or paid AI checks. LCS comparison still uses quadratic time and memory. Source-specific metric and proposal dispositions are deliberate reviewed choices, not a claim that every scanner metric has disappeared.
 
