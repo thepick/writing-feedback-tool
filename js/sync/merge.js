@@ -290,13 +290,15 @@ function rebuildIndexFromStudentFiles(studentFiles) {
             if (s.createdAt && (!latestSessionAt || s.createdAt > latestSessionAt)) {
                 latestSessionAt = s.createdAt;
             }
-            if (typeof s.overallScore === "number" && !isNaN(s.overallScore)) {
-                totalScore += s.overallScore;
+            var score = Object.prototype.hasOwnProperty.call(s, "overall") ? s.overall : s.overallScore;
+            if (typeof score === "string" && score.trim()) { score = Number(score); }
+            if (typeof score === "number" && isFinite(score)) {
+                totalScore += score;
                 scorableCount += 1;
             }
         }
 
-        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : 0;
+        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : null;
 
         index.students[file.studentId] = {
             studentId: file.studentId,

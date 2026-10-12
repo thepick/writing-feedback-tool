@@ -28,6 +28,7 @@ const root = path.resolve(__dirname, '..');
             syncWftDeletionsIfNeeded = () => Promise.resolve(false);
             syncWftSettingsIfNeeded = () => Promise.resolve(false);
             syncWftPortfolioIndexIfNeeded = () => Promise.resolve(false);
+            WFT_PORTFOLIO_INDEX_V1 = false; // These scenarios isolate primary portfolio sync.
             checkDuplicateSyncFilesStatus = () => {};
             findWftFilesByNamePromise = () => Promise.resolve([{ id: 'canonical', modifiedTime: '2026-10-01T00:00:00Z' }]);
             wftSyncState.signedIn = true;
@@ -91,6 +92,7 @@ const root = path.resolve(__dirname, '..');
                 syncWftDeletionsIfNeeded = () => Promise.resolve(false);
                 syncWftSettingsIfNeeded = () => Promise.resolve(false);
                 syncWftPortfolioIndexIfNeeded = () => Promise.resolve(false);
+                WFT_PORTFOLIO_INDEX_V1 = false;
                 checkDuplicateSyncFilesStatus = () => {};
                 wftSyncState.signedIn = true;
                 wftSyncState.accessToken = driveAccessToken = 'test-token';

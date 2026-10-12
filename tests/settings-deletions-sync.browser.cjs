@@ -29,6 +29,7 @@ const root = path.resolve(__dirname, '..');
             ensureDriveFolderPromise = () => Promise.resolve('folder');
             syncWftPortfolioIfNeeded = () => Promise.resolve(false);
             syncWftPortfolioIndexIfNeeded = () => Promise.resolve(false);
+            WFT_PORTFOLIO_INDEX_V1 = false; // These scenarios isolate settings/deletion sync.
             checkDuplicateSyncFilesStatus = () => {};
             wftSyncState.signedIn = true;
             wftSyncState.accessToken = driveAccessToken = 'test-token';

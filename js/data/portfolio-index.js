@@ -96,13 +96,15 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
             if (s.createdAt && (!latestSessionAt || Date.parse(s.createdAt) > Date.parse(latestSessionAt))) {
                 latestSessionAt = s.createdAt;
             }
-            if (typeof s.overallScore === "number" && !isNaN(s.overallScore)) {
-                totalScore += s.overallScore;
+            var score = Object.prototype.hasOwnProperty.call(s, "overall") ? s.overall : s.overallScore;
+            if (typeof score === "string" && score.trim()) { score = Number(score); }
+            if (typeof score === "number" && isFinite(score)) {
+                totalScore += score;
                 scorableCount += 1;
             }
         }
 
-        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : 0;
+        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : null;
 
         // Check for cached student file ID
         var studentFileId = "";

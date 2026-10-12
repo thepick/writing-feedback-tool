@@ -2057,17 +2057,20 @@ function createPortfolioThumbnailBlob(image, callback) {
 // PATCH 6 — PORTFOLIO INDEX
 // ═══════════════════════════════════════════════════════════════════════════
 
+var wftPortfolioIndexRevision = 0;
+var wftPortfolioIndexDirty = false;
+
 function markWftPortfolioIndexDirty(reason) {
     if (!WFT_PORTFOLIO_INDEX_V1 || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) { return; }
+    wftPortfolioIndexRevision += 1;
+    // shortcut: failed hint writes retry in this tab; add durable revision storage if reload retry is required.
+    wftPortfolioIndexDirty = true;
     try {
-        var raw = localStorage.getItem("wft_settings");
-        if (raw) {
-            var settings = JSON.parse(raw);
-            settings._indexDirty = true;
-            settings._indexDirtyReason = reason || "portfolio-change";
-            settings._indexDirtyAt = new Date().toISOString();
-            localStorage.setItem("wft_settings", JSON.stringify(settings));
-        }
+        var settings = readWftRequiredStorage("wft_settings");
+        settings._indexDirty = true;
+        settings._indexDirtyReason = reason || "portfolio-change";
+        settings._indexDirtyAt = new Date().toISOString();
+        localStorage.setItem("wft_settings", JSON.stringify(settings));
     } catch (e) {
         wftDebugWarn("[PortfolioIndex] Failed to mark dirty:", e);
     }
@@ -2075,27 +2078,33 @@ function markWftPortfolioIndexDirty(reason) {
 
 function isWftPortfolioIndexDirty() {
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) { return false; }
+    if (wftPortfolioIndexDirty) { return true; }
     try {
-        var raw = localStorage.getItem("wft_settings");
-        if (raw) {
-            return JSON.parse(raw)._indexDirty === true;
-        }
-    } catch (e) {}
-    return false;
+        return readWftRequiredStorage("wft_settings")._indexDirty === true;
+    } catch (e) {
+        wftDebugWarn("[PortfolioIndex] Could not read dirty hint; retry required:", e);
+        return true;
+    }
 }
 
-function clearWftPortfolioIndexDirty() {
-    if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) { return; }
-    try {
-        var raw = localStorage.getItem("wft_settings");
-        if (raw) {
-            var settings = JSON.parse(raw);
-            delete settings._indexDirty;
-            delete settings._indexDirtyReason;
-            delete settings._indexDirtyAt;
-            localStorage.setItem("wft_settings", JSON.stringify(settings));
-        }
-    } catch (e) {}
+function clearWftPortfolioIndexDirty(snapshot) {
+    if (!snapshot || (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode())) { return false; }
+    // An old upload cannot acknowledge writing changed while it was in flight.
+    wftPortfolioIndexDirty = true;
+    if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+    preflightWftRequiredStorage();
+    var settings = readWftRequiredStorage("wft_settings");
+    if (snapshot.revision !== wftPortfolioIndexRevision || snapshot.dirtyAt !== settings._indexDirtyAt ||
+        snapshot.portfolioHash !== getPortfolioFingerprint(getLocalPortfolioSnapshot())) {
+        wftSyncState.needsSyncAfterCurrent = true;
+        return false;
+    }
+    delete settings._indexDirty;
+    delete settings._indexDirtyReason;
+    delete settings._indexDirtyAt;
+    localStorage.setItem("wft_settings", JSON.stringify(settings));
+    wftPortfolioIndexDirty = false;
+    return true;
 }
 
 function buildPortfolioIndexFromPortfolio(portfolio) {
@@ -2136,13 +2145,15 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
             if (s.createdAt && (!latestSessionAt || Date.parse(s.createdAt) > Date.parse(latestSessionAt))) {
                 latestSessionAt = s.createdAt;
             }
-            if (typeof s.overallScore === "number" && !isNaN(s.overallScore)) {
-                totalScore += s.overallScore;
+            var score = Object.prototype.hasOwnProperty.call(s, "overall") ? s.overall : s.overallScore;
+            if (typeof score === "string" && score.trim()) { score = Number(score); }
+            if (typeof score === "number" && isFinite(score)) {
+                totalScore += score;
                 scorableCount += 1;
             }
         }
 
-        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : 0;
+        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : null;
 
         var studentFileId = "";
         var cacheKey = "wft_drive_student_file_" + (studentId || sanitizeStudentIdPart(name));
@@ -2165,40 +2176,42 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
 }
 
 function savePortfolioIndexToDrive(index, callback) {
-    if (!WFT_PORTFOLIO_INDEX_V1) {
-        if (callback) { callback(null, "feature-disabled"); }
-        return;
-    }
-    if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) {
-        if (callback) { callback(null, "safe-mode"); }
-        return;
-    }
-
     var filename = "portfolio-index.json";
-
-    if (typeof uploadWftJsonFilePromise === "function" && typeof isWftTokenValid === "function" && isWftTokenValid()) {
-        uploadWftJsonFilePromise(filename, index).then(function(fileId) {
-            if (fileId) {
-                setCachedWftDriveFileId(filename, fileId);
-            }
-            clearWftPortfolioIndexDirty();
+    var snapshot, connection;
+    function finish(err, fileId) {
+        try {
+            if (err) { throw err; }
+            if (typeof fileId !== "string" || !fileId) { throw new Error("Portfolio index upload did not return a Drive file ID."); }
+            if (!isCurrentWftGoogleAuthOperation(connection)) { throw new Error("Google connection changed during portfolio index upload; retry required."); }
+            setCachedWftDriveFileId(filename, fileId);
+            clearWftPortfolioIndexDirty(snapshot);
             updateWftStorageMeta("patch-6-index", "saved");
-            if (callback) { callback(null, fileId || "saved"); }
-        }).catch(function(err) {
-            wftDebugWarn("[PortfolioIndex] Drive save failed:", err);
-            if (callback) { callback(err, null); }
-        });
-    } else if (typeof saveFileToDrive === "function" && typeof isWftTokenValid === "function" && isWftTokenValid()) {
-        saveFileToDrive(filename, JSON.stringify(index, null, 2), "application/json", function(err, fileId) {
-            if (!err && fileId) {
-                setCachedWftDriveFileId(filename, fileId);
-                clearWftPortfolioIndexDirty();
-            }
-            if (callback) { callback(err, fileId); }
-        });
-    } else {
-        wftDebugWarn("[PortfolioIndex] Not signed in - index saved locally only");
-        if (callback) { callback(null, "local-only"); }
+        } catch (e) {
+            wftDebugWarn("[PortfolioIndex] Drive save failed:", e);
+            if (callback) { callback(e, null); }
+            return;
+        }
+        if (callback) { callback(null, fileId); }
+    }
+    try {
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        if (!WFT_PORTFOLIO_INDEX_V1 || isWftStorageSafeMode() || !navigator.onLine || !driveAccessToken || !isWftTokenValid()) {
+            throw new Error("Portfolio index was not uploaded; reconnect and retry when online.");
+        }
+        preflightWftRequiredStorage();
+        var portfolio = getLocalPortfolioSnapshot();
+        if (stableStringify(index.students) !== stableStringify(buildPortfolioIndexFromPortfolio(portfolio).students)) {
+            throw new Error("Portfolio index snapshot is out of date; rebuild and retry.");
+        }
+        snapshot = { revision: wftPortfolioIndexRevision, portfolioHash: getPortfolioFingerprint(portfolio), dirtyAt: readWftRequiredStorage("wft_settings")._indexDirtyAt };
+        connection = captureWftGoogleAuthOperation();
+        if (typeof uploadWftJsonFilePromise === "function") {
+            uploadWftJsonFilePromise(filename, index).then(function(fileId) { finish(null, fileId); }, function(err) { finish(err, null); });
+        } else if (typeof saveFileToDrive === "function") {
+            saveFileToDrive(filename, JSON.stringify(index, null, 2), "application/json", finish);
+        } else { throw new Error("Portfolio index upload is unavailable; retry required."); }
+    } catch (e) {
+        finish(e, null);
     }
 }
 
@@ -2292,7 +2305,7 @@ function rebuildPortfolioIndex(callback) {
                 try { entry.studentId = getOrCreateStudentId(entry.displayName); } catch (e) {}
             }
         }
-        index.updatedAt = new Date().toISOString();
+        index = buildPortfolioIndexFromPortfolio(portfolio);
     }
 
     savePortfolioIndexToDrive(index, function(err, fileId) {
@@ -3134,7 +3147,8 @@ function migrateLegacyPortfolioToStudentFiles(callback) {
             var completed = 0, errors = [];
             function saveNext() {
                 if (completed >= names.length) {
-                    rebuildPortfolioIndex(function() {
+                    rebuildPortfolioIndex(function(indexErr) {
+                        if (indexErr) { if (callback) callback(indexErr, null); return; }
                         var meta = getWftStorageMeta();
                         meta.activePortfolioFormat = "split-student-files";
                         meta.migrationCompletedAt = new Date().toISOString();
@@ -3369,11 +3383,13 @@ function rebuildIndexFromStudentFiles(studentFiles) {
         for (var j = 0; j < sessions.length; j++) {
             var s = sessions[j];
             if (s.createdAt && (!latest || s.createdAt > latest)) { latest = s.createdAt; }
-            if (typeof s.overallScore === "number" && !isNaN(s.overallScore)) { totalScore += s.overallScore; scorable += 1; }
+            var score = Object.prototype.hasOwnProperty.call(s, "overall") ? s.overall : s.overallScore;
+            if (typeof score === "string" && score.trim()) { score = Number(score); }
+            if (typeof score === "number" && isFinite(score)) { totalScore += score; scorable += 1; }
         }
         index.students[file.studentId] = { studentId: file.studentId, displayName: file.displayName,
             legacyNameKey: (file.legacyNameKeys && file.legacyNameKeys.length > 0) ? file.legacyNameKeys[0] : file.displayName,
-            sessionCount: sessions.length, latestSessionAt: latest, averageScore: scorable > 0 ? Math.round(totalScore / scorable) : 0,
+            sessionCount: sessions.length, latestSessionAt: latest, averageScore: scorable > 0 ? Math.round(totalScore / scorable) : null,
             studentFileId: "", studentFileEtag: "", hasUnloadedDetails: true };
     }
     return index;
@@ -6542,6 +6558,7 @@ function savePortfolioLocalOnly(portfolio, reason) {
         wftDebugWarn("[WFT Sync] Could not save merged portfolio locally:", e);
         throw e;
     }
+    markWftPortfolioIndexDirty(reason || "cloud-merge");
 }
 
 function refreshPortfolioUiAfterCloudMerge() {
@@ -6660,7 +6677,6 @@ function syncWftPortfolioIndexIfNeeded(reason) {
                     resolve(false);
                     return;
                 }
-                clearWftPortfolioIndexDirty();
                 wftSyncLog("[WFT Sync][INDEX] saved", reason);
                 resolve(true);
             });
@@ -6797,6 +6813,7 @@ function syncWftNow(reason, options) {
             return syncWftPortfolioIndexIfNeeded(reason).then(function(indexChanged) {
                 preflightWftRequiredStorage();
                 if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+                if (WFT_PORTFOLIO_INDEX_V1 && !indexChanged && isWftPortfolioIndexDirty()) throw new Error("Portfolio index is still pending; retry required.");
                 wftSyncLog("[WFT Sync] run portfolio index done", runId, indexChanged, getWftSyncDebugSnapshot());
                 wftSyncState.lastPollAt = Date.now();
                 // ── WFT_BROADCAST_CHANNEL_V1: notify other tabs that a sync completed ──
