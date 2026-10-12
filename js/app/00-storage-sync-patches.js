@@ -3937,22 +3937,42 @@ function syncStateFromLegacyGoogleGlobals() {
 }
 
 function isWftTokenValid() {
-    if (!wftSyncState.accessToken) return false;
-    if (!wftSyncState.tokenExpiresAt) return !!wftSyncState.accessToken;
-    return Date.now() < wftSyncState.tokenExpiresAt;
+    return isWftTokenPayloadValid(wftSyncState.accessToken, wftSyncState.tokenExpiresAt);
+}
+
+var wftGoogleAuthOperationId = 0;
+var wftTokenSessionBlocked = false;
+var wftTokenPersistenceWarning = '';
+
+function captureWftGoogleAuthOperation() {
+    return { id: wftGoogleAuthOperationId, token: wftSyncState.accessToken, legacyToken: driveAccessToken };
+}
+
+function isCurrentWftGoogleAuthOperation(operation) {
+    return operation.id === wftGoogleAuthOperationId && operation.token === wftSyncState.accessToken && operation.legacyToken === driveAccessToken;
+}
+
+function clearWftLegacyTokenCache() {
+    var cleared = true;
+    [DRIVE_TOKEN_CACHE_KEY, DRIVE_TOKEN_EXPIRY_CACHE_KEY].forEach(function(key) {
+        try { localStorage.removeItem(key); } catch (e) { cleared = false; }
+    });
+    return cleared;
 }
 
 function clearPersistedGoogleState() {
-    localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-    localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-    localStorage.removeItem(GOOGLE_USER_CACHE_KEY);
-    localStorage.removeItem(GOOGLE_CONNECTED_CACHE_KEY);
+    var cleared = clearWftLegacyTokenCache();
+    // Identity hints cannot authorize Drive; their removal is optional after token removal.
+    [GOOGLE_USER_CACHE_KEY, GOOGLE_CONNECTED_CACHE_KEY].forEach(function(key) {
+        try { localStorage.removeItem(key); } catch (e) { }
+    });
+    return cleared;
 }
 
 function getCachedGoogleUser() {
-    var cachedUserRaw = localStorage.getItem(GOOGLE_USER_CACHE_KEY);
-    if (!cachedUserRaw) return null;
     try {
+        var cachedUserRaw = localStorage.getItem(GOOGLE_USER_CACHE_KEY);
+        if (!cachedUserRaw) return null;
         var cachedUser = JSON.parse(cachedUserRaw);
         if (cachedUser && (cachedUser.name || cachedUser.email)) {
             return cachedUser;
@@ -3962,10 +3982,16 @@ function getCachedGoogleUser() {
 }
 
 function hasPersistedGoogleConnection() {
-    return localStorage.getItem(GOOGLE_CONNECTED_CACHE_KEY) === "1";
+    try { return localStorage.getItem(GOOGLE_CONNECTED_CACHE_KEY) === "1"; } catch (e) { return false; }
 }
 
 function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess) {
+    if (!isWftTokenPayloadValid(accessToken, getWftOAuthTokenExpiry(expiresIn))) {
+        setDriveSyncStatus('error', 'Google sign-in returned an invalid token or expiration. Please retry.');
+        return false;
+    }
+    wftGoogleAuthOperationId += 1;
+    var operation = captureWftGoogleAuthOperation();
     setDriveSyncStatus('syncing', 'Checking saved Google work...');
     window.GoogleDriveMigration.ensure({
         oldClient: '546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com',
@@ -3973,6 +3999,7 @@ function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, sou
         scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
         folderName: 'WritingFeedbackTool'
     }, accessToken).then(async function(result) {
+        if (!isCurrentWftGoogleAuthOperation(operation)) return;
         // Retire inaccessible old file IDs while keeping drafts, portfolios and settings.
         var keys = Object.keys(localStorage).filter(function(key) {return /^wft_drive_.*(?:file_id|folder_id|folder_)/.test(key);});
         keys.forEach(function(key) {localStorage.removeItem(key);});
@@ -3984,6 +4011,7 @@ function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, sou
             if (typeof pendingPortfolioSync !== 'undefined') pendingPortfolioSync = window.GoogleDriveMigration.remap(pendingPortfolioSync, result.ids);
             if (window.indexedDB) {
                 var db = await WftIndexedDb.open();
+                if (!isCurrentWftGoogleAuthOperation(operation)) return;
                 var stores = Array.from(db.objectStoreNames);
                 if (stores.length) await new Promise(function(resolve, reject) {
                     var tx = db.transaction(stores, 'readwrite');
@@ -3992,6 +4020,7 @@ function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, sou
                     stores.forEach(function(store) {
                         var cursor = tx.objectStore(store).openCursor();
                         cursor.onsuccess = function() {
+                            if (!isCurrentWftGoogleAuthOperation(operation)) { tx.abort(); return; }
                             var record = cursor.result;
                             if (!record) return;
                             record.update(window.GoogleDriveMigration.remap(record.value, result.ids));
@@ -4001,29 +4030,31 @@ function finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, sou
                 });
             }
         }
+        if (!isCurrentWftGoogleAuthOperation(operation)) return;
         driveFolderId = null;
         wftSyncState.folderId = null;
         wftSyncState.settingsFileId = null;
         wftSyncState.portfolioFileId = null;
         wftSyncState.deletionsFileId = null;
         googleUser = result.user;
-        localStorage.setItem(GOOGLE_USER_CACHE_KEY, JSON.stringify(result.user));
+        try { localStorage.setItem(GOOGLE_USER_CACHE_KEY, JSON.stringify(result.user)); } catch (e) { }
         completeWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess);
-    }).catch(function(error) {setDriveSyncStatus('error', error.message);});
+    }).catch(function(error) { if (isCurrentWftGoogleAuthOperation(operation)) setDriveSyncStatus('error', error.message); });
     return true;
 }
 
 function completeWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, source, onSuccess) {
-    if (!accessToken) return false;
-
-    var expiresSeconds = parseInt(expiresIn || '3600', 10);
-    if (!expiresSeconds || isNaN(expiresSeconds)) expiresSeconds = 3600;
-    var expiresAt = Date.now() + Math.max(60, (expiresSeconds - 30)) * 1000;
-
-    saveWftTokenSession(accessToken, expiresAt);
+    var expiresAt = getWftOAuthTokenExpiry(expiresIn);
+    if (!isWftTokenPayloadValid(accessToken, expiresAt)) {
+        setDriveSyncStatus('error', 'Google sign-in returned an invalid token or expiration. Please retry.');
+        return false;
+    }
+    wftGoogleAuthOperationId += 1;
+    var persisted = saveWftTokenSession(accessToken, expiresAt);
+    var legacyCleared = clearWftLegacyTokenCache();
+    wftTokenPersistenceWarning = !persisted ? 'Connected in this tab, but the session could not be saved. Sign out and retry before reloading.'
+        : (!legacyCleared ? 'Connected, but an old token could not be removed. Sign out and retry before reloading.' : '');
     try {
-        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
         localStorage.setItem(GOOGLE_CONNECTED_CACHE_KEY, '1');
     } catch (storageErr) { }
 
@@ -4034,17 +4065,18 @@ function completeWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, s
     wftSyncState.permissionBlocked = false;
     wftSyncState.lastError = null;
     driveAccessToken = accessToken;
+    var operation = captureWftGoogleAuthOperation();
     try { localStorage.removeItem("wft_oauth_pending_action"); } catch (e0) { }
     syncStateFromLegacyGoogleGlobals();
 
     // Give immediate visible feedback. User info fetch may take a moment or fail
     // independently, but a valid token means the app is connected.
-    googleUser = getCachedGoogleUser() || { name: "Connected" };
+    googleUser = googleUser || getCachedGoogleUser() || { name: "Connected" };
     showSignedInState(googleUser);
 
     wftSyncLog("[WFT Sync][AUTH] OAuth token received", {
         hasAccessToken: true,
-        expiresIn: expiresSeconds,
+        expiresIn: expiresIn == null ? 3600 : Number(expiresIn),
         scope: scope || "",
         source: source || "unknown"
     });
@@ -4053,6 +4085,7 @@ function completeWftGoogleSignInWithAccessToken(accessToken, expiresIn, scope, s
 
     if (typeof onSuccess === "function") {
         setTimeout(function() {
+            if (!isCurrentWftGoogleAuthOperation(operation)) return;
             try { onSuccess(); } catch (e) { wftDebugError("Google sign-in success callback failed:", e); }
         }, 0);
     }
@@ -4098,11 +4131,11 @@ function checkHashForOAuthTokens() {
         }
 
         var accessToken = params.get('access_token');
-        var expiresIn = parseInt(params.get('expires_in') || '3600', 10);
+        var expiresIn = params.get('expires_in');
 
         if (!accessToken) return false;
 
-        var handled = finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, params.get("scope") || "", "oauth-redirect", null);
+        var handled = finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, params.get("scope") || "", "oauth-redirect", function() { manualSaveToDrive(); });
         try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e2) { }
         return handled;
     } catch (e) {
@@ -4142,12 +4175,11 @@ function restoreGoogleStateFromStorage() {
     wftSyncState.accessToken = null;
     wftSyncState.tokenExpiresAt = 0;
     wftSyncState.signedIn = false;
-    try {
-        localStorage.removeItem(DRIVE_TOKEN_CACHE_KEY);
-        localStorage.removeItem(DRIVE_TOKEN_EXPIRY_CACHE_KEY);
-    } catch (e) { }
+    var legacyCleared = clearWftLegacyTokenCache();
     showSignedOutState();
-    if (cachedUser || hasConnectionMarker) {
+    if (!legacyCleared) {
+        setDriveSyncStatus('error', 'An old Google token could not be removed. Retry Sign Out before reloading.');
+    } else if (cachedUser || hasConnectionMarker) {
         setDriveSyncStatus("error", "Session expired - please sign in again.");
     }
     return false;
@@ -4168,45 +4200,75 @@ function saveWftOAuthDraftBeforeRedirect(reason) {
             manualGenreOverrideValue: manualGenreOverrideValue || "__auto__",
             writingGenreSelectValue: genreSelect ? genreSelect.value : "__auto__"
         };
-        if (text.trim() || draft.selectedStudent) {
-            localStorage.setItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY, JSON.stringify(draft));
+        var previousRaw = localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
+        if (previousRaw) {
+            var previous = JSON.parse(previousRaw);
+            if (!previous || previous.text !== draft.text || (previous.selectedStudent || '') !== draft.selectedStudent
+                || (previous.manualGenreOverrideValue || '__auto__') !== draft.manualGenreOverrideValue
+                || (previous.writingGenreSelectValue || '__auto__') !== draft.writingGenreSelectValue) {
+                setDriveSyncStatus('error', 'A previous writing draft is kept for recovery. Restore or copy it before starting another redirect sign-in. Your current writing is still here.');
+                return false;
+            }
         }
-    } catch (e) { }
+        localStorage.setItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY, JSON.stringify(draft));
+        return true;
+    } catch (e) {
+        setDriveSyncStatus('error', 'Unsaved writing could not be preserved for Google sign-in. Your writing is still here; retry or copy it before leaving.');
+        return false;
+    }
 }
 
 function restoreWftOAuthDraftAfterRedirect() {
     try {
         var raw = localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
-        if (!raw) return;
+        if (!raw) return false;
         var draft = JSON.parse(raw);
-        localStorage.removeItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
-        if (!draft || typeof draft.text !== "string") return;
+        if (!draft || typeof draft.text !== 'string' || ['selectedStudent', 'manualGenreOverrideValue', 'writingGenreSelectValue'].some(function(key) {
+            return draft[key] !== undefined && typeof draft[key] !== 'string';
+        })) throw new Error('Unreadable writing draft');
 
         var ta = document.getElementById("studentWriting");
-        if (ta && !String(ta.value || "").trim() && draft.text.trim()) {
-            ta.value = draft.text;
+        if (!ta) throw new Error('Writing field unavailable');
+        // A removal retry may find the exact writing already restored; other writing must stay coherent.
+        var alreadyRestored = ta.value === draft.text && selectedStudent === (draft.selectedStudent || '')
+            && manualGenreOverrideValue === (draft.manualGenreOverrideValue || '__auto__')
+            && document.getElementById('writingGenreSelect').value === (draft.writingGenreSelectValue || draft.manualGenreOverrideValue || '__auto__');
+        if (ta.value !== '' && !alreadyRestored) {
+            setOcrStatus('Saved writing is kept for recovery. Clear the current writing and retry restoration when ready.', 'error');
+            return false;
         }
-        if (draft.selectedStudent) {
-            selectedStudent = draft.selectedStudent;
-            try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e2) { }
-            var studentSelect = document.getElementById("studentSelect");
-            if (studentSelect) studentSelect.value = selectedStudent;
+        ta.value = draft.text;
+        selectedStudent = draft.selectedStudent || '';
+        try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e2) { }
+        var studentSelect = document.getElementById("studentSelect");
+        if (studentSelect) {
+            if (selectedStudent && !Array.from(studentSelect.options).some(function(option) { return option.value === selectedStudent; })) {
+                var recoveredOption = document.createElement('option');
+                recoveredOption.value = selectedStudent;
+                recoveredOption.textContent = selectedStudent + ' (recovered draft)';
+                studentSelect.appendChild(recoveredOption);
+            }
+            studentSelect.value = selectedStudent;
         }
-        if (draft.manualGenreOverrideValue) {
-            manualGenreOverrideValue = draft.manualGenreOverrideValue;
-            var genreSelect = document.getElementById("writingGenreSelect");
-            if (genreSelect) genreSelect.value = draft.writingGenreSelectValue || draft.manualGenreOverrideValue || "__auto__";
-        }
+        manualGenreOverrideValue = draft.manualGenreOverrideValue || '__auto__';
+        var genreSelect = document.getElementById("writingGenreSelect");
+        if (genreSelect) genreSelect.value = draft.writingGenreSelectValue || manualGenreOverrideValue;
         if (typeof syncUiState === "function") syncUiState();
+        if (ta.value !== draft.text) throw new Error('Writing could not be fully restored');
+        localStorage.removeItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
         if (typeof setOcrStatus === "function" && draft.text && draft.text.trim()) {
             setOcrStatus("Restored unsaved writing after Google sign-in.", "success");
         }
+        return true;
     } catch (e) {
-        try { localStorage.removeItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY); } catch (e2) { }
+        setOcrStatus('Saved writing could not be fully restored or consumed. Its bytes are kept for recovery; retry when storage is available.', 'error');
+        return false;
     }
 }
 
 function requestDriveAccess(onSuccess, options) {
+    wftGoogleAuthOperationId += 1;
+    var operation = captureWftGoogleAuthOperation();
     var scope = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
     var opts = options || {};
 
@@ -4222,14 +4284,16 @@ function requestDriveAccess(onSuccess, options) {
                 scope: scope,
                 include_granted_scopes: true,
                 callback: function(response) {
+                    if (!isCurrentWftGoogleAuthOperation(operation)) return;
                     if (!response || response.error) {
                         var msg = response && (response.error_description || response.error) ? (response.error_description || response.error) : "Google sign-in was cancelled or blocked.";
                         setDriveSyncStatus("error", msg);
                         return;
                     }
-                    finishWftGoogleSignInWithAccessToken(response.access_token, response.expires_in || 3600, response.scope || scope, "gis-popup", onSuccess);
+                    finishWftGoogleSignInWithAccessToken(response.access_token, response.expires_in, response.scope || scope, "gis-popup", onSuccess);
                 },
                 error_callback: function(error) {
+                    if (!isCurrentWftGoogleAuthOperation(operation)) return;
                     var errMsg = error && (error.message || error.type) ? (error.message || error.type) : "Google sign-in popup could not open.";
                     setDriveSyncStatus("error", errMsg);
                 }
@@ -4252,7 +4316,7 @@ function requestDriveAccess(onSuccess, options) {
         + "&prompt=" + encodeURIComponent(opts.prompt || "select_account")
         + "&scope=" + encodeURIComponent(scope);
 
-    saveWftOAuthDraftBeforeRedirect(typeof onSuccess === "function" ? "sync" : "sign-in");
+    if (!saveWftOAuthDraftBeforeRedirect(typeof onSuccess === "function" ? "sync" : "sign-in")) return;
     window.location.href = authUrl;
 }
 
@@ -4313,20 +4377,14 @@ function restoreGoogleSessionOnce() {
 }
 
 function fetchGoogleUserInfo(token) {
+    var operation = captureWftGoogleAuthOperation();
     fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
         headers: { Authorization: "Bearer " + token }
     }).then(function(r) { return r.json(); }).then(function(info) {
+        if (!isCurrentWftGoogleAuthOperation(operation) || token !== driveAccessToken || !isWftTokenValid()) return;
         googleUser = info;
-        localStorage.setItem(GOOGLE_USER_CACHE_KEY, JSON.stringify(info));
-
-        var expiry = Number(wftSyncState.tokenExpiresAt || getWftSessionTokenExpiry() || 0);
-        if (token && expiry > Date.now()) {
-            saveWftTokenSession(token, expiry);
-            wftSyncState.accessToken = token;
-            wftSyncState.tokenExpiresAt = expiry;
-            wftSyncState.signedIn = true;
-            syncStateFromLegacyGoogleGlobals();
-        }
+        wftSyncState.googleUser = info;
+        try { localStorage.setItem(GOOGLE_USER_CACHE_KEY, JSON.stringify(info)); } catch (e) { }
 
         showSignedInState(info);
 
@@ -4341,6 +4399,7 @@ function fetchGoogleUserInfo(token) {
             startDriveAutoSync();
         }
     }).catch(function(e) {
+        if (!isCurrentWftGoogleAuthOperation(operation) || token !== driveAccessToken || !isWftTokenValid()) return;
         wftDebugError("Failed to fetch user info:", e);
         var cachedUser = getCachedGoogleUser();
         if (cachedUser) {
@@ -4378,6 +4437,7 @@ function showSignedInState(info) {
 
 // ── WFT Sync V2: reset sync state on sign-out ──
 function resetWftSyncStateAfterSignOut() {
+    wftGoogleAuthOperationId += 1;
     if (wftSyncState.syncDebounceTimer) {
         clearTimeout(wftSyncState.syncDebounceTimer);
         wftSyncState.syncDebounceTimer = null;
@@ -4653,7 +4713,10 @@ function resetWftLocalWorkAfterSignOut() {
 
 
 function handleGoogleSignOut() {
+    wftGoogleAuthOperationId += 1;
+    var operation = captureWftGoogleAuthOperation();
     function finishSignOut() {
+        if (!isCurrentWftGoogleAuthOperation(operation)) return;
         // Revoke the access token with Google
         if (driveAccessToken) {
             fetch("https://oauth2.googleapis.com/revoke?token=" + encodeURIComponent(driveAccessToken), {
@@ -4661,13 +4724,16 @@ function handleGoogleSignOut() {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" }
             }).catch(function() {});
         }
-        clearPersistedGoogleState();
-        clearWftTokenSession();
+        var legacyCleared = clearPersistedGoogleState();
+        var sessionCleared = clearWftTokenSession();
+        wftTokenPersistenceWarning = '';
         clearWftLocalStorageAfterSignOut();
         stopDriveAutoSync();
         stopWftSyncPolling();
         showSignedOutState();
-        setDriveSyncStatus("", "Signed out - local data kept on this device");
+        setDriveSyncStatus(sessionCleared && legacyCleared ? '' : 'error', sessionCleared && legacyCleared
+            ? 'Signed out - local data kept on this device'
+            : 'Disconnected in this tab, but saved Google tokens could not be removed. Retry Sign Out before reloading; local data is kept.');
         try { updateSyncPortfolioButtonState(); } catch (e) { }
     }
 
@@ -4683,6 +4749,7 @@ function handleGoogleSignOut() {
 }
 
 function setDriveSyncStatus(state, text) {
+    if (wftTokenPersistenceWarning && state !== 'error') { state = 'error'; text = wftTokenPersistenceWarning; }
     wftSyncLog("[WFT Sync] status", state || "", text || "", getWftSyncDebugSnapshot());
     var dot = document.getElementById("driveSyncDot");
     var txt = document.getElementById("driveSyncText");
@@ -6946,16 +7013,37 @@ function initWftSyncLifecycleHandlers() {
 }
 
 // ── WFT Sync Engine V2 session token storage ──
+function isWftTokenPayloadValid(token, expiresAt) {
+    return typeof token === 'string' && token.trim().length > 0 && typeof expiresAt === 'number'
+        && Number.isFinite(expiresAt) && expiresAt > Date.now();
+}
+
+function getWftOAuthTokenExpiry(expiresIn) {
+    if (expiresIn == null) expiresIn = 3600;
+    if (typeof expiresIn !== 'number' && typeof expiresIn !== 'string') return 0;
+    var seconds = Number(expiresIn);
+    if (!Number.isFinite(seconds) || seconds <= 0) return 0;
+    return Date.now() + Math.max(60, seconds - 30) * 1000;
+}
+
 function saveWftTokenSession(token, expiresAt) {
+    if (!isWftTokenPayloadValid(token, expiresAt)) return false;
     try {
         sessionStorage.setItem(DRIVE_TOKEN_SESSION_KEY, JSON.stringify({
             accessToken: token,
             tokenExpiresAt: expiresAt
         }));
-    } catch (e) { }
+        wftTokenSessionBlocked = false;
+        return true;
+    } catch (e) {
+        // A failed replacement must not silently restore an older connection in this tab.
+        clearWftTokenSession();
+        return false;
+    }
 }
 
 function restoreWftTokenSession() {
+    if (wftTokenSessionBlocked) return false;
     var raw;
     var saved;
 
@@ -6964,15 +7052,14 @@ function restoreWftTokenSession() {
         if (!raw) return false;
 
         saved = JSON.parse(raw);
-        if (!saved || !saved.accessToken || !saved.tokenExpiresAt) return false;
-
-        if (Date.now() >= Number(saved.tokenExpiresAt)) {
-            sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
+        if (!saved || !isWftTokenPayloadValid(saved.accessToken, saved.tokenExpiresAt)) {
+            clearWftTokenSession();
             return false;
         }
 
+        wftGoogleAuthOperationId += 1;
         wftSyncState.accessToken = saved.accessToken;
-        wftSyncState.tokenExpiresAt = Number(saved.tokenExpiresAt);
+        wftSyncState.tokenExpiresAt = saved.tokenExpiresAt;
         wftSyncState.signedIn = true;
 
         driveAccessToken = saved.accessToken;
@@ -6984,17 +7071,20 @@ function restoreWftTokenSession() {
 }
 
 function clearWftTokenSession() {
+    wftTokenSessionBlocked = true;
     try {
         sessionStorage.removeItem(DRIVE_TOKEN_SESSION_KEY);
-    } catch (e) { }
+        return true;
+    } catch (e) { return false; }
 }
 
 function getWftSessionTokenExpiry() {
+    if (wftTokenSessionBlocked) return 0;
     try {
         var raw = sessionStorage.getItem(DRIVE_TOKEN_SESSION_KEY);
         if (!raw) return 0;
         var saved = JSON.parse(raw);
-        return Number(saved && saved.tokenExpiresAt ? saved.tokenExpiresAt : 0);
+        return saved && isWftTokenPayloadValid(saved.accessToken, saved.tokenExpiresAt) ? saved.tokenExpiresAt : 0;
     } catch (e) {
         return 0;
     }

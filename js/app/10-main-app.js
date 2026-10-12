@@ -9545,6 +9545,7 @@ window.addEventListener("load", function() {
     ta.value = '';
     ta.focus();
     ta.setSelectionRange(ta.value.length, ta.value.length);
+    restoreWftOAuthDraftAfterRedirect();
     syncMobileOcrPanelState();
     syncOcrPanelTitle();
     pendingPortfolioSync = loadPendingPortfolioSyncFromStorage();
@@ -9557,28 +9558,29 @@ window.addEventListener("load", function() {
         initWftSyncLifecycleHandlers();
     }
 
-    // Check if tokens were delivered in the URL fragment after Google sign-in
-    var fromOAuth = checkHashForOAuthTokens();
-
     var restoredFromStorage = restoreGoogleStateFromStorage();
     if (!restoredFromStorage) {
         restoreGoogleSessionOnce();
     }
 
+    // Start redirect completion after session restoration so startup cannot cancel it.
+    var fromOAuth = checkHashForOAuthTokens();
+
     // If we just came back from OAuth, trigger a sync
-    var pendingAction = localStorage.getItem("wft_oauth_pending_action");
-    if (pendingAction === "sync" || fromOAuth) {
-        localStorage.removeItem("wft_oauth_pending_action");
+    var pendingAction;
+    try { pendingAction = localStorage.getItem("wft_oauth_pending_action"); } catch (e) { }
+    if (pendingAction === "sync" && !fromOAuth) {
+        try { localStorage.removeItem("wft_oauth_pending_action"); } catch (e) { }
+        var operation = captureWftGoogleAuthOperation();
         // Small delay to let the token restore finish
         setTimeout(function() {
-            if (driveAccessToken) {
+            if (driveAccessToken && isCurrentWftGoogleAuthOperation(operation)) {
                 manualSaveToDrive();
             }
         }, 1500);
     }
 });
 
-restoreWftOAuthDraftAfterRedirect();
 syncUiState();
 
 // When the browser restores this page from the back/forward cache (bfcache)
