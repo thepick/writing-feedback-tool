@@ -1,8 +1,8 @@
 # Repowise audit progress
 
-Updated 2026-10-12T05:28:07.802Z; timezone Asia/Bangkok. All 662 original IDs retained, 1108 total tracked rows. Original outcomes: {"no_code_change":468,"confirmed_awaiting_fix":132,"fixed_and_deployed":56,"fixed_in_draft_pr":4,"pending":2}. Scanner absence does not imply resolution. Ledger review dispositions retain their historical names; publication fields record current live status.
+Updated 2026-10-12T05:59:02.992Z; timezone Asia/Bangkok. All 662 original IDs retained, 1113 total tracked rows. Original outcomes: {"no_code_change":468,"confirmed_awaiting_fix":128,"fixed_in_draft_pr":4,"fixed_and_deployed":60,"pending":2}. Scanner absence does not imply resolution. Ledger review dispositions retain their historical names; publication fields record current live status.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T04:46:01Z, commit 8d94e0c65ec794ef237a0c1f12d692f08379feb7. All five shipped files match the reviewed source byte for byte. Rollback backup and file hashes are recorded in the ledger.
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T05:29:39Z, commit 5bfaa2bd52cb94f6d76cd6a7cb4752725d5e38fe. All five shipped files match the reviewed source byte for byte. Rollback backup and file hashes are recorded in the ledger.
 
 - SYNC-001: Older settings/deletion uploads clear newer pending changes. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/41)
 - ANALYSIS-001: Async analysis reads changed student and writing at completion. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/42)
@@ -20,14 +20,15 @@ Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), b
 - AUTH-001: Sign-out reports success while a retained session token can restore sign-in. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/55)
 - STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/50)
 - SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/48)
-- GUIDE-001: Notebook punctuation and spelling changes receive incorrect teaching labels. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/58)
-- GUIDE-002: Notebook paragraph revisions lose their separation before display. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/58)
+- PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/59)
+- GUIDE-001: Notebook punctuation and spelling changes receive incorrect teaching labels. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/58)
+- GUIDE-002: Notebook paragraph revisions lose their separation before display. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/58)
 - STORAGE-003: Corrupt deletion history is overwritten as empty. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/51)
 - DELETIONS-001: Enabled experimental deletion compaction recurses indefinitely. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/51)
 - FEEDBACK-002: Flow adjustment converts an explicitly missing detailed score to zero. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/57)
 - FLOW-001: Inherited token names break repetition, grammar and title keyword lookups. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/49)
 - PENDING-001: Photo completion commits and clears a newer pending assessment. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/48)
-- GUIDE-003: Separate notebook action lines are collapsed into one checklist item. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/58)
+- GUIDE-003: Separate notebook action lines are collapsed into one checklist item. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/58)
 - PHOTO-002: Cropped uploaded photo keeps the original Drive reference and loses its changed bytes. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/48)
 - KEY-001: Credential persistence failures mishandle keys and legacy settings uploads. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/53)
 - SETTINGS-002: Unreadable existing preferences are replaced with current defaults. [Merged PR - live](https://github.com/thepick/writing-feedback-tool/pull/51)
@@ -51,9 +52,8 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - INDEX-001: Portfolio summary reads wrong score field and acknowledges stale or offline saves
 - PERF-001: Correction comparison blocks the UI with a full repeated token matrix
 - API-001: Missing API key triggers futile fallback retries and delayed error
-- PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores
 
-Current indexed source cb04dd52f998bbd48e35f956d6038d4855eacf4d: 763 health rows, 156 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
+Current indexed source 20430f869b3c1f49223fba680d2d65a260e2bb93: 766 health rows, 157 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
 
 No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
