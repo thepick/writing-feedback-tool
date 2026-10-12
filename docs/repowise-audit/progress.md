@@ -25,7 +25,7 @@ Current indexed source: 3c99bf6c62447c3a2325314f70905ff2738cda34.
 | doc_drift | 0 |
 | actions | 2 |
 
-No repair chat is writing. The coordinator is reviewing and checkpointing the ledger before the next sequential step.
+No repair chat is writing. All confirmed repairs and final validation are complete.
 
 Reviewed repairs:
 
