@@ -294,10 +294,11 @@ function chooseStudentToManage(defaultName) {
         }
 
         function onKeyDown(event) {
+            if (event.isComposing || event.keyCode === 229) return;
             if (event.key === 'Escape') {
                 event.preventDefault();
                 close("");
-            } else if (event.key === 'Enter') {
+            } else if (event.key === 'Enter' && event.target === studentSelect) {
                 event.preventDefault();
                 close(studentSelect.value || "");
             }

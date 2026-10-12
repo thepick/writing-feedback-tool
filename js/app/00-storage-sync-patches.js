@@ -585,10 +585,11 @@ function wftTextInput(message, options) {
         }
 
         function onKeyDown(event) {
+            if (event.isComposing || event.keyCode === 229) return;
             if (event.key === 'Escape') {
                 event.preventDefault();
                 close(null);
-            } else if (event.key === 'Enter') {
+            } else if (event.key === 'Enter' && event.target === input) {
                 event.preventDefault();
                 submit();
             }

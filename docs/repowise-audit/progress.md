@@ -1,6 +1,6 @@
 # Repowise audit progress
 
-Updated 2026-10-12T12:57:33.362Z; timezone Asia/Bangkok. All662 original IDs retained; 1163 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
+Updated 2026-10-12T13:28:52.673Z; timezone Asia/Bangkok. All662 original IDs retained; 1164 total tracked rows. Original outcomes: {"no_code_change":468,"fixed_and_deployed":194}. Scanner absence does not imply resolution. Historical disposition names remain; publication fields record current live status.
 
 Storage coverage follow-up: in_progress. Prior audit dispositions remain preserved; these additional paths are being checked in sequential repair chats.
 
@@ -8,12 +8,13 @@ Storage coverage follow-up: in_progress. Prior audit dispositions remain preserv
 - STORAGE-COVERAGE-002: Recovery backup, safe mode and local cache clearing — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/66)).
 - STORAGE-COVERAGE-003: Drive errors, manual save and polling lifecycle — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/67)).
 - STORAGE-COVERAGE-004: Optional cache and async student portfolio paths — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/68)).
-- STORAGE-COVERAGE-006: Repair late upload sync acknowledgements — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/70)).
+- STORAGE-COVERAGE-006: Repair late upload sync acknowledgements — complete ([PR](https://github.com/thepick/writing-feedback-tool/pull/70)).
+- STORAGE-COVERAGE-007: Repair keyboard cancellation in student dialogs — reviewed_awaiting_publication ([PR](https://github.com/thepick/writing-feedback-tool/pull/72)).
 - STORAGE-COVERAGE-005: Remaining storage UI and final measured coverage — pending.
 
-Current follow-up source: bb2022fd086ea170ea200b0273822ade11c4b8f5. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
+Current follow-up source: b706bb7f3ad3dc8d3203299a6cc8a1f6df3b8ae6. fresh final-source coverage pending until stable final phase Coverage numbers from the prior audit below remain historical until replaced by verified final-source evidence.
 
-Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T12:21:41Z, commit d0cf96a22e7983d449613fea3d2ffb16eab1deb7. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
+Latest live release: [https://wft.mtomlinson.ca/](https://wft.mtomlinson.ca/), built 2026-10-12T12:59:16Z, commit 469cc25c4699a603faac859a8a4c45d86fe594d7. All five shipped files match reviewed Git source byte for byte. Publication history records exact hashes and rollback backup.
 
 Confirmed remaining repairs; one repair chat and repository writer at a time:
 
@@ -109,7 +110,8 @@ Reviewed repairs:
 - STORAGE-037: Lazy reads report unavailable cloud and local writing as empty success. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
 - STORAGE-038: Split reads accept mismatched student ownership. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
 - STORAGE-039: Concurrent async student saves lose a different student update. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/68)
-- STORAGE-040: Late timed-out upload advertises Synced while newer writing remains dirty. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/70)
+- STORAGE-040: Late timed-out upload advertises Synced while newer writing remains dirty. [Merged PR — live](https://github.com/thepick/writing-feedback-tool/pull/70)
+- STORAGE-041: Enter on focused Cancel submits student chooser and text input. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/72)
 
 Measured coverage ingestion remains open. Collection self-checks validate source hashing, uncovered executable positions, first-page execution before navigation and Windows line endings; preparation runs were not ingested as final coverage.
 
