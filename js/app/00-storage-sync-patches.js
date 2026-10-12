@@ -2953,6 +2953,7 @@ function getWftDriveFolderId() {
 
 function createWftSubfolder(folderName, parentFolderId) {
     return new Promise(function(resolve, reject) {
+        if (typeof parentFolderId !== "string" || !parentFolderId.trim()) { reject(new Error("No parent folder ID")); return; }
         if (!driveAccessToken) { reject(new Error("Not signed in")); return; }
         var metadata = { name: folderName, mimeType: "application/vnd.google-apps.folder", parents: [parentFolderId] };
         var xhr = new XMLHttpRequest();
@@ -2961,7 +2962,11 @@ function createWftSubfolder(folderName, parentFolderId) {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = function() {
             if (xhr.status >= 200 && xhr.status < 300) {
-                try { resolve(JSON.parse(xhr.responseText).id); }
+                try {
+                    var folder = JSON.parse(xhr.responseText);
+                    if (!folder || typeof folder.id !== "string" || !folder.id.trim()) { reject(new Error("Folder create did not return a Drive folder ID.")); return; }
+                    resolve(folder.id);
+                }
                 catch (e) { reject(new Error("Failed to parse folder response")); }
             } else { reject(new Error("Folder create failed: " + xhr.status)); }
         };
@@ -2971,10 +2976,11 @@ function createWftSubfolder(folderName, parentFolderId) {
 }
 
 function ensureWftSubfolderPromise(folderName, parentFolderId) {
-    if (!parentFolderId) { return Promise.reject(new Error("No parent folder ID")); }
+    if (typeof parentFolderId !== "string" || !parentFolderId.trim()) { return Promise.reject(new Error("No parent folder ID")); }
     return findWftFilesByNameInFolderPromise(folderName, parentFolderId).then(function(files) {
         for (var fi = 0; fi < files.length; fi++) {
             if (files[fi].mimeType === "application/vnd.google-apps.folder") {
+                if (typeof files[fi].id !== "string" || !files[fi].id.trim()) { throw new Error("Folder search did not return a Drive folder ID."); }
                 return files[fi].id;
             }
         }
@@ -3031,6 +3037,7 @@ function findWftFilesByNameInFolderPromise(filename, folderId) {
 }
 
 function saveJsonToDriveFolderPromise(filename, data, folderId) {
+    if (typeof folderId !== "string" || !folderId.trim()) { return Promise.reject(new Error("No parent folder ID")); }
     preflightWftRequiredStorage();
     return findWftFilesByNameInFolderPromise(filename, folderId).then(function(files) {
         preflightWftRequiredStorage();
