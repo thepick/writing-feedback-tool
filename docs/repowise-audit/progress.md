@@ -1,6 +1,6 @@
 # Repowise audit progress
 
-Updated 2026-10-12T02:33:05.955Z; timezone Asia/Bangkok. All 662 original IDs retained, 1062 total tracked rows. Original outcomes: {"no_code_change":426,"confirmed_awaiting_fix":159,"pending":39,"fixed_in_draft_pr":38}. Scanner absence does not imply resolution.
+Updated 2026-10-12T03:55:22.519Z; timezone Asia/Bangkok. All 662 original IDs retained, 1087 total tracked rows. Original outcomes: {"no_code_change":448,"confirmed_awaiting_fix":148,"pending":22,"fixed_in_draft_pr":44}. Scanner absence does not imply resolution.
 
 - SYNC-001: Older settings/deletion uploads clear newer pending changes. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/41)
 - ANALYSIS-001: Async analysis reads changed student and writing at completion. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/42)
@@ -12,6 +12,8 @@ Updated 2026-10-12T02:33:05.955Z; timezone Asia/Bangkok. All 662 original IDs re
 - SYNC-003: Same-image merge overwrites newer photo reference with older metadata. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - SECURITY-002: Inherited identity keys drop records and mutate shared object properties. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/49)
 - SETTINGS-001: Failed preference save is acknowledged and schedules sync. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/53)
+- OAUTH-001: OAuth redirect proceeds after failing to preserve unsaved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/55)
+- AUTH-001: Sign-out reports success while a retained session token can restore sign-in. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/55)
 - STUDENT-001: Rename confirmation writes a stale portfolio and loses intervening saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/50)
 - SYNC-004: Photo sync writes a stale portfolio snapshot and loses newer saved writing. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/48)
 - STORAGE-003: Corrupt deletion history is overwritten as empty. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/51)
@@ -31,6 +33,8 @@ Updated 2026-10-12T02:33:05.955Z; timezone Asia/Bangkok. All 662 original IDs re
 - STORAGE-005: Session retention discards the newest existing essay. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/54)
 - ARCHIVE-003: A delayed archive upload follows a changed Google connection. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/52)
 - EXPORT-004: Windows-equivalent student archive folders overwrite on extraction. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/52)
+- AUTH-002: Delayed Google sign-in or profile response republishes a signed-out or replaced connection. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/55)
+- AUTH-003: Malformed session payload is accepted as a valid Drive connection. [Draft PR](https://github.com/thepick/writing-feedback-tool/pull/55)
 
 Confirmed remaining queue; one repair chat and repository writer at a time:
 
@@ -39,8 +43,6 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - ANALYSIS-002: In-flight grade change mixes original assessment metadata with current scoring policy
 - ARCHIVE-001: Unused archive-removal helper writes a mismatched legacy session marker
 - INDEX-001: Portfolio summary reads wrong score field and acknowledges stale or offline saves
-- OAUTH-001: OAuth redirect proceeds after failing to preserve unsaved writing
-- AUTH-001: Sign-out reports success while a retained session token can restore sign-in
 - PERF-001: Correction comparison blocks the UI with a full repeated token matrix
 - API-001: Missing API key triggers futile fallback retries and delayed error
 - PARSER-001: Detailed assessment terminator creates empty categories and suppresses valid scores
@@ -48,10 +50,8 @@ Confirmed remaining queue; one repair chat and repository writer at a time:
 - GUIDE-002: Notebook paragraph revisions lose their separation before display
 - FEEDBACK-002: Flow adjustment converts an explicitly missing detailed score to zero
 - GUIDE-003: Separate notebook action lines are collapsed into one checklist item
-- AUTH-002: Delayed Google sign-in or profile response republishes a signed-out or replaced connection
-- AUTH-003: Malformed session payload is accepted as a valid Drive connection
 
-Current indexed source b630911a210483a52d1f7a6d4dc064eacae38fca: 739 health rows, 154 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
+Current indexed source b8d13b839e665a9f8a288cbad8a7d2c137645329: 746 health rows, 154 refactoring plans, 24 performance opportunities; dead-code, security, documentation and action surfaces individually reconciled in audit-ledger.json. Coverage report ingestion remains open; native executable-location collection has passed a source-hashed four-script self-check, including uncovered unused function bodies, first-page-only execution before reload, and Windows line endings. No coverage was ingested from the preparation run.
 
 No repair chat is writing; coordinator is checkpointing the ledger before the next sequential repair.
 
