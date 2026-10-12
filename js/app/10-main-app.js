@@ -2344,16 +2344,12 @@ function extractScoreNearLabel(text, labelVariants) {
     var i;
     for (i = 0; i < labelVariants.length; i++) {
         var label = labelVariants[i].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        var patterns = [
-            new RegExp(label + "\\s*[:\\-]\\s*((?:10|9|8|7|6|5|4)|Missing)\\s*(?:\\/\\s*" + RUBRIC_MAX + ")?", "i"),
-            new RegExp(label + "[\\s\\S]{0,40}?((?:10|9|8|7|6|5|4)|Missing)\\s*(?:\\/\\s*" + RUBRIC_MAX + ")?", "i"),
-            new RegExp(label + "[\\s\\S]{0,40}?score\\s*[:\\-]?\\s*((?:10|9|8|7|6|5|4)|Missing)", "i")
-        ];
-        var j;
-        for (j = 0; j < patterns.length; j++) {
-            var m = text.match(patterns[j]);
-            if (m) return /missing/i.test(m[1]) ? null : parseRubricScore(m[1]);
-        }
+        // Only the header's score slot (or its immediate Score line) is evidence of a score.
+        var pattern = new RegExp("(?:^|\\n)[ \\t]*(?:[-#]+[ \\t]*)?(?:\\*\\*)?(?:\\d+\\.[ \\t]*)?" + label
+            + "(?:\\*\\*)?[ \\t]*[:\\-]?[ \\t]*(?:\\*\\*)?[ \\t]*(?:\\r?\\n[ \\t]*)?(?:\\(?score[ \\t]*[:\\-]?[ \\t]*)?"
+            + "((?:10|[4-9])|Missing)(?!\\w|\\.\\d)(?:[ \\t]*\\/[ \\t]*" + RUBRIC_MAX + "(?!\\d|\\.\\d))?(?![ \\t]*\\/)", "i");
+        var m = text.match(pattern);
+        if (m) return /missing/i.test(m[1]) ? null : parseRubricScore(m[1]);
     }
     return null;
 }
@@ -2390,9 +2386,16 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
         titleSuggestion: ""
     };
 
-    function captureCategory(label, nextLabelRegex) {
-        var labelSafe = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        var pattern = new RegExp("\\*\\*" + labelSafe + ":\\*\\*\\s*((?:10|9|8|7|6|5|4)|Missing)\\s*(?:\\/" + RUBRIC_MAX + ")?([\\s\\S]*?)" + nextLabelRegex, "i");
+    function captureCategory(label) {
+        var labelSafe = label.replace(/^\d+\. /, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/^Clear /, "(?:Clear )?").replace(/ & /g, " (?:&|and) ");
+        // Any following category/section ends this body, including reordered or duplicate labels.
+        var nextLabelRegex = "(?=\\r?\\n[ \\t]*(?:#{1,6}[ \\t]+|(?:-[ \\t]*)?(?:\\*\\*)?(?:\\d+\\.[ \\t]*)?"
+            + "(?:(?:Clear )?Ideas (?:&|and) Details|Grammar|Word Choice|Organization|Flow|Spelling (?:&|and) Punctuation)(?:\\*\\*)?[ \\t]*[:\\-]"
+            + "|(?:\\*\\*)?(?:Your Writing Strength:|Your Grow Goal:|Try This Next Time:|Keep Writing|Writing Title:)"
+            + "|(?:Grow Goal Selection|Notebook Guide Candidate JSON|What I Noticed)[ \\t]*(?:\\r?\\n|$))|$)";
+        var pattern = new RegExp("(?:^|\\n)[ \\t]*(?:[-#]+[ \\t]*)?(?:\\*\\*)?(?:\\d+\\.[ \\t]*)?" + labelSafe
+            + "(?:\\*\\*)?[ \\t]*[:\\-][ \\t]*(?:\\*\\*)?[ \\t]*(?:\\r?\\n[ \\t]*)?(?:\\(?score[ \\t]*[:\\-]?[ \\t]*)?"
+            + "((?:10|[4-9])|Missing)(?!\\w|\\.\\d)(?:[ \\t]*\\/[ \\t]*" + RUBRIC_MAX + "(?!\\d|\\.\\d))?(?![ \\t]*\\/)([\\s\\S]*?)" + nextLabelRegex, "i");
         var m = step3Text.match(pattern);
         if (!m) return null;
         var body = (m[2] || "").trim();
@@ -2438,21 +2441,12 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
         };
     }
 
-    var c1 = captureCategory("1. Clear Ideas & Details", "\\*\\*2\\. Grammar:|##\\s*Grow Goal Selection");
-    var c2 = captureCategory("2. Grammar", "\\*\\*3\\. Word Choice:|##\\s*Grow Goal Selection");
-    var c3 = captureCategory("3. Word Choice", "\\*\\*4\\. Organization:|##\\s*Grow Goal Selection");
-    var c4 = captureCategory("4. Organization", "\\*\\*5\\. Flow:|##\\s*Grow Goal Selection");
-
-    // Flow terminates at Spelling & Punctuation or the Grow Goal section.
-    // NOTE: Neatness never appears in the Step 3 response (it is assessed separately via image),
-    // so it must NOT be used as a terminator here — doing so caused Flow and Spelling &
-    // Punctuation to always fall through to their extractScoreNearLabel fallbacks.
-    var flowNextLabel = "\\*\\*6\\. Spelling & Punctuation:|##\\s*Grow Goal Selection";
-    var c5_flow = captureCategory("5. Flow", flowNextLabel);
-
-    // Spelling & Punctuation terminates at the Grow Goal section.
-    var spellNextLabel = "##\\s*Grow Goal Selection|\\*\\*Your Writing Strength:";
-    var c5 = captureCategory("6. Spelling & Punctuation", spellNextLabel);
+    var c1 = captureCategory("1. Clear Ideas & Details");
+    var c2 = captureCategory("2. Grammar");
+    var c3 = captureCategory("3. Word Choice");
+    var c4 = captureCategory("4. Organization");
+    var c5_flow = captureCategory("5. Flow");
+    var c5 = captureCategory("6. Spelling & Punctuation");
 
     if (c1) result.categories["Ideas & Details"] = c1;
     if (c2) result.categories["Grammar"] = c2;
@@ -2463,10 +2457,6 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
 
     // NOTE: Neatness is NOT parsed from Step 3 — it is assessed separately by assessNeatnessFromImage()
     // and injected into detailed.categories["Neatness"] via the inheritance loop in analyzeWriting().
-    // A captureCategory("7. Neatness", ...) call was previously here but caused a regex alternation
-    // bug: the terminator pattern's | split made \*\*Your Writing Strength: a second top-level
-    // alternative, which always matched — producing a null-score ghost entry that blocked the
-    // inheritance loop from ever writing the real score. Removed entirely.
 
     if (!c1) {
         var sIdeas = extractScoreNearLabel(step3Text, [
@@ -9250,9 +9240,6 @@ async function analyzeWriting() {
             detailed.categories["Grammar"].patternNotes = buildGrammarPatternNotes(grammarScore, text, parsed1.correctedStory || correctedText || text);
         }
 
-        applyEligibilityToDetailed(detailed, eligibility);
-        polishFeedback(parsed1.quickRubric, detailed, text, parsed1.correctedStory, flowData);
-
         // Use dynamic category keys to include Neatness if present
         var activeKeys = getActiveCategoryKeys();
         for (var inheritIndex = 0; inheritIndex < activeKeys.length; inheritIndex++) {
@@ -9286,6 +9273,10 @@ async function analyzeWriting() {
                 }
             }
         }
+
+        // Inherit absent categories before eligibility creates unscored display placeholders.
+        applyEligibilityToDetailed(detailed, eligibility);
+        polishFeedback(parsed1.quickRubric, detailed, text, parsed1.correctedStory, flowData);
 
         for (var i = 0; i < CATEGORY_KEYS.length; i++) {
             var key = CATEGORY_KEYS[i];
