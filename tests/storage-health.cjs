@@ -22,9 +22,9 @@ function context(source, globals) {
         let saves = 0;
         const app = context(source, {
             WFT_ASYNC_PORTFOLIO_ACCESS_V1: true, WFT_STUDENT_ID_MAP_V1: true,
-            getPortfolioData: () => portfolio,
+            getLocalPortfolioSnapshot: () => portfolio,
             savePortfolioData: value => { saves++; assert.equal(value, portfolio); return true; },
-            getRawSettings: () => ({ studentIdMap: { Alice: 'student-1' } })
+            readWftRequiredStorage: () => ({ studentIdMap: { Alice: 'student-1' } })
         });
         assert.equal(await app.loadStudentPortfolioAsync('Alice'), portfolio.Alice);
         assert.equal(await app.loadStudentPortfolioAsync('student-1'), portfolio.Alice);
@@ -35,7 +35,7 @@ function context(source, globals) {
         assert.equal(Object.hasOwn(portfolio, 'student-1'), false);
 
         const failure = new Error('settings lookup failed');
-        app.getRawSettings = () => { throw failure; };
+        app.readWftRequiredStorage = () => { throw failure; };
         await assert.rejects(app.loadStudentPortfolioAsync('student-1'), error => error === failure);
         await assert.rejects(app.saveStudentPortfolioAsync('student-1', { sessions: [] }), error => error === failure);
         assert.equal(saves, 1, 'Failed ID resolution must not save a portfolio under the wrong key');
@@ -43,7 +43,7 @@ function context(source, globals) {
         app.WFT_STUDENT_ID_MAP_V1 = false;
         assert.equal((await app.loadStudentPortfolioAsync('missing')).sessions.length, 0);
 
-        app.getPortfolioData = () => { throw new Error('read failed'); };
+        app.getLocalPortfolioSnapshot = () => { throw new Error('read failed'); };
         let promise;
         assert.doesNotThrow(() => { promise = app.loadPortfolioAsync(); });
         await assert.rejects(promise, /read failed/);

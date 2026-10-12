@@ -2536,7 +2536,7 @@ function wftPromiseCallback(promise, callback) {
 }
 
 function loadPortfolioAsync() {
-    return Promise.resolve().then(function() { return getPortfolioData(); });
+    return Promise.resolve().then(function() { return getLocalPortfolioSnapshot(); });
 }
 
 function savePortfolioAsync(portfolio) {
@@ -2549,7 +2549,7 @@ function loadStudentPortfolioAsync(studentNameOrId) {
             return portfolio[studentNameOrId];
         }
         if (WFT_STUDENT_ID_MAP_V1) {
-            var settings = getRawSettings ? getRawSettings() : {};
+            var settings = readWftRequiredStorage('wft_settings');
             if (settings.studentIdMap) {
                 var keys = Object.keys(settings.studentIdMap);
                 for (var lsi = 0; lsi < keys.length; lsi++) {
@@ -2564,10 +2564,12 @@ function loadStudentPortfolioAsync(studentNameOrId) {
 }
 
 function saveStudentPortfolioAsync(studentNameOrId, studentData) {
-    return loadPortfolioAsync().then(function(portfolio) {
+    return Promise.resolve().then(function() {
+        // Keep the local read and write together so concurrent student saves retain each other.
+        var portfolio = getLocalPortfolioSnapshot();
         var targetKey = studentNameOrId;
         if (WFT_STUDENT_ID_MAP_V1 && !portfolio[studentNameOrId]) {
-            var settings = getRawSettings ? getRawSettings() : {};
+            var settings = readWftRequiredStorage('wft_settings');
             if (settings.studentIdMap) {
                 var keys = Object.keys(settings.studentIdMap);
                 for (var ssi = 0; ssi < keys.length; ssi++) {
@@ -2579,7 +2581,7 @@ function saveStudentPortfolioAsync(studentNameOrId, studentData) {
             }
         }
         portfolio[targetKey] = studentData;
-        return savePortfolioAsync(portfolio);
+        return savePortfolioData(portfolio);
     });
 }
 
@@ -2679,7 +2681,8 @@ var WftIndexedDb = {
                     var tx = db.transaction(storeName, "readonly");
                     var store = tx.objectStore(storeName);
                     var req = store.get(key);
-                    req.onsuccess = function() { resolve(req.result); };
+                    tx.oncomplete = function() { resolve(req.result); };
+                    tx.onabort = function() { reject(tx.error || new Error("IndexedDB read aborted")); };
                     req.onerror = function() { reject(req.error); };
                 } catch (e) { reject(e); }
             });
@@ -2694,7 +2697,8 @@ var WftIndexedDb = {
                     var tx = db.transaction(storeName, "readwrite");
                     var store = tx.objectStore(storeName);
                     var req = store.put(value);
-                    req.onsuccess = function() { resolve(req.result); };
+                    tx.oncomplete = function() { resolve(req.result); };
+                    tx.onabort = function() { reject(tx.error || new Error("IndexedDB write aborted")); };
                     req.onerror = function() { reject(req.error); };
                 } catch (e) { reject(e); }
             });
@@ -2709,7 +2713,8 @@ var WftIndexedDb = {
                     var tx = db.transaction(storeName, "readwrite");
                     var store = tx.objectStore(storeName);
                     var req = store.delete(key);
-                    req.onsuccess = function() { resolve(); };
+                    tx.oncomplete = function() { resolve(); };
+                    tx.onabort = function() { reject(tx.error || new Error("IndexedDB delete aborted")); };
                     req.onerror = function() { reject(req.error); };
                 } catch (e) { reject(e); }
             });
@@ -2724,7 +2729,8 @@ var WftIndexedDb = {
                     var tx = db.transaction(storeName, "readonly");
                     var store = tx.objectStore(storeName);
                     var req = store.getAll();
-                    req.onsuccess = function() { resolve(req.result || []); };
+                    tx.oncomplete = function() { resolve(req.result || []); };
+                    tx.onabort = function() { reject(tx.error || new Error("IndexedDB read aborted")); };
                     req.onerror = function() { reject(req.error); };
                 } catch (e) { reject(e); }
             });
@@ -2739,7 +2745,8 @@ var WftIndexedDb = {
                     var tx = db.transaction(storeName, "readwrite");
                     var store = tx.objectStore(storeName);
                     var req = store.clear();
-                    req.onsuccess = function() { resolve(); };
+                    tx.oncomplete = function() { resolve(); };
+                    tx.onabort = function() { reject(tx.error || new Error("IndexedDB clear aborted")); };
                     req.onerror = function() { reject(req.error); };
                 } catch (e) { reject(e); }
             });
@@ -2795,14 +2802,14 @@ var WftStorage = {
     },
 
     getPortfolioIndex: function() {
-        if (this.mode === "indexeddb") {
+        if (this.mode === "indexeddb" && WFT_INDEXEDDB_CACHE_V1 && !isWftStorageSafeMode()) {
             return WftIndexedDb.get("portfolioIndex", "current").catch(function() { return null; });
         }
         return Promise.resolve(null);
     },
 
     savePortfolioIndex: function(index) {
-        if (this.mode === "indexeddb") {
+        if (this.mode === "indexeddb" && WFT_INDEXEDDB_CACHE_V1 && !isWftStorageSafeMode()) {
             var record = { id: "current", data: index, updatedAt: new Date().toISOString() };
             return WftIndexedDb.put("portfolioIndex", record).catch(function() {});
         }
@@ -2810,14 +2817,14 @@ var WftStorage = {
     },
 
     getStudentPortfolio: function(studentId) {
-        if (this.mode === "indexeddb") {
+        if (this.mode === "indexeddb" && WFT_INDEXEDDB_CACHE_V1 && !isWftStorageSafeMode()) {
             return WftIndexedDb.get("studentPortfolios", studentId).catch(function() { return null; });
         }
         return Promise.resolve(null);
     },
 
     saveStudentPortfolio: function(studentId, data) {
-        if (this.mode === "indexeddb") {
+        if (this.mode === "indexeddb" && WFT_INDEXEDDB_CACHE_V1 && !isWftStorageSafeMode()) {
             var record = { studentId: studentId, data: data, cachedAt: new Date().toISOString() };
             return WftIndexedDb.put("studentPortfolios", record).catch(function() {});
         }
@@ -2825,7 +2832,7 @@ var WftStorage = {
     },
 
     getMetadata: function(key) {
-        if (this.mode === "indexeddb") {
+        if (this.mode === "indexeddb" && WFT_INDEXEDDB_CACHE_V1 && !isWftStorageSafeMode()) {
             return WftIndexedDb.get("metadata", key).then(function(record) {
                 return record ? record.value : null;
             }).catch(function() { return null; });
@@ -2834,7 +2841,7 @@ var WftStorage = {
     },
 
     setMetadata: function(key, value) {
-        if (this.mode === "indexeddb") {
+        if (this.mode === "indexeddb" && WFT_INDEXEDDB_CACHE_V1 && !isWftStorageSafeMode()) {
             var record = { key: key, value: value, updatedAt: new Date().toISOString() };
             return WftIndexedDb.put("metadata", record).catch(function() {});
         }
@@ -2926,23 +2933,19 @@ function ensureStudentRecordsForRoster() {
     }
 }
 function resolveStudentPortfolioKey(studentNameOrId) {
-    try {
-        var portfolio = getPortfolioData();
-        if (portfolio[studentNameOrId]) { return studentNameOrId; }
-    } catch (e) {}
+    var portfolio = getLocalPortfolioSnapshot();
+    if (portfolio[studentNameOrId]) { return studentNameOrId; }
 
     if (WFT_STUDENT_ID_MAP_V1) {
-        try {
-            var settings = getRawSettings ? getRawSettings() : {};
-            if (settings.studentIdMap) {
-                var keys = Object.keys(settings.studentIdMap);
-                for (var rk = 0; rk < keys.length; rk++) {
-                    if (settings.studentIdMap[keys[rk]] === studentNameOrId) {
-                        return keys[rk];
-                    }
+        var settings = readWftRequiredStorage('wft_settings');
+        if (settings.studentIdMap) {
+            var keys = Object.keys(settings.studentIdMap);
+            for (var rk = 0; rk < keys.length; rk++) {
+                if (settings.studentIdMap[keys[rk]] === studentNameOrId) {
+                    return keys[rk];
                 }
             }
-        } catch (e) {}
+        }
     }
     return studentNameOrId;
 }
@@ -3150,6 +3153,7 @@ function loadStudentFileFromDrive(studentId, callback) {
         }
         return null;
     }).then(function(data) {
+        if (data && data.studentId !== studentId) throw new Error("Student portfolio file belongs to a different student.");
         if (data && data.format === "student-portfolio-v1") { callback(null, data); }
         else { callback(null, null); }
     }).catch(function(err) { if (callback) { callback(err, null); } });
@@ -3373,18 +3377,22 @@ function chooseWftOlderDate(a, b) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function loadStudentPortfolioLazy(studentId, displayName, callback) {
-    if (!WFT_LAZY_PORTFOLIO_LOAD_V1) {
+    function loadLocal(error) {
         try {
-            var portfolio = getPortfolioData();
+            var portfolio = getLocalPortfolioSnapshot();
             var resolvedKey = resolveStudentPortfolioKey(displayName || studentId);
+            if (!portfolio[resolvedKey] && error) { callback(error, null); return; }
             callback(null, portfolio[resolvedKey] || { sessions: [] });
         } catch (e) { callback(e, null); }
+    }
+    if (!WFT_LAZY_PORTFOLIO_LOAD_V1 || isWftStorageSafeMode()) {
+        loadLocal();
         return;
     }
 
     var checkCache = WFT_INDEXEDDB_CACHE_V1 ? WftStorage.getStudentPortfolio(studentId) : Promise.resolve(null);
     checkCache.then(function(cached) {
-        if (cached && cached.data) {
+        if (cached && cached.data && Array.isArray(cached.data.sessions) && (!cached.data.studentId || cached.data.studentId === studentId)) {
             wftDebugLog("[LazyLoad] Cache hit:", studentId);
             callback(null, cached.data);
             if (WFT_SPLIT_STUDENT_FILES_V1) {
@@ -3407,26 +3415,14 @@ function loadStudentPortfolioLazy(studentId, displayName, callback) {
                     if (WFT_INDEXEDDB_CACHE_V1) { WftStorage.saveStudentPortfolio(studentId, remoteFile); }
                     callback(null, remoteFile);
                 } else {
-                    try {
-                        var portfolio = getPortfolioData();
-                        var resolvedKey = resolveStudentPortfolioKey(displayName || studentId);
-                        callback(null, portfolio[resolvedKey] || { sessions: [], displayName: displayName, studentId: studentId });
-                    } catch (e2) { callback(e2, null); }
+                    loadLocal(err || new Error("Student portfolio file is unavailable."));
                 }
             });
         } else {
-            try {
-                var portfolio = getPortfolioData();
-                var resolvedKey = resolveStudentPortfolioKey(displayName || studentId);
-                callback(null, portfolio[resolvedKey] || { sessions: [] });
-            } catch (e2) { callback(e2, null); }
+            loadLocal();
         }
-    }).catch(function() {
-        try {
-            var portfolio = getPortfolioData();
-            var resolvedKey = resolveStudentPortfolioKey(displayName || studentId);
-            callback(null, portfolio[resolvedKey] || { sessions: [] });
-        } catch (e2) { callback(e2, null); }
+    }).catch(function(error) {
+        loadLocal(error);
     });
 }
 
@@ -7977,7 +7973,7 @@ function renderStudentPortfolio() {
         contentEl.innerHTML = '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>';
         return;
     }
-    if (WFT_ASYNC_PORTFOLIO_ACCESS_V1 && !renderStudentPortfolio._syncRender) {
+    if (WFT_ASYNC_PORTFOLIO_ACCESS_V1 && !isWftStorageSafeMode() && !renderStudentPortfolio._syncRender) {
         contentEl.innerHTML = '<div class="portfolio-empty">Loading student portfolio...</div>';
         loadStudentPortfolioAsync(name).then(function(studentData) {
             renderStudentPortfolio._asyncStudentData = studentData || { sessions: [] };
@@ -7989,10 +7985,7 @@ function renderStudentPortfolio() {
             }
         }).catch(function(e) {
             wftDebugError('[AsyncPortfolio] Could not load student portfolio:', e);
-            contentEl.innerHTML = '<div class="portfolio-empty">Could not load this student portfolio. Using local data if available.</div>';
-            renderStudentPortfolio._syncRender = true;
-            try { renderStudentPortfolio(); }
-            finally { renderStudentPortfolio._syncRender = false; }
+            contentEl.innerHTML = '<div class="portfolio-empty">Could not load this student portfolio. Download Emergency Backup before repairing browser storage.</div>';
         });
         return;
     }
