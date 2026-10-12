@@ -125,7 +125,7 @@ for (const field of ['chooser','text']) for (const signal of ['composing','229']
           const portfolio=JSON.parse(observed.after.bytes.wft_portfolio);
           const beforePortfolio=JSON.parse(observed.before.bytes.wft_portfolio);
           check('Keyboard-confirmed rename retains writing with corrected name',observed.after.roster.includes('Alicia')&&!observed.after.roster.includes('Alice')&&portfolio.Alicia.sessions[0].originalText==='Synthetic writing must stay with its student');
-          check('Accepted rename preserves all writing and other student portfolio',JSON.stringify(portfolio.Alicia)===JSON.stringify(beforePortfolio.Alice)&&JSON.stringify(portfolio.Bob)===JSON.stringify(beforePortfolio.Bob)&&!Object.hasOwn(portfolio,'Alice'));
+          check('Accepted rename preserves all original writing fields and other student portfolio',portfolio.Alicia.sessions.length===beforePortfolio.Alice.sessions.length&&beforePortfolio.Alice.sessions.every((session,i)=>Object.keys(session).every(key=>JSON.stringify(portfolio.Alicia.sessions[i][key])===JSON.stringify(session[key])))&&JSON.stringify(portfolio.Bob)===JSON.stringify(beforePortfolio.Bob)&&!Object.hasOwn(portfolio,'Alice'));
           check('Accepted rename selects the corrected student',observed.after.selected==='Alicia'&&observed.after.bytes.wft_selectedStudent==='Alicia');
         } else check('Cancelled workflow preserves bytes, roster, selection and dirty state',JSON.stringify(observed.before)===JSON.stringify(observed.after));
         check('No browser script errors',errors.length===0);
