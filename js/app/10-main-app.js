@@ -2091,20 +2091,7 @@ function normalizeNoticeRows(rows) {
 function polishFeedback(quickRubric, detailed, originalText, correctedText, flowData) {
     var conventionSource = (correctedText && correctedText.trim()) ? correctedText : originalText;
     var issues = detectConventionIssues(conventionSource);
-    var i;
-    for (i = 0; i < CATEGORY_KEYS.length; i++) {
-        var key = CATEGORY_KEYS[i];
-        if (quickRubric[key] && quickRubric[key].reason) {
-            quickRubric[key].reason = toOneSentence(teacherizeWording(softenOverclaim(quickRubric[key].reason, quickRubric[key].score), key, quickRubric[key].score));
-        }
-        if (detailed.categories[key]) {
-            var item = detailed.categories[key];
-            if (item.evidence) item.evidence = toOneSentence(teacherizeWording(softenOverclaim(item.evidence, item.score), key, item.score));
-            if (item.growthTip) item.growthTip = teacherizeWording(softenOverclaim(item.growthTip, item.score), key, item.score);
-            if (item.contentOrganization) item.contentOrganization = toOneSentence(teacherizeWording(softenOverclaim(item.contentOrganization, item.score), key, item.score));
-            if (item.sentenceVariety) item.sentenceVariety = toOneSentence(teacherizeWording(softenOverclaim(item.sentenceVariety, item.score), key, item.score));
-        }
-    }
+    polishCategoryWording();
 
     if (quickRubric["Spelling & Punctuation"] && (getNumericAssessmentScore(quickRubric["Spelling & Punctuation"].score) != null || issues.length || !quickRubric["Spelling & Punctuation"].reason)) {
         quickRubric["Spelling & Punctuation"].reason = toOneSentence(teacherizeWording(buildConventionReason(quickRubric["Spelling & Punctuation"].score, issues), "Spelling & Punctuation", quickRubric["Spelling & Punctuation"].score));
@@ -2138,6 +2125,23 @@ function polishFeedback(quickRubric, detailed, originalText, correctedText, flow
     if (detailed.categories["Flow"] && getNumericAssessmentScore(detailed.categories["Flow"].score) != null) {
         var flowEvidence = buildFlowEvidenceFromData(detailed.categories["Flow"].score, flowData);
         if (flowEvidence) detailed.categories["Flow"].evidence = toOneSentence(teacherizeWording(flowEvidence, "Flow", detailed.categories["Flow"].score));
+    }
+
+    function polishCategoryWording() {
+        var i;
+        for (i = 0; i < CATEGORY_KEYS.length; i++) {
+            var key = CATEGORY_KEYS[i];
+            if (quickRubric[key] && quickRubric[key].reason) {
+                quickRubric[key].reason = toOneSentence(teacherizeWording(softenOverclaim(quickRubric[key].reason, quickRubric[key].score), key, quickRubric[key].score));
+            }
+            if (detailed.categories[key]) {
+                var item = detailed.categories[key];
+                if (item.evidence) item.evidence = toOneSentence(teacherizeWording(softenOverclaim(item.evidence, item.score), key, item.score));
+                if (item.growthTip) item.growthTip = teacherizeWording(softenOverclaim(item.growthTip, item.score), key, item.score);
+                if (item.contentOrganization) item.contentOrganization = toOneSentence(teacherizeWording(softenOverclaim(item.contentOrganization, item.score), key, item.score));
+                if (item.sentenceVariety) item.sentenceVariety = toOneSentence(teacherizeWording(softenOverclaim(item.sentenceVariety, item.score), key, item.score));
+            }
+        }
     }
 }
 
