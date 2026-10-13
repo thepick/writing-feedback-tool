@@ -6115,13 +6115,21 @@ var NOTEBOOK_GUIDE_CATEGORY_ALIASES = {
 function normalizeNotebookGuideCategoryName(value) {
     var text = String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
     if (!text) return "";
-    if (text.indexOf("spelling") !== -1 || text.indexOf("punctuation") !== -1 || text.indexOf("convention") !== -1 || text.indexOf("capital") !== -1 || text.indexOf("word form") !== -1) return "Spelling & Punctuation";
-    if (text.indexOf("ideas") !== -1 || text.indexOf("details") !== -1 || text.indexOf("description") !== -1 || text.indexOf("evidence") !== -1) return "Ideas & Details";
-    if (text.indexOf("word choice") !== -1 || text.indexOf("vocabulary") !== -1 || text.indexOf("precise") !== -1) return "Word Choice";
-    if (text.indexOf("organization") !== -1 || text.indexOf("paragraph") !== -1 || text.indexOf("structure") !== -1 || text.indexOf("sequence") !== -1 || text.indexOf("order") !== -1) return "Organization";
-    if (text.indexOf("flow") !== -1 || text.indexOf("sentence opening") !== -1 || text.indexOf("sentence starter") !== -1 || text.indexOf("sentence rhythm") !== -1 || text.indexOf("sentence variety") !== -1 || text.indexOf("transition") !== -1 || text.indexOf("smooth") !== -1) return "Flow";
-    if (text.indexOf("grammar") !== -1 || text.indexOf("tense") !== -1 || text.indexOf("run-on") !== -1 || text.indexOf("sentence break") !== -1 || text.indexOf("sentence boundary") !== -1 || text.indexOf("complete sentence") !== -1 || text.indexOf("agreement") !== -1) return "Grammar";
-    if (text.indexOf("neatness") !== -1 || text.indexOf("handwriting") !== -1 || text.indexOf("spacing") !== -1) return "Neatness";
+
+    function containsAnyCategoryTerm(terms) {
+        for (var i = 0; i < terms.length; i += 1) {
+            if (text.indexOf(terms[i]) !== -1) return true;
+        }
+        return false;
+    }
+
+    if (containsAnyCategoryTerm(["spelling", "punctuation", "convention", "capital", "word form"])) return "Spelling & Punctuation";
+    if (containsAnyCategoryTerm(["ideas", "details", "description", "evidence"])) return "Ideas & Details";
+    if (containsAnyCategoryTerm(["word choice", "vocabulary", "precise"])) return "Word Choice";
+    if (containsAnyCategoryTerm(["organization", "paragraph", "structure", "sequence", "order"])) return "Organization";
+    if (containsAnyCategoryTerm(["flow", "sentence opening", "sentence starter", "sentence rhythm", "sentence variety", "transition", "smooth"])) return "Flow";
+    if (containsAnyCategoryTerm(["grammar", "tense", "run-on", "sentence break", "sentence boundary", "complete sentence", "agreement"])) return "Grammar";
+    if (containsAnyCategoryTerm(["neatness", "handwriting", "spacing"])) return "Neatness";
     return "";
 }
 
