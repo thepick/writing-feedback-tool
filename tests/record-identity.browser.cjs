@@ -5,44 +5,7 @@ const path = require('node:path');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
 const cases = [];
 
-(async () => {
-    const browser = await chromium.launch({ channel: 'msedge', headless: true });
-    try {
-        const page = await browser.newPage();
-        const errors = [];
-        page.on('pageerror', e => errors.push(e.message));
-        await page.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
-        });
-        const run = async (name, exercise, check, arg) => {
-            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-            await page.evaluate(() => {
-                stopWftSyncPolling(); scheduleWftCloudSync = () => {};
-                localStorage.clear(); localStorage.setItem('wft_settings', '{}');
-                localStorage.setItem('wft_portfolio', '{}');
-                students = []; selectedStudent = ''; wftStudentChangeRecovery = null;
-            });
-            let observed;
-            // JSON transport keeps an own __proto__ key intact across the browser automation protocol.
-            try { observed = JSON.parse(await page.evaluate(async ({ source, arg }) => JSON.stringify(await eval('(' + source + ')')(arg)), { source: exercise.toString(), arg })); check(observed); cases.push({ name, passed: true, observed }); }
-            catch (e) { cases.push({ name, passed: false, error: e.message, observed }); }
-        };
-        // Native FileReader, actual transactional import/storage/UI; only alerts and scheduling replaced.
-        await run('native-roster-import-own-keys-and-case-deduplication', async () => {
-            const alerts = []; window.alert = text => alerts.push(text);
-            importStudents({ target: { files: [new File(['constructor\n__proto__\nAlice\nCONSTRUCTOR\nalice\ntoString\nhasOwnProperty'], 'synthetic.txt')], value: 'synthetic' } });
-            for (let i = 0; i < 100 && !alerts.length; i++) await new Promise(resolve => setTimeout(resolve, 10));
-            if (!alerts.length) throw Error('FileReader did not complete');
-            const merged = mergeWftStudents(students, ['ALICE', 'constructor', '__proto__']);
-            return { stored: JSON.parse(localStorage.getItem('wft_students')), merged, alerts, dropdown: Array.from(document.getElementById('studentSelect').options).map(o => o.value) };
-        }, r => {
-            assert.deepEqual(r.stored.slice().sort(), ['constructor', '__proto__', 'Alice', 'toString', 'hasOwnProperty'].sort());
-            assert.deepEqual(r.merged.slice().sort(), r.stored.slice().sort());
-            for (const name of r.stored) assert.ok(r.dropdown.includes(name));
-        });
+async function runStudentIdentityCases(run) {
         for (const name of ['constructor', '__proto__', 'toString', 'hasOwnProperty', 'Alice']) {
             await run('main-merge-local-only-student-' + name, name => {
                 const local = Object.fromEntries([[name, { sessions: [{ id: '__proto__', originalText: 'Keep', images: [] }] }]]);
@@ -103,6 +66,47 @@ const cases = [];
                 return { index, split, record: getDeletionsData().records[0] };
             }, r => { assert.ok(Object.hasOwn(r.index.students, name)); assert.ok(Object.hasOwn(r.split.students, name)); assert.equal(r.record.studentId, ''); }, name);
         }
+}
+
+(async () => {
+    const browser = await chromium.launch({ channel: 'msedge', headless: true });
+    try {
+        const page = await browser.newPage();
+        const errors = [];
+        page.on('pageerror', e => errors.push(e.message));
+        await page.route('**/*', route => {
+            const url = new URL(route.request().url());
+            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
+            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
+            return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
+        });
+        const run = async (name, exercise, check, arg) => {
+            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+            await page.evaluate(() => {
+                stopWftSyncPolling(); scheduleWftCloudSync = () => {};
+                localStorage.clear(); localStorage.setItem('wft_settings', '{}');
+                localStorage.setItem('wft_portfolio', '{}');
+                students = []; selectedStudent = ''; wftStudentChangeRecovery = null;
+            });
+            let observed;
+            // JSON transport keeps an own __proto__ key intact across the browser automation protocol.
+            try { observed = JSON.parse(await page.evaluate(async ({ source, arg }) => JSON.stringify(await eval('(' + source + ')')(arg)), { source: exercise.toString(), arg })); check(observed); cases.push({ name, passed: true, observed }); }
+            catch (e) { cases.push({ name, passed: false, error: e.message, observed }); }
+        };
+        // Native FileReader, actual transactional import/storage/UI; only alerts and scheduling replaced.
+        await run('native-roster-import-own-keys-and-case-deduplication', async () => {
+            const alerts = []; window.alert = text => alerts.push(text);
+            importStudents({ target: { files: [new File(['constructor\n__proto__\nAlice\nCONSTRUCTOR\nalice\ntoString\nhasOwnProperty'], 'synthetic.txt')], value: 'synthetic' } });
+            for (let i = 0; i < 100 && !alerts.length; i++) await new Promise(resolve => setTimeout(resolve, 10));
+            if (!alerts.length) throw Error('FileReader did not complete');
+            const merged = mergeWftStudents(students, ['ALICE', 'constructor', '__proto__']);
+            return { stored: JSON.parse(localStorage.getItem('wft_students')), merged, alerts, dropdown: Array.from(document.getElementById('studentSelect').options).map(o => o.value) };
+        }, r => {
+            assert.deepEqual(r.stored.slice().sort(), ['constructor', '__proto__', 'Alice', 'toString', 'hasOwnProperty'].sort());
+            assert.deepEqual(r.merged.slice().sort(), r.stored.slice().sort());
+            for (const name of r.stored) assert.ok(r.dropdown.includes(name));
+        });
+        await runStudentIdentityCases(run);
         for (const localNewer of [false, true]) {
             await run('photo-conflict-sync-' + (localNewer ? 'local-newer' : 'cloud-newer'), async localNewer => {
                 const entry = newer => ({ id: 'essay', createdAt: '2026-10-01', updatedAt: newer ? '2026-10-03' : '2026-10-01', originalText: newer ? 'Newer writing' : 'Older writing', images: [{ imageId: 'photo', driveFileId: newer ? 'new-file' : 'old-file', dataUrl: newer ? 'new-bytes' : 'old-bytes', name: newer ? 'new.png' : 'old.png', mimeType: newer ? 'image/png' : 'image/jpeg' }] });
