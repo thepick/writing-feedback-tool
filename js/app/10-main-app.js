@@ -1506,37 +1506,9 @@ function analyzeSentenceVariety(lengths, sentences) {
     }
 
     var average = sum / total;
-    var bandsPresent = 0;
-    if (shortCount > 0) bandsPresent += 1;
-    if (mediumCount > 0) bandsPresent += 1;
-    if (longCount > 0) bandsPresent += 1;
-
-    var dominant = Math.max(shortCount, mediumCount, longCount);
-    var dominantRatio = dominant / total;
-    var score = 0;
-
-    if (bandsPresent === 3) score += 35;
-    else if (bandsPresent === 2) score += 22;
-    else score += 8;
-
-    if (dominantRatio <= 0.60) score += 35;
-    else if (dominantRatio <= 0.75) score += 22;
-    else score += 10;
-
-    if (maxLen >= Math.max(1, minLen * 2)) score += 30;
-    else if (maxLen - minLen >= 5) score += 20;
-    else score += 10;
-
-    var starterInfo = analyzeSentenceStarters(sentences || []);
-    if (starterInfo.ratio > 0.6) score -= 20;
-    else if (starterInfo.ratio > 0.5) score -= 10;
-
-    var shortRun = getShortSentenceRun(lengths);
-    if (shortRun >= 6) score -= 20;
-    else if (shortRun >= 4) score -= 10;
-
-    if (score < 0) score = 0;
-    if (score > 100) score = 100;
+    var starterInfo;
+    var shortRun;
+    var score = getSentenceVarietyScore();
 
     var varietyLabel = "Limited";
     if (score >= 85) varietyLabel = "Strong";
@@ -1576,6 +1548,41 @@ function analyzeSentenceVariety(lengths, sentences) {
         shortRun: shortRun,
         flowRating: flowRating
     };
+
+    function getSentenceVarietyScore() {
+        var bandsPresent = 0;
+        if (shortCount > 0) bandsPresent += 1;
+        if (mediumCount > 0) bandsPresent += 1;
+        if (longCount > 0) bandsPresent += 1;
+
+        var dominant = Math.max(shortCount, mediumCount, longCount);
+        var dominantRatio = dominant / total;
+        var score = 0;
+
+        if (bandsPresent === 3) score += 35;
+        else if (bandsPresent === 2) score += 22;
+        else score += 8;
+
+        if (dominantRatio <= 0.60) score += 35;
+        else if (dominantRatio <= 0.75) score += 22;
+        else score += 10;
+
+        if (maxLen >= Math.max(1, minLen * 2)) score += 30;
+        else if (maxLen - minLen >= 5) score += 20;
+        else score += 10;
+
+        starterInfo = analyzeSentenceStarters(sentences || []);
+        if (starterInfo.ratio > 0.6) score -= 20;
+        else if (starterInfo.ratio > 0.5) score -= 10;
+
+        shortRun = getShortSentenceRun(lengths);
+        if (shortRun >= 6) score -= 20;
+        else if (shortRun >= 4) score -= 10;
+
+        if (score < 0) score = 0;
+        if (score > 100) score = 100;
+        return score;
+    }
 }
 
 function buildComputedFlowTip(flowData) {
