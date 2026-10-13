@@ -700,89 +700,6 @@ async function assessNeatnessFromImage(imageDataUrl, model) {
     // margins, clutter, or typed/printed material the user intentionally removed.
     var assessmentImageUrl = imageDataUrl;
 
-    function parseNeatnessSubScore(label, responseText) {
-        var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5', 'i');
-        var m = responseText.match(rx);
-        if (!m) return null;
-        return /missing/i.test(m[1]) ? null : Number(m[1]);
-    }
-
-    function parseNeatnessSourceType(responseText) {
-        var text = String(responseText || '').replace(/\*\*/g, '');
-        var sourceMatch = text.match(/(?:\*\*)?Source\s*Type(?:\*\*)?\s*:\s*(HANDWRITTEN|TYPED_OR_PRINTED|MIXED|NOT_SCORABLE)/i);
-        if (sourceMatch) return sourceMatch[1].toUpperCase();
-        if (/\b(TYPED_OR_PRINTED|typed\s+or\s+printed|typed\s+work|printed\s+work|appears\s+to\s+be\s+typed|mostly\s+typed|computer\s+typed)\b/i.test(text)) return 'TYPED_OR_PRINTED';
-        if (/\b(NOT_SCORABLE|not\s+scorable|cannot\s+score|not\s+enough\s+handwriting|does\s+not\s+show\s+enough\s+handwriting)\b/i.test(text)) return 'NOT_SCORABLE';
-        return '';
-    }
-
-    function parseNeatnessSourceReason(responseText) {
-        var text = String(responseText || '').replace(/\*\*/g, '');
-        var reasonMatch = text.match(/(?:\*\*)?Source\s*Type\s*Reason(?:\*\*)?\s*:\s*([^\n]+)/i);
-        return reasonMatch ? reasonMatch[1].trim() : '';
-    }
-
-    function buildUnscoredNeatnessResult(sourceType, reason) {
-        sourceType = sourceType || 'NOT_SCORABLE';
-        reason = String(reason || '').trim();
-        if (!reason) {
-            if (sourceType === 'TYPED_OR_PRINTED') {
-                reason = 'Neatness was not assessed because this sample appears to be typed or printed.';
-            } else {
-                reason = 'Neatness was not assessed because there was not enough clear handwriting to score fairly.';
-            }
-        }
-        return {
-            quickRubric: {
-                score: null,
-                reason: reason,
-                growthTip: 'No handwriting score was added to the overall grade for this sample.',
-                subScores: {
-                    letterFormation: null,
-                    spacing: null,
-                    stayingOnLine: null,
-                    sizeConsistency: null,
-                    penControl: null,
-                    pageLayoutParagraphs: null
-                },
-                neatnessScoreFive: null,
-                neatnessWeightedFive: null,
-                sourceType: sourceType,
-                notAssessedReason: reason,
-                scoreBasis: 'Skipped before scoring because the image source type was ' + sourceType + '.'
-            }
-        };
-    }
-
-    function calculateWeightedNeatnessFive(subScores) {
-        if (!subScores) return null;
-        var values = [
-            subScores.letterFormation,
-            subScores.spacing,
-            subScores.stayingOnLine,
-            subScores.sizeConsistency,
-            subScores.penControl,
-            subScores.pageLayoutParagraphs
-        ];
-        for (var i = 0; i < values.length; i++) {
-            if (!Number.isFinite(values[i])) return null;
-        }
-        return (Number(subScores.letterFormation) * 0.20) +
-               (Number(subScores.spacing) * 0.15) +
-               (Number(subScores.stayingOnLine) * 0.15) +
-               (Number(subScores.sizeConsistency) * 0.15) +
-               (Number(subScores.penControl) * 0.15) +
-               (Number(subScores.pageLayoutParagraphs) * 0.20);
-    }
-
-    function convertNeatnessFiveToTen(scoreFive) {
-        var n = Number(scoreFive);
-        if (!isFinite(n)) return null;
-        if (n < 1) n = 1;
-        if (n > 5) n = 5;
-        return Math.round(n) * 2;
-    }
-
     var prompt = `Look at the image of this student writing sample.
 
 FIRST, classify the source before scoring. This is a required safety check.
@@ -909,76 +826,168 @@ Example for handwritten work:
 
     try {
         var response = await callOpenRouterImage(model, prompt, assessmentImageUrl);
-        var rubric = {};
-        var sourceType = parseNeatnessSourceType(response);
-        var sourceReason = parseNeatnessSourceReason(response);
+        return parseNeatnessAssessmentResponse(response);
+    } catch (e) {
+        wftDebugError('Neatness assessment failed:', e);
+    }
+    return null;
+}
 
-        if (sourceType === 'TYPED_OR_PRINTED' || sourceType === 'NOT_SCORABLE') {
-            return buildUnscoredNeatnessResult(sourceType, sourceReason);
+function parseNeatnessAssessmentResponse(response) {
+    function parseNeatnessSubScore(label, responseText) {
+        var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5', 'i');
+        var m = responseText.match(rx);
+        if (!m) return null;
+        return /missing/i.test(m[1]) ? null : Number(m[1]);
+    }
+
+    function parseNeatnessSourceType(responseText) {
+        var text = String(responseText || '').replace(/\*\*/g, '');
+        var sourceMatch = text.match(/(?:\*\*)?Source\s*Type(?:\*\*)?\s*:\s*(HANDWRITTEN|TYPED_OR_PRINTED|MIXED|NOT_SCORABLE)/i);
+        if (sourceMatch) return sourceMatch[1].toUpperCase();
+        if (/\b(TYPED_OR_PRINTED|typed\s+or\s+printed|typed\s+work|printed\s+work|appears\s+to\s+be\s+typed|mostly\s+typed|computer\s+typed)\b/i.test(text)) return 'TYPED_OR_PRINTED';
+        if (/\b(NOT_SCORABLE|not\s+scorable|cannot\s+score|not\s+enough\s+handwriting|does\s+not\s+show\s+enough\s+handwriting)\b/i.test(text)) return 'NOT_SCORABLE';
+        return '';
+    }
+
+    function parseNeatnessSourceReason(responseText) {
+        var text = String(responseText || '').replace(/\*\*/g, '');
+        var reasonMatch = text.match(/(?:\*\*)?Source\s*Type\s*Reason(?:\*\*)?\s*:\s*([^\n]+)/i);
+        return reasonMatch ? reasonMatch[1].trim() : '';
+    }
+
+    function buildUnscoredNeatnessResult(sourceType, reason) {
+        sourceType = sourceType || 'NOT_SCORABLE';
+        reason = String(reason || '').trim();
+        if (!reason) {
+            if (sourceType === 'TYPED_OR_PRINTED') {
+                reason = 'Neatness was not assessed because this sample appears to be typed or printed.';
+            } else {
+                reason = 'Neatness was not assessed because there was not enough clear handwriting to score fairly.';
+            }
         }
-
-        // Parse the 1-5 sub-scores from the image rubric.
-        var subScores = {
-            letterFormation:  parseNeatnessSubScore('Letter Formation', response),
-            spacing:          parseNeatnessSubScore('Spacing', response),
-            stayingOnLine:    parseNeatnessSubScore('Staying on the Line', response),
-            sizeConsistency:  parseNeatnessSubScore('Size Consistency', response),
-            penControl:       parseNeatnessSubScore('Pen Control and Marks', response),
-            pageLayoutParagraphs: parseNeatnessSubScore('Page Layout and Paragraphs', response)
+        return {
+            quickRubric: {
+                score: null,
+                reason: reason,
+                growthTip: 'No handwriting score was added to the overall grade for this sample.',
+                subScores: {
+                    letterFormation: null,
+                    spacing: null,
+                    stayingOnLine: null,
+                    sizeConsistency: null,
+                    penControl: null,
+                    pageLayoutParagraphs: null
+                },
+                neatnessScoreFive: null,
+                neatnessWeightedFive: null,
+                sourceType: sourceType,
+                notAssessedReason: reason,
+                scoreBasis: 'Skipped before scoring because the image source type was ' + sourceType + '.'
+            }
         };
+    }
 
-        var weightedFive = calculateWeightedNeatnessFive(subScores);
-        var roundedFive = weightedFive != null ? Math.round(weightedFive) : null;
-        var computedTen = roundedFive != null ? convertNeatnessFiveToTen(roundedFive) : null;
-
-        // If the model did not provide a usable score, preserve the unscored state instead of guessing.
-        if (computedTen == null && /Missing\s*\/10/i.test(response)) {
-            return buildUnscoredNeatnessResult(sourceType || 'NOT_SCORABLE', sourceReason || 'Neatness was not assessed because there was not enough clear handwriting to score fairly.');
+    function calculateWeightedNeatnessFive(subScores) {
+        if (!subScores) return null;
+        var values = [
+            subScores.letterFormation,
+            subScores.spacing,
+            subScores.stayingOnLine,
+            subScores.sizeConsistency,
+            subScores.penControl,
+            subScores.pageLayoutParagraphs
+        ];
+        for (var i = 0; i < values.length; i++) {
+            if (!Number.isFinite(values[i])) return null;
         }
+        return (Number(subScores.letterFormation) * 0.20) +
+               (Number(subScores.spacing) * 0.15) +
+               (Number(subScores.stayingOnLine) * 0.15) +
+               (Number(subScores.sizeConsistency) * 0.15) +
+               (Number(subScores.penControl) * 0.15) +
+               (Number(subScores.pageLayoutParagraphs) * 0.20);
+    }
 
-        // Parse the response - expected pattern: - Neatness: [score]/10 ([score]/5 - [level]) - [observation]
-        var match = response.match(/-\s*Neatness:\s*((?:10|8|6|4|2)|Missing)\s*\/10(?:\s*\([^)]*\))?\s*-\s*([^\n]+)/i);
-        var growthTipMatch = response.match(/\*\*Neatness Growth Tip:\*\*\s*([^\n]+)/i);
-        var parsedGrowthTip = growthTipMatch ? growthTipMatch[1].trim() : null;
+    function convertNeatnessFiveToTen(scoreFive) {
+        var n = Number(scoreFive);
+        if (!isFinite(n)) return null;
+        if (n < 1) n = 1;
+        if (n > 5) n = 5;
+        return Math.round(n) * 2;
+    }
 
-        if (match) {
-            var parsedTen = /missing/i.test(match[1]) ? null : Number(match[1]);
+    var rubric = {};
+    var sourceType = parseNeatnessSourceType(response);
+    var sourceReason = parseNeatnessSourceReason(response);
+
+    if (sourceType === 'TYPED_OR_PRINTED' || sourceType === 'NOT_SCORABLE') {
+        return buildUnscoredNeatnessResult(sourceType, sourceReason);
+    }
+
+    // Parse the 1-5 sub-scores from the image rubric.
+    var subScores = {
+        letterFormation:  parseNeatnessSubScore('Letter Formation', response),
+        spacing:          parseNeatnessSubScore('Spacing', response),
+        stayingOnLine:    parseNeatnessSubScore('Staying on the Line', response),
+        sizeConsistency:  parseNeatnessSubScore('Size Consistency', response),
+        penControl:       parseNeatnessSubScore('Pen Control and Marks', response),
+        pageLayoutParagraphs: parseNeatnessSubScore('Page Layout and Paragraphs', response)
+    };
+
+    var weightedFive = calculateWeightedNeatnessFive(subScores);
+    var roundedFive = weightedFive != null ? Math.round(weightedFive) : null;
+    var computedTen = roundedFive != null ? convertNeatnessFiveToTen(roundedFive) : null;
+
+    // If the model did not provide a usable score, preserve the unscored state instead of guessing.
+    if (computedTen == null && /Missing\s*\/10/i.test(response)) {
+        return buildUnscoredNeatnessResult(sourceType || 'NOT_SCORABLE', sourceReason || 'Neatness was not assessed because there was not enough clear handwriting to score fairly.');
+    }
+
+    // Parse the response - expected pattern: - Neatness: [score]/10 ([score]/5 - [level]) - [observation]
+    var match = response.match(/-\s*Neatness:\s*((?:10|8|6|4|2)|Missing)\s*\/10(?:\s*\([^)]*\))?\s*-\s*([^\n]+)/i);
+    var growthTipMatch = response.match(/\*\*Neatness Growth Tip:\*\*\s*([^\n]+)/i);
+    var parsedGrowthTip = growthTipMatch ? growthTipMatch[1].trim() : null;
+
+    function parseNeatnessFallback() {
+        // Fallback: score present but observation was not in the expected format.
+        var scoreMatch = response.match(/(?:10|8|6|4|2)\s*\/10/i);
+        if (scoreMatch || computedTen != null) {
+            var score = computedTen != null ? computedTen : Number(scoreMatch[0].match(/(?:10|8|6|4|2)/)[0]);
+            var sentenceMatch = response.match(/([^.\n]*(?:10|8|6|4|2)\s*\/10[^.\n]*\.?)/i);
+            var extractedReason = sentenceMatch ? sentenceMatch[0].replace(/^\s*[-*\d.]+\s*/, '').trim() : '';
+            var reason = extractedReason.length > 10 ? extractedReason : null;
             rubric = {
-                score: computedTen != null ? computedTen : parsedTen,
-                reason: (match[2] || '').trim(),
+                score: score,
+                reason: reason,
                 growthTip: parsedGrowthTip,
                 subScores: subScores,
                 neatnessScoreFive: roundedFive,
                 neatnessWeightedFive: weightedFive,
                 sourceType: sourceType || 'HANDWRITTEN',
-                scoreBasis: computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response.'
+                scoreBasis: computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response fallback.'
             };
-        } else {
-            // Fallback: score present but observation was not in the expected format.
-            var scoreMatch = response.match(/(?:10|8|6|4|2)\s*\/10/i);
-            if (scoreMatch || computedTen != null) {
-                var score = computedTen != null ? computedTen : Number(scoreMatch[0].match(/(?:10|8|6|4|2)/)[0]);
-                var sentenceMatch = response.match(/([^.\n]*(?:10|8|6|4|2)\s*\/10[^.\n]*\.?)/i);
-                var extractedReason = sentenceMatch ? sentenceMatch[0].replace(/^\s*[-*\d.]+\s*/, '').trim() : '';
-                var reason = extractedReason.length > 10 ? extractedReason : null;
-                rubric = {
-                    score: score,
-                    reason: reason,
-                    growthTip: parsedGrowthTip,
-                    subScores: subScores,
-                    neatnessScoreFive: roundedFive,
-                    neatnessWeightedFive: weightedFive,
-                    sourceType: sourceType || 'HANDWRITTEN',
-                    scoreBasis: computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response fallback.'
-                };
-            }
         }
+    }
 
-        if (rubric && (rubric.score !== undefined)) {
-            return { quickRubric: rubric };
-        }
-    } catch (e) {
-        wftDebugError('Neatness assessment failed:', e);
+    if (match) {
+        var parsedTen = /missing/i.test(match[1]) ? null : Number(match[1]);
+        rubric = {
+            score: computedTen != null ? computedTen : parsedTen,
+            reason: (match[2] || '').trim(),
+            growthTip: parsedGrowthTip,
+            subScores: subScores,
+            neatnessScoreFive: roundedFive,
+            neatnessWeightedFive: weightedFive,
+            sourceType: sourceType || 'HANDWRITTEN',
+            scoreBasis: computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response.'
+        };
+    } else {
+        parseNeatnessFallback();
+    }
+
+    if (rubric && (rubric.score !== undefined)) {
+        return { quickRubric: rubric };
     }
     return null;
 }
