@@ -2677,6 +2677,32 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
     var records = getWftDeletionRecords(deletions);
     var sessionUpdateMs = (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt))) ? Date.parse(sessionUpdatedAt) : 0;
     var normalizedStudentId = String(studentId || "");
+    function matchesStudentOwner(d, legacyKey, keyedSession, suffix) {
+        if (keyedSession && !d.studentId && !d.studentName) {
+            var owner = legacyKey.slice(8, -suffix.length);
+            if (owner && owner !== normalizedStudentId && owner.toLowerCase() !== String(studentName || '').trim().toLowerCase()) return false;
+        }
+        if (studentName && d.studentId && !normalizedStudentId && !d.studentName) return false;
+        if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { return false; }
+        if (studentName && d.studentName && !(normalizedStudentId && d.studentId) && String(d.studentName).trim().toLowerCase() !== String(studentName).trim().toLowerCase()) return false;
+        return true;
+    }
+
+    function deletionIsNewer(d) {
+        var useLamport = WFT_LAMPORT_V1 && typeof d.lamportClock === "number" && !isNaN(d.lamportClock);
+        if (useLamport) {
+            var sessLam = (typeof sessionLamportClock === "number" && !isNaN(sessionLamportClock)) ? sessionLamportClock : -1;
+            // Deletion wins only if its Lamport clock is strictly higher than the session's.
+            // If they are equal or the session is higher, the session survives.
+            if (d.lamportClock > sessLam) { return true; }
+            return false;
+        }
+        var deletedMs = (d.deletedAt && !isNaN(Date.parse(d.deletedAt))) ? Date.parse(d.deletedAt) : 0;
+        if (!deletedMs) { return false; }
+        if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
+        return false;
+    }
+
     for (var i = 0; i < records.length; i++) {
         var d = records[i] || {};
         var type = d.type || "session";
@@ -2685,24 +2711,8 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
         var legacyKey = String(d.legacyKey || '');
         var keyedSession = legacyKey.indexOf('session:') === 0 && legacyKey.slice(-suffix.length) === suffix;
         if (String(d.sessionId || "") !== String(sessionId) && (d.sessionId || !keyedSession)) continue;
-        if (keyedSession && !d.studentId && !d.studentName) {
-            var owner = legacyKey.slice(8, -suffix.length);
-            if (owner && owner !== normalizedStudentId && owner.toLowerCase() !== String(studentName || '').trim().toLowerCase()) continue;
-        }
-        if (studentName && d.studentId && !normalizedStudentId && !d.studentName) continue;
-        if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { continue; }
-        if (studentName && d.studentName && !(normalizedStudentId && d.studentId) && String(d.studentName).trim().toLowerCase() !== String(studentName).trim().toLowerCase()) continue;
-        var useLamport = WFT_LAMPORT_V1 && typeof d.lamportClock === "number" && !isNaN(d.lamportClock);
-        if (useLamport) {
-            var sessLam = (typeof sessionLamportClock === "number" && !isNaN(sessionLamportClock)) ? sessionLamportClock : -1;
-            // Deletion wins only if its Lamport clock is strictly higher than the session's.
-            // If they are equal or the session is higher, the session survives.
-            if (d.lamportClock > sessLam) { return true; }
-            continue;
-        }
-        var deletedMs = (d.deletedAt && !isNaN(Date.parse(d.deletedAt))) ? Date.parse(d.deletedAt) : 0;
-        if (!deletedMs) { continue; }
-        if (!sessionUpdateMs || deletedMs > sessionUpdateMs) { return true; }
+        if (!matchesStudentOwner(d, legacyKey, keyedSession, suffix)) { continue; }
+        if (deletionIsNewer(d)) { return true; }
     }
     return false;
 }
