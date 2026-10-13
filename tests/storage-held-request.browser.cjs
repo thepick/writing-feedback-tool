@@ -6,6 +6,14 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
   const browser = await chromium.launch({channel:'msedge',headless:true});
   const held = [], requests = [], errors = [], checks = [];
   let observed;
+  function checkHeldRequestInvariants(timedOut, late) {
+    const check = (name,pass) => checks.push({name,passed:!!pass});
+    check('Three actual uploads timed out and run returned false',held.length===3 && timedOut.result===false && timedOut.dirty && !timedOut.active && /TIMEOUT/.test(timedOut.error));
+    check('Held upload payloads never contain newer writing',requests.filter(r=>r.url.includes('/upload/')).every(r=>!r.body.includes('Newer synthetic writing')));
+    check('Late callback never resolves failed run or clears newer dirty/pending bytes',late.result===false && late.dirty && late.bytesUnchanged && late.pending.sessionData.id==='newer' && late.portfolio.Synthetic.sessions.some(s=>s.id==='newer'));
+    check('Late obsolete upload cannot advertise synced while newer writing remains dirty',!late.dot.split(' ').includes('synced') && !/^Synced/.test(late.status));
+    check('No browser script errors',errors.length===0);
+  }
   try {
     const context = await browser.newContext(), page = await context.newPage();
     page.on('pageerror', e => errors.push(e.message));
@@ -55,12 +63,7 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
     await held[0].fulfill({contentType:'application/json',body:JSON.stringify({id:'accepted-old-upload'})});
     await page.waitForFunction(() => getCachedWftDriveFileId(WFT_PORTFOLIO_FILENAME) === 'accepted-old-upload');
     const late = await page.evaluate(() => ({result:heldRunResult,dirty:wftSyncState.pendingPortfolioPush,active:wftSyncState.isSyncing,status:document.getElementById('driveSyncTextHeader').textContent,dot:document.getElementById('driveSyncDotHeader').className,pending:pendingPortfolioSync,bytesUnchanged:beforeLate===localStorage.getItem('wft_portfolio'),portfolio:JSON.parse(localStorage.getItem('wft_portfolio')),error:String(wftSyncState.lastError && wftSyncState.lastError.message),flags:{v2:WFT_SYNC_ENGINE_V2,split:WFT_SPLIT_STUDENT_FILES_V1,index:WFT_PORTFOLIO_INDEX_V1,lazy:WFT_LAZY_PORTFOLIO_LOAD_V1,idb:WFT_INDEXEDDB_CACHE_V1,debug:WFT_DEBUG,syncDebug:WFT_SYNC_DEBUG}}));
-    const check = (name,pass) => checks.push({name,passed:!!pass});
-    check('Three actual uploads timed out and run returned false',held.length===3 && timedOut.result===false && timedOut.dirty && !timedOut.active && /TIMEOUT/.test(timedOut.error));
-    check('Held upload payloads never contain newer writing',requests.filter(r=>r.url.includes('/upload/')).every(r=>!r.body.includes('Newer synthetic writing')));
-    check('Late callback never resolves failed run or clears newer dirty/pending bytes',late.result===false && late.dirty && late.bytesUnchanged && late.pending.sessionData.id==='newer' && late.portfolio.Synthetic.sessions.some(s=>s.id==='newer'));
-    check('Late obsolete upload cannot advertise synced while newer writing remains dirty',!late.dot.split(' ').includes('synced') && !/^Synced/.test(late.status));
-    check('No browser script errors',errors.length===0);
+    checkHeldRequestInvariants(timedOut, late);
     observed={timedOut,late,requests,errors,checks,sourceRoot:root,browser:browser.version(),timeoutMs:30000,productionMethodsReplaced:[]};
   } finally {
     for(const route of held.slice(1)) await route.abort().catch(()=>{});
