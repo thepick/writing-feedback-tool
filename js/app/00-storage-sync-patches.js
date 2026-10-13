@@ -4278,7 +4278,7 @@ function saveFileToDriveOncePromise(filename, content, mimeType) {
 function isTransientWftDriveError(err) {
     if (!err) return false;
     var status = Number(err.status || 0);
-    if (status === 0 || status === 408 || status === 429 || status === 500 || status === 502 || status === 503 || status === 504) return true;
+    if ([0, 408, 429, 500, 502, 503, 504].includes(status)) return true;
     var msg = String(err.message || "");
     return /network|timeout|failed to fetch|SAVE_FILE_TIMEOUT/i.test(msg);
 }
