@@ -2609,25 +2609,29 @@ function buildComputedFlowQuickNote(flowData) {
     if (shortRunBad) {
         return "Try combining some short sentences that are next to each other so the rhythm feels less choppy.";
     }
-    if ((flowData.shortCount || 0) === 0) {
-        return "The writing uses mostly medium and long sentences, so adding a few shorter sentences could create more rhythm and contrast.";
+    return buildSentenceLengthQuickNote();
+
+    function buildSentenceLengthQuickNote() {
+        if ((flowData.shortCount || 0) === 0) {
+            return "The writing uses mostly medium and long sentences, so adding a few shorter sentences could create more rhythm and contrast.";
+        }
+        if ((flowData.longCount || 0) === 0) {
+            return "Adding one or two longer sentences would help balance the shorter sentences and make the rhythm smoother.";
+        }
+        if ((flowData.mediumCount || 0) === 0) {
+            return "Adding some medium-length sentences would help the writing move more naturally between short and long sentences.";
+        }
+        if (dominant.label === "short" && dominant.ratio >= 0.60) {
+            return "Many sentences are short, so combining a few ideas into longer sentences would help the rhythm feel smoother.";
+        }
+        if (dominant.label === "long" && dominant.ratio >= 0.60) {
+            return "Many sentences are long, so adding a few shorter sentences would create clearer rhythm and contrast.";
+        }
+        if (dominant.label === "medium" && dominant.ratio >= 0.75) {
+            return "Most sentences are medium length, so adding a few short and long sentences would create more variety.";
+        }
+        return "A bit more sentence variety would help the writing sound smoother and more polished.";
     }
-    if ((flowData.longCount || 0) === 0) {
-        return "Adding one or two longer sentences would help balance the shorter sentences and make the rhythm smoother.";
-    }
-    if ((flowData.mediumCount || 0) === 0) {
-        return "Adding some medium-length sentences would help the writing move more naturally between short and long sentences.";
-    }
-    if (dominant.label === "short" && dominant.ratio >= 0.60) {
-        return "Many sentences are short, so combining a few ideas into longer sentences would help the rhythm feel smoother.";
-    }
-    if (dominant.label === "long" && dominant.ratio >= 0.60) {
-        return "Many sentences are long, so adding a few shorter sentences would create clearer rhythm and contrast.";
-    }
-    if (dominant.label === "medium" && dominant.ratio >= 0.75) {
-        return "Most sentences are medium length, so adding a few short and long sentences would create more variety.";
-    }
-    return "A bit more sentence variety would help the writing sound smoother and more polished.";
 }
 
 function buildFlowPatternSummary(flowData) {
