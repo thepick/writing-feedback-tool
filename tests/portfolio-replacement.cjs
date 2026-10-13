@@ -14,7 +14,7 @@ function functions(file, first, last) {
 const source = functions('js/app/10-main-app.js', 'findPortfolioSessionIndex', 'renderNotebookDetailedAssessmentFromSavedSession')
     + functions('js/app/00-storage-sync-patches.js', 'normalizeWftSessionDate', 'normalizeWftPortfolioForSchemaV1')
     + functions('js/app/00-storage-sync-patches.js', 'retainWftStudentSessions', 'saveStudentSession')
-    + functions('js/app/00-storage-sync-patches.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
+    + functions('js/app/storage-recovery.js', 'restoreWftStudentChangeStorage', 'parseWftBackupValue')
     + functions('js/app/00-storage-sync-patches.js', 'saveWftStudentChange', 'applyDeletionsToStudents')
     + functions('js/app/00-storage-sync-patches.js', 'commitPendingPortfolioReplacement');
 const copy = value => JSON.parse(JSON.stringify(value));

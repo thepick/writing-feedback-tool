@@ -2,7 +2,9 @@
 
 A browser-only writing analysis tool for teachers. It provides rubric scoring, corrected writing, structured feedback, student tracking, and optional Google Drive syncing.
 
-The page loads `google-drive-migration.js`, `js/app/00-storage-sync-patches.js`, `js/app/10-main-app.js`, and `js/app/99-lightbox.js`. Runtime helpers and configuration live in those scripts. Tests under `tests/` exercise the shipped code; historical audit records under `docs/repowise-audit/` may refer to retired helper copies.
+The page loads classic browser scripts in this order: `google-drive-migration.js`, `js/app/dialogs.js`, `js/app/storage-recovery.js`, `js/app/00-storage-sync-patches.js`, `js/app/portfolio-export.js`, `js/app/10-main-app.js`, `js/app/photo-crop.js`, then `js/app/99-lightbox.js` after its markup. Keep that order: main initializes the page immediately and retains the crop-state assignments; crop functions bind the modal on DOMContentLoaded.
+
+Dialogs, storage recovery/backup, portfolio exports/archives, and photo cropping each have one source file. The storage script retains settings, configuration, authentication, sync, portfolio persistence and display. Main retains roster, analysis, feedback, notebook printing, image input and page initialization. Public functions and state remain browser globals used by existing handlers. Tests under `tests/` exercise shipped code. See [current script locations](docs/script-locations.md) when following historical audit references, which retain their original source locations.
 
 ## Features
 
@@ -167,3 +169,17 @@ Because this is a browser-based tool:
 - Treat your OpenRouter API key as private
 - Do not share screenshots that reveal your key
 - Remember that settings are stored locally in the browser you are using
+
+## Local regression tests
+
+With the existing Node, Playwright/Edge and JSZip installation available, run:
+
+```powershell
+node scripts/check-test-runner.cjs
+node scripts/run-tests.cjs --out ./test-results
+node scripts/run-tests.cjs --out ./test-results-focused --suite tests/openrouter-failures.browser.cjs
+```
+
+The runner syntax checks the application, tests and scripts, then runs each discovered top-level `tests/*.cjs` suite and the root migration test in a separate process, sequentially. A failed or timed-out suite makes the final exit status nonzero. Logs and `suite-results.json` record the inventory, selection, status and duration; suites with case reports also save their JSON. Focused selections are marked partial. Reports are refreshed each run, and expected missing or empty reports fail. There are no automatic retries. Browser tests intercept external services and use synthetic writing and accounts.
+
+Native coverage is optional evidence tooling: `WFT_COVERAGE_PRELOAD` selects an external reviewed collector, and `WFT_SUPPLEMENTAL_MANIFEST` selects a JSON list of external driver paths. The runner alone does not certify coverage. Source hashes, the eight loaded scripts, executable-line denominators and excluded frozen reference contexts must be verified separately. VM snippets do not establish native browser coverage; branch coverage and live service behavior remain unmeasured.

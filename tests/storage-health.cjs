@@ -52,8 +52,8 @@ function context(source, globals) {
         await assert.rejects(promise, /write failed/);
     }
 
-    for (const file of [production]) {
-        const source = section(file, file === production ? '// ── Emergency Backup ──' : '// ── Build a comprehensive backup object ──', 'function downloadWftEmergencyBackup(');
+    for (const file of ['js/app/storage-recovery.js']) {
+        const source = section(file, '// ── Emergency Backup ──', 'function downloadWftEmergencyBackup(');
         const flags = Object.fromEntries([...source.matchAll(/\b(WFT_[A-Z0-9_]+)\b/g)].map(match => [match[1], false]));
         const values = { wft_settings: '{"unknown":{"keep":true}}', wft_students: 'null', wft_portfolio: '{invalid', wft_selectedStudent: 'Alice', wft_google_user: '' };
         const app = context(source, {

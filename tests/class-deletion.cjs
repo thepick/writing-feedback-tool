@@ -4,7 +4,11 @@ const path = require('node:path');
 const vm = require('node:vm');
 const source = fs.readFileSync(path.join(__dirname, '../js/app/10-main-app.js'), 'utf8');
 const patches = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-patches.js'), 'utf8');
-const commitSource = patches.slice(patches.indexOf('function restoreWftStudentChangeStorage('), patches.indexOf('function parseWftBackupValue('))
+const recovery = fs.readFileSync(path.join(__dirname, '../js/app/storage-recovery.js'), 'utf8');
+const recoveryStart = recovery.indexOf('function restoreWftStudentChangeStorage(');
+const recoveryEnd = recovery.indexOf('function parseWftBackupValue(', recoveryStart);
+assert.ok(recoveryStart >= 0 && recoveryEnd > recoveryStart);
+const commitSource = recovery.slice(recoveryStart, recoveryEnd)
     + patches.slice(patches.indexOf('function saveWftStudentChange('), patches.indexOf('function applyDeletionsToStudents('));
 const extracted = commitSource + [
     ['removeStudent', 'getPreferredStudentForManagement'],

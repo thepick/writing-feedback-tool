@@ -1,6 +1,7 @@
 const {chromium} = require('playwright');
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'));
+const localAppRoute = require('./support/local-app-route');
 const scenarios = [
     ...['text','image'].flatMap(kind => ['missing','whitespace','read-fault','key-recovery','settings-recovery','reader-throw','success','fallback','timeout','cancel-before','cancel-body','cancel-delay','edit-delay','remove-delay','recovery-delay','policy-delay'].map(mode => ({kind,mode}))),
     ...['session','remembered','legacy'].map(mode => ({kind:'text',mode})),
@@ -15,12 +16,7 @@ const scenarios = [
         for (const scenario of scenarios) {
             const page = await browser.newPage(), errors=[];
             page.on('pageerror', error => errors.push(error.message));
-            await page.route('**/*', route => {
-                const url = new URL(route.request().url());
-                if(url.origin !== 'http://127.0.0.1:8765') return route.abort();
-                const file=path.join(root,url.pathname==='/'?'index.html':decodeURIComponent(url.pathname));
-                return route.fulfill(fs.existsSync(file)?{contentType:file.endsWith('.js')?'application/javascript':'text/html',body:fs.readFileSync(file)}:{status:404,body:''});
-            });
+            await page.route('**/*', route => localAppRoute(route, root));
             try {
                 await page.goto('http://127.0.0.1:8765',{waitUntil:'domcontentloaded'});
                 const result=await page.evaluate(async ({kind,mode}) => {
