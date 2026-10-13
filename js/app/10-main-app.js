@@ -5651,39 +5651,45 @@ function buildEncouragingClosing(data) {
     var nextStep = cleanNotebookSentence(plan.nextTime || "revise one part carefully").replace(/[.!?]+$/, "");
     var closing = "You are building strong writing habits, and your next " + genre + " will be even better when you " + nextStep.toLowerCase() + ".";
 
-    if (genreInfo.mainGenre === "Narrative / Story") {
-        closing = "You have the start of an engaging story here, and it will be even stronger next time when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Opinion / Argument") {
-        closing = "You shared your opinion clearly, and your next opinion piece will be even stronger when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Informational / Explanatory") {
-        closing = "You are teaching the reader about your topic, and this explanation will become even clearer when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Procedural / How-To") {
-        closing = "Your how-to piece already helps the reader follow your thinking, and it will be even clearer when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Letter / Email") {
-        closing = "Your letter already has a clear message, and it will sound even stronger when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Poem / Creative Writing") {
-        closing = "Your " + genre + " shows creative thinking, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Literary Analysis / Text Response" || genreInfo.mainGenre === "Academic Short Response") {
-        closing = "Your response shows your thinking, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Journal / Reflection") {
-        closing = "Your reflection shares your thinking clearly, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
-    } else if (genreInfo.mainGenre === "Speech / Presentation") {
-        closing = "Your speech has a clear message, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+    function applyGenreClosing() {
+        if (genreInfo.mainGenre === "Narrative / Story") {
+            closing = "You have the start of an engaging story here, and it will be even stronger next time when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Opinion / Argument") {
+            closing = "You shared your opinion clearly, and your next opinion piece will be even stronger when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Informational / Explanatory") {
+            closing = "You are teaching the reader about your topic, and this explanation will become even clearer when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Procedural / How-To") {
+            closing = "Your how-to piece already helps the reader follow your thinking, and it will be even clearer when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Letter / Email") {
+            closing = "Your letter already has a clear message, and it will sound even stronger when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Poem / Creative Writing") {
+            closing = "Your " + genre + " shows creative thinking, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Literary Analysis / Text Response" || genreInfo.mainGenre === "Academic Short Response") {
+            closing = "Your response shows your thinking, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Journal / Reflection") {
+            closing = "Your reflection shares your thinking clearly, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+        } else if (genreInfo.mainGenre === "Speech / Presentation") {
+            closing = "Your speech has a clear message, and it will be even stronger when you " + nextStep.toLowerCase() + ".";
+        }
     }
+    applyGenreClosing();
 
-    if (lowest === "Grammar") {
-        closing = "You shared your ideas well, and this " + genre + " will sound even smoother when you check each sentence carefully for grammar as you revise.";
-    } else if (lowest === "Spelling & Punctuation") {
-        closing = "Your message is coming through clearly, and this " + genre + " will feel even more polished when you proofread for capitals, punctuation, and spelling.";
-    } else if (lowest === "Organization") {
-        closing = "You have good ideas in this " + genre + ", and it will be even easier to read when you organize them in a clear, logical order.";
-    } else if (lowest === "Flow") {
-        closing = "You have good ideas in this " + genre + ", and it will be even easier to read when you vary your sentence lengths for a smoother rhythm.";
-    } else if (lowest === "Ideas & Details") {
-        closing = "You have a solid start here, and this " + genre + " will become even more interesting when you add a few more specific details.";
-    } else if (lowest === "Word Choice") {
-        closing = "You are communicating your ideas clearly, and this " + genre + " will stand out even more when you choose a few stronger words.";
+    function applyCategoryClosing() {
+        if (lowest === "Grammar") {
+            closing = "You shared your ideas well, and this " + genre + " will sound even smoother when you check each sentence carefully for grammar as you revise.";
+        } else if (lowest === "Spelling & Punctuation") {
+            closing = "Your message is coming through clearly, and this " + genre + " will feel even more polished when you proofread for capitals, punctuation, and spelling.";
+        } else if (lowest === "Organization") {
+            closing = "You have good ideas in this " + genre + ", and it will be even easier to read when you organize them in a clear, logical order.";
+        } else if (lowest === "Flow") {
+            closing = "You have good ideas in this " + genre + ", and it will be even easier to read when you vary your sentence lengths for a smoother rhythm.";
+        } else if (lowest === "Ideas & Details") {
+            closing = "You have a solid start here, and this " + genre + " will become even more interesting when you add a few more specific details.";
+        } else if (lowest === "Word Choice") {
+            closing = "You are communicating your ideas clearly, and this " + genre + " will stand out even more when you choose a few stronger words.";
+        }
     }
+    applyCategoryClosing();
 
     if (strength && strength !== "-") {
         var strengthShort = summarizeStrengthForClosing(strength);
