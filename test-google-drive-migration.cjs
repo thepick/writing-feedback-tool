@@ -8,6 +8,17 @@ function setup(){
  const document={createElement:element,body:{append(d){dialog=d;}}};
  const reply=(data,status=200,headers={})=>new Response(typeof data==='string'||data instanceof Uint8Array?data:JSON.stringify(data),{status,headers});
  const context={window:{google:{accounts:{oauth2:{hasGrantedAllScopes:()=>true,initTokenClient:cfg=>({requestAccessToken(){cfg.callback({access_token:'old',expires_in:3600});}})}}}},document,Blob,AbortSignal,URLSearchParams,TextEncoder,TextDecoder,crypto:webcrypto,console};
+ function fileResponse(url,token){
+  const id=url.match(/\/files\/([^?]+)/)?.[1];
+  if(id){const f=files.find(x=>x.id===decodeURIComponent(id)&&x.token===token);if(!f)return reply({},404);if(changed&&token==='old')f.data=bytes({progress:'changed'});return reply(f.data);}
+  const q=new URL(url).searchParams.get('q')||'',space=new URL(url).searchParams.get('spaces');
+  let matching=files.filter(f=>f.token===token&&(space!=='appDataFolder'||f.parents.includes('appDataFolder')));
+  const name=q.match(/name\s*=\s*'([^']+)'/);if(name)matching=matching.filter(f=>f.name===name[1]);
+  const parent=q.match(/'([^']+)' in parents/);if(parent)matching=matching.filter(f=>f.parents.includes(parent[1]));
+  if(q.includes('mimeType='))matching=matching.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
+  if(q.includes('oauthSource'))matching=matching.filter(f=>f.appProperties.oauthSource==='oldclient');
+  return reply({files:matching.map(({data,token,...metadata})=>metadata)});
+ }
  context.fetch=async(url,opts={})=>{
   const token=opts.headers.Authorization.replace('Bearer ',''),method=opts.method||'GET';calls.push({url,token,method});
   assert.ok(token!=='old'||method==='GET','Original must be read only');
@@ -26,15 +37,7 @@ function setup(){
   if(method==='POST'){
    const m=JSON.parse(opts.body),f=file(token,m.name,'',m.parents?.[0]||'root',m.mimeType);f.appProperties=m.appProperties||{};return reply({id:f.id});
   }
-  const id=url.match(/\/files\/([^?]+)/)?.[1];
-  if(id){const f=files.find(x=>x.id===decodeURIComponent(id)&&x.token===token);if(!f)return reply({},404);if(changed&&token==='old')f.data=bytes({progress:'changed'});return reply(f.data);}
-  const q=new URL(url).searchParams.get('q')||'',space=new URL(url).searchParams.get('spaces');
-  let matching=files.filter(f=>f.token===token&&(space!=='appDataFolder'||f.parents.includes('appDataFolder')));
-  const name=q.match(/name\s*=\s*'([^']+)'/);if(name)matching=matching.filter(f=>f.name===name[1]);
-  const parent=q.match(/'([^']+)' in parents/);if(parent)matching=matching.filter(f=>f.parents.includes(parent[1]));
-  if(q.includes('mimeType='))matching=matching.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
-  if(q.includes('oauthSource'))matching=matching.filter(f=>f.appProperties.oauthSource==='oldclient');
-  return reply({files:matching.map(({data,token,...metadata})=>metadata)});
+  return fileResponse(url,token);
  };
  vm.createContext(context);vm.runInContext(source.replace('window.GoogleDriveMigration = {ensure, remap};','window.GoogleDriveMigration = {ensure, remap, recoverAppData, recoverFolder, list};'),context);
  const api=context.window.GoogleDriveMigration;
