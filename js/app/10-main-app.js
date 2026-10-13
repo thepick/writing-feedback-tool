@@ -2778,6 +2778,40 @@ function normalizeOpenRouterError(prefix, err, attempts) {
     return new Error(prefix + ": " + summary + " " + message + attemptsText);
 }
 
+function parseOpenRouterResponse(res, rawText) {
+    var data;
+    try {
+        data = JSON.parse(rawText);
+    } catch (e) {
+        throw new Error("OpenRouter returned non-JSON: " + rawText);
+    }
+
+    if (!res.ok) {
+        var statusMessage = summarizeOpenRouterFailure(res.status, rawText);
+        var err = new Error("OpenRouter error " + res.status + ": " + statusMessage + " Raw: " + rawText);
+        err.status = res.status;
+        err.rawText = rawText;
+        throw err;
+    }
+
+    if (data.error) {
+        var payloadErr = new Error("OpenRouter payload error: " + JSON.stringify(data.error));
+        payloadErr.status = data.error.code ? Number(data.error.code) : 0;
+        payloadErr.rawText = JSON.stringify(data.error);
+        throw payloadErr;
+    }
+
+    if (!data.choices || !data.choices.length) {
+        throw new Error("OpenRouter returned no choices: " + rawText);
+    }
+
+    if (!data.choices[0].message || typeof data.choices[0].message.content !== "string") {
+        throw new Error("Unexpected OpenRouter response shape: " + rawText);
+    }
+
+    return data.choices[0].message.content;
+}
+
 async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, options) {
     var requestContext = typeof activeAnalysisContext !== "undefined" ? activeAnalysisContext : null;
     if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
@@ -2788,6 +2822,20 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
     var attempts = [];
     var lastError = null;
     var maxRetriesPerModel = options.maxRetriesPerModel == null ? 2 : options.maxRetriesPerModel;
+
+    function checkOpenRouterRetry() {
+        var status = lastError && lastError.status ? Number(lastError.status) : 0;
+        var summary = summarizeOpenRouterFailure(status, lastError && lastError.message ? lastError.message : "");
+        attempts.push(model + " attempt " + (attempt + 1) + ": " + summary);
+
+        var retryable = !status || isRetryableOpenRouterStatus(status) || /timed out|Failed to fetch|network|Upstream Response Error|Provider returned error|Decode transfer failed|KVTransferError/i.test(lastError && lastError.message ? lastError.message : "");
+        var hasAnotherAttemptSameModel = attempt < maxRetriesPerModel;
+        var hasAnotherModel = m < models.length - 1;
+
+        if (!(retryable && (hasAnotherAttemptSameModel || hasAnotherModel))) {
+            throw new Error("OpenRouter request failed after retries: " + (lastError && lastError.message ? lastError.message : String(lastError)));
+        }
+    }
 
     for (var m = 0; m < models.length; m++) {
         var model = models[m];
@@ -2819,37 +2867,7 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                 var rawText = await res.text();
                 clearTimeout(timeoutId);
                 if (requestContext) assertCurrentAnalysisContext(requestContext);
-                var data;
-                try {
-                    data = JSON.parse(rawText);
-                } catch (e) {
-                    throw new Error("OpenRouter returned non-JSON: " + rawText);
-                }
-
-                if (!res.ok) {
-                    var statusMessage = summarizeOpenRouterFailure(res.status, rawText);
-                    var err = new Error("OpenRouter error " + res.status + ": " + statusMessage + " Raw: " + rawText);
-                    err.status = res.status;
-                    err.rawText = rawText;
-                    throw err;
-                }
-
-                if (data.error) {
-                    var payloadErr = new Error("OpenRouter payload error: " + JSON.stringify(data.error));
-                    payloadErr.status = data.error.code ? Number(data.error.code) : 0;
-                    payloadErr.rawText = JSON.stringify(data.error);
-                    throw payloadErr;
-                }
-
-                if (!data.choices || !data.choices.length) {
-                    throw new Error("OpenRouter returned no choices: " + rawText);
-                }
-
-                if (!data.choices[0].message || typeof data.choices[0].message.content !== "string") {
-                    throw new Error("Unexpected OpenRouter response shape: " + rawText);
-                }
-
-                return data.choices[0].message.content;
+                return parseOpenRouterResponse(res, rawText);
             } catch (e) {
                 clearTimeout(timeoutId);
                 if (requestContext) assertCurrentAnalysisContext(requestContext);
@@ -2866,18 +2884,7 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
 
                 if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
 
-                var status = lastError && lastError.status ? Number(lastError.status) : 0;
-                var summary = summarizeOpenRouterFailure(status, lastError && lastError.message ? lastError.message : "");
-                attempts.push(model + " attempt " + (attempt + 1) + ": " + summary);
-
-                var retryable = !status || isRetryableOpenRouterStatus(status) || /timed out|Failed to fetch|network|Upstream Response Error|Provider returned error|Decode transfer failed|KVTransferError/i.test(lastError && lastError.message ? lastError.message : "");
-                var hasAnotherAttemptSameModel = attempt < maxRetriesPerModel;
-                var hasAnotherModel = m < models.length - 1;
-
-                if (!(retryable && (hasAnotherAttemptSameModel || hasAnotherModel))) {
-                    throw new Error("OpenRouter request failed after retries: " + (lastError && lastError.message ? lastError.message : String(lastError)));
-                }
-
+                checkOpenRouterRetry();
                 await sleepMs(Math.min(1200 * (attempt + 1), 3000));
             }
         }
