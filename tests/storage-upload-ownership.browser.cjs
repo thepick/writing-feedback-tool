@@ -24,6 +24,7 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
     if(hold&&(name==='wft-portfolio.json'||name==='wft-deletions.json')){held.push(route);return;}
     return accept(route);
    }
+   async function replyToReadRequest(){
    if(url.pathname.includes('/userinfo'))return reply({id:'synthetic-account',email:'synthetic@example.invalid',name:'Synthetic'});
    if(query.includes('.google-migration-v1.json'))return reply({files:[{id:'migration-marker'}]});
    if(url.searchParams.get('alt')==='media'&&url.pathname.endsWith('/migration-marker'))return reply({userId:'synthetic-account',oldClient:'546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com',newClient:await page.evaluate(()=>GOOGLE_CLIENT_ID)});
@@ -33,6 +34,8 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
    const saved=files.get(url.pathname.split('/').pop());
    if(saved)return reply(url.searchParams.get('alt')==='media'?saved.data:{id:saved.id,name:saved.name,parents:['root-folder'],mimeType:'application/json',trashed:false,modifiedTime:saved.modifiedTime});
    return reply({});
+   }
+   return replyToReadRequest();
   });
   await page.clock.install();await page.goto('http://127.0.0.1:8765',{waitUntil:'load'});
   await page.evaluate(()=>{
@@ -53,13 +56,17 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
    await page.evaluate(()=>finishWftGoogleSignInWithAccessToken('synthetic-token-B',3600,'synthetic-scope','gis-popup'));
    await page.waitForFunction(()=>driveAccessToken==='synthetic-token-B');
   };
+  async function startScenario(){
   if(scenario==='legacy-current'){
    await page.evaluate(()=>saveFileToDrive(WFT_PORTFOLIO_FILENAME,localStorage.getItem('wft_portfolio'),'application/json',(err,id)=>{window.legacyResult={error:err&&err.message,id};}));
   }else if(scenario==='signout-current'||scenario==='signout-timeout-reconnect'){
    // The actual sign-out handler waits for syncAllToDrive; no lock/reset methods are replaced.
    await page.evaluate(()=>handleGoogleSignOut());
   }else await page.evaluate(()=>{window.run=syncWftNow('manual',{immediate:true}).then(r=>{window.runResult=r;return r;});});
+  }
+  await startScenario();
   await waitHeld(1);
+  async function finishScenario(){
   if(scenario==='retry-late-success'||scenario==='retry-late-error'){
    await page.clock.runFor(30001);await page.clock.runFor(500);await waitHeld(2);
    snapshots.retry=await capture();
@@ -68,6 +75,7 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
    check('Late first attempt cannot replace the active retry status or block it',snapshots.late.active&&snapshots.late.hasPromise&&snapshots.late.result===null&&snapshots.late.status===snapshots.retry.status&&snapshots.late.dot===snapshots.retry.dot&&!snapshots.late.blocked);
    hold=false;await accept(held[1]);await page.waitForFunction(()=>window.runResult!==null);
   }else if(scenario==='signout-timeout-reconnect'){
+   async function finishSignoutReconnect(){
    for(let attempt=1;attempt<=3;attempt++){await page.clock.runFor(30001);if(attempt<3){await page.clock.runFor(attempt===1?500:1000);await waitHeld(attempt+1);}}
    await page.waitForFunction(()=>!driveAccessToken);snapshots.signedOut=await capture();
    check('Real sign-out disconnects after bounded V2 failure and retains writing',!snapshots.signedOut.token&&/Signed out/.test(snapshots.signedOut.status)&&JSON.parse(snapshots.signedOut.bytes).Synthetic.sessions[0].originalText==='Original synthetic writing');
@@ -76,6 +84,8 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
    await accept(held[0]);await page.waitForTimeout(100);snapshots.late=await capture();
    check('Old accepted reply cannot alter reconnecting account status/ownership',snapshots.late.status===snapshots.reconnected.status&&snapshots.late.dot===snapshots.reconnected.dot&&snapshots.late.active&&snapshots.late.hasPromise&&snapshots.late.token==='synthetic-token-B');
    hold=false;await accept(held[3]);await page.waitForFunction(()=>!wftSyncState.isSyncing);
+   }
+   await finishSignoutReconnect();
   }else if(scenario==='newer-during-upload'){
    await page.evaluate(()=>{saveStudentSession('Synthetic',{id:'newer',createdAt:'2026-10-12T00:01:00Z',originalText:'Newer writing',images:[]});pendingPortfolioSync={studentName:'Synthetic',signature:'pending-newer',sessionData:{id:'pending-newer',originalText:'Pending uncommitted writing',images:[]}};persistPendingPortfolioSync();});
    await accept(held[0]);await waitHeld(2);snapshots.followup=await capture();
@@ -92,13 +102,18 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
    else if(scenario==='signout-current')await page.waitForFunction(()=>!driveAccessToken);
    else await page.waitForFunction(()=>window.runResult!==null);
   }
+  }
+  await finishScenario();
   snapshots.final=await capture();
+  function checkFinal(){
   if(scenario==='legacy-current')check('Direct legacy callback reports accepted file ID and successful status',snapshots.final.legacy.id==='accepted-1'&&!snapshots.final.legacy.error&&/^Synced/.test(snapshots.final.status));
   else if(scenario==='signout-current')check('Actual sign-out waits for uploads and keeps local portfolio',!snapshots.final.token&&!snapshots.final.active&&/Signed out/.test(snapshots.final.status)&&JSON.parse(snapshots.final.bytes).Synthetic.sessions[0].originalText==='Original synthetic writing');
   else if(scenario==='newer-during-upload')check('Successful current snapshot cannot advertise synced over uncommitted pending writing',snapshots.final.result===true&&!snapshots.final.active&&!snapshots.final.dirty&&!snapshots.final.dot.split(' ').includes('synced')&&!/^Synced/.test(snapshots.final.status));
   else check('Current successful run clears its lock/dirty work and publishes Synced',!snapshots.final.active&&!snapshots.final.hasPromise&&!snapshots.final.dirty&&!snapshots.final.blocked&&/^Synced/.test(snapshots.final.status)&&(scenario==='signout-timeout-reconnect'||snapshots.final.result===true));
   if(scenario==='newer-during-upload')check('Uncommitted pending writing survives actual successful retry',snapshots.final.pending.sessionData.id==='pending-newer'&&JSON.parse(snapshots.final.bytes).Synthetic.sessions.some(s=>s.id==='newer')&&snapshots.final.counter===snapshots.final.syncedCounter);
   check('No browser script errors',errors.length===0);
+  }
+  checkFinal();
   cases.push({scenario,checks,snapshots,requests,errors});
   for(const route of held)await route.abort().catch(()=>{});
   await context.close();console.log(JSON.stringify({scenario,checks}));
