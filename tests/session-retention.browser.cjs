@@ -2,19 +2,7 @@ const fs = require('node:fs'), path = require('node:path'), assert = require('no
 const { chromium } = require('playwright');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
 
-(async () => {
-    const browser = await chromium.launch({ channel: 'msedge', headless: true });
-    try {
-        const page = await browser.newPage(), errors = [];
-        page.on('pageerror', error => errors.push(error.message));
-        await page.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
-        });
-        await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-        const cases = await page.evaluate(() => {
+function exerciseSessionRetention() {
             stopWftSyncPolling(); stopDriveAutoSync();
             scheduleWftCloudSync = scheduleWftDriveSync = () => {};
             alert = () => {};
@@ -72,6 +60,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
             }
             const byDate = sessions => sessions.slice().sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
             run('shipped optional defaults', () => equal(flags, { split: true, id: false, lazy: false, idb: false, compaction: false }, 'flags'));
+            function checkRetentionModes() {
             for (const mode of ['save', 'pending-add', 'move-direct', 'pending-move']) {
                 for (const count of [0, 3, 49, 50, 51, 75]) {
                     for (const older of [false, true]) run(`${mode}: ISO seed ${count}, new date ${older ? 'older' : 'newest'}`, () => {
@@ -105,6 +94,9 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     return { kept: after.map(s => s.id) };
                 });
             }
+            }
+            checkRetentionModes();
+            function checkOwnershipAndReplacement() {
             for (const student of ['__proto__', 'constructor', 'toString']) {
                 for (const mode of ['save', 'pending-move']) run(`${mode}: own student ${student} and own session ID`, () => {
                     const before = prepare(50, 'iso', student), session = entry(101); session.id = student;
@@ -124,6 +116,9 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                 check(after[20].originalText === session.originalText && after[20].images[0].imageRevision === 'reassessed', 'replacement bytes');
                 equal(getDeletionsData().deletedSessions, {}, 'no tombstone for same ID');
             });
+            }
+            checkOwnershipAndReplacement();
+            function checkPendingFailureRecovery() {
             for (const mode of ['pending-add', 'pending-move']) for (const failure of ['portfolio', 'deletions', 'pending-clear', 'corrupt', 'normalization', 'rollback']) {
                 if (mode === 'pending-add' && ['deletions', 'rollback'].includes(failure)) continue;
                 run(`${mode}: required ${failure} failure preserves pending and retry`, () => {
@@ -157,6 +152,8 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     equal(getLocalPortfolioSnapshot().Alice.sessions, after, 'stable retry bytes');
                 });
             }
+            }
+            checkPendingFailureRecovery();
             run('optional preliminary normalizer catch still reaches required normalizer', () => {
                 prepare(50, 'iso'); let calls = 0;
                 normalizeWftSessionForStorage = function(...args) { if (++calls === 1) throw new Error('Optional preparation'); return normalizer(...args); };
@@ -200,7 +197,21 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                 check(after[0].images[0].dataUrl === undefined && after[0].images[0].dataUrlRemovedForStorage, 'existing heavy-field quota fallback');
             });
             reset(); return cases;
+}
+
+(async () => {
+    const browser = await chromium.launch({ channel: 'msedge', headless: true });
+    try {
+        const page = await browser.newPage(), errors = [];
+        page.on('pageerror', error => errors.push(error.message));
+        await page.route('**/*', route => {
+            const url = new URL(route.request().url());
+            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
+            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
+            return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
         });
+        await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+        const cases = await page.evaluate(exerciseSessionRetention);
         const report = { root, fixture: 'Full app in native Edge; actual durable normalization, ordinary save, staged replacement and pending commit; synthetic records, external requests blocked.', cases, passed: cases.filter(c => c.passed).length, failed: cases.filter(c => !c.passed).length, pageErrors: errors };
         if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify(report, null, 2));
         console.log(JSON.stringify({ passed: report.passed, failed: report.failed, failures: cases.filter(c => !c.passed) }, null, 2));
