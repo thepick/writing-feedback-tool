@@ -78,6 +78,24 @@ async function exerciseOwnershipBoundary(name) {
         raw: localStorage.getItem('wft_portfolio') };
 }
 
+function assertOwnershipOutcome(name, observed, errors) {
+    assert.deepEqual(errors, []);
+    const happy = name.endsWith('-happy') || name === 'compression-new-essay' || name === 'compression-ui-switch';
+    assert.equal(observed.finished, true, 'Failure must settle instead of hanging');
+    assert.equal(observed.requests.length, happy ? 1 : 0, 'Stale writing must be rejected before its outgoing request');
+    if (happy) {
+        assert.equal(observed.requests[0].authorization, 'Bearer synthetic-Alice');
+        assert.match(observed.requests[0].body, /Synthetic Alice/);
+        if (name === 'compression-new-essay') assert.deepEqual(observed.portfolio.Alice.sessions.map(session => session.id).sort(), ['first', 'new-essay']);
+        if (!name.includes('direct')) assert.equal(observed.portfolio.Alice.sessions.find(session => session.id === 'first').images[0].driveFileId, 'synthetic-upload');
+    } else if (name.includes('pending')) {
+        assert.equal(observed.flushes, 0);
+        if (name.endsWith('replace')) assert.equal(observed.pendingStudent, 'Bob');
+        else if (!name.endsWith('clear')) { assert.equal(observed.pendingStudent, 'Alice'); assert.equal(observed.pendingBytes, true); }
+    } else assert.ok(observed.error, 'Storage/owner/IO failures must propagate');
+    if (name === 'compression-corrupt') assert.equal(observed.raw, '{broken');
+}
+
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     const cases = [];
@@ -95,21 +113,7 @@ async function exerciseOwnershipBoundary(name) {
             let observed;
             try {
                 observed = await page.evaluate(exerciseOwnershipBoundary, name);
-                assert.deepEqual(errors, []);
-                const happy = name.endsWith('-happy') || name === 'compression-new-essay' || name === 'compression-ui-switch';
-                assert.equal(observed.finished, true, 'Failure must settle instead of hanging');
-                assert.equal(observed.requests.length, happy ? 1 : 0, 'Stale writing must be rejected before its outgoing request');
-                if (happy) {
-                    assert.equal(observed.requests[0].authorization, 'Bearer synthetic-Alice');
-                    assert.match(observed.requests[0].body, /Synthetic Alice/);
-                    if (name === 'compression-new-essay') assert.deepEqual(observed.portfolio.Alice.sessions.map(session => session.id).sort(), ['first', 'new-essay']);
-                    if (!name.includes('direct')) assert.equal(observed.portfolio.Alice.sessions.find(session => session.id === 'first').images[0].driveFileId, 'synthetic-upload');
-                } else if (name.includes('pending')) {
-                    assert.equal(observed.flushes, 0);
-                    if (name.endsWith('replace')) assert.equal(observed.pendingStudent, 'Bob');
-                    else if (!name.endsWith('clear')) { assert.equal(observed.pendingStudent, 'Alice'); assert.equal(observed.pendingBytes, true); }
-                } else assert.ok(observed.error, 'Storage/owner/IO failures must propagate');
-                if (name === 'compression-corrupt') assert.equal(observed.raw, '{broken');
+                assertOwnershipOutcome(name, observed, errors);
                 cases.push({ name, passed: true, observed });
             } catch (error) { cases.push({ name, passed: false, error: error.message, observed }); }
             console.log((cases[cases.length - 1].passed ? 'PASS ' : 'FAIL ') + name);
