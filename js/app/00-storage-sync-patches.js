@@ -3376,9 +3376,7 @@ function saveWftOAuthDraftBeforeRedirect(reason) {
         var previousRaw = localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
         if (previousRaw) {
             var previous = JSON.parse(previousRaw);
-            if (!previous || previous.text !== draft.text || (previous.selectedStudent || '') !== draft.selectedStudent
-                || (previous.manualGenreOverrideValue || '__auto__') !== draft.manualGenreOverrideValue
-                || (previous.writingGenreSelectValue || '__auto__') !== draft.writingGenreSelectValue) {
+            if (!isPreviousDraftCompatible()) {
                 setDriveSyncStatus('error', 'A previous writing draft is kept for recovery. Restore or copy it before starting another redirect sign-in. Your current writing is still here.');
                 return false;
             }
@@ -3388,6 +3386,15 @@ function saveWftOAuthDraftBeforeRedirect(reason) {
     } catch (e) {
         setDriveSyncStatus('error', 'Unsaved writing could not be preserved for Google sign-in. Your writing is still here; retry or copy it before leaving.');
         return false;
+    }
+
+    function isPreviousDraftCompatible() {
+        if (!previous) return false;
+        if (previous.text !== draft.text) return false;
+        if ((previous.selectedStudent || '') !== draft.selectedStudent) return false;
+        if ((previous.manualGenreOverrideValue || '__auto__') !== draft.manualGenreOverrideValue) return false;
+        if ((previous.writingGenreSelectValue || '__auto__') !== draft.writingGenreSelectValue) return false;
+        return true;
     }
 }
 
