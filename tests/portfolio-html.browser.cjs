@@ -97,9 +97,12 @@ const exerciseLivePortfolio = async () => {
             const unsafeDrive = await getPortfolioImageDataUrlForReassessment({ driveFileId: 'unsafe_synthetic' });
             const originalMediaFetch = window.fetch;
             let invalidMediaRequests = 0, invalidMediaRejections = 0;
+            const countInvalidMediaRejection = error => {
+                if (error.message === 'Invalid image data URL.') invalidMediaRejections++;
+            };
             window.fetch = () => { invalidMediaRequests++; return Promise.reject(new Error('Unexpected request')); };
             for (const src of [badImage, 'https://blocked.invalid/photo.png', 'data:image/svg+xml,<svg/>', 'javascript:window.injected=true']) {
-                try { await dataUrlToBlobPromise(src); } catch (error) { if (error.message === 'Invalid image data URL.') invalidMediaRejections++; }
+                try { await dataUrlToBlobPromise(src); } catch (error) { countInvalidMediaRejection(error); }
             }
             window.fetch = originalMediaFetch;
             const downloads = []; downloadBlob = (blob, fileName) => downloads.push(fileName);
