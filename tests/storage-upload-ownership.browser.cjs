@@ -3,13 +3,34 @@ const {chromium}=require('playwright');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(process.env.WFT_TEST_ROOT||path.join(__dirname,'..'));
 const scenarios=['current','legacy-current','retry-late-success','retry-late-error','newer-during-upload','signout-current','signout-timeout-reconnect','reconnect-during-upload'];
+function initializeOwnershipState(){
+ stopWftSyncPolling();stopDriveAutoSync();localStorage.clear();sessionStorage.clear();
+ localStorage.setItem('wft_settings','{}');localStorage.setItem('wft_students','["Synthetic"]');localStorage.setItem('wft_deletions','{"records":[]}');
+ localStorage.setItem('wft_portfolio',JSON.stringify({Synthetic:{sessions:[{id:'original',createdAt:'2026-10-12T00:00:00Z',originalText:'Original synthetic writing',images:[]}]}}));
+ students=['Synthetic'];pendingPortfolioSync=null;
+ driveAccessToken=wftSyncState.accessToken='synthetic-token-A';wftSyncState.signedIn=true;wftSyncState.tokenExpiresAt=Date.now()+600000;
+ driveFolderId=wftSyncState.folderId='root-folder';clearWftSyncBlockState();
+ wftSyncState.pendingSettingsPush=wftSyncState.pendingDeletionsPush=false;markWftPortfolioDirty('ownership-check');
+ window.beforeBytes=localStorage.getItem('wft_portfolio');window.runResult=null;window.legacyResult=null;
+}
+
+function checkFinalOwnership(scenario,snapshots,check,errors){
+ if(scenario==='legacy-current')check('Direct legacy callback reports accepted file ID and successful status',snapshots.final.legacy.id==='accepted-1'&&!snapshots.final.legacy.error&&/^Synced/.test(snapshots.final.status));
+ else if(scenario==='signout-current')check('Actual sign-out waits for uploads and keeps local portfolio',!snapshots.final.token&&!snapshots.final.active&&/Signed out/.test(snapshots.final.status)&&JSON.parse(snapshots.final.bytes).Synthetic.sessions[0].originalText==='Original synthetic writing');
+ else if(scenario==='newer-during-upload')check('Successful current snapshot cannot advertise synced over uncommitted pending writing',snapshots.final.result===true&&!snapshots.final.active&&!snapshots.final.dirty&&!snapshots.final.dot.split(' ').includes('synced')&&!/^Synced/.test(snapshots.final.status));
+ else check('Current successful run clears its lock/dirty work and publishes Synced',!snapshots.final.active&&!snapshots.final.hasPromise&&!snapshots.final.dirty&&!snapshots.final.blocked&&/^Synced/.test(snapshots.final.status)&&(scenario==='signout-timeout-reconnect'||snapshots.final.result===true));
+ if(scenario==='newer-during-upload')check('Uncommitted pending writing survives actual successful retry',snapshots.final.pending.sessionData.id==='pending-newer'&&JSON.parse(snapshots.final.bytes).Synthetic.sessions.some(s=>s.id==='newer')&&snapshots.final.counter===snapshots.final.syncedCounter);
+ check('No browser script errors',errors.length===0);
+}
+
 (async()=>{
  const browser=await chromium.launch({channel:'msedge',headless:true}),cases=[];
  try{for(const scenario of scenarios){
   const context=await browser.newContext(),page=await context.newPage(),held=[],requests=[],errors=[],checks=[],snapshots={},files=new Map(),uploads=new Map();
   let hold=true;
   page.on('pageerror',e=>errors.push(e.message));
-  await context.route('**/*',async route=>{
+  await context.route('**/*',handleServiceRequest);
+  async function handleServiceRequest(route){
    const req=route.request(),url=new URL(req.url()),query=url.searchParams.get('q')||'';
    const reply=(data,status=200)=>route.fulfill({status,contentType:'application/json',body:JSON.stringify(data)});
    if(url.origin==='http://127.0.0.1:8765'){const file=path.join(root,url.pathname==='/'?'index.html':decodeURIComponent(url.pathname));return fs.existsSync(file)?route.fulfill({body:fs.readFileSync(file),contentType:file.endsWith('.js')?'application/javascript':'text/html'}):reply({},404);}
@@ -36,18 +57,9 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
    return reply({});
    }
    return replyToReadRequest();
-  });
+  }
   await page.clock.install();await page.goto('http://127.0.0.1:8765',{waitUntil:'load'});
-  await page.evaluate(()=>{
-   stopWftSyncPolling();stopDriveAutoSync();localStorage.clear();sessionStorage.clear();
-   localStorage.setItem('wft_settings','{}');localStorage.setItem('wft_students','["Synthetic"]');localStorage.setItem('wft_deletions','{"records":[]}');
-   localStorage.setItem('wft_portfolio',JSON.stringify({Synthetic:{sessions:[{id:'original',createdAt:'2026-10-12T00:00:00Z',originalText:'Original synthetic writing',images:[]}]}}));
-   students=['Synthetic'];pendingPortfolioSync=null;
-   driveAccessToken=wftSyncState.accessToken='synthetic-token-A';wftSyncState.signedIn=true;wftSyncState.tokenExpiresAt=Date.now()+600000;
-   driveFolderId=wftSyncState.folderId='root-folder';clearWftSyncBlockState();
-   wftSyncState.pendingSettingsPush=wftSyncState.pendingDeletionsPush=false;markWftPortfolioDirty('ownership-check');
-   window.beforeBytes=localStorage.getItem('wft_portfolio');window.runResult=null;window.legacyResult=null;
-  });
+  await page.evaluate(initializeOwnershipState);
   const check=(name,passed)=>checks.push({name,passed:!!passed});
   const waitHeld=async count=>{for(let i=0;i<300&&held.length<count;i++)await page.waitForTimeout(10);assert.equal(held.length,count,'Actual upload reaches intercepted service');};
   const capture=()=>page.evaluate(()=>({token:driveAccessToken,result:window.runResult,legacy:window.legacyResult,active:wftSyncState.isSyncing,hasPromise:!!wftSyncState.currentSyncPromise,dirty:wftSyncState.pendingPortfolioPush,status:document.getElementById('driveSyncTextHeader').textContent,dot:document.getElementById('driveSyncDotHeader').className,bytes:localStorage.getItem('wft_portfolio'),pending:getPendingPortfolioSync(),error:String(wftSyncState.lastError&&wftSyncState.lastError.message),counter:wftSyncState.localPortfolioCounter,syncedCounter:wftSyncState.lastSyncedPortfolioCounter,blocked:wftSyncState.authBlocked||wftSyncState.quotaBlocked||wftSyncState.permissionBlocked}));
@@ -105,15 +117,7 @@ const scenarios=['current','legacy-current','retry-late-success','retry-late-err
   }
   await finishScenario();
   snapshots.final=await capture();
-  function checkFinal(){
-  if(scenario==='legacy-current')check('Direct legacy callback reports accepted file ID and successful status',snapshots.final.legacy.id==='accepted-1'&&!snapshots.final.legacy.error&&/^Synced/.test(snapshots.final.status));
-  else if(scenario==='signout-current')check('Actual sign-out waits for uploads and keeps local portfolio',!snapshots.final.token&&!snapshots.final.active&&/Signed out/.test(snapshots.final.status)&&JSON.parse(snapshots.final.bytes).Synthetic.sessions[0].originalText==='Original synthetic writing');
-  else if(scenario==='newer-during-upload')check('Successful current snapshot cannot advertise synced over uncommitted pending writing',snapshots.final.result===true&&!snapshots.final.active&&!snapshots.final.dirty&&!snapshots.final.dot.split(' ').includes('synced')&&!/^Synced/.test(snapshots.final.status));
-  else check('Current successful run clears its lock/dirty work and publishes Synced',!snapshots.final.active&&!snapshots.final.hasPromise&&!snapshots.final.dirty&&!snapshots.final.blocked&&/^Synced/.test(snapshots.final.status)&&(scenario==='signout-timeout-reconnect'||snapshots.final.result===true));
-  if(scenario==='newer-during-upload')check('Uncommitted pending writing survives actual successful retry',snapshots.final.pending.sessionData.id==='pending-newer'&&JSON.parse(snapshots.final.bytes).Synthetic.sessions.some(s=>s.id==='newer')&&snapshots.final.counter===snapshots.final.syncedCounter);
-  check('No browser script errors',errors.length===0);
-  }
-  checkFinal();
+  checkFinalOwnership(scenario,snapshots,check,errors);
   cases.push({scenario,checks,snapshots,requests,errors});
   for(const route of held)await route.abort().catch(()=>{});
   await context.close();console.log(JSON.stringify({scenario,checks}));
