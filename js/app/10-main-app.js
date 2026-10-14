@@ -5784,14 +5784,18 @@ function pickTeacherComment(data) {
         ? "You especially showed strength in " + categoryDisplayLabel(highest) + ". " + topEvidence
         : "Your effort really shows in this piece.";
 
-    var lowestGrowthTip = cleanNotebookSentence(categories[lowest] && categories[lowest].growthTip ? categories[lowest].growthTip : "");
-    var coaching = "Keep revising carefully to make your writing even stronger.";
-    if (lowestGrowthTip) {
-        var firstSentenceMatch = lowestGrowthTip.match(/^[^.!?]+[.!?]?/);
-        coaching = firstSentenceMatch && firstSentenceMatch[0] ? cleanNotebookSentence(firstSentenceMatch[0]) : lowestGrowthTip;
-    } else if (goalPlan.nextTime) {
-        coaching = cleanNotebookSentence(goalPlan.nextTime);
+    function buildTeacherCoaching() {
+        var lowestGrowthTip = cleanNotebookSentence(categories[lowest] && categories[lowest].growthTip ? categories[lowest].growthTip : "");
+        var coaching = "Keep revising carefully to make your writing even stronger.";
+        if (lowestGrowthTip) {
+            var firstSentenceMatch = lowestGrowthTip.match(/^[^.!?]+[.!?]?/);
+            coaching = firstSentenceMatch && firstSentenceMatch[0] ? cleanNotebookSentence(firstSentenceMatch[0]) : lowestGrowthTip;
+        } else if (goalPlan.nextTime) {
+            coaching = cleanNotebookSentence(goalPlan.nextTime);
+        }
+        return coaching;
     }
+    var coaching = buildTeacherCoaching();
 
     return sanitizeGenreReferenceInFeedback((opening + " " + praise + " " + coaching).replace(/\s+/g, " ").trim(), genreInfo);
 }
