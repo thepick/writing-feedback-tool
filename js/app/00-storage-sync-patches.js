@@ -440,6 +440,18 @@ function saveWftApiKeyFromForm() {
 }
 
 function migrateLegacyApiKeyStorage() {
+    function copyLegacyApiKey(key) {
+        var sessionKey = sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY);
+        if (sessionKey && String(sessionKey).trim() !== key) {
+            // A different active key must not erase the only legacy copy.
+            if (String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim() !== key) throw getWftApiKeyStorageError();
+        } else if (!sessionKey) {
+            sessionStorage.setItem(WFT_API_KEY_SESSION_STORAGE_KEY, key);
+        }
+        var copied = String(sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) || '').trim() === key
+            || String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim() === key;
+        if (!copied) throw getWftApiKeyStorageError();
+    }
     try {
         if (wftApiKeyStorageRecovery) throw getWftApiKeyStorageError();
         if (wftStudentChangeRecovery && Object.prototype.hasOwnProperty.call(wftStudentChangeRecovery, 'wft_settings')) throw getWftApiKeyStorageError();
@@ -448,18 +460,7 @@ function migrateLegacyApiKeyStorage() {
         var settings = JSON.parse(raw);
         if (!Object.prototype.hasOwnProperty.call(settings, 'apiKey')) return;
         var key = String(settings.apiKey || '').trim();
-        if (key) {
-            var sessionKey = sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY);
-            if (sessionKey && String(sessionKey).trim() !== key) {
-                // A different active key must not erase the only legacy copy.
-                if (String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim() !== key) throw getWftApiKeyStorageError();
-            } else if (!sessionKey) {
-                sessionStorage.setItem(WFT_API_KEY_SESSION_STORAGE_KEY, key);
-            }
-            var copied = String(sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) || '').trim() === key
-                || String(localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) || '').trim() === key;
-            if (!copied) throw getWftApiKeyStorageError();
-        }
+        if (key) copyLegacyApiKey(key);
         delete settings.apiKey;
         localStorage.setItem('wft_settings', JSON.stringify(settings));
     } catch (e) { throw getWftApiKeyStorageError(); }
