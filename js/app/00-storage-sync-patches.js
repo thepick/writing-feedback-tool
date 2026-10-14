@@ -554,9 +554,7 @@ function saveSettingsToLocalStorage(settingsOverride) {
             if (key !== 'apiKey') settings[key] = cloneWftJson(settingsOverride[key]);
         });
     }
-    try {
-        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
-        preflightWftRequiredStorage();
+    function updateSettingsFromForm() {
         var modelSelect = document.getElementById('modelSelect');
         var targetWordCountEl = document.getElementById('targetWordCount');
         var useWordCountTargetEl = document.getElementById('useWordCountTarget');
@@ -569,6 +567,11 @@ function saveSettingsToLocalStorage(settingsOverride) {
         if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
         if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
         settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+    }
+    try {
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        preflightWftRequiredStorage();
+        updateSettingsFromForm();
         if (typeof students !== 'undefined' && Array.isArray(students)) settings.students = applyDeletionsToStudents(students, getDeletionsData());
         validateWftRequiredStorage('wft_settings', settings);
         localStorage.setItem('wft_settings', JSON.stringify(settings));
