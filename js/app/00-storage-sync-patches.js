@@ -489,6 +489,11 @@ function getStoredApiKey() {
 
 function persistApiKeyStorageFromInput() {
     var key = getApiKeyInputValue(), remember, previous;
+    function verifyApiKeyStorage() {
+        if (sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) !== (key || null)
+            || localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) !== (remember && key ? key : null)
+            || localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) !== (remember ? 'true' : 'false')) throw getWftApiKeyStorageError();
+    }
     try {
         remember = isRememberApiKeyEnabled();
         if (wftStudentChangeRecovery && Object.prototype.hasOwnProperty.call(wftStudentChangeRecovery, 'wft_settings')) throw getWftApiKeyStorageError();
@@ -513,9 +518,7 @@ function persistApiKeyStorageFromInput() {
         if (remember && key) localStorage.setItem(WFT_API_KEY_LOCAL_STORAGE_KEY, key);
         else localStorage.removeItem(WFT_API_KEY_LOCAL_STORAGE_KEY);
         setRememberApiKeyEnabled(remember);
-        if (sessionStorage.getItem(WFT_API_KEY_SESSION_STORAGE_KEY) !== (key || null)
-            || localStorage.getItem(WFT_API_KEY_LOCAL_STORAGE_KEY) !== (remember && key ? key : null)
-            || localStorage.getItem(WFT_API_KEY_REMEMBER_PREF_KEY) !== (remember ? 'true' : 'false')) throw getWftApiKeyStorageError();
+        verifyApiKeyStorage();
         if (Object.prototype.hasOwnProperty.call(settings, 'apiKey')) {
             delete settings.apiKey;
             localStorage.setItem('wft_settings', JSON.stringify(settings));
