@@ -163,13 +163,14 @@ function checkLivePortfolio(live, generated, check) {
     try {
         const context = await browser.newContext();
         const documents = new Map();
-        await context.route('**/*', route => {
+        function servePortfolioDocument(route) {
             const url = new URL(route.request().url());
             if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
             if (documents.has(url.pathname)) return route.fulfill({ contentType: 'text/html', body: documents.get(url.pathname) });
             const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
             return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
-        });
+        }
+        await context.route('**/*', servePortfolioDocument);
         const page = await context.newPage();
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
         await page.waitForFunction(() => typeof reassessPortfolioSession === 'function');
