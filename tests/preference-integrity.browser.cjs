@@ -15,7 +15,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
             return fs.existsSync(file) ? route.fulfill({ status: 200, body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
         });
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-        const cases = await page.evaluate(fs.readFileSync(path.join(__dirname, 'fixtures/preference-integrity-scenarios.js'), 'utf8'));
+        const cases = await page.evaluate(fs.readFileSync(path.join(__dirname, 'preference-integrity-scenarios.js'), 'utf8'));
         cases.push({ name: 'no-unhandled-native-events/startup/async-callbacks', pass: errors.length === 0, errors });
         const startup = await browser.newPage(), startupErrors = [];
         startup.on('pageerror', error => startupErrors.push(error.message));
