@@ -71,6 +71,16 @@ async function delayedUpload(files) {
     assert.equal(test.state.needsSyncAfterCurrent, true);
     assert.equal(test.state.lastSyncedPortfolioCounter, 1);
 }
+function setupTimestampConflict(localNewer) {
+    const local = portfolio('same'), cloud = portfolio('same');
+    local.Alice.sessions[0].updatedAt = localNewer ? '2026-10-03' : '2026-10-01';
+    cloud.Alice.sessions[0].updatedAt = localNewer ? '2026-10-01' : '2026-10-03';
+    local.Alice.sessions[0].originalText = 'local';
+    cloud.Alice.sessions[0].originalText = 'cloud';
+    local.Alice.sessions[0].images = [{ imageId: 'local-photo', driveFileId: 'local-file' }];
+    cloud.Alice.sessions[0].images = [{ imageId: 'cloud-photo', driveFileId: 'cloud-file' }];
+    return setup({ localPortfolio: local, cloudPortfolio: cloud });
+}
 (async () => {
     const union = setup();
     assert.equal(await union.app.syncWftPortfolioIfNeeded('union'), true);
@@ -80,14 +90,7 @@ async function delayedUpload(files) {
     await duplicate.app.syncWftPortfolioIfNeeded('duplicates');
     assert.deepEqual(duplicate.uploads[0].Alice.sessions.map(s => s.id).sort(), ['cloud', 'duplicate', 'old']);
     for (const localNewer of [false, true]) {
-        const local = portfolio('same'), cloud = portfolio('same');
-        local.Alice.sessions[0].updatedAt = localNewer ? '2026-10-03' : '2026-10-01';
-        cloud.Alice.sessions[0].updatedAt = localNewer ? '2026-10-01' : '2026-10-03';
-        local.Alice.sessions[0].originalText = 'local';
-        cloud.Alice.sessions[0].originalText = 'cloud';
-        local.Alice.sessions[0].images = [{ imageId: 'local-photo', driveFileId: 'local-file' }];
-        cloud.Alice.sessions[0].images = [{ imageId: 'cloud-photo', driveFileId: 'cloud-file' }];
-        const conflict = setup({ localPortfolio: local, cloudPortfolio: cloud });
+        const conflict = setupTimestampConflict(localNewer);
         await conflict.app.syncWftPortfolioIfNeeded('conflict');
         assert.equal(conflict.local.Alice.sessions.length, 1);
         assert.equal(conflict.local.Alice.sessions[0].originalText, localNewer ? 'local' : 'cloud');
