@@ -6,7 +6,7 @@ function setup(){
  function file(token,name,data,parent='appDataFolder',mimeType='application/json'){const f={id:'id'+(++count),token,name,mimeType,parents:[parent],data:bytes(data),appProperties:{}};files.push(f);return f;}
  function element(tag){return {tag,children:[],style:{},textContent:'',setAttribute(){},addEventListener(){},append(...els){this.children.push(...els);},showModal(){},close(){},remove(){}};}
  const document={createElement:element,body:{append(d){dialog=d;}}};
- const reply=(data,status=200,headers={})=>new Response(typeof data==='string'||data instanceof Uint8Array?data:JSON.stringify(data),{status,headers});
+ function reply(data,status=200,headers={}){return new Response(typeof data==='string'||data instanceof Uint8Array?data:JSON.stringify(data),{status,headers});}
  const context={window:{google:{accounts:{oauth2:{hasGrantedAllScopes:()=>true,initTokenClient:cfg=>({requestAccessToken(){cfg.callback({access_token:'old',expires_in:3600});}})}}}},document,Blob,AbortSignal,URLSearchParams,TextEncoder,TextDecoder,crypto:webcrypto,console};
  function fileResponse(url,token){
   const id=url.match(/\/files\/([^?]+)/)?.[1];
@@ -19,15 +19,22 @@ function setup(){
   if(q.includes('oauthSource'))matching=matching.filter(f=>f.appProperties.oauthSource==='oldclient');
   return reply({files:matching.map(({data,token,...metadata})=>metadata)});
  }
+ function uploadFile(url,token){
+   const {meta,id}=uploads.get(url);let f=files.find(x=>x.id===id);
+   if(!f){f=file(token,meta.name,'',meta.parents?.[0]||'root',meta.mimeType);}
+   f.appProperties={...f.appProperties,...meta.appProperties};
+   return f;
+ }
+ function createFileResponse(token,opts){
+   const m=JSON.parse(opts.body),f=file(token,m.name,'',m.parents?.[0]||'root',m.mimeType);f.appProperties=m.appProperties||{};return reply({id:f.id});
+ }
  context.fetch=async(url,opts={})=>{
   const token=opts.headers.Authorization.replace('Bearer ',''),method=opts.method||'GET';calls.push({url,token,method});
   assert.ok(token!=='old'||method==='GET','Original must be read only');
   if(fail)return reply({},500);
   if(url.includes('/userinfo'))return reply({id:token==='old'&&badUser?'other':'same',email:'test@example.com'});
   if(uploads.has(url)){
-   const {meta,id}=uploads.get(url);let f=files.find(x=>x.id===id);
-   if(!f){f=file(token,meta.name,'',meta.parents?.[0]||'root',meta.mimeType);}
-   f.appProperties={...f.appProperties,...meta.appProperties};f.data=new Uint8Array(await opts.body.arrayBuffer());
+   const f=uploadFile(url,token);f.data=new Uint8Array(await opts.body.arrayBuffer());
    if(corrupt)f.data=bytes('bad');return reply({id:f.id});
   }
   if(url.includes('uploadType=resumable')){
@@ -35,7 +42,7 @@ function setup(){
    uploads.set(location,{id,meta:JSON.parse(opts.body)});return reply({},200,{Location:location});
   }
   if(method==='POST'){
-   const m=JSON.parse(opts.body),f=file(token,m.name,'',m.parents?.[0]||'root',m.mimeType);f.appProperties=m.appProperties||{};return reply({id:f.id});
+   return createFileResponse(token,opts);
   }
   return fileResponse(url,token);
  };
