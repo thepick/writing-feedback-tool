@@ -3,28 +3,25 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs'), path = require('node:path');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
 
+function serveLocalFile(route) {
+    const url = new URL(route.request().url());
+    if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
+    const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
+    return fs.existsSync(file) ? route.fulfill({ status: 200, body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
+}
+
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     try {
         const page = await browser.newPage(), errors = [];
         page.on('pageerror', error => errors.push(error.message));
-        await page.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            return fs.existsSync(file) ? route.fulfill({ status: 200, body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
-        });
+        await page.route('**/*', serveLocalFile);
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
         const cases = await page.evaluate(fs.readFileSync(path.join(__dirname, 'preference-integrity-scenarios.js'), 'utf8'));
         cases.push({ name: 'no-unhandled-native-events/startup/async-callbacks', pass: errors.length === 0, errors });
         const startup = await browser.newPage(), startupErrors = [];
         startup.on('pageerror', error => startupErrors.push(error.message));
-        await startup.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            return fs.existsSync(file) ? route.fulfill({ status: 200, body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
-        });
+        await startup.route('**/*', serveLocalFile);
         await startup.addInitScript(() => {
             globalThis.startupAlerts = []; alert = message => startupAlerts.push(message);
             localStorage.setItem('wft_settings', JSON.stringify({ apiKey: 'synthetic-startup-key', gradeLevel: 6, classGradeLevel: 6, targetWordCount: '333', students: ['Synthetic Student'] }));
