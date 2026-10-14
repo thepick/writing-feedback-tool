@@ -52,6 +52,28 @@ function setup(options = {}) {
     });
     return { app, events, markers, writes, alerts, confirmations, get stored() { return stored; } };
 }
+function assertSuccessfulDeletion(action, success) {
+    assert.equal(success.events[0], 'portfolio-save', action + ': save before markers or roster changes');
+    assert.equal(success.events.filter(event => event === 'portfolio-save').length, 1);
+    assert.equal(success.events.indexOf('roster-save') > success.events.lastIndexOf('marker'), true);
+    assert.equal(success.app.selectedStudent, '');
+    assert.deepEqual(success.alerts, []);
+    if (action === 'removeStudent') {
+        assert.deepEqual(Object.keys(JSON.parse(success.stored)), ['Bob', 'Archived']);
+        assert.deepEqual(Array.from(success.app.students), ['Bob']);
+        assert.deepEqual(success.markers, [['student', 'Alice']]);
+    } else {
+        assert.deepEqual(JSON.parse(success.stored), {});
+        assert.deepEqual(Array.from(success.app.students), []);
+        assert.ok(success.markers.some(marker => marker[1] === 'Bob'));
+    }
+    if (action === 'resetCurrentClassData') {
+        assert.ok(success.markers.some(marker => marker[0] === 'student' && marker[1] === 'Archived'));
+        assert.deepEqual(success.markers.filter(marker => marker[0] === 'session'), [['session', 'Alice', 'a'], ['session', 'Bob', 'b'], ['session', 'Archived', 'c']]);
+        assert.deepEqual(success.events.slice(-5), ['settings-dirty', 'portfolio-dirty', 'deletions-dirty', 'flush', 'status']);
+    }
+    if (action === 'clearAllStudents') assert.match(success.confirmations[0], /all saved writing/i);
+}
 (async () => {
     const failures = [];
     for (const action of ['resetCurrentClassData', 'clearAllStudents', 'removeStudent']) {
@@ -78,26 +100,7 @@ function setup(options = {}) {
         assert.deepEqual(cancelled.writes, []);
         const success = setup();
         await success.app[action]('Alice');
-        assert.equal(success.events[0], 'portfolio-save', action + ': save before markers or roster changes');
-        assert.equal(success.events.filter(event => event === 'portfolio-save').length, 1);
-        assert.equal(success.events.indexOf('roster-save') > success.events.lastIndexOf('marker'), true);
-        assert.equal(success.app.selectedStudent, '');
-        assert.deepEqual(success.alerts, []);
-        if (action === 'removeStudent') {
-            assert.deepEqual(Object.keys(JSON.parse(success.stored)), ['Bob', 'Archived']);
-            assert.deepEqual(Array.from(success.app.students), ['Bob']);
-            assert.deepEqual(success.markers, [['student', 'Alice']]);
-        } else {
-            assert.deepEqual(JSON.parse(success.stored), {});
-            assert.deepEqual(Array.from(success.app.students), []);
-            assert.ok(success.markers.some(marker => marker[1] === 'Bob'));
-        }
-        if (action === 'resetCurrentClassData') {
-            assert.ok(success.markers.some(marker => marker[0] === 'student' && marker[1] === 'Archived'));
-            assert.deepEqual(success.markers.filter(marker => marker[0] === 'session'), [['session', 'Alice', 'a'], ['session', 'Bob', 'b'], ['session', 'Archived', 'c']]);
-            assert.deepEqual(success.events.slice(-5), ['settings-dirty', 'portfolio-dirty', 'deletions-dirty', 'flush', 'status']);
-        }
-        if (action === 'clearAllStudents') assert.match(success.confirmations[0], /all saved writing/i);
+        assertSuccessfulDeletion(action, success);
     }
     const nonselected = setup();
     await nonselected.app.removeStudent('Bob');
