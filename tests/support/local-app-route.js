@@ -7,6 +7,7 @@ module.exports = function localAppRoute(route, root) {
     if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
     const file = path.resolve(root, '.' + (url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname)));
     const relative = path.relative(root, file);
-    if (relative.startsWith('..') || path.isAbsolute(relative) || !fs.existsSync(file) || !fs.statSync(file).isFile()) return route.fulfill({ status: 404, body: '' });
+    if (relative.startsWith('..') || path.isAbsolute(relative)) return route.fulfill({ status: 404, body: '' });
+    if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return route.fulfill({ status: 404, body: '' });
     return route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) });
 };
