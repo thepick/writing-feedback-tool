@@ -615,11 +615,51 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
     var session;
     var images;
     var image;
-    var fileName;
 
     if (!includeImages) {
         imageFolder.file("Photos not included.txt", "Images/photos were not included in this export. Re-run the export with the image option checked if needed.");
         return Promise.resolve();
+    }
+
+    function addImageExport(session, image, sessionIndex, imageIndex) {
+        var baseName = sanitizeFileName((getSessionDate(session) || ("Session " + (sessionIndex + 1))) + " - " + (image.name || ("Image " + (imageIndex + 1))));
+        var extension = /\.(png|jpe?g|gif|webp)$/i.exec(baseName);
+        var stem = getUniqueFolderName(extension ? baseName.slice(0, -extension[0].length) : baseName, usedNames);
+        var mimeType = /^data:(image\/[a-z]+);/i.exec(image.dataUrl || image.originalDataUrl || "");
+        var imageType = mimeType ? mimeType[1].toLowerCase() : image.mimeType;
+        var fileName = stem + getAvailableImageExportExtension(extension, imageType);
+
+        manifest.push({
+            sessionIndex: sessionIndex + 1,
+            sessionDate: getSessionDate(session),
+            originalName: image.name || "",
+            exportedName: fileName,
+            driveFileId: image.driveFileId || "",
+            included: false
+        });
+
+        if (image.dataUrl || image.originalDataUrl || image.driveFileId) {
+            (function(img, exportName, exportStem, entry) {
+                tasks.push(function() {
+                    assertWftArchiveConnection(options && options.archiveConnection);
+                    var blobPromise;
+                    if (img.dataUrl || img.originalDataUrl) {
+                        blobPromise = dataUrlToBlobPromise(img.dataUrl || img.originalDataUrl);
+                    } else {
+                        blobPromise = downloadDriveFileAsBlobPromise(img.driveFileId, options && options.archiveConnection);
+                    }
+                    return blobPromise.then(function(blob) {
+                        assertWftArchiveConnection(options && options.archiveConnection);
+                        var type = /^image\/(png|jpe?g|gif|webp)$/i.exec(blob.type || "");
+                        if (type) exportName = exportStem + "." + type[1].toLowerCase().replace("jpeg", "jpg");
+                        imageFolder.file(exportName, blob);
+                        entry.exportedName = exportName;
+                        entry.included = true;
+                        return true;
+                    });
+                });
+            }(image, fileName, stem, manifest[manifest.length - 1]));
+        }
     }
 
     for (i = 0; i < sessions.length; i += 1) {
@@ -629,44 +669,7 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
 
         for (j = 0; j < images.length; j += 1) {
             image = images[j] || {};
-            var baseName = sanitizeFileName((getSessionDate(session) || ("Session " + (i + 1))) + " - " + (image.name || ("Image " + (j + 1))));
-            var extension = /\.(png|jpe?g|gif|webp)$/i.exec(baseName);
-            var stem = getUniqueFolderName(extension ? baseName.slice(0, -extension[0].length) : baseName, usedNames);
-            var mimeType = /^data:(image\/[a-z]+);/i.exec(image.dataUrl || image.originalDataUrl || "");
-            var imageType = mimeType ? mimeType[1].toLowerCase() : image.mimeType;
-            fileName = stem + getAvailableImageExportExtension(extension, imageType);
-
-            manifest.push({
-                sessionIndex: i + 1,
-                sessionDate: getSessionDate(session),
-                originalName: image.name || "",
-                exportedName: fileName,
-                driveFileId: image.driveFileId || "",
-                included: false
-            });
-
-            if (image.dataUrl || image.originalDataUrl || image.driveFileId) {
-                (function(img, exportName, exportStem, entry) {
-                    tasks.push(function() {
-                        assertWftArchiveConnection(options && options.archiveConnection);
-                        var blobPromise;
-                        if (img.dataUrl || img.originalDataUrl) {
-                            blobPromise = dataUrlToBlobPromise(img.dataUrl || img.originalDataUrl);
-                        } else {
-                            blobPromise = downloadDriveFileAsBlobPromise(img.driveFileId, options && options.archiveConnection);
-                        }
-                        return blobPromise.then(function(blob) {
-                            assertWftArchiveConnection(options && options.archiveConnection);
-                            var type = /^image\/(png|jpe?g|gif|webp)$/i.exec(blob.type || "");
-                            if (type) exportName = exportStem + "." + type[1].toLowerCase().replace("jpeg", "jpg");
-                            imageFolder.file(exportName, blob);
-                            entry.exportedName = exportName;
-                            entry.included = true;
-                            return true;
-                        });
-                    });
-                }(image, fileName, stem, manifest[manifest.length - 1]));
-            }
+            addImageExport(session, image, i, j);
         }
     }
 
