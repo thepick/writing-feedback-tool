@@ -184,6 +184,23 @@ async function runDeletionDurability() {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     const failures = [];
     let passed = 0;
+    function recordDeletionCaseResult(action, failedKey, result, errors) {
+        try {
+            const failed = result.failed;
+            assertSavedClassBytes(failed);
+            assertRosterSelection(failed);
+            assertSyncRecovery(failed);
+            assertFailureReporting(action, failedKey, failed);
+            assertDeletionRenameRetry(action, result);
+            assertRenameIdentityRetry(action, result);
+            assertClassClearRetry(action, result);
+            assertReplacementRetry(action, result);
+            assertResetMarkersRetry(action, result);
+            assertRestoreRetry(action, result, failed);
+            assert.deepEqual(errors, [], 'no unhandled browser errors');
+            passed++;
+        } catch (error) { failures.push(`${action}/${failedKey}: ${error.message}`); }
+    }
     try {
         const context = await browser.newContext();
         await context.route('**/*', routeLocalAppRequest);
@@ -195,21 +212,7 @@ async function runDeletionDurability() {
             await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
             await page.waitForFunction(() => typeof removeStudent === 'function');
             const result = await page.evaluate(exerciseStorageFailure, { action, failedKey });
-            try {
-                const failed = result.failed;
-                assertSavedClassBytes(failed);
-                assertRosterSelection(failed);
-                assertSyncRecovery(failed);
-                assertFailureReporting(action, failedKey, failed);
-                assertDeletionRenameRetry(action, result);
-                assertRenameIdentityRetry(action, result);
-                assertClassClearRetry(action, result);
-                assertReplacementRetry(action, result);
-                assertResetMarkersRetry(action, result);
-                assertRestoreRetry(action, result, failed);
-                assert.deepEqual(errors, [], 'no unhandled browser errors');
-                passed++;
-            } catch (error) { failures.push(`${action}/${failedKey}: ${error.message}`); }
+            recordDeletionCaseResult(action, failedKey, result, errors);
             await page.close();
         }
         console.log(`Deletion durability browser cases: ${passed}/${cases.length} passed, ${failures.length} failed. Synthetic records; all external network blocked.`);
