@@ -48,48 +48,52 @@ async function runSettingsDeletionScenarios() {
     }
 
     const results = [];
+    async function runScenario(stream, scenario) {
+        syncWftSettingsIfNeeded = stream === 'Settings' ? settingsSync : () => Promise.resolve(false);
+        syncWftDeletionsIfNeeded = stream === 'Deletions' ? deletionsSync : () => Promise.resolve(false);
+        localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify({}));
+        students = ['Test Student'];
+        document.getElementById('targetWordCount').value = '200';
+        const initial = stream === 'Settings' ? getLocalSettingsSnapshot() : normalizeDeletionsData({ deletedSessions: { old: { sessionId: 'old', deletedAt: '2026-10-10T00:00:00Z' } }, records: [{ id: 'old', sessionId: 'old', deletedAt: '2026-10-10T00:00:00Z' }] });
+        const key = stream === 'Settings' ? 'wft_settings' : WFT_DELETIONS_STORAGE_KEY;
+        localStorage.setItem(key, JSON.stringify(initial));
+        const race = scenario.endsWith('race');
+        initializeSyncState(stream, scenario);
+        let files = scenario === 'create-race' ? [] : [{ id: 'canonical' }];
+        let cloud = stream === 'Settings' ? { ...clone(initial), targetWordCount: '100', students: ['Cloud Student', 'Test Student'] } : normalizeDeletionsData({ deletedSessions: { cloud: { sessionId: 'cloud', deletedAt: '2026-10-10T00:00:00Z' } }, records: [{ id: 'cloud', sessionId: 'cloud', deletedAt: '2026-10-10T00:00:00Z' }] });
+        let searches = 0, started, release;
+        const ready = new Promise(resolve => { started = resolve; });
+        const uploads = [];
+        findWftFilesByNamePromise = () => { searches++; return Promise.resolve(files); };
+        downloadWftJsonFilePromise = () => Promise.resolve(clone(cloud));
+        uploadWftJsonFilePromise = async (name, data) => {
+            uploads.push(clone(data));
+            if (race && uploads.length === 1) await new Promise(resolve => { release = resolve; started(); });
+            cloud = clone(data);
+            files = [{ id: 'canonical' }];
+            return 'canonical';
+        };
+        const before = { stored: localStorage.getItem(key), roster: clone(students), target: document.getElementById('targetWordCount').value, pending: wftSyncState['pending' + stream + 'Push'] };
+        if (!race) Storage.prototype.setItem = function(name, value) {
+            if (name === key) throw new Error('Storage full');
+            return setItem.call(this, name, value);
+        };
+        let completed;
+        try {
+            const run = syncWftNow('manual', { immediate: true });
+            if (race) {
+                await ready;
+                editDuringUpload(stream);
+                release();
+            }
+            completed = await run;
+        } finally { Storage.prototype.setItem = setItem; }
+        results.push({ stream, scenario, completed, searches, uploads, cloud, before, stored: localStorage.getItem(key), roster: clone(students), target: document.getElementById('targetWordCount').value, pending: wftSyncState['pending' + stream + 'Push'], localCounter: wftSyncState['local' + stream + 'Counter'], syncedCounter: wftSyncState['lastSynced' + stream + 'Counter'], syncedHash: wftSyncState['lastSynced' + stream + 'Hash'], suppress: wftSuppressDirtyMarks, error: wftSyncState.lastError && wftSyncState.lastError.message, status: document.getElementById('driveSyncTextHeader').textContent });
+    }
+
     for (const stream of ['Settings', 'Deletions']) {
         for (const scenario of ['create-race', 'update-race', 'failed-pull', 'failed-push']) {
-            syncWftSettingsIfNeeded = stream === 'Settings' ? settingsSync : () => Promise.resolve(false);
-            syncWftDeletionsIfNeeded = stream === 'Deletions' ? deletionsSync : () => Promise.resolve(false);
-            localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify({}));
-            students = ['Test Student'];
-            document.getElementById('targetWordCount').value = '200';
-            const initial = stream === 'Settings' ? getLocalSettingsSnapshot() : normalizeDeletionsData({ deletedSessions: { old: { sessionId: 'old', deletedAt: '2026-10-10T00:00:00Z' } }, records: [{ id: 'old', sessionId: 'old', deletedAt: '2026-10-10T00:00:00Z' }] });
-            const key = stream === 'Settings' ? 'wft_settings' : WFT_DELETIONS_STORAGE_KEY;
-            localStorage.setItem(key, JSON.stringify(initial));
-            const race = scenario.endsWith('race');
-            initializeSyncState(stream, scenario);
-            let files = scenario === 'create-race' ? [] : [{ id: 'canonical' }];
-            let cloud = stream === 'Settings' ? { ...clone(initial), targetWordCount: '100', students: ['Cloud Student', 'Test Student'] } : normalizeDeletionsData({ deletedSessions: { cloud: { sessionId: 'cloud', deletedAt: '2026-10-10T00:00:00Z' } }, records: [{ id: 'cloud', sessionId: 'cloud', deletedAt: '2026-10-10T00:00:00Z' }] });
-            let searches = 0, started, release;
-            const ready = new Promise(resolve => { started = resolve; });
-            const uploads = [];
-            findWftFilesByNamePromise = () => { searches++; return Promise.resolve(files); };
-            downloadWftJsonFilePromise = () => Promise.resolve(clone(cloud));
-            uploadWftJsonFilePromise = async (name, data) => {
-                uploads.push(clone(data));
-                if (race && uploads.length === 1) await new Promise(resolve => { release = resolve; started(); });
-                cloud = clone(data);
-                files = [{ id: 'canonical' }];
-                return 'canonical';
-            };
-            const before = { stored: localStorage.getItem(key), roster: clone(students), target: document.getElementById('targetWordCount').value, pending: wftSyncState['pending' + stream + 'Push'] };
-            if (!race) Storage.prototype.setItem = function(name, value) {
-                if (name === key) throw new Error('Storage full');
-                return setItem.call(this, name, value);
-            };
-            let completed;
-            try {
-                const run = syncWftNow('manual', { immediate: true });
-                if (race) {
-                    await ready;
-                    editDuringUpload(stream);
-                    release();
-                }
-                completed = await run;
-            } finally { Storage.prototype.setItem = setItem; }
-            results.push({ stream, scenario, completed, searches, uploads, cloud, before, stored: localStorage.getItem(key), roster: clone(students), target: document.getElementById('targetWordCount').value, pending: wftSyncState['pending' + stream + 'Push'], localCounter: wftSyncState['local' + stream + 'Counter'], syncedCounter: wftSyncState['lastSynced' + stream + 'Counter'], syncedHash: wftSyncState['lastSynced' + stream + 'Hash'], suppress: wftSuppressDirtyMarks, error: wftSyncState.lastError && wftSyncState.lastError.message, status: document.getElementById('driveSyncTextHeader').textContent });
+            await runScenario(stream, scenario);
         }
     }
     return results;
