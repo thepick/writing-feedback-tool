@@ -1239,6 +1239,16 @@ function getOrCreateStudentId(studentName) {
 function normalizeWftSessionDate(session, fallbackCreatedAt) {
     if (!session) { return; }
 
+    function setDisplayDateFromIso() {
+        try {
+            var dd = new Date(session.dateIso);
+            var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            session.displayDate = months[dd.getMonth()] + " " + dd.getDate() + ", " + dd.getFullYear();
+        } catch (e) {
+            session.displayDate = session.dateIso;
+        }
+    }
+
     if (!session.createdAt || isNaN(Date.parse(session.createdAt))) {
         if (session.timestamp && !isNaN(Date.parse(session.timestamp))) {
             session.createdAt = session.timestamp;
@@ -1274,13 +1284,7 @@ function normalizeWftSessionDate(session, fallbackCreatedAt) {
         if (session.date) {
             session.displayDate = session.date;
         } else {
-            try {
-                var dd = new Date(session.dateIso);
-                var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-                session.displayDate = months[dd.getMonth()] + " " + dd.getDate() + ", " + dd.getFullYear();
-            } catch (e) {
-                session.displayDate = session.dateIso;
-            }
+            setDisplayDateFromIso();
         }
     }
 
