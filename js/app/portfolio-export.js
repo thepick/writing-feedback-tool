@@ -114,19 +114,23 @@ function buildSessionExportFeedbackText(session) {
     var scores;
     if (!session) return "";
 
-    if (session.feedbackSummary && typeof session.feedbackSummary === "object") {
-        if (session.feedbackSummary.strength) parts.push("Strength: " + session.feedbackSummary.strength);
-        if (session.feedbackSummary.nextTime) parts.push("Next step: " + session.feedbackSummary.nextTime);
-        if (session.feedbackSummary.growGoal) parts.push("Growth goal: " + session.feedbackSummary.growGoal);
-        if (session.feedbackSummary.closing) parts.push("Encouragement: " + session.feedbackSummary.closing);
+    function appendStructuredFeedback() {
+        if (session.feedbackSummary && typeof session.feedbackSummary === "object") {
+            if (session.feedbackSummary.strength) parts.push("Strength: " + session.feedbackSummary.strength);
+            if (session.feedbackSummary.nextTime) parts.push("Next step: " + session.feedbackSummary.nextTime);
+            if (session.feedbackSummary.growGoal) parts.push("Growth goal: " + session.feedbackSummary.growGoal);
+            if (session.feedbackSummary.closing) parts.push("Encouragement: " + session.feedbackSummary.closing);
+        }
+
+        if (session.feedback && typeof session.feedback === "object") {
+            if (session.feedback.strength) parts.push("Strength: " + session.feedback.strength);
+            if (session.feedback.nextTime) parts.push("Next step: " + session.feedback.nextTime);
+            if (session.feedback.growGoal) parts.push("Growth goal: " + session.feedback.growGoal);
+            if (session.feedback.comment) parts.push("Comment: " + session.feedback.comment);
+        }
     }
 
-    if (session.feedback && typeof session.feedback === "object") {
-        if (session.feedback.strength) parts.push("Strength: " + session.feedback.strength);
-        if (session.feedback.nextTime) parts.push("Next step: " + session.feedback.nextTime);
-        if (session.feedback.growGoal) parts.push("Growth goal: " + session.feedback.growGoal);
-        if (session.feedback.comment) parts.push("Comment: " + session.feedback.comment);
-    }
+    appendStructuredFeedback();
 
     if (session.teacherComment) parts.push("Teacher comment: " + session.teacherComment);
     if (session.notes) parts.push("Notes: " + session.notes);
