@@ -1724,6 +1724,16 @@ function loadPortfolioIndexFromDrive(callback) {
     }
 }
 
+function assignMissingPortfolioIndexStudentIds(index) {
+    var indexNames = Object.keys(index.students);
+    for (var ri = 0; ri < indexNames.length; ri++) {
+        var entry = index.students[indexNames[ri]];
+        if (!entry.studentId) {
+            try { entry.studentId = getOrCreateStudentId(entry.displayName); } catch (e) {}
+        }
+    }
+}
+
 function rebuildPortfolioIndex(callback) {
     if (!WFT_PORTFOLIO_INDEX_V1) {
         if (callback) { callback(null, null); }
@@ -1745,13 +1755,7 @@ function rebuildPortfolioIndex(callback) {
     var index = buildPortfolioIndexFromPortfolio(portfolio);
 
     if (WFT_STUDENT_ID_MAP_V1) {
-        var indexNames = Object.keys(index.students);
-        for (var ri = 0; ri < indexNames.length; ri++) {
-            var entry = index.students[indexNames[ri]];
-            if (!entry.studentId) {
-                try { entry.studentId = getOrCreateStudentId(entry.displayName); } catch (e) {}
-            }
-        }
+        assignMissingPortfolioIndexStudentIds(index);
         index = buildPortfolioIndexFromPortfolio(portfolio);
     }
 
