@@ -4,27 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 
-(async () => {
-    const browser = await chromium.launch({ channel: 'msedge', headless: true });
-    const cases = [], failures = [];
-    const check = (name, run) => {
-        try { run(); cases.push({ name, passed: true }); }
-        catch (error) { cases.push({ name, passed: false, error: error.message }); failures.push(name); }
-    };
-    try {
-        const context = await browser.newContext();
-        const documents = new Map();
-        await context.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            if (documents.has(url.pathname)) return route.fulfill({ contentType: 'text/html', body: documents.get(url.pathname) });
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
-        });
-        const page = await context.newPage();
-        await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-        await page.waitForFunction(() => typeof reassessPortfolioSession === 'function');
-        const generated = await page.evaluate(async () => {
+const generateArchiveFixtures = async () => {
             stopWftSyncPolling(); scheduleWftCloudSync = () => {}; wftConfirm = async () => true;
             const canvas = document.createElement('canvas'); canvas.width = canvas.height = 2;
             canvas.getContext('2d').fillRect(0, 0, 2, 2);
@@ -74,42 +54,9 @@ const root = path.resolve(__dirname, '..');
             html.push({ archive: 'notebook', file: 'notebook.html', body: buildNotebookPrintDocument(refreshNotebookPage2Guide(sessions[0].notebookPrintHtml, name, sessions[0]), name, payload) });
             const manifests = syntheticArchives.map(files => ({ names: Object.keys(files), json: Object.entries(files).filter(([file]) => file.endsWith('.json')).map(([file, body]) => ({ file, data: JSON.parse(body) })) }));
             return { html, safeImage, payload, media, rejectedBadPhotos, manifests };
-        });
-        await page.waitForTimeout(100);
-        const generationInjected = await page.evaluate(() => window.injected === true);
-        check('export generation cannot execute imported corrected HTML', () => assert.equal(generationInjected, false));
-        check('requested unsafe photo bytes reject archive completion', () => assert.equal(generated.rejectedBadPhotos, true));
-        check('year archive with photos includes safe local and Drive image bytes', () => { assert.equal(generated.media.length, 2); assert.ok(generated.media.every(image => image.size > 0)); });
-        check('live single/year ZIP entries preserve student sessions and manifests', () => {
-            assert.equal(generated.manifests.length, 3);
-            for (const [index, archive] of generated.manifests.entries()) {
-                assert.ok(archive.names.some(file => file.endsWith('Portfolio.html')));
-                if (index > 0) {
-                    assert.ok(archive.json.some(({ data }) => data.sessions?.length === 4));
-                    assert.ok(archive.json.some(({ file, data }) => file.endsWith('archive-info.json') && data.studentCount === 1));
-                }
-                if (index === 2) assert.ok(archive.json.some(({ file }) => file.endsWith('photos-manifest.json')));
-            }
-        });
-        for (let i = 0; i < generated.html.length; i++) {
-            const item = generated.html[i];
-            const url = '/generated-' + i + '.html'; documents.set(url, item.body);
-            const exported = await context.newPage();
-            await exported.goto('http://127.0.0.1:8765' + url, { waitUntil: 'load' });
-            const state = await exported.evaluate(() => ({ injected: window.injected === true, handlers: [...document.querySelectorAll('*')].flatMap(node => [...node.attributes].filter(attr => /^on/i.test(attr.name)).map(attr => attr.value)), scores: [...document.querySelectorAll('.session-score')].map(node => node.textContent), photos: [...document.querySelectorAll('.export-image')].map(img => ({ src: img.getAttribute('src'), alt: img.alt, loaded: img.naturalWidth > 0 })), formatted: !!document.querySelector('.corrected-highlight') && !!document.querySelector('strong'), text: document.body.textContent }));
-            check('served ' + item.archive + '/' + item.file + ' rejects executable imports', () => {
-                assert.equal(state.injected, false);
-                assert.ok(state.handlers.every(value => !value.includes('window.injected')));
-            });
-            if (item.file.endsWith('Portfolio.html')) check('valid photos, zero/numeric/missing scores and formatting survive ' + item.archive + '/' + item.file, () => {
-                assert.deepEqual(state.scores, [generated.payload + '%', '0%', '85%', 'N/A']);
-                assert.equal(state.photos.length, 1); assert.equal(state.photos[0].src, generated.safeImage);
-                assert.equal(state.photos[0].alt, 'Valid " & photo'); assert.equal(state.photos[0].loaded, true);
-                assert.equal(state.formatted, true);
-            });
-            await exported.close();
-        }
-        const live = await page.evaluate(async () => {
+        };
+
+const exerciseLivePortfolio = async () => {
             delete window.injected;
             const { name, sessions, safeImage, badImage } = syntheticFixture;
             const select = document.getElementById('portfolioStudentSelect');
@@ -162,14 +109,83 @@ const root = path.resolve(__dirname, '..');
             clearCurrentClassAfterSuccessfulArchive = () => { cleared++; }; window.alert = () => {};
             await archiveCurrentSchoolYear(); await new Promise(resolve => setTimeout(resolve, 100));
             return { portfolioInjected, directInjected, previewInjected, restored, driveNode: !!driveNode, galleryDriveLoaded, driveRestore, driveLoaded, fallback, unavailable, unsafeDrive, invalidMediaRequests, invalidMediaRejections, downloads, saved, cleared };
+        };
+
+function checkGeneratedArchives(generated, check) {
+    check('requested unsafe photo bytes reject archive completion', () => assert.equal(generated.rejectedBadPhotos, true));
+    check('year archive with photos includes safe local and Drive image bytes', () => { assert.equal(generated.media.length, 2); assert.ok(generated.media.every(image => image.size > 0)); });
+    check('live single/year ZIP entries preserve student sessions and manifests', () => {
+        assert.equal(generated.manifests.length, 3);
+        for (const [index, archive] of generated.manifests.entries()) {
+            assert.ok(archive.names.some(file => file.endsWith('Portfolio.html')));
+            if (index > 0) {
+                assert.ok(archive.json.some(({ data }) => data.sessions?.length === 4));
+                assert.ok(archive.json.some(({ file, data }) => file.endsWith('archive-info.json') && data.studentCount === 1));
+            }
+            if (index === 2) assert.ok(archive.json.some(({ file }) => file.endsWith('photos-manifest.json')));
+        }
+    });
+}
+
+function checkExportedDocument(item, state, generated, check) {
+    check('served ' + item.archive + '/' + item.file + ' rejects executable imports', () => {
+        assert.equal(state.injected, false);
+        assert.ok(state.handlers.every(value => !value.includes('window.injected')));
+    });
+    if (item.file.endsWith('Portfolio.html')) check('valid photos, zero/numeric/missing scores and formatting survive ' + item.archive + '/' + item.file, () => {
+        assert.deepEqual(state.scores, [generated.payload + '%', '0%', '85%', 'N/A']);
+        assert.equal(state.photos.length, 1); assert.equal(state.photos[0].src, generated.safeImage);
+        assert.equal(state.photos[0].alt, 'Valid " & photo'); assert.equal(state.photos[0].loaded, true);
+        assert.equal(state.formatted, true);
+    });
+}
+
+function checkLivePortfolio(live, generated, check) {
+    check('live portfolio raw score and corrected HTML are safe', () => assert.equal(live.portfolioInjected, false));
+    check('direct selected photo preview is safe', () => assert.equal(live.directInjected, false));
+    check('actual reassessment rejects unsafe saved sources and keeps valid data image', () => { assert.equal(live.previewInjected, false); assert.deepEqual(live.restored, [generated.safeImage]); });
+    check('Drive references, live gallery loading and downloaded image restoration survive', () => { assert.equal(live.driveNode, true); assert.equal(live.galleryDriveLoaded, true); assert.equal(live.driveRestore.restored, 1); assert.equal(live.driveLoaded, true); });
+    check('safe original photo fallback and unsafe local/Drive image rejection', () => { assert.equal(live.fallback, generated.safeImage); assert.equal(live.unavailable, ''); assert.equal(live.unsafeDrive, ''); });
+    check('archive media rejects unsafe sources before fetching', () => { assert.equal(live.invalidMediaRequests, 0); assert.equal(live.invalidMediaRejections, 4); });
+    check('student/year export handlers complete through tested generators', () => { assert.equal(live.downloads.length, 2); assert.equal(live.saved, 1); assert.equal(live.cleared, 1); });
+}
+
+(async () => {
+    const browser = await chromium.launch({ channel: 'msedge', headless: true });
+    const cases = [], failures = [];
+    const check = (name, run) => {
+        try { run(); cases.push({ name, passed: true }); }
+        catch (error) { cases.push({ name, passed: false, error: error.message }); failures.push(name); }
+    };
+    try {
+        const context = await browser.newContext();
+        const documents = new Map();
+        await context.route('**/*', route => {
+            const url = new URL(route.request().url());
+            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
+            if (documents.has(url.pathname)) return route.fulfill({ contentType: 'text/html', body: documents.get(url.pathname) });
+            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
+            return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
         });
-        check('live portfolio raw score and corrected HTML are safe', () => assert.equal(live.portfolioInjected, false));
-        check('direct selected photo preview is safe', () => assert.equal(live.directInjected, false));
-        check('actual reassessment rejects unsafe saved sources and keeps valid data image', () => { assert.equal(live.previewInjected, false); assert.deepEqual(live.restored, [generated.safeImage]); });
-        check('Drive references, live gallery loading and downloaded image restoration survive', () => { assert.equal(live.driveNode, true); assert.equal(live.galleryDriveLoaded, true); assert.equal(live.driveRestore.restored, 1); assert.equal(live.driveLoaded, true); });
-        check('safe original photo fallback and unsafe local/Drive image rejection', () => { assert.equal(live.fallback, generated.safeImage); assert.equal(live.unavailable, ''); assert.equal(live.unsafeDrive, ''); });
-        check('archive media rejects unsafe sources before fetching', () => { assert.equal(live.invalidMediaRequests, 0); assert.equal(live.invalidMediaRejections, 4); });
-        check('student/year export handlers complete through tested generators', () => { assert.equal(live.downloads.length, 2); assert.equal(live.saved, 1); assert.equal(live.cleared, 1); });
+        const page = await context.newPage();
+        await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+        await page.waitForFunction(() => typeof reassessPortfolioSession === 'function');
+        const generated = await page.evaluate(generateArchiveFixtures);
+        await page.waitForTimeout(100);
+        const generationInjected = await page.evaluate(() => window.injected === true);
+        check('export generation cannot execute imported corrected HTML', () => assert.equal(generationInjected, false));
+        checkGeneratedArchives(generated, check);
+        for (let i = 0; i < generated.html.length; i++) {
+            const item = generated.html[i];
+            const url = '/generated-' + i + '.html'; documents.set(url, item.body);
+            const exported = await context.newPage();
+            await exported.goto('http://127.0.0.1:8765' + url, { waitUntil: 'load' });
+            const state = await exported.evaluate(() => ({ injected: window.injected === true, handlers: [...document.querySelectorAll('*')].flatMap(node => [...node.attributes].filter(attr => /^on/i.test(attr.name)).map(attr => attr.value)), scores: [...document.querySelectorAll('.session-score')].map(node => node.textContent), photos: [...document.querySelectorAll('.export-image')].map(img => ({ src: img.getAttribute('src'), alt: img.alt, loaded: img.naturalWidth > 0 })), formatted: !!document.querySelector('.corrected-highlight') && !!document.querySelector('strong'), text: document.body.textContent }));
+            checkExportedDocument(item, state, generated, check);
+            await exported.close();
+        }
+        const live = await page.evaluate(exerciseLivePortfolio);
+        checkLivePortfolio(live, generated, check);
         const performance = await page.evaluate(() => {
             const sessions = Array.from({ length: 100 }, (_, i) => ({ id: String(i), overall: 85, originalText: 'Synthetic text '.repeat(100), correctedMarkup: '**Corrected** writing '.repeat(100), feedbackSummary: { strength: 'Good detail' } }));
             const samples = {};
