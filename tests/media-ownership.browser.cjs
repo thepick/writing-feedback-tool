@@ -255,42 +255,46 @@ function assertPhotoScenario(scenario, result) {
     }
 }
 
+async function runMediaOwnershipCase(browser, scenario, cases) {
+    const page = await browser.newPage();
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.route('**/*', route => {
+        const url = new URL(route.request().url());
+        if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
+        const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
+        return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
+    });
+    await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+    let observed;
+    try {
+        const result = await page.evaluate(evaluateMediaOwnershipScenario, scenario);
+        observed = { students: Object.fromEntries(Object.entries(result.portfolio).map(([name, data]) => [name, data.sessions.map(session => ({ id: session.id, text: session.originalText,
+            photos: session.images.map(image => ({ imageId: image.imageId, imageRevision: image.imageRevision, driveFileId: image.driveFileId, bytesRetained: !!image.dataUrl })) }))])),
+            pendingStudent: result.pending?.studentName || null, pendingId: result.pending?.sessionData.id || null,
+            pendingPhotoBytesRetained: !!result.pending?.sessionData.images[0]?.dataUrl,
+            synced: result.synced, flushes: result.flushes, uploadCount: result.uploads.length,
+            uploadNames: result.uploads.map(upload => upload.name), error: result.error || result.uploadError || null };
+        assert.deepEqual(errors, [], 'No uncaught app errors');
+        if (scenario.startsWith('sync-')) {
+            assertSavedMediaScenario(scenario, result);
+        } else if (scenario.startsWith('pending-')) {
+            assertPendingMediaScenario(scenario, result);
+        } else {
+            assertPhotoScenario(scenario, result);
+        }
+        cases.push({ name: scenario, passed: true, observed });
+    } catch (error) { cases.push({ name: scenario, passed: false, error: error.message, observed }); }
+    console.log((cases[cases.length - 1].passed ? 'PASS ' : 'FAIL ') + scenario + (cases[cases.length - 1].error ? ': ' + cases[cases.length - 1].error : ''));
+    await page.close();
+}
+
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     const cases = [];
     try {
         for (const scenario of scenarios) {
-            const page = await browser.newPage();
-            const errors = [];
-            page.on('pageerror', error => errors.push(error.message));
-            await page.route('**/*', route => {
-                const url = new URL(route.request().url());
-                if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-                const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-                return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
-            });
-            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-            let observed;
-            try {
-                const result = await page.evaluate(evaluateMediaOwnershipScenario, scenario);
-                observed = { students: Object.fromEntries(Object.entries(result.portfolio).map(([name, data]) => [name, data.sessions.map(session => ({ id: session.id, text: session.originalText,
-                    photos: session.images.map(image => ({ imageId: image.imageId, imageRevision: image.imageRevision, driveFileId: image.driveFileId, bytesRetained: !!image.dataUrl })) }))])),
-                    pendingStudent: result.pending?.studentName || null, pendingId: result.pending?.sessionData.id || null,
-                    pendingPhotoBytesRetained: !!result.pending?.sessionData.images[0]?.dataUrl,
-                    synced: result.synced, flushes: result.flushes, uploadCount: result.uploads.length,
-                    uploadNames: result.uploads.map(upload => upload.name), error: result.error || result.uploadError || null };
-                assert.deepEqual(errors, [], 'No uncaught app errors');
-                if (scenario.startsWith('sync-')) {
-                    assertSavedMediaScenario(scenario, result);
-                } else if (scenario.startsWith('pending-')) {
-                    assertPendingMediaScenario(scenario, result);
-                } else {
-                    assertPhotoScenario(scenario, result);
-                }
-                cases.push({ name: scenario, passed: true, observed });
-            } catch (error) { cases.push({ name: scenario, passed: false, error: error.message, observed }); }
-            console.log((cases[cases.length - 1].passed ? 'PASS ' : 'FAIL ') + scenario + (cases[cases.length - 1].error ? ': ' + cases[cases.length - 1].error : ''));
-            await page.close();
+            await runMediaOwnershipCase(browser, scenario, cases);
         }
     } finally { await browser.close(); }
     if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify({ root, cases }, null, 2) + '\n');
