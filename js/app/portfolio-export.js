@@ -88,7 +88,10 @@ function getStudentSessions(studentData) {
 
 function getSessionDate(session) {
     if (!session) return "";
-    return (session.date || session.createdAt || session.updatedAt || session.timestamp) ? String(session.date || session.createdAt || session.updatedAt || session.timestamp) : "";
+    function readSessionDate() {
+        return session.date || session.createdAt || session.updatedAt || session.timestamp;
+    }
+    return readSessionDate() ? String(readSessionDate()) : "";
 }
 
 function getSessionTitle(session) {
