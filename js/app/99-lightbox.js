@@ -3,7 +3,8 @@ function openImageLightbox(imgEl) {
     var lb = document.getElementById('imgLightbox');
     var lbImg = document.getElementById('imgLightboxImg');
     var lbCap = document.getElementById('imgLightboxCaption');
-    if (!lb || !lbImg || !imgEl || !imgEl.getAttribute('src')) return;
+    if (!lb || !lbImg) return;
+    if (!imgEl || !imgEl.getAttribute('src')) return;
 
     lbImg.src = imgEl.src;
     lbImg.alt = imgEl.alt || 'Writing sample preview';
