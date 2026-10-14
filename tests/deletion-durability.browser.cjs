@@ -41,11 +41,15 @@ async function exerciseStorageFailure({ action, failedKey }) {
     localStorage.setItem('wft_portfolio', original);
     localStorage.setItem('wft_students', JSON.stringify(['Alice', 'Bob']));
     localStorage.setItem('wft_selectedStudent', 'Alice');
-    localStorage.setItem('wft_settings', JSON.stringify({ students: ['Alice', 'Bob'], studentIdMap: action === 'idRenameMissingMap' ? {} : { Alice: 'student-alice' }, studentRecords: [{ studentId: 'student-alice', displayName: 'Alice', legacyNameKeys: ['Alice'] }], unknown: 'keep' }));
-    const originalSettings = localStorage.getItem('wft_settings');
-    if (['idRename', 'idRenameMissingMap'].includes(action)) WFT_STUDENT_ID_MAP_V1 = true;
-    const deletedName = ['add', 'import', 'restore', 'rename'].includes(action) ? 'Alicia' : 'Earlier';
-    localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify({ deletedStudents: { ['student:' + deletedName.toLowerCase()]: { studentName: deletedName, deletedAt: '2026-10-01T00:00:00Z' } } }));
+    function seedOriginalIdentityStorage() {
+        localStorage.setItem('wft_settings', JSON.stringify({ students: ['Alice', 'Bob'], studentIdMap: action === 'idRenameMissingMap' ? {} : { Alice: 'student-alice' }, studentRecords: [{ studentId: 'student-alice', displayName: 'Alice', legacyNameKeys: ['Alice'] }], unknown: 'keep' }));
+        const originalSettings = localStorage.getItem('wft_settings');
+        if (['idRename', 'idRenameMissingMap'].includes(action)) WFT_STUDENT_ID_MAP_V1 = true;
+        const deletedName = ['add', 'import', 'restore', 'rename'].includes(action) ? 'Alicia' : 'Earlier';
+        localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify({ deletedStudents: { ['student:' + deletedName.toLowerCase()]: { studentName: deletedName, deletedAt: '2026-10-01T00:00:00Z' } } }));
+        return originalSettings;
+    }
+    const originalSettings = seedOriginalIdentityStorage();
     const originalMarkers = localStorage.getItem(WFT_DELETIONS_STORAGE_KEY);
     students = ['Alice', 'Bob']; selectedStudent = 'Alice';
     renderStudentList(); populateStudentDropdown();
