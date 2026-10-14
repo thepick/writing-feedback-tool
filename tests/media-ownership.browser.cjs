@@ -195,16 +195,7 @@ async function evaluateMediaOwnershipScenario(scenario) {
 }
 function assertSavedMediaScenario(scenario, result) {
     const entry = result.portfolio.Alice?.sessions.find(item => item.id === 'first');
-    if (scenario === 'sync-add') assert.deepEqual(result.portfolio.Alice.sessions.map(item => item.id).sort(), ['first', 'second']);
-    if (scenario === 'sync-edit') assert.equal(entry.originalText, 'Edited while uploading.');
-    if (scenario === 'sync-delete-session') assert.equal(result.portfolio.Alice.sessions.length, 0);
-    if (scenario === 'sync-delete-student') assert.deepEqual(result.portfolio, {});
-    if (scenario === 'sync-rename') { assert.equal(result.portfolio.Alice, undefined); assert.equal(result.portfolio.Alicia.sessions.length, 1); assert.equal(result.portfolio.Alicia.sessions[0].images[0].driveFileId, undefined); }
-    if (scenario === 'sync-new-photo') { assert.ok(entry.images[0].dataUrl); assert.equal(entry.images[0].driveFileId, undefined); }
-    if (scenario === 'sync-photo-add') { assert.equal(entry.images.length, 2); assert.ok(entry.images[1].dataUrl); assert.equal(entry.images[0].driveFileId, 'uploaded-file'); }
-    if (scenario === 'sync-new-reference') assert.equal(entry.images[0].driveFileId, 'newer-file');
-    if (scenario === 'sync-photo-delete') assert.equal(entry.images.length, 0);
-    if (scenario === 'sync-photo-reorder') assert.deepEqual(entry.images.map(image => image.imageId), ['photo-two', 'photo-one']);
+    assertSavedMediaChanges(scenario, result, entry);
     if (['sync-upload-failure', 'sync-write-failure', 'sync-corrupt', 'sync-recovery', 'sync-entry-corrupt', 'sync-entry-recovery', 'sync-upload-throws', 'sync-invalid-bytes'].includes(scenario)) assert.ok(result.error, 'Required failures must propagate');
     else assert.equal(result.error, '');
     if (scenario === 'sync-corrupt') assert.equal(result.raw, '{broken');
@@ -223,15 +214,7 @@ function assertPendingMediaScenario(scenario, result) {
         assert.equal(result.portfolio.Alice.sessions[0].images[0].driveFileId, scenario === 'pending-retry' ? 'retry-file' : 'uploaded-file');
         assert.equal(result.portfolio.Alice.sessions.length, 1);
     } else {
-        assert.equal(result.synced, false, 'Old completion must not report current writing synced');
-        if (scenario !== 'pending-clear') assert.ok(result.pending, 'Current work must remain retryable');
-        if (scenario !== 'pending-new-during-flush') assert.deepEqual(result.portfolio, {});
-        if (scenario === 'pending-replacement' || scenario === 'pending-analysis-bob' || scenario === 'pending-new-during-flush') assert.equal(result.pending.studentName, 'Bob');
-        if (scenario === 'pending-analysis-alice') assert.equal(result.pending.studentName, 'Alice');
-        if (scenario === 'pending-analysis-alice' || scenario === 'pending-analysis-bob') assert.match(result.pending.sessionData.originalText, /blue bird/);
-        if (scenario !== 'pending-new-during-flush') assert.equal(result.flushes, ['pending-class-reset', 'pending-access-change'].includes(scenario) ? 1 : 0);
-        if (scenario === 'pending-upload-failure') assert.ok(result.pending.sessionData.images[0].dataUrl);
-        if (scenario === 'pending-corrupt') assert.equal(result.raw, '{broken');
+        assertRetainedPendingMedia(scenario, result);
     }
     if (scenario === 'pending-retry') { assert.ok(result.beforeRetry.pending); assert.equal(result.beforeRetry.synced, false); }
     if (scenario === 'pending-rollback-failure') assert.equal(result.recovery, true, 'A failed rollback must retain the original portfolio for recovery and block sync');
@@ -255,6 +238,38 @@ function assertPhotoScenario(scenario, result) {
     }
 }
 
+function assertSavedMediaChanges(scenario, result, entry) {
+    if (scenario === 'sync-add') assert.deepEqual(result.portfolio.Alice.sessions.map(item => item.id).sort(), ['first', 'second']);
+    if (scenario === 'sync-edit') assert.equal(entry.originalText, 'Edited while uploading.');
+    if (scenario === 'sync-delete-session') assert.equal(result.portfolio.Alice.sessions.length, 0);
+    if (scenario === 'sync-delete-student') assert.deepEqual(result.portfolio, {});
+    if (scenario === 'sync-rename') { assert.equal(result.portfolio.Alice, undefined); assert.equal(result.portfolio.Alicia.sessions.length, 1); assert.equal(result.portfolio.Alicia.sessions[0].images[0].driveFileId, undefined); }
+    if (scenario === 'sync-new-photo') { assert.ok(entry.images[0].dataUrl); assert.equal(entry.images[0].driveFileId, undefined); }
+    if (scenario === 'sync-photo-add') { assert.equal(entry.images.length, 2); assert.ok(entry.images[1].dataUrl); assert.equal(entry.images[0].driveFileId, 'uploaded-file'); }
+    if (scenario === 'sync-new-reference') assert.equal(entry.images[0].driveFileId, 'newer-file');
+    if (scenario === 'sync-photo-delete') assert.equal(entry.images.length, 0);
+    if (scenario === 'sync-photo-reorder') assert.deepEqual(entry.images.map(image => image.imageId), ['photo-two', 'photo-one']);
+}
+function assertRetainedPendingMedia(scenario, result) {
+    assert.equal(result.synced, false, 'Old completion must not report current writing synced');
+    if (scenario !== 'pending-clear') assert.ok(result.pending, 'Current work must remain retryable');
+    if (scenario !== 'pending-new-during-flush') assert.deepEqual(result.portfolio, {});
+    if (scenario === 'pending-replacement' || scenario === 'pending-analysis-bob' || scenario === 'pending-new-during-flush') assert.equal(result.pending.studentName, 'Bob');
+    if (scenario === 'pending-analysis-alice') assert.equal(result.pending.studentName, 'Alice');
+    if (scenario === 'pending-analysis-alice' || scenario === 'pending-analysis-bob') assert.match(result.pending.sessionData.originalText, /blue bird/);
+    if (scenario !== 'pending-new-during-flush') assert.equal(result.flushes, ['pending-class-reset', 'pending-access-change'].includes(scenario) ? 1 : 0);
+    if (scenario === 'pending-upload-failure') assert.ok(result.pending.sessionData.images[0].dataUrl);
+    if (scenario === 'pending-corrupt') assert.equal(result.raw, '{broken');
+}
+function buildMediaOwnershipObservation(result) {
+    return { students: Object.fromEntries(Object.entries(result.portfolio).map(([name, data]) => [name, data.sessions.map(session => ({ id: session.id, text: session.originalText,
+        photos: session.images.map(image => ({ imageId: image.imageId, imageRevision: image.imageRevision, driveFileId: image.driveFileId, bytesRetained: !!image.dataUrl })) }))])),
+        pendingStudent: result.pending?.studentName || null, pendingId: result.pending?.sessionData.id || null,
+        pendingPhotoBytesRetained: !!result.pending?.sessionData.images[0]?.dataUrl,
+        synced: result.synced, flushes: result.flushes, uploadCount: result.uploads.length,
+        uploadNames: result.uploads.map(upload => upload.name), error: result.error || result.uploadError || null };
+}
+
 async function runMediaOwnershipCase(browser, scenario, cases) {
     const page = await browser.newPage();
     const errors = [];
@@ -269,12 +284,7 @@ async function runMediaOwnershipCase(browser, scenario, cases) {
     let observed;
     try {
         const result = await page.evaluate(evaluateMediaOwnershipScenario, scenario);
-        observed = { students: Object.fromEntries(Object.entries(result.portfolio).map(([name, data]) => [name, data.sessions.map(session => ({ id: session.id, text: session.originalText,
-            photos: session.images.map(image => ({ imageId: image.imageId, imageRevision: image.imageRevision, driveFileId: image.driveFileId, bytesRetained: !!image.dataUrl })) }))])),
-            pendingStudent: result.pending?.studentName || null, pendingId: result.pending?.sessionData.id || null,
-            pendingPhotoBytesRetained: !!result.pending?.sessionData.images[0]?.dataUrl,
-            synced: result.synced, flushes: result.flushes, uploadCount: result.uploads.length,
-            uploadNames: result.uploads.map(upload => upload.name), error: result.error || result.uploadError || null };
+        observed = buildMediaOwnershipObservation(result);
         assert.deepEqual(errors, [], 'No uncaught app errors');
         if (scenario.startsWith('sync-')) {
             assertSavedMediaScenario(scenario, result);
