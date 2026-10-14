@@ -189,6 +189,18 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         return buildExportHtmlDocument(studentName + " - Portfolio", '<div class="empty">No writing sessions recorded yet.</div>');
     }
 
+    var html = buildStudentPortfolioHeaderHtml(studentName, sessions, schoolYear);
+    // Session cards (newest first)
+    html += '<h2 class="section-title">Saved Work</h2>';
+    for (var si = 0; si < sessions.length; si += 1) {
+        html += buildStudentPortfolioSessionHtml(sessions[si]);
+    }
+
+    html += '</div>'; // .portfolio-page
+    return buildStudentPortfolioDocument(studentName, html);
+}
+
+function buildStudentPortfolioHeaderHtml(studentName, sessions, schoolYear) {
     var latestSession = sessions[0];
     var prevSession = sessions.length >= 2 ? sessions[1] : null;
     var overalls = sessions.map(function(s) { return s.overall != null ? Number(s.overall) : null; }).filter(function(v) { return v != null && !isNaN(v); });
@@ -207,12 +219,7 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
         if (weakestCategory == null || categoryAverages[key] < categoryAverages[weakestCategory]) weakestCategory = key;
     });
 
-    var trendText = '';
-    if (trend != null) {
-        if (trend > 0) trendText = '&#9650; +' + trend + '% vs previous';
-        else if (trend < 0) trendText = '&#9660; ' + trend + '% vs previous';
-        else trendText = 'Same as previous';
-    }
+    var trendText = buildStudentPortfolioTrendText(trend);
 
     var html = '';
     html += '<div class="portfolio-page">';
@@ -225,82 +232,105 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
 
     // Stats grid
     html += '<div class="stats-grid">';
-    html += '<div class="stat-card"><div class="stat-label">Latest Score</div><div class="stat-value">' + (latestOverall != null ? latestOverall + '%' : '-') + '</div><div class="stat-trend">' + trendText + '</div></div>';
-    html += '<div class="stat-card"><div class="stat-label">Average Score</div><div class="stat-value">' + (avgOverall != null ? avgOverall + '%' : '-') + '</div></div>';
-    html += '<div class="stat-card"><div class="stat-label">Best Score</div><div class="stat-value">' + (bestOverall != null ? bestOverall + '%' : '-') + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Latest Score</div><div class="stat-value">' + formatStudentPortfolioScore(latestOverall) + '</div><div class="stat-trend">' + trendText + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Average Score</div><div class="stat-value">' + formatStudentPortfolioScore(avgOverall) + '</div></div>';
+    html += '<div class="stat-card"><div class="stat-label">Best Score</div><div class="stat-value">' + formatStudentPortfolioScore(bestOverall) + '</div></div>';
     html += '<div class="stat-card"><div class="stat-label">Submissions</div><div class="stat-value">' + sessions.length + '</div></div>';
     html += '<div class="stat-card"><div class="stat-label">Strongest Area</div><div class="stat-value area-name">' + escapeHtml(strongestCategory || '-') + '</div></div>';
     html += '<div class="stat-card"><div class="stat-label">Focus Area</div><div class="stat-value area-name">' + escapeHtml(weakestCategory || '-') + '</div></div>';
     html += '</div>';
 
-    // Session cards (newest first)
-    html += '<h2 class="section-title">Saved Work</h2>';
-    for (var si = 0; si < sessions.length; si += 1) {
-        var sess = sessions[si];
-        var scoreColor = scoreBadgeColor(sess.overall);
+    return html;
+}
 
-        // Category chips
-        var chipsHtml = '';
-        var sessCategoryKeys = typeof getSessionCategoryKeys === 'function' ? getSessionCategoryKeys(sess) : Object.keys(sess.categoryScores || {});
-        sessCategoryKeys.forEach(function(key) {
-            var value = getNumericAssessmentScore(sess.categoryScores && sess.categoryScores[key]);
-            if (value == null) value = '-';
-            var chipClass = getRubricScoreColorClass(value);
-            chipsHtml += '<span class="chip ' + chipClass + '"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</span>';
-        });
+function formatStudentPortfolioScore(score) {
+    return score != null ? score + '%' : '-';
+}
 
-        // Feedback notes
-        var feedbackText = buildSessionExportFeedbackText(sess);
-        var notesContent = feedbackText ? renderSimpleMarkdown(feedbackText) : '<em>No notes saved.</em>';
-
-        // Corrected HTML (use the same helper as the in-app portfolio when available)
-        var correctedDisplayHtml = '';
-        if (typeof getPortfolioCorrectedHtml === 'function') {
-            correctedDisplayHtml = getPortfolioCorrectedHtml(sess);
-        } else if (sess.correctedMarkup) {
-            correctedDisplayHtml = renderCorrectionMarkdown(sess.correctedMarkup);
-        } else if (sess.correctedHtml) {
-            correctedDisplayHtml = sanitizeWftHtmlFragment(sess.correctedHtml);
-        } else {
-            correctedDisplayHtml = '<pre>' + escapeHtml(getSessionCorrectedText(sess)) + '</pre>';
-        }
-
-        html += '<div class="session-card">';
-        // Header row
-        html += '<div class="session-card-header">';
-        html += '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(getSessionDate(sess) || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(getSessionTitle(sess) || 'Untitled') + '</span></div>';
-        html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>';
-        html += '</div>';
-        // Meta
-        html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
-        // Chips
-        html += '<div class="chip-row">' + chipsHtml + '</div>';
-        // Artifact grid: Original | Corrected | Notes
-        html += '<div class="artifact-grid">';
-        html += '<div class="artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(getSessionOriginalText(sess)) + '</pre></div>';
-        html += '<div class="artifact-box"><h5>Corrected Writing</h5><div class="rich-html corrected-writing-html">' + correctedDisplayHtml + '</div></div>';
-        html += '<div class="artifact-box"><h5>Teacher Notes</h5><div class="rich-html">' + notesContent + '</div></div>';
-        html += '</div>';
-
-        // Image strip
-        if (sess.images && sess.images.length) {
-            html += '<div class="photo-strip">';
-            for (var imi = 0; imi < sess.images.length; imi++) {
-                var img = sess.images[imi];
-                if (isSafeWftImageDataUrl(img.dataUrl)) {
-                    html += '<div class="photo-thumb"><img src="' + escapeHtmlAttr(img.dataUrl) + '" alt="' + escapeHtmlAttr(img.name || 'Image') + '" class="export-image"><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
-                } else {
-                    html += '<div class="photo-thumb"><div class="photo-placeholder">&#128247; Image not available in export</div><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
-                }
-            }
-            html += '</div>';
-        }
-
-        html += '</div>'; // .session-card
+function buildStudentPortfolioTrendText(trend) {
+    var trendText = '';
+    if (trend != null) {
+        if (trend > 0) trendText = '&#9650; +' + trend + '% vs previous';
+        else if (trend < 0) trendText = '&#9660; ' + trend + '% vs previous';
+        else trendText = 'Same as previous';
     }
 
-    html += '</div>'; // .portfolio-page
+    return trendText;
+}
 
+function buildStudentPortfolioSessionHtml(sess) {
+    var html = '';
+    var scoreColor = scoreBadgeColor(sess.overall);
+
+    // Category chips
+    var chipsHtml = '';
+    var sessCategoryKeys = typeof getSessionCategoryKeys === 'function' ? getSessionCategoryKeys(sess) : Object.keys(sess.categoryScores || {});
+    sessCategoryKeys.forEach(function(key) {
+        var value = getNumericAssessmentScore(sess.categoryScores && sess.categoryScores[key]);
+        if (value == null) value = '-';
+        var chipClass = getRubricScoreColorClass(value);
+        chipsHtml += '<span class="chip ' + chipClass + '"><strong>' + escapeHtml(key) + ':</strong> ' + escapeHtml(String(value)) + (value !== '-' ? '/10' : '') + '</span>';
+    });
+
+    // Feedback notes
+    var feedbackText = buildSessionExportFeedbackText(sess);
+    var notesContent = feedbackText ? renderSimpleMarkdown(feedbackText) : '<em>No notes saved.</em>';
+
+    // Corrected HTML (use the same helper as the in-app portfolio when available)
+    var correctedDisplayHtml = '';
+    if (typeof getPortfolioCorrectedHtml === 'function') {
+        correctedDisplayHtml = getPortfolioCorrectedHtml(sess);
+    } else if (sess.correctedMarkup) {
+        correctedDisplayHtml = renderCorrectionMarkdown(sess.correctedMarkup);
+    } else if (sess.correctedHtml) {
+        correctedDisplayHtml = sanitizeWftHtmlFragment(sess.correctedHtml);
+    } else {
+        correctedDisplayHtml = '<pre>' + escapeHtml(getSessionCorrectedText(sess)) + '</pre>';
+    }
+
+    html += '<div class="session-card">';
+    // Header row
+    html += '<div class="session-card-header">';
+    html += '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(getSessionDate(sess) || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(getSessionTitle(sess) || 'Untitled') + '</span></div>';
+    html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>';
+    html += '</div>';
+    // Meta
+    html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
+    // Chips
+    html += '<div class="chip-row">' + chipsHtml + '</div>';
+    // Artifact grid: Original | Corrected | Notes
+    html += '<div class="artifact-grid">';
+    html += '<div class="artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(getSessionOriginalText(sess)) + '</pre></div>';
+    html += '<div class="artifact-box"><h5>Corrected Writing</h5><div class="rich-html corrected-writing-html">' + correctedDisplayHtml + '</div></div>';
+    html += '<div class="artifact-box"><h5>Teacher Notes</h5><div class="rich-html">' + notesContent + '</div></div>';
+    html += '</div>';
+
+    html += buildStudentPortfolioPhotosHtml(sess);
+
+    html += '</div>'; // .session-card
+    return html;
+}
+
+function buildStudentPortfolioPhotosHtml(sess) {
+    var html = '';
+    // Image strip
+    if (sess.images && sess.images.length) {
+        html += '<div class="photo-strip">';
+        for (var imi = 0; imi < sess.images.length; imi++) {
+            var img = sess.images[imi];
+            if (isSafeWftImageDataUrl(img.dataUrl)) {
+                html += '<div class="photo-thumb"><img src="' + escapeHtmlAttr(img.dataUrl) + '" alt="' + escapeHtmlAttr(img.name || 'Image') + '" class="export-image"><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
+            } else {
+                html += '<div class="photo-thumb"><div class="photo-placeholder">&#128247; Image not available in export</div><div class="thumb-caption">' + escapeHtml(img.name || 'Image') + '</div></div>';
+            }
+        }
+        html += '</div>';
+    }
+
+    return html;
+}
+
+function buildStudentPortfolioDocument(studentName, html) {
     // Inline CSS matching in-app portfolio look
     var css = ''
         + '*{box-sizing:border-box;margin:0;padding:0;}'
