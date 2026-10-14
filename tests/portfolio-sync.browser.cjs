@@ -122,25 +122,28 @@ const runPortfolioSyncScenario = async scenario => {
                 const local = { Alice: { sessions: [entry('local')] } };
                 let cloud = { Alice: { sessions: [entry('remote')] } };
                 const duplicate = { Alice: { sessions: [entry('duplicate')] } };
-                if (scenario.endsWith('-newer')) {
-                    local.Alice.sessions[0].id = cloud.Alice.sessions[0].id = 'same';
-                    local.Alice.sessions[0].updatedAt = scenario === 'local-newer' ? '2026-10-03' : '2026-10-01';
-                    cloud.Alice.sessions[0].updatedAt = scenario === 'cloud-newer' ? '2026-10-03' : '2026-10-01';
-                    local.Alice.sessions[0].images = [{ imageId: 'local-photo', driveFileId: 'local-file' }];
-                    cloud.Alice.sessions[0].images = [{ imageId: 'remote-photo', driveFileId: 'remote-file' }];
+                function preparePortfolioFixtures() {
+                    if (scenario.endsWith('-newer')) {
+                        local.Alice.sessions[0].id = cloud.Alice.sessions[0].id = 'same';
+                        local.Alice.sessions[0].updatedAt = scenario === 'local-newer' ? '2026-10-03' : '2026-10-01';
+                        cloud.Alice.sessions[0].updatedAt = scenario === 'cloud-newer' ? '2026-10-03' : '2026-10-01';
+                        local.Alice.sessions[0].images = [{ imageId: 'local-photo', driveFileId: 'local-file' }];
+                        cloud.Alice.sessions[0].images = [{ imageId: 'remote-photo', driveFileId: 'remote-file' }];
+                    }
+                    if (scenario === 'deleted' || scenario === 'restored') {
+                        local.Alice.sessions.push(entry('deleted'));
+                        cloud.Alice.sessions.push(entry('deleted'));
+                        cloud.Bob = { sessions: [entry('bob')] };
+                    }
+                    savePortfolioData(local);
+                    if (scenario === 'deleted' || scenario === 'restored') {
+                        // Use the shipped successful removal and marker writers, rather than stubbing filtering.
+                        if (!removeStudentSession('Alice', 'deleted')) throw new Error('Removal failed');
+                        recordStudentDeletion('Bob');
+                        if (scenario === 'restored') restoreStudentDeletion('Bob', 'test');
+                    }
                 }
-                if (scenario === 'deleted' || scenario === 'restored') {
-                    local.Alice.sessions.push(entry('deleted'));
-                    cloud.Alice.sessions.push(entry('deleted'));
-                    cloud.Bob = { sessions: [entry('bob')] };
-                }
-                savePortfolioData(local);
-                if (scenario === 'deleted' || scenario === 'restored') {
-                    // Use the shipped successful removal and marker writers, rather than stubbing filtering.
-                    if (!removeStudentSession('Alice', 'deleted')) throw new Error('Removal failed');
-                    recordStudentDeletion('Bob');
-                    if (scenario === 'restored') restoreStudentDeletion('Bob', 'test');
-                }
+                preparePortfolioFixtures();
                 findWftFilesByNamePromise = () => Promise.resolve(scenario === 'duplicates'
                     ? [{ id: 'canonical', modifiedTime: '2026-10-03' }, { id: 'duplicate', modifiedTime: '2026-10-01' }]
                     : [{ id: 'canonical' }]);
