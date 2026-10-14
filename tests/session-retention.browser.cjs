@@ -161,6 +161,7 @@ function exerciseSessionRetention() {
                 check(calls > 1 && getLocalPortfolioSnapshot().Alice.sessions.some(s => s.id === 'essay-101'), 'required downstream normalization succeeded');
                 return { calls, contract: 'Optional preliminary catch is unchanged; the required durable normalization remains authoritative.' };
             });
+            function checkOrdinarySaveFailureRecovery() {
             for (const failure of ['portfolio', 'corrupt', 'normalization']) run(`ordinary save: required ${failure} failure preserves history`, () => {
                 prepare(50, 'iso'); const before = localStorage.getItem('wft_portfolio');
                 if (failure === 'corrupt') localStorage.setItem('wft_portfolio', '{damaged synthetic portfolio');
@@ -174,6 +175,8 @@ function exerciseSessionRetention() {
                 saveStudentSession('Alice', entry(101));
                 equal(getLocalPortfolioSnapshot().Alice.sessions.map(s => s.id), ['essay-101', ...Array.from({ length: 49 }, (_, i) => 'essay-' + (50 - i))], 'ordinary retry IDs');
             });
+            }
+            checkOrdinarySaveFailureRecovery();
             run('new undated ID-less writing keeps assigned ID across failed pending commit', () => {
                 prepare(50, 'iso'); const session = { originalText: 'Undated pending writing', custom: { keep: true }, images: [] };
                 const staged = pending('Alice', session, false);
