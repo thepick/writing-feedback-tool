@@ -2838,6 +2838,25 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
     var lastError = null;
     var maxRetriesPerModel = options.maxRetriesPerModel == null ? 2 : options.maxRetriesPerModel;
 
+    function prepareOpenRouterRetry(e, timeoutId) {
+        clearTimeout(timeoutId);
+        if (requestContext) assertCurrentAnalysisContext(requestContext);
+        if (e && e.name === "AbortError") {
+            if (cancelAnalysis) {
+                throw new Error("Analysis cancelled by user.");
+            }
+            // Timeout-based abort uses the same controller. Recreate it so retries are possible.
+            analysisAbortController = new AbortController();
+            lastError = new Error("OpenRouter request timed out after 90 seconds.");
+        } else {
+            lastError = e;
+        }
+
+        if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
+
+        checkOpenRouterRetry();
+    }
+
     function checkOpenRouterRetry() {
         var status = lastError && lastError.status ? Number(lastError.status) : 0;
         var summary = summarizeOpenRouterFailure(status, lastError && lastError.message ? lastError.message : "");
@@ -2884,22 +2903,7 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                 if (requestContext) assertCurrentAnalysisContext(requestContext);
                 return parseOpenRouterResponse(res, rawText);
             } catch (e) {
-                clearTimeout(timeoutId);
-                if (requestContext) assertCurrentAnalysisContext(requestContext);
-                if (e && e.name === "AbortError") {
-                    if (cancelAnalysis) {
-                        throw new Error("Analysis cancelled by user.");
-                    }
-                    // Timeout-based abort uses the same controller. Recreate it so retries are possible.
-                    analysisAbortController = new AbortController();
-                    lastError = new Error("OpenRouter request timed out after 90 seconds.");
-                } else {
-                    lastError = e;
-                }
-
-                if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
-
-                checkOpenRouterRetry();
+                prepareOpenRouterRetry(e, timeoutId);
                 await sleepMs(Math.min(1200 * (attempt + 1), 3000));
             }
         }
