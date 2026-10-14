@@ -59,7 +59,7 @@ async function exerciseStorageFailure({ action, failedKey }) {
     wftSyncState.pendingDeletionsPush = true;
     const syncState = () => [wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter, wftSyncState.pendingPortfolioPush, wftSyncState.pendingSettingsPush, wftSyncState.pendingDeletionsPush];
     const beforeSync = JSON.stringify(syncState());
-    const invoke = async () => {
+    async function invokeStorageFailureAction() {
         if (action === 'student') await removeStudent('Alice');
         if (action === 'session') await deletePortfolioSession('Alice', 'a');
         if (['rename', 'casing', 'emptyRename', 'idRename', 'idRenameMissingMap', 'rosterOnlyRename'].includes(action)) await renameStudent('Alice');
@@ -75,7 +75,7 @@ async function exerciseStorageFailure({ action, failedKey }) {
         }
         if (action === 'restore') restoreStudentDeletion('Alicia', 'test');
         if (action === 'saveMarkers') saveDeletionsData(getEmptyDeletionsData());
-    };
+    }
     const setItem = Storage.prototype.setItem;
     let markerWrites = 0;
     Storage.prototype.setItem = function(key, value) {
@@ -84,7 +84,7 @@ async function exerciseStorageFailure({ action, failedKey }) {
         return setItem.call(this, key, value);
     };
     let threw = false, committed;
-    try { committed = await invoke(); } catch (e) { threw = true; }
+    try { committed = await invokeStorageFailureAction(); } catch (e) { threw = true; }
     finally { Storage.prototype.setItem = setItem; }
     const failed = { portfolioKept: localStorage.getItem('wft_portfolio') === original,
         markersKept: localStorage.getItem(WFT_DELETIONS_STORAGE_KEY) === originalMarkers,
@@ -97,7 +97,7 @@ async function exerciseStorageFailure({ action, failedKey }) {
         signatureKept: lastSyncedPortfolioSessionSignature === 'previous-signature',
         visible: !originalData.Alice || !!applyDeletionsToPortfolio(JSON.parse(original), getDeletionsData()).Alice,
         alerts: alerts.slice(), threw, committed, input: document.getElementById('studentNameInput').value };
-    const retried = await invoke();
+    const retried = await invokeStorageFailureAction();
     return { failed, retried, portfolio: getPortfolioData(), roster: students, selected: selectedStudent,
         markers: getDeletionsData(), pending: getPendingPortfolioSync(), input: document.getElementById('studentNameInput').value,
         settings: getRawSettings(), markerWritesOnRetry: markerWrites, schedules, flushes };
