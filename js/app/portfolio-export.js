@@ -588,6 +588,14 @@ function runTasksWithConcurrency(tasks, limit, progressCallback) {
     });
 }
 
+function getAvailableImageExportExtension(extension, imageType) {
+    if (extension) return extension[0];
+    if (imageType === "image/png") return ".png";
+    if (imageType === "image/gif") return ".gif";
+    if (imageType === "image/webp") return ".webp";
+    return ".jpg";
+}
+
 function addAvailableImagesToStudentFolder(folder, studentName, studentData, options) {
     var sessions = getStudentSessions(studentData);
     var imageFolder = folder.folder("Photos");
@@ -619,7 +627,7 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
             var stem = getUniqueFolderName(extension ? baseName.slice(0, -extension[0].length) : baseName, usedNames);
             var mimeType = /^data:(image\/[a-z]+);/i.exec(image.dataUrl || image.originalDataUrl || "");
             var imageType = mimeType ? mimeType[1].toLowerCase() : image.mimeType;
-            fileName = stem + (extension ? extension[0] : imageType === "image/png" ? ".png" : imageType === "image/gif" ? ".gif" : imageType === "image/webp" ? ".webp" : ".jpg");
+            fileName = stem + getAvailableImageExportExtension(extension, imageType);
 
             manifest.push({
                 sessionIndex: i + 1,
