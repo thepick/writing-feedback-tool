@@ -1,0 +1,151 @@
+{
+  "repair_id": "repair-023",
+  "source_base": "1b8af7acb39e3c8921ef56144e8733e10abd9a82",
+  "created_at_utc": "2026-10-15T23:20:09.328413+00:00",
+  "status": "copy_lookup_refactor_verified_pending_coordinator",
+  "lead_id": "migration-recovery-copy-lookup",
+  "summary": "Index existing recovery copies once by oauthOriginal instead of filtering every copy for each original. All guards and request ordering retained.",
+  "scope": {
+    "changed_code_files": [
+      "google-drive-migration.js",
+      "test-google-drive-migration.cjs"
+    ],
+    "other_88_code_files_raw_identical": true,
+    "config_raw_identical": [
+      "scripts/case-report-suites.json"
+    ],
+    "crlf_preserved": true,
+    "production_exact_reconstruction": true,
+    "unit_only_addition_all_prior_bytes_retained": true,
+    "hashes": {
+      "google-drive-migration.js": {
+        "before": {
+          "raw": "444f21014a872da31ec38886bd7d3c5f1df37120624b9cae97a85e531b670f9b",
+          "normalized_lf": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142"
+        },
+        "after": {
+          "raw": "df073e0d0288afa22e56673974ab155cf3a3dbec00b3bcb2decfa531e6469c13",
+          "normalized_lf": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9"
+        }
+      },
+      "test-google-drive-migration.cjs": {
+        "before": {
+          "raw": "08ef907851a567997abc3c1bba884a702e7c4ab9abab751cfd6fca94666393a8",
+          "normalized_lf": "ce6148a36a12837c692c8702b656958798f06833bb2e0d9df88b01016a634c5a"
+        },
+        "after": {
+          "raw": "c5ee4edc4b89f9f82b9d00593fc4f5e7727c3a23480ce521066a2de156584362",
+          "normalized_lf": "75fb9ffae666f4b0cf7d32d757a06c922e19be5f27517b556afb5407478cd26d"
+        }
+      }
+    },
+    "no_git_index_tracker_or_runtime_mutations": true
+  },
+  "verified_lead": {
+    "held": true,
+    "before": "Each of N original nodes filters all M previously copied metadata records; no local cap.",
+    "after": "One native Map groups the M records into arrays preserving their order, followed by N expected constant-time lookups. O(M+N) local indexing/lookup work and O(M) additional index references; no API count or end-to-end latency claim.",
+    "behavior": "Duplicate groups are stored without rejection; existing duplicate length guard executes at the same node encounter. Unrelated duplicate groups are ignored. Zero-match allocation, first matching ID, parent-before-child construction, readonly old token, uploads/hash readbacks, original rereads and tree consistency checks remain in the original body."
+  },
+  "tests": {
+    "before_production_edit": "Added parity assertions first; both current suites and90syntax passed against original production bytes.",
+    "parity_checks_added": [
+      "Existing zero-copy nested tree/media creation retained.",
+      "One-copy retry mapping returns every identical existing ID; no new POST allocations.",
+      "Two copied records for an unrelated original are ignored and their bytes remain unchanged.",
+      "Two root matches reject with exact existing message and no writes.",
+      "Two child matches reject after exactly one parent allocation and before uploads; allocation metadata and original bytes/parents checked."
+    ],
+    "receipts": {
+      "before": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-023\\before\\suite-results.json",
+        "sha256": "a0999b178adec5193a82886dd1e24ec2309b06eb8ecc583273b788325ada8b9c",
+        "suites": [
+          "test-google-drive-migration.cjs",
+          "tests/google-drive-migration.browser.cjs"
+        ],
+        "passed": true,
+        "syntax_passed": 90,
+        "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-023\\before\\google-drive-migration.browser.json",
+        "native_report_sha256": "c9ad564d23b7cc52a85f4bdc8bdceda8f0adbbf62527b5eb09b519c44a2abc25"
+      },
+      "after": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-023\\after\\suite-results.json",
+        "sha256": "159f00deffcde65bf11954bb7fe5e0a613452e4f706311d645c56b3aeae4c718",
+        "suites": [
+          "test-google-drive-migration.cjs",
+          "tests/google-drive-migration.browser.cjs"
+        ],
+        "passed": true,
+        "syntax_passed": 90,
+        "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-023\\after\\google-drive-migration.browser.json",
+        "native_report_sha256": "c9ad564d23b7cc52a85f4bdc8bdceda8f0adbbf62527b5eb09b519c44a2abc25"
+      }
+    },
+    "complete_native_reports_identical": true,
+    "per_case_trace_parity": [
+      {
+        "name": "cancel",
+        "passed": true,
+        "requests": 2,
+        "new_files": 0,
+        "calls_and_metadata_equal": true
+      },
+      {
+        "name": "account-mismatch",
+        "passed": true,
+        "requests": 3,
+        "new_files": 0,
+        "calls_and_metadata_equal": true
+      },
+      {
+        "name": "verified-copy",
+        "passed": true,
+        "requests": 29,
+        "new_files": 5,
+        "calls_and_metadata_equal": true
+      },
+      {
+        "name": "corrupt-retry",
+        "passed": true,
+        "requests": 38,
+        "new_files": 5,
+        "calls_and_metadata_equal": true
+      }
+    ]
+  },
+  "metrics": {
+    "before": [
+      {
+        "name": "recoverFolder",
+        "ccn": 13,
+        "cognitive": 18,
+        "nloc": 36,
+        "max_nesting": 2,
+        "start_line": 83,
+        "end_line": 119
+      }
+    ],
+    "after": [
+      {
+        "name": "recoverFolder",
+        "ccn": 16,
+        "cognitive": 22,
+        "nloc": 42,
+        "max_nesting": 2,
+        "start_line": 83,
+        "end_line": 125
+      }
+    ]
+  },
+  "exact_patch": "diff --git a/google-drive-migration.js b/google-drive-migration.js\nindex 919d0c9..e35578f 100644\n--- a/google-drive-migration.js\n+++ b/google-drive-migration.js\n@@ -93,9 +93,15 @@\n     }\n     await scan(roots[0], null);\n     const copied = await list(newToken, \"appProperties has { key='oauthSource' and value=\" + quote(config.oldClient) + ' }');\n+    const copiesByOriginal = new Map();\n+    for (const file of copied) {\n+      const original = file.appProperties?.oauthOriginal;\n+      if (!copiesByOriginal.has(original)) copiesByOriginal.set(original, []);\n+      copiesByOriginal.get(original).push(file);\n+    }\n     const ids = {};\n     for (const node of nodes) {\n-      const previous = copied.filter(file => file.appProperties?.oauthOriginal === node.id);\n+      const previous = copiesByOriginal.get(node.id) || [];\n       if (previous.length > 1) throw new Error('Duplicate recovery copies require reconciliation.');\n       if (previous[0]) { ids[node.id] = previous[0].id; continue; }\n       const metadata = {name: node.name, mimeType: node.mimeType, appProperties: {oauthSource: config.oldClient, oauthOriginal: node.id}};\ndiff --git a/test-google-drive-migration.cjs b/test-google-drive-migration.cjs\nindex 2cd84ee..25e17f5 100644\n--- a/test-google-drive-migration.cjs\n+++ b/test-google-drive-migration.cjs\n@@ -75,5 +75,25 @@ async function until(fn){for(let i=0;i<50&&!fn();i++)await new Promise(setImmedi\n  const config={...s.config,fileName:undefined,folderName:'WritingFeedbackTool'};const ids=await s.api.recoverFolder(config,'old','new');\n  assert.equal(new TextDecoder().decode(s.files.find(f=>f.id===ids[image.id]).data),'image-bytes');const recovered=JSON.parse(new TextDecoder().decode(s.files.find(f=>f.id===ids[portfolio.id]).data));assert.equal(recovered.student.sessions[0].image.driveFileId,ids[image.id]);assert.equal(recovered.unknown,'keep');assert.deepEqual(s.files.find(f=>f.id===ids[image.id]).parents,[ids[media.id]]);\n  const n=s.files.length;await s.api.recoverFolder(config,'old','new');assert.equal(s.files.length,n,'Portfolio retry must not duplicate files');\n+ // Duplicate metadata for another original must not block an otherwise reusable folder.\n+ const unrelated=[s.file('new','unrelated-a','keep-a','root'),s.file('new','unrelated-b','keep-b','root')];\n+ for(const f of unrelated)f.appProperties={oauthSource:'oldclient',oauthOriginal:'not-in-original-tree'};\n+ const beforeRetry=s.calls.length;\n+ assert.deepEqual(await s.api.recoverFolder(config,'old','new'),ids,'Every existing copy ID must be reused in traversal order');\n+ assert.equal(s.files.length,n+2,'Unrelated duplicate groups must not create more copies');\n+ assert.deepEqual(unrelated.map(f=>new TextDecoder().decode(f.data)),['keep-a','keep-b']);\n+ assert.ok(s.calls.slice(beforeRetry).every(c=>c.method!=='POST'),'Reusing all folder copies requires no new allocation');\n+ // Reject a duplicate only when traversal reaches that original, after any earlier allocations.\n+ for(const duplicateAt of ['root','child']){\n+  const d=setup(),root=d.file('old','WritingFeedbackTool','','root','application/vnd.google-apps.folder');\n+  const child=d.file('old','photo.jpg','original-image',root.id,'image/jpeg'),target=duplicateAt==='root'?root:child;\n+  const originals=d.files.map(f=>({id:f.id,data:Buffer.from(f.data).toString('base64'),parents:[...f.parents]}));\n+  for(const name of ['first-copy','second-copy'])d.file('new',name,'existing-copy','root',target.mimeType).appProperties={oauthSource:'oldclient',oauthOriginal:target.id};\n+  await assert.rejects(d.api.recoverFolder({...d.config,fileName:undefined,folderName:'WritingFeedbackTool'},'old','new'),/^Error: Duplicate recovery copies require reconciliation\\.$/);\n+  assert.deepEqual(d.calls.filter(c=>c.method!=='GET'),duplicateAt==='root'?[]:[{url:'https://www.googleapis.com/drive/v3/files?fields=id',token:'new',method:'POST'}],'Duplicate child is rejected after allocating its parent, before any upload');\n+  const allocated=d.files.filter(f=>f.token==='new').slice(2);\n+  assert.deepEqual(allocated.map(f=>({name:f.name,original:f.appProperties.oauthOriginal,parents:f.parents})),duplicateAt==='root'?[]:[{name:'WritingFeedbackTool',original:root.id,parents:['root']}]);\n+  assert.deepEqual(d.files.filter(f=>f.token==='old').map(f=>({id:f.id,data:Buffer.from(f.data).toString('base64'),parents:[...f.parents]})),originals);\n+ }\n  console.log('Migration tests passed: raw progress, merge, read-back corruption, duplicates, same-account gate, cancellation, persistent completion, nested portfolio/media IDs, retry without duplicates.');\n })().catch(e=>{console.error(e);process.exitCode=1;});\n",
+  "limits": [
+    "Additional source lead, not an existing scanner finding closure. Coordinator must commit, refresh and revalidate changed metrics; recoverFolder CCN13to16/NLOC36to42/nesting2 unchanged.",
+    "No full76-suite run, coverage import, real Google/OAuth/account testing, deployment or measured speed benchmark. All network responses are synthetic.",
+    "Map adds O(M) references for the one recovery operation; no new dependencies, helpers, private exports or concurrency."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "reason": "Complete production/rootunit read and full two-file diff reviewed. Only one local grouping loop and lookup substitution; original duplicate guard remains at node traversal. New tests retain every prior byte and check unrelated duplicates, root no-write rejection, child parent-allocation timing, readonly source bytes/parents, reused IDs. Independently verified both receipts/90syntax/2suites, exact full4scenario JSON parity, both current/old source hashes and88othercode+configraw pins. Expected local work improvement, no scanner closure or latency claim."
+  }
+}

@@ -160,5 +160,12 @@
   "coordinator_acceptance": {
     "reviewed": true,
     "reason": "Full original file and diff read; all23 assertion callsites retained, cancel/mismatch/retry/default-success flow and common checks preserve order. Independent receipt/hash/native JSON equality and89othercode+1config raw pins verified. Primary nesting target pending committed refresh; CCN14/NLOC87 retained for finite scenario orchestration, no helper added."
+  },
+  "committed_refresh": {
+    "source_commit": "1b8af7acb39e3c8921ef56144e8733e10abd9a82",
+    "all88_health_state_registry_agree": true,
+    "nesting_warning_absent_verified": true,
+    "total_verified_scanner_clearances": 23,
+    "remaining_host_complexity_and_size_individually_retained": true
   }
 }

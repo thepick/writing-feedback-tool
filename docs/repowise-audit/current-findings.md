@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T06:13:36.915111+07:00.
+Updated 2026-10-16T06:20:47.395844+07:00.
 
-Source: 95fec80952dc8cbf60539dde0a8f8e9f6666eaef. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 1b8af7acb39e3c8921ef56144e8733e10abd9a82. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,21 +10,21 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 918 |
+| code_health | 917 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"confirmed_repair_candidate": 6, "in_progress": 1, "reviewed_no_change": 349, "test_added_pending_full_coverage": 2, "unreviewed": 633}.
+Statuses: {"confirmed_repair_candidate": 6, "reviewed_no_change": 351, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
 
-All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 6, "fixed_verified": 22, "in_progress": 1, "reviewed_no_change": 351, "test_added_pending_full_coverage": 2, "unreviewed": 633}.
+All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 6, "fixed_verified": 23, "reviewed_no_change": 353, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
 
-Findings confirmed cleared: 22. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+Findings confirmed cleared: 23. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
 Behavior repairs with regression evidence: 6.
 
-Supporting refactoring plans: 113; grouped refactoring opportunities: 29.
+Supporting refactoring plans: 114; grouped refactoring opportunities: 30.
 
 These plans and opportunities can overlap findings; their counts are not added as distinct bugs.
 
@@ -58,8 +58,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-021: Flatten emergency-backup guards - refactor_fixed_verified.
 - repair-021b: Remove obsolete single-file backup test loops - refactor_fixed_verified.
 - repair-022: Restore native migration test discovery - test_integration_verified_pending_batch_coverage.
+- repair-022b: Flatten native migration case flow - refactor_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-022b: Flatten native migration case flow - accepted_pending_committed_refresh.
+- repair-023: Index existing migration recovery copies once - accepted_pending_committed_refresh.
 
 ## Additional source leads
 
@@ -69,12 +70,12 @@ These are review leads, separate from scanner observations. They require their o
 - notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — fixed_verified. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
 - preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — fixed_verified. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
 - checklist-second-person-contraction: buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist in js/app/10-main-app.js — fixed_verified. toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.
-- migration-recovery-copy-lookup: recoverFolder in google-drive-migration.js — confirmed_repair_candidate. For every one of N scanned source nodes, copied.filter tests all M previously copied metadata records. Source proves N*M predicate visits, with no node/copy cap. Build a native Map from oauthOriginal to matching copied records once, then use one lookup per node; keep duplicate-match rejection at the same node encounter, preserve first-match order, ignore unrelated duplicate groups exactly as before, and keep parent-before-child writes plus all readback/source guards. This is a CPU/clarity refactor lead, not evidence that the required network calls are redundant and not a measured end-to-end speedup.
+- migration-recovery-copy-lookup: recoverFolder in google-drive-migration.js — in_progress. For every one of N scanned source nodes, copied.filter tests all M previously copied metadata records. Source proves N*M predicate visits, with no node/copy cap. Build a native Map from oauthOriginal to matching copied records once, then use one lookup per node; keep duplicate-match rejection at the same node encounter, preserve first-match order, ignore unrelated duplicate groups exactly as before, and keep parent-before-child writes plus all readback/source guards. This is a CPU/clarity refactor lead, not evidence that the required network calls are redundant and not a measured end-to-end speedup.
 - native-coverage-terminal-breakpoint-denominator: native executable-line export in work/do-next-05/export-coverage.cjs — candidate_needs_regression. Captured possible-breakpoint locations include type:return at the final empty EOF position for dialogs(line232), storage-recovery(line361) and migration(line170). Those points are outside textual statements and appear unhit. The preload maps all locations to offsets and coveredOffsets uses end-exclusive ranges; its own source self-check explicitly treats an offset at range.endOffset as uncovered. The exporter counts every location line in the denominator. Review this terminal-boundary mapping before treating EOF as a missing test branch. This is an instrumentation lead, not a confirmed production bug or permission to discard real uncovered lines.
 
 ## Coverage evidence
 
-91.2% native executable-line coverage from 58 browser suites. 7/8 shipped source files still match that capture. Ingestion: verified_merged_source.
+91.2% native executable-line coverage from 58 browser suites. 6/8 shipped source files still match that capture. Ingestion: verified_merged_source.
 
 Per-file gaps and excluded reference/mutated contexts are recorded in reviews/batch-003-validation.json. This is line coverage, not branch coverage.
 
@@ -231,7 +232,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_e7d9bc21d5bd55cdff4b | high | code_health | tests/drive-lifecycle.browser.cjs:166 | replyToUpload / complex_method | yes | unreviewed |
 | code_health:finding_34d155a11ae12094772a | high | code_health | tests/drive-lifecycle.browser.cjs:214 | installDriveRoute / complex_conditional | yes | unreviewed |
 | code_health:finding_6e57e46cfd771706f50b | high | code_health | tests/feedback-compatibility.browser.cjs:13 | <anonymous@13> / complex_method | yes | unreviewed |
-| code_health:finding_d763af2881aa6ebe85e9 | high | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / nested_complexity | yes | in_progress |
+| code_health:finding_d763af2881aa6ebe85e9 | high | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / nested_complexity | no | fixed_verified |
 | code_health:finding_1680dfdc2c2903f2af21 | high | code_health | tests/image-preparation.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
 | code_health:finding_3a510389b4b1a431469d | high | code_health | tests/main-app-health.browser.cjs:102 | checkVisibility / nested_complexity | yes | unreviewed |
 | code_health:finding_11a556def902a383e11c | high | code_health | tests/main-app-health.browser.cjs:102 | checkVisibility / complex_method | yes | unreviewed |
@@ -541,7 +542,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_a342a0ef30b71cae9eb3 | medium | code_health | tests/drive-lifecycle.browser.cjs:244 | checkManualScenario / complex_method | yes | unreviewed |
 | code_health:finding_998220186c13aa82abd3 | medium | code_health | tests/drive-lifecycle.browser.cjs:261 | checkSplitScenario / complex_method | yes | unreviewed |
 | code_health:finding_248573c51c1521f8340e | medium | code_health | tests/drive-lifecycle.browser.cjs:302 | io_in_loop | yes | unreviewed |
-| code_health:finding_e26914b4ed0a7d2677ed | medium | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / complex_method | yes | unreviewed |
+| code_health:finding_e26914b4ed0a7d2677ed | medium | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / complex_method | yes | reviewed_no_change |
 | code_health:finding_200b7f89bb709f880329 | medium | code_health | tests/image-preparation.browser.cjs:3 | dry_violation | yes | unreviewed |
 | code_health:finding_d56e623610c171ece3bd | medium | code_health | tests/media-ownership.browser.cjs:97 | runPendingMediaScenario / complex_method | yes | unreviewed |
 | code_health:finding_f1363ca369412b5bc505 | medium | code_health | tests/media-ownership.browser.cjs:208 | assertPendingMediaScenario / complex_method | yes | unreviewed |
@@ -937,7 +938,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_61ea1e71eb770a77989a | low | code_health | tests/drive-lifecycle.browser.cjs:176 | replyToUpload / complex_conditional | yes | unreviewed |
 | code_health:finding_1be4afa8ded3013ac8e7 | low | code_health | tests/drive-lifecycle.browser.cjs:294 | dry_violation | yes | unreviewed |
 | code_health:finding_a837428ede3cbf0c9096 | low | code_health | tests/feedback-compatibility.browser.cjs:12 | dry_violation | yes | unreviewed |
-| code_health:finding_6656c8d7f5732c8fe3f8 | low | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / large_method | yes | unreviewed |
+| code_health:finding_6656c8d7f5732c8fe3f8 | low | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / large_method | yes | reviewed_no_change |
 | code_health:finding_2bd454722e654474e601 | low | code_health | tests/google-drive-migration.browser.cjs:17 | migrationRoute / bumpy_road | yes | reviewed_no_change |
 | code_health:finding_c12bceffea7618fdd8b8 | low | code_health | tests/image-preparation.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
 | code_health:finding_5b6315b17f8803c7e046 | low | code_health | tests/media-ownership.browser.cjs | prior_defect | yes | reviewed_no_change |

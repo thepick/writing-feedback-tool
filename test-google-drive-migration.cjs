@@ -75,5 +75,25 @@ async function until(fn){for(let i=0;i<50&&!fn();i++)await new Promise(setImmedi
  const config={...s.config,fileName:undefined,folderName:'WritingFeedbackTool'};const ids=await s.api.recoverFolder(config,'old','new');
  assert.equal(new TextDecoder().decode(s.files.find(f=>f.id===ids[image.id]).data),'image-bytes');const recovered=JSON.parse(new TextDecoder().decode(s.files.find(f=>f.id===ids[portfolio.id]).data));assert.equal(recovered.student.sessions[0].image.driveFileId,ids[image.id]);assert.equal(recovered.unknown,'keep');assert.deepEqual(s.files.find(f=>f.id===ids[image.id]).parents,[ids[media.id]]);
  const n=s.files.length;await s.api.recoverFolder(config,'old','new');assert.equal(s.files.length,n,'Portfolio retry must not duplicate files');
+ // Duplicate metadata for another original must not block an otherwise reusable folder.
+ const unrelated=[s.file('new','unrelated-a','keep-a','root'),s.file('new','unrelated-b','keep-b','root')];
+ for(const f of unrelated)f.appProperties={oauthSource:'oldclient',oauthOriginal:'not-in-original-tree'};
+ const beforeRetry=s.calls.length;
+ assert.deepEqual(await s.api.recoverFolder(config,'old','new'),ids,'Every existing copy ID must be reused in traversal order');
+ assert.equal(s.files.length,n+2,'Unrelated duplicate groups must not create more copies');
+ assert.deepEqual(unrelated.map(f=>new TextDecoder().decode(f.data)),['keep-a','keep-b']);
+ assert.ok(s.calls.slice(beforeRetry).every(c=>c.method!=='POST'),'Reusing all folder copies requires no new allocation');
+ // Reject a duplicate only when traversal reaches that original, after any earlier allocations.
+ for(const duplicateAt of ['root','child']){
+  const d=setup(),root=d.file('old','WritingFeedbackTool','','root','application/vnd.google-apps.folder');
+  const child=d.file('old','photo.jpg','original-image',root.id,'image/jpeg'),target=duplicateAt==='root'?root:child;
+  const originals=d.files.map(f=>({id:f.id,data:Buffer.from(f.data).toString('base64'),parents:[...f.parents]}));
+  for(const name of ['first-copy','second-copy'])d.file('new',name,'existing-copy','root',target.mimeType).appProperties={oauthSource:'oldclient',oauthOriginal:target.id};
+  await assert.rejects(d.api.recoverFolder({...d.config,fileName:undefined,folderName:'WritingFeedbackTool'},'old','new'),/^Error: Duplicate recovery copies require reconciliation\.$/);
+  assert.deepEqual(d.calls.filter(c=>c.method!=='GET'),duplicateAt==='root'?[]:[{url:'https://www.googleapis.com/drive/v3/files?fields=id',token:'new',method:'POST'}],'Duplicate child is rejected after allocating its parent, before any upload');
+  const allocated=d.files.filter(f=>f.token==='new').slice(2);
+  assert.deepEqual(allocated.map(f=>({name:f.name,original:f.appProperties.oauthOriginal,parents:f.parents})),duplicateAt==='root'?[]:[{name:'WritingFeedbackTool',original:root.id,parents:['root']}]);
+  assert.deepEqual(d.files.filter(f=>f.token==='old').map(f=>({id:f.id,data:Buffer.from(f.data).toString('base64'),parents:[...f.parents]})),originals);
+ }
  console.log('Migration tests passed: raw progress, merge, read-back corruption, duplicates, same-account gate, cancellation, persistent completion, nested portfolio/media IDs, retry without duplicates.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
