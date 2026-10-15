@@ -7477,6 +7477,7 @@ function renderWftPortfolioSessionCardHtml(name, sess, si) {
     var imageStripHtml = '';
     if (sess.images && sess.images.length) {
         imageStripHtml = '<div class="session-photo-strip">' + sess.images.map(function(image) {
+            image = image || {};
             return '<div class="session-photo-thumb">'
                 + renderPortfolioSessionImageHtml(image)
                 + '<div class="thumb-caption">' + escapeHtml(image.name || 'Image') + (image.pendingDriveUpload ? '<br>Waiting to sync to Drive' : (image.driveFileId ? '<br>Stored in Drive' : '')) + '</div>'

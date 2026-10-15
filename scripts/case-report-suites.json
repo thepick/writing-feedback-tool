@@ -21,6 +21,7 @@
   "tests/pending-commit-publication.browser.cjs",
   "tests/pending-portfolio.browser.cjs",
   "tests/portfolio-html.browser.cjs",
+  "tests/portfolio-image-slots.browser.cjs",
   "tests/portfolio-index.browser.cjs",
   "tests/portfolio-render-failures.browser.cjs",
   "tests/portfolio-renderer.browser.cjs",
