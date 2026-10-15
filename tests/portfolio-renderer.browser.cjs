@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
+const localAppRoute = require('./support/local-app-route');
 const root = path.resolve(__dirname, '..');
 // The reference is the unmodified renderer at 35bf15ee8533; shared helpers stay shipped code.
 const reference = fs.readFileSync(path.join(__dirname, 'fixtures/portfolio-renderer-baseline.js'), 'utf8').replace(/\r\n/g, '\n');
@@ -127,12 +128,7 @@ async function exercise(page, scenario) {
             for (const baseline of [true, false]) {
                 const context = await browser.newContext({ locale: 'en-GB', timezoneId: 'Asia/Bangkok' }), page = await context.newPage(), errors = [];
                 page.on('pageerror', e => errors.push(e.message));
-                await context.route('**/*', route => {
-                    const url = new URL(route.request().url());
-                    if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-                    const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-                    return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
-                });
+                await context.route('**/*', route => localAppRoute(route, root));
                 await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
                 if (baseline) await page.addScriptTag({ content: reference });
                 try { observations.push(await exercise(page, scenario)); assert.deepEqual(errors, []); }

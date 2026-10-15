@@ -1,0 +1,1280 @@
+{
+  "repair_id": "repair-028",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "dff5375bba4f9d8c3e43794010830da860b87615",
+  "source_hashes_normalized_lf": {
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2"
+  },
+  "verification": {
+    "assignment_main_hash_matches": true,
+    "production_files_equal_indexed_commit": true,
+    "metrics": "Read-only installed RepoWise complexity.walk_file(abs_path, javascript, source bytes); Python -B; no CLI health/index/cache/database operations. All available assigned walker fields and spans matched. dependents_count and centrality_floor are copied assignment graph facts, not independently recomputed.",
+    "test_evidence": "Every cited test line was read using immutable git show at source_commit. Assertions were inspected, not executed. No claim is made about current concurrently edited test files.",
+    "immutable_test_blobs": {
+      "tests/analysis-identity.browser.cjs": "b6e618a320c06b5250a92371a77448a5aeeb18be",
+      "tests/analysis-policy.browser.cjs": "9356ad0e63d263c398681b606a9c04ed78a3b471",
+      "tests/missing-feedback.browser.cjs": "51366f0d16de78d900257114add5be8bf78c7ed1",
+      "tests/openrouter-failures.browser.cjs": "5fefdaba1bcac39b0571ab18863fe9e7a4845eab",
+      "tests/openrouter-admission.browser.cjs": "ed925e710081fd35de71ed8552ab041795c2102a",
+      "tests/preference-integrity-scenarios.js": "76fa415ca74dfeaf24d19672f0644eeab7c6d1c8",
+      "tests/analysis-pipeline.browser.cjs": "ce8c74a70a14918f3ba48472bb327042d1052c9a",
+      "tests/openrouter-request.cjs": "2c0f5a84b8280035bfade4843a4c80e51a4e8fcb"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_add1570706440ac5d6c3",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "buildLowSampleAnalysis",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_local_predicate_reuse",
+      "reason": "The shallow data assembly is coherent, but the exact eligibility && limited && not-Organization && not-Flow predicate is repeated three times inside one category callback. Compute one local scorable flag and one score, reuse for reason and categoryScores; no new helper or text split.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:985-1059 complete function",
+        "js/app/10-main-app.js:997-1016 status-specific teaching text",
+        "js/app/10-main-app.js:1018-1037 three identical eligibility/status/category predicates",
+        "js/app/10-main-app.js:8220-8228 guarded low-sample caller"
+      ],
+      "verified_metrics": {
+        "name": "buildLowSampleAnalysis",
+        "start_line": 985,
+        "end_line": 1059,
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 71,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          990,
+          990
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "nloc": 71,
+        "max_nesting": 1,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 985,
+        "deepest_block": {
+          "start": 990,
+          "end": 990
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8223 analyzeWriting; fixtures/analysis-pipeline-baseline.js:48 is retained test reference, not another production caller"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:7-20 insufficient/limited and grade thresholds; :177-187 captures full data, key order, UI, pending state; :264 compares original/refactored",
+        "tests/analysis-pipeline.browser.cjs:219 low-sample makes zero requests and keeps overall null",
+        "tests/missing-feedback.browser.cjs:103 low-sample coaching policy"
+      ],
+      "regression_recommendation": "Compare full quickRubric, detailed and categoryScores for insufficient and limited samples, all CATEGORY_KEYS, eligible/ineligible categories, empty topic fallback and grades 4/5/12. Organization/Flow remain null; preserve output key order and exact coaching strings."
+    },
+    {
+      "record_id": "code_health:finding_db4e7c9b1ab45d742573",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "requestOpenRouterWithFallback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_retry_state_machine",
+      "reason": "80 NLOC/CCN 16 is accurate. Named local helpers already separate parsing, retry preparation and terminal decisions. Remaining outer loop connects retry budgets, fallback models and request-controller ownership; moving it adds state threading and risks cancellation/timeout behavior without eliminating a repeated rule.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2753-2844 complete function",
+        "js/app/10-main-app.js:2764-2800 context-aware parser/retry helpers",
+        "js/app/10-main-app.js:2802-2818 retry budget, per-attempt storage admission and captured controller",
+        "js/app/10-main-app.js:2832-2838 timeout spans response body and is cleared before retry"
+      ],
+      "verified_metrics": {
+        "name": "requestOpenRouterWithFallback",
+        "start_line": 2753,
+        "end_line": 2844,
+        "ccn": 16,
+        "cognitive": 24,
+        "nloc": 80,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2836,
+          2839
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "nloc": 80,
+        "max_nesting": 3,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 2753,
+        "deepest_block": {
+          "start": 2836,
+          "end": 2839
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:2848 callOpenRouter text wrapper",
+        "js/app/10-main-app.js:2865 callOpenRouterImage image wrapper"
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-request.cjs:28-77 stalled-body timeout/fresh controller and cancellation",
+        "tests/openrouter-request.cjs:79-109 exact model/backoff schedules including fractional/string/negative/NaN budgets and cancellation during sleep",
+        "tests/openrouter-request.cjs:114-147 admission before payload/transport, wrapper payloads and malformed response rejection",
+        "tests/openrouter-failures.browser.cjs:43-58 bounded retries, retained bytes/report, timer cleanup, credential exclusion",
+        "tests/openrouter-admission.browser.cjs:106-119 zero transport/backoff on rejected storage admission; retry, timeout and cancel cases"
+      ],
+      "regression_recommendation": "No repair proposed. Any later change must preserve exact budgets/backoff/controller ownership, timeout through body read, no retry on cancellation/nonretryable status and strict storage admission before payload or transport."
+    },
+    {
+      "record_id": "code_health:finding_fcbf91717c7b0b330799",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "extractTextFromSelectedImage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_ocr_lifecycle",
+      "reason": "98 NLOC includes a seven-rule transcription prompt and one owned extraction lifecycle. Literal-true admission, shared promise, per-image cache, context checks and automatic/manual cleanup have different responsibilities; splitting them would obscure the ownership boundary and is not justified by the length flag.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3620-3729 complete function",
+        "js/app/10-main-app.js:3624-3647 automatic/manual ownership and shared-promise admission",
+        "js/app/10-main-app.js:3668-3688 promise installed before cached completion; guards around each provider await",
+        "js/app/10-main-app.js:3695-3724 guarded publication and owner-only cleanup",
+        "js/app/10-main-app.js:8398-8402 manual click wrapper"
+      ],
+      "verified_metrics": {
+        "name": "extractTextFromSelectedImage",
+        "start_line": 3620,
+        "end_line": 3729,
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 98,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3638,
+          3641
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "nloc": 98,
+        "max_nesting": 2,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 3620,
+        "deepest_block": {
+          "start": 3638,
+          "end": 3641
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8211 analyzeWriting automatic OCR",
+        "js/app/10-main-app.js:8399 extractTextBtn manual wrapper"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:120-155 cached first-page stop/retry setup; :287-298 exact cache/reinsertion/promise/controls assertions",
+        "tests/analysis-identity.browser.cjs:259-267 changed owner/text and stop do not publish stale writing",
+        "tests/analysis-pipeline.browser.cjs:10-19 OCR single/multiple/cached and held cancellation/writing/policy; :264 full parity",
+        "tests/openrouter-admission.browser.cjs:109 visible OCR key admission failure"
+      ],
+      "regression_recommendation": "No structural extraction proposed. Retain manual MouseEvent normalization, automatic parent ownership, multi-image order/cache, stopped partial-page retry, writing/owner changes around awaits and owner-only promise/UI cleanup."
+    },
+    {
+      "record_id": "code_health:finding_3ccac7951387eba2bc17",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "buildStep3Prompt",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_prompt_data_assembly",
+      "reason": "167 NLOC is mostly ordered literal instructions/examples; maximum nesting is only one. Existing genre/priority helpers handle reusable logic. Keep the prompt together for review; a score-only template wrapper would just move strings. The positional-input concern is reviewed separately.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3889-4058 complete function",
+        "js/app/10-main-app.js:3890-3894 delegates priorities/genre/profile preparation",
+        "js/app/10-main-app.js:3910-3925 nine distinct input roles with shallow data fallback expressions",
+        "js/app/10-main-app.js:3927-4056 ordered rules, parser-facing headings and candidate JSON example",
+        "js/app/10-main-app.js:8256-8257 sole production call with nine positional arguments"
+      ],
+      "verified_metrics": {
+        "name": "buildStep3Prompt",
+        "start_line": 3889,
+        "end_line": 4058,
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 167,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 9,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3919,
+          3919
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "nloc": 167,
+        "max_nesting": 1,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 3889,
+        "deepest_block": {
+          "start": 3919,
+          "end": 3919
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8257 analyzeWriting; baseline fixture:150 is frozen parity reference, not production API"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:101-107 records prompt for each request; :177-187 serializes requests; :264 exact original/refactored parity",
+        "tests/analysis-pipeline.browser.cjs:13-14 grade/target/strictness and :9 genre cases",
+        "tests/analysis-policy.browser.cjs:116-126 records prompt/model and :216-217 verifies selected model"
+      ],
+      "regression_recommendation": "If adopting named inputs, change only signature/destructuring and sole production call. Compare prompt byte-for-byte for normal, original-versus-corrected text, absent optional flow/profile/genre/original/priorities and all grade/genre cases. The frozen baseline caller would need a test-side compatibility plan rather than silently replacing its expected API."
+    },
+    {
+      "record_id": "code_health:finding_6abe7cc396ba01536e50",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "reassessPortfolioSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_guarded_reassessment_transaction",
+      "reason": "The function has one user-confirmed load sequence. Grade-save failure must abort before clearing current work, while a late neatness-save failure must retain already-loaded writing. Those different recovery boundaries explain the size; extracting a generic load helper would hide the crucial order.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7624-7705 complete function",
+        "js/app/10-main-app.js:7625-7647 validates saved session/text then awaits confirmation",
+        "js/app/10-main-app.js:7649-7653 grade-save failure aborts before writing/pending mutation",
+        "js/app/10-main-app.js:7660-7672 loads selection/text/genre and clears pending",
+        "js/app/10-main-app.js:7677-7704 photo outcomes versus failed neatness persistence",
+        "js/app/10-main-app.js:7575-7621 restore helper discards late successful image publication via context check"
+      ],
+      "verified_metrics": {
+        "name": "reassessPortfolioSession",
+        "start_line": 7624,
+        "end_line": 7705,
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 74,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7650,
+          7653
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "nloc": 74,
+        "max_nesting": 2,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 7624,
+        "deepest_block": {
+          "start": 7650,
+          "end": 7653
+        }
+      },
+      "callers": [
+        "js/app/00-storage-sync-patches.js:7518 saved portfolio button inline handler with student/session dataset",
+        "tests/preference-integrity-scenarios.js:110,123 are direct retained test callers"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:103-115 grade-save failure retains writing/pending/selection and alerts",
+        "tests/preference-integrity-scenarios.js:117-128 late neatness-save failure retains loaded writing and durable policy with actionable status",
+        "tests/analysis-identity.browser.cjs:273-280 late image preparation and reassessment source ownership assertions"
+      ],
+      "regression_recommendation": "No structural split proposed. Preserve abort-before-mutation on grade-save failure, each zero/partial/full photo message, durable neatness policy and stale image context behavior. Separate confirmation-gap lead needs held-confirmation regression before repair."
+    },
+    {
+      "record_id": "code_health:finding_cb53739209c1f71bdb7a",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildLowSampleAnalysis",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_same_predicate_candidate",
+      "reason": "CCN 13/cognitive 12 includes repeated category eligibility logic, not deep nesting. Same small repair as finding_add1570706440ac5d6c3: compute the local scoring predicate once. Retain status-specific coaching alternatives; this is one repair, not a second extraction.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:985-1059 complete function",
+        "js/app/10-main-app.js:997-1016 status-specific teaching text",
+        "js/app/10-main-app.js:1018-1037 three identical eligibility/status/category predicates",
+        "js/app/10-main-app.js:8220-8228 guarded low-sample caller"
+      ],
+      "verified_metrics": {
+        "name": "buildLowSampleAnalysis",
+        "start_line": 985,
+        "end_line": 1059,
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 71,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          990,
+          990
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 71,
+        "dispatch_share": 0.0,
+        "symbol_line": 985,
+        "deepest_block": {
+          "start": 990,
+          "end": 990
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8223 analyzeWriting; fixtures/analysis-pipeline-baseline.js:48 is retained test reference, not another production caller"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:7-20 insufficient/limited and grade thresholds; :177-187 captures full data, key order, UI, pending state; :264 compares original/refactored",
+        "tests/analysis-pipeline.browser.cjs:219 low-sample makes zero requests and keeps overall null",
+        "tests/missing-feedback.browser.cjs:103 low-sample coaching policy"
+      ],
+      "regression_recommendation": "Compare full quickRubric, detailed and categoryScores for insufficient and limited samples, all CATEGORY_KEYS, eligible/ineligible categories, empty topic fallback and grades 4/5/12. Organization/Flow remain null; preserve output key order and exact coaching strings."
+    },
+    {
+      "record_id": "code_health:finding_c646e256c7bae6ac93e0",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "applyWordCountToIdeas",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_reuse_of_word_target_decisions",
+      "reason": "The same under-target and 80-percent tests run in quick and existing-detail branches. After the missing-score return, compute local underTarget/noticeablyShort/goingBeyond flags once and reuse, retaining distinct wording and missing-detail behavior. Do not reimplement calculateWordCountAdjustment or bundle output mutation into a generic helper.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2411-2467 complete function",
+        "js/app/10-main-app.js:2412-2422 explicit missing detailed score returns before mutation",
+        "js/app/10-main-app.js:2433-2442 and 2454-2463 repeat under-target/80-percent/goingBeyond decisions",
+        "js/app/10-main-app.js:7936-7941 single production reconciliation caller"
+      ],
+      "verified_metrics": {
+        "name": "applyWordCountToIdeas",
+        "start_line": 2411,
+        "end_line": 2467,
+        "ccn": 16,
+        "cognitive": 19,
+        "nloc": 51,
+        "max_nesting": 3,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2455,
+          2459
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 19,
+        "nloc": 51,
+        "dispatch_share": 0.0,
+        "symbol_line": 2411,
+        "deepest_block": {
+          "start": 2455,
+          "end": 2459
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:7937 reconcileScoredAssessment, passing policy.targetWords and policy.gradeProfile; baseline fixture:160 is test reference"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:8-14 missing/explicit-missing, target-under/met/over/off across grades; :177-187 serializes data and saved outputs; :264 parity assertion",
+        "tests/analysis-policy.browser.cjs:200-225 policy changes preserve previous work; :213 verifies changed-policy Ideas score"
+      ],
+      "regression_recommendation": "Direct before/after equality for below/exactly 80 percent, just below/equal/above target, target off, missing quick/detail categories, present-null detail with scored quick, goingBeyond true/false and grades 4/5/12. Preserve asymmetry: newly synthesized detail does not receive appended target advice."
+    },
+    {
+      "record_id": "code_health:finding_935cafeb9b03bf1e6d7e",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "applyComputedFlowToFlow",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "remove_duplicate_pure_pattern_computation",
+      "reason": "When detail is absent and flowData exists, pattern summary and notes are built in the fallback object and immediately rebuilt below. Initialize fallback fields to their null-flow defaults and populate them once in the existing flowData branch. The inspected builders are pure. Keep independent null-preserving quick/detail score caps; merging those semantics is unsafe.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2612-2656 complete function",
+        "js/app/10-main-app.js:2618-2625 quick null-preserving cap and conditional note",
+        "js/app/10-main-app.js:2627-2638 missing-detail fallback",
+        "js/app/10-main-app.js:2634-2635 then 2647-2648 recompute same pure builders when detail missing and flowData truthy",
+        "js/app/10-main-app.js:2557-2608 builders read flowData and return strings/arrays"
+      ],
+      "verified_metrics": {
+        "name": "applyComputedFlowToFlow",
+        "start_line": 2612,
+        "end_line": 2656,
+        "ccn": 16,
+        "cognitive": 20,
+        "nloc": 42,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2620,
+          2624
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 20,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 2612,
+        "deepest_block": {
+          "start": 2620,
+          "end": 2624
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:7938 reconcileScoredAssessment; baseline fixture:161 is test reference"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:42-45 null-like scores remain null",
+        "tests/missing-feedback.browser.cjs:65-79 numeric/string scores, caps, null detail versus scored quick, missing quick versus scored detail",
+        "tests/analysis-pipeline.browser.cjs:177-187 and :264 full output parity"
+      ],
+      "regression_recommendation": "Keep null/undefined/empty/nonfinite/zero/string numeric scores, separate quick/detail missingness, all ratings, absent flowData and absent detail. Compare full object fields and notes. For deduplication, missing-detail flowData path should call each pattern builder once while preserving values/key order."
+    },
+    {
+      "record_id": "code_health:finding_accfd50defd9b707a8cb",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "requestOpenRouterWithFallback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_retry_guards",
+      "reason": "Cognitive 24 comes from bounded retry/fallback decisions and error/cancellation differentiation. The deepest catch performs shared timeout cleanup, owner validation, then backoff. Its local helpers already expose the meaningful steps; flattening catches or combining cancellation with retryable errors would remove required behavior.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2753-2844 complete function",
+        "js/app/10-main-app.js:2764-2800 context-aware parser/retry helpers",
+        "js/app/10-main-app.js:2802-2818 retry budget, per-attempt storage admission and captured controller",
+        "js/app/10-main-app.js:2832-2838 timeout spans response body and is cleared before retry"
+      ],
+      "verified_metrics": {
+        "name": "requestOpenRouterWithFallback",
+        "start_line": 2753,
+        "end_line": 2844,
+        "ccn": 16,
+        "cognitive": 24,
+        "nloc": 80,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2836,
+          2839
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 24,
+        "nloc": 80,
+        "dispatch_share": 0.0,
+        "symbol_line": 2753,
+        "deepest_block": {
+          "start": 2836,
+          "end": 2839
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:2848 callOpenRouter text wrapper",
+        "js/app/10-main-app.js:2865 callOpenRouterImage image wrapper"
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-request.cjs:28-77 stalled-body timeout/fresh controller and cancellation",
+        "tests/openrouter-request.cjs:79-109 exact model/backoff schedules including fractional/string/negative/NaN budgets and cancellation during sleep",
+        "tests/openrouter-request.cjs:114-147 admission before payload/transport, wrapper payloads and malformed response rejection",
+        "tests/openrouter-failures.browser.cjs:43-58 bounded retries, retained bytes/report, timer cleanup, credential exclusion",
+        "tests/openrouter-admission.browser.cjs:106-119 zero transport/backoff on rejected storage admission; retry, timeout and cancel cases"
+      ],
+      "regression_recommendation": "No repair proposed. Any later change must preserve exact budgets/backoff/controller ownership, timeout through body read, no retry on cancellation/nonretryable status and strict storage admission before payload or transport."
+    },
+    {
+      "record_id": "code_health:finding_691819b607d0c2ab6370",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "extractTextFromSelectedImage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_cache_and_async_guards",
+      "reason": "CCN 11/cognitive 11 is modest for ordered multi-image extraction. Cached-page and fresh-provider paths intentionally converge before final guarded insertion; owner-only finally prevents an old run from clearing a new run. Existing cache-stop-retry assertions justify retaining these branches.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3620-3729 complete function",
+        "js/app/10-main-app.js:3624-3647 automatic/manual ownership and shared-promise admission",
+        "js/app/10-main-app.js:3668-3688 promise installed before cached completion; guards around each provider await",
+        "js/app/10-main-app.js:3695-3724 guarded publication and owner-only cleanup",
+        "js/app/10-main-app.js:8398-8402 manual click wrapper"
+      ],
+      "verified_metrics": {
+        "name": "extractTextFromSelectedImage",
+        "start_line": 3620,
+        "end_line": 3729,
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 98,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3638,
+          3641
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 98,
+        "dispatch_share": 0.0,
+        "symbol_line": 3620,
+        "deepest_block": {
+          "start": 3638,
+          "end": 3641
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8211 analyzeWriting automatic OCR",
+        "js/app/10-main-app.js:8399 extractTextBtn manual wrapper"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:120-155 cached first-page stop/retry setup; :287-298 exact cache/reinsertion/promise/controls assertions",
+        "tests/analysis-identity.browser.cjs:259-267 changed owner/text and stop do not publish stale writing",
+        "tests/analysis-pipeline.browser.cjs:10-19 OCR single/multiple/cached and held cancellation/writing/policy; :264 full parity",
+        "tests/openrouter-admission.browser.cjs:109 visible OCR key admission failure"
+      ],
+      "regression_recommendation": "No structural extraction proposed. Retain manual MouseEvent normalization, automatic parent ownership, multi-image order/cache, stopped partial-page retry, writing/owner changes around awaits and owner-only promise/UI cleanup."
+    },
+    {
+      "record_id": "code_health:finding_57b4e6dc07e078be7f9a",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildStep3Prompt",
+      "proposed_status": "reviewed_no_change",
+      "classification": "shallow_fallback_expressions_not_algorithmic_tangle",
+      "reason": "CCN 17 is real but arises largely from profile, original-text and computed-flow fallbacks in a flat returned array. Those expressions specify prompt behavior clearly. Extra functions would distribute the same conditions across names without simplifying a repeated decision.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3889-4058 complete function",
+        "js/app/10-main-app.js:3890-3894 delegates priorities/genre/profile preparation",
+        "js/app/10-main-app.js:3910-3925 nine distinct input roles with shallow data fallback expressions",
+        "js/app/10-main-app.js:3927-4056 ordered rules, parser-facing headings and candidate JSON example",
+        "js/app/10-main-app.js:8256-8257 sole production call with nine positional arguments"
+      ],
+      "verified_metrics": {
+        "name": "buildStep3Prompt",
+        "start_line": 3889,
+        "end_line": 4058,
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 167,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 9,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3919,
+          3919
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 167,
+        "dispatch_share": 0.0,
+        "symbol_line": 3889,
+        "deepest_block": {
+          "start": 3919,
+          "end": 3919
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8257 analyzeWriting; baseline fixture:150 is frozen parity reference, not production API"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:101-107 records prompt for each request; :177-187 serializes requests; :264 exact original/refactored parity",
+        "tests/analysis-pipeline.browser.cjs:13-14 grade/target/strictness and :9 genre cases",
+        "tests/analysis-policy.browser.cjs:116-126 records prompt/model and :216-217 verifies selected model"
+      ],
+      "regression_recommendation": "If adopting named inputs, change only signature/destructuring and sole production call. Compare prompt byte-for-byte for normal, original-versus-corrected text, absent optional flow/profile/genre/original/priorities and all grade/genre cases. The frozen baseline caller would need a test-side compatibility plan rather than silently replacing its expected API."
+    },
+    {
+      "record_id": "code_health:finding_cb05a47a890f2d721e5f",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "reassessPortfolioSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_distinct_failure_and_photo_outcomes",
+      "reason": "CCN 9/cognitive 10 separates missing source/text, declined confirmation, failed required grade save, failed late neatness save and zero/partial/full restored photos. Each branch changes user-visible recovery instructions. Do not collapse them into one success/failure label; confirmation freshness is a separate behavioral lead.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7624-7705 complete function",
+        "js/app/10-main-app.js:7625-7647 validates saved session/text then awaits confirmation",
+        "js/app/10-main-app.js:7649-7653 grade-save failure aborts before writing/pending mutation",
+        "js/app/10-main-app.js:7660-7672 loads selection/text/genre and clears pending",
+        "js/app/10-main-app.js:7677-7704 photo outcomes versus failed neatness persistence",
+        "js/app/10-main-app.js:7575-7621 restore helper discards late successful image publication via context check"
+      ],
+      "verified_metrics": {
+        "name": "reassessPortfolioSession",
+        "start_line": 7624,
+        "end_line": 7705,
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 74,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7650,
+          7653
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 74,
+        "dispatch_share": 0.0,
+        "symbol_line": 7624,
+        "deepest_block": {
+          "start": 7650,
+          "end": 7653
+        }
+      },
+      "callers": [
+        "js/app/00-storage-sync-patches.js:7518 saved portfolio button inline handler with student/session dataset",
+        "tests/preference-integrity-scenarios.js:110,123 are direct retained test callers"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:103-115 grade-save failure retains writing/pending/selection and alerts",
+        "tests/preference-integrity-scenarios.js:117-128 late neatness-save failure retains loaded writing and durable policy with actionable status",
+        "tests/analysis-identity.browser.cjs:273-280 late image preparation and reassessment source ownership assertions"
+      ],
+      "regression_recommendation": "No structural split proposed. Preserve abort-before-mutation on grade-save failure, each zero/partial/full photo message, durable neatness policy and stale image context behavior. Separate confirmation-gap lead needs held-confirmation regression before repair."
+    },
+    {
+      "record_id": "code_health:finding_0d7c6ff5f039bc409ce8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "analyzeWriting",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_existing_orchestration_and_guard_order",
+      "reason": "68 NLOC already delegates correction metrics, detail input/parsing, reconciliation, result construction, publication and UI completion. Remaining branches choose OCR/low-sample/neatness and protect each awaited stage. Another orchestration wrapper would hide sequencing and widen state passing without removing duplicated work.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:8196-8277 complete function",
+        "js/app/10-main-app.js:8197-8215 no-input/reentrancy and OCR acceptance guards",
+        "js/app/10-main-app.js:8220-8228 low-sample return bypasses AI",
+        "js/app/10-main-app.js:8231-8263 assertions after every AI boundary and before publication",
+        "js/app/10-main-app.js:8244-8253 staged neatness cannot be overwritten by parser",
+        "js/app/10-main-app.js:8270-8275 identity guard before error reporting/final cleanup",
+        "js/app/10-main-app.js:8075-8088,8122-8153 existing begin/failure/finish helpers"
+      ],
+      "verified_metrics": {
+        "name": "analyzeWriting",
+        "start_line": 8196,
+        "end_line": 8277,
+        "ccn": 16,
+        "cognitive": 27,
+        "nloc": 68,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          8210,
+          8214
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 27,
+        "nloc": 68,
+        "dispatch_share": 0.0,
+        "symbol_line": 8196,
+        "deepest_block": {
+          "start": 8210,
+          "end": 8214
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8404 analyzeBtn click registration; test callers exercise public function directly"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:7-20 full scenario matrix; :219-235 explicit low/missing/ownership assertions; :264 full frozen-baseline parity",
+        "tests/analysis-policy.browser.cjs:200-225 earlier result/pending byte preservation and correct fresh-policy publication",
+        "tests/analysis-identity.browser.cjs:240-267 superseded run/stop/owner guards; :287-298 OCR cache retry behavior"
+      ],
+      "regression_recommendation": "No additional wrapper/extraction proposed. Retain await/check ordering, low-sample zero AI path, pending neatness inheritance, publish-time guard, and identity-protected failure/final cleanup."
+    },
+    {
+      "record_id": "code_health:finding_415557c855bfd3dd897c",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "applyComputedFlowToFlow",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_flow_guard_simplification",
+      "reason": "Three bumps are verified. After both score caps and fallback construction, replace the final if(flowData) block with if(!flowData) return and an unnested enrichment block. This keeps null-flow defaults and all quick-note behavior. Pair with the duplicate pattern-computation repair; never move the return before detailed score handling.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2612-2656 complete function",
+        "js/app/10-main-app.js:2618-2625 quick null-preserving cap and conditional note",
+        "js/app/10-main-app.js:2627-2638 missing-detail fallback",
+        "js/app/10-main-app.js:2634-2635 then 2647-2648 recompute same pure builders when detail missing and flowData truthy",
+        "js/app/10-main-app.js:2557-2608 builders read flowData and return strings/arrays"
+      ],
+      "verified_metrics": {
+        "name": "applyComputedFlowToFlow",
+        "start_line": 2612,
+        "end_line": 2656,
+        "ccn": 16,
+        "cognitive": 20,
+        "nloc": 42,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2620,
+          2624
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 16,
+        "max_nesting": 2,
+        "symbol_line": 2612,
+        "deepest_block": {
+          "start": 2620,
+          "end": 2624
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:7938 reconcileScoredAssessment; baseline fixture:161 is test reference"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:42-45 null-like scores remain null",
+        "tests/missing-feedback.browser.cjs:65-79 numeric/string scores, caps, null detail versus scored quick, missing quick versus scored detail",
+        "tests/analysis-pipeline.browser.cjs:177-187 and :264 full output parity"
+      ],
+      "regression_recommendation": "Keep null/undefined/empty/nonfinite/zero/string numeric scores, separate quick/detail missingness, all ratings, absent flowData and absent detail. Compare full object fields and notes. For deduplication, missing-detail flowData path should call each pattern builder once while preserving values/key order."
+    },
+    {
+      "record_id": "code_health:finding_3b7008f933f118f15ac3",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "buildLowSampleAnalysis",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_low_sample_shape_with_linked_small_repair",
+      "reason": "71 NLOC mostly defines parallel rubric fields and teacher coaching for six categories. Keep the returned structure and exact teaching strings together. The repeated predicate has a concrete repair under the brain/complex records; length alone does not justify splitting maps/objects into wrappers.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:985-1059 complete function",
+        "js/app/10-main-app.js:997-1016 status-specific teaching text",
+        "js/app/10-main-app.js:1018-1037 three identical eligibility/status/category predicates",
+        "js/app/10-main-app.js:8220-8228 guarded low-sample caller"
+      ],
+      "verified_metrics": {
+        "name": "buildLowSampleAnalysis",
+        "start_line": 985,
+        "end_line": 1059,
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 71,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          990,
+          990
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 71,
+        "ccn": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 985,
+        "deepest_block": {
+          "start": 990,
+          "end": 990
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8223 analyzeWriting; fixtures/analysis-pipeline-baseline.js:48 is retained test reference, not another production caller"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:7-20 insufficient/limited and grade thresholds; :177-187 captures full data, key order, UI, pending state; :264 compares original/refactored",
+        "tests/analysis-pipeline.browser.cjs:219 low-sample makes zero requests and keeps overall null",
+        "tests/missing-feedback.browser.cjs:103 low-sample coaching policy"
+      ],
+      "regression_recommendation": "Compare full quickRubric, detailed and categoryScores for insufficient and limited samples, all CATEGORY_KEYS, eligible/ineligible categories, empty topic fallback and grades 4/5/12. Organization/Flow remain null; preserve output key order and exact coaching strings."
+    },
+    {
+      "record_id": "code_health:finding_686cbca1ed33c485434a",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "requestOpenRouterWithFallback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_request_lifecycle_size",
+      "reason": "80 NLOC includes nested named helpers and the complete request lifecycle. API-key admission precedes payload/timer transport; timeout remains active during body reading; retries preserve model order and exact waits. Removing lines here offers less value than preserving these tested boundaries.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2753-2844 complete function",
+        "js/app/10-main-app.js:2764-2800 context-aware parser/retry helpers",
+        "js/app/10-main-app.js:2802-2818 retry budget, per-attempt storage admission and captured controller",
+        "js/app/10-main-app.js:2832-2838 timeout spans response body and is cleared before retry"
+      ],
+      "verified_metrics": {
+        "name": "requestOpenRouterWithFallback",
+        "start_line": 2753,
+        "end_line": 2844,
+        "ccn": 16,
+        "cognitive": 24,
+        "nloc": 80,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2836,
+          2839
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 80,
+        "ccn": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 2753,
+        "deepest_block": {
+          "start": 2836,
+          "end": 2839
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:2848 callOpenRouter text wrapper",
+        "js/app/10-main-app.js:2865 callOpenRouterImage image wrapper"
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-request.cjs:28-77 stalled-body timeout/fresh controller and cancellation",
+        "tests/openrouter-request.cjs:79-109 exact model/backoff schedules including fractional/string/negative/NaN budgets and cancellation during sleep",
+        "tests/openrouter-request.cjs:114-147 admission before payload/transport, wrapper payloads and malformed response rejection",
+        "tests/openrouter-failures.browser.cjs:43-58 bounded retries, retained bytes/report, timer cleanup, credential exclusion",
+        "tests/openrouter-admission.browser.cjs:106-119 zero transport/backoff on rejected storage admission; retry, timeout and cancel cases"
+      ],
+      "regression_recommendation": "No repair proposed. Any later change must preserve exact budgets/backoff/controller ownership, timeout through body read, no retry on cancellation/nonretryable status and strict storage admission before payload or transport."
+    },
+    {
+      "record_id": "code_health:finding_1a5454e6e63026044dbb",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "extractTextFromSelectedImage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_transcription_prompt_and_owner_lifecycle",
+      "reason": "98 NLOC includes transcription rules that preserve original spelling and worksheet context, plus cache/publication cleanup. Moving the literal prompt to a separate wrapper would only reduce reported size. Retain the installed-promise-before-cache-completion fix and per-owner cleanup.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3620-3729 complete function",
+        "js/app/10-main-app.js:3624-3647 automatic/manual ownership and shared-promise admission",
+        "js/app/10-main-app.js:3668-3688 promise installed before cached completion; guards around each provider await",
+        "js/app/10-main-app.js:3695-3724 guarded publication and owner-only cleanup",
+        "js/app/10-main-app.js:8398-8402 manual click wrapper"
+      ],
+      "verified_metrics": {
+        "name": "extractTextFromSelectedImage",
+        "start_line": 3620,
+        "end_line": 3729,
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 98,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3638,
+          3641
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 98,
+        "ccn": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 3620,
+        "deepest_block": {
+          "start": 3638,
+          "end": 3641
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8211 analyzeWriting automatic OCR",
+        "js/app/10-main-app.js:8399 extractTextBtn manual wrapper"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:120-155 cached first-page stop/retry setup; :287-298 exact cache/reinsertion/promise/controls assertions",
+        "tests/analysis-identity.browser.cjs:259-267 changed owner/text and stop do not publish stale writing",
+        "tests/analysis-pipeline.browser.cjs:10-19 OCR single/multiple/cached and held cancellation/writing/policy; :264 full parity",
+        "tests/openrouter-admission.browser.cjs:109 visible OCR key admission failure"
+      ],
+      "regression_recommendation": "No structural extraction proposed. Retain manual MouseEvent normalization, automatic parent ownership, multi-image order/cache, stopped partial-page retry, writing/owner changes around awaits and owner-only promise/UI cleanup."
+    },
+    {
+      "record_id": "code_health:finding_e80e6459cb0f8eec82fd",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "buildStep3Prompt",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ordered_prompt_contract",
+      "reason": "The long function is an ordered prompt contract containing exact parser headings, student-facing rules and a JSON example. Splitting static sections solely to pass NLOC thresholds fragments review. Named inputs may improve the call boundary separately without altering the content.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3889-4058 complete function",
+        "js/app/10-main-app.js:3890-3894 delegates priorities/genre/profile preparation",
+        "js/app/10-main-app.js:3910-3925 nine distinct input roles with shallow data fallback expressions",
+        "js/app/10-main-app.js:3927-4056 ordered rules, parser-facing headings and candidate JSON example",
+        "js/app/10-main-app.js:8256-8257 sole production call with nine positional arguments"
+      ],
+      "verified_metrics": {
+        "name": "buildStep3Prompt",
+        "start_line": 3889,
+        "end_line": 4058,
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 167,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 9,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3919,
+          3919
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 167,
+        "ccn": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 3889,
+        "deepest_block": {
+          "start": 3919,
+          "end": 3919
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8257 analyzeWriting; baseline fixture:150 is frozen parity reference, not production API"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:101-107 records prompt for each request; :177-187 serializes requests; :264 exact original/refactored parity",
+        "tests/analysis-pipeline.browser.cjs:13-14 grade/target/strictness and :9 genre cases",
+        "tests/analysis-policy.browser.cjs:116-126 records prompt/model and :216-217 verifies selected model"
+      ],
+      "regression_recommendation": "If adopting named inputs, change only signature/destructuring and sole production call. Compare prompt byte-for-byte for normal, original-versus-corrected text, absent optional flow/profile/genre/original/priorities and all grade/genre cases. The frozen baseline caller would need a test-side compatibility plan rather than silently replacing its expected API."
+    },
+    {
+      "record_id": "code_health:finding_701d382f4514d56049a6",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "reassessPortfolioSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_load_sequence_and_recovery_copy",
+      "reason": "74 NLOC includes the confirmation explanation, required preference-save recovery copy and four image-restore outcomes. Those messages support different safe next actions. Retain the sequence; do not obscure when current pending work is cleared versus when photo restoration finishes.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7624-7705 complete function",
+        "js/app/10-main-app.js:7625-7647 validates saved session/text then awaits confirmation",
+        "js/app/10-main-app.js:7649-7653 grade-save failure aborts before writing/pending mutation",
+        "js/app/10-main-app.js:7660-7672 loads selection/text/genre and clears pending",
+        "js/app/10-main-app.js:7677-7704 photo outcomes versus failed neatness persistence",
+        "js/app/10-main-app.js:7575-7621 restore helper discards late successful image publication via context check"
+      ],
+      "verified_metrics": {
+        "name": "reassessPortfolioSession",
+        "start_line": 7624,
+        "end_line": 7705,
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 74,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7650,
+          7653
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 74,
+        "ccn": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 7624,
+        "deepest_block": {
+          "start": 7650,
+          "end": 7653
+        }
+      },
+      "callers": [
+        "js/app/00-storage-sync-patches.js:7518 saved portfolio button inline handler with student/session dataset",
+        "tests/preference-integrity-scenarios.js:110,123 are direct retained test callers"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:103-115 grade-save failure retains writing/pending/selection and alerts",
+        "tests/preference-integrity-scenarios.js:117-128 late neatness-save failure retains loaded writing and durable policy with actionable status",
+        "tests/analysis-identity.browser.cjs:273-280 late image preparation and reassessment source ownership assertions"
+      ],
+      "regression_recommendation": "No structural split proposed. Preserve abort-before-mutation on grade-save failure, each zero/partial/full photo message, durable neatness policy and stale image context behavior. Separate confirmation-gap lead needs held-confirmation regression before repair."
+    },
+    {
+      "record_id": "code_health:finding_a588ab315453a61edf9d",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "analyzeWriting",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_small_existing_pipeline_orchestrator",
+      "reason": "68 NLOC after existing helper extraction is a readable stage list. It carries essential assertions after OCR/correction/rubric/neatness/detail and before publication, plus owner checks in catch/finally. A stage-dispatch abstraction would shorten the symbol while making variable dependencies and cancellation less explicit.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:8196-8277 complete function",
+        "js/app/10-main-app.js:8197-8215 no-input/reentrancy and OCR acceptance guards",
+        "js/app/10-main-app.js:8220-8228 low-sample return bypasses AI",
+        "js/app/10-main-app.js:8231-8263 assertions after every AI boundary and before publication",
+        "js/app/10-main-app.js:8244-8253 staged neatness cannot be overwritten by parser",
+        "js/app/10-main-app.js:8270-8275 identity guard before error reporting/final cleanup",
+        "js/app/10-main-app.js:8075-8088,8122-8153 existing begin/failure/finish helpers"
+      ],
+      "verified_metrics": {
+        "name": "analyzeWriting",
+        "start_line": 8196,
+        "end_line": 8277,
+        "ccn": 16,
+        "cognitive": 27,
+        "nloc": 68,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          8210,
+          8214
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 68,
+        "ccn": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 8196,
+        "deepest_block": {
+          "start": 8210,
+          "end": 8214
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8404 analyzeBtn click registration; test callers exercise public function directly"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:7-20 full scenario matrix; :219-235 explicit low/missing/ownership assertions; :264 full frozen-baseline parity",
+        "tests/analysis-policy.browser.cjs:200-225 earlier result/pending byte preservation and correct fresh-policy publication",
+        "tests/analysis-identity.browser.cjs:240-267 superseded run/stop/owner guards; :287-298 OCR cache retry behavior"
+      ],
+      "regression_recommendation": "No additional wrapper/extraction proposed. Retain await/check ordering, low-sample zero AI path, pending neatness inheritance, publish-time guard, and identity-protected failure/final cleanup."
+    },
+    {
+      "record_id": "code_health:finding_3856a4f577518ea32781",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "symbol": "applyWordCountToIdeas",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_primitive_type_inference_keep_coherent_inputs",
+      "reason": "The five-parameter count is correct, but the observation itself has zero typed and zero primitive parameters. Inputs are two mutable result objects, actual/target word counts and the optional grade profile, all used. One production caller passes these explicitly. Replacing them with a parameter bag only to cross a threshold adds ceremony; simplify duplicated decisions instead.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2411-2467 complete function",
+        "js/app/10-main-app.js:2412-2422 explicit missing detailed score returns before mutation",
+        "js/app/10-main-app.js:2433-2442 and 2454-2463 repeat under-target/80-percent/goingBeyond decisions",
+        "js/app/10-main-app.js:7936-7941 single production reconciliation caller"
+      ],
+      "verified_metrics": {
+        "name": "applyWordCountToIdeas",
+        "start_line": 2411,
+        "end_line": 2467,
+        "ccn": 16,
+        "cognitive": 19,
+        "nloc": 51,
+        "max_nesting": 3,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2455,
+          2459
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 2411
+      },
+      "callers": [
+        "js/app/10-main-app.js:7937 reconcileScoredAssessment, passing policy.targetWords and policy.gradeProfile; baseline fixture:160 is test reference"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:8-14 missing/explicit-missing, target-under/met/over/off across grades; :177-187 serializes data and saved outputs; :264 parity assertion",
+        "tests/analysis-policy.browser.cjs:200-225 policy changes preserve previous work; :213 verifies changed-policy Ideas score"
+      ],
+      "regression_recommendation": "Direct before/after equality for below/exactly 80 percent, just below/equal/above target, target off, missing quick/detail categories, present-null detail with scored quick, goingBeyond true/false and grades 4/5/12. Preserve asymmetry: newly synthesized detail does not receive appended target advice."
+    },
+    {
+      "record_id": "code_health:finding_c2c09734de489bfe0c43",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "symbol": "buildStep3Prompt",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_parameter_count_not_worth_api_and_reference_churn",
+      "reason": "Nine positional arguments at the sole production call are a credible maintenance hazard, especially correctedText versus originalText and grade/genre/priorities. A single named-input object would make those roles reviewable without adding a wrapper. No argument-order bug is demonstrated, and untyped JavaScript does not prove primitive obsession. Adopt only if prompt parity and the frozen-baseline test compatibility cost justify it. Coordinator disposition: Read actual nine named parameters and sole production call; their roles are explicit and no permutation defect is evidenced. This private call is also exercised through a frozen historical pipeline caller. An options-object signature would require compatibility work in that parity path without deleting a repeated rule. Its cost outweighs the present benefit; retain the count warning and existing API, rather than force a parameter-bag refactor.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3889-4058 complete function",
+        "js/app/10-main-app.js:3890-3894 delegates priorities/genre/profile preparation",
+        "js/app/10-main-app.js:3910-3925 nine distinct input roles with shallow data fallback expressions",
+        "js/app/10-main-app.js:3927-4056 ordered rules, parser-facing headings and candidate JSON example",
+        "js/app/10-main-app.js:8256-8257 sole production call with nine positional arguments"
+      ],
+      "verified_metrics": {
+        "name": "buildStep3Prompt",
+        "start_line": 3889,
+        "end_line": 4058,
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 167,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 9,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3919,
+          3919
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 9,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 3889
+      },
+      "callers": [
+        "js/app/10-main-app.js:8257 analyzeWriting; baseline fixture:150 is frozen parity reference, not production API"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:101-107 records prompt for each request; :177-187 serializes requests; :264 exact original/refactored parity",
+        "tests/analysis-pipeline.browser.cjs:13-14 grade/target/strictness and :9 genre cases",
+        "tests/analysis-policy.browser.cjs:116-126 records prompt/model and :216-217 verifies selected model"
+      ],
+      "regression_recommendation": "If adopting named inputs, change only signature/destructuring and sole production call. Compare prompt byte-for-byte for normal, original-versus-corrected text, absent optional flow/profile/genre/original/priorities and all grade/genre cases. The frozen baseline caller would need a test-side compatibility plan rather than silently replacing its expected API.",
+      "reviewer_proposed_status": "candidate_needs_regression"
+    }
+  ],
+  "additional_leads": [
+    {
+      "lead_id": "review028-reassessment-confirmation-freshness",
+      "kind": "source_supported_behavioral_candidate",
+      "status": "candidate_needs_regression",
+      "file": "js/app/10-main-app.js",
+      "symbol": "reassessPortfolioSession",
+      "reason": "session and reassessText are captured before awaiting wftConfirm. After confirmation, the function immediately saves grade preferences, selects the captured student, replaces writing and clears pending work without re-reading the saved session or validating the current writing/pending context. An asynchronous portfolio/selection change during the dialog could therefore load a stale/deleted/replaced source or clear newer pending work. This is a source-supported gap, not a reproduced defect or an automatic scanner disposition.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7625-7647 captured source/text followed by async confirmation",
+        "js/app/10-main-app.js:7649-7672 mutations after confirmation without freshness check",
+        "js/app/10-main-app.js:7430-7436 findPortfolioSession reads current portfolio only when called",
+        "js/app/10-main-app.js:7575-7621 image restore validates its later context but cannot protect the earlier confirmation boundary"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:103-128 immediate successful confirmation stubs test storage-failure boundaries",
+        "tests/analysis-identity.browser.cjs:273-280 asserts loading/source ownership after load; does not establish held-dialog freshness"
+      ],
+      "regression_recommendation": "Hold the actual reassessment confirmation promise; remove/replace/rename the source or update writing/pending state through supported seams; then accept. Establish intended behavior and require no stale owner/source publication or lost newer pending work. Also retain unchanged/declined confirmation and grade-save failure controls. Do not implement merely from this report.",
+      "original_lead_id": "review028-reassessment-confirmation-freshness",
+      "id": "review028-reassessment-confirmation-freshness",
+      "classification": "source_supported_behavioral_candidate",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "function": "reassessPortfolioSession"
+    }
+  ],
+  "summary": {
+    "assigned_records": 22,
+    "unique_functions": 8,
+    "proposed_status_counts": {
+      "confirmed_repair_candidate": 5,
+      "reviewed_no_change": 16,
+      "candidate_needs_regression": 1
+    },
+    "minimal_repairs": [
+      "Low-sample local scoring predicate/score reuse (two related records, one repair).",
+      "Word-count local threshold decision reuse with original output asymmetries retained.",
+      "Flow fallback avoids duplicate pure pattern builders; final flow-data guard can flatten enrichment (two related records, one repair)."
+    ],
+    "optional_candidate": "Nine-argument prompt call may benefit from named inputs; full prompt/frozen-baseline parity cost must be assessed.",
+    "retained": "Retry state machine, OCR ownership/cache lifecycle, reassessment recovery distinctions, ordered prompt content and already-delegated analysis stages remain coherent despite genuine numerical flags.",
+    "scanner_state": "No scanner finding was closed or mutated; parent must recheck source/facts before adoption."
+  },
+  "limits": [
+    "Read-only source/assertion review; no app test execution, browser/runtime exercise, live AI/Drive calls, dependency changes, Git mutations, health refresh/index/cache writes or docs/tracker edits.",
+    "The single behavioral lead is not reproduced; actual dialog-time mutation reachability and intended conflict behavior need a regression.",
+    "No threshold-only helpers or blanket symbol-level dismissals proposed. 22 assigned records are individually reasoned; their repeated dimensions are not independent defects.",
+    "Shared AI-Library START-HERE and knowledge/library-rules read; no relevant curated project note existed in knowledge. memU retrieval consulted as historical context, not verification. Ponytail full applied."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "method": "Read every individual retained/candidate reason and caller/test anchors; checked plausible repairs separately from confirmed bugs. Independently replayed numerical walker fields for all assigned records. Immutable production+HTML hashes and exact current observation facts must pass central adopter before any tracker mutation. Read-only test references are versioned413; no testpass or scannerclosure claim."
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "repair_id": "repair-025",
+  "source_base": "dff5375bba4f9d8c3e43794010830da860b87615",
+  "created_at_utc": "2026-10-15T23:46:30.775583+00:00",
+  "status": "native_route_reuse_verified_pending_coordinator",
+  "scanner_records": [
+    "code_health:finding_9708f175ae4a6033ae11",
+    "code_health:finding_5301ae7f99d89050d43c",
+    "code_health:finding_ced969c11ee33e523e58",
+    "code_health:finding_29be0fb5517d3f81826a",
+    "code_health:finding_5fbb3828d0e444afeb09"
+  ],
+  "summary": "Reuse the existing local asset helper in six native tests, preserving Google ownership mocks, all original assertions/fixtures, and both legacy octet-stream defaults through one optional helper parameter.",
+  "scope": {
+    "changed_code_files": [
+      "tests/missing-feedback.browser.cjs",
+      "tests/notebook-guidance-repair.browser.cjs",
+      "tests/pending-portfolio.browser.cjs",
+      "tests/portfolio-renderer.browser.cjs",
+      "tests/student-read-ownership.browser.cjs",
+      "tests/student-rename.browser.cjs",
+      "tests/support/local-app-route.js",
+      "scripts/check-test-runner.cjs"
+    ],
+    "other_82_code_files_raw_identical": true,
+    "configuration_raw_identical": [
+      "scripts/case-report-suites.json"
+    ],
+    "source_hashes": [
+      {
+        "file": "tests/missing-feedback.browser.cjs",
+        "before_raw_sha256": "42ef342368cddd5a733066316aefd82cec9c5ce693e54b9ffa0b0a904dce99aa",
+        "after_raw_sha256": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+        "all_other_source_bytes_exactly_reconstruct": true,
+        "anonymous_top_level_driver_lines": [
+          7,
+          8
+        ],
+        "newlines_outside_edits_preserved": true
+      },
+      {
+        "file": "tests/notebook-guidance-repair.browser.cjs",
+        "before_raw_sha256": "5ac4e2c26c5dadfe5dd1b6fcd52ca7bcee8ced301c8ea5264fb8cbef4250129c",
+        "after_raw_sha256": "12b8520784cb26c20846e01535aadaaa3b7ea40fb3af54dbfe6b85197d822835",
+        "all_other_source_bytes_exactly_reconstruct": true,
+        "anonymous_top_level_driver_lines": [
+          252,
+          253
+        ],
+        "newlines_outside_edits_preserved": true
+      },
+      {
+        "file": "tests/pending-portfolio.browser.cjs",
+        "before_raw_sha256": "3e6a9a33da4a3635994d1fa60398adfc3503823b71d4b53d855f6162aee52a5e",
+        "after_raw_sha256": "617bdeb04b603ce9c97c50aab16c8f99c5833fcd6338deeb4c9d9cd763bd7566",
+        "all_other_source_bytes_exactly_reconstruct": true,
+        "anonymous_top_level_driver_lines": [
+          8,
+          9
+        ],
+        "newlines_outside_edits_preserved": true
+      },
+      {
+        "file": "tests/portfolio-renderer.browser.cjs",
+        "before_raw_sha256": "d7aaa80468c5a3a1af2133030d660d16e9728bafde5172c98d4e11334edfe469",
+        "after_raw_sha256": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323",
+        "all_other_source_bytes_exactly_reconstruct": true,
+        "anonymous_top_level_driver_lines": [
+          122,
+          123
+        ],
+        "newlines_outside_edits_preserved": true
+      },
+      {
+        "file": "tests/student-read-ownership.browser.cjs",
+        "before_raw_sha256": "0cea2436dcd6ccef925a50236d7d23b5e68f6650afc28cc9b0d3ee06b718fdb1",
+        "after_raw_sha256": "fd47e6a0c69714957663788177d18570fd163861cb0349f863cff242713ddb36",
+        "all_other_source_bytes_exactly_reconstruct": true,
+        "anonymous_top_level_driver_lines": [
+          6,
+          7
+        ],
+        "newlines_outside_edits_preserved": true
+      },
+      {
+        "file": "tests/student-rename.browser.cjs",
+        "before_raw_sha256": "228cfd9540fd24ee9f813310133de140b794f01c02ae7db247c57690eccc0613",
+        "after_raw_sha256": "6c42062d16dd3332c56388ba85689eee62445c145745657bbe6b61927a96790b",
+        "all_other_source_bytes_exactly_reconstruct": true,
+        "anonymous_top_level_driver_lines": [
+          7,
+          8
+        ],
+        "newlines_outside_edits_preserved": true
+      },
+      {
+        "file": "tests/support/local-app-route.js",
+        "before_raw_sha256": "7657a3597c09ebfbd426140208ec9a679e0ac8ccb4d13b4f7976a945a9346250",
+        "after_raw_sha256": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f"
+      },
+      {
+        "file": "scripts/check-test-runner.cjs",
+        "before_raw_sha256": "2a12cf7690ea2613ec38adb469945242196b474bed0c9f54ba1327900550919f",
+        "after_raw_sha256": "f97df97b4e07a8b73113288b9b9a457b4747ae44fde96079860f77301985991c"
+      }
+    ],
+    "renderer_fixture_raw_sha256": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+    "renderer_fixture_normalized_lf_sha256": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+    "renderer_fixture_unchanged": true,
+    "google_handler_except_local_branch_exact": true,
+    "no_favicon_specific_routes_remain": true,
+    "git_index_cache_tracker_runtime_writes": false
+  },
+  "helper_contract": {
+    "change": "One optional fallbackContentType=text/html parameter. JavaScript and HTML retain their explicit types; other assets use the supplied/default fallback. Existing path/root/external/file guards are unchanged. Only pending-portfolio and student-rename opt into application/octet-stream.",
+    "selfcheck_additions": 3,
+    "negative_old_helper": {
+      "exit_code": 1,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\helper-before-selfcheck.log",
+      "sha256": "4318cfaa03b8a9e0ee98572484a83a1cffba680f29f583f05303ccd48c939952",
+      "reason": "New opted-in fallback assertion fails: actual text/html, expected application/octet-stream."
+    },
+    "positive_final_helper": {
+      "exit_code": 0,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\helper-after-selfcheck.log",
+      "sha256": "6d1c6a435c7a5a438efef2f6cc477740e9bdeea291b31479aa9d2c8bcae9398d",
+      "all_existing_and_three_new_assertions_passed": true
+    },
+    "native_asset_probe": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\asset-inventory-helper-fallback.json",
+      "sha256": "2328b1dc6b6d1c8575170a01b2f02c8270a39c1cc876ae8fbb97ffa250b56024",
+      "requested_local_paths": 10,
+      "response_status_and_mime_signatures_equal": true,
+      "initial_mime_difference_discovery": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\asset-inventory.json"
+    }
+  },
+  "tests": {
+    "receipts": {
+      "before": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\before\\suite-results.json",
+        "sha256": "f037d18dde6523156b12cb3b442a01fb1b4a77cc7e6032b1d2aaf93c6947a553",
+        "syntax_passed": 90,
+        "suites_passed": 6,
+        "native_reports": [
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\before\\missing-feedback.browser.json",
+            "sha256": "3ed469bf897ccaf75c0e1751d4aea2f3cfd0aef460cae40c06097f59ff09691a"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\before\\notebook-guidance-repair.browser.json",
+            "sha256": "e2256f5ac0cf6fb207841c12d516e5aff90a282f17b5bb8d5046a74df75755b7"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\before\\pending-portfolio.browser.json",
+            "sha256": "096fcf3630dceacea066105490ab11ad84172bfee9ec26dca810b81e89822f59"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\before\\portfolio-renderer.browser.json",
+            "sha256": "64f124c5785951de5d13de7242b7508f56d78f7c22afa3aa01862fb9047f1c10"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\before\\student-read-ownership.browser.json",
+            "sha256": "c951855177050d50903d3cec3fb760b18fa395bbf817c6ccdea10666d1d4b5c5"
+          }
+        ]
+      },
+      "after": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\suite-results.json",
+        "sha256": "3ca23a07518355e52e0d146ed281ce12d77575c74f5f2154fbc002b94067ce4f",
+        "syntax_passed": 90,
+        "suites_passed": 6,
+        "native_reports": [
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\missing-feedback.browser.json",
+            "sha256": "3ed469bf897ccaf75c0e1751d4aea2f3cfd0aef460cae40c06097f59ff09691a"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\notebook-guidance-repair.browser.json",
+            "sha256": "e2256f5ac0cf6fb207841c12d516e5aff90a282f17b5bb8d5046a74df75755b7"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\pending-portfolio.browser.json",
+            "sha256": "096fcf3630dceacea066105490ab11ad84172bfee9ec26dca810b81e89822f59"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\portfolio-renderer.browser.json",
+            "sha256": "64f124c5785951de5d13de7242b7508f56d78f7c22afa3aa01862fb9047f1c10"
+          },
+          {
+            "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\student-read-ownership.browser.json",
+            "sha256": "dd4f9293ab9ffedc79f7a9032ec4995790e5f408d6584e32c3f754ceb3d3740e"
+          }
+        ]
+      }
+    },
+    "comparisons": [
+      {
+        "suite": "missing-feedback",
+        "cases": 228,
+        "full_parsed_report_equal": true
+      },
+      {
+        "suite": "notebook-guidance-repair",
+        "cases": 103,
+        "full_parsed_report_equal": true
+      },
+      {
+        "suite": "pending-portfolio",
+        "cases": 7,
+        "full_parsed_report_equal": true
+      },
+      {
+        "suite": "portfolio-renderer",
+        "cases": 29,
+        "full_parsed_report_equal": true
+      },
+      {
+        "suite": "student-read-ownership",
+        "cases": 12,
+        "complete_report_equal_after_bounded_clock_normalization": true,
+        "clock_differences_only": [
+          "merge-unchanged/requests/upload: multipart boundary and top-level createdAt/updatedAt",
+          "merge-missing/requests/upload: multipart boundary and top-level createdAt/updatedAt",
+          "merge-unchanged/observed/outcomes/0/data: createdAt/updatedAt",
+          "lazy-unchanged/observed/cached: cachedAt"
+        ],
+        "all_request_order_url_method_token_and_remaining_body_bytes_equal": true,
+        "requests": 50
+      },
+      {
+        "suite": "student-rename",
+        "direct_state_assertions_unchanged": 16,
+        "native_log_bytes_equal": true,
+        "case_report": "Existing suite intentionally has no case report; official runner exit0 and its sixteen unchanged assertions are the validation."
+      }
+    ],
+    "reported_cases_preserved": 379,
+    "student_rename_direct_assertions_preserved": 16,
+    "superseded_initial_after_receipt_preserved": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after\\suite-results.json",
+    "authoritative_final_source_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-025\\after-final\\suite-results.json"
+  },
+  "identity_note": "Every top-level anonymous driver moves by one import line; route deletions shift later callback/body locations. Preserve scanner campaign identities using unchanged role/fixture/AST path as needed; no disappearance here is claimed as a clearance.",
+  "exact_patch": "diff --git a/scripts/check-test-runner.cjs b/scripts/check-test-runner.cjs\nindex dd011cb..030f3b1 100644\n--- a/scripts/check-test-runner.cjs\n+++ b/scripts/check-test-runner.cjs\n@@ -49,10 +49,14 @@ try {\n     assert.throws(() => runTests({ root, out: path.join(root, 'invalid'), selected: ['tests/absent.cjs'] }), /Unknown suite/);\n     for (const supplements of [{}, [null], [''], [{ file: 'test.cjs' }], [{ file: 'test.cjs', reportRequired: 'false' }]]) assert.throws(() => runTests({ root, out: path.join(root, 'invalid'), supplements }), /Supplemental|supplemental/);\n     const route = require('../tests/support/local-app-route');\n-    const asset = url => route({ request: () => ({ url: () => url }), abort: () => 'aborted', fulfill: value => value }, root);\n+    const asset = (url, fallbackContentType) => route({ request: () => ({ url: () => url }), abort: () => 'aborted', fulfill: value => value }, root, fallbackContentType);\n     assert.equal(asset('https://external.invalid/file.js'), 'aborted');\n     assert.equal(asset('http://127.0.0.1:8765/google-drive-migration.js').contentType, 'application/javascript');\n     for (const name of ['/missing.js', '/%2e%2e%5csecret', '/tests']) assert.equal(asset('http://127.0.0.1:8765' + name).status, 404);\n+    fs.writeFileSync(path.join(root, 'index.html'), ''); fs.writeFileSync(path.join(root, 'favicon-32x32.png'), '');\n+    assert.equal(asset('http://127.0.0.1:8765/favicon-32x32.png').contentType, 'text/html', 'Existing default MIME is retained');\n+    assert.equal(asset('http://127.0.0.1:8765/favicon-32x32.png', 'application/octet-stream').contentType, 'application/octet-stream', 'Opted-in asset MIME is retained');\n+    assert.deepEqual(['/index.html', '/google-drive-migration.js'].map(name => asset('http://127.0.0.1:8765' + name, 'application/octet-stream').contentType), ['text/html', 'application/javascript'], 'HTML and JavaScript MIME override the fallback');\n     console.log('Runner checks passed: fixture strings, required/optional reports, failure, timeout, termination, valid/empty/missing/stale/malformed/failed reports, preload, invalid selections/manifests and local routing.');\n } finally {\n     // Delete only this uniquely created fixture directory, including after a failed assertion.\ndiff --git a/tests/missing-feedback.browser.cjs b/tests/missing-feedback.browser.cjs\nindex 51366f0..b8c4005 100644\n--- a/tests/missing-feedback.browser.cjs\n+++ b/tests/missing-feedback.browser.cjs\n@@ -2,6 +2,7 @@ const { chromium } = require('playwright');\n const assert = require('node:assert/strict');\n const fs = require('node:fs');\n const path = require('node:path');\n+const localAppRoute = require('./support/local-app-route');\n const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');\n \n (async () => {\n@@ -10,12 +11,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');\n         const page = await browser.newPage();\n         const errors = [];\n         page.on('pageerror', error => errors.push(error.message));\n-        await page.route('**/*', route => {\n-            const url = new URL(route.request().url());\n-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();\n-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));\n-            return route.fulfill(fs.existsSync(file) ? { contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) } : { status: 404, body: '' });\n-        });\n+        await page.route('**/*', route => localAppRoute(route, root));\n         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });\n         const result = await page.evaluate(async () => {\n             stopWftSyncPolling(); scheduleWftCloudSync = () => {};\ndiff --git a/tests/notebook-guidance-repair.browser.cjs b/tests/notebook-guidance-repair.browser.cjs\nindex 3ac9f63..c15b899 100644\n--- a/tests/notebook-guidance-repair.browser.cjs\n+++ b/tests/notebook-guidance-repair.browser.cjs\n@@ -2,6 +2,7 @@ const {chromium} = require('playwright');\n const assert = require('node:assert/strict');\n const fs = require('node:fs');\n const path = require('node:path');\n+const localAppRoute = require('./support/local-app-route');\n const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');\n \n function runNotebookGuidanceCases() {\n@@ -255,12 +256,7 @@ function runNotebookGuidanceCases() {\n         const page = await browser.newPage();\n         const errors = [];\n         page.on('pageerror', error => errors.push(error.message));\n-        await page.route('**/*', route => {\n-            const url = new URL(route.request().url());\n-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();\n-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));\n-            return route.fulfill(fs.existsSync(file) ? {contentType:file.endsWith('.js') ? 'application/javascript' : 'text/html', body:fs.readFileSync(file)} : {status:404, body:''});\n-        });\n+        await page.route('**/*', route => localAppRoute(route, root));\n         await page.goto('http://127.0.0.1:8765', {waitUntil:'domcontentloaded'});\n         const result = await page.evaluate(runNotebookGuidanceCases);\n         assert.deepEqual(errors, []);\ndiff --git a/tests/pending-portfolio.browser.cjs b/tests/pending-portfolio.browser.cjs\nindex b91dc11..6dafc4a 100644\n--- a/tests/pending-portfolio.browser.cjs\n+++ b/tests/pending-portfolio.browser.cjs\n@@ -2,6 +2,7 @@ const { chromium } = require('playwright');\n const assert = require('node:assert/strict');\n const fs = require('node:fs');\n const path = require('node:path');\n+const localAppRoute = require('./support/local-app-route');\n const root = path.resolve(__dirname, '..');\n const cases = [];\n \n@@ -11,13 +12,7 @@ const cases = [];\n         const page = await browser.newPage();\n         const errors = [];\n         page.on('pageerror', error => errors.push(error.message));\n-        await page.route('**/*', route => {\n-            const url = new URL(route.request().url());\n-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();\n-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));\n-            if (!fs.existsSync(file)) return route.fulfill({ status: 404, body: '' });\n-            return route.fulfill({ status: 200, contentType: file.endsWith('.js') ? 'application/javascript' : file.endsWith('.html') ? 'text/html' : 'application/octet-stream', body: fs.readFileSync(file) });\n-        });\n+        await page.route('**/*', route => localAppRoute(route, root, 'application/octet-stream'));\n         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });\n         await page.waitForFunction(() => typeof persistPendingPortfolioSync === 'function');\n         for (const failBoth of [false, true]) {\ndiff --git a/tests/portfolio-renderer.browser.cjs b/tests/portfolio-renderer.browser.cjs\nindex 43c113b..a804ee8 100644\n--- a/tests/portfolio-renderer.browser.cjs\n+++ b/tests/portfolio-renderer.browser.cjs\n@@ -1,5 +1,6 @@\n const { chromium } = require('playwright');\n const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');\n+const localAppRoute = require('./support/local-app-route');\n const root = path.resolve(__dirname, '..');\n // The reference is the unmodified renderer at 35bf15ee8533; shared helpers stay shipped code.\n const reference = fs.readFileSync(path.join(__dirname, 'fixtures/portfolio-renderer-baseline.js'), 'utf8').replace(/\\r\\n/g, '\\n');\n@@ -127,12 +128,7 @@ async function exercise(page, scenario) {\n             for (const baseline of [true, false]) {\n                 const context = await browser.newContext({ locale: 'en-GB', timezoneId: 'Asia/Bangkok' }), page = await context.newPage(), errors = [];\n                 page.on('pageerror', e => errors.push(e.message));\n-                await context.route('**/*', route => {\n-                    const url = new URL(route.request().url());\n-                    if (url.origin !== 'http://127.0.0.1:8765') return route.abort();\n-                    const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));\n-                    return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });\n-                });\n+                await context.route('**/*', route => localAppRoute(route, root));\n                 await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });\n                 if (baseline) await page.addScriptTag({ content: reference });\n                 try { observations.push(await exercise(page, scenario)); assert.deepEqual(errors, []); }\ndiff --git a/tests/student-read-ownership.browser.cjs b/tests/student-read-ownership.browser.cjs\nindex 07f8943..4928d79 100644\n--- a/tests/student-read-ownership.browser.cjs\n+++ b/tests/student-read-ownership.browser.cjs\n@@ -1,5 +1,6 @@\n const { chromium } = require('playwright');\n const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path');\n+const localAppRoute = require('./support/local-app-route');\n const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'));\n const folderType = 'application/vnd.google-apps.folder';\n \n@@ -13,10 +14,7 @@ const folderType = 'application/vnd.google-apps.folder';\n             await page.route('**/*', async route => {\n                 const req = route.request(), url = new URL(req.url()), query = url.searchParams.get('q') || '';\n                 const reply = data => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });\n-                if (url.origin === 'http://127.0.0.1:8765') {\n-                    const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));\n-                    return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });\n-                }\n+                if (url.origin === 'http://127.0.0.1:8765') return localAppRoute(route, root);\n                 if (url.origin !== 'https://www.googleapis.com') return route.abort();\n                 if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, body: '' });\n                 requests.push({ url: url.href, method: req.method(), body: req.postData(), token: req.headers().authorization });\ndiff --git a/tests/student-rename.browser.cjs b/tests/student-rename.browser.cjs\nindex 0e236b4..a5482ae 100644\n--- a/tests/student-rename.browser.cjs\n+++ b/tests/student-rename.browser.cjs\n@@ -2,6 +2,7 @@ const { chromium } = require('playwright');\n const assert = require('node:assert/strict');\n const fs = require('node:fs');\n const path = require('node:path');\n+const localAppRoute = require('./support/local-app-route');\n const root = path.resolve(__dirname, '..');\n \n (async () => {\n@@ -10,13 +11,7 @@ const root = path.resolve(__dirname, '..');\n         const page = await browser.newPage();\n         const errors = [];\n         page.on('pageerror', error => errors.push(error.message));\n-        await page.route('**/*', route => {\n-            const url = new URL(route.request().url());\n-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();\n-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));\n-            if (!fs.existsSync(file)) return route.fulfill({ status: 404, body: '' });\n-            return route.fulfill({ status: 200, contentType: file.endsWith('.js') ? 'application/javascript' : file.endsWith('.html') ? 'text/html' : 'application/octet-stream', body: fs.readFileSync(file) });\n-        });\n+        await page.route('**/*', route => localAppRoute(route, root, 'application/octet-stream'));\n         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });\n         await page.waitForFunction(() => typeof renameStudent === 'function');\n         const result = await page.evaluate(async () => {\ndiff --git a/tests/support/local-app-route.js b/tests/support/local-app-route.js\nindex ca82c38..215d295 100644\n--- a/tests/support/local-app-route.js\n+++ b/tests/support/local-app-route.js\n@@ -2,12 +2,12 @@ const fs = require('node:fs');\n const path = require('node:path');\n \n // Serve only snapshot assets; specialized service and library routes stay in each test.\n-module.exports = function localAppRoute(route, root) {\n+module.exports = function localAppRoute(route, root, fallbackContentType = 'text/html') {\n     const url = new URL(route.request().url());\n     if (url.origin !== 'http://127.0.0.1:8765') return route.abort();\n     const file = path.resolve(root, '.' + (url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname)));\n     const relative = path.relative(root, file);\n     if (relative.startsWith('..') || path.isAbsolute(relative)) return route.fulfill({ status: 404, body: '' });\n     if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return route.fulfill({ status: 404, body: '' });\n-    return route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) });\n+    return route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : file.endsWith('.html') ? 'text/html' : fallbackContentType, body: fs.readFileSync(file) });\n };\n",
+  "limits": [
+    "No RepoWise/index refresh or scanner-clearance claim. A DRY aggregate may move to another remaining clone after this shared asset route is removed.",
+    "No full76-suite run, coverage capture/import, live Google/accounts/services, commit/push/merge or publication; coordinator owns batch integration.",
+    "The source lead held. Scope was extended by coordinator to the existing helper and runner selfcheck after an actual favicon MIME difference was found. Earlier dedicated favicon routes were removed; only the final optional-fallback implementation is proposed."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "reason": "Reviewed full six route diffs/helper and runner assertions; helper selfcheck root is an isolated temp directory. Original GoogleAPI handler and fixtures/assertions retained, two MIME fallback callers explicit. Independently verified8currenthashes/82othercode+configpins, both6suite/90syntaxreceipts, fourbyte-identicalnativeJSONreports, selfchecknegative/positive logs and nativeassetprobe hashes. Ownership request differences limited by reported clock/multipart normalization plus unchanged Google branch; no app or fixture edit. Scanner/anonymousidentity checks deferred to batch refresh."
+  }
+}

@@ -1,0 +1,1788 @@
+{
+  "repair_id": "repair-029",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "dff5375bba4f9d8c3e43794010830da860b87615",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+  },
+  "source_verification": {
+    "assignment_normalized_hash_matches": true,
+    "all_inspected_production_files_match_frozen_blobs": true,
+    "all_test_assertions_read_from_immutable_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+    "source_edits": false
+  },
+  "metrics_verification": {
+    "method": "Unchanged installed RepoWise pure walk_file_complexity(path,javascript,normalized bytes), Python -B; no CLI/health/index operation.",
+    "functions": 12,
+    "all_assignment_ccn_cognitive_nloc_nesting_bumps_params_dispatch_deepest_blocks_and_condition_counts_reproduced": true,
+    "not_independently_verified": [
+      "scanner severity/impact/status/identity"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_e12eb3ad598aa6782566",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "normalizeWftPortfolioForSchemaV1",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_per_student_optional_identity_boundary",
+      "reason": "Depth4 is the per-student loop plus feature/mode-guarded identity allocation try. Session normalization is required, ID persistence is optional and caught per student. P1 centralizes repeated metadata filtering, but deleting this catch or moving all ID allocation after normalization would alter partial-progress/failure behavior.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1333",
+        "js/app/00-storage-sync-patches.js:1339",
+        "js/app/00-storage-sync-patches.js:1341",
+        "js/app/00-storage-sync-patches.js:1352",
+        "js/app/00-storage-sync-patches.js:1355",
+        "js/app/00-storage-sync-patches.js:1356"
+      ],
+      "verified_metrics": {
+        "name": "normalizeWftPortfolioForSchemaV1",
+        "start_line": 1333,
+        "end_line": 1362,
+        "ccn": 14,
+        "max_nesting": 4,
+        "cognitive": 22,
+        "nloc": 25,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1341,
+          1358
+        ],
+        "complex_conditions": [
+          {
+            "line": 1335,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1344,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1347,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1355,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 14,
+        "cognitive": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 1333,
+        "deepest_block": {
+          "start": 1341,
+          "end": 1358
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:6411 stripPortfolioHeavyFields(data,localOnly)",
+        "00-storage-sync-patches.js:6467 savePortfolioData(data,localOnly); required validate/preflight before conversion"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:106-110 actual schema conversion preserves own __proto__ student key",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:337-347 failed optional ID persistence retains legacy names and does not publish unstored IDs",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-save.cjs:36-42 required conversion failure preserves raw bytes/no sync; 77-81 safe mode skips conversion"
+      ],
+      "regression_recommendation": "P1 must retain exactly the six excluded root names, own-key iteration order and null-prototype output; preserve array/session compatibility, safe-mode identity and skipStudentIds. Update VM helper lists where normalization/index/roster are source-extracted and run native identity, preference, index and retention cases. Do not broaden exclusions or alter invalid-student behavior."
+    },
+    {
+      "record_id": "code_health:finding_1395e7bc92e44d166e50",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "buildPortfolioIndexFromPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_per_student_live_settings_boundary",
+      "reason": "Deepest1600-1605 is the optional student-map read inside each student iteration. The code intentionally rereads live settings and protects each optional lookup while summarizing current sessions. Hoisting one settings read would change getter/failure timing; P1 may share root-name filtering without touching this nesting.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1589",
+        "js/app/00-storage-sync-patches.js:1591",
+        "js/app/00-storage-sync-patches.js:1599",
+        "js/app/00-storage-sync-patches.js:1600",
+        "js/app/00-storage-sync-patches.js:1608",
+        "js/app/00-storage-sync-patches.js:1612"
+      ],
+      "verified_metrics": {
+        "name": "buildPortfolioIndexFromPortfolio",
+        "start_line": 1579,
+        "end_line": 1647,
+        "ccn": 18,
+        "max_nesting": 4,
+        "cognitive": 36,
+        "nloc": 60,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1600,
+          1605
+        ],
+        "complex_conditions": [
+          {
+            "line": 1594,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1602,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 18,
+        "cognitive": 36,
+        "dispatch_share": 0.0,
+        "symbol_line": 1579,
+        "deepest_block": {
+          "start": 1600,
+          "end": 1605
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1674 savePortfolioIndexToDrive validates fresh students snapshot",
+        "00-storage-sync-patches.js:1777,1781 rebuildPortfolioIndex before/after durable student ID allocation",
+        "00-storage-sync-patches.js:5710 syncWftPortfolioIndexIfNeeded"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:44-81 score precedence/zero/null/missing, own keys, metadata exclusion, exact live date/score getter reads, growing sessions and thrown getter identity",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:104-127 durable ID rebuild and cache-key choice; 281-285 optional file-cache read failure",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.cjs:44-47 parsed latest legacy date",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:117-122 own __proto__/constructor index keys"
+      ],
+      "regression_recommendation": "P1 must preserve getter read counts, thrown error identity, growing live sessions, zero/null/legacy score precedence, per-student settings/cache rereads and dictionary prototype. Update record-identity.cjs and session-retention.cjs explicit extraction dependencies; rerun exact getter/own-key/native index cases. No snapshot/hoisted settings optimization."
+    },
+    {
+      "record_id": "code_health:finding_1d84979baa4895e8b298",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "assignMissingPortfolioIndexStudentIds",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_allocation_guard",
+      "reason": "This entire helper is9NLOC/CCN4: enumerate entries, skip existing IDs and tolerate individual durable-allocation failures. Its caller immediately rebuilds from stored settings. Another helper or early-continue rewrite adds churn around a clear single loop and does not improve the failed-allocation contract.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1749",
+        "js/app/00-storage-sync-patches.js:1751",
+        "js/app/00-storage-sync-patches.js:1753",
+        "js/app/00-storage-sync-patches.js:1754",
+        "js/app/00-storage-sync-patches.js:1780",
+        "js/app/00-storage-sync-patches.js:1781"
+      ],
+      "verified_metrics": {
+        "name": "assignMissingPortfolioIndexStudentIds",
+        "start_line": 1749,
+        "end_line": 1757,
+        "ccn": 4,
+        "max_nesting": 4,
+        "cognitive": 10,
+        "nloc": 9,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1751,
+          1756
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 4,
+        "cognitive": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 1749,
+        "deepest_block": {
+          "start": 1751,
+          "end": 1756
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1780 rebuildPortfolioIndex; immediately rebuilds index from persisted IDs at1781"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:104-127 new/existing/failed allocation, honest name fallback, persisted-ID index keys, file-cache choice, exact uploaded students and preserved primary bytes",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:337-347 no unstored ID after settings failure"
+      ],
+      "regression_recommendation": "Keep per-student allocation catch, existing IDs, record order and mandatory second build from persisted IDs. Native new/existing/failed allocation tests protect this contract; flattening this9NLOC helper has no demonstrated benefit."
+    },
+    {
+      "record_id": "code_health:finding_0d58c6763761293e9a6e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "ensureStudentRecordsForRoster",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_independent_startup_read_boundaries",
+      "reason": "The deepest2345-2351 block isolates optional portfolio-name enrichment from optional roster loading and the outer required-settings/save boundary. A portfolio/display failure must not prevent creating available roster identities. Keep this isolation and shared settings snapshot; P1 changes only repeated name exclusion.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2330",
+        "js/app/00-storage-sync-patches.js:2331",
+        "js/app/00-storage-sync-patches.js:2335",
+        "js/app/00-storage-sync-patches.js:2341",
+        "js/app/00-storage-sync-patches.js:2345",
+        "js/app/00-storage-sync-patches.js:2351",
+        "js/app/00-storage-sync-patches.js:2370",
+        "js/app/00-storage-sync-patches.js:2373"
+      ],
+      "verified_metrics": {
+        "name": "ensureStudentRecordsForRoster",
+        "start_line": 2326,
+        "end_line": 2376,
+        "ccn": 18,
+        "max_nesting": 4,
+        "cognitive": 43,
+        "nloc": 46,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2345,
+          2351
+        ],
+        "complex_conditions": [
+          {
+            "line": 2328,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2338,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 18,
+        "cognitive": 43,
+        "dispatch_share": 0.0,
+        "symbol_line": 2326,
+        "deepest_block": {
+          "start": 2345,
+          "end": 2351
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2943-2944 startup only with ID-map flag and safe-mode bypass"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:53-59 special own-name roster/rename;69-117 initial failed settings read preserves raw data, lookup shares snapshot, retry retains aliases/records, repeated initialization stable and writing unchanged",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:128-136 own constructor/__proto__ map creation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:337-347 startup cannot publish generated map when settings write fails"
+      ],
+      "regression_recommendation": "P1 changes only the repeated root-name filter. Preserve one required settings snapshot, optional roster/portfolio reads, null-prototype map, alias lookup using that same snapshot and one final settings save. Native initial-read-failure/repeated-initialization/own-name assertions must remain; no bulk getOrCreateStudentId substitution."
+    },
+    {
+      "record_id": "code_health:finding_0ff88595b09107caf0b3",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "resolveStudentPortfolioKey",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_short_compatibility_lookup",
+      "reason": "16NLOC/CCN6 checks direct names first, then conditionally scans a present map for the first matching ID, finally returning the original key. The four levels are one flag/map/loop/match sequence, not tangled logic. Guard-clause expansion or Array.find introduces style churn without removing duplicate work in this sole caller.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2377",
+        "js/app/00-storage-sync-patches.js:2378",
+        "js/app/00-storage-sync-patches.js:2379",
+        "js/app/00-storage-sync-patches.js:2381",
+        "js/app/00-storage-sync-patches.js:2383",
+        "js/app/00-storage-sync-patches.js:2385",
+        "js/app/00-storage-sync-patches.js:2386",
+        "js/app/00-storage-sync-patches.js:2392"
+      ],
+      "verified_metrics": {
+        "name": "resolveStudentPortfolioKey",
+        "start_line": 2377,
+        "end_line": 2393,
+        "ccn": 6,
+        "max_nesting": 4,
+        "cognitive": 11,
+        "nloc": 16,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2385,
+          2389
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 6,
+        "cognitive": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 2377,
+        "deepest_block": {
+          "start": 2385,
+          "end": 2389
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2848 loadStudentPortfolioLazy.loadLocal; strict snapshot and callback error boundary"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/optional-storage.browser.cjs:163-172 safe mode loads actual named local portfolio;173-192 missing/invalid remote with local fallback and corrupt-primary rejection",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:287-292 explicit lazy local startup path retains saved session",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:Coverage limit: no cited focused test directly supplies only a stable ID to resolveStudentPortfolioKey; async-own-name-and-ID tests76-85 exercise separate async helpers, not this resolver"
+      ],
+      "regression_recommendation": "Retain direct-name precedence, strict read errors, flag-disabled bypass and first matching ID map key. If changed, add direct resolver cases for name/ID ambiguity, missing/duplicate IDs, special names and settings-read failure; existing async helper tests are not exact coverage of this function."
+    },
+    {
+      "record_id": "code_health:finding_dda353f9f59e6a52421c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "compactDeletions",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_expiry_policy_signal",
+      "reason": "Depth4 appears in the legacy map entry/date/age checks. The same age policy also appears in two array filters, so P3 finding_5b9479addfbfe7efc78a is the single shared-predicate opportunity. Preserve missing/invalid-date retention; do not treat nesting as permission to drop old records differently.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4513",
+        "js/app/00-storage-sync-patches.js:4521",
+        "js/app/00-storage-sync-patches.js:4532",
+        "js/app/00-storage-sync-patches.js:4535",
+        "js/app/00-storage-sync-patches.js:4537",
+        "js/app/00-storage-sync-patches.js:4546"
+      ],
+      "verified_metrics": {
+        "name": "compactDeletions",
+        "start_line": 4513,
+        "end_line": 4559,
+        "ccn": 13,
+        "max_nesting": 4,
+        "cognitive": 19,
+        "nloc": 40,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4535,
+          4540
+        ],
+        "complex_conditions": [
+          {
+            "line": 4530,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4535,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4537,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 13,
+        "cognitive": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 4513,
+        "deepest_block": {
+          "start": 4535,
+          "end": 4540
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:4576 normalizeDeletionsData unless skipCompaction; compact calls normalize with true at4515, avoiding recursion"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:185-202 compaction on/off, actual 90-day boundary, invalid/missing date retention, recent/old legacy map, bounded log, unknown/student metadata, idempotence and unchanged source",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:6-13 VM loader imports compact/normalize; tests/settings-deletions-sync.cjs:6 imports same helpers with settings/deletion sync"
+      ],
+      "regression_recommendation": "P3 can share the exact keep-recent-or-unknown predicate between records and deletionLog, using its complement for legacy-map deletion only after parity checks. Freeze Date.now; cover exact90-day/future/invalid/missing/null dates in all three collections, feature-off identity, unknown/student metadata, log last200 order and input immutability. Preserve existing property-read order if cloneWftJson returns live fallback objects."
+    },
+    {
+      "record_id": "code_health:finding_eff9d54f723d8d0e218d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "normalizeWftSessionDate",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_legacy_date_normalization_policy",
+      "reason": "CCN19 covers ordered legacy createdAt/timestamp/date fallback plus independent updatedAt, normalizedAt, dateIso, displayDate and ID fill-only rules. Existing normalizeWftSessionForStorage and normalizeWftStudentRecord already separate public preparation/batch sorting. A generic fill/parse helper would obscure field precedence and clock reads; retain this41NLOC policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1256",
+        "js/app/00-storage-sync-patches.js:1269",
+        "js/app/00-storage-sync-patches.js:1270",
+        "js/app/00-storage-sync-patches.js:1272",
+        "js/app/00-storage-sync-patches.js:1275",
+        "js/app/00-storage-sync-patches.js:1282",
+        "js/app/00-storage-sync-patches.js:1286",
+        "js/app/00-storage-sync-patches.js:1295",
+        "js/app/00-storage-sync-patches.js:1300",
+        "js/app/00-storage-sync-patches.js:1308"
+      ],
+      "verified_metrics": {
+        "name": "normalizeWftSessionDate",
+        "start_line": 1256,
+        "end_line": 1311,
+        "ccn": 19,
+        "max_nesting": 3,
+        "cognitive": 24,
+        "nloc": 41,
+        "bumps": 3,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1295,
+          1298
+        ],
+        "complex_conditions": [
+          {
+            "line": 1269,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1270,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1272,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1282,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1286,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 24,
+        "nloc": 41,
+        "dispatch_share": 0.0,
+        "symbol_line": 1256,
+        "deepest_block": {
+          "start": 1295,
+          "end": 1298
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1314 normalizeWftSessionForStorage; 1323 normalizeWftStudentRecord batches one fallback then sorts parsed dates"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.cjs:18-41 parsed chronology/fallback precedence, shared batch fallback, stable retries/dates/IDs",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:63-94 actual durable saves retain ordered IDs for ISO, legacy, absent, invalid and tied dates"
+      ],
+      "regression_recommendation": "Retain createdAt > timestamp > date > shared fallback precedence, unchanged valid updatedAt/normalizedAt/dateIso/displayDate/ID and Lamport. Existing ticking-date/retention tests cover stable retries; add a focused truthy-invalid-dateIso display case only if separate lead L1 is adopted."
+    },
+    {
+      "record_id": "code_health:finding_9599830c23cff6c9eeab",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "normalizeWftPortfolioForSchemaV1",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "shared_root_name_policy_candidate_P1",
+      "reason": "The exact six reserved-root-name exclusions at1339 are copied at1589,1851 and2347. One small shared name-filter helper, used at all four sites, centralizes a schema rule and prevents normalization/index/health/roster disagreement. Keep each caller existing null/shape guards and iteration order; this is actual duplication reduction, not an extracted per-student wrapper.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1339",
+        "js/app/00-storage-sync-patches.js:1589",
+        "js/app/00-storage-sync-patches.js:1851",
+        "js/app/00-storage-sync-patches.js:2347"
+      ],
+      "verified_metrics": {
+        "name": "normalizeWftPortfolioForSchemaV1",
+        "start_line": 1333,
+        "end_line": 1362,
+        "ccn": 14,
+        "max_nesting": 4,
+        "cognitive": 22,
+        "nloc": 25,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1341,
+          1358
+        ],
+        "complex_conditions": [
+          {
+            "line": 1335,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1344,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1347,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1355,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 22,
+        "nloc": 25,
+        "dispatch_share": 0.0,
+        "symbol_line": 1333,
+        "deepest_block": {
+          "start": 1341,
+          "end": 1358
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:6411 stripPortfolioHeavyFields(data,localOnly)",
+        "00-storage-sync-patches.js:6467 savePortfolioData(data,localOnly); required validate/preflight before conversion"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:106-110 actual schema conversion preserves own __proto__ student key",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:337-347 failed optional ID persistence retains legacy names and does not publish unstored IDs",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-save.cjs:36-42 required conversion failure preserves raw bytes/no sync; 77-81 safe mode skips conversion"
+      ],
+      "regression_recommendation": "P1 must retain exactly the six excluded root names, own-key iteration order and null-prototype output; preserve array/session compatibility, safe-mode identity and skipStudentIds. Update VM helper lists where normalization/index/roster are source-extracted and run native identity, preference, index and retention cases. Do not broaden exclusions or alter invalid-student behavior."
+    },
+    {
+      "record_id": "code_health:finding_73853e063ab1f2054c82",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "buildPortfolioIndexFromPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "shared_candidate_overlap_and_valid_summary_policy",
+      "reason": "The copied root-name rule belongs to P1. Remaining outer CCN18 includes optional per-student identity/cache reads and existing separately named summarizeSessions; its score/date loop already preserves own overall precedence, string-number handling and live getter reads. Do not split/hoist more solely to clear this warning.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1589",
+        "js/app/00-storage-sync-patches.js:1594",
+        "js/app/00-storage-sync-patches.js:1599",
+        "js/app/00-storage-sync-patches.js:1608",
+        "js/app/00-storage-sync-patches.js:1612",
+        "js/app/00-storage-sync-patches.js:1629",
+        "js/app/00-storage-sync-patches.js:1635",
+        "js/app/00-storage-sync-patches.js:1638",
+        "js/app/00-storage-sync-patches.js:1640"
+      ],
+      "verified_metrics": {
+        "name": "buildPortfolioIndexFromPortfolio",
+        "start_line": 1579,
+        "end_line": 1647,
+        "ccn": 18,
+        "max_nesting": 4,
+        "cognitive": 36,
+        "nloc": 60,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1600,
+          1605
+        ],
+        "complex_conditions": [
+          {
+            "line": 1594,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1602,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 36,
+        "nloc": 60,
+        "dispatch_share": 0.0,
+        "symbol_line": 1579,
+        "deepest_block": {
+          "start": 1600,
+          "end": 1605
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1674 savePortfolioIndexToDrive validates fresh students snapshot",
+        "00-storage-sync-patches.js:1777,1781 rebuildPortfolioIndex before/after durable student ID allocation",
+        "00-storage-sync-patches.js:5710 syncWftPortfolioIndexIfNeeded"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:44-81 score precedence/zero/null/missing, own keys, metadata exclusion, exact live date/score getter reads, growing sessions and thrown getter identity",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:104-127 durable ID rebuild and cache-key choice; 281-285 optional file-cache read failure",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.cjs:44-47 parsed latest legacy date",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:117-122 own __proto__/constructor index keys"
+      ],
+      "regression_recommendation": "P1 must preserve getter read counts, thrown error identity, growing live sessions, zero/null/legacy score precedence, per-student settings/cache rereads and dictionary prototype. Update record-identity.cjs and session-retention.cjs explicit extraction dependencies; rerun exact getter/own-key/native index cases. No snapshot/hoisted settings optimization."
+    },
+    {
+      "record_id": "code_health:finding_f2b8ca75bb4ed5364679",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "savePortfolioIndexToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_snapshot_and_transport_boundary",
+      "reason": "39NLOC/CCN12 chooses current upload/legacy transport only after recovery, feature, connectivity/auth, required-storage and fresh-index validation. Nested finish separately verifies file ID/current auth, cache and durable dirty acknowledgement. These are distinct trust boundaries; existing finish already shares both transport completion paths.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1652",
+        "js/app/00-storage-sync-patches.js:1655",
+        "js/app/00-storage-sync-patches.js:1656",
+        "js/app/00-storage-sync-patches.js:1658",
+        "js/app/00-storage-sync-patches.js:1668",
+        "js/app/00-storage-sync-patches.js:1669",
+        "js/app/00-storage-sync-patches.js:1672",
+        "js/app/00-storage-sync-patches.js:1674",
+        "js/app/00-storage-sync-patches.js:1677",
+        "js/app/00-storage-sync-patches.js:1679",
+        "js/app/00-storage-sync-patches.js:1681"
+      ],
+      "verified_metrics": {
+        "name": "savePortfolioIndexToDrive",
+        "start_line": 1649,
+        "end_line": 1687,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 17,
+        "nloc": 39,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1667,
+          1686
+        ],
+        "complex_conditions": [
+          {
+            "line": 1668,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1669,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 17,
+        "nloc": 39,
+        "dispatch_share": 0.0,
+        "symbol_line": 1649,
+        "deepest_block": {
+          "start": 1667,
+          "end": 1686
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1784 rebuildPortfolioIndex",
+        "00-storage-sync-patches.js:5711 syncWftPortfolioIndexIfNeeded; errors resolve false and keep retry hints"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:129-170 held newer revisions remain pending; upload/offline/auth/writer/error/missing-ID failures retain primary bytes and retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:196-218 stale prebuilt snapshot rejected, changed Google connection/recovery block ack; 221-237 disabled/safe/recovery guards and rebuild retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:240-277 required reads/ack writes preserve primary and retry; failed primary write never dirties index"
+      ],
+      "regression_recommendation": "Retain guard ordering/recovery errors, fresh students comparison, revision/hash/dirtyAt and auth-operation snapshot, callback error propagation, current-success file ID/cache and failed ack retry. Exercise existing native index upload-failure, held revision, auth-change and storage-failure matrix; no guard extraction needed."
+    },
+    {
+      "record_id": "code_health:finding_d3a504b4c70a26a0deb0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "loadPortfolioIndexFromDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_cached_or_discovered_load_paths",
+      "reason": "CCN13/nesting2 is two concrete cache/discovery routes with optional maintenance/cache failures tolerated. The repeated format-to-callback blocks are only a few lines; sharing them would add a callable plus cached-only logging and error-policy plumbing. Retain exact synchronous no-op callbacks and tested dependency order instead of rewriting the promise shape.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1690",
+        "js/app/00-storage-sync-patches.js:1694",
+        "js/app/00-storage-sync-patches.js:1700",
+        "js/app/00-storage-sync-patches.js:1702",
+        "js/app/00-storage-sync-patches.js:1705",
+        "js/app/00-storage-sync-patches.js:1712",
+        "js/app/00-storage-sync-patches.js:1717",
+        "js/app/00-storage-sync-patches.js:1724",
+        "js/app/00-storage-sync-patches.js:1726",
+        "js/app/00-storage-sync-patches.js:1728",
+        "js/app/00-storage-sync-patches.js:1734",
+        "js/app/00-storage-sync-patches.js:1744"
+      ],
+      "verified_metrics": {
+        "name": "loadPortfolioIndexFromDrive",
+        "start_line": 1689,
+        "end_line": 1747,
+        "ccn": 13,
+        "max_nesting": 2,
+        "cognitive": 17,
+        "nloc": 57,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1690,
+          1693
+        ],
+        "complex_conditions": [
+          {
+            "line": 1694,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1702,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1717,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 17,
+        "nloc": 57,
+        "dispatch_share": 0.0,
+        "symbol_line": 1689,
+        "deepest_block": {
+          "start": 1690,
+          "end": 1693
+        }
+      },
+      "callers": [
+        "index.html:3751 Reload Index from Drive button supplies callback and displays error/missing/count"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index-load.cjs:9-33 exact callback count/timing/error/payload and dependency-call ordering; 38-46 eighteen disabled/safe/cache/discovery/missing/invalid/maintenance cases",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/split-storage.browser.cjs:87-96 native cache seeding,114-126 invocation/count;129-132 no index upload and canonical newest discovery/cache"
+      ],
+      "regression_recommendation": "Keep unit18 exact calls/count/timing/error identity and native cached/discovery cases. Disabled/safe/no-service paths stay synchronous; cached path warning and optional maintenance/cache catches remain separate. No shared callback wrapper is required by current duplication cost."
+    },
+    {
+      "record_id": "code_health:finding_b68bf41e40df886f4980",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "rebuildPortfolioIndex",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_two_build_persisted_identity_contract",
+      "reason": "31NLOC/CCN9 orchestrates disabled/safe no-ops, strict snapshot read, build, optional durable ID allocation and mandatory rebuild, then save callback. The second build is necessary to use persisted ID keys/cache paths after allocation; the existing assignMissingPortfolioIndexStudentIds helper already isolates the only nested loop.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1760",
+        "js/app/00-storage-sync-patches.js:1764",
+        "js/app/00-storage-sync-patches.js:1770",
+        "js/app/00-storage-sync-patches.js:1777",
+        "js/app/00-storage-sync-patches.js:1779",
+        "js/app/00-storage-sync-patches.js:1780",
+        "js/app/00-storage-sync-patches.js:1781",
+        "js/app/00-storage-sync-patches.js:1784",
+        "js/app/00-storage-sync-patches.js:1791"
+      ],
+      "verified_metrics": {
+        "name": "rebuildPortfolioIndex",
+        "start_line": 1759,
+        "end_line": 1793,
+        "ccn": 9,
+        "max_nesting": 3,
+        "cognitive": 14,
+        "nloc": 31,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1771,
+          1775
+        ],
+        "complex_conditions": [
+          {
+            "line": 1764,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 14,
+        "nloc": 31,
+        "dispatch_share": 0.0,
+        "symbol_line": 1759,
+        "deepest_block": {
+          "start": 1771,
+          "end": 1775
+        }
+      },
+      "callers": [
+        "index.html:3749 Rebuild Portfolio Index button supplies callback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:104-127 two-build identity contract and byte-preserved primary;230-237 failed upload returns index/error, retry acknowledges current index",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:35-44,64-85 corrupt primary blocks rebuild/writes and permits later repair/retry"
+      ],
+      "regression_recommendation": "Preserve feature/safe no-op callbacks, strict primary-read error, ID allocation then second build, async error plus index callback and metadata only after success. Native rebuild identity/failure plus corrupt-primary cases are appropriate if touched."
+    },
+    {
+      "record_id": "code_health:finding_e07c780e97aad39804ee",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "ensureStudentRecordsForRoster",
+      "proposed_status": "reviewed_no_change",
+      "classification": "shared_candidate_overlap_and_snapshot_preservation",
+      "reason": "P1 removes this function repeated root-name exclusion. CCN18/cognitive43 otherwise reflects independent optional input reads, ID/record creation and one final required settings save using a single snapshot passed to getStudentRecordByName. Replacing it with repeated getOrCreateStudentId calls would add reads/writes and threaten alias/record retention.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2331",
+        "js/app/00-storage-sync-patches.js:2333",
+        "js/app/00-storage-sync-patches.js:2336",
+        "js/app/00-storage-sync-patches.js:2345",
+        "js/app/00-storage-sync-patches.js:2347",
+        "js/app/00-storage-sync-patches.js:2353",
+        "js/app/00-storage-sync-patches.js:2355",
+        "js/app/00-storage-sync-patches.js:2358",
+        "js/app/00-storage-sync-patches.js:2370"
+      ],
+      "verified_metrics": {
+        "name": "ensureStudentRecordsForRoster",
+        "start_line": 2326,
+        "end_line": 2376,
+        "ccn": 18,
+        "max_nesting": 4,
+        "cognitive": 43,
+        "nloc": 46,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2345,
+          2351
+        ],
+        "complex_conditions": [
+          {
+            "line": 2328,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2338,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 43,
+        "nloc": 46,
+        "dispatch_share": 0.0,
+        "symbol_line": 2326,
+        "deepest_block": {
+          "start": 2345,
+          "end": 2351
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2943-2944 startup only with ID-map flag and safe-mode bypass"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:53-59 special own-name roster/rename;69-117 initial failed settings read preserves raw data, lookup shares snapshot, retry retains aliases/records, repeated initialization stable and writing unchanged",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:128-136 own constructor/__proto__ map creation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:337-347 startup cannot publish generated map when settings write fails"
+      ],
+      "regression_recommendation": "P1 changes only the repeated root-name filter. Preserve one required settings snapshot, optional roster/portfolio reads, null-prototype map, alias lookup using that same snapshot and one final settings save. Native initial-read-failure/repeated-initialization/own-name assertions must remain; no bulk getOrCreateStudentId substitution."
+    },
+    {
+      "record_id": "code_health:finding_c5754b3008cce04a947d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "isStudentSessionDeleted",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_deletion_compatibility_and_owner_policy",
+      "reason": "CCN19 on48NLOC includes modern/legacy record matching plus one loop; named matchesStudentOwner and deletionIsNewer already isolate owner and time/Lamport rules. Explicit-ID mismatch, key-only suffix fallback, owner verification and strict-newer deletion have different meanings. A generic predicate bundle would hide safeguards against deleting another student writing.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2712",
+        "js/app/00-storage-sync-patches.js:2714",
+        "js/app/00-storage-sync-patches.js:2717",
+        "js/app/00-storage-sync-patches.js:2736",
+        "js/app/00-storage-sync-patches.js:2751",
+        "js/app/00-storage-sync-patches.js:2754",
+        "js/app/00-storage-sync-patches.js:2757",
+        "js/app/00-storage-sync-patches.js:2758",
+        "js/app/00-storage-sync-patches.js:2759",
+        "js/app/00-storage-sync-patches.js:2760"
+      ],
+      "verified_metrics": {
+        "name": "isStudentSessionDeleted",
+        "start_line": 2712,
+        "end_line": 2763,
+        "ccn": 19,
+        "max_nesting": 2,
+        "cognitive": 22,
+        "nloc": 48,
+        "bumps": 1,
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2751,
+          2761
+        ],
+        "complex_conditions": [
+          {
+            "line": 2713,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2715,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 2754,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2758,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 22,
+        "nloc": 48,
+        "dispatch_share": 0.0,
+        "symbol_line": 2712,
+        "deepest_block": {
+          "start": 2751,
+          "end": 2761
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2674 mergeWftSessions; actual session/file owner, timestamp, Lamport and display name",
+        "00-storage-sync-patches.js:2772 applyDeletionsToFile",
+        "00-storage-sync-patches.js:4836 applyDeletionsToPortfolio"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 actual record/legacy/both/key-only tombstones, strict time/Lamport tie policy, wrong owner/session/type, archive-removes, source ID and own-name preservation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-41 record-only archive-remove filters split data and equal Lamport survives without input aliasing"
+      ],
+      "regression_recommendation": "Keep all three caller argument contracts, legacy key/session matching, owner verification and strict deletion-newer policy including Lamport ties. Existing full-app policy cases plus unit archive-remove cases are appropriate; do not collapse modern explicit IDs into legacy suffix matching."
+    },
+    {
+      "record_id": "code_health:finding_5b9479addfbfe7efc78a",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "compactDeletions",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "shared_expiry_policy_candidate_P3",
+      "reason": "The records filter4521-4526 and deletionLog filter4546-4551 repeat the same missing-date/invalid-date/90-day retention decision; legacy-map4535-4538 uses its complement. A local retained-deletion predicate can own this policy for the two arrays and optionally map. This removes real repeated decisions, but exact boundary/read-order parity and feature-off identity need verification.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4515",
+        "js/app/00-storage-sync-patches.js:4516",
+        "js/app/00-storage-sync-patches.js:4521",
+        "js/app/00-storage-sync-patches.js:4522",
+        "js/app/00-storage-sync-patches.js:4524",
+        "js/app/00-storage-sync-patches.js:4525",
+        "js/app/00-storage-sync-patches.js:4535",
+        "js/app/00-storage-sync-patches.js:4537",
+        "js/app/00-storage-sync-patches.js:4546",
+        "js/app/00-storage-sync-patches.js:4547",
+        "js/app/00-storage-sync-patches.js:4549",
+        "js/app/00-storage-sync-patches.js:4550",
+        "js/app/00-storage-sync-patches.js:4552"
+      ],
+      "verified_metrics": {
+        "name": "compactDeletions",
+        "start_line": 4513,
+        "end_line": 4559,
+        "ccn": 13,
+        "max_nesting": 4,
+        "cognitive": 19,
+        "nloc": 40,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4535,
+          4540
+        ],
+        "complex_conditions": [
+          {
+            "line": 4530,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4535,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4537,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 19,
+        "nloc": 40,
+        "dispatch_share": 0.0,
+        "symbol_line": 4513,
+        "deepest_block": {
+          "start": 4535,
+          "end": 4540
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:4576 normalizeDeletionsData unless skipCompaction; compact calls normalize with true at4515, avoiding recursion"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:185-202 compaction on/off, actual 90-day boundary, invalid/missing date retention, recent/old legacy map, bounded log, unknown/student metadata, idempotence and unchanged source",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:6-13 VM loader imports compact/normalize; tests/settings-deletions-sync.cjs:6 imports same helpers with settings/deletion sync"
+      ],
+      "regression_recommendation": "P3 can share the exact keep-recent-or-unknown predicate between records and deletionLog, using its complement for legacy-map deletion only after parity checks. Freeze Date.now; cover exact90-day/future/invalid/missing/null dates in all three collections, feature-off identity, unknown/student metadata, log last200 order and input immutability. Preserve existing property-read order if cloneWftJson returns live fallback objects."
+    },
+    {
+      "record_id": "code_health:finding_4db26584b9741348c94f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "mergeWftSettings",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "mirrored_settings_copy_candidate_P2",
+      "reason": "The preferLocal branch contains four mirrored for-in/own-property loops: each mode merely changes low/high-priority source order. Select the two sources first and retain two copy loops, then unchanged roster union and credential deletion. This removes duplicated copy branches while preserving null-prototype output, string-key behavior, winner/order and cloneWftJson fallback semantics.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5227",
+        "js/app/00-storage-sync-patches.js:5228",
+        "js/app/00-storage-sync-patches.js:5229",
+        "js/app/00-storage-sync-patches.js:5232",
+        "js/app/00-storage-sync-patches.js:5233",
+        "js/app/00-storage-sync-patches.js:5238",
+        "js/app/00-storage-sync-patches.js:5244",
+        "js/app/00-storage-sync-patches.js:5249",
+        "js/app/00-storage-sync-patches.js:5256",
+        "js/app/00-storage-sync-patches.js:5261"
+      ],
+      "verified_metrics": {
+        "name": "mergeWftSettings",
+        "start_line": 5226,
+        "end_line": 5263,
+        "ccn": 16,
+        "max_nesting": 3,
+        "cognitive": 27,
+        "nloc": 34,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5233,
+          5237
+        ],
+        "complex_conditions": [
+          {
+            "line": 5256,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 27,
+        "nloc": 34,
+        "dispatch_share": 0.0,
+        "symbol_line": 5226,
+        "deepest_block": {
+          "start": 5233,
+          "end": 5237
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5161 downloadAndMergeDuplicateSettings prefers local accumulated data",
+        "00-storage-sync-patches.js:5324 syncWftSettingsIfNeeded uses pending state; 5335 newer local snapshot always wins",
+        "00-storage-sync-patches.js:6298 applyLoadedSettings prefers incoming validated settings"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:159-173 both preference modes and local/cloud/both/empty source matrix: source immutability, own __proto__, winner metadata, ordered roster union and credential exclusion",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/settings-deletions-sync.cjs:84-98 newer local upload retained/republished;103-109 failed settings merge preserves bytes/UI/state and issues no upload"
+      ],
+      "regression_recommendation": "P2 should select low/high-priority copies first, then retain two existing for-in/hasOwnProperty copy loops, null-prototype destination, clone order, source reads and roster/credential postprocessing. This removes the four mirrored branch loops without changing own enumerable string-key semantics. Object.assign is shorter for JSON but differs on symbols if cloneWftJson falls back; do not silently expand that contract. Run preference matrix and settings/deletion sync assertions."
+    },
+    {
+      "record_id": "code_health:finding_144a97f8282d9b7f029e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "normalizeWftSessionDate",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_independent_fill_only_stages",
+      "reason": "Three bumps come from the createdAt legacy fallback, dateIso try/catch and displayDate fallback. These stages update different fields with different exceptions and must leave valid saved timestamps/IDs untouched on retry. Flattening them into a table-driven normalizer would add abstraction and risk repeated-now/order semantics.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1269",
+        "js/app/00-storage-sync-patches.js:1275",
+        "js/app/00-storage-sync-patches.js:1282",
+        "js/app/00-storage-sync-patches.js:1286",
+        "js/app/00-storage-sync-patches.js:1295",
+        "js/app/00-storage-sync-patches.js:1296",
+        "js/app/00-storage-sync-patches.js:1297",
+        "js/app/00-storage-sync-patches.js:1300",
+        "js/app/00-storage-sync-patches.js:1304"
+      ],
+      "verified_metrics": {
+        "name": "normalizeWftSessionDate",
+        "start_line": 1256,
+        "end_line": 1311,
+        "ccn": 19,
+        "max_nesting": 3,
+        "cognitive": 24,
+        "nloc": 41,
+        "bumps": 3,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1295,
+          1298
+        ],
+        "complex_conditions": [
+          {
+            "line": 1269,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1270,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1272,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1282,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1286,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 19,
+        "max_nesting": 3,
+        "symbol_line": 1256,
+        "deepest_block": {
+          "start": 1295,
+          "end": 1298
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1314 normalizeWftSessionForStorage; 1323 normalizeWftStudentRecord batches one fallback then sorts parsed dates"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.cjs:18-41 parsed chronology/fallback precedence, shared batch fallback, stable retries/dates/IDs",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:63-94 actual durable saves retain ordered IDs for ISO, legacy, absent, invalid and tied dates"
+      ],
+      "regression_recommendation": "Retain createdAt > timestamp > date > shared fallback precedence, unchanged valid updatedAt/normalizedAt/dateIso/displayDate/ID and Lamport. Existing ticking-date/retention tests cover stable retries; add a focused truthy-invalid-dateIso display case only if separate lead L1 is adopted."
+    },
+    {
+      "record_id": "code_health:finding_12a6c35ba840a7b4a46a",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "loadPortfolioIndexFromDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_noop_and_service_routes",
+      "reason": "Four bumps mark disabled-index callback, safe-mode callback, cached download and discovery/absent-service branch. Early no-ops deliberately remain synchronous while fetch paths settle asynchronously once. Unit assertions cover those timings; one generalized promise wrapper would change the public callback contract without a feature need.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1690",
+        "js/app/00-storage-sync-patches.js:1694",
+        "js/app/00-storage-sync-patches.js:1702",
+        "js/app/00-storage-sync-patches.js:1717",
+        "js/app/00-storage-sync-patches.js:1733",
+        "js/app/00-storage-sync-patches.js:1744"
+      ],
+      "verified_metrics": {
+        "name": "loadPortfolioIndexFromDrive",
+        "start_line": 1689,
+        "end_line": 1747,
+        "ccn": 13,
+        "max_nesting": 2,
+        "cognitive": 17,
+        "nloc": 57,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1690,
+          1693
+        ],
+        "complex_conditions": [
+          {
+            "line": 1694,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1702,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1717,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 13,
+        "max_nesting": 2,
+        "symbol_line": 1689,
+        "deepest_block": {
+          "start": 1690,
+          "end": 1693
+        }
+      },
+      "callers": [
+        "index.html:3751 Reload Index from Drive button supplies callback and displays error/missing/count"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index-load.cjs:9-33 exact callback count/timing/error/payload and dependency-call ordering; 38-46 eighteen disabled/safe/cache/discovery/missing/invalid/maintenance cases",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/split-storage.browser.cjs:87-96 native cache seeding,114-126 invocation/count;129-132 no index upload and canonical newest discovery/cache"
+      ],
+      "regression_recommendation": "Keep unit18 exact calls/count/timing/error identity and native cached/discovery cases. Disabled/safe/no-service paths stay synchronous; cached path warning and optional maintenance/cache catches remain separate. No shared callback wrapper is required by current duplication cost."
+    },
+    {
+      "record_id": "code_health:finding_bc84d26d5eac20ff69b6",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "rebuildPortfolioIndex",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_noop_error_and_optional_allocation_stages",
+      "reason": "Three bumps correspond to disabled/safe no-ops and strict-read error handling, with optional ID allocation already named. They keep no-op callbacks distinct from read failure and required persisted-ID rebuilding. There is no repeated branch logic worth adding another orchestration helper for.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1760",
+        "js/app/00-storage-sync-patches.js:1764",
+        "js/app/00-storage-sync-patches.js:1770",
+        "js/app/00-storage-sync-patches.js:1771",
+        "js/app/00-storage-sync-patches.js:1773",
+        "js/app/00-storage-sync-patches.js:1779",
+        "js/app/00-storage-sync-patches.js:1780",
+        "js/app/00-storage-sync-patches.js:1781"
+      ],
+      "verified_metrics": {
+        "name": "rebuildPortfolioIndex",
+        "start_line": 1759,
+        "end_line": 1793,
+        "ccn": 9,
+        "max_nesting": 3,
+        "cognitive": 14,
+        "nloc": 31,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1771,
+          1775
+        ],
+        "complex_conditions": [
+          {
+            "line": 1764,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 9,
+        "max_nesting": 3,
+        "symbol_line": 1759,
+        "deepest_block": {
+          "start": 1771,
+          "end": 1775
+        }
+      },
+      "callers": [
+        "index.html:3749 Rebuild Portfolio Index button supplies callback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:104-127 two-build identity contract and byte-preserved primary;230-237 failed upload returns index/error, retry acknowledges current index",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:35-44,64-85 corrupt primary blocks rebuild/writes and permits later repair/retry"
+      ],
+      "regression_recommendation": "Preserve feature/safe no-op callbacks, strict primary-read error, ID allocation then second build, async error plus index callback and metadata only after success. Native rebuild identity/failure plus corrupt-primary cases are appropriate if touched."
+    },
+    {
+      "record_id": "code_health:finding_5b7863fdcbef269b3b17",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "buildPortfolioIndexFromPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_enclosing_size_signal",
+      "reason": "60NLOC includes the named summarizeSessions body and required metadata fields for each index entry. Existing summary helper already prevents the score/date loop from dominating outer nesting. P1 addresses the genuine repeated root filter; moving the full builder into more single-use wrappers would mostly redistribute the same work.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1579",
+        "js/app/00-storage-sync-patches.js:1580",
+        "js/app/00-storage-sync-patches.js:1589",
+        "js/app/00-storage-sync-patches.js:1614",
+        "js/app/00-storage-sync-patches.js:1629",
+        "js/app/00-storage-sync-patches.js:1645",
+        "js/app/00-storage-sync-patches.js:1647"
+      ],
+      "verified_metrics": {
+        "name": "buildPortfolioIndexFromPortfolio",
+        "start_line": 1579,
+        "end_line": 1647,
+        "ccn": 18,
+        "max_nesting": 4,
+        "cognitive": 36,
+        "nloc": 60,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1600,
+          1605
+        ],
+        "complex_conditions": [
+          {
+            "line": 1594,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1602,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 60,
+        "ccn": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 1579,
+        "deepest_block": {
+          "start": 1600,
+          "end": 1605
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1674 savePortfolioIndexToDrive validates fresh students snapshot",
+        "00-storage-sync-patches.js:1777,1781 rebuildPortfolioIndex before/after durable student ID allocation",
+        "00-storage-sync-patches.js:5710 syncWftPortfolioIndexIfNeeded"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:44-81 score precedence/zero/null/missing, own keys, metadata exclusion, exact live date/score getter reads, growing sessions and thrown getter identity",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:104-127 durable ID rebuild and cache-key choice; 281-285 optional file-cache read failure",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.cjs:44-47 parsed latest legacy date",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:117-122 own __proto__/constructor index keys"
+      ],
+      "regression_recommendation": "P1 must preserve getter read counts, thrown error identity, growing live sessions, zero/null/legacy score precedence, per-student settings/cache rereads and dictionary prototype. Update record-identity.cjs and session-retention.cjs explicit extraction dependencies; rerun exact getter/own-key/native index cases. No snapshot/hoisted settings optimization."
+    },
+    {
+      "record_id": "code_health:finding_11fe6a9227d4a69bd361",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "isStudentSessionDeleted",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_primitive_domain_inference",
+      "reason": "Six positional parameters carry session/owner identifiers, deletion collection, time, Lamport clock and fallback student name. Three production callers consistently already have those values; typed/primitive counts are0 in untyped JS. No argument-order defect is evidenced, and a new options object would churn all call sites without removing policy complexity.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2712",
+        "js/app/00-storage-sync-patches.js:2674",
+        "js/app/00-storage-sync-patches.js:2772",
+        "js/app/00-storage-sync-patches.js:4835",
+        "js/app/00-storage-sync-patches.js:4836"
+      ],
+      "verified_metrics": {
+        "name": "isStudentSessionDeleted",
+        "start_line": 2712,
+        "end_line": 2763,
+        "ccn": 19,
+        "max_nesting": 2,
+        "cognitive": 22,
+        "nloc": 48,
+        "bumps": 1,
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2751,
+          2761
+        ],
+        "complex_conditions": [
+          {
+            "line": 2713,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2715,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 2754,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2758,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 2712
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2674 mergeWftSessions; actual session/file owner, timestamp, Lamport and display name",
+        "00-storage-sync-patches.js:2772 applyDeletionsToFile",
+        "00-storage-sync-patches.js:4836 applyDeletionsToPortfolio"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 actual record/legacy/both/key-only tombstones, strict time/Lamport tie policy, wrong owner/session/type, archive-removes, source ID and own-name preservation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-41 record-only archive-remove filters split data and equal Lamport survives without input aliasing"
+      ],
+      "regression_recommendation": "Keep all three caller argument contracts, legacy key/session matching, owner verification and strict deletion-newer policy including Lamport ties. Existing full-app policy cases plus unit archive-remove cases are appropriate; do not collapse modern explicit IDs into legacy suffix matching."
+    },
+    {
+      "record_id": "code_health:finding_0ae3fcd2fb53acfcaad0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "savePortfolioIndexToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_compound_upload_precondition",
+      "reason": "Four OR operators express5 reasons to refuse an index upload: feature off, safe mode, offline, no legacy token or invalid current token. One error and callback path is appropriate; splitting into repeated throws or hiding behind a one-use helper would weaken visibility of the required upload gate.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1668",
+        "js/app/00-storage-sync-patches.js:1669",
+        "js/app/00-storage-sync-patches.js:1670",
+        "js/app/00-storage-sync-patches.js:1672"
+      ],
+      "verified_metrics": {
+        "name": "savePortfolioIndexToDrive",
+        "start_line": 1649,
+        "end_line": 1687,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 17,
+        "nloc": 39,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1667,
+          1686
+        ],
+        "complex_conditions": [
+          {
+            "line": 1668,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1669,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 1649
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1784 rebuildPortfolioIndex",
+        "00-storage-sync-patches.js:5711 syncWftPortfolioIndexIfNeeded; errors resolve false and keep retry hints"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:129-170 held newer revisions remain pending; upload/offline/auth/writer/error/missing-ID failures retain primary bytes and retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:196-218 stale prebuilt snapshot rejected, changed Google connection/recovery block ack; 221-237 disabled/safe/recovery guards and rebuild retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:240-277 required reads/ack writes preserve primary and retry; failed primary write never dirties index"
+      ],
+      "regression_recommendation": "Retain guard ordering/recovery errors, fresh students comparison, revision/hash/dirtyAt and auth-operation snapshot, callback error propagation, current-success file ID/cache and failed ack retry. Exercise existing native index upload-failure, held revision, auth-change and storage-failure matrix; no guard extraction needed."
+    },
+    {
+      "record_id": "code_health:finding_e8d941d37700f399ba87",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "isStudentSessionDeleted",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_explicit_id_precedence_guard",
+      "reason": "The compound condition preserves explicit sessionId precedence over legacy key matching. A differing explicit ID is rejected even when a suffix happens to match; only a missing ID can use the correctly shaped legacy key. These3 operators encode one compatibility rule, followed separately by owner and time checks; a generic match abstraction is unnecessary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2755",
+        "js/app/00-storage-sync-patches.js:2756",
+        "js/app/00-storage-sync-patches.js:2757",
+        "js/app/00-storage-sync-patches.js:2758",
+        "js/app/00-storage-sync-patches.js:2759",
+        "js/app/00-storage-sync-patches.js:2760"
+      ],
+      "verified_metrics": {
+        "name": "isStudentSessionDeleted",
+        "start_line": 2712,
+        "end_line": 2763,
+        "ccn": 19,
+        "max_nesting": 2,
+        "cognitive": 22,
+        "nloc": 48,
+        "bumps": 1,
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2751,
+          2761
+        ],
+        "complex_conditions": [
+          {
+            "line": 2713,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2715,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 2754,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2758,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 2712
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2674 mergeWftSessions; actual session/file owner, timestamp, Lamport and display name",
+        "00-storage-sync-patches.js:2772 applyDeletionsToFile",
+        "00-storage-sync-patches.js:4836 applyDeletionsToPortfolio"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 actual record/legacy/both/key-only tombstones, strict time/Lamport tie policy, wrong owner/session/type, archive-removes, source ID and own-name preservation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-41 record-only archive-remove filters split data and equal Lamport survives without input aliasing"
+      ],
+      "regression_recommendation": "Keep all three caller argument contracts, legacy key/session matching, owner verification and strict deletion-newer policy including Lamport ties. Existing full-app policy cases plus unit archive-remove cases are appropriate; do not collapse modern explicit IDs into legacy suffix matching."
+    },
+    {
+      "record_id": "code_health:finding_f68f0f8e1f2e30f76ee5",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "mergeWftSettings",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_optional_roster_union_guard",
+      "reason": "The3 AND operators protect roster union only when both cloned sources and their students collections are truthy. cloneWftJson can return its original value on serialization failure or null for some truthy primitive inputs, so claiming both clone null guards are universally redundant is unsupported. P2 can remove mirrored copy loops while retaining this guard exactly.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4403",
+        "js/app/00-storage-sync-patches.js:4405",
+        "js/app/00-storage-sync-patches.js:4407",
+        "js/app/00-storage-sync-patches.js:5227",
+        "js/app/00-storage-sync-patches.js:5228",
+        "js/app/00-storage-sync-patches.js:5256",
+        "js/app/00-storage-sync-patches.js:5257"
+      ],
+      "verified_metrics": {
+        "name": "mergeWftSettings",
+        "start_line": 5226,
+        "end_line": 5263,
+        "ccn": 16,
+        "max_nesting": 3,
+        "cognitive": 27,
+        "nloc": 34,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5233,
+          5237
+        ],
+        "complex_conditions": [
+          {
+            "line": 5256,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 5226
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5161 downloadAndMergeDuplicateSettings prefers local accumulated data",
+        "00-storage-sync-patches.js:5324 syncWftSettingsIfNeeded uses pending state; 5335 newer local snapshot always wins",
+        "00-storage-sync-patches.js:6298 applyLoadedSettings prefers incoming validated settings"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:159-173 both preference modes and local/cloud/both/empty source matrix: source immutability, own __proto__, winner metadata, ordered roster union and credential exclusion",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/settings-deletions-sync.cjs:84-98 newer local upload retained/republished;103-109 failed settings merge preserves bytes/UI/state and issues no upload"
+      ],
+      "regression_recommendation": "P2 should select low/high-priority copies first, then retain two existing for-in/hasOwnProperty copy loops, null-prototype destination, clone order, source reads and roster/credential postprocessing. This removes the four mirrored branch loops without changing own enumerable string-key semantics. Object.assign is shorter for JSON but differs on symbols if cloneWftJson falls back; do not silently expand that contract. Run preference matrix and settings/deletion sync assertions."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "review029-invalid-dateiso-display",
+      "status": "source_supported_not_reproduced",
+      "classification": "legacy_invalid_dateIso_display",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1259",
+        "js/app/00-storage-sync-patches.js:1261",
+        "js/app/00-storage-sync-patches.js:1263",
+        "js/app/00-storage-sync-patches.js:1295",
+        "js/app/00-storage-sync-patches.js:1300",
+        "js/app/00-storage-sync-patches.js:1304"
+      ],
+      "observation": "A truthy invalid dateIso is retained because only missing dateIso is filled. With no existing date/displayDate, setDisplayDateFromIso reads an invalid Date with getMonth/getDate/getFullYear; invalid Date getters return NaN rather than throwing, so the catch does not provide a useful display fallback. This is a source-supported malformed display lead, not a reproduced saved-data defect.",
+      "regression_recommendation": "Directly normalize a session with valid createdAt, dateIso=invalid, no date/displayDate and a fixed ID; assert intended display fallback and unchanged saved identity/timestamps. Existing invalid-date retention tests cover createdAt/timestamp/date, not this preexisting invalid dateIso combination. Keep any correction separate from structural cleanup.",
+      "original_lead_id": "L1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "normalizeWftSessionDate",
+      "reason": "A truthy invalid dateIso is retained because only missing dateIso is filled. With no existing date/displayDate, setDisplayDateFromIso reads an invalid Date with getMonth/getDate/getFullYear; invalid Date getters return NaN rather than throwing, so the catch does not provide a useful display fallback. This is a source-supported malformed display lead, not a reproduced saved-data defect.",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false
+    }
+  ],
+  "summary": {
+    "records": 24,
+    "status_counts": {
+      "reviewed_no_change": 21,
+      "confirmed_repair_candidate": 2,
+      "candidate_needs_regression": 1
+    },
+    "repair_opportunities": [
+      {
+        "id": "P1",
+        "primary_record": "code_health:finding_9599830c23cff6c9eeab",
+        "scope": "Share exact reserved-root-name filtering at1339/1589/1851/2347. Affects normalization, index builder, health counts and roster initializer; update explicit VM helper dependencies.",
+        "cost": "One small helper/four replacements plus extraction-test wiring. Prevents schema-rule divergence; preserves all caller guards and ordering."
+      },
+      {
+        "id": "P2",
+        "primary_record": "code_health:finding_4db26584b9741348c94f",
+        "scope": "Select copy-source precedence once and replace four mirrored copy loops with two existing own-string-key loops.",
+        "cost": "One function only; no new helper/dependency; preserve clone fallback, roster merge and apiKey deletion."
+      },
+      {
+        "id": "P3",
+        "primary_record": "code_health:finding_5b9479addfbfe7efc78a",
+        "scope": "Share exact age-retention rule across tombstone arrays, optionally legacy map complement after parity proof.",
+        "cost": "One local predicate with existing closure now/90-day threshold; focused boundary/unknown-date parity needed."
+      }
+    ],
+    "retained_tradeoffs": "Date/score legacy precedence and live reads; required storage and auth/snapshot ownership; durable-ID second build; independent optional startup reads; short key/allocation loops; explicit modern/legacy deletion ownership.",
+    "scanner_clearances_claimed": 0
+  },
+  "limits": [
+    "No tests/app/browser/live Google/AI calls, installations, source/Git/index/cache/docs/tracker mutations. Only own scratch/report written; installed pure walker replayed with bytecode writes disabled.",
+    "All twelve complete assigned functions/nested helpers and relevant callers/guards/assertions read. Existing native/VM assertions are evidence of intended contracts, not fresh pass results.",
+    "Three refactor opportunities are recommendations pending coordinator source/fact recheck and regression validation; no fixes or scanner closures claimed.",
+    "P1 must include the fourth metadata-filter consumer refreshStorageHealthUI and explicit source-extraction test imports. No score-only extraction or schema expansion recommended.",
+    "Resolver exact stable-ID-only callback behavior lacks cited direct coverage; separate async helper tests are not substituted as proof. Date lead L1 remains untested."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "method": "Read24individual reasons/caller/testanchors andthree specific duplication proposals. Independently replayed all24 numerical walker observations. Source+HTML immutablehash/currentfacts guard required at central adoption. Date-display lead remains unconfirmed; no testpass/scannerclosure claim."
+  }
+}
