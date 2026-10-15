@@ -7333,10 +7333,22 @@ function getNotebookPrintFitScript() {
 
 
 function writeWftPrintWindow(printWindow, printHtml) {
-    try { printWindow.opener = null; } catch (e) { }
-    printWindow.document.open();
-    printWindow.document.write(printHtml);
-    printWindow.document.close();
+    var isolated;
+    try {
+        printWindow.opener = null;
+        isolated = printWindow.opener === null;
+    } catch (e) {
+        isolated = false;
+    }
+    if (isolated) {
+        printWindow.document.open();
+        printWindow.document.write(printHtml);
+        printWindow.document.close();
+        return true;
+    }
+    try { printWindow.close(); } catch (e) { }
+    alert("Could not safely open the notebook summary for printing. Please try again.");
+    return false;
 }
 
 function scheduleWftPrintWindow(printWindow) {
@@ -7384,7 +7396,7 @@ function printNotebookSummary() {
     var studentName = (document.getElementById("notebookStudentName") || {}).textContent || "";
     var writingTitle = (document.getElementById("notebookTitle") || {}).textContent || "";
     var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle);
-    writeWftPrintWindow(printWindow, printHtml);
+    if (!writeWftPrintWindow(printWindow, printHtml)) return;
     scheduleWftPrintWindow(printWindow);
 }
 
@@ -7722,7 +7734,7 @@ function printPortfolioNotebookSummary(studentName, sessionId) {
         return;
     }
     var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary");
-    writeWftPrintWindow(printWindow, printHtml);
+    if (!writeWftPrintWindow(printWindow, printHtml)) return;
     scheduleWftPrintWindow(printWindow);
 }
 
