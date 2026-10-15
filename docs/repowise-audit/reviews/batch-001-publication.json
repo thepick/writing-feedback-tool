@@ -1,0 +1,36 @@
+{
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/182",
+  "merge_commit": "14025032df09b23b84e400c9ca12561902714942",
+  "verified_at": "2026-10-15T19:16:47.273774+00:00",
+  "pages_build": "built",
+  "files": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "http_status": 200,
+      "bytes": 397182,
+      "git_sha256": "72f2992898f8f2cd401b4de36d5a6b31ac0eb47ee61334b3dd1c4e847f6ce2aa",
+      "live_sha256": "72f2992898f8f2cd401b4de36d5a6b31ac0eb47ee61334b3dd1c4e847f6ce2aa",
+      "exact_git_bytes": true
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "http_status": 200,
+      "bytes": 422009,
+      "git_sha256": "c0625eabfeca02e8a176463e35da6df6792936b84149b0674e0d75b859fdd678",
+      "live_sha256": "c0625eabfeca02e8a176463e35da6df6792936b84149b0674e0d75b859fdd678",
+      "exact_git_bytes": true
+    },
+    {
+      "file": "js/app/storage-recovery.js",
+      "http_status": 200,
+      "bytes": 15296,
+      "git_sha256": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636",
+      "live_sha256": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static file deployment only; no real account, writing, Drive or model calls.",
+  "tested_source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+  "all89_frozen_source_hashes_match_clean_merged_main": true
+}

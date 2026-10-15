@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "task": "Focused repair007: student-record initialization read consistency",
+  "created_at_utc": "2026-10-15T19:28:37.104594+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "14025032df09b23b84e400c9ca12561902714942",
+  "observed_head_at_finish": "14025032df09b23b84e400c9ca12561902714942",
+  "summary": {
+    "candidate_reproduced": true,
+    "failure_paths_reproduced": 2,
+    "behavior_fix_completed": true,
+    "application_lines_replaced": 4,
+    "regression_cases_added": 3,
+    "after_suites_passed": 4,
+    "syntax_checks_passed": 89,
+    "scanner_clearance_claimed": false,
+    "needs_user_attention": false
+  },
+  "changed_repository_files": [
+    "js/app/00-storage-sync-patches.js",
+    "tests/record-identity.browser.cjs"
+  ],
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "before_sha256_raw": "3fe34c0fe41f000f5079eec08482268fe5de63093ce6705aac1c5e28159ffb69",
+      "after_sha256_raw": "f4c95f2974f315e129c009be0e3a022e70efe911bc62160e343a7ec94b70ec96",
+      "before_sha256_normalized_lf": "72f2992898f8f2cd401b4de36d5a6b31ac0eb47ee61334b3dd1c4e847f6ce2aa",
+      "after_sha256_normalized_lf": "e79032cea4d0348782aa6538b2b6c58f54a832c5c4f0e110fd813b4bc4881f8f"
+    },
+    "tests/record-identity.browser.cjs": {
+      "before_sha256_raw": "a92587d528dd76219f5c3523a854c31f1195445d0c3e2e420cf4934d92877347",
+      "after_sha256_raw": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+      "before_sha256_normalized_lf": "a92587d528dd76219f5c3523a854c31f1195445d0c3e2e420cf4934d92877347",
+      "after_sha256_normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d"
+    }
+  },
+  "source_verification": {
+    "other87_source_files_raw_unchanged": true,
+    "all_other_app_top_level_nodes_unchanged_normalized_lf": true,
+    "getRawSettings_and_shipped_flags_unchanged": true,
+    "proof": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\source-evidence.json"
+  },
+  "reproduction": {
+    "source": "Native Edge loading the unchanged application at the assigned source; local-only routes and synthetic storage.",
+    "before_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\before-regression\\record-identity.browser.json",
+    "before_runner_exit": 1,
+    "cases": 50,
+    "passed": 48,
+    "failed": 2,
+    "observations": [
+      {
+        "case": "student-record-initialization-read-failure-initial",
+        "injected_read_failures": 1,
+        "existing_records_seeded": 2,
+        "records_after_first_call": 1,
+        "initial_failure_kept_exact_settings": false,
+        "lookup_storage_reads": 2,
+        "primary_writing_bytes_unchanged": true
+      },
+      {
+        "case": "student-record-initialization-read-failure-lookup",
+        "injected_read_failures": 1,
+        "existing_records_seeded": 2,
+        "records_after_first_call": 4,
+        "initial_failure_kept_exact_settings": false,
+        "lookup_storage_reads": 2,
+        "primary_writing_bytes_unchanged": true
+      }
+    ],
+    "interpretation": "Initial read failure caused a fallback snapshot to replace existing metadata; a failed repeated lookup appended a second legacy-name record. Neither case changed the primary writing bytes. These are reproduced optional-path metadata faults, not a claim of live account loss."
+  },
+  "change": {
+    "getStudentRecordByName": "Accepts the caller-owned settings snapshot. One-argument calls retain the same fail-soft getRawSettings lookup, first-match order and legacy-name handling.",
+    "ensureStudentRecordsForRoster": "Uses readWftRequiredStorage for its initial settings snapshot, then passes that same snapshot to every lookup. A failed initial read aborts optional initialization before persistence; required save/preflight and recovery guards stay unchanged.",
+    "shipped_flag": "Both WFT_STUDENT_ID_MAP_V1=false assignments are unchanged; only the synthetic regression enables the supported optional path.",
+    "scope": "No new helper, dependency, configuration, export or fixture changes."
+  },
+  "caller_reachability": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 2358,
+      "function": "ensureStudentRecordsForRoster",
+      "role": "Only production caller of getStudentRecordByName; now supplies the verified snapshot."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 2943,
+      "role": "Initializer startup call is guarded by the disabled optional ID-map flag and storage safe mode."
+    },
+    {
+      "file": "tests/record-identity.browser.cjs",
+      "role": "Native creation/rename and added initial-read/repeated-lookup/soft-reader regressions."
+    },
+    {
+      "file": "tests/record-identity.cjs",
+      "line": 132,
+      "role": "Source-extracted optional initializer/rename tests already provide the strict settings reader; no harness change needed."
+    },
+    {
+      "file": "tests/preference-integrity-scenarios.js",
+      "line": 298,
+      "role": "Existing persistence-failure scenario verifies optional initialization does not publish an unstored ID map."
+    }
+  ],
+  "tests": {
+    "before_existing_baseline": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\batch-001-validation.json",
+      "suites_passed": 75,
+      "syntax_checks_passed": 89,
+      "source_equality": "All89 raw source hashes matched the passing batch001 pins before edits. Merged main140 has the same tested source.",
+      "pins": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\before-source-pins.json"
+    },
+    "before_new_regressions": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\before-regression\\suite-results.json",
+      "complete": true,
+      "passed": false,
+      "expected_failures": 2,
+      "note": "Application was unchanged. The new native tests reproduced the two faults; the other48 cases passed."
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\after\\suite-results.json",
+      "complete": true,
+      "passed": true,
+      "syntax_checks": 89,
+      "suites": [
+        {
+          "suite": "tests/optional-storage.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 46.427,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\after\\optional-storage.browser.json"
+        },
+        {
+          "suite": "tests/preference-integrity.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 4.301,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\after\\preference-integrity.browser.json"
+        },
+        {
+          "suite": "tests/record-identity.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 10.937,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\after\\record-identity.browser.json"
+        },
+        {
+          "suite": "tests/record-identity.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 0.126,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-007\\after\\record-identity.json"
+        }
+      ],
+      "identity_cases": 50,
+      "identity_cases_passed": 50,
+      "started": "2026-10-15T19:24:24.152Z",
+      "finished": "2026-10-15T19:25:33.433Z"
+    },
+    "new_contracts_checked": [
+      "Failed initial read preserves exact settings bytes.",
+      "Lookup no longer rereads storage or appends duplicate identity metadata.",
+      "Legacy IDs/record order and unrelated records survive normal creation and idempotent retry.",
+      "Primary writing bytes remain exact.",
+      "Read-only one-argument lookup keeps first-match/legacy-name semantics and returns null on storage failure."
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_5e1517d62b1781066e9b",
+      "held": true,
+      "classification": "intentional_optional_lookup_after_mutating_caller_fix",
+      "proposed_status": "reviewed_no_change",
+      "behavior_repair_status": "fixed_with_native_regression",
+      "application_behavior_changed": true,
+      "reason": "The caller misuse was reproduced and repaired using one required snapshot. The lookup catch still provides the retained read-only null fallback; removing it would change that interface. The proposed no-change disposition applies to the valid retained catch metric, not to the completed application bug fix.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2302,
+          "end_line": 2313,
+          "role": "Optional snapshot/soft-reader lookup; catch retained."
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2331,
+          "end_line": 2358,
+          "role": "Strict initial read and same-snapshot lookup in the mutating initializer."
+        }
+      ],
+      "remaining_scanner_expectation": "Swallowed-catch warning is expected to remain. No index refresh/clearance or health improvement is claimed.",
+      "needs_user_attention": false
+    }
+  ],
+  "metrics": {
+    "ensureStudentRecordsForRoster": {
+      "before": {
+        "ccn": 19,
+        "nloc": 46,
+        "max_nesting": 4,
+        "start_line": 2326,
+        "end_line": 2376
+      },
+      "after": {
+        "ccn": 18,
+        "nloc": 46,
+        "max_nesting": 4,
+        "start_line": 2326,
+        "end_line": 2376
+      }
+    },
+    "getStudentRecordByName": {
+      "before": {
+        "ccn": 8,
+        "nloc": 12,
+        "max_nesting": 3,
+        "start_line": 2302,
+        "end_line": 2313
+      },
+      "after": {
+        "ccn": 9,
+        "nloc": 12,
+        "max_nesting": 3,
+        "start_line": 2302,
+        "end_line": 2313
+      }
+    }
+  },
+  "limits": [
+    "No full75-suite run in this focused repair; coordinator owns the next batch gate.",
+    "No RepoWise update/recompute/index write or tracker/docs/Git mutation.",
+    "No live service, real account or paid call. Native tests abort nonlocal requests and use synthetic data.",
+    "Initializer remains CCN18/nesting4; lookup CCN9 in12 nonblank lines. Any refreshed shape observations need individual coordinator disposition."
+  ],
+  "coordinator_owned_changes_left_untouched": [
+    "docs/repowise-audit/current-findings.json",
+    "docs/repowise-audit/current-findings.md",
+    "docs/repowise-audit/reviews/batch-001-publication.json",
+    "docs/repowise-audit/reviews/history-context-review-1402503.json"
+  ],
+  "scope_checks": {
+    "no_branch_switch": true,
+    "no_staging_commit_push_merge": true,
+    "no_tracker_docs_edit": true,
+    "no_index_write": true,
+    "no_chats_agents_or_messages": true,
+    "next_issue_not_selected": true
+  }
+}

@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T02:12:01.351197+07:00.
+Updated 2026-10-16T02:30:14.052222+07:00.
 
-Source: 4c39f162f816eb191e92f9a61ee0ec935b2f991e. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 14025032df09b23b84e400c9ca12561902714942. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -16,11 +16,13 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"candidate_needs_regression": 2, "reviewed_no_change": 145, "unreviewed": 834}.
+Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 146, "unreviewed": 834}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 2, "fixed_verified": 11, "reviewed_no_change": 146, "unreviewed": 834}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 11, "reviewed_no_change": 147, "unreviewed": 834}.
 
-Verified source fixes: 11. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+Findings confirmed cleared: 11. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+
+Behavior repairs with regression evidence: 1.
 
 Supporting refactoring plans: 104; grouped refactoring opportunities: 23.
 
@@ -33,9 +35,11 @@ These plans and opportunities can overlap findings; their counts are not added a
 - history-context-review: Interpret git-only risk signals â€” reviewed_complete.
 - repair-004: Historical security signals â€” reviewed_complete.
 - repair-005: Remove verified unused helpers â€” reviewed_complete.
-- repair-001: Verify security signals â€” reviewed_complete.
 - repair-006: Storage failure safeguards â€” reviewed_complete.
 - history-context-review-4c39f16: Revalidate history after cleanup â€” reviewed_complete.
+- repair-001: Verify security signals â€” reviewed_complete.
+- history-context-review-1402503: Revalidate history on published main â€” reviewed_complete.
+- repair-007: Preserve student identity metadata on read failure â€” reviewed_complete.
 
 ## Complete inventory
 
@@ -611,7 +615,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_bc84d26d5eac20ff69b6 | low | code_health | js/app/00-storage-sync-patches.js:1759 | rebuildPortfolioIndex / bumpy_road | unreviewed |
 | code_health:finding_334b8bc581310ce17f48 | low | code_health | js/app/00-storage-sync-patches.js:1849 | error_handling | reviewed_no_change |
 | code_health:finding_37c2ddecfa1ce89e3871 | low | code_health | js/app/00-storage-sync-patches.js:1897 | error_handling | reviewed_no_change |
-| code_health:finding_5e1517d62b1781066e9b | low | code_health | js/app/00-storage-sync-patches.js:2311 | error_handling | candidate_needs_regression |
+| code_health:finding_5e1517d62b1781066e9b | low | code_health | js/app/00-storage-sync-patches.js:2311 | error_handling | reviewed_no_change |
 | code_health:finding_73b80266603d7896f995 | low | code_health | js/app/00-storage-sync-patches.js:2322 | error_handling | reviewed_no_change |
 | code_health:finding_cfe4655da07db0e031ca | low | code_health | js/app/00-storage-sync-patches.js:2351 | error_handling | reviewed_no_change |
 | code_health:finding_a676bd99b260bc23f13f | low | code_health | js/app/00-storage-sync-patches.js:2440 | error_handling | reviewed_no_change |
@@ -1043,5 +1047,5 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 - Disappearance from a scan is not accepted as proof of resolution.
 - Immutable history metrics require documented interpretation; never rewrite history to improve a score.
 - Security snippets are excluded to avoid copying potential credentials.
-- Full-history security scan completed; all29 current/historical signals have individual verified outcomes, without exporting credential values.
+- Full-history security scan completed; see security_history_scan and individual security outcomes.
 - Coverage is older source evidence. Source validation is recorded per repair/publication; live model/Drive calls were not tested.

@@ -2299,9 +2299,9 @@ var WftStorage = {
 // PATCH 7 — STUDENT ID MAP
 // ═══════════════════════════════════════════════════════════════════════════
 
-function getStudentRecordByName(name) {
+function getStudentRecordByName(name, settings) {
     try {
-        var settings = getRawSettings ? getRawSettings() : {};
+        settings = settings || (getRawSettings ? getRawSettings() : {});
         if (!settings.studentRecords) { return null; }
         for (var sri = 0; sri < settings.studentRecords.length; sri++) {
             var rec = settings.studentRecords[sri];
@@ -2328,7 +2328,7 @@ function ensureStudentRecordsForRoster() {
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) { return; }
 
     try {
-        var settings = getRawSettings ? getRawSettings() : {};
+        var settings = readWftRequiredStorage('wft_settings');
         if (!settings.studentRecords) { settings.studentRecords = []; }
         settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
 
@@ -2355,7 +2355,7 @@ function ensureStudentRecordsForRoster() {
             if (!settings.studentIdMap[name]) {
                 settings.studentIdMap[name] = createStableStudentId(name, settings.studentIdMap);
             }
-            var rec = getStudentRecordByName(name);
+            var rec = getStudentRecordByName(name, settings);
             if (!rec) {
                 settings.studentRecords.push({
                     studentId: settings.studentIdMap[name],
