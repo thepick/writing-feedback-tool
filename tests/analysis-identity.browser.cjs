@@ -117,6 +117,43 @@ async function evaluateAnalysisIdentity(scenario) {
         newer.release(); await running;
         return { ...state(), requests, protectedNewRun, stopped, resetKept };
     }
+    async function runCancelledOcrRetryCase() {
+        const wait = gate();
+        const transcription = 'Alice has a dog.';
+        writing.value = '';
+        selectedImages = [photo('page-one'), photo('page-two')];
+        syncSelectedImageState(); updateSelectedImagePreview();
+        document.getElementById('apiKeyInput').value = 'synthetic-ocr-key'; saveWftApiKeyFromForm();
+        let requests = 0;
+        fetch = async (url, options) => {
+            if (url !== 'https://openrouter.ai/api/v1/chat/completions') throw new Error('Unexpected external request');
+            requests++;
+            return { ok: true, status: 200, text: requests !== 2
+                ? async () => JSON.stringify({ choices: [{ message: { content: transcription } }] })
+                : () => new Promise((resolve, reject) => {
+                    options.signal.addEventListener('abort', () => reject(new DOMException('Synthetic stopped OCR', 'AbortError')), { once: true });
+                    wait.enter();
+                }) };
+        };
+        document.getElementById('extractTextBtn').click();
+        const running = selectedImageExtractionPromise.catch(() => {});
+        await wait.started;
+        document.getElementById('stopAnalysisBtn').click();
+        await running;
+        const stoppedWithoutInsertion = !isAnalyzing && writing.value === '' && selectedImages[0].extractedText === transcription;
+        document.querySelector('.ocr-preview-remove[data-index="1"]').click();
+        document.getElementById('extractTextBtn').click();
+        await selectedImageExtractionPromise;
+        const retryWriting = writing.value;
+        const retryPromiseCleared = selectedImageExtractionPromise === null;
+        document.getElementById('clearTextBtn').click();
+        document.getElementById('extractTextBtn').click();
+        await selectedImageExtractionPromise;
+        return { ...state(), requests, stoppedWithoutInsertion, transcription, retryWriting,
+            retryPromiseCleared, finalPromiseCleared: selectedImageExtractionPromise === null,
+            status: document.getElementById('ocrStatus').textContent,
+            extractBusy: document.getElementById('extractTextBtn').hasAttribute('aria-busy') };
+    }
     function startOcrRequest(wait) {
         writing.value = ''; selectedImages = [photo('Alice')]; syncSelectedImageState();
         localStorage.setItem('wft_settings', JSON.stringify({ apiKey: 'fake-test-key' }));
@@ -173,6 +210,7 @@ async function evaluateAnalysisIdentity(scenario) {
     if (scenario === 'reassessment-loading' || scenario === 'image-preparation') return runImagePreparationCase();
     if (['reassessment-student', 'reassessment-unchanged', 'no-student'].includes(scenario)) return runReassessmentCase();
     if (scenario === 'class-reset-restart') return runClassResetRestartCase();
+    if (scenario === 'ocr-stop-cached-retry') return runCancelledOcrRetryCase();
     return runInterruptedAnalysisCase();
 }
 
@@ -246,6 +284,18 @@ function assertScenarioResult(scenario, result, diagnostic) {
         assert.equal(result.retained, true, diagnostic);
     } else if (scenario === 'class-reset-restart') {
         assertClassResetRestart(result, diagnostic);
+    } else if (scenario === 'ocr-stop-cached-retry') {
+        assert.equal(result.stoppedWithoutInsertion, true, 'Stopping page two must retain page one in the cache without inserting partial writing');
+        assert.equal(result.requests, 2, 'Retrying the cached page must not make another provider request');
+        assert.equal(result.retryWriting, result.transcription, 'Extract must insert the retained page after stopping and removing page two');
+        assert.equal(result.writing, result.transcription, 'Extract must reinsert the cached page after Clear text');
+        assert.equal(result.retryPromiseCleared, true, 'The first cached retry must clear its completed extraction promise');
+        assert.equal(result.finalPromiseCleared, true, 'The second cached retry must clear its completed extraction promise');
+        assert.match(result.status, /Text extracted and inserted/);
+        assert.equal(result.retained, true);
+        assert.equal(result.corrected, null);
+        assert.equal(result.analyzing, false);
+        assert.equal(result.extractBusy, false);
     } else if (scenario.startsWith('unchanged-')) {
         assertUnchangedAnalysis(scenario, result);
     } else {
@@ -281,7 +331,9 @@ async function runIdentityScenario(browser, scenario, failures) {
     const cases = ['automatic-student', 'ocr-student', 'typed-student', 'typed-writing', 'step2-images',
         'neatness-images', 'step3-source', 'stop', 'class-reset-restart', 'unchanged-ocr', 'unchanged-typed',
         'stale-preparation', 'stale-helper', 'stale-writing', 'consecutive-results', 'reassessment-loading',
-        'reassessment-student', 'reassessment-unchanged', 'no-student', 'reset', 'ocr-stop', 'image-preparation'];
+        'reassessment-student', 'reassessment-unchanged', 'no-student', 'reset', 'ocr-stop', 'image-preparation', 'ocr-stop-cached-retry']
+        .filter(scenario => !process.env.WFT_IDENTITY_FILTER || scenario === process.env.WFT_IDENTITY_FILTER);
+    assert.ok(cases.length, 'No analysis identity cases selected');
     try {
         for (const scenario of cases) await runIdentityScenario(browser, scenario, failures);
         assert.deepEqual(failures, [], 'Analysis identity regressions failed');
