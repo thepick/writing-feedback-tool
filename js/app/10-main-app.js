@@ -1156,14 +1156,6 @@ function tokenizeForDiff(text) {
     return matches || [];
 }
 
-function isWordToken(token) {
-    return /[A-Za-z0-9]/.test(token || "") && !/^[^A-Za-z0-9\s]+$/.test(token || "");
-}
-
-function isNewlineToken(token) {
-    return /^\n+$/.test(token || "");
-}
-
 var SAFE_INSERT_WORD_SET = {
     "a": true, "an": true, "the": true,
     "is": true, "are": true, "am": true, "was": true, "were": true,

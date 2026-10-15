@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "task": "Focused repair005b: remove two orphaned correction token predicates",
+  "created_at_utc": "2026-10-15T20:14:17.023487+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "1d3764d97bc5ec52b4f4ed5cd498cceb75a360cf",
+  "observed_head_at_finish": "1d3764d97bc5ec52b4f4ed5cd498cceb75a360cf",
+  "summary": {
+    "findings_reviewed": 2,
+    "functions_removed": 2,
+    "lines_removed": 8,
+    "bytes_removed": 201,
+    "lines_added": 0,
+    "source_fixes_pending_refresh": 2,
+    "needs_user_attention": 0,
+    "scanner_clearance_claimed": false
+  },
+  "changed_repository_files": [
+    "js/app/10-main-app.js"
+  ],
+  "source_hashes": {
+    "file": "js/app/10-main-app.js",
+    "before_sha256_raw": "40e699fbadd2fd53f295c4adf088dcbee7fac6b5facf093d2ff33298cbcde74d",
+    "after_sha256_raw": "1cf34c7924721f2cfd198420b5f6696770db1688a3622710da0212d4230e322d",
+    "before_sha256_normalized_lf": "c0625eabfeca02e8a176463e35da6df6792936b84149b0674e0d75b859fdd678",
+    "after_sha256_normalized_lf": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8"
+  },
+  "deletion_proof": {
+    "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\deletion-proof.json",
+    "start_line": 1159,
+    "end_line_including_separators": 1166,
+    "prefix_and_suffix_byte_identical": true,
+    "all_other102_tracked_non_documentation_files_byte_identical": true,
+    "before_pins": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before-source-hashes.json",
+    "after_pins": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\after-source-hashes.json",
+    "removed_names_absent_from_non_audit_repository_search": true
+  },
+  "findings": [
+    {
+      "record_id": "dead_code:9d75931b1c8bab4f0aa65bca",
+      "file": "js/app/10-main-app.js",
+      "symbol": "isWordToken",
+      "held": true,
+      "classification": "orphaned_token_predicate_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The only current reference was this declaration. Its former caller isPunctuationToken was removed in repair005; current correction code does not call this predicate. No HTML/generated handler, test, dynamic registration, alias or documented external compatibility contract was found. Removed only this orphaned declaration and its separator.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 1159,
+          "end_line": 1161,
+          "version": "assigned before deletion",
+          "role": "Only remaining declaration"
+        },
+        {
+          "commit": "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7",
+          "file": "js/app/10-main-app.js",
+          "symbol": "isPunctuationToken",
+          "role": "Former direct caller, absent after published repair005"
+        }
+      ],
+      "reference_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before-reference-evidence.json",
+      "remaining_scanner_expectation": "Expected absent on coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:f421a2898f25969c27f3ebe9",
+      "file": "js/app/10-main-app.js",
+      "symbol": "isNewlineToken",
+      "held": true,
+      "classification": "orphaned_token_predicate_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The only current reference was this declaration. Its former caller isPunctuationToken was removed in repair005; current correction code does not call this predicate. No HTML/generated handler, test, dynamic registration, alias or documented external compatibility contract was found. Removed only this orphaned declaration and its separator.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 1163,
+          "end_line": 1165,
+          "version": "assigned before deletion",
+          "role": "Only remaining declaration"
+        },
+        {
+          "commit": "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7",
+          "file": "js/app/10-main-app.js",
+          "symbol": "isPunctuationToken",
+          "role": "Former direct caller, absent after published repair005"
+        }
+      ],
+      "reference_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before-reference-evidence.json",
+      "remaining_scanner_expectation": "Expected absent on coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    }
+  ],
+  "tests": {
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "partial": true,
+      "syntax_checks": 89,
+      "started": "2026-10-15T20:12:07.554Z",
+      "finished": "2026-10-15T20:12:41.247Z",
+      "suites": [
+        {
+          "suite": "tests/correction-performance.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 16.892,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before\\correction-performance.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before\\correction-performance.browser.json"
+        },
+        {
+          "suite": "tests/script-loading.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 7.396,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before\\script-loading.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\before\\script-loading.browser.json"
+        }
+      ]
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\after\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "partial": true,
+      "syntax_checks": 89,
+      "started": "2026-10-15T20:13:18.126Z",
+      "finished": "2026-10-15T20:13:47.740Z",
+      "suites": [
+        {
+          "suite": "tests/correction-performance.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 15.229,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\after\\correction-performance.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\after\\correction-performance.browser.json"
+        },
+        {
+          "suite": "tests/script-loading.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 6.907,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\after\\script-loading.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005b\\after\\script-loading.browser.json"
+        }
+      ]
+    }
+  },
+  "tests_added_or_changed": [],
+  "additional_checks": [
+    "Git diff --check passed.",
+    "Fresh original and candidate correction-performance/script-loading suites each passed.",
+    "All89 syntax checks passed in each runner invocation.",
+    "Exact binary prefix/suffix comparison and103-file source hashes prove no unrelated source change."
+  ],
+  "scope_checks": {
+    "source_frozen_for_coordinator_review": true,
+    "no_other_source_edits": true,
+    "supported_async_facade_and_strip_alias_unchanged": true,
+    "no_tracker_docs_changes": true,
+    "no_branch_stage_commit_push_merge": true,
+    "no_index_jobs_or_refresh": true,
+    "no_new_chats_agents_or_interchat_messages": true
+  },
+  "limits": [
+    "Full75-suite batch gate, commit/publication and RepoWise refresh belong to the coordinator; none were performed here.",
+    "No live external service, paid request or real account was used.",
+    "Scanner clearance and health-score changes remain unconfirmed until coordinator refresh."
+  ]
+}
