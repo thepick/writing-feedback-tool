@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T05:38:24.606361+07:00.
+Updated 2026-10-16T05:59:31.841354+07:00.
 
-Source: 74ac0e60b28d66d1865f37fc825477285a03ccd9. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 44a7282c727eb6d0735cbd65247f72e45bfe37c0. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,17 +10,17 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 915 |
+| code_health | 913 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"confirmed_repair_candidate": 8, "in_progress": 2, "reviewed_no_change": 347, "unreviewed": 631}.
+Statuses: {"confirmed_repair_candidate": 6, "reviewed_no_change": 347, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
 
-All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 8, "fixed_verified": 20, "in_progress": 2, "reviewed_no_change": 349, "unreviewed": 631}.
+All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 6, "fixed_verified": 22, "reviewed_no_change": 349, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
 
-Findings confirmed cleared: 20. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+Findings confirmed cleared: 22. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
 Behavior repairs with regression evidence: 6.
 
@@ -56,8 +56,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-019: Review production loop and performance warnings - reviewed_complete.
 - repair-020: Review recovery guards and coverage gaps - reviewed_complete.
 - repair-021: Flatten emergency-backup guards - refactor_fixed_verified.
+- repair-021b: Remove obsolete single-file backup test loops - refactor_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-021b: Remove obsolete single-file backup test loops - reviewed_pending_refresh.
+- repair-022: Restore native migration test discovery - test_integration_verified_pending_batch_coverage.
 
 ## Additional source leads
 
@@ -105,8 +106,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_14ac99ade4516a264416 | critical | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / complex_method | yes | reviewed_no_change |
 | code_health:finding_2cc014e33a4adfabcf8e | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / nested_complexity | yes | reviewed_no_change |
 | code_health:finding_d972d4b21d11f1043309 | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / complex_method | yes | reviewed_no_change |
-| code_health:finding_c9064893d7223bb4ffd1 | high | code_health | google-drive-migration.js | coverage_gap | yes | confirmed_repair_candidate |
-| code_health:finding_ac236ee8c53f6b06a02a | high | code_health | google-drive-migration.js | coverage_gradient | yes | confirmed_repair_candidate |
+| code_health:finding_c9064893d7223bb4ffd1 | high | code_health | google-drive-migration.js | coverage_gap | yes | test_added_pending_full_coverage |
+| code_health:finding_ac236ee8c53f6b06a02a | high | code_health | google-drive-migration.js | coverage_gradient | yes | test_added_pending_full_coverage |
 | code_health:finding_b820d2d24da772091e34 | high | code_health | js/app/00-storage-sync-patches.js | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_9b4aa07ab42ab6350d8c | high | code_health | js/app/00-storage-sync-patches.js:491 | persistApiKeyStorageFromInput / complex_method | yes | unreviewed |
 | code_health:finding_bce2bd1af6dae6674398 | high | code_health | js/app/00-storage-sync-patches.js:550 | saveSettingsToLocalStorage / complex_method | yes | unreviewed |
@@ -620,10 +621,10 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_6f76ca4ed548a3b45a97 | medium | code_health | tests/storage-dialog-keyboard.browser.cjs:65 | runRenameWorkflow / complex_method | yes | unreviewed |
 | code_health:finding_16c64c2a184431b16205 | medium | code_health | tests/storage-dialog-keyboard.browser.cjs:104 | runKeyboardScenario / complex_method | yes | unreviewed |
 | code_health:finding_accd5aba18f79b2d9999 | medium | code_health | tests/storage-dialog-keyboard.browser.cjs:153 | io_in_loop | yes | unreviewed |
-| code_health:finding_e3735602ceb02f6eae10 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / nested_complexity | yes | in_progress |
-| code_health:finding_4b72d43cb1506626012e | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / complex_method | yes | in_progress |
 | code_health:finding_64343803d3bcb7a25471 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / large_method | yes | unreviewed |
 | code_health:finding_8af0d42678ef30e65221 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / function_hotspot | yes | unreviewed |
+| code_health:finding_e3735602ceb02f6eae10 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / nested_complexity | no | fixed_verified |
+| code_health:finding_4b72d43cb1506626012e | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / complex_method | no | fixed_verified |
 | code_health:finding_bfcf3ebf003b174fd360 | medium | code_health | tests/storage-held-request.browser.cjs:5 | <anonymous@5> / nested_complexity | yes | unreviewed |
 | code_health:finding_98485cb8749defada08b | medium | code_health | tests/storage-held-request.browser.cjs:9 | checkHeldRequestInvariants / complex_method | yes | unreviewed |
 | code_health:finding_73b0629d0342f5021c60 | medium | code_health | tests/storage-held-request.browser.cjs:37 | dry_violation | yes | unreviewed |
