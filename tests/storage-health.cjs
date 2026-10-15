@@ -16,8 +16,8 @@ function context(source, globals) {
 
 (async () => {
     const production = 'js/app/00-storage-sync-patches.js';
-    for (const file of [production]) {
-        const source = section(file, 'function loadPortfolioAsync()', 'function renderStudentPortfolioAsync(');
+    {
+        const source = section(production, 'function loadPortfolioAsync()', 'function renderStudentPortfolioAsync(');
         const portfolio = { Alice: { sessions: [{ id: 'keep' }] } };
         let saves = 0;
         const app = context(source, {
@@ -52,8 +52,8 @@ function context(source, globals) {
         await assert.rejects(promise, /write failed/);
     }
 
-    for (const file of ['js/app/storage-recovery.js']) {
-        const source = section(file, '// ── Emergency Backup ──', 'function downloadWftEmergencyBackup(');
+    {
+        const source = section('js/app/storage-recovery.js', '// ── Emergency Backup ──', 'function downloadWftEmergencyBackup(');
         const flags = Object.fromEntries([...source.matchAll(/\b(WFT_[A-Z0-9_]+)\b/g)].map(match => [match[1], false]));
         const values = { wft_settings: '{"unknown":{"keep":true}}', wft_students: 'null', wft_portfolio: '{invalid', wft_selectedStudent: 'Alice', wft_google_user: '' };
         const app = context(source, {

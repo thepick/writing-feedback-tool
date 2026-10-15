@@ -1,0 +1,103 @@
+{
+  "repair_id": "repair-021b",
+  "source_base": "74ac0e60b28d66d1865f37fc825477285a03ccd9",
+  "created_at_utc": "2026-10-15T22:37:44.274605+00:00",
+  "status": "test_refactor_verified_pending_coordinator",
+  "scanner_records": [
+    "code_health:finding_e3735602ceb02f6eae10",
+    "code_health:finding_4b72d43cb1506626012e"
+  ],
+  "findings_held": true,
+  "summary": "Replace two obsolete one-file loops with separate lexical blocks and pass their constant source paths directly to the existing extractor.",
+  "scope": {
+    "changed_files": [
+      "tests/storage-health.cjs"
+    ],
+    "application_files_changed": [],
+    "exact_four_fragments_only": true,
+    "other88codefiles_raw_and_lf_identical": true,
+    "config_files_unchanged": true,
+    "case_report_manifest_unchanged": true,
+    "all_assertions_awaits_fixture_data_extraction_helpers_and_failure_exit_bytes_unchanged": true
+  },
+  "metrics": {
+    "before": {
+      "ccn": 10,
+      "cognitive": 20,
+      "nloc": 90,
+      "max_nesting": 4,
+      "bumps": 1,
+      "start_line": 17,
+      "end_line": 109
+    },
+    "after": {
+      "ccn": 8,
+      "cognitive": 12,
+      "nloc": 90,
+      "max_nesting": 3,
+      "bumps": 1,
+      "start_line": 17,
+      "end_line": 109
+    }
+  },
+  "tests": {
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021b\\before\\suite-results.json",
+      "suite": "tests/storage-health.cjs",
+      "suite_status": 0,
+      "syntax_passed": 89
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021b\\after\\suite-results.json",
+      "suite": "tests/storage-health.cjs",
+      "suite_status": 0,
+      "syntax_passed": 89
+    }
+  },
+  "replacements": [
+    {
+      "before": "    for (const file of [production]) {",
+      "after": "    {"
+    },
+    {
+      "before": "        const source = section(file, 'function loadPortfolioAsync()',",
+      "after": "        const source = section(production, 'function loadPortfolioAsync()',"
+    },
+    {
+      "before": "    for (const file of ['js/app/storage-recovery.js']) {",
+      "after": "    {"
+    },
+    {
+      "before": "        const source = section(file, '// ",
+      "after": "        const source = section('js/app/storage-recovery.js', '// "
+    }
+  ],
+  "source_hashes": {
+    "tests/storage-health.cjs": {
+      "before": {
+        "raw": "b41ffa69731cf65e30a03f284d58da44d459b6b21e3561adbc118909652642a0",
+        "normalized_lf": "60c42547c6bef79f836e8cc4e4241ca59748eaa4ddf83628582226f030e77280"
+      },
+      "after": {
+        "raw": "4ca4456751b5c909a014fa7b86c33d451e2656499b3eef791ee1cb8ff66162de",
+        "normalized_lf": "eaf6c8c760e788cc0342afc3ca8d29874a5da77b4ec9162d38371d41d132c7bf"
+      }
+    }
+  },
+  "all89_source_pins": {
+    "before": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021b\\before.json",
+    "after": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021b\\after.json",
+    "approved_manifest": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-pre-native-source-pins.json"
+  },
+  "config_hashes": {
+    "scripts/case-report-suites.json": "bbdd21a14991d684921034bd1fa9740b882df3133c651da00b079a8c93db865a"
+  },
+  "behavior_preserved": "Both former iterable literals contain exactly one fixed path and no other use of their loop variable. Plain blocks preserve separate const source/app scopes and the exact sequential await/assert.rejects lifecycle. Malformed-settings/redaction loops, the seven backup contract assertions, settings validation fixtures and rejection exit remain byte-identical. No production code changed.",
+  "scanner_clearance_claimed": false,
+  "remaining_limits": [
+    "Coordinator must commit and refresh RepoWise to confirm the two target records clear.",
+    "Large-method, hotspot and DRY findings may remain; no broader test redesign attempted.",
+    "Native36/429 and full75-suite runs were deliberately not repeated for this unit-only cleanup; production source remains exact accepted021.",
+    "No Git mutation, index/cache update, tracker/docs edit, live service or real account/data use."
+  ]
+}

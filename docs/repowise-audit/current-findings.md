@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T05:29:04.385994+07:00.
+Updated 2026-10-16T05:38:24.606361+07:00.
 
-Source: c225561882e845a905a32c32d6321e3b815b14e9. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 74ac0e60b28d66d1865f37fc825477285a03ccd9. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,21 +10,21 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 914 |
+| code_health | 915 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"confirmed_repair_candidate": 8, "in_progress": 1, "reviewed_no_change": 346, "unreviewed": 632}.
+Statuses: {"confirmed_repair_candidate": 8, "in_progress": 2, "reviewed_no_change": 347, "unreviewed": 631}.
 
-All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 8, "fixed_verified": 19, "in_progress": 1, "reviewed_no_change": 348, "unreviewed": 632}.
+All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 8, "fixed_verified": 20, "in_progress": 2, "reviewed_no_change": 349, "unreviewed": 631}.
 
-Findings confirmed cleared: 19. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+Findings confirmed cleared: 20. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
 Behavior repairs with regression evidence: 6.
 
-Supporting refactoring plans: 111; grouped refactoring opportunities: 27.
+Supporting refactoring plans: 113; grouped refactoring opportunities: 29.
 
 These plans and opportunities can overlap findings; their counts are not added as distinct bugs.
 
@@ -55,8 +55,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-018: Review test assertions and critical harness warnings - reviewed_complete.
 - repair-019: Review production loop and performance warnings - reviewed_complete.
 - repair-020: Review recovery guards and coverage gaps - reviewed_complete.
+- repair-021: Flatten emergency-backup guards - refactor_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-021: Flatten emergency-backup guards - reviewed_pending_refresh.
+- repair-021b: Remove obsolete single-file backup test loops - reviewed_pending_refresh.
 
 ## Additional source leads
 
@@ -96,7 +97,6 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / complex_method | yes | reviewed_no_change |
 | code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7111 | buildNotebookReconstructionDataFromSession / complex_method | yes | reviewed_no_change |
 | code_health:finding_2f3ed327ca58291a143e | critical | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / large_method | yes | reviewed_no_change |
-| code_health:finding_615d19856374d52a4a9b | critical | code_health | tests/archive-integrity.browser.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_3dffc42c2f6cdecd5764 | critical | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / complex_method | yes | reviewed_no_change |
 | code_health:finding_b3ea0e675e7c1c2fdb28 | critical | code_health | tests/notebook-guidance-repair.browser.cjs:7 | runNotebookGuidanceCases / large_method | yes | reviewed_no_change |
 | code_health:finding_886ef320a4749424aed4 | critical | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / complex_method | yes | reviewed_no_change |
@@ -215,6 +215,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_41424acaaa71fa628e81 | high | code_health | tests/archive-connection.browser.cjs:8 | runArchiveConnectionScenario / complex_method | yes | unreviewed |
 | code_health:finding_f215a3da5418d44ab994 | high | code_health | tests/archive-connection.browser.cjs:34 | respondToArchiveConnectionRequest / complex_method | yes | unreviewed |
 | code_health:finding_42bfe284bb0b87e01389 | high | code_health | tests/archive-integrity.browser.cjs | churn_risk | yes | reviewed_no_change |
+| code_health:finding_615d19856374d52a4a9b | high | code_health | tests/archive-integrity.browser.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_9ed9ee996a2e3ba97e2e | high | code_health | tests/auth-integrity.browser.cjs:82 | checkDraftOccupancy / complex_method | yes | unreviewed |
 | code_health:finding_97506bb4c786936411e9 | high | code_health | tests/auth-integrity.browser.cjs:257 | checkRedirectRecovery / complex_method | yes | unreviewed |
 | code_health:finding_873694a833229c403503 | high | code_health | tests/correction-performance.browser.cjs:4 | <anonymous@4> / complex_method | yes | unreviewed |
@@ -236,7 +237,6 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_22d1f5de4bf7e22b8cca | high | code_health | tests/media-upload-boundary.browser.cjs:12 | exerciseOwnershipBoundary / complex_method | yes | unreviewed |
 | code_health:finding_ed57c83e3c13fa85d009 | high | code_health | tests/media-upload-boundary.browser.cjs:46 | changeStoredWriting / complex_method | yes | unreviewed |
 | code_health:finding_3d6e5336abe11651954f | high | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / large_method | yes | reviewed_no_change |
-| code_health:finding_243db0fbfb8a96a7c724 | high | code_health | tests/notebook-guide.browser.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_9283e3747b5135c2a7fc | high | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / nested_complexity | yes | reviewed_no_change |
 | code_health:finding_41bebd95e154dbeb1101 | high | code_health | tests/openrouter-admission.browser.cjs:14 | runAdmissionScenario / complex_method | yes | unreviewed |
 | code_health:finding_f832cc5b27c3d52f19ac | high | code_health | tests/openrouter-admission.browser.cjs:122 | checkDelayedOutcome / complex_method | yes | unreviewed |
@@ -268,6 +268,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_53cd03ddef0fff61c0fa | high | code_health | tests/script-loading.browser.cjs:5 | <anonymous@5> / complex_method | yes | unreviewed |
 | code_health:finding_dffe523407bccdaa39b7 | high | code_health | tests/session-retention.browser.cjs:5 | exerciseSessionRetention / large_method | yes | unreviewed |
 | code_health:finding_a6e8de9e2a9b5306df36 | high | code_health | tests/session-retention.browser.cjs:63 | checkRetentionModes / complex_method | yes | unreviewed |
+| code_health:finding_bd2f800fbe50490cc6fb | high | code_health | tests/storage-health.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_b732c9ff348ddfb246a2 | high | code_health | tests/storage-held-request.browser.cjs:5 | <anonymous@5> / complex_method | yes | unreviewed |
 | code_health:finding_e468e4d675f32bce5d17 | high | code_health | tests/storage-integrity.browser.cjs:124 | runDeletionPolicyCases / complex_method | yes | unreviewed |
 | code_health:finding_859af07b8b5b8bc2527d | high | code_health | tests/storage-public-ui.browser.cjs:5 | runStorageScenario / large_method | yes | unreviewed |
@@ -476,8 +477,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_becc6cad0dd7863a6b9b | medium | code_health | js/app/portfolio-export.js:119 | appendStructuredFeedback / complex_method | yes | unreviewed |
 | code_health:finding_481a4a617b0134a3a219 | medium | code_health | js/app/portfolio-export.js:629 | addImageExport / complex_method | yes | unreviewed |
 | code_health:finding_52dd694654409f08a520 | medium | code_health | js/app/storage-recovery.js | change_entropy | yes | reviewed_no_change |
+| code_health:finding_109a87742e8c5d101e06 | medium | code_health | js/app/storage-recovery.js | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_aed41adf814ee93f00d0 | medium | code_health | js/app/storage-recovery.js:160 | validateWftRequiredStorage / complex_method | yes | reviewed_no_change |
-| code_health:finding_28ab15e0abd57a32278e | medium | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / nested_complexity | yes | in_progress |
+| code_health:finding_28ab15e0abd57a32278e | medium | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / nested_complexity | no | fixed_verified |
 | code_health:finding_c488fbf48a69c6dcaa4b | medium | code_health | scripts/check-test-runner.cjs | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_db029d1060192426b222 | medium | code_health | scripts/check-test-runner.cjs:13 | io_in_loop | yes | unreviewed |
 | code_health:finding_b2267d45e0c328b33cd3 | medium | code_health | scripts/run-tests.cjs | co_change_scatter | yes | reviewed_no_change |
@@ -550,6 +552,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_d0678036801b08d91445 | medium | code_health | tests/notebook-guidance-repair.browser.cjs | churn_risk | yes | reviewed_no_change |
 | code_health:finding_782b98d52eb223e30e23 | medium | code_health | tests/notebook-guidance-repair.browser.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_023e9357755094e56ba3 | medium | code_health | tests/notebook-guidance-repair.browser.cjs:252 | <anonymous@252> / complex_method | yes | reviewed_no_change |
+| code_health:finding_243db0fbfb8a96a7c724 | medium | code_health | tests/notebook-guide.browser.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_86491e87c4892f377fed | medium | code_health | tests/notebook-guide.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_ac3dbb7c835d1db56e3a | medium | code_health | tests/openrouter-admission.browser.cjs:14 | runAdmissionScenario / large_method | yes | unreviewed |
 | code_health:finding_67ef791c85e9c929ff70 | medium | code_health | tests/openrouter-admission.browser.cjs:66 | configureAdmissionKey / complex_method | yes | unreviewed |
@@ -617,8 +620,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_6f76ca4ed548a3b45a97 | medium | code_health | tests/storage-dialog-keyboard.browser.cjs:65 | runRenameWorkflow / complex_method | yes | unreviewed |
 | code_health:finding_16c64c2a184431b16205 | medium | code_health | tests/storage-dialog-keyboard.browser.cjs:104 | runKeyboardScenario / complex_method | yes | unreviewed |
 | code_health:finding_accd5aba18f79b2d9999 | medium | code_health | tests/storage-dialog-keyboard.browser.cjs:153 | io_in_loop | yes | unreviewed |
-| code_health:finding_bd2f800fbe50490cc6fb | medium | code_health | tests/storage-health.cjs | change_entropy | yes | reviewed_no_change |
-| code_health:finding_e3735602ceb02f6eae10 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / nested_complexity | yes | unreviewed |
+| code_health:finding_e3735602ceb02f6eae10 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / nested_complexity | yes | in_progress |
+| code_health:finding_4b72d43cb1506626012e | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / complex_method | yes | in_progress |
+| code_health:finding_64343803d3bcb7a25471 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / large_method | yes | unreviewed |
 | code_health:finding_8af0d42678ef30e65221 | medium | code_health | tests/storage-health.cjs:17 | <anonymous@17> / function_hotspot | yes | unreviewed |
 | code_health:finding_bfcf3ebf003b174fd360 | medium | code_health | tests/storage-held-request.browser.cjs:5 | <anonymous@5> / nested_complexity | yes | unreviewed |
 | code_health:finding_98485cb8749defada08b | medium | code_health | tests/storage-held-request.browser.cjs:9 | checkHeldRequestInvariants / complex_method | yes | unreviewed |
@@ -995,7 +999,6 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_cd13f605cdef84dd5e3f | low | code_health | tests/split-storage.browser.cjs:53 | replySearch / bumpy_road | yes | unreviewed |
 | code_health:finding_1211ef84f5feb095204b | low | code_health | tests/storage-dialog-keyboard.browser.cjs:65 | runRenameWorkflow / primitive_obsession | yes | unreviewed |
 | code_health:finding_9934b52e0c0db9b89709 | low | code_health | tests/storage-health.cjs:1 | dry_violation | yes | unreviewed |
-| code_health:finding_64343803d3bcb7a25471 | low | code_health | tests/storage-health.cjs:17 | <anonymous@17> / large_method | yes | unreviewed |
 | code_health:finding_229cb91cb1ac685a58c4 | low | code_health | tests/storage-held-request.browser.cjs:5 | <anonymous@5> / large_method | yes | unreviewed |
 | code_health:finding_eac0d63c55f858b16f57 | low | code_health | tests/storage-integrity.browser.cjs:124 | runDeletionPolicyCases / large_method | yes | unreviewed |
 | code_health:finding_9f733e328960b7279b3b | low | code_health | tests/storage-integrity.browser.cjs:224 | initializeIntegrityFixture / large_method | yes | unreviewed |
