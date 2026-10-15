@@ -1,0 +1,2095 @@
+{
+  "repair_id": "repair-031",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "8be13c9f0eeadb7fe9975c5e4b680f596607745e",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "source_verification": {
+    "assignment_normalized_hash_matches": true,
+    "all_five_inspected_production_files_match_frozen_blobs": true,
+    "test_assertions_read_from_immutable_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+    "production_mutated": false
+  },
+  "metrics_verification": {
+    "method": "Installed unchanged RepoWise pure walk_file_complexity(path,javascript,normalized bytes); Python -B; no health/CLI/index/cache writes.",
+    "complete_assigned_functions": 20,
+    "all_assignment_ccn_cognitive_nloc_nesting_bumps_params_dispatch_deepest_blocks_condition_counts_reproduced": true,
+    "not_independently_verified": [
+      "file dependent count11",
+      "centrality floor4",
+      "scanner severity/health impact/status/identity"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_8439ac91fb299207a6e9",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "brain_method",
+      "symbol": "syncWftNow",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_sync_run_orchestration",
+      "reason": "117NLOC/CCN17/nesting2 covers one ordered run: eligibility/queue ownership, folder/deletions/settings/portfolio/index, final required-store validation, broadcast, one error path and reset/follow-up. Existing helpers already own individual streams. Stage-loop/wrapper extraction would hide ordering and connection checks without eliminating duplicated policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5767",
+        "js/app/00-storage-sync-patches.js:5769",
+        "js/app/00-storage-sync-patches.js:5796",
+        "js/app/00-storage-sync-patches.js:5806",
+        "js/app/00-storage-sync-patches.js:5836",
+        "js/app/00-storage-sync-patches.js:5840",
+        "js/app/00-storage-sync-patches.js:5845",
+        "js/app/00-storage-sync-patches.js:5850",
+        "js/app/00-storage-sync-patches.js:5855",
+        "js/app/00-storage-sync-patches.js:5857",
+        "js/app/00-storage-sync-patches.js:5871",
+        "js/app/00-storage-sync-patches.js:5876",
+        "js/app/00-storage-sync-patches.js:5888"
+      ],
+      "verified_metrics": {
+        "name": "syncWftNow",
+        "start_line": 5767,
+        "end_line": 5903,
+        "ccn": 17,
+        "max_nesting": 2,
+        "cognitive": 18,
+        "nloc": 117,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5798,
+          5803
+        ],
+        "complex_conditions": [
+          {
+            "line": 5769,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5784,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5796,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5798,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "nloc": 117,
+        "max_nesting": 2,
+        "dependents_count": 11,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 5767,
+        "deepest_block": {
+          "start": 5798,
+          "end": 5803
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3620 sign-in,4934 debounce,4944 immediate flush,5890 queued follow-up,5969 poll,6008 online,6025 visible;6050-6053 broadcast wrapper forwards original reason/options"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:81-109 late retry response ownership, bounded signout/reconnect and actual queued follow-up with newer writing",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.browser.cjs:16-28 actual follow-up preserves old/new/remote sessions and clears current lock/counter",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:324-351 full controller cannot acknowledge failed pending index;tests/storage-integrity.browser.cjs:87-97 late final corruption prevents success/poll acknowledgement"
+      ],
+      "regression_recommendation": "Retain guards, explicit unblock, queued callers/follow-up, per-stage connection assertions, final strict storage/pending-index validation, broadcast then completion reset and newer-pending status. Run ownership/held-request/native portfolio/index/integrity/lifecycle suites for any controller change; do not loop over stages just to shorten source."
+    },
+    {
+      "record_id": "code_health:finding_73631653667bec4679f6",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "clearWftLocalStorageAfterSignOut",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_collect_before_delete_nesting",
+      "reason": "Deepest prefix test3739-3742 is a two-prefix scan while collecting cache keys before removals. Mutating localStorage during enumeration could skip keys; each removal then tolerates its own failure. With two fixed prefixes a helper/some wrapper adds overhead and obscures this finite cache-only allowlist.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3709",
+        "js/app/00-storage-sync-patches.js:3719",
+        "js/app/00-storage-sync-patches.js:3728",
+        "js/app/00-storage-sync-patches.js:3734",
+        "js/app/00-storage-sync-patches.js:3738",
+        "js/app/00-storage-sync-patches.js:3739",
+        "js/app/00-storage-sync-patches.js:3747",
+        "js/app/00-storage-sync-patches.js:3749"
+      ],
+      "verified_metrics": {
+        "name": "clearWftLocalStorageAfterSignOut",
+        "start_line": 3705,
+        "end_line": 3752,
+        "ccn": 14,
+        "max_nesting": 4,
+        "cognitive": 28,
+        "nloc": 42,
+        "bumps": 3,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3739,
+          3742
+        ],
+        "complex_conditions": [
+          {
+            "line": 3729,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3739,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 14,
+        "cognitive": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 3705,
+        "deepest_block": {
+          "start": 3739,
+          "end": 3742
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3768 handleGoogleSignOut.finishSignOut after auth-operation ownership check3757 and token cleanup3765-3766"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:74-97 real signout waits for bounded sync failure, retains writing, reconnects, ignores old accepted reply",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:392-406 failed token removal gives truthful reload warning/retry;411-462 stale signout callback cannot replace current connection",
+        "Scope limit: no cited direct assertion of all exact/prefix cache-key removals and per-key remove failure; source establishes the finite cache-only allowlist"
+      ],
+      "regression_recommendation": "Preserve exact cache-key/prefix allowlist, collect-before-delete order, optional-key guards, dedup and independent remove catches. If touched, add focused cache-only seeded storage and enumeration/remove-failure cases; native signout/data-preservation checks alone do not cover every cache entry."
+    },
+    {
+      "record_id": "code_health:finding_d0ca54c8b8826e302a40",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "refreshStorageHealthUI",
+      "proposed_status": "reviewed_no_change",
+      "classification": "existing_candidate_overlap_and_valid_optional_ui",
+      "reason": "Root-name filtering1851 already belongs to029/P1. Remaining50NLOC/CCN21 reads one health summary and updates optional section/summary/button nodes, with guards for unavailable portfolio and sync metadata. Existing safe text renderer isolates DOM construction; no new summary builder is justified.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1824",
+        "js/app/00-storage-sync-patches.js:1830",
+        "js/app/00-storage-sync-patches.js:1833",
+        "js/app/00-storage-sync-patches.js:1844",
+        "js/app/00-storage-sync-patches.js:1849",
+        "js/app/00-storage-sync-patches.js:1851",
+        "js/app/00-storage-sync-patches.js:1861",
+        "js/app/00-storage-sync-patches.js:1871",
+        "js/app/00-storage-sync-patches.js:1879",
+        "js/app/00-storage-sync-patches.js:1883"
+      ],
+      "verified_metrics": {
+        "name": "refreshStorageHealthUI",
+        "start_line": 1823,
+        "end_line": 1887,
+        "ccn": 21,
+        "max_nesting": 3,
+        "cognitive": 29,
+        "nloc": 50,
+        "bumps": 6,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1853,
+          1856
+        ],
+        "complex_conditions": [
+          {
+            "line": 1855,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1861,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 29,
+        "nloc": 50,
+        "dispatch_share": 0.0,
+        "symbol_line": 1823,
+        "deepest_block": {
+          "start": 1853,
+          "end": 1856
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:386 drawer refresh,1966 cache-clear completion; storage-recovery.js:136 safe-mode toggle"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/script-loading.browser.cjs:52-55 drawer opening refreshes real health summary;70-74 lifecycle retains exact saved portfolio bytes and no browser errors",
+        "Scope limit: no cited dedicated assertion matrix for every health summary line; metadata-filter duplication is already repair-029/P1"
+      ],
+      "regression_recommendation": "Reuse existing029/P1 if adopted; no additional summary wrapper. Preserve optional DOM guards, safe text renderer, cached counts and unknown-storage fallback. Native drawer/lifecycle cases remain appropriate; exact summary-line tests only if content changes."
+    },
+    {
+      "record_id": "code_health:finding_8daa013c7519c2c2d6a5",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "redactWftSyncLogValue",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_security_type_dispatch",
+      "reason": "38NLOC/CCN15 handles null, string token patterns, primitives, Error fields, depth, arrays and own object keys. These are different value contracts; recursive helper already exists. Removing checks or moving each arm to another helper would obscure credential redaction and error/log shape.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2959",
+        "js/app/00-storage-sync-patches.js:2961",
+        "js/app/00-storage-sync-patches.js:2963",
+        "js/app/00-storage-sync-patches.js:2969",
+        "js/app/00-storage-sync-patches.js:2971",
+        "js/app/00-storage-sync-patches.js:2980",
+        "js/app/00-storage-sync-patches.js:2982",
+        "js/app/00-storage-sync-patches.js:2989",
+        "js/app/00-storage-sync-patches.js:2990",
+        "js/app/00-storage-sync-patches.js:2991"
+      ],
+      "verified_metrics": {
+        "name": "redactWftSyncLogValue",
+        "start_line": 2953,
+        "end_line": 2999,
+        "ccn": 15,
+        "max_nesting": 3,
+        "cognitive": 18,
+        "nloc": 38,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.5,
+        "deepest_block": [
+          2991,
+          2995
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 18,
+        "nloc": 38,
+        "dispatch_share": 0.5,
+        "symbol_line": 2953,
+        "deepest_block": {
+          "start": 2991,
+          "end": 2995
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2974,2976,2984,2994 recursive error/array/object cases;3004 getRedactedWftSyncLogArgs -> debug/log/warn/error wrappers1088-1098,3008-3038"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:28-29 enable debug;35-40 fetch error status plus synthetic-token log redaction;244-256 manual error logs redact token and retry clears dirty state",
+        "Scope limit: cited tests cover real string/error logging, not every recursive shape/depth/key case"
+      ],
+      "regression_recommendation": "Retain type-specific recursion, token-key/string redaction, Error field shape, own-property filtering and depth cap. Any refactor needs primitive/null/Error/array/object/cyclic/deep/nested secret cases plus native log checks; no metric-only dispatch extraction."
+    },
+    {
+      "record_id": "code_health:finding_e6a8dcdcd8e8e8e77ae3",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "getWftSyncDebugSnapshot",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_flat_debug_projection",
+      "reason": "24NLOC/nesting1 constructs diagnostic fields; CCN12 mostly counts fallback ORs and lastError formatting, not business branching. Public getWftSyncDiagnostics additionally synchronizes legacy globals, probes another folder cache and returns hashes rather than counters. Sharing by calling it here changes log side effects/read behavior.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3041",
+        "js/app/00-storage-sync-patches.js:3045",
+        "js/app/00-storage-sync-patches.js:3046",
+        "js/app/00-storage-sync-patches.js:3047",
+        "js/app/00-storage-sync-patches.js:3056",
+        "js/app/00-storage-sync-patches.js:3062",
+        "js/app/00-storage-sync-patches.js:5906",
+        "js/app/00-storage-sync-patches.js:5907",
+        "js/app/00-storage-sync-patches.js:5912",
+        "js/app/00-storage-sync-patches.js:5922"
+      ],
+      "verified_metrics": {
+        "name": "getWftSyncDebugSnapshot",
+        "start_line": 3041,
+        "end_line": 3064,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 24,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3062,
+          3062
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 24,
+        "dispatch_share": 0.0,
+        "symbol_line": 3041,
+        "deepest_block": {
+          "start": 3062,
+          "end": 3062
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3791 setDriveSyncStatus; sync request/stage/finish logs5777-5879; manual-save logs7871,7934,7955; transport/block/push diagnostics throughout same file"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:35-40 real status/error logging and redaction;244-256 manual failure/retry path",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:65,87-109 native observed counters/status/current-promise/late-response behavior; this observes controller state, not an exact snapshot-object schema oracle"
+      ],
+      "regression_recommendation": "Keep field names/coercions/cache fallback and avoid synchronizing legacy globals inside the low-impact log snapshot. If sharing with public diagnostics, first prove differing counter/hash/folder-cache behavior and property-read order; no helper proposed here."
+    },
+    {
+      "record_id": "code_health:finding_dd8fb02464ca2f8542d6",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "clearWftLocalStorageAfterSignOut",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_cache_cleanup_policy",
+      "reason": "CCN14 on42NLOC includes optional fixed-key constants, dedup, two-prefix discovery and best-effort per-key removal. It intentionally keeps settings, roster, selection, portfolio, deletions and pending work. A general storage cleanup function would be larger and risk broadening the deletion boundary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3705",
+        "js/app/00-storage-sync-patches.js:3706",
+        "js/app/00-storage-sync-patches.js:3709",
+        "js/app/00-storage-sync-patches.js:3716",
+        "js/app/00-storage-sync-patches.js:3719",
+        "js/app/00-storage-sync-patches.js:3729",
+        "js/app/00-storage-sync-patches.js:3739",
+        "js/app/00-storage-sync-patches.js:3749"
+      ],
+      "verified_metrics": {
+        "name": "clearWftLocalStorageAfterSignOut",
+        "start_line": 3705,
+        "end_line": 3752,
+        "ccn": 14,
+        "max_nesting": 4,
+        "cognitive": 28,
+        "nloc": 42,
+        "bumps": 3,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3739,
+          3742
+        ],
+        "complex_conditions": [
+          {
+            "line": 3729,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3739,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 28,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 3705,
+        "deepest_block": {
+          "start": 3739,
+          "end": 3742
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3768 handleGoogleSignOut.finishSignOut after auth-operation ownership check3757 and token cleanup3765-3766"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:74-97 real signout waits for bounded sync failure, retains writing, reconnects, ignores old accepted reply",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:392-406 failed token removal gives truthful reload warning/retry;411-462 stale signout callback cannot replace current connection",
+        "Scope limit: no cited direct assertion of all exact/prefix cache-key removals and per-key remove failure; source establishes the finite cache-only allowlist"
+      ],
+      "regression_recommendation": "Preserve exact cache-key/prefix allowlist, collect-before-delete order, optional-key guards, dedup and independent remove catches. If touched, add focused cache-only seeded storage and enumeration/remove-failure cases; native signout/data-preservation checks alone do not cover every cache entry."
+    },
+    {
+      "record_id": "code_health:finding_f5063b8834d488cbffac",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "setDriveSyncStatus",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_dom_projection",
+      "reason": "13NLOC/CCN12 is a token-warning override, fallback strings and four independent optional-node assignments for the two status locations. One dotClass is already shared and text uses textContent. A generic status-node renderer would add lookup/abstraction for a very small concrete UI.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3789",
+        "js/app/00-storage-sync-patches.js:3790",
+        "js/app/00-storage-sync-patches.js:3791",
+        "js/app/00-storage-sync-patches.js:3792",
+        "js/app/00-storage-sync-patches.js:3796",
+        "js/app/00-storage-sync-patches.js:3797",
+        "js/app/00-storage-sync-patches.js:3798",
+        "js/app/00-storage-sync-patches.js:3799",
+        "js/app/00-storage-sync-patches.js:3800"
+      ],
+      "verified_metrics": {
+        "name": "setDriveSyncStatus",
+        "start_line": 3789,
+        "end_line": 3801,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 13,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3790,
+          3790
+        ],
+        "complex_conditions": [
+          {
+            "line": 3790,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 3789,
+        "deepest_block": {
+          "start": 3790,
+          "end": 3790
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3772 signout warning;5728-5764 error classifier;5770-5895 sync controller;6912-6932 sync-all;7854 media;7885-7987 manual-save; storage-recovery.js:115,328 safe-mode/backup notices;10-main-app.js:8160 analysis preparation error"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:123-124 offline/online real lifecycle status;244-256 native manual failure/retry UI",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:395-406 token cleanup failure remains visibly error despite signout/reload",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:87,93,97 late response cannot overwrite active status and truthful signout remains"
+      ],
+      "regression_recommendation": "Keep token-persistence warning overriding every non-error state, both DOM locations and textContent. Existing native auth/status/late-response checks protect behavior; direct missing-DOM and warning-precedence assertions needed only for a change."
+    },
+    {
+      "record_id": "code_health:finding_b7d345bc52fe3457ba20",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "saveWftStudentChange",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_durable_change_boundary",
+      "reason": "CCN22 protects recovery restoration, required preflight, roster-aware snapshots and device credential preservation, portfolio/marker/roster writes, rollback, then committed publication. The two V2 checks bracket syncSavedPortfolioData and preserve live flag/read order. Generic transaction extraction or catch merging would threaten the saved-versus-publication-failure contract.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4736",
+        "js/app/00-storage-sync-patches.js:4737",
+        "js/app/00-storage-sync-patches.js:4741",
+        "js/app/00-storage-sync-patches.js:4745",
+        "js/app/00-storage-sync-patches.js:4750",
+        "js/app/00-storage-sync-patches.js:4754",
+        "js/app/00-storage-sync-patches.js:4758",
+        "js/app/00-storage-sync-patches.js:4759",
+        "js/app/00-storage-sync-patches.js:4765",
+        "js/app/00-storage-sync-patches.js:4773",
+        "js/app/00-storage-sync-patches.js:4783",
+        "js/app/00-storage-sync-patches.js:4784",
+        "js/app/00-storage-sync-patches.js:4788",
+        "js/app/00-storage-sync-patches.js:4789"
+      ],
+      "verified_metrics": {
+        "name": "saveWftStudentChange",
+        "start_line": 4735,
+        "end_line": 4793,
+        "ccn": 22,
+        "max_nesting": 3,
+        "cognitive": 43,
+        "nloc": 57,
+        "bumps": 5,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4766,
+          4769
+        ],
+        "complex_conditions": [
+          {
+            "line": 4737,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4777,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 22,
+        "cognitive": 43,
+        "nloc": 57,
+        "dispatch_share": 0.0,
+        "symbol_line": 4735,
+        "deepest_block": {
+          "start": 4766,
+          "end": 4769
+        }
+      },
+      "callers": [
+        "10-main-app.js:136 add,165 remove,405 rename,443 clear,504 import,3160 class reset; each caller handles save failure before UI publication",
+        "00-storage-sync-patches.js:6854 session removal,8338 pending replacement;portfolio-export.js:964 archive clear checks change.committed before interpreting failure"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-durability.browser.cjs:14-24 action/key matrix;110-138 original portfolio/markers/settings/roster/selection/counters/pending preserved, no scheduling and failure reported",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31 required corrupt/read failures preserve memory/storage/UI and emit no writes;110-120 normalization failures preserve before state",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-commit-publication.browser.cjs:59-77 signature failure precedes cleanup while display/read failure after clear does not undo committed writing"
+      ],
+      "regression_recommendation": "Preserve snapshots before writes, portfolio-before-markers, per-key rollback, recovery buffer, committed publication boundary, stored device key and live suppression/V2 checks around sync publication. Existing durability/integrity/publication suites are relevant; no generic transaction helper proposed."
+    },
+    {
+      "record_id": "code_health:finding_c3f2f127bb0b956fafd1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "handleWftSyncError",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_ordered_error_classification",
+      "reason": "32NLOC/nesting1 is an early-return classifier: absent error, storage recovery, settings apply, offline, expired auth,403 quota/rate,403 permission, fallback. Storage errors intentionally precede HTTP/message matching. An error table or individual predicate wrappers add indirection without repeated handling.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5728",
+        "js/app/00-storage-sync-patches.js:5730",
+        "js/app/00-storage-sync-patches.js:5735",
+        "js/app/00-storage-sync-patches.js:5739",
+        "js/app/00-storage-sync-patches.js:5744",
+        "js/app/00-storage-sync-patches.js:5749",
+        "js/app/00-storage-sync-patches.js:5754",
+        "js/app/00-storage-sync-patches.js:5759",
+        "js/app/00-storage-sync-patches.js:5764"
+      ],
+      "verified_metrics": {
+        "name": "handleWftSyncError",
+        "start_line": 5728,
+        "end_line": 5765,
+        "ccn": 15,
+        "max_nesting": 1,
+        "cognitive": 14,
+        "nloc": 32,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5729,
+          5729
+        ],
+        "complex_conditions": [
+          {
+            "line": 5729,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 5749,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5754,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 14,
+        "nloc": 32,
+        "dispatch_share": 0.0,
+        "symbol_line": 5728,
+        "deepest_block": {
+          "start": 5729,
+          "end": 5729
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5873 syncWftNow catch after lastError capture"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:35-40 401/quota/rate/permission response classification;244-256 actual manual pipeline preserves dirty writing and retry UI",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:87-97 final required-storage corruption returns false, preserves state and does not advance poll timestamp",
+        "Scope limit: fetch block flags and aggregate UI checks are not direct exact-message assertions for every classifier arm"
+      ],
+      "regression_recommendation": "Retain ordered recovery/settings/offline/auth/quota/permission/default classification; add direct error/null/status/reason message matrix only if refactored. Keep status403 outside textual quota matching, no weaker owner/storage checks."
+    },
+    {
+      "record_id": "code_health:finding_ead34325951527c35fd0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "syncWftNow",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_shared_run_controller",
+      "reason": "CCN17/cognitive18 remains modest for the full run and queue protocol. Explicit retry can clear blocks while automatic work stays blocked; busy requests wait on the current promise and request one follow-up. Completion clears run-owned locks before recursing. Preserve this coherent controller instead of moving conditions into score-only helpers.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5796",
+        "js/app/00-storage-sync-patches.js:5798",
+        "js/app/00-storage-sync-patches.js:5806",
+        "js/app/00-storage-sync-patches.js:5810",
+        "js/app/00-storage-sync-patches.js:5823",
+        "js/app/00-storage-sync-patches.js:5829",
+        "js/app/00-storage-sync-patches.js:5836",
+        "js/app/00-storage-sync-patches.js:5876",
+        "js/app/00-storage-sync-patches.js:5881",
+        "js/app/00-storage-sync-patches.js:5888",
+        "js/app/00-storage-sync-patches.js:5893"
+      ],
+      "verified_metrics": {
+        "name": "syncWftNow",
+        "start_line": 5767,
+        "end_line": 5903,
+        "ccn": 17,
+        "max_nesting": 2,
+        "cognitive": 18,
+        "nloc": 117,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5798,
+          5803
+        ],
+        "complex_conditions": [
+          {
+            "line": 5769,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5784,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5796,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5798,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 18,
+        "nloc": 117,
+        "dispatch_share": 0.0,
+        "symbol_line": 5767,
+        "deepest_block": {
+          "start": 5798,
+          "end": 5803
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3620 sign-in,4934 debounce,4944 immediate flush,5890 queued follow-up,5969 poll,6008 online,6025 visible;6050-6053 broadcast wrapper forwards original reason/options"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:81-109 late retry response ownership, bounded signout/reconnect and actual queued follow-up with newer writing",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.browser.cjs:16-28 actual follow-up preserves old/new/remote sessions and clears current lock/counter",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:324-351 full controller cannot acknowledge failed pending index;tests/storage-integrity.browser.cjs:87-97 late final corruption prevents success/poll acknowledgement"
+      ],
+      "regression_recommendation": "Retain guards, explicit unblock, queued callers/follow-up, per-stage connection assertions, final strict storage/pending-index validation, broadcast then completion reset and newer-pending status. Run ownership/held-request/native portfolio/index/integrity/lifecycle suites for any controller change; do not loop over stages just to shorten source."
+    },
+    {
+      "record_id": "code_health:finding_ab0a8010627d9e203fec",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "getWftSyncDiagnostics",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_public_diagnostic_projection",
+      "reason": "25NLOC/CCN16/nesting1 is a public state snapshot with fallback hashes/IDs and error string. The initial legacy synchronization and folder-cache fallback differ intentionally from getWftSyncDebugSnapshot. Both preserve token presence only; a common base object would add extra reads/allocation and alter these observable contracts.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5906",
+        "js/app/00-storage-sync-patches.js:5907",
+        "js/app/00-storage-sync-patches.js:5909",
+        "js/app/00-storage-sync-patches.js:5912",
+        "js/app/00-storage-sync-patches.js:5913",
+        "js/app/00-storage-sync-patches.js:5922",
+        "js/app/00-storage-sync-patches.js:5925",
+        "js/app/00-storage-sync-patches.js:5928",
+        "js/app/00-storage-sync-patches.js:5933"
+      ],
+      "verified_metrics": {
+        "name": "getWftSyncDiagnostics",
+        "start_line": 5906,
+        "end_line": 5930,
+        "ccn": 16,
+        "max_nesting": 1,
+        "cognitive": 15,
+        "nloc": 25,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5928,
+          5928
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 25,
+        "dispatch_share": 0.0,
+        "symbol_line": 5906,
+        "deepest_block": {
+          "start": 5928,
+          "end": 5928
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5933 window.WFT_SYNC_DIAGNOSTICS public read API"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-public-ui.browser.cjs:66-67 public API truthfully exposes pending portfolio push without token bytes",
+        "Scope limit: no cited exact assertion of every optional cache/hash field; getWftSyncDebugSnapshot is a different no-resync diagnostic contract"
+      ],
+      "regression_recommendation": "Keep synchronization of legacy state and extra folder-cache fallback plus hashes. Public dirty/token-free test is partial; exact schema/no-token/raw-cache cases are needed for a change. Do not call the public API from debug logging."
+    },
+    {
+      "record_id": "code_health:finding_193eef374799108f654b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "shouldPollWftCloudNow",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_fail_fast_poll_policy",
+      "reason": "21NLOC/CCN17/nesting1 lists independent reasons background work must stop: disabled/signed-out/offline/expired/busy/media/quota/permission/auth. Pending pushes intentionally bypass the interval only after all safety gates pass. Turning these into a broad aggregate helper would hide which work is eligible.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5937",
+        "js/app/00-storage-sync-patches.js:5940",
+        "js/app/00-storage-sync-patches.js:5942",
+        "js/app/00-storage-sync-patches.js:5943",
+        "js/app/00-storage-sync-patches.js:5944",
+        "js/app/00-storage-sync-patches.js:5945",
+        "js/app/00-storage-sync-patches.js:5946",
+        "js/app/00-storage-sync-patches.js:5948",
+        "js/app/00-storage-sync-patches.js:5949",
+        "js/app/00-storage-sync-patches.js:5953",
+        "js/app/00-storage-sync-patches.js:5957"
+      ],
+      "verified_metrics": {
+        "name": "shouldPollWftCloudNow",
+        "start_line": 5937,
+        "end_line": 5962,
+        "ccn": 17,
+        "max_nesting": 1,
+        "cognitive": 16,
+        "nloc": 21,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5942,
+          5942
+        ],
+        "complex_conditions": [
+          {
+            "line": 5943,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5953,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5957,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 5937,
+        "deepest_block": {
+          "start": 5942,
+          "end": 5942
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5968 poll interval,6024 visible lifecycle event"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:98-124 writer/media/quota/permission/auth/signed-out gates;hidden-page eligibility retained;expired timer emits no request;single polling timer and visible/online paths perform real sync"
+      ],
+      "regression_recommendation": "Keep fail-fast gates and pending-push-before-time-interval priority. Preserve hidden-page polling eligibility as current tested behavior. Existing native lifecycle/poll-block cases are suitable; do not merge into a less explicit generic eligibility helper."
+    },
+    {
+      "record_id": "code_health:finding_d4954938b0245dea0b84",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "setSyncButtonsBusy",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "unreachable_empty_indicator_loop_C1",
+      "reason": "thinkingIds is initialized to[] at7760 and never changed or exposed. Its loop7778-7781 cannot execute. Delete the declaration and loop; keep top/bottom button loop and final updateSyncPortfolioButtonState. This removes unused code/branches with no indicator behavior to replace.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7758",
+        "js/app/00-storage-sync-patches.js:7759",
+        "js/app/00-storage-sync-patches.js:7760",
+        "js/app/00-storage-sync-patches.js:7761",
+        "js/app/00-storage-sync-patches.js:7778",
+        "js/app/00-storage-sync-patches.js:7780",
+        "js/app/00-storage-sync-patches.js:7782"
+      ],
+      "verified_metrics": {
+        "name": "setSyncButtonsBusy",
+        "start_line": 7758,
+        "end_line": 7785,
+        "ccn": 11,
+        "max_nesting": 3,
+        "cognitive": 19,
+        "nloc": 28,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7766,
+          7776
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 19,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 7758,
+        "deepest_block": {
+          "start": 7766,
+          "end": 7776
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7898 manual start;7946 V2 manual success;7977 legacy manual success"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:244-256 actual sync button click settles success/failure and retry;tests/media-ownership.browser.cjs:208-220 pending success/retry/signout flush outcomes",
+        "Scope limit: no direct cited matrix of both button classes/labels or missing DOM; deletion C1 is source-proven unreachable-loop removal"
+      ],
+      "regression_recommendation": "C1: remove thinkingIds=[] and its unreachable loop7778-7781 only. Keep main button class/label/disabled behavior and !isBusy updateSyncPortfolioButtonState call after loop. Compare native manual success/failure/newer pending; add no replacement indicator abstraction."
+    },
+    {
+      "record_id": "code_health:finding_3a1b9b63082ed59d733c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "setSyncButtonsFailure",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "unreachable_empty_indicator_loop_C1",
+      "reason": "The separate thinkingIds=[] at7790 has no writes or escaping reference; loop7806-7809 is unreachable. Remove it and the declaration as the same C1 cleanup in this second helper. Pending readiness, enabled Retry behavior and failure labels remain in the actual button loop.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7787",
+        "js/app/00-storage-sync-patches.js:7788",
+        "js/app/00-storage-sync-patches.js:7790",
+        "js/app/00-storage-sync-patches.js:7791",
+        "js/app/00-storage-sync-patches.js:7796",
+        "js/app/00-storage-sync-patches.js:7806",
+        "js/app/00-storage-sync-patches.js:7808"
+      ],
+      "verified_metrics": {
+        "name": "setSyncButtonsFailure",
+        "start_line": 7787,
+        "end_line": 7810,
+        "ccn": 11,
+        "max_nesting": 3,
+        "cognitive": 17,
+        "nloc": 24,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7796,
+          7804
+        ],
+        "complex_conditions": [
+          {
+            "line": 7796,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 17,
+        "nloc": 24,
+        "dispatch_share": 0.0,
+        "symbol_line": 7787,
+        "deepest_block": {
+          "start": 7796,
+          "end": 7804
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7884 preparation,7918/7925 commit,7943/7958 V2 flush,7973 legacy flush,7986 pending-media failure"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:247-256 failed cloud save stays dirty with enabled Retry and real retry clears state",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:59-85 retained pending photo bytes reach actual pre-commit upload and successful saved record",
+        "Scope limit: dedicated both-button/no-pending failure-label combinations are not asserted here"
+      ],
+      "regression_recommendation": "C1: remove thinkingIds=[] and its unreachable loop7806-7809 only. Keep pending lookup before DOM iteration, live pendingPortfolioPush read, labels/classes and optional DOM behavior. Native manual Retry path should remain unchanged."
+    },
+    {
+      "record_id": "code_health:finding_b2a0b905ca7c2f210685",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "pendingPortfolioSessionHasUploadableImages",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_uploadability_guard",
+      "reason": "8NLOC/CCN9 uses ordered pending/session/images short-circuit reads and a loop accepting a photo only when bytes exist and no Drive ID exists. The count reflects boolean operators, not a large routine. Array.some or another input helper offers no necessary simplification and may change array-like compatibility.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7813",
+        "js/app/00-storage-sync-patches.js:7814",
+        "js/app/00-storage-sync-patches.js:7815",
+        "js/app/00-storage-sync-patches.js:7816",
+        "js/app/00-storage-sync-patches.js:7817",
+        "js/app/00-storage-sync-patches.js:7819"
+      ],
+      "verified_metrics": {
+        "name": "pendingPortfolioSessionHasUploadableImages",
+        "start_line": 7813,
+        "end_line": 7820,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 9,
+        "nloc": 8,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7817,
+          7817
+        ],
+        "complex_conditions": [
+          {
+            "line": 7815,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7817,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 7813,
+        "deepest_block": {
+          "start": 7817,
+          "end": 7817
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7844 pre-commit-media no-op guard;7982 manual media-before-commit route"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:37-62 pending bytes survive quota storage and uploadable remains true;77-85 exactly one fresh photo upload and existing Drive reference retained"
+      ],
+      "regression_recommendation": "Retain short-circuit pending/session/images access and only dataUrl without Drive fileId qualifies. Existing native quota/pre-commit upload protects real positive case; missing/empty/null/already-uploaded cases if changed. Array.some is not a necessary rewrite."
+    },
+    {
+      "record_id": "code_health:finding_6ab7dd261477cb43f4e7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "uploadPendingPortfolioMediaBeforeCommit",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_pending_owner_commit_boundary",
+      "reason": "33NLOC captures pending owner/signature, handles three clear no-op reasons, uploads captured media, then rechecks owner/signature before required pending persistence and success. The start/end signature checks protect an asynchronous gap; combining them or delegating persistence into upload completion would weaken ownership.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7833",
+        "js/app/00-storage-sync-patches.js:7834",
+        "js/app/00-storage-sync-patches.js:7835",
+        "js/app/00-storage-sync-patches.js:7836",
+        "js/app/00-storage-sync-patches.js:7840",
+        "js/app/00-storage-sync-patches.js:7844",
+        "js/app/00-storage-sync-patches.js:7855",
+        "js/app/00-storage-sync-patches.js:7859",
+        "js/app/00-storage-sync-patches.js:7860",
+        "js/app/00-storage-sync-patches.js:7861",
+        "js/app/00-storage-sync-patches.js:7866",
+        "js/app/00-storage-sync-patches.js:7867"
+      ],
+      "verified_metrics": {
+        "name": "uploadPendingPortfolioMediaBeforeCommit",
+        "start_line": 7833,
+        "end_line": 7868,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 14,
+        "nloc": 33,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7836,
+          7839
+        ],
+        "complex_conditions": [
+          {
+            "line": 7836,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 14,
+        "nloc": 33,
+        "dispatch_share": 0.0,
+        "symbol_line": 7833,
+        "deepest_block": {
+          "start": 7836,
+          "end": 7839
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7983 manualSaveToDrive captures owner and handles error before finishManualSaveToDrive"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:72-85 actual pre-commit upload writes expected raster bytes/reference, portfolio fields preserved, pending cleared after successful flush",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145 held owner/photo/persist/clear changes;208-220,253-262 retryable owner retention/rollback/recovery/no obsolete synced status",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 stale held compression/folder cases emit zero requests and settle errors"
+      ],
+      "regression_recommendation": "Keep owner/signature capture and final comparison, separate no-op callbacks, image upload with skipPortfolioSave=true/captured owner and required pending persistence before success. Existing media ownership/boundary/pending-portfolio tests are suitable; do not deduplicate away temporal checks."
+    },
+    {
+      "record_id": "code_health:finding_419468d595b912adfb7d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "updateSyncPortfolioButtonState",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "duplicated_ready_button_branch_C2",
+      "reason": "Branches8276-8280 and8286-8290 perform exactly the same class removals/addition, enabled flag and Sync to Portfolio label. Combine their eligibility into one ready branch while retaining manualSyncInProgress priority, then the select-student/synced/analyze states. This removes real repeated rendering, not a new generic UI wrapper; full state/DOM parity is still untested.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:8276",
+        "js/app/00-storage-sync-patches.js:8277",
+        "js/app/00-storage-sync-patches.js:8278",
+        "js/app/00-storage-sync-patches.js:8279",
+        "js/app/00-storage-sync-patches.js:8280",
+        "js/app/00-storage-sync-patches.js:8281",
+        "js/app/00-storage-sync-patches.js:8286",
+        "js/app/00-storage-sync-patches.js:8287",
+        "js/app/00-storage-sync-patches.js:8288",
+        "js/app/00-storage-sync-patches.js:8289",
+        "js/app/00-storage-sync-patches.js:8290",
+        "js/app/00-storage-sync-patches.js:8291",
+        "js/app/00-storage-sync-patches.js:8295",
+        "js/app/00-storage-sync-patches.js:8300"
+      ],
+      "verified_metrics": {
+        "name": "updateSyncPortfolioButtonState",
+        "start_line": 8265,
+        "end_line": 8306,
+        "ccn": 22,
+        "max_nesting": 3,
+        "cognitive": 35,
+        "nloc": 42,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          8276,
+          8304
+        ],
+        "complex_conditions": [
+          {
+            "line": 8276,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8286,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8291,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8295,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 22,
+        "cognitive": 35,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 8265,
+        "deepest_block": {
+          "start": 8276,
+          "end": 8304
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3775 signout,7751 session publication,7783 busy completion,7936-7968 token/new-pending manual completion,8261 pending clear;10-main-app.js:116,7785,8161,8434,8606 selection/analysis/startup refreshes"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:247-256 newer pending gets ready UI, failure offers retry, actual retry clears dirty state",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:52-65,110-150 persistence notice survives quota/memory and missing-photo reload blocks unsafe commit",
+        "Scope limit: C2 needs explicit both-button DOM matrix for all ordered branches; current flow tests do not enumerate every class/label/state combination"
+      ],
+      "regression_recommendation": "C2: combine the two identical ready branches8276-8280 and8286-8290 into one ready predicate while manualSyncInProgress always wins. Keep pending notice call and signature/student reads once before loop, both buttons, label guards and select-student/synced/analyze branch order. Add explicit state/DOM parity matrix, then run native manual/pending/photo cases; no shared UI state abstraction needed."
+    },
+    {
+      "record_id": "code_health:finding_96179f2cb386a54e873f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "commitPendingPortfolioSync",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_pending_commit_and_rollback_policy",
+      "reason": "38NLOC/CCN23 guards expected owner, required storage/recovery, missing photo bytes and replacement/save success before signature/cleanup publication. Failed pending removal must restore before-image storage; failed restore enters recovery. Existing clearPendingPortfolioSync already isolates post-clear refresh errors; another transaction wrapper would hide this boundary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:8343",
+        "js/app/00-storage-sync-patches.js:8345",
+        "js/app/00-storage-sync-patches.js:8346",
+        "js/app/00-storage-sync-patches.js:8349",
+        "js/app/00-storage-sync-patches.js:8351",
+        "js/app/00-storage-sync-patches.js:8355",
+        "js/app/00-storage-sync-patches.js:8356",
+        "js/app/00-storage-sync-patches.js:8361",
+        "js/app/00-storage-sync-patches.js:8362",
+        "js/app/00-storage-sync-patches.js:8363",
+        "js/app/00-storage-sync-patches.js:8364",
+        "js/app/00-storage-sync-patches.js:8368",
+        "js/app/00-storage-sync-patches.js:8373",
+        "js/app/00-storage-sync-patches.js:8257",
+        "js/app/00-storage-sync-patches.js:8261"
+      ],
+      "verified_metrics": {
+        "name": "commitPendingPortfolioSync",
+        "start_line": 8343,
+        "end_line": 8381,
+        "ccn": 23,
+        "max_nesting": 3,
+        "cognitive": 40,
+        "nloc": 38,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          8356,
+          8360
+        ],
+        "complex_conditions": [
+          {
+            "line": 8345,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8346,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8349,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8368,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8375,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 8376,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 8377,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 40,
+        "nloc": 38,
+        "dispatch_share": 0.0,
+        "symbol_line": 8343,
+        "deepest_block": {
+          "start": 8356,
+          "end": 8360
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7908 finishManualSaveToDrive passes captured pending identity; independent test/public call without expectedPending supported by arguments.length guard"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-commit-publication.browser.cjs:19-77 held clear/read/refresh/signature failures: signature rejected before cleanup, completed cleanup survives display/read failure and owns saved writing",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:121-152 required failures retain pending/bytes/counters and retry appends once;180-189 failed commit preserves assigned ID/date",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:208-220,253-262 pending ownership/rollback;tests/pending-portfolio.browser.cjs:145-150 missing reloaded photo bytes refuse commit"
+      ],
+      "regression_recommendation": "Preserve expected-owner guard, missing-photo refusal, strict preflight, before images, replacement/new-save behavior, signature-before-clear, clear-before-synced-signature, rollback/recovery and post-clear refresh isolation. Existing native publication/retention/photo/move cases are appropriate; no catch removal or delayed ownership validation."
+    },
+    {
+      "record_id": "code_health:finding_ba1ecff48ab5d7bc7fe4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "refreshStorageHealthUI",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_optional_health_sections",
+      "reason": "Six bumps correspond to feature/section visibility, optional counts, sync timestamp, rebuild metadata and optional summary/button elements. They are separate optional display sections, not interacting failure states.029/P1 already centralizes the repeated metadata filter; keep current text renderer and sections.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1824",
+        "js/app/00-storage-sync-patches.js:1826",
+        "js/app/00-storage-sync-patches.js:1831",
+        "js/app/00-storage-sync-patches.js:1850",
+        "js/app/00-storage-sync-patches.js:1861",
+        "js/app/00-storage-sync-patches.js:1871",
+        "js/app/00-storage-sync-patches.js:1878",
+        "js/app/00-storage-sync-patches.js:1884"
+      ],
+      "verified_metrics": {
+        "name": "refreshStorageHealthUI",
+        "start_line": 1823,
+        "end_line": 1887,
+        "ccn": 21,
+        "max_nesting": 3,
+        "cognitive": 29,
+        "nloc": 50,
+        "bumps": 6,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1853,
+          1856
+        ],
+        "complex_conditions": [
+          {
+            "line": 1855,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1861,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 6,
+        "ccn": 21,
+        "max_nesting": 3,
+        "symbol_line": 1823,
+        "deepest_block": {
+          "start": 1853,
+          "end": 1856
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:386 drawer refresh,1966 cache-clear completion; storage-recovery.js:136 safe-mode toggle"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/script-loading.browser.cjs:52-55 drawer opening refreshes real health summary;70-74 lifecycle retains exact saved portfolio bytes and no browser errors",
+        "Scope limit: no cited dedicated assertion matrix for every health summary line; metadata-filter duplication is already repair-029/P1"
+      ],
+      "regression_recommendation": "Reuse existing029/P1 if adopted; no additional summary wrapper. Preserve optional DOM guards, safe text renderer, cached counts and unknown-storage fallback. Native drawer/lifecycle cases remain appropriate; exact summary-line tests only if content changes."
+    },
+    {
+      "record_id": "code_health:finding_8f9b29415e86e102be0c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "clearWftLocalStorageAfterSignOut",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_cleanup_phases",
+      "reason": "Three bumps are fixed-key collection, guarded dynamic-key enumeration and independent per-key removals. Each phase has a distinct failure policy: optional enumeration can stop but already-known keys still get attempted, and one failed removal must not stop the rest. Combining catches loses that behavior.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3728",
+        "js/app/00-storage-sync-patches.js:3729",
+        "js/app/00-storage-sync-patches.js:3734",
+        "js/app/00-storage-sync-patches.js:3735",
+        "js/app/00-storage-sync-patches.js:3745",
+        "js/app/00-storage-sync-patches.js:3747",
+        "js/app/00-storage-sync-patches.js:3748",
+        "js/app/00-storage-sync-patches.js:3750"
+      ],
+      "verified_metrics": {
+        "name": "clearWftLocalStorageAfterSignOut",
+        "start_line": 3705,
+        "end_line": 3752,
+        "ccn": 14,
+        "max_nesting": 4,
+        "cognitive": 28,
+        "nloc": 42,
+        "bumps": 3,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3739,
+          3742
+        ],
+        "complex_conditions": [
+          {
+            "line": 3729,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3739,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 14,
+        "max_nesting": 4,
+        "symbol_line": 3705,
+        "deepest_block": {
+          "start": 3739,
+          "end": 3742
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3768 handleGoogleSignOut.finishSignOut after auth-operation ownership check3757 and token cleanup3765-3766"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:74-97 real signout waits for bounded sync failure, retains writing, reconnects, ignores old accepted reply",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:392-406 failed token removal gives truthful reload warning/retry;411-462 stale signout callback cannot replace current connection",
+        "Scope limit: no cited direct assertion of all exact/prefix cache-key removals and per-key remove failure; source establishes the finite cache-only allowlist"
+      ],
+      "regression_recommendation": "Preserve exact cache-key/prefix allowlist, collect-before-delete order, optional-key guards, dedup and independent remove catches. If touched, add focused cache-only seeded storage and enumeration/remove-failure cases; native signout/data-preservation checks alone do not cover every cache entry."
+    },
+    {
+      "record_id": "code_health:finding_0438f4d267deb61d65f1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "saveWftStudentChange",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_commit_phases",
+      "reason": "Five bumps separate recovery retry, roster-aware preparation, multi-key write/rollback, post-commit UI publication and sync scheduling. Keeping change.committed=true after required writes makes archive callers distinguish durable success from later refresh/publication failure. Flattening these phases would obscure what is safe to roll back.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4737",
+        "js/app/00-storage-sync-patches.js:4745",
+        "js/app/00-storage-sync-patches.js:4756",
+        "js/app/00-storage-sync-patches.js:4765",
+        "js/app/00-storage-sync-patches.js:4773",
+        "js/app/00-storage-sync-patches.js:4774",
+        "js/app/00-storage-sync-patches.js:4783",
+        "js/app/00-storage-sync-patches.js:4788",
+        "js/app/00-storage-sync-patches.js:4790"
+      ],
+      "verified_metrics": {
+        "name": "saveWftStudentChange",
+        "start_line": 4735,
+        "end_line": 4793,
+        "ccn": 22,
+        "max_nesting": 3,
+        "cognitive": 43,
+        "nloc": 57,
+        "bumps": 5,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4766,
+          4769
+        ],
+        "complex_conditions": [
+          {
+            "line": 4737,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4777,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 5,
+        "ccn": 22,
+        "max_nesting": 3,
+        "symbol_line": 4735,
+        "deepest_block": {
+          "start": 4766,
+          "end": 4769
+        }
+      },
+      "callers": [
+        "10-main-app.js:136 add,165 remove,405 rename,443 clear,504 import,3160 class reset; each caller handles save failure before UI publication",
+        "00-storage-sync-patches.js:6854 session removal,8338 pending replacement;portfolio-export.js:964 archive clear checks change.committed before interpreting failure"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-durability.browser.cjs:14-24 action/key matrix;110-138 original portfolio/markers/settings/roster/selection/counters/pending preserved, no scheduling and failure reported",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31 required corrupt/read failures preserve memory/storage/UI and emit no writes;110-120 normalization failures preserve before state",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-commit-publication.browser.cjs:59-77 signature failure precedes cleanup while display/read failure after clear does not undo committed writing"
+      ],
+      "regression_recommendation": "Preserve snapshots before writes, portfolio-before-markers, per-key rollback, recovery buffer, committed publication boundary, stored device key and live suppression/V2 checks around sync publication. Existing durability/integrity/publication suites are relevant; no generic transaction helper proposed."
+    },
+    {
+      "record_id": "code_health:finding_d523b84a45d044f4c0f5",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "saveWftLocalSnapshotsBeforeHide",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_independent_page_hide_failures",
+      "reason": "18NLOC has preflight-stop, settings save with finally restoring suppression, and independent portfolio save. Required corrupt/read failures stop all work; optional settings failure should still permit the portfolio attempt. A combined catch or extraction would change that failure sequence or hide suppression restoration.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5982",
+        "js/app/00-storage-sync-patches.js:5983",
+        "js/app/00-storage-sync-patches.js:5984",
+        "js/app/00-storage-sync-patches.js:5985",
+        "js/app/00-storage-sync-patches.js:5986",
+        "js/app/00-storage-sync-patches.js:5991",
+        "js/app/00-storage-sync-patches.js:5992",
+        "js/app/00-storage-sync-patches.js:5994",
+        "js/app/00-storage-sync-patches.js:5996",
+        "js/app/00-storage-sync-patches.js:5998"
+      ],
+      "verified_metrics": {
+        "name": "saveWftLocalSnapshotsBeforeHide",
+        "start_line": 5981,
+        "end_line": 5999,
+        "ccn": 8,
+        "max_nesting": 2,
+        "cognitive": 15,
+        "nloc": 18,
+        "bumps": 3,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5984,
+          5984
+        ],
+        "complex_conditions": [
+          {
+            "line": 5982,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 8,
+        "max_nesting": 2,
+        "symbol_line": 5981,
+        "deepest_block": {
+          "start": 5984,
+          "end": 5984
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:6020 visibility hidden,6068 beforeunload;10-main-app.js:8485 pagehide,8500 hidden visibility; recovery guard blocks destructive leave6062-6065"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31,110-120 required read/normalization failures preserve state and block writes/scheduling",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:98 failed settings hide-save retains suppression flag;tests/script-loading.browser.cjs:70-74 actual pagehide/pageshow preserves saved bytes",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/main-app-health.browser.cjs:102-120 main visibility handler dispatch/failure matrix;these substitutions test caller routing, not helper internals"
+      ],
+      "regression_recommendation": "Keep recovery/preflight early stop, finally restoration of suppression and independent portfolio attempt after optional settings failure. Do not join catches or perform network calls on hide. Existing integrity, preference and lifecycle assertions are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_44a8d8bf9c9caf35a45e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "syncAllToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_legacy_v2_sync_all_routes",
+      "reason": "Three bumps reflect no-token false completion, strict primary-read error and separate legacy save/media flow. V2 already uses named failPortfolioSync, marks dirty, waits for photos, saves latest local snapshot and returns flush truth. The legacy route has different save/callback semantics; merging paths solely for shape is not justified.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6905",
+        "js/app/00-storage-sync-patches.js:6910",
+        "js/app/00-storage-sync-patches.js:6915",
+        "js/app/00-storage-sync-patches.js:6919",
+        "js/app/00-storage-sync-patches.js:6923",
+        "js/app/00-storage-sync-patches.js:6926",
+        "js/app/00-storage-sync-patches.js:6928",
+        "js/app/00-storage-sync-patches.js:6939",
+        "js/app/00-storage-sync-patches.js:6941",
+        "js/app/00-storage-sync-patches.js:6942",
+        "js/app/00-storage-sync-patches.js:6945"
+      ],
+      "verified_metrics": {
+        "name": "syncAllToDrive",
+        "start_line": 6904,
+        "end_line": 6950,
+        "ccn": 6,
+        "max_nesting": 2,
+        "cognitive": 10,
+        "nloc": 43,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6905,
+          6908
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 6,
+        "max_nesting": 2,
+        "symbol_line": 6904,
+        "deepest_block": {
+          "start": 6905,
+          "end": 6908
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3780 signout waits for completion,7964 manual legacy completion;10-main-app.js:8491,8507 legacy lifecycle saves"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:28-55,64-85 both V2/legacy sync-all reject corrupt bytes and preserve pending;tests/storage-upload-ownership.browser.cjs:74-97 real signout waits for native sync-all failure and retains writing",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:208-211 pending signout during flush cannot report obsolete success"
+      ],
+      "regression_recommendation": "Preserve no-token false callback, strict primary validation, native media error settlement, required latest local save, V2 flush boolean and distinct legacy upload/save route. Existing corrupt-primary/media/signout cases protect sequence; no merging legacy/V2 paths without native parity."
+    },
+    {
+      "record_id": "code_health:finding_011d338cf5eaa80b7fbe",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "uploadPendingPortfolioMediaBeforeCommit",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_noop_vs_upload_routes",
+      "reason": "Three bumps are absent/invalid pending owner, absent Drive access and no uploadable image. Each settles callback(false) before side effects; the later success/error path persists current media ownership. A single larger condition saves little and creates another complex-conditional warning without reducing policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7836",
+        "js/app/00-storage-sync-patches.js:7837",
+        "js/app/00-storage-sync-patches.js:7840",
+        "js/app/00-storage-sync-patches.js:7841",
+        "js/app/00-storage-sync-patches.js:7844",
+        "js/app/00-storage-sync-patches.js:7845",
+        "js/app/00-storage-sync-patches.js:7855",
+        "js/app/00-storage-sync-patches.js:7860",
+        "js/app/00-storage-sync-patches.js:7866"
+      ],
+      "verified_metrics": {
+        "name": "uploadPendingPortfolioMediaBeforeCommit",
+        "start_line": 7833,
+        "end_line": 7868,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 14,
+        "nloc": 33,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7836,
+          7839
+        ],
+        "complex_conditions": [
+          {
+            "line": 7836,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 12,
+        "max_nesting": 2,
+        "symbol_line": 7833,
+        "deepest_block": {
+          "start": 7836,
+          "end": 7839
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7983 manualSaveToDrive captures owner and handles error before finishManualSaveToDrive"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:72-85 actual pre-commit upload writes expected raster bytes/reference, portfolio fields preserved, pending cleared after successful flush",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145 held owner/photo/persist/clear changes;208-220,253-262 retryable owner retention/rollback/recovery/no obsolete synced status",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 stale held compression/folder cases emit zero requests and settle errors"
+      ],
+      "regression_recommendation": "Keep owner/signature capture and final comparison, separate no-op callbacks, image upload with skipPortfolioSave=true/captured owner and required pending persistence before success. Existing media ownership/boundary/pending-portfolio tests are suitable; do not deduplicate away temporal checks."
+    },
+    {
+      "record_id": "code_health:finding_450dd0c9bb941a47e1a7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "syncWftNow",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_run_size_signal",
+      "reason": "117NLOC includes stage logs, connection assertions and anonymous continuations for the one run/reset lifecycle. This overlaps syncWftNow brain/complex warnings, not a separate repair. Existing stream helpers and one finishing continuation are appropriate; another extraction would mostly move context-capturing code.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5767",
+        "js/app/00-storage-sync-patches.js:5833",
+        "js/app/00-storage-sync-patches.js:5836",
+        "js/app/00-storage-sync-patches.js:5842",
+        "js/app/00-storage-sync-patches.js:5852",
+        "js/app/00-storage-sync-patches.js:5871",
+        "js/app/00-storage-sync-patches.js:5876",
+        "js/app/00-storage-sync-patches.js:5902"
+      ],
+      "verified_metrics": {
+        "name": "syncWftNow",
+        "start_line": 5767,
+        "end_line": 5903,
+        "ccn": 17,
+        "max_nesting": 2,
+        "cognitive": 18,
+        "nloc": 117,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5798,
+          5803
+        ],
+        "complex_conditions": [
+          {
+            "line": 5769,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5784,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5796,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5798,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 117,
+        "ccn": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 5767,
+        "deepest_block": {
+          "start": 5798,
+          "end": 5803
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3620 sign-in,4934 debounce,4944 immediate flush,5890 queued follow-up,5969 poll,6008 online,6025 visible;6050-6053 broadcast wrapper forwards original reason/options"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:81-109 late retry response ownership, bounded signout/reconnect and actual queued follow-up with newer writing",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.browser.cjs:16-28 actual follow-up preserves old/new/remote sessions and clears current lock/counter",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:324-351 full controller cannot acknowledge failed pending index;tests/storage-integrity.browser.cjs:87-97 late final corruption prevents success/poll acknowledgement"
+      ],
+      "regression_recommendation": "Retain guards, explicit unblock, queued callers/follow-up, per-stage connection assertions, final strict storage/pending-index validation, broadcast then completion reset and newer-pending status. Run ownership/held-request/native portfolio/index/integrity/lifecycle suites for any controller change; do not loop over stages just to shorten source."
+    },
+    {
+      "record_id": "code_health:finding_38c0855f7dc3861622c9",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "initWftSyncLifecycleHandlers",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_lifecycle_registration_group",
+      "reason": "60NLOC/CCN4 registers online/offline/visibility/beforeunload handlers and guarded BroadcastChannel setup. Handler bodies account for much of the span; startup has one caller, and real channel/timer/lifecycle tests express current behavior. One helper per event would add names while keeping the same ownership/teardown work.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6001",
+        "js/app/00-storage-sync-patches.js:6002",
+        "js/app/00-storage-sync-patches.js:6011",
+        "js/app/00-storage-sync-patches.js:6017",
+        "js/app/00-storage-sync-patches.js:6031",
+        "js/app/00-storage-sync-patches.js:6038",
+        "js/app/00-storage-sync-patches.js:6050",
+        "js/app/00-storage-sync-patches.js:6055",
+        "js/app/00-storage-sync-patches.js:6061",
+        "js/app/00-storage-sync-patches.js:6071"
+      ],
+      "verified_metrics": {
+        "name": "initWftSyncLifecycleHandlers",
+        "start_line": 6001,
+        "end_line": 6075,
+        "ccn": 4,
+        "max_nesting": 3,
+        "cognitive": 7,
+        "nloc": 60,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6055,
+          6058
+        ],
+        "complex_conditions": [
+          {
+            "line": 6031,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 60,
+        "ccn": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 6001,
+        "deepest_block": {
+          "start": 6055,
+          "end": 6058
+        }
+      },
+      "callers": [
+        "10-main-app.js:8437-8439 DOMContentLoaded installs once when V2 enabled"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:69-87 real same-origin BroadcastChannel completion and invalid message handling;98-124 hidden/visible/online/offline/timer routes",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/script-loading.browser.cjs:70-74 real page lifecycle leaves writing/rejections intact"
+      ],
+      "regression_recommendation": "Preserve one startup install, hidden local snapshots/visible gate, offline/online notices, channel support/catch/debounce/wrapper semantics and recovery-beforeunload prompt. Native real BroadcastChannel/lifecycle cases are appropriate; no one-function-per-event extraction for size alone."
+    },
+    {
+      "record_id": "code_health:finding_c41bba6fd11258d23e87",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "manualSaveToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "existing_repair027_completion_overlap",
+      "reason": "118NLOC includes named finishManualSaveToDrive, whose duplicated V2/legacy completion policy is already027/M1. Outer CCN6 captures preparation/access/lock/photo-before-commit routing and is already coherent. Do not create another size extraction or duplicate the existing manual rejection/new-pending lead.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7870",
+        "js/app/00-storage-sync-patches.js:7878",
+        "js/app/00-storage-sync-patches.js:7888",
+        "js/app/00-storage-sync-patches.js:7897",
+        "js/app/00-storage-sync-patches.js:7905",
+        "js/app/00-storage-sync-patches.js:7933",
+        "js/app/00-storage-sync-patches.js:7964",
+        "js/app/00-storage-sync-patches.js:7982",
+        "js/app/00-storage-sync-patches.js:7990",
+        "js/app/00-storage-sync-patches.js:7993"
+      ],
+      "verified_metrics": {
+        "name": "manualSaveToDrive",
+        "start_line": 7870,
+        "end_line": 7995,
+        "ccn": 6,
+        "max_nesting": 2,
+        "cognitive": 7,
+        "nloc": 118,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7882,
+          7887
+        ],
+        "complex_conditions": [
+          {
+            "line": 7982,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 118,
+        "ccn": 6,
+        "dispatch_share": 0.0,
+        "symbol_line": 7870,
+        "deepest_block": {
+          "start": 7882,
+          "end": 7887
+        }
+      },
+      "callers": [
+        "10-main-app.js:8411,8413 top/bottom button listeners,8459 owned post-OAuth action;00-storage-sync-patches.js:3367 redirect completion,7892 retry after Drive access"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:244-258 native button-entry preparation/commit/success/failure/retry/newer writing with real multipart bytes",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145,208-220,253-262 pending ownership changes, newer pending during flush, signout and rollback/retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:72-85 retained photo uploads before actual commit; existing repair-027/M1 and separate flush-rejection lead not re-raised"
+      ],
+      "regression_recommendation": "Existing027/M1 covers real duplicated completion policy; do not create another opportunity. Preserve prepare/owner capture before request, one manual lock, photo-before-commit, token/new-pending guards and V2/legacy result contracts. Native pending-media/button-entry/ownership cases plus027 regression matrix remain necessary."
+    },
+    {
+      "record_id": "code_health:finding_72bb568aecd724a691c3",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "handleWftSyncError",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_quota_status_and_reason_guard",
+      "reason": "Three boolean operators include status403 plus quota/rate matching in either reason or message. Both text fields need fallback because Google can supply either; HTTP403 must remain mandatory so unrelated errors are not mislabeled quota. This is one classification rule with one outcome.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5749",
+        "js/app/00-storage-sync-patches.js:5754",
+        "js/app/00-storage-sync-patches.js:5755",
+        "js/app/00-storage-sync-patches.js:5759"
+      ],
+      "verified_metrics": {
+        "name": "handleWftSyncError",
+        "start_line": 5728,
+        "end_line": 5765,
+        "ccn": 15,
+        "max_nesting": 1,
+        "cognitive": 14,
+        "nloc": 32,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5729,
+          5729
+        ],
+        "complex_conditions": [
+          {
+            "line": 5729,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 5749,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5754,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 5728
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5873 syncWftNow catch after lastError capture"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:35-40 401/quota/rate/permission response classification;244-256 actual manual pipeline preserves dirty writing and retry UI",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:87-97 final required-storage corruption returns false, preserves state and does not advance poll timestamp",
+        "Scope limit: fetch block flags and aggregate UI checks are not direct exact-message assertions for every classifier arm"
+      ],
+      "regression_recommendation": "Retain ordered recovery/settings/offline/auth/quota/permission/default classification; add direct error/null/status/reason message matrix only if refactored. Keep status403 outside textual quota matching, no weaker owner/storage checks."
+    },
+    {
+      "record_id": "code_health:finding_a2f159e8a65910389542",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "updateSyncPortfolioButtonState",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_unsynced_analysis_readiness_guard",
+      "reason": "Three ANDs require analysis, selected student, current signature and a signature differing from the last synced writing. These are one readiness invariant; removing any term enables invalid sync states. C2 can combine its identical ready rendering with pending-ready logic while preserving these requirements and manual busy precedence.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:8276",
+        "js/app/00-storage-sync-patches.js:8281",
+        "js/app/00-storage-sync-patches.js:8286",
+        "js/app/00-storage-sync-patches.js:8291",
+        "js/app/00-storage-sync-patches.js:8295"
+      ],
+      "verified_metrics": {
+        "name": "updateSyncPortfolioButtonState",
+        "start_line": 8265,
+        "end_line": 8306,
+        "ccn": 22,
+        "max_nesting": 3,
+        "cognitive": 35,
+        "nloc": 42,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          8276,
+          8304
+        ],
+        "complex_conditions": [
+          {
+            "line": 8276,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8286,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8291,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 8295,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 8265
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3775 signout,7751 session publication,7783 busy completion,7936-7968 token/new-pending manual completion,8261 pending clear;10-main-app.js:116,7785,8161,8434,8606 selection/analysis/startup refreshes"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:247-256 newer pending gets ready UI, failure offers retry, actual retry clears dirty state",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/pending-portfolio.browser.cjs:52-65,110-150 persistence notice survives quota/memory and missing-photo reload blocks unsafe commit",
+        "Scope limit: C2 needs explicit both-button DOM matrix for all ordered branches; current flow tests do not enumerate every class/label/state combination"
+      ],
+      "regression_recommendation": "C2: combine the two identical ready branches8276-8280 and8286-8290 into one ready predicate while manualSyncInProgress always wins. Keep pending notice call and signature/student reads once before loop, both buttons, label guards and select-student/synced/analyze branch order. Add explicit state/DOM parity matrix, then run native manual/pending/photo cases; no shared UI state abstraction needed."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "records": 29,
+    "status_counts": {
+      "reviewed_no_change": 26,
+      "confirmed_repair_candidate": 2,
+      "candidate_needs_regression": 1
+    },
+    "new_repair_opportunities": [
+      {
+        "id": "repair031-C1",
+        "primary_records": [
+          "code_health:finding_d4954938b0245dea0b84",
+          "code_health:finding_3a1b9b63082ed59d733c"
+        ],
+        "scope": "Delete local always-empty thinkingIds arrays and their never-executed loops in both busy/failure button helpers.",
+        "cost": "Two declarations and two loops deleted; no new helper, state, selector or behavior."
+      },
+      {
+        "id": "repair031-C2",
+        "primary_record": "code_health:finding_419468d595b912adfb7d",
+        "scope": "Combine two identical ready-button render branches while preserving exact manual-busy and later-state precedence.",
+        "cost": "One function only; no generic UI abstraction. Requires both-button state/DOM parity and native flow checks."
+      }
+    ],
+    "existing_opportunities_not_duplicated": [
+      "repair027/M1 manual completion policy",
+      "repair027/U1 photo queue-owner predicate",
+      "repair029/P1 four-site reserved-root-name rule, including refreshStorageHealthUI1851",
+      "repair027 separate V2 rejection/new-pending status lead remains tracked; no new duplicate lead"
+    ],
+    "retained_tradeoffs": "Strict storage and current-owner validation, committed-vs-publication and rollback phases, run ordering/follow-up and final ack, explicit polling gates, token warning priority, no-network hide snapshots, type-aware redaction and distinct debug/public diagnostics.",
+    "new_behavioral_leads": 0,
+    "scanner_clearances_claimed": 0
+  },
+  "limits": [
+    "Read-only source/assertion review and installed pure metrics replay. No source/Git/index/cache/docs/tracker mutations, tests/app/browser/live services or dependency changes; only own scratch/report written.",
+    "Complete20 assigned functions plus nested functions and relevant guarded caller paths were read. High-fanout status/debug/UI helpers were traced by representative controller/auth/manual/lifecycle callers, not every full unrelated caller body.",
+    "Frozen413 test assertions are intended-contract evidence, not fresh test-pass results. Specific coverage gaps are recorded for all-field diagnostics, exhaustive redaction, every cache-prefix failure and complete button-state matrix.",
+    "C1 unreachable code is established from local arrays with no mutation/escape. C2 behavior parity remains untested; coordinator must recheck current bytes/facts and run appropriate regressions before adoption.",
+    "Existing027/029 candidates/leads are cross-references, not new findings. No scanner finding is closed, no behavioral bug reproduced, and no new unconfirmed lead is asserted."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "individual_reasons_read": 29,
+    "independent_numeric_walker_replay_records": 29,
+    "scope": "Individually reasoned read-only dispositions accepted. Candidates need baseline/regression tests and new behavioral leads remain unconfirmed. Central immutable-production/finding-fact guards required. No graph recomputation or app-test pass claim."
+  }
+}

@@ -1,0 +1,1594 @@
+{
+  "repair_id": "repair-030",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "dff5375bba4f9d8c3e43794010830da860b87615",
+  "source_hashes_normalized_lf": {
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2"
+  },
+  "verification": {
+    "complete_assigned_functions_read": [
+      "getSampleStatusData",
+      "teacherizeWording",
+      "polishFeedback",
+      "buildFlowPatternSummary",
+      "buildFlowPatternNotes",
+      "buildEvidenceBasedTeacherComment",
+      "buildActionGrowthTip",
+      "getNeatnessComment",
+      "detectWritingGenreInfo",
+      "buildEncouragingClosing",
+      "getNotebookGuideDefaultFocus",
+      "buildFallbackExampleForPriority",
+      "buildNotebookGuideFallback"
+    ],
+    "assignment_main_hash_matches": true,
+    "inspected_production_files_equal_indexed_commit": true,
+    "metrics": "Installed unchanged RepoWise complexity.walk_file read-only source walk under Python -B. All assigned numeric fields, source spans, deepest blocks and seven individual conditional operator counts matched. File-level dependents_count/centrality_floor are copied assignment graph facts, not independently recomputed.",
+    "test_evidence": "Final references are immutable git-show source_commit test assertions, not concurrently modified worktree lines. Tests were inspected only; no app tests/runtime/live services executed.",
+    "immutable_test_blobs": {
+      "tests/analysis-pipeline.browser.cjs": "ce8c74a70a14918f3ba48472bb327042d1052c9a",
+      "tests/analysis-policy.browser.cjs": "9356ad0e63d263c398681b606a9c04ed78a3b471",
+      "tests/missing-feedback.browser.cjs": "51366f0d16de78d900257114add5be8bf78c7ed1",
+      "tests/feedback-compatibility.browser.cjs": "40205a4e830bcbf61017c1ddca366f9b4881804f",
+      "tests/notebook-guidance-repair.browser.cjs": "3ac9f63a991054949d44867787fa92f7867a1724",
+      "tests/notebook-guide.browser.cjs": "b00e67b46a1a3f179e601897128a09f27541bdbb"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_c8995c9fef2bc75e5f0b",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "buildFallbackExampleForPriority",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "merge_equivalent_grammar_result_paths",
+      "reason": "The dispatch share .92 is real, but the Grammar arm has genuine repetition. Within the existing opener pass, select correctedMatch when the comma predicate holds, otherwise the simple opener model, then make the single identical example. Within the later run-on pass, select correctedMatch || simple run-on model once and construct the same run-on example once. Keep both passes and generic corrected fallback in their present order; no wrapper or teaching-string extraction.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6693-6826 complete fallback category dispatcher",
+        "js/app/10-main-app.js:6723-6748 global opener-comma pass: corrected/model alternatives construct same example metadata",
+        "js/app/10-main-app.js:6750-6787 second grammar pass: corrected/model run-on alternatives repeat same metadata before generic corrected fallback",
+        "js/app/10-main-app.js:6681-6690 existing validated factory is already shared",
+        "js/app/10-main-app.js:6828-6845 outer insertion separately validates exact source quote"
+      ],
+      "verified_metrics": {
+        "name": "buildFallbackExampleForPriority",
+        "start_line": 6693,
+        "end_line": 6826,
+        "ccn": 26,
+        "cognitive": 49,
+        "nloc": 122,
+        "max_nesting": 4,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.92,
+        "deepest_block": [
+          6765,
+          6774
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 26,
+        "nloc": 122,
+        "max_nesting": 4,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.92,
+        "symbol_line": 6693,
+        "deepest_block": {
+          "start": 6765,
+          "end": 6774
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:6885,6891 buildNotebookGuideFallback; :6958 assembleNotebookGuideFromCandidates"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:15-49 convention labels, no guessed plurals, corrected possessive/plural and safe capitalization",
+        "tests/notebook-guidance-repair.browser.cjs:96-138 paragraph preservation, unrelated/malformed/oversize rejection and missing-candidate fallback",
+        "tests/notebook-guidance-repair.browser.cjs:75-95 candidate-assembly dictionary controls already present; :242-248 live/save/legacy snapshots"
+      ],
+      "regression_recommendation": "Before/after full example equality for corrected/model opener comma, later-sentence opener versus earlier run-on (first pass still wins), corrected/model run-on, generic corrected grammar, convention marker priority and empty/Flow/unsupported category null results. Retain exact-source grounding, truncation rejection, labels and paragraph breaks. Investigate the separate early-invalid-example lead independently."
+    },
+    {
+      "record_id": "code_health:finding_31c686c7b1d48ddf441b",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getSampleStatusData",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_pure_sample_evidence_flags",
+      "reason": "29 NLOC/CCN23 comes mostly from defaults and compound guards. A concrete small improvement exists: compute hasEnding and completeClause before the zero-sentence fallback and reuse them there; currently the same pure detectors can run twice for the same raw text. Keep all grade thresholds, list-like rules and fallback conjunctions unchanged.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:921-949 complete classifier",
+        "js/app/10-main-app.js:901-918 inspected punctuation/clause helpers are pure string checks",
+        "js/app/10-main-app.js:930-932 repeats those helpers when zero-sentence fallback is eligible",
+        "js/app/10-main-app.js:934-948 grade-dependent status rules and public evidence fields"
+      ],
+      "verified_metrics": {
+        "name": "getSampleStatusData",
+        "start_line": 921,
+        "end_line": 949,
+        "ccn": 23,
+        "cognitive": 22,
+        "nloc": 29,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          927,
+          927
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 22,
+        "nloc": 29,
+        "dispatch_share": 0.0,
+        "symbol_line": 921,
+        "deepest_block": {
+          "start": 927,
+          "end": 927
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:8220 analyzeWriting, with captured gradeProfile; tests/fixtures/analysis-pipeline-baseline.js:45 retained orchestration reference"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:8-15 insufficient/limited and grade 4/5/12 threshold cases; :219 low-sample zero-request/null-overall assertion; :264 frozen original/refactored full-result parity",
+        "tests/analysis-policy.browser.cjs:228 low-sample overall null and zero provider calls"
+      ],
+      "regression_recommendation": "Add a direct status equality matrix for empty/list-like/unpunctuated/connected clauses, zero-sentence fallback, exactly 8 words, each grade word/sentence boundary and strongWordFallback. Compare reason, lines, counts and hasSentenceEnding/hasCompleteClause, not only status."
+    },
+    {
+      "record_id": "code_health:finding_da71eb8351ac6076820a",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "teacherizeWording",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "delete_redundant_normalization_work",
+      "reason": "The filler callback at1716 returns the empty string in both ternary arms; use the empty replacement string directly. The exact-space room-to replacement is subsumed by the next whitespace-aware regex, and Word Choice tests works-for-topic before doing an identical replace that is safe unconditionally. These remove real duplicate work/branches in one existing helper; retain ordered rewrites and the score-aware generic-praise gate.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1695-1741 complete text normalizer",
+        "js/app/10-main-app.js:1706-1707 exact-space replacement is subsumed by following whitespace-tolerant replacement",
+        "js/app/10-main-app.js:1716 callback ternary returns empty string from both arms",
+        "js/app/10-main-app.js:1722 test-then-replace can be one unconditional identical replacement",
+        "js/app/10-main-app.js:1730 numeric-score/category gate prevents invented generic praise for missing assessment"
+      ],
+      "verified_metrics": {
+        "name": "teacherizeWording",
+        "start_line": 1695,
+        "end_line": 1741,
+        "ccn": 17,
+        "cognitive": 18,
+        "nloc": 36,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1720,
+          1723
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 18,
+        "nloc": 36,
+        "dispatch_share": 0.0,
+        "symbol_line": 1695,
+        "deepest_block": {
+          "start": 1720,
+          "end": 1723
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:2070,2082,2086,2096,2100,2108-2115 polishFeedback paths",
+        "js/app/10-main-app.js:4093 cleanTeacherCommentText; :4309 cleanGrowthTipText; :4682 closing normalization"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:35-50 missing scores do not acquire low-score/praise claims through native feedback; :85-88 supplied unknown-score evidence retained",
+        "tests/analysis-pipeline.browser.cjs:177-187 captures full feedback/UI/saved output and :264 compares original/refactored; no inspected exact teacherize rewrite-table assertion"
+      ],
+      "regression_recommendation": "Direct before/after text table: overall/even more/in general (mixed case), exact and multi-whitespace room-to phrases, works-for-topic versus no match, each category, null/zero/4/10 scores, short/good/nice generic inputs, empty input and overclaims. Preserve replacement order and exact whitespace/capitalization."
+    },
+    {
+      "record_id": "code_health:finding_388712b85a162a306869",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "polishFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_evidence_preserving_reconciliation",
+      "reason": "The function already delegates category-wide wording to one shared pass. Remaining convention, Grammar and Flow decisions intentionally differ: missing-score supplied evidence stays intact, observed issues can still be shown, and computed replacements only overwrite when present. Local aliases would be cosmetic; extracting generic scored-category handlers risks erasing those distinct conditions.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2064-2119 complete mutating reconciliation",
+        "js/app/10-main-app.js:2069-2076 unknown conventions retain supplied evidence unless issues exist or evidence is absent",
+        "js/app/10-main-app.js:2079-2100 grammar/Flow updates require scored items and nonempty computed replacement",
+        "js/app/10-main-app.js:2103-2117 shared category wording pass already extracted",
+        "js/app/10-main-app.js:7847-7866 caller inherits absent categories then applies eligibility before polishing"
+      ],
+      "verified_metrics": {
+        "name": "polishFeedback",
+        "start_line": 2064,
+        "end_line": 2119,
+        "ccn": 24,
+        "cognitive": 29,
+        "nloc": 52,
+        "max_nesting": 2,
+        "bumps": 5,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2072,
+          2077
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 24,
+        "cognitive": 29,
+        "nloc": 52,
+        "dispatch_share": 0.0,
+        "symbol_line": 2064,
+        "deepest_block": {
+          "start": 2072,
+          "end": 2077
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:7860 reconcileDetailedAnalysis; tests/fixtures/analysis-pipeline-baseline.js:228 parity reference"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:46-48 unknown no-issue convention claims remain neutral; :81-88 actual evidence retained even with missing scores",
+        "tests/feedback-compatibility.browser.cjs:50-60 computed Flow/grammar/convention builders and action/category controls",
+        "tests/analysis-pipeline.browser.cjs:177-187 and :264 full feedback/serialization/native parity"
+      ],
+      "regression_recommendation": "No repair required. Any later simplification must cover absent/unknown/scored quick and detailed categories independently, real issues versus no issues, supplied evidence retention, correction fallback, grammar error-density wording, Flow missing data and exact strings across all fields."
+    },
+    {
+      "record_id": "code_health:finding_831b9c9992d43fcc64c9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildFlowPatternSummary",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_shallow_flow_decision_list",
+      "reason": "19 NLOC with maximum nesting1 is a small ordered language selector. Starter repetition, absence of short sentences and a cluster of shorts need different wording and precedence. CCN16 counts defensive fallbacks as well as actual choices. A wrapper or generalized template would distribute this simple logic without removing work; repair028 separately identified duplicate invocations at the caller.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2557-2575 complete shallow ordered decision list",
+        "js/app/10-main-app.js:2558 no-sentence guard",
+        "js/app/10-main-app.js:2562-2573 repeated-starter/no-short/cluster precedence",
+        "js/app/10-main-app.js:2612-2655 callers distinguish score evidence from pattern data"
+      ],
+      "verified_metrics": {
+        "name": "buildFlowPatternSummary",
+        "start_line": 2557,
+        "end_line": 2575,
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 19,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2558,
+          2558
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 2557,
+        "deepest_block": {
+          "start": 2558,
+          "end": 2558
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:2634,2647 applyComputedFlowToFlow; :7865 reconcileDetailedAnalysis fallback"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:59 analyzer produces no-data, balanced counts and repeated short-run values",
+        "tests/missing-feedback.browser.cjs:70-79 scored/null Flow reconciliation; tests/analysis-pipeline.browser.cjs:177-187,:264 full serialized Flow outputs"
+      ],
+      "regression_recommendation": "Retain null/zero-sentence guard, starter ratio exactly/above .25, no shorts, shortRun 3/4, zero/positive short counts and fallback strings. No direct exact summary matrix was found in the inspected tests."
+    },
+    {
+      "record_id": "code_health:finding_e9fabed7ada8fc27ebc3",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildFlowPatternNotes",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_three_row_flow_assembly",
+      "reason": "30 NLOC builds Sentence length, Sentence starters and Connections in a stable order. The no-short/no-long/short-run hierarchy and starter-present/repetitive/absent cases support different feedback. Keep the inline data assembly; combining it with the prose summary would force different output roles into a new abstraction.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2577-2608 complete three-row assembly",
+        "js/app/10-main-app.js:2584-2591 no-shorts/no-longs/cluster priority",
+        "js/app/10-main-app.js:2595-2606 starter presence versus repetition and fixed Connections row"
+      ],
+      "verified_metrics": {
+        "name": "buildFlowPatternNotes",
+        "start_line": 2577,
+        "end_line": 2608,
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 30,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2578,
+          2578
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 2577,
+        "deepest_block": {
+          "start": 2578,
+          "end": 2578
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:2635,2648 applyComputedFlowToFlow; :7866 reconcileDetailedAnalysis fallback"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:51-59 known mixed, balanced, repetitive and no-data analyzer controls",
+        "tests/analysis-pipeline.browser.cjs:177-187,:264 full detailed Flow patternNotes parity"
+      ],
+      "regression_recommendation": "Retain empty-array result without sentences; exact three-row order, no-short and no-long precedence before clustered-short text, starter/no-starter cases and row labels. Cluster conditions must not be generalized to other thresholds used by false-comment sanitization."
+    },
+    {
+      "record_id": "code_health:finding_8518ceb3be5bf2c125b1",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildEvidenceBasedTeacherComment",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "guard_unknown_score_once",
+      "reason": "After choosing need/strength/evidence, return the current unknown-score note early when score is null. The remaining function can use score>=9 and score>=7 directly and fall through to the low-score wording, eliminating repeated hasScore conjunctions and the enclosing low-band guard. Keep unknown evidence attachment and current cutoffs exactly; do not change teaching text or use getScoreBandKey, whose thresholds differ.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4231-4258 complete score-aware composition",
+        "js/app/10-main-app.js:4234-4242 score normalization and independent need/strength choice",
+        "js/app/10-main-app.js:4244-4254 repeated hasScore gates around known-score bands",
+        "js/app/10-main-app.js:4256-4257 unknown-score evidence note and supplied observation retention",
+        "js/app/10-main-app.js:4280-4288 buildTeacherComment bypasses confident AI comments when score missing"
+      ],
+      "verified_metrics": {
+        "name": "buildEvidenceBasedTeacherComment",
+        "start_line": 4231,
+        "end_line": 4258,
+        "ccn": 19,
+        "cognitive": 21,
+        "nloc": 27,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4244,
+          4247
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 21,
+        "nloc": 27,
+        "dispatch_share": 0.0,
+        "symbol_line": 4231,
+        "deepest_block": {
+          "start": 4244,
+          "end": 4247
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:4283,4288 buildTeacherComment; renderer/save flow goes through buildStudentFeedbackForCategory :4423-4457"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:24-35 null-like values yield unknown teacher comment rather than low-score claims",
+        "tests/missing-feedback.browser.cjs:81-90 actual missing-score evidence remains visible; known scores 4/10 retain developing/strong language",
+        "tests/feedback-compatibility.browser.cjs:37-38 native saved score/goals control"
+      ],
+      "regression_recommendation": "For every category, compare full sentences for missing/null/undefined/empty/nonfinite/zero/string scores and 6/7/8/9/10 boundaries, rows containing need/strength/both/neither, item.evidence and absent items. Preserve unknown evidence attachment and score-band cutoffs exactly."
+    },
+    {
+      "record_id": "code_health:finding_7bac15813de051bb7ed9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "detectWritingGenreInfo",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_precedence_sensitive_genre_heuristics",
+      "reason": "64 NLOC contains two literal pattern lists and ordered early returns, not deeply nested orchestration. Existing helpers already own letter, poem, subtype and count logic. Reordering into a dispatch table could change mixed-feature genre precedence. The source-supported Dear Diary overlap is separated as a behavioral lead instead of disguising it as a structural refactor.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5391-5465 complete precedence-sensitive detector",
+        "js/app/10-main-app.js:5333-5360 hasLetterFeatures requires two signals and runs before other detectors",
+        "js/app/10-main-app.js:5396-5409 letter/procedure/speech/reflection priority",
+        "js/app/10-main-app.js:5412-5457 pattern counts and later literary/poem/narrative/informational fallbacks"
+      ],
+      "verified_metrics": {
+        "name": "detectWritingGenreInfo",
+        "start_line": 5391,
+        "end_line": 5465,
+        "ccn": 21,
+        "cognitive": 22,
+        "nloc": 64,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5424,
+          5424
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 22,
+        "nloc": 64,
+        "dispatch_share": 0.0,
+        "symbol_line": 5391,
+        "deepest_block": {
+          "start": 5424,
+          "end": 5424
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:5322 saved-session fallback; :5476-5477 UI auto choice; :5539 genre review",
+        "js/app/10-main-app.js:3839,3894 prompt fallbacks; :5576,5703 closings/notebook summary; :6870,6906,7096 notebook guide fallbacks",
+        "js/app/00-storage-sync-patches.js:7729 saved-session genre capture"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:9 genre scenario and :264 prompt/result/native parity",
+        "tests/missing-feedback.browser.cjs:99-101 manual genre objects keep unknown-score closings neutral; these do not directly calibrate automatic detector precedence"
+      ],
+      "regression_recommendation": "Any detector change needs positive/negative cases for every genre plus ambiguous mixed-feature precedence, manual override controls, empty and short-response fallbacks and saved-source inference. Separate Dear Diary precedence lead must establish intended classification before repair."
+    },
+    {
+      "record_id": "code_health:finding_6ab2c53b3fdff625ecb9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildEncouragingClosing",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_closing_override_precedence",
+      "reason": "The order is meaningful: unknown-score guard, initial genre language, lowest-category language, optional supplied strength and final genre sanitization. Existing local helpers make the two dispatches explicit. A template registry would move teacher strings and obscure override priority. Keep these stages and their no-score/low-sample distinction.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5574-5635 complete closing composition",
+        "js/app/10-main-app.js:5580-5582 no-scored-category guard excludes explicit low-sample coaching",
+        "js/app/10-main-app.js:5587-5625 genre then category precedence",
+        "js/app/10-main-app.js:5627-5634 supplied strength overrides and final genre sanitization"
+      ],
+      "verified_metrics": {
+        "name": "buildEncouragingClosing",
+        "start_line": 5574,
+        "end_line": 5635,
+        "ccn": 23,
+        "cognitive": 23,
+        "nloc": 58,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5627,
+          5632
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 23,
+        "nloc": 58,
+        "dispatch_share": 0.0,
+        "symbol_line": 5574,
+        "deepest_block": {
+          "start": 5627,
+          "end": 5632
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:4684,4686 detailed rendering fallback",
+        "js/app/00-storage-sync-patches.js:6746 buildSessionFeedbackSummary; :6765 buildPortfolioDetailedFeedback fallback"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:38-41 unknown-score closing avoids unsupported praise; :92-101 known categories and manual genre controls",
+        "tests/feedback-compatibility.browser.cjs:37-38 saved score/goal control; tests/analysis-pipeline.browser.cjs:177-187,:264 full live/save output parity"
+      ],
+      "regression_recommendation": "Retain no-score versus limited/insufficient sample distinction, every genre, each lowest category, only-Neatness and tied-score cases, optional strength override, and saved-data genre precedence over current UI."
+    },
+    {
+      "record_id": "code_health:finding_d41a46dccd3be770d913",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildFallbackExampleForPriority",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_grammar_path_merge",
+      "reason": "Cognitive49 is concentrated in the Grammar loops. The corrected and modeled opener branches return identical metadata, as do the corrected and modeled run-on branches. Merge each pair by choosing its example text before one existing-factory call. This is the same repair as finding_c8995c9fef2bc75e5f0b; preserve two-pass priority and all factory/grounding validation.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6693-6826 complete fallback category dispatcher",
+        "js/app/10-main-app.js:6723-6748 global opener-comma pass: corrected/model alternatives construct same example metadata",
+        "js/app/10-main-app.js:6750-6787 second grammar pass: corrected/model run-on alternatives repeat same metadata before generic corrected fallback",
+        "js/app/10-main-app.js:6681-6690 existing validated factory is already shared",
+        "js/app/10-main-app.js:6828-6845 outer insertion separately validates exact source quote"
+      ],
+      "verified_metrics": {
+        "name": "buildFallbackExampleForPriority",
+        "start_line": 6693,
+        "end_line": 6826,
+        "ccn": 26,
+        "cognitive": 49,
+        "nloc": 122,
+        "max_nesting": 4,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.92,
+        "deepest_block": [
+          6765,
+          6774
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 26,
+        "cognitive": 49,
+        "nloc": 122,
+        "dispatch_share": 0.92,
+        "symbol_line": 6693,
+        "deepest_block": {
+          "start": 6765,
+          "end": 6774
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:6885,6891 buildNotebookGuideFallback; :6958 assembleNotebookGuideFromCandidates"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:15-49 convention labels, no guessed plurals, corrected possessive/plural and safe capitalization",
+        "tests/notebook-guidance-repair.browser.cjs:96-138 paragraph preservation, unrelated/malformed/oversize rejection and missing-candidate fallback",
+        "tests/notebook-guidance-repair.browser.cjs:75-95 candidate-assembly dictionary controls already present; :242-248 live/save/legacy snapshots"
+      ],
+      "regression_recommendation": "Before/after full example equality for corrected/model opener comma, later-sentence opener versus earlier run-on (first pass still wins), corrected/model run-on, generic corrected grammar, convention marker priority and empty/Flow/unsupported category null results. Retain exact-source grounding, truncation rejection, labels and paragraph breaks. Investigate the separate early-invalid-example lead independently."
+    },
+    {
+      "record_id": "code_health:finding_72946e150a8efed522fa",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildNotebookGuideFallback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_required_coverage_then_extras",
+      "reason": "32 NLOC first supplies required categories, then fills remaining slots under stricter duplicate-quote rules. Both passes already use shared candidate and validated insertion helpers. Merging loops or hiding them behind callbacks would obscure required-category precedence and the true/false duplicate exception. No additional orchestration layer is warranted.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6869-6903 complete fallback guide orchestration",
+        "js/app/10-main-app.js:6882-6887 required-category pass allows shared quote only across distinct categories",
+        "js/app/10-main-app.js:6890-6893 remaining-priority pass rejects duplicate quotes",
+        "js/app/10-main-app.js:6828-6845 shared insertion helper already centralizes validation/seen-state updates",
+        "js/app/10-main-app.js:7080-7100 caller bypasses example generation for low samples"
+      ],
+      "verified_metrics": {
+        "name": "buildNotebookGuideFallback",
+        "start_line": 6869,
+        "end_line": 6903,
+        "ccn": 17,
+        "cognitive": 21,
+        "nloc": 32,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6883,
+          6887
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 21,
+        "nloc": 32,
+        "dispatch_share": 0.0,
+        "symbol_line": 6869,
+        "deepest_block": {
+          "start": 6883,
+          "end": 6887
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:6977 assembleNotebookGuideFromCandidates; :7064 renderNotebookGuideHtml empty fallback"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:117-138 grounded paragraph fallback and missing model candidates; :146-147 bounded priority maximum",
+        "tests/notebook-guide.browser.cjs:91-97 malformed/invalid/generic candidates and low-sample fallback; :100-104 saved snapshot preservation"
+      ],
+      "regression_recommendation": "Keep required-category coverage before extras, maximum example count, duplicate-quote rules distinct between passes, priority ordering, grounding, empty input and returned key order. Do not memoize/reorder candidate generation without exact parity and all invalid/duplicate cases."
+    },
+    {
+      "record_id": "code_health:finding_b5d8eafd6a4bd0367d8d",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "polishFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_independent_scored_and_evidence_guards",
+      "reason": "Five bumps reflect independent availability gates, not five interchangeable handlers. The convention branch permits real issue evidence with a missing score; Grammar/Flow require valid scores and nonempty computed content. Flattening by returning early for an absent category would skip later categories. Keep the branches; no blanket scored-only helper.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2064-2119 complete mutating reconciliation",
+        "js/app/10-main-app.js:2069-2076 unknown conventions retain supplied evidence unless issues exist or evidence is absent",
+        "js/app/10-main-app.js:2079-2100 grammar/Flow updates require scored items and nonempty computed replacement",
+        "js/app/10-main-app.js:2103-2117 shared category wording pass already extracted",
+        "js/app/10-main-app.js:7847-7866 caller inherits absent categories then applies eligibility before polishing"
+      ],
+      "verified_metrics": {
+        "name": "polishFeedback",
+        "start_line": 2064,
+        "end_line": 2119,
+        "ccn": 24,
+        "cognitive": 29,
+        "nloc": 52,
+        "max_nesting": 2,
+        "bumps": 5,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2072,
+          2077
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 5,
+        "ccn": 24,
+        "max_nesting": 2,
+        "symbol_line": 2064,
+        "deepest_block": {
+          "start": 2072,
+          "end": 2077
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:7860 reconcileDetailedAnalysis; tests/fixtures/analysis-pipeline-baseline.js:228 parity reference"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:46-48 unknown no-issue convention claims remain neutral; :81-88 actual evidence retained even with missing scores",
+        "tests/feedback-compatibility.browser.cjs:50-60 computed Flow/grammar/convention builders and action/category controls",
+        "tests/analysis-pipeline.browser.cjs:177-187 and :264 full feedback/serialization/native parity"
+      ],
+      "regression_recommendation": "No repair required. Any later simplification must cover absent/unknown/scored quick and detailed categories independently, real issues versus no issues, supplied evidence retention, correction fallback, grammar error-density wording, Flow missing data and exact strings across all fields."
+    },
+    {
+      "record_id": "code_health:finding_3d4ce77d3c9108a187ad",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "buildEvidenceBasedTeacherComment",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_single_missing_score_guard",
+      "reason": "Three bumps are accurate. A single early missing-score return lets known low-band wording become the final need/direct fallback rather than another hasScore wrapper. This is the same guard simplification as finding_8518ceb3be5bf2c125b1, preserving each need/strength choice and every sentence.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4231-4258 complete score-aware composition",
+        "js/app/10-main-app.js:4234-4242 score normalization and independent need/strength choice",
+        "js/app/10-main-app.js:4244-4254 repeated hasScore gates around known-score bands",
+        "js/app/10-main-app.js:4256-4257 unknown-score evidence note and supplied observation retention",
+        "js/app/10-main-app.js:4280-4288 buildTeacherComment bypasses confident AI comments when score missing"
+      ],
+      "verified_metrics": {
+        "name": "buildEvidenceBasedTeacherComment",
+        "start_line": 4231,
+        "end_line": 4258,
+        "ccn": 19,
+        "cognitive": 21,
+        "nloc": 27,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4244,
+          4247
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 19,
+        "max_nesting": 2,
+        "symbol_line": 4231,
+        "deepest_block": {
+          "start": 4244,
+          "end": 4247
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:4283,4288 buildTeacherComment; renderer/save flow goes through buildStudentFeedbackForCategory :4423-4457"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:24-35 null-like values yield unknown teacher comment rather than low-score claims",
+        "tests/missing-feedback.browser.cjs:81-90 actual missing-score evidence remains visible; known scores 4/10 retain developing/strong language",
+        "tests/feedback-compatibility.browser.cjs:37-38 native saved score/goals control"
+      ],
+      "regression_recommendation": "For every category, compare full sentences for missing/null/undefined/empty/nonfinite/zero/string scores and 6/7/8/9/10 boundaries, rows containing need/strength/both/neither, item.evidence and absent items. Preserve unknown evidence attachment and score-band cutoffs exactly."
+    },
+    {
+      "record_id": "code_health:finding_1807aa3acdf28aad29d0",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "buildActionGrowthTip",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_category_scoped_action_dispatch",
+      "reason": "Five bumps are seven-category dispatch (share.81) with purposeful subchoices for tense, paragraphing, sentence rhythm and handwriting. The missing-score/no-need guard is essential. Extracting one function per category or building a cue table would move strings without reducing a duplicated rule, and regex precedence would become less obvious.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4327-4367 complete category dispatch",
+        "js/app/10-main-app.js:4334 missing-score/no-need guard",
+        "js/app/10-main-app.js:4336-4364 category-specific actionable choices",
+        "js/app/10-main-app.js:4369-4376 caller validates existing growthTip before falling back"
+      ],
+      "verified_metrics": {
+        "name": "buildActionGrowthTip",
+        "start_line": 4327,
+        "end_line": 4367,
+        "ccn": 22,
+        "cognitive": 30,
+        "nloc": 39,
+        "max_nesting": 2,
+        "bumps": 5,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.81,
+        "deepest_block": [
+          4336,
+          4339
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 5,
+        "ccn": 22,
+        "max_nesting": 2,
+        "symbol_line": 4327,
+        "deepest_block": {
+          "start": 4336,
+          "end": 4339
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:4376 buildGrowthTip; :4423-4457 rendering and saved feedback builder"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:58 all seven categories plus unknown, Grammar tense and Neatness spacing branches",
+        "tests/missing-feedback.browser.cjs:49-50 neutral unknown category rendering; :92-97 each known category remains usable"
+      ],
+      "regression_recommendation": "Keep missing-score/no-evidence teacher-review instruction, each recognized category, specific regex cues versus fallback and category priority when need text matches multiple cues. Existing compatibility test does not fully enumerate every cue."
+    },
+    {
+      "record_id": "code_health:finding_709433cd9c383145550f",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "getNeatnessComment",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_handwriting_criterion_score_matrix",
+      "reason": "Six bumps correspond exactly to six handwriting criteria; dispatch share.97 confirms the shape. Each criterion uses the same descending thresholds with distinct calibrated wording, after one numeric/missing guard. A data-table rewrite is possible but would relocate thirty teaching strings and add selection/indexing rules; no demonstrated defect or maintenance benefit justifies it.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4461-4507 complete criterion/score-band dispatch",
+        "js/app/10-main-app.js:4462-4463 missing-score guard",
+        "js/app/10-main-app.js:4464-4505 six independent handwriting criteria with descending 5/4/3/2 cutoffs",
+        "js/app/10-main-app.js:4517-4535 notice-row caller passes individual subscores, not overall neatness"
+      ],
+      "verified_metrics": {
+        "name": "getNeatnessComment",
+        "start_line": 4461,
+        "end_line": 4507,
+        "ccn": 32,
+        "cognitive": 55,
+        "nloc": 47,
+        "max_nesting": 2,
+        "bumps": 6,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.97,
+        "deepest_block": [
+          4464,
+          4470
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 6,
+        "ccn": 32,
+        "max_nesting": 2,
+        "symbol_line": 4461,
+        "deepest_block": {
+          "start": 4464,
+          "end": 4470
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:4529-4534 buildNeatnessNoticeRows; renderer/save builder uses those rows"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:24-36 all null-like values remain neutral for spacing; :91 low/high letter formation controls",
+        "tests/missing-feedback.browser.cjs:104-109 valid overall handwriting fallback leaves unknown spacing criterion neutral"
+      ],
+      "regression_recommendation": "No table rewrite required. If later changed, verify all six kinds at 1/2/3/4/5 and numeric strings, null-like/nonfinite/zero values and unknown kind; retain separate subscore missingness under a valid overall score."
+    },
+    {
+      "record_id": "code_health:finding_aff95dd9e196478bf792",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "getNotebookGuideDefaultFocus",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_short_category_focus_dispatch",
+      "reason": "23 NLOC/share.95 is almost entirely category dispatch with three cue-specific arms. Flow, Grammar and Organization have different cue priority; other categories return direct labels. Keep the readable guards and labels. A generic keyword registry adds machinery and may change substring-versus-word matching.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6231-6253 complete focus-label dispatch",
+        "js/app/10-main-app.js:6233-6241 category-scoped Flow and Grammar cue priority",
+        "js/app/10-main-app.js:6244-6248 Organization ending/paragraph/transition priority",
+        "js/app/10-main-app.js:6284-6297 caller normalizes category and deduplicates before choosing focus"
+      ],
+      "verified_metrics": {
+        "name": "getNotebookGuideDefaultFocus",
+        "start_line": 6231,
+        "end_line": 6253,
+        "ccn": 22,
+        "cognitive": 28,
+        "nloc": 23,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.95,
+        "deepest_block": [
+          6233,
+          6237
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 22,
+        "max_nesting": 2,
+        "symbol_line": 6231,
+        "deepest_block": {
+          "start": 6233,
+          "end": 6237
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:6289,6295 buildNotebookGuidePrioritiesFromRawInput; :6382 sanitizeNotebookGuideCandidate; :6487 getNotebookGuideFocusItems; :6857 buildNotebookGuideFocusItemsFromExamples"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:198-227 tied rubric order, saved zero-score/goal precedence and score-eight priorities",
+        "tests/notebook-guide.browser.cjs:91-97 low-sample/full-sentence and missing-score priority controls"
+      ],
+      "regression_recommendation": "No dispatch rewrite needed. Preserve exact focus labels, category scoping, overlaps such as paragraph plus ending, Flow opening versus transitions, Grammar tense versus run-on and unknown-category cleaned-text fallback."
+    },
+    {
+      "record_id": "code_health:finding_1b54f65228745086620d",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "buildFallbackExampleForPriority",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_merge_nested_runon_alternatives",
+      "reason": "The deepest block is the modeled run-on return under category/loop/run-on/model guards. Select the corrected or simple model inside the single run-on branch and reuse one existing example-factory call. This removes duplicate result construction while keeping validation, not merely moving the deepest block to a new symbol.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6693-6826 complete fallback category dispatcher",
+        "js/app/10-main-app.js:6723-6748 global opener-comma pass: corrected/model alternatives construct same example metadata",
+        "js/app/10-main-app.js:6750-6787 second grammar pass: corrected/model run-on alternatives repeat same metadata before generic corrected fallback",
+        "js/app/10-main-app.js:6681-6690 existing validated factory is already shared",
+        "js/app/10-main-app.js:6828-6845 outer insertion separately validates exact source quote"
+      ],
+      "verified_metrics": {
+        "name": "buildFallbackExampleForPriority",
+        "start_line": 6693,
+        "end_line": 6826,
+        "ccn": 26,
+        "cognitive": 49,
+        "nloc": 122,
+        "max_nesting": 4,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.92,
+        "deepest_block": [
+          6765,
+          6774
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 26,
+        "max_nesting": 4,
+        "symbol_line": 6693,
+        "deepest_block": {
+          "start": 6765,
+          "end": 6774
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:6885,6891 buildNotebookGuideFallback; :6958 assembleNotebookGuideFromCandidates"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:15-49 convention labels, no guessed plurals, corrected possessive/plural and safe capitalization",
+        "tests/notebook-guidance-repair.browser.cjs:96-138 paragraph preservation, unrelated/malformed/oversize rejection and missing-candidate fallback",
+        "tests/notebook-guidance-repair.browser.cjs:75-95 candidate-assembly dictionary controls already present; :242-248 live/save/legacy snapshots"
+      ],
+      "regression_recommendation": "Before/after full example equality for corrected/model opener comma, later-sentence opener versus earlier run-on (first pass still wins), corrected/model run-on, generic corrected grammar, convention marker priority and empty/Flow/unsupported category null results. Retain exact-source grounding, truncation rejection, labels and paragraph breaks. Investigate the separate early-invalid-example lead independently."
+    },
+    {
+      "record_id": "code_health:finding_860035c4a626f17c5d07",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "detectWritingGenreInfo",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_genre_pattern_lists",
+      "reason": "The 64 lines include 9 opinion patterns and 14 narrative patterns plus explicit genre metadata. Splitting these static lists into new helpers would reduce NLOC only on this symbol. Existing feature helpers already provide useful boundaries; retain source-visible precedence and assess the diary ambiguity separately.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5391-5465 complete precedence-sensitive detector",
+        "js/app/10-main-app.js:5333-5360 hasLetterFeatures requires two signals and runs before other detectors",
+        "js/app/10-main-app.js:5396-5409 letter/procedure/speech/reflection priority",
+        "js/app/10-main-app.js:5412-5457 pattern counts and later literary/poem/narrative/informational fallbacks"
+      ],
+      "verified_metrics": {
+        "name": "detectWritingGenreInfo",
+        "start_line": 5391,
+        "end_line": 5465,
+        "ccn": 21,
+        "cognitive": 22,
+        "nloc": 64,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5424,
+          5424
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 64,
+        "ccn": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 5391,
+        "deepest_block": {
+          "start": 5424,
+          "end": 5424
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:5322 saved-session fallback; :5476-5477 UI auto choice; :5539 genre review",
+        "js/app/10-main-app.js:3839,3894 prompt fallbacks; :5576,5703 closings/notebook summary; :6870,6906,7096 notebook guide fallbacks",
+        "js/app/00-storage-sync-patches.js:7729 saved-session genre capture"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:9 genre scenario and :264 prompt/result/native parity",
+        "tests/missing-feedback.browser.cjs:99-101 manual genre objects keep unknown-score closings neutral; these do not directly calibrate automatic detector precedence"
+      ],
+      "regression_recommendation": "Any detector change needs positive/negative cases for every genre plus ambiguous mixed-feature precedence, manual override controls, empty and short-response fallbacks and saved-source inference. Separate Dear Diary precedence lead must establish intended classification before repair."
+    },
+    {
+      "record_id": "code_health:finding_e6c13bd33f14c45f3bd2",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "buildFallbackExampleForPriority",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_reduce_repeated_example_objects",
+      "reason": "122 NLOC includes repeated eight-line existing-factory calls for equivalent corrected/model Grammar results. Merging those two pairs is a real deletion opportunity and leaves category-specific teaching strings local. Retain the separate convention passes, no-hardcoded-Flow fallback, Organization paragraph grounding and documented long-source limit.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6693-6826 complete fallback category dispatcher",
+        "js/app/10-main-app.js:6723-6748 global opener-comma pass: corrected/model alternatives construct same example metadata",
+        "js/app/10-main-app.js:6750-6787 second grammar pass: corrected/model run-on alternatives repeat same metadata before generic corrected fallback",
+        "js/app/10-main-app.js:6681-6690 existing validated factory is already shared",
+        "js/app/10-main-app.js:6828-6845 outer insertion separately validates exact source quote"
+      ],
+      "verified_metrics": {
+        "name": "buildFallbackExampleForPriority",
+        "start_line": 6693,
+        "end_line": 6826,
+        "ccn": 26,
+        "cognitive": 49,
+        "nloc": 122,
+        "max_nesting": 4,
+        "bumps": 3,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.92,
+        "deepest_block": [
+          6765,
+          6774
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 122,
+        "ccn": 26,
+        "dispatch_share": 0.92,
+        "symbol_line": 6693,
+        "deepest_block": {
+          "start": 6765,
+          "end": 6774
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:6885,6891 buildNotebookGuideFallback; :6958 assembleNotebookGuideFromCandidates"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:15-49 convention labels, no guessed plurals, corrected possessive/plural and safe capitalization",
+        "tests/notebook-guidance-repair.browser.cjs:96-138 paragraph preservation, unrelated/malformed/oversize rejection and missing-candidate fallback",
+        "tests/notebook-guidance-repair.browser.cjs:75-95 candidate-assembly dictionary controls already present; :242-248 live/save/legacy snapshots"
+      ],
+      "regression_recommendation": "Before/after full example equality for corrected/model opener comma, later-sentence opener versus earlier run-on (first pass still wins), corrected/model run-on, generic corrected grammar, convention marker priority and empty/Flow/unsupported category null results. Retain exact-source grounding, truncation rejection, labels and paragraph breaks. Investigate the separate early-invalid-example lead independently."
+    },
+    {
+      "record_id": "code_health:finding_da2b2ef9a672b56e85c4",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "symbol": "polishFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_primitive_inference_keep_coherent_inputs",
+      "reason": "Five inputs are real, but zero typed and zero primitive parameters were observed. They are two result structures, original/corrected text and computed flow data, all consumed distinctly. One production reconciliation caller supplies them. A parameter bag or wrapper solely to lower the count adds indirection and does not simplify the evidence rules.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2064-2119 complete mutating reconciliation",
+        "js/app/10-main-app.js:2069-2076 unknown conventions retain supplied evidence unless issues exist or evidence is absent",
+        "js/app/10-main-app.js:2079-2100 grammar/Flow updates require scored items and nonempty computed replacement",
+        "js/app/10-main-app.js:2103-2117 shared category wording pass already extracted",
+        "js/app/10-main-app.js:7847-7866 caller inherits absent categories then applies eligibility before polishing"
+      ],
+      "verified_metrics": {
+        "name": "polishFeedback",
+        "start_line": 2064,
+        "end_line": 2119,
+        "ccn": 24,
+        "cognitive": 29,
+        "nloc": 52,
+        "max_nesting": 2,
+        "bumps": 5,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2072,
+          2077
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 2064
+      },
+      "callers": [
+        "js/app/10-main-app.js:7860 reconcileDetailedAnalysis; tests/fixtures/analysis-pipeline-baseline.js:228 parity reference"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:46-48 unknown no-issue convention claims remain neutral; :81-88 actual evidence retained even with missing scores",
+        "tests/feedback-compatibility.browser.cjs:50-60 computed Flow/grammar/convention builders and action/category controls",
+        "tests/analysis-pipeline.browser.cjs:177-187 and :264 full feedback/serialization/native parity"
+      ],
+      "regression_recommendation": "No repair required. Any later simplification must cover absent/unknown/scored quick and detailed categories independently, real issues versus no issues, supplied evidence retention, correction fallback, grammar error-density wording, Flow missing data and exact strings across all fields."
+    },
+    {
+      "record_id": "code_health:finding_ce819733bea699e05190",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "symbol": "buildNotebookGuideFallback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_primitive_inference_keep_guide_context",
+      "reason": "The five inputs represent original/corrected writing, analysis context, optional genre and optional priorities; all are used with explicit fallback precedence. Untyped JavaScript provides no evidence that these are all primitives. Existing candidate/insertion helpers are already shared; replacing the call boundary with an options object is disproportionate for these two callers.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6869-6903 complete fallback guide orchestration",
+        "js/app/10-main-app.js:6882-6887 required-category pass allows shared quote only across distinct categories",
+        "js/app/10-main-app.js:6890-6893 remaining-priority pass rejects duplicate quotes",
+        "js/app/10-main-app.js:6828-6845 shared insertion helper already centralizes validation/seen-state updates",
+        "js/app/10-main-app.js:7080-7100 caller bypasses example generation for low samples"
+      ],
+      "verified_metrics": {
+        "name": "buildNotebookGuideFallback",
+        "start_line": 6869,
+        "end_line": 6903,
+        "ccn": 17,
+        "cognitive": 21,
+        "nloc": 32,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6883,
+          6887
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 6869
+      },
+      "callers": [
+        "js/app/10-main-app.js:6977 assembleNotebookGuideFromCandidates; :7064 renderNotebookGuideHtml empty fallback"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:117-138 grounded paragraph fallback and missing model candidates; :146-147 bounded priority maximum",
+        "tests/notebook-guide.browser.cjs:91-97 malformed/invalid/generic candidates and low-sample fallback; :100-104 saved snapshot preservation"
+      ],
+      "regression_recommendation": "Keep required-category coverage before extras, maximum example count, duplicate-quote rules distinct between passes, priority ordering, grounding, empty input and returned key order. Do not memoize/reorder candidate generation without exact parity and all invalid/duplicate cases."
+    },
+    {
+      "record_id": "code_health:finding_79e1b20adb32b9182b1b",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "getSampleStatusData",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_flags_keep_zero_sentence_conjunction",
+      "reason": "All four requirements at930 are necessary: no detected sentences, minimum words, connected clause and sentence-ending punctuation. Keep the conjunction, but use the hasEnding/completeClause flags already returned by the function, computed once before it. This is the same local reuse as finding_31c686c7b1d48ddf441b, not a threshold-only boolean wrapper.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:921-949 complete classifier",
+        "js/app/10-main-app.js:901-918 inspected punctuation/clause helpers are pure string checks",
+        "js/app/10-main-app.js:930-932 repeats those helpers when zero-sentence fallback is eligible",
+        "js/app/10-main-app.js:934-948 grade-dependent status rules and public evidence fields"
+      ],
+      "verified_metrics": {
+        "name": "getSampleStatusData",
+        "start_line": 921,
+        "end_line": 949,
+        "ccn": 23,
+        "cognitive": 22,
+        "nloc": 29,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          927,
+          927
+        ],
+        "assigned_condition": {
+          "line": 930,
+          "operator_count": 3,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 921
+      },
+      "callers": [
+        "js/app/10-main-app.js:8220 analyzeWriting, with captured gradeProfile; tests/fixtures/analysis-pipeline-baseline.js:45 retained orchestration reference"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:8-15 insufficient/limited and grade 4/5/12 threshold cases; :219 low-sample zero-request/null-overall assertion; :264 frozen original/refactored full-result parity",
+        "tests/analysis-policy.browser.cjs:228 low-sample overall null and zero provider calls"
+      ],
+      "regression_recommendation": "Add a direct status equality matrix for empty/list-like/unpunctuated/connected clauses, zero-sentence fallback, exactly 8 words, each grade word/sentence boundary and strongWordFallback. Compare reason, lines, counts and hasSentenceEnding/hasCompleteClause, not only status."
+    },
+    {
+      "record_id": "code_health:finding_b37fbb90b7c90f70de7c",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "getSampleStatusData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_fair_scoring_disjunction",
+      "reason": "The four operators express independent reasons to withhold a score: empty text, too few words, neither ending nor clause, or list-like input. Replacing this with a named predicate would only conceal the same rule. The order and parentheses are clear and current low-sample tests protect withholding a full score.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:921-949 complete classifier",
+        "js/app/10-main-app.js:901-918 inspected punctuation/clause helpers are pure string checks",
+        "js/app/10-main-app.js:930-932 repeats those helpers when zero-sentence fallback is eligible",
+        "js/app/10-main-app.js:934-948 grade-dependent status rules and public evidence fields"
+      ],
+      "verified_metrics": {
+        "name": "getSampleStatusData",
+        "start_line": 921,
+        "end_line": 949,
+        "ccn": 23,
+        "cognitive": 22,
+        "nloc": 29,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          927,
+          927
+        ],
+        "assigned_condition": {
+          "line": 941,
+          "operator_count": 4,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 921
+      },
+      "callers": [
+        "js/app/10-main-app.js:8220 analyzeWriting, with captured gradeProfile; tests/fixtures/analysis-pipeline-baseline.js:45 retained orchestration reference"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:8-15 insufficient/limited and grade 4/5/12 threshold cases; :219 low-sample zero-request/null-overall assertion; :264 frozen original/refactored full-result parity",
+        "tests/analysis-policy.browser.cjs:228 low-sample overall null and zero provider calls"
+      ],
+      "regression_recommendation": "Add a direct status equality matrix for empty/list-like/unpunctuated/connected clauses, zero-sentence fallback, exactly 8 words, each grade word/sentence boundary and strongWordFallback. Compare reason, lines, counts and hasSentenceEnding/hasCompleteClause, not only status."
+    },
+    {
+      "record_id": "code_health:finding_093a5b89338891a83bb9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "teacherizeWording",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_score_and_category_gate",
+      "reason": "The generic rewrite requires a numeric score, a category and short/good/nice text. Every part prevents unsupported automatic praise for missing assessment while limiting replacement to generic wording. Keep this guard and its category-specific outputs; the function has separate concrete redundancies at1706-1716/1722.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1695-1741 complete text normalizer",
+        "js/app/10-main-app.js:1706-1707 exact-space replacement is subsumed by following whitespace-tolerant replacement",
+        "js/app/10-main-app.js:1716 callback ternary returns empty string from both arms",
+        "js/app/10-main-app.js:1722 test-then-replace can be one unconditional identical replacement",
+        "js/app/10-main-app.js:1730 numeric-score/category gate prevents invented generic praise for missing assessment"
+      ],
+      "verified_metrics": {
+        "name": "teacherizeWording",
+        "start_line": 1695,
+        "end_line": 1741,
+        "ccn": 17,
+        "cognitive": 18,
+        "nloc": 36,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1720,
+          1723
+        ],
+        "assigned_condition": {
+          "line": 1730,
+          "operator_count": 4,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 1695
+      },
+      "callers": [
+        "js/app/10-main-app.js:2070,2082,2086,2096,2100,2108-2115 polishFeedback paths",
+        "js/app/10-main-app.js:4093 cleanTeacherCommentText; :4309 cleanGrowthTipText; :4682 closing normalization"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:35-50 missing scores do not acquire low-score/praise claims through native feedback; :85-88 supplied unknown-score evidence retained",
+        "tests/analysis-pipeline.browser.cjs:177-187 captures full feedback/UI/saved output and :264 compares original/refactored; no inspected exact teacherize rewrite-table assertion"
+      ],
+      "regression_recommendation": "Direct before/after text table: overall/even more/in general (mixed case), exact and multi-whitespace room-to phrases, works-for-topic versus no match, each category, null/zero/4/10 scores, short/good/nice generic inputs, empty input and overclaims. Preserve replacement order and exact whitespace/capitalization."
+    },
+    {
+      "record_id": "code_health:finding_c0f9bb7da8550f66432a",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "polishFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_unknown_convention_evidence",
+      "reason": "The item must exist, and replacement is allowed only for a scored result, observed issue or absent supplied reason. This is an evidence-preservation boundary: simplifying to item existence or score presence would overwrite valid unknown-score evidence or suppress real detected issues. Existing missing-feedback assertions directly cover this rule.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2064-2119 complete mutating reconciliation",
+        "js/app/10-main-app.js:2069-2076 unknown conventions retain supplied evidence unless issues exist or evidence is absent",
+        "js/app/10-main-app.js:2079-2100 grammar/Flow updates require scored items and nonempty computed replacement",
+        "js/app/10-main-app.js:2103-2117 shared category wording pass already extracted",
+        "js/app/10-main-app.js:7847-7866 caller inherits absent categories then applies eligibility before polishing"
+      ],
+      "verified_metrics": {
+        "name": "polishFeedback",
+        "start_line": 2064,
+        "end_line": 2119,
+        "ccn": 24,
+        "cognitive": 29,
+        "nloc": 52,
+        "max_nesting": 2,
+        "bumps": 5,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2072,
+          2077
+        ],
+        "assigned_condition": {
+          "line": 2069,
+          "operator_count": 3,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 2064
+      },
+      "callers": [
+        "js/app/10-main-app.js:7860 reconcileDetailedAnalysis; tests/fixtures/analysis-pipeline-baseline.js:228 parity reference"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:46-48 unknown no-issue convention claims remain neutral; :81-88 actual evidence retained even with missing scores",
+        "tests/feedback-compatibility.browser.cjs:50-60 computed Flow/grammar/convention builders and action/category controls",
+        "tests/analysis-pipeline.browser.cjs:177-187 and :264 full feedback/serialization/native parity"
+      ],
+      "regression_recommendation": "No repair required. Any later simplification must cover absent/unknown/scored quick and detailed categories independently, real issues versus no issues, supplied evidence retention, correction fallback, grammar error-density wording, Flow missing data and exact strings across all fields."
+    },
+    {
+      "record_id": "code_health:finding_3d107669bd8eaedca599",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "buildFlowPatternSummary",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_consistent_cluster_guard",
+      "reason": "The run-length>=4 and positive-short-count conjunction ensures the cluster message is supported by both measures. Earlier no-short handling does not justify weakening accepted input semantics for inconsistent/non-numeric counts. A shared one-line predicate across prose/tips/notes is possible, but adds a helper just to rename a small condition; no repair benefit demonstrated.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2557-2575 complete shallow ordered decision list",
+        "js/app/10-main-app.js:2558 no-sentence guard",
+        "js/app/10-main-app.js:2562-2573 repeated-starter/no-short/cluster precedence",
+        "js/app/10-main-app.js:2612-2655 callers distinguish score evidence from pattern data"
+      ],
+      "verified_metrics": {
+        "name": "buildFlowPatternSummary",
+        "start_line": 2557,
+        "end_line": 2575,
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 19,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2558,
+          2558
+        ],
+        "assigned_condition": {
+          "line": 2571,
+          "operator_count": 3,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 2557
+      },
+      "callers": [
+        "js/app/10-main-app.js:2634,2647 applyComputedFlowToFlow; :7865 reconcileDetailedAnalysis fallback"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:59 analyzer produces no-data, balanced counts and repeated short-run values",
+        "tests/missing-feedback.browser.cjs:70-79 scored/null Flow reconciliation; tests/analysis-pipeline.browser.cjs:177-187,:264 full serialized Flow outputs"
+      ],
+      "regression_recommendation": "Retain null/zero-sentence guard, starter ratio exactly/above .25, no shorts, shortRun 3/4, zero/positive short counts and fallback strings. No direct exact summary matrix was found in the inspected tests."
+    },
+    {
+      "record_id": "code_health:finding_4908307b68a52238a52f",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "buildFlowPatternNotes",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_length_note_priority_and_data_guard",
+      "reason": "The same measured cluster rule is valid here, after no-short and no-long notes. It must not replace or move ahead of those stronger length-distribution cases. Keep the short-count confirmation and ordering; consolidating it with the summary would conflate different student-facing outputs.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2577-2608 complete three-row assembly",
+        "js/app/10-main-app.js:2584-2591 no-shorts/no-longs/cluster priority",
+        "js/app/10-main-app.js:2595-2606 starter presence versus repetition and fixed Connections row"
+      ],
+      "verified_metrics": {
+        "name": "buildFlowPatternNotes",
+        "start_line": 2577,
+        "end_line": 2608,
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 30,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2578,
+          2578
+        ],
+        "assigned_condition": {
+          "line": 2588,
+          "operator_count": 3,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 2577
+      },
+      "callers": [
+        "js/app/10-main-app.js:2635,2648 applyComputedFlowToFlow; :7866 reconcileDetailedAnalysis fallback"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:51-59 known mixed, balanced, repetitive and no-data analyzer controls",
+        "tests/analysis-pipeline.browser.cjs:177-187,:264 full detailed Flow patternNotes parity"
+      ],
+      "regression_recommendation": "Retain empty-array result without sentences; exact three-row order, no-short and no-long precedence before clustered-short text, starter/no-starter cases and row labels. Cluster conditions must not be generalized to other thresholds used by false-comment sanitization."
+    },
+    {
+      "record_id": "code_health:finding_8500ae12a975ea5b7683",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "buildEncouragingClosing",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_unknown_score_low_sample_exception",
+      "reason": "The guard correctly distinguishes no scored category from explicit insufficient/limited coaching. Removing the sampleStatus exception would change low-sample encouragement; removing the no-lowest check would invent praise for wholly unknown assessments. The compound form is short and source-visible, and unknown-score closing tests cover its core safety behavior.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5574-5635 complete closing composition",
+        "js/app/10-main-app.js:5580-5582 no-scored-category guard excludes explicit low-sample coaching",
+        "js/app/10-main-app.js:5587-5625 genre then category precedence",
+        "js/app/10-main-app.js:5627-5634 supplied strength overrides and final genre sanitization"
+      ],
+      "verified_metrics": {
+        "name": "buildEncouragingClosing",
+        "start_line": 5574,
+        "end_line": 5635,
+        "ccn": 23,
+        "cognitive": 23,
+        "nloc": 58,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5627,
+          5632
+        ],
+        "assigned_condition": {
+          "line": 5580,
+          "operator_count": 3,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 5574
+      },
+      "callers": [
+        "js/app/10-main-app.js:4684,4686 detailed rendering fallback",
+        "js/app/00-storage-sync-patches.js:6746 buildSessionFeedbackSummary; :6765 buildPortfolioDetailedFeedback fallback"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:38-41 unknown-score closing avoids unsupported praise; :92-101 known categories and manual genre controls",
+        "tests/feedback-compatibility.browser.cjs:37-38 saved score/goal control; tests/analysis-pipeline.browser.cjs:177-187,:264 full live/save output parity"
+      ],
+      "regression_recommendation": "Retain no-score versus limited/insufficient sample distinction, every genre, each lowest category, only-Neatness and tied-score cases, optional strength override, and saved-data genre precedence over current UI."
+    }
+  ],
+  "additional_leads": [
+    {
+      "lead_id": "review030-fallback-first-unusable-example",
+      "kind": "source_supported_behavioral_candidate",
+      "status": "candidate_needs_regression",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildFallbackExampleForPriority",
+      "reason": "Search branches immediately return the first factory result. The factory may return null or an example whose truncated originalQuote contains an added ellipsis; the caller later rejects that quote as not present in the source. The search then never reaches a later sentence that might yield a valid grounded example. Concrete source-based scenario to test: an over-180-character first sentence eligible for an opener-comma Grammar fallback followed by a short eligible sentence. This is not reproduced and should not be merged with the behavior-preserving branch-coalescence repair.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:6723-6748 immediate returns stop the opener pass",
+        "js/app/10-main-app.js:6681-6690 factory truncates originalQuote to180 then may return null",
+        "js/app/10-main-app.js:6198-6203 truncation appends ellipsis",
+        "js/app/10-main-app.js:6828-6839 insertion rejects invalid or non-source quotes",
+        "js/app/10-main-app.js:6885-6892 caller retries category, not alternate sentence"
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guidance-repair.browser.cjs:122-127 verifies oversize truncation/break rejection but does not establish later-sentence recovery",
+        "tests/notebook-guidance-repair.browser.cjs:117-138 validates ordinary grounded fallback and missing candidates"
+      ],
+      "regression_recommendation": "Use actual fallback factory/insertion helpers with a long unusable first candidate and a valid later sentence. Assert valid later source quote is selected, preserving global opener-before-run-on priority, exact quotation, no guessed revisions and unchanged single-candidate rejection. Establish whether full-source validation belongs before returning a search result.",
+      "id": "review030-fallback-first-unusable-example",
+      "function": "buildFallbackExampleForPriority",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "source_supported_behavioral_candidate",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false
+    },
+    {
+      "lead_id": "review030-diary-letter-precedence",
+      "kind": "source_supported_behavioral_candidate",
+      "status": "candidate_needs_regression",
+      "file": "js/app/10-main-app.js",
+      "symbol": "detectWritingGenreInfo",
+      "reason": "For ordinary multi-line Dear Diary, followed by reflection prose, hasLetterFeatures can count the salutation as both hasGreeting and directRecipient and meet its two-feature threshold. detectWritingGenreInfo returns Letter/Email before reaching its explicit dear-diary Journal/Reflection rule. The overlap is directly visible in source; intended diary precedence and actual native behavior still need a test. Do not silently alter genre calibration during structural cleanup.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5344 greeting includes Dear Diary with optional comma",
+        "js/app/10-main-app.js:5353-5360 directRecipient counts Dear again toward letter threshold",
+        "js/app/10-main-app.js:5396-5397 early Letter/Email return",
+        "js/app/10-main-app.js:5408-5409 later explicit Dear Diary reflection rule"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:9 manual genre scenario does not decide this automatic-detector overlap",
+        "tests/missing-feedback.browser.cjs:99-101 manual genre objects test unknown-score closing safety, not diary detection"
+      ],
+      "regression_recommendation": "Add direct and UI-auto cases for Dear Diary with LF/CRLF, optional comma and reflection prose. Compare with a genuine Dear person letter with signature/closing, ordinary journal text and mixed-feature writing; determine expected Journal/Reflection precedence before modifying the feature rules.",
+      "id": "review030-diary-letter-precedence",
+      "function": "detectWritingGenreInfo",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "source_supported_behavioral_candidate",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false
+    }
+  ],
+  "summary": {
+    "assigned_records": 28,
+    "unique_functions": 13,
+    "proposed_status_counts": {
+      "confirmed_repair_candidate": 9,
+      "reviewed_no_change": 19
+    },
+    "minimal_repairs": [
+      "Reuse already-needed sample evidence flags before the zero-sentence fallback (two records, one repair).",
+      "Delete redundant wording replacements/test and constant-output callback (one record).",
+      "Use one early unknown-score return before known teacher-comment bands (two records, one repair).",
+      "Coalesce equivalent corrected/model Grammar fallback result construction within each existing pass (four records, one repair)."
+    ],
+    "retained_structure": "Evidence-preserving polishing, shallow Flow data selectors, genre precedence list, closing override order, category/handwriting/focus dispatch, and required-coverage guide passes remain coherent. Parameter-count findings do not establish primitive type misuse.",
+    "shared_helper_assessment": "Reuse existing makeNotebookGuideExample and current pure sample-evidence helpers; no new wrapper required. Repeated corrected-text sentence parsing in findBestCorrectedMatchForQuote (four fallback call sites) is a secondary profiling candidate: passing one parsed corrected sentence list could avoid repeated parsing, but changes a helper contract and has no measured need in this review.",
+    "scanner_state": "No findings closed, scanner/index updated or state mutated. Parent must refresh exact source/facts before adoption."
+  },
+  "limits": [
+    "Read-only source/assertion review; no source/docs/tracker/Git/dependency/config/index/cache writes, application tests, runtime/browser exercise or live AI/Drive calls. Only own scratch and this UTF-8 report written.",
+    "Two behavioral leads are source-supported and untested; neither is an established failing case or part of the structural repair authorization.",
+    "Existing 013-017 fixes were retained in indexed413 source: grounding, convention labels, paragraph breaks, missing-score handling, priority/order and first-person action controls. Suggested simplifications must preserve them even if shape thresholds remain exceeded.",
+    "Shared AI-Library START-HERE reread; previously consulted knowledge contains only library-rules, no relevant curated project note. memU historical recall consulted without treating reported historical tests as current verification. Ponytail full applied."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "individual_reasons_read": 28,
+    "independent_numeric_walker_replay_records": 28,
+    "scope": "Individually reasoned read-only dispositions accepted. Candidates need baseline/regression tests and new behavioral leads remain unconfirmed. Central immutable-production/finding-fact guards required. No graph recomputation or app-test pass claim."
+  }
+}
