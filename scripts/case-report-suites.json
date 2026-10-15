@@ -13,6 +13,7 @@
   "tests/media-ownership.browser.cjs",
   "tests/media-upload-boundary.browser.cjs",
   "tests/missing-feedback.browser.cjs",
+  "tests/neatness-boundaries.browser.cjs",
   "tests/notebook-guidance-repair.browser.cjs",
   "tests/notebook-print-failure.browser.cjs",
   "tests/openrouter-admission.browser.cjs",
