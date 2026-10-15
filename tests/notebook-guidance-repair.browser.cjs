@@ -121,6 +121,43 @@ function runNotebookGuidanceCases() {
         check('per item compression first person and limit', compressed.length === 2 && /^Check my verbs\s*\.$/.test(compressed[0]) && compressed.every(s => s.length <= 160), compressed);
     }
     checkActionItems();
+    function checkNotebookGuidanceDecisions() {
+        const tied = {
+            categoryScores: {Flow:4, Grammar:4, 'Ideas & Details':4},
+            detailed: {categories: {
+                Flow: {growthTip:'Read your writing aloud.'},
+                Grammar: {growthTip:'Check your verbs.'},
+                'Ideas & Details': {growthTip:'Add clear details.'}
+            }}
+        };
+        const tiedActions = buildNotebookActionChecklist(tied, [], '', '');
+        check('tied checklist follows rubric order', JSON.stringify(tiedActions) === JSON.stringify(['Add clear details.', 'Check my verbs.']), tiedActions);
+        const tiedPriorities = buildNotebookGuidePriorities(tied).map(item => item.category);
+        check('tied guide priorities follow rubric order', JSON.stringify(tiedPriorities) === JSON.stringify(['Ideas & Details', 'Grammar', 'Flow']), tiedPriorities);
+
+        const legacy = buildNotebookReconstructionDataFromSession({
+            originalText: original,
+            categoryScores: {'Ideas & Details':NaN, Grammar:null, Organization:'', Flow:undefined, 'Word Choice':0, 'Spelling & Punctuation':'0', Neatness:0},
+            detailedFeedback: {growGoal:'Choose precise words.', nextTime:'Check your spelling.'},
+            feedbackSummary: {growGoal:'Add details.', nextTime:'Read your writing aloud.'}
+        });
+        const legacyPriorities = buildNotebookGuidePriorities(legacy);
+        check('legacy guide retains zero scores and saved goal precedence',
+            legacy.detailed.growGoal === 'Choose precise words.' && legacy.detailed.nextTime === 'Check your spelling.' &&
+            legacyPriorities[0].source === 'lowestScore' && JSON.stringify(legacyPriorities.map(item => item.category)) === JSON.stringify(['Word Choice', 'Spelling & Punctuation']), legacyPriorities);
+
+        const strong = {categoryScores:{Grammar:8, Flow:9, 'Word Choice':9}, detailed:{categories:{Grammar:{growthTip:'Check your verbs.'}}}};
+        const strongActions = buildNotebookActionChecklist(strong, [], 'Add clear details.\nUse stronger words.', '');
+        check('checklist skips score eight growth tips', JSON.stringify(strongActions) === JSON.stringify(['Add clear details.', 'Use stronger words.']), strongActions);
+        const strongPriorities = buildNotebookGuidePriorities(strong).map(item => item.category);
+        check('guide keeps score eight priority and two category minimum', JSON.stringify(strongPriorities) === JSON.stringify(['Grammar', 'Word Choice']), strongPriorities);
+
+        const fallbackActions = buildNotebookActionChecklist(null, ['Add clear details.', 'Read your story aloud.'], 'Add clear details.', '');
+        check('checklist fallback deduplicates after text actions', JSON.stringify(fallbackActions) === JSON.stringify(['Add clear details.', 'Read my writing aloud.']), fallbackActions);
+        const unchanged = sanitizeNotebookGuideCandidate({area:'Grammar', skill:'Verb tense', originalQuote:'We played in the park.', nextTimeExample:'We played in the park.', whyThisWorks:'The verb shows past time.'}, original, null, null);
+        check('shared revision validator rejects unchanged candidate', unchanged === null, unchanged);
+    }
+    checkNotebookGuidanceDecisions();
     document.getElementById('studentWriting').value = original;
     selectedStudent = 'Synthetic';
     students = ['Synthetic'];
