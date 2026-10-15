@@ -38,5 +38,6 @@
   "tests/storage-held-request.browser.cjs",
   "tests/storage-integrity.browser.cjs",
   "tests/storage-public-ui.browser.cjs",
-  "tests/storage-upload-ownership.browser.cjs"
+  "tests/storage-upload-ownership.browser.cjs",
+  "tests/student-read-ownership.browser.cjs"
 ]
