@@ -5854,14 +5854,7 @@ function extractNotebookActionItems(text) {
 
 function buildNotebookActionChecklist(data, fallbackChecklist, fallbackNextTime, fallbackGrowGoal) {
     var items = [];
-    var labels = [
-        "Ideas & Details",
-        "Grammar",
-        "Word Choice",
-        "Organization",
-        "Flow",
-        "Spelling & Punctuation"
-    ];
+    var labels = CATEGORY_KEYS.slice();
     var categories = data && data.detailed && data.detailed.categories ? data.detailed.categories : {};
     var categoryScores = data && data.categoryScores ? data.categoryScores : {};
 
@@ -5899,14 +5892,17 @@ function buildNotebookActionChecklist(data, fallbackChecklist, fallbackNextTime,
     if (items.length < 2) pushItemsFromText(fallbackNextTime || "");
     if (items.length < 2) pushItemsFromText(fallbackGrowGoal || "");
 
-    if (items.length < 2 && fallbackChecklist && fallbackChecklist.length) {
-        for (var j = 0; j < fallbackChecklist.length; j++) {
-            var fallbackItem = compressChecklistItem(fallbackChecklist[j]);
-            if (!fallbackItem || items.indexOf(fallbackItem) !== -1) continue;
-            items.push(fallbackItem);
-            if (items.length >= 2) break;
+    function appendFallbackChecklist() {
+        if (items.length < 2 && fallbackChecklist && fallbackChecklist.length) {
+            for (var j = 0; j < fallbackChecklist.length; j++) {
+                var fallbackItem = compressChecklistItem(fallbackChecklist[j]);
+                if (!fallbackItem || items.indexOf(fallbackItem) !== -1) continue;
+                items.push(fallbackItem);
+                if (items.length >= 2) break;
+            }
         }
     }
+    appendFallbackChecklist();
 
     while (items.length < 2) {
         items.push(items.length === 0 ? "Read my work carefully before I submit it." : "Fix one thing that I notice during proofreading.");
@@ -6362,7 +6358,7 @@ function buildNotebookGuidePrioritiesFromRawInput(data) {
     var categoryScores = data.categoryScores || {};
     var detailed = data.detailedFeedback || data.detailed || {};
     var priorities = [];
-    var labels = ["Ideas & Details", "Grammar", "Word Choice", "Organization", "Flow", "Spelling & Punctuation"];
+    var labels = CATEGORY_KEYS.slice();
     var ranked = [];
     var j;
 
@@ -6462,9 +6458,7 @@ function sanitizeNotebookGuideCandidate(candidate, originalText, optGenreInfo, n
     if (combinedLabel.indexOf("paragraph") !== -1 && nextTimeExample.indexOf("\n\n") === -1) return null;
     if (originalTokenCount > 4 && nextTokenCount > Math.max(Math.ceil(originalTokenCount * 1.8), originalTokenCount + 12)) return null;
     if (originalSentenceCount > 0 && nextSentenceCount > originalSentenceCount + 1) return null;
-    if (isGenericNotebookNextTimeExample(nextTimeExample)) return null;
-    if (!notebookGuideExampleHasTextConnection(originalQuote, nextTimeExample)) return null;
-    if (!isConcreteNotebookGuideRevision(originalQuote, nextTimeExample)) return null;
+    if (!isValidNotebookGuideExample({ originalQuote: originalQuote, nextTimeExample: nextTimeExample })) return null;
     if (!area) area = categoryDisplayLabel(connection);
     if (!skill) skill = getNotebookGuideDefaultFocus(connection, "");
     return {
