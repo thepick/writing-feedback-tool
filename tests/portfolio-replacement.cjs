@@ -35,6 +35,7 @@ function setup(portfolio, sourceId = 'old', target = 'Alice') {
         renderStudentPortfolio: () => { renders++; },
         wftDebugError() {}, wftSyncLog() {},
         getPendingPortfolioSync: () => pending,
+        hasMissingPendingPortfolioPhotos: () => false,
         clearPendingPortfolioSync: () => { app.pendingCleared = true; },
         getCurrentPortfolioSessionSignature: () => 'current-signature',
         lastSyncedPortfolioSessionSignature: 'previous-signature'
