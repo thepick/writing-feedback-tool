@@ -2882,41 +2882,45 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
         }
     }
 
-    for (var m = 0; m < models.length; m++) {
+    for (var m = 0, attempt = 0; m < models.length;) {
         var model = models[m];
-        for (var attempt = 0; attempt <= maxRetriesPerModel; attempt++) {
-            if (requestContext) assertCurrentAnalysisContext(requestContext);
-            if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
-            if (refreshApiKeyRuntimeValue() === false) throw getWftApiKeyStorageError();
-            if (!API_KEY) {
-                throw new Error('No API key found. Open Settings and paste your OpenRouter API key.');
-            }
-            var requestController = analysisAbortController;
-            var timeoutId = setTimeout(function() {
-                requestController.abort();
-            }, 90000);
-            try {
-                var payload = payloadBuilder(model);
-                var res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": "Bearer " + API_KEY,
-                        "Content-Type": "application/json",
-                        "HTTP-Referer": window.location.href,
-                        "X-OpenRouter-Title": "Writing Feedback Tool"
-                    },
-                    body: JSON.stringify(payload),
-                    signal: requestController.signal
-                });
-                // Headers can arrive while the body stalls; keep the timeout through the body read.
-                var rawText = await res.text();
-                clearTimeout(timeoutId);
-                return parseCurrentOpenRouterResponse(res, rawText);
-            } catch (e) {
-                prepareOpenRouterRetry(e, timeoutId);
-                await sleepMs(Math.min(1200 * (attempt + 1), 3000));
-            }
+        if (!(attempt <= maxRetriesPerModel)) {
+            m++;
+            attempt = 0;
+            continue;
         }
+        if (requestContext) assertCurrentAnalysisContext(requestContext);
+        if (cancelAnalysis) throw new Error("Analysis cancelled by user.");
+        if (refreshApiKeyRuntimeValue() === false) throw getWftApiKeyStorageError();
+        if (!API_KEY) {
+            throw new Error('No API key found. Open Settings and paste your OpenRouter API key.');
+        }
+        var requestController = analysisAbortController;
+        var timeoutId = setTimeout(function() {
+            requestController.abort();
+        }, 90000);
+        try {
+            var payload = payloadBuilder(model);
+            var res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + API_KEY,
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": window.location.href,
+                    "X-OpenRouter-Title": "Writing Feedback Tool"
+                },
+                body: JSON.stringify(payload),
+                signal: requestController.signal
+            });
+            // Headers can arrive while the body stalls; keep the timeout through the body read.
+            var rawText = await res.text();
+            clearTimeout(timeoutId);
+            return parseCurrentOpenRouterResponse(res, rawText);
+        } catch (e) {
+            prepareOpenRouterRetry(e, timeoutId);
+            await sleepMs(Math.min(1200 * (attempt + 1), 3000));
+        }
+        attempt++;
     }
 
     throw new Error("OpenRouter request failed after retries: " + (lastError && lastError.message ? lastError.message : "Unknown error") + (attempts.length ? " Attempts: " + attempts.join(" | ") : ""));

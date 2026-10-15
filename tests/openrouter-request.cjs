@@ -76,6 +76,38 @@ async function cancelledBody() {
     assert.equal(test.attempts.length, 1);
     assert.equal(test.timers.size, 0);
 }
+async function retrySchedules() {
+    for (const [budget, expectedModels, expectedSleeps] of [
+        [0, ['primary', 'backup'], [1200]],
+        [1, ['primary', 'primary', 'backup', 'backup'], [1200, 2400, 1200]],
+        [3, ['primary', 'primary', 'primary', 'primary', 'backup', 'backup', 'backup', 'backup'], [1200, 2400, 3000, 3000, 1200, 2400, 3000]],
+        [0.5, ['primary', 'backup'], [1200, 1200]],
+        ['1', ['primary', 'primary', 'backup', 'backup'], [1200, 2400, 1200]],
+        [-1, [], []],
+        [NaN, [], []]
+    ]) {
+        const test = setup(async () => response(content('busy'), 503), ['primary', 'backup']);
+        await assert.rejects(test.request(budget), /OpenRouter request failed after retries/);
+        assert.deepEqual(test.attempts.map(attempt => JSON.parse(attempt.body).model), expectedModels);
+        assert.deepEqual(test.sleeps, expectedSleeps);
+        assert.equal(test.timers.size, 0);
+    }
+    for (const succeedsOn of [2, 3, 4]) {
+        const test = setup(async (options, attempt) => response(content(attempt === succeedsOn ? 'recovered' : 'busy'), attempt === succeedsOn ? 200 : 503), ['primary', 'backup']);
+        assert.equal(await test.request(1), 'recovered');
+        assert.deepEqual(test.attempts.map(attempt => JSON.parse(attempt.body).model), ['primary', 'primary', 'backup', 'backup'].slice(0, succeedsOn));
+        assert.deepEqual(test.sleeps, [1200, 2400, 1200].slice(0, succeedsOn - 1));
+        assert.equal(test.timers.size, 0);
+    }
+    const cancelledRetry = setup(async () => response(content('busy'), 503), ['primary', 'backup']);
+    cancelledRetry.app.sleepMs = async ms => {
+        assert.equal(ms, 1200);
+        assert.equal(cancelledRetry.timers.size, 0);
+        cancelledRetry.app.cancelAnalysis = true;
+    };
+    await assert.rejects(cancelledRetry.request(1), /Analysis cancelled by user/);
+    assert.equal(cancelledRetry.attempts.length, 1);
+}
 (async () => {
     await stalledBody();
     await cancelledBody();
@@ -113,5 +145,6 @@ async function cancelledBody() {
     assert.equal(await fallback.request(), 'fallback');
     assert.deepEqual(fallback.attempts.map(attempt => JSON.parse(attempt.body).model), ['primary', 'backup']);
     assert.equal(fallback.timers.size, 0);
+    await retrySchedules();
     console.log('OpenRouter request tests passed: real stalled HTTP body times out and retries, cancellation does not retry, text/image wrappers and response validation remain intact.');
 })().catch(error => { console.error(error); process.exitCode = 1; });
