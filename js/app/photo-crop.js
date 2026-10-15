@@ -17,7 +17,8 @@ function openCropModal(imgIndex) {
     var canvas = document.getElementById("cropCanvas");
     var overlay = document.getElementById("cropOverlay");
     var wrap = document.getElementById("cropCanvasWrap");
-    if (!modal || !canvas || !overlay || !wrap) return;
+    if (!modal || !canvas) return;
+    if (!overlay || !wrap) return;
 
     _cropSession = {
         photo: photo, images: selectedImages.slice(), studentName: getActivePortfolioStudentName(),
