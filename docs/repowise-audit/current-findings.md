@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T02:06:13.751024+07:00.
+Updated 2026-10-16T02:12:01.351197+07:00.
 
 Source: 4c39f162f816eb191e92f9a61ee0ec935b2f991e. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -16,9 +16,9 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"in_progress": 57, "reviewed_no_change": 90, "unreviewed": 834}.
+Statuses: {"candidate_needs_regression": 2, "reviewed_no_change": 145, "unreviewed": 834}.
 
-All tracked rows, including findings absent on the latest scan: {"fixed_verified": 11, "in_progress": 57, "reviewed_no_change": 91, "unreviewed": 834}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 2, "fixed_verified": 11, "reviewed_no_change": 146, "unreviewed": 834}.
 
 Verified source fixes: 11. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
@@ -34,7 +34,7 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-004: Historical security signals â€” reviewed_complete.
 - repair-005: Remove verified unused helpers â€” reviewed_complete.
 - repair-001: Verify security signals â€” reviewed_complete.
-- repair-006: Storage failure safeguards â€” in_progress.
+- repair-006: Storage failure safeguards â€” reviewed_complete.
 - history-context-review-4c39f16: Revalidate history after cleanup â€” reviewed_complete.
 
 ## Complete inventory
@@ -598,65 +598,65 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_50d9e7d39f28106a6a3f | low | code_health | js/app/00-storage-sync-patches.js:583 | saveSettingsToLocalStorage / complex_conditional | unreviewed |
 | code_health:finding_b77d5a59154a4da066cc | low | code_health | js/app/00-storage-sync-patches.js:586 | saveSettingsToLocalStorage / complex_conditional | unreviewed |
 | code_health:finding_f9de7f79d6d6f74e74ae | low | code_health | js/app/00-storage-sync-patches.js:1115 | isWftLikelyDriveOrSyncError / complex_conditional | unreviewed |
-| code_health:finding_9e5285cbf5a78d3654d0 | low | code_health | js/app/00-storage-sync-patches.js:1128 | error_handling | in_progress |
+| code_health:finding_9e5285cbf5a78d3654d0 | low | code_health | js/app/00-storage-sync-patches.js:1128 | error_handling | reviewed_no_change |
 | code_health:finding_144a97f8282d9b7f029e | low | code_health | js/app/00-storage-sync-patches.js:1256 | normalizeWftSessionDate / bumpy_road | unreviewed |
-| code_health:finding_38ba295af9ce6d8d26f1 | low | code_health | js/app/00-storage-sync-patches.js:1356 | error_handling | in_progress |
+| code_health:finding_38ba295af9ce6d8d26f1 | low | code_health | js/app/00-storage-sync-patches.js:1356 | error_handling | reviewed_no_change |
 | code_health:finding_5b7863fdcbef269b3b17 | low | code_health | js/app/00-storage-sync-patches.js:1579 | buildPortfolioIndexFromPortfolio / large_method | unreviewed |
-| code_health:finding_14dbd4d545c3fb9fcfab | low | code_health | js/app/00-storage-sync-patches.js:1605 | error_handling | in_progress |
-| code_health:finding_f06a20d0aff8afc84bef | low | code_health | js/app/00-storage-sync-patches.js:1612 | error_handling | in_progress |
-| code_health:finding_6cc91c4c90a49de2b695 | low | code_health | js/app/00-storage-sync-patches.js:1700 | error_handling | in_progress |
-| code_health:finding_2069a110e097ff0c385c | low | code_health | js/app/00-storage-sync-patches.js:1724 | error_handling | in_progress |
-| code_health:finding_f15f0dc71767cee077c6 | low | code_health | js/app/00-storage-sync-patches.js:1726 | error_handling | in_progress |
-| code_health:finding_380693af42e0fcc5aa4b | low | code_health | js/app/00-storage-sync-patches.js:1754 | error_handling | in_progress |
+| code_health:finding_14dbd4d545c3fb9fcfab | low | code_health | js/app/00-storage-sync-patches.js:1605 | error_handling | reviewed_no_change |
+| code_health:finding_f06a20d0aff8afc84bef | low | code_health | js/app/00-storage-sync-patches.js:1612 | error_handling | reviewed_no_change |
+| code_health:finding_6cc91c4c90a49de2b695 | low | code_health | js/app/00-storage-sync-patches.js:1700 | error_handling | reviewed_no_change |
+| code_health:finding_2069a110e097ff0c385c | low | code_health | js/app/00-storage-sync-patches.js:1724 | error_handling | reviewed_no_change |
+| code_health:finding_f15f0dc71767cee077c6 | low | code_health | js/app/00-storage-sync-patches.js:1726 | error_handling | reviewed_no_change |
+| code_health:finding_380693af42e0fcc5aa4b | low | code_health | js/app/00-storage-sync-patches.js:1754 | error_handling | reviewed_no_change |
 | code_health:finding_bc84d26d5eac20ff69b6 | low | code_health | js/app/00-storage-sync-patches.js:1759 | rebuildPortfolioIndex / bumpy_road | unreviewed |
-| code_health:finding_334b8bc581310ce17f48 | low | code_health | js/app/00-storage-sync-patches.js:1849 | error_handling | in_progress |
-| code_health:finding_37c2ddecfa1ce89e3871 | low | code_health | js/app/00-storage-sync-patches.js:1897 | error_handling | in_progress |
-| code_health:finding_5e1517d62b1781066e9b | low | code_health | js/app/00-storage-sync-patches.js:2311 | error_handling | in_progress |
-| code_health:finding_73b80266603d7896f995 | low | code_health | js/app/00-storage-sync-patches.js:2322 | error_handling | in_progress |
-| code_health:finding_cfe4655da07db0e031ca | low | code_health | js/app/00-storage-sync-patches.js:2351 | error_handling | in_progress |
-| code_health:finding_a676bd99b260bc23f13f | low | code_health | js/app/00-storage-sync-patches.js:2440 | error_handling | in_progress |
-| code_health:finding_45b70249c4ffc6443fe5 | low | code_health | js/app/00-storage-sync-patches.js:2489 | error_handling | in_progress |
-| code_health:finding_0c4bc10b50af7687ccba | low | code_health | js/app/00-storage-sync-patches.js:2500 | error_handling | in_progress |
-| code_health:finding_38fc04fbc968b93d0391 | low | code_health | js/app/00-storage-sync-patches.js:2504 | error_handling | in_progress |
-| code_health:finding_4a8e629c288c372da189 | low | code_health | js/app/00-storage-sync-patches.js:2511 | error_handling | in_progress |
-| code_health:finding_10f61d35f1aa42a6e1fa | low | code_health | js/app/00-storage-sync-patches.js:2514 | error_handling | in_progress |
-| code_health:finding_db3372678b3e62a8c2c7 | low | code_health | js/app/00-storage-sync-patches.js:2522 | error_handling | in_progress |
-| code_health:finding_eec9e3971aba9df7e472 | low | code_health | js/app/00-storage-sync-patches.js:2527 | error_handling | in_progress |
-| code_health:finding_e128e7f8aa5527a937b4 | low | code_health | js/app/00-storage-sync-patches.js:2597 | error_handling | in_progress |
-| code_health:finding_d6058db028bbc3ef0568 | low | code_health | js/app/00-storage-sync-patches.js:2628 | error_handling | in_progress |
+| code_health:finding_334b8bc581310ce17f48 | low | code_health | js/app/00-storage-sync-patches.js:1849 | error_handling | reviewed_no_change |
+| code_health:finding_37c2ddecfa1ce89e3871 | low | code_health | js/app/00-storage-sync-patches.js:1897 | error_handling | reviewed_no_change |
+| code_health:finding_5e1517d62b1781066e9b | low | code_health | js/app/00-storage-sync-patches.js:2311 | error_handling | candidate_needs_regression |
+| code_health:finding_73b80266603d7896f995 | low | code_health | js/app/00-storage-sync-patches.js:2322 | error_handling | reviewed_no_change |
+| code_health:finding_cfe4655da07db0e031ca | low | code_health | js/app/00-storage-sync-patches.js:2351 | error_handling | reviewed_no_change |
+| code_health:finding_a676bd99b260bc23f13f | low | code_health | js/app/00-storage-sync-patches.js:2440 | error_handling | reviewed_no_change |
+| code_health:finding_45b70249c4ffc6443fe5 | low | code_health | js/app/00-storage-sync-patches.js:2489 | error_handling | reviewed_no_change |
+| code_health:finding_0c4bc10b50af7687ccba | low | code_health | js/app/00-storage-sync-patches.js:2500 | error_handling | reviewed_no_change |
+| code_health:finding_38fc04fbc968b93d0391 | low | code_health | js/app/00-storage-sync-patches.js:2504 | error_handling | reviewed_no_change |
+| code_health:finding_4a8e629c288c372da189 | low | code_health | js/app/00-storage-sync-patches.js:2511 | error_handling | reviewed_no_change |
+| code_health:finding_10f61d35f1aa42a6e1fa | low | code_health | js/app/00-storage-sync-patches.js:2514 | error_handling | reviewed_no_change |
+| code_health:finding_db3372678b3e62a8c2c7 | low | code_health | js/app/00-storage-sync-patches.js:2522 | error_handling | reviewed_no_change |
+| code_health:finding_eec9e3971aba9df7e472 | low | code_health | js/app/00-storage-sync-patches.js:2527 | error_handling | reviewed_no_change |
+| code_health:finding_e128e7f8aa5527a937b4 | low | code_health | js/app/00-storage-sync-patches.js:2597 | error_handling | reviewed_no_change |
+| code_health:finding_d6058db028bbc3ef0568 | low | code_health | js/app/00-storage-sync-patches.js:2628 | error_handling | reviewed_no_change |
 | code_health:finding_d1472251b3841d77f04e | low | code_health | js/app/00-storage-sync-patches.js:2659 | mergeStudentSessions / primitive_obsession | unreviewed |
 | code_health:finding_11fe6a9227d4a69bd361 | low | code_health | js/app/00-storage-sync-patches.js:2712 | isStudentSessionDeleted / primitive_obsession | unreviewed |
 | code_health:finding_e8d941d37700f399ba87 | low | code_health | js/app/00-storage-sync-patches.js:2758 | isStudentSessionDeleted / complex_conditional | unreviewed |
-| code_health:finding_c9981aa381c390ebb755 | low | code_health | js/app/00-storage-sync-patches.js:2944 | error_handling | in_progress |
-| code_health:finding_eee33d14b85f755b849b | low | code_health | js/app/00-storage-sync-patches.js:3016 | error_handling | in_progress |
-| code_health:finding_e181390bac7f21e963d8 | low | code_health | js/app/00-storage-sync-patches.js:3027 | error_handling | in_progress |
-| code_health:finding_e3efdc4af519461794d0 | low | code_health | js/app/00-storage-sync-patches.js:3038 | error_handling | in_progress |
-| code_health:finding_5bf74f394c8a838a9668 | low | code_health | js/app/00-storage-sync-patches.js:3144 | error_handling | in_progress |
-| code_health:finding_a8fbe9fa3ab024ef52dc | low | code_health | js/app/00-storage-sync-patches.js:3176 | error_handling | in_progress |
-| code_health:finding_316818f9b20b33331b71 | low | code_health | js/app/00-storage-sync-patches.js:3189 | error_handling | in_progress |
+| code_health:finding_c9981aa381c390ebb755 | low | code_health | js/app/00-storage-sync-patches.js:2944 | error_handling | reviewed_no_change |
+| code_health:finding_eee33d14b85f755b849b | low | code_health | js/app/00-storage-sync-patches.js:3016 | error_handling | reviewed_no_change |
+| code_health:finding_e181390bac7f21e963d8 | low | code_health | js/app/00-storage-sync-patches.js:3027 | error_handling | reviewed_no_change |
+| code_health:finding_e3efdc4af519461794d0 | low | code_health | js/app/00-storage-sync-patches.js:3038 | error_handling | reviewed_no_change |
+| code_health:finding_5bf74f394c8a838a9668 | low | code_health | js/app/00-storage-sync-patches.js:3144 | error_handling | reviewed_no_change |
+| code_health:finding_a8fbe9fa3ab024ef52dc | low | code_health | js/app/00-storage-sync-patches.js:3176 | error_handling | reviewed_no_change |
+| code_health:finding_316818f9b20b33331b71 | low | code_health | js/app/00-storage-sync-patches.js:3189 | error_handling | reviewed_no_change |
 | code_health:finding_44bdc87f8713f0fe0b34 | low | code_health | js/app/00-storage-sync-patches.js:3197 | finishWftGoogleSignInWithAccessToken / primitive_obsession | unreviewed |
-| code_health:finding_92281015b6558a25ccf4 | low | code_health | js/app/00-storage-sync-patches.js:3249 | error_handling | in_progress |
+| code_health:finding_92281015b6558a25ccf4 | low | code_health | js/app/00-storage-sync-patches.js:3249 | error_handling | reviewed_no_change |
 | code_health:finding_879a20d0d0bc9e7a59ac | low | code_health | js/app/00-storage-sync-patches.js:3255 | completeWftGoogleSignInWithAccessToken / primitive_obsession | unreviewed |
-| code_health:finding_82a1305c8c6ea7f18054 | low | code_health | js/app/00-storage-sync-patches.js:3268 | error_handling | in_progress |
-| code_health:finding_9b637db612c321b9d935 | low | code_health | js/app/00-storage-sync-patches.js:3278 | error_handling | in_progress |
-| code_health:finding_48ecc6ce9ca0e204604a | low | code_health | js/app/00-storage-sync-patches.js:3338 | error_handling | in_progress |
-| code_health:finding_05b33b2d236e13ab956c | low | code_health | js/app/00-storage-sync-patches.js:3348 | error_handling | in_progress |
-| code_health:finding_1eb82956f0c43b5c3eca | low | code_health | js/app/00-storage-sync-patches.js:3477 | error_handling | in_progress |
+| code_health:finding_82a1305c8c6ea7f18054 | low | code_health | js/app/00-storage-sync-patches.js:3268 | error_handling | reviewed_no_change |
+| code_health:finding_9b637db612c321b9d935 | low | code_health | js/app/00-storage-sync-patches.js:3278 | error_handling | reviewed_no_change |
+| code_health:finding_48ecc6ce9ca0e204604a | low | code_health | js/app/00-storage-sync-patches.js:3338 | error_handling | reviewed_no_change |
+| code_health:finding_05b33b2d236e13ab956c | low | code_health | js/app/00-storage-sync-patches.js:3348 | error_handling | candidate_needs_regression |
+| code_health:finding_1eb82956f0c43b5c3eca | low | code_health | js/app/00-storage-sync-patches.js:3477 | error_handling | reviewed_no_change |
 | code_health:finding_a8a87935472a58468993 | low | code_health | js/app/00-storage-sync-patches.js:3504 | requestDriveAccess / bumpy_road | unreviewed |
-| code_health:finding_3d17096d3720efd5988e | low | code_health | js/app/00-storage-sync-patches.js:3511 | error_handling | in_progress |
-| code_health:finding_c6c437a3f5d906220e7e | low | code_health | js/app/00-storage-sync-patches.js:3593 | error_handling | in_progress |
+| code_health:finding_3d17096d3720efd5988e | low | code_health | js/app/00-storage-sync-patches.js:3511 | error_handling | reviewed_no_change |
+| code_health:finding_c6c437a3f5d906220e7e | low | code_health | js/app/00-storage-sync-patches.js:3593 | error_handling | reviewed_no_change |
 | code_health:finding_8f9b29415e86e102be0c | low | code_health | js/app/00-storage-sync-patches.js:3685 | clearWftLocalStorageAfterSignOut / bumpy_road | unreviewed |
-| code_health:finding_29a6dc1f54e5f6712827 | low | code_health | js/app/00-storage-sync-patches.js:3725 | error_handling | in_progress |
-| code_health:finding_9b5c010df5cc52cd6ceb | low | code_health | js/app/00-storage-sync-patches.js:3730 | error_handling | in_progress |
-| code_health:finding_ff2fa11f62abe960d003 | low | code_health | js/app/00-storage-sync-patches.js:3755 | error_handling | in_progress |
-| code_health:finding_d5c9f34e1f0076814706 | low | code_health | js/app/00-storage-sync-patches.js:3805 | error_handling | in_progress |
-| code_health:finding_002942509f9f668c5bf1 | low | code_health | js/app/00-storage-sync-patches.js:3904 | error_handling | in_progress |
-| code_health:finding_c8b13530cfcd50f78b70 | low | code_health | js/app/00-storage-sync-patches.js:3938 | error_handling | in_progress |
-| code_health:finding_12c7f03482c92310bf6d | low | code_health | js/app/00-storage-sync-patches.js:3953 | error_handling | in_progress |
+| code_health:finding_29a6dc1f54e5f6712827 | low | code_health | js/app/00-storage-sync-patches.js:3725 | error_handling | reviewed_no_change |
+| code_health:finding_9b5c010df5cc52cd6ceb | low | code_health | js/app/00-storage-sync-patches.js:3730 | error_handling | reviewed_no_change |
+| code_health:finding_ff2fa11f62abe960d003 | low | code_health | js/app/00-storage-sync-patches.js:3755 | error_handling | reviewed_no_change |
+| code_health:finding_d5c9f34e1f0076814706 | low | code_health | js/app/00-storage-sync-patches.js:3805 | error_handling | reviewed_no_change |
+| code_health:finding_002942509f9f668c5bf1 | low | code_health | js/app/00-storage-sync-patches.js:3904 | error_handling | reviewed_no_change |
+| code_health:finding_c8b13530cfcd50f78b70 | low | code_health | js/app/00-storage-sync-patches.js:3938 | error_handling | reviewed_no_change |
+| code_health:finding_12c7f03482c92310bf6d | low | code_health | js/app/00-storage-sync-patches.js:3953 | error_handling | reviewed_no_change |
 | code_health:finding_e7551d61caac0aa4e1e6 | low | code_health | js/app/00-storage-sync-patches.js:4119 | saveFileToDrive / large_method | unreviewed |
 | code_health:finding_a84beffd019dbbae5cda | low | code_health | js/app/00-storage-sync-patches.js:4119 | saveFileToDrive / primitive_obsession | unreviewed |
 | code_health:finding_b7be92ac9d86ce17b33e | low | code_health | js/app/00-storage-sync-patches.js:4189 | ensureDriveFolderPromise / large_method | unreviewed |
-| code_health:finding_25f9c687f74bb140cca7 | low | code_health | js/app/00-storage-sync-patches.js:4695 | error_handling | in_progress |
+| code_health:finding_25f9c687f74bb140cca7 | low | code_health | js/app/00-storage-sync-patches.js:4695 | error_handling | reviewed_no_change |
 | code_health:finding_a1d3edb67f1235db4b52 | low | code_health | js/app/00-storage-sync-patches.js:5038 | uploadWftJsonFilePromise / large_method | unreviewed |
 | code_health:finding_f68f0f8e1f2e30f76ee5 | low | code_health | js/app/00-storage-sync-patches.js:5236 | mergeWftSettings / complex_conditional | unreviewed |
 | code_health:finding_dffec2060f1195e595db | low | code_health | js/app/00-storage-sync-patches.js:5253 | syncWftSettingsIfNeeded / large_method | unreviewed |
@@ -664,35 +664,35 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_9ae6fddb1587d38c6426 | low | code_health | js/app/00-storage-sync-patches.js:5376 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_83aadb338a812a5c1310 | low | code_health | js/app/00-storage-sync-patches.js:5590 | syncWftPortfolioIfNeeded / large_method | unreviewed |
 | code_health:finding_72bb568aecd724a691c3 | low | code_health | js/app/00-storage-sync-patches.js:5734 | handleWftSyncError / complex_conditional | unreviewed |
-| code_health:finding_e0eb4bd9894d70ec8a28 | low | code_health | js/app/00-storage-sync-patches.js:5846 | error_handling | in_progress |
-| code_health:finding_567c2c3fe1148fb6204e | low | code_health | js/app/00-storage-sync-patches.js:5914 | error_handling | in_progress |
+| code_health:finding_e0eb4bd9894d70ec8a28 | low | code_health | js/app/00-storage-sync-patches.js:5846 | error_handling | reviewed_no_change |
+| code_health:finding_567c2c3fe1148fb6204e | low | code_health | js/app/00-storage-sync-patches.js:5914 | error_handling | reviewed_no_change |
 | code_health:finding_d523b84a45d044f4c0f5 | low | code_health | js/app/00-storage-sync-patches.js:5961 | saveWftLocalSnapshotsBeforeHide / bumpy_road | unreviewed |
-| code_health:finding_40506fc89c1b3ae5d0e0 | low | code_health | js/app/00-storage-sync-patches.js:5978 | error_handling | in_progress |
+| code_health:finding_40506fc89c1b3ae5d0e0 | low | code_health | js/app/00-storage-sync-patches.js:5978 | error_handling | reviewed_no_change |
 | code_health:finding_38c0855f7dc3861622c9 | low | code_health | js/app/00-storage-sync-patches.js:5981 | initWftSyncLifecycleHandlers / large_method | unreviewed |
-| code_health:finding_156db6ee1ab11f402cfe | low | code_health | js/app/00-storage-sync-patches.js:6027 | error_handling | in_progress |
-| code_health:finding_dba32f79d863b2dbc216 | low | code_health | js/app/00-storage-sync-patches.js:6052 | error_handling | in_progress |
+| code_health:finding_156db6ee1ab11f402cfe | low | code_health | js/app/00-storage-sync-patches.js:6027 | error_handling | reviewed_no_change |
+| code_health:finding_dba32f79d863b2dbc216 | low | code_health | js/app/00-storage-sync-patches.js:6052 | error_handling | reviewed_no_change |
 | code_health:finding_8c1e5a2b0423614dea4b | low | code_health | js/app/00-storage-sync-patches.js:6179 | uploadBlobToDrive / primitive_obsession | unreviewed |
 | code_health:finding_eba7f088a4fab7fddea3 | low | code_health | js/app/00-storage-sync-patches.js:6371 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_9594f4eb52ffbcf09db0 | low | code_health | js/app/00-storage-sync-patches.js:6664 | setWftSanitizedInnerHtml / complex_conditional | unreviewed |
-| code_health:finding_6ba8692dd09e4d1554ac | low | code_health | js/app/00-storage-sync-patches.js:6792 | error_handling | in_progress |
-| code_health:finding_22fc6fec08d1b93873e2 | low | code_health | js/app/00-storage-sync-patches.js:6800 | error_handling | in_progress |
-| code_health:finding_d342aecb83e0282c5fd2 | low | code_health | js/app/00-storage-sync-patches.js:6812 | error_handling | in_progress |
+| code_health:finding_6ba8692dd09e4d1554ac | low | code_health | js/app/00-storage-sync-patches.js:6792 | error_handling | reviewed_no_change |
+| code_health:finding_22fc6fec08d1b93873e2 | low | code_health | js/app/00-storage-sync-patches.js:6800 | error_handling | reviewed_no_change |
+| code_health:finding_d342aecb83e0282c5fd2 | low | code_health | js/app/00-storage-sync-patches.js:6812 | error_handling | reviewed_no_change |
 | code_health:finding_44a8d8bf9c9caf35a45e | low | code_health | js/app/00-storage-sync-patches.js:6883 | syncAllToDrive / bumpy_road | unreviewed |
 | code_health:finding_20894b7df80971e6e886 | low | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / bumpy_road | unreviewed |
 | code_health:finding_8db10553c83e85be9dd7 | low | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / primitive_obsession | unreviewed |
 | code_health:finding_0dd0b44ef3cf9a917f4b | low | code_health | js/app/00-storage-sync-patches.js:6998 | nextUpload / large_method | unreviewed |
 | code_health:finding_0ebf1243a621949a6e83 | low | code_health | js/app/00-storage-sync-patches.js:7032 | validateCurrentUpload / complex_conditional | unreviewed |
-| code_health:finding_e6856bfa0d603fa582a2 | low | code_health | js/app/00-storage-sync-patches.js:7151 | error_handling | in_progress |
+| code_health:finding_e6856bfa0d603fa582a2 | low | code_health | js/app/00-storage-sync-patches.js:7151 | error_handling | reviewed_no_change |
 | code_health:finding_07c825055cecc7b49cbc | low | code_health | js/app/00-storage-sync-patches.js:7180 | getSessionCategoryKeys / complex_conditional | unreviewed |
 | code_health:finding_321f99e606cfd1e7915e | low | code_health | js/app/00-storage-sync-patches.js:7295 | renderPortfolioFeedbackRows / string_concat_in_loop | unreviewed |
-| code_health:finding_5fcc9daff01d66f13e80 | low | code_health | js/app/00-storage-sync-patches.js:7418 | error_handling | in_progress |
+| code_health:finding_5fcc9daff01d66f13e80 | low | code_health | js/app/00-storage-sync-patches.js:7418 | error_handling | reviewed_no_change |
 | code_health:finding_7e9e3bd687e666b878c1 | low | code_health | js/app/00-storage-sync-patches.js:7539 | setupWftPortfolioCharts / primitive_obsession | unreviewed |
 | code_health:finding_bd262137e5d6d346dc75 | low | code_health | js/app/00-storage-sync-patches.js:7592 | renderStudentPortfolio / large_method | unreviewed |
 | code_health:finding_4cc8d496bdb9e7a9baaf | low | code_health | js/app/00-storage-sync-patches.js:7672 | saveCurrentSessionToPortfolio / large_method | reviewed_no_change |
 | code_health:finding_011d338cf5eaa80b7fbe | low | code_health | js/app/00-storage-sync-patches.js:7812 | uploadPendingPortfolioMediaBeforeCommit / bumpy_road | unreviewed |
 | code_health:finding_dda7cb8583c1ac2b8c1b | low | code_health | js/app/00-storage-sync-patches.js:7884 | finishManualSaveToDrive / large_method | unreviewed |
 | code_health:finding_0956f3c90bb76c36955b | low | code_health | js/app/00-storage-sync-patches.js:8005 | updateStatusBar / primitive_obsession | unreviewed |
-| code_health:finding_4f4a40401b66f5644289 | low | code_health | js/app/00-storage-sync-patches.js:8087 | error_handling | in_progress |
+| code_health:finding_4f4a40401b66f5644289 | low | code_health | js/app/00-storage-sync-patches.js:8087 | error_handling | reviewed_no_change |
 | code_health:finding_a2f159e8a65910389542 | low | code_health | js/app/00-storage-sync-patches.js:8265 | updateSyncPortfolioButtonState / complex_conditional | unreviewed |
 | code_health:finding_ce0ef519180cad77d766 | low | code_health | js/app/00-storage-sync-patches.js:8288 | commitPendingPortfolioReplacement / complex_conditional | unreviewed |
 | code_health:finding_f761b8085338ef63b4df | low | code_health | js/app/00-storage-sync-patches.js:8294 | commitPendingPortfolioReplacement / complex_conditional | unreviewed |

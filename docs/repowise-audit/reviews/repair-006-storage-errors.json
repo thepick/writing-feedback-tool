@@ -1,0 +1,2026 @@
+{
+  "schema_version": 1,
+  "task": "Focused repair006: read-only storage error-handling verification",
+  "created_at_utc": "2026-10-15T19:07:27.460879+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+  "observed_head_at_finish": "0cc3268ff41c2322c3fd4ed777202ff394a5b587",
+  "summary": {
+    "findings_reviewed": 57,
+    "stored_catch_anchors_held": 57,
+    "proposed_reviewed_no_change": 55,
+    "source_supported_candidates_needing_regression": 2,
+    "confirmed_live_exposures": 0,
+    "source_changes": 0,
+    "tests_launched": 0,
+    "needs_user_attention": 0,
+    "coordinator_acceptance_required": true
+  },
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "assigned_frozen_sha256": "3fe34c0fe41f000f5079eec08482268fe5de63093ce6705aac1c5e28159ffb69",
+      "review_start_sha256": "3fe34c0fe41f000f5079eec08482268fe5de63093ce6705aac1c5e28159ffb69",
+      "review_finish_sha256": "3fe34c0fe41f000f5079eec08482268fe5de63093ce6705aac1c5e28159ffb69",
+      "matches_coordinator_frozen_source": true
+    }
+  },
+  "changed_repository_files": [],
+  "findings": [
+    {
+      "record_id": "code_health:finding_9e5285cbf5a78d3654d0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 1128,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The unhandled-rejection listener logs the normalized original error before attempting the sync-status update. This catch prevents a broken status widget from creating a second rejection; it neither consumes a required save result nor changes stored data.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1120,
+          "end_line": 1129,
+          "role": "optional secondary error UI"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1128,
+          "end_line": 1128,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional secondary error UI",
+      "failure_behavior": "The unhandled-rejection listener logs the normalized original error before attempting the sync-status update. This catch prevents a broken status widget from creating a second rejection; it neither consumes a required save result nor changes stored data.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_38ba295af9ce6d8d26f1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "normalizeWftPortfolioForSchemaV1",
+      "line": 1356,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Schema normalization keeps every name-keyed session even if the optional ID-map enrichment cannot obtain or persist an ID. getOrCreateStudentId uses strict settings reads/writes; its failure does not erase the name-keyed portfolio. Required portfolio persistence is validated separately.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1333,
+          "end_line": 1361,
+          "role": "optional identity enrichment"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1356,
+          "end_line": 1356,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional identity enrichment",
+      "failure_behavior": "Schema normalization keeps every name-keyed session even if the optional ID-map enrichment cannot obtain or persist an ID. getOrCreateStudentId uses strict settings reads/writes; its failure does not erase the name-keyed portfolio. Required portfolio persistence is validated separately.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_14dbd4d545c3fb9fcfab",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "buildPortfolioIndexFromPortfolio",
+      "line": 1605,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Index construction can omit studentId and retain the display-name/legacy-name key, sessions, counts and scores. This is derived index metadata, not permission to overwrite the canonical portfolio. Index upload revalidates its strict source snapshot.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1596,
+          "end_line": 1624,
+          "role": "optional identity lookup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1605,
+          "end_line": 1605,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional identity lookup",
+      "failure_behavior": "Index construction can omit studentId and retain the display-name/legacy-name key, sessions, counts and scores. This is derived index metadata, not permission to overwrite the canonical portfolio. Index upload revalidates its strict source snapshot.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_f06a20d0aff8afc84bef",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "buildPortfolioIndexFromPortfolio",
+      "line": 1612,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "A failed per-student file-ID cache read leaves studentFileId empty. The derived entry still retains the student identity, session count and score summary; it does not modify primary writing. The existing index test explicitly injects this read failure.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1608,
+          "end_line": 1624,
+          "role": "optional cached file location"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1612,
+          "end_line": 1612,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional cached file location",
+      "failure_behavior": "A failed per-student file-ID cache read leaves studentFileId empty. The derived entry still retains the student identity, session count and score summary; it does not modify primary writing. The existing index test explicitly injects this read failure.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_6cc91c4c90a49de2b695",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "loadPortfolioIndexFromDrive",
+      "line": 1700,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Failure to read the cached index file ID falls through to name-based file discovery. Discovery/download failures reach callback(err,null); this catch does not convert a failed download into successful data or overwrite local writing.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1699,
+          "end_line": 1742,
+          "role": "optional index-file location cache"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1700,
+          "end_line": 1700,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional index-file location cache",
+      "failure_behavior": "Failure to read the cached index file ID falls through to name-based file discovery. Discovery/download failures reach callback(err,null); this catch does not convert a failed download into successful data or overwrite local writing.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_2069a110e097ff0c385c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 1724,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The discovered canonical fileId stays in the local variable and is used directly for download even when its cache write fails. Subsequent download/shape failures propagate through the promise chain to the caller.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1719,
+          "end_line": 1742,
+          "role": "optional discovered file-ID hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1724,
+          "end_line": 1724,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional discovered file-ID hint",
+      "failure_behavior": "The discovered canonical fileId stays in the local variable and is used directly for download even when its cache write fails. Subsequent download/shape failures propagate through the promise chain to the caller.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_f15f0dc71767cee077c6",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 1726,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Updating the duplicate-file maintenance display is ancillary to a discovered index download. A broken maintenance widget must not discard the canonical ID or prevent the actual download/error callback.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1719,
+          "end_line": 1742,
+          "role": "optional duplicate-maintenance UI"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1726,
+          "end_line": 1726,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional duplicate-maintenance UI",
+      "failure_behavior": "Updating the duplicate-file maintenance display is ancillary to a discovered index download. A broken maintenance widget must not discard the canonical ID or prevent the actual download/error callback.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_380693af42e0fcc5aa4b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "assignMissingPortfolioIndexStudentIds",
+      "line": 1754,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "An ID-generation/persistence failure leaves the existing name-keyed entry intact. Rebuild constructs the index again from the strict primary snapshot; the subsequent upload and dirty acknowledgement have separate required checks. No session is removed by this catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1749,
+          "end_line": 1792,
+          "role": "optional ID enrichment of a derived index"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1754,
+          "end_line": 1754,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional ID enrichment of a derived index",
+      "failure_behavior": "An ID-generation/persistence failure leaves the existing name-keyed entry intact. Rebuild constructs the index again from the strict primary snapshot; the subsequent upload and dirty acknowledgement have separate required checks. No session is removed by this catch.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_334b8bc581310ce17f48",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "refreshStorageHealthUI",
+      "line": 1849,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This catch surrounds only the cached-student/session count read for the health panel. getPortfolioData already reports unreadable primary bytes and returns a display fallback; persistence/sync use the strict reader. The diagnostic count is not a save acknowledgement.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1843,
+          "end_line": 1858,
+          "role": "optional health-display counts"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1849,
+          "end_line": 1849,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional health-display counts",
+      "failure_behavior": "This catch surrounds only the cached-student/session count read for the health panel. getPortfolioData already reports unreadable primary bytes and returns a display fallback; persistence/sync use the strict reader. The diagnostic count is not a save acknowledgement.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_37c2ddecfa1ce89e3871",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "estimateLocalStorageSize",
+      "line": 1897,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The function deliberately returns an approximate byte count, possibly partial if storage enumeration/read is unavailable. It performs no writes and is used as an estimated health-display value, not as a durability or quota-success decision.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1889,
+          "end_line": 1898,
+          "role": "optional approximate storage-size display"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1897,
+          "end_line": 1897,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional approximate storage-size display",
+      "failure_behavior": "The function deliberately returns an approximate byte count, possibly partial if storage enumeration/read is unavailable. It performs no writes and is used as an estimated health-display value, not as a durability or quota-success decision.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_5e1517d62b1781066e9b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "getStudentRecordByName",
+      "line": 2311,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "source_supported_identity_metadata_candidate",
+      "proposed_status": "candidate_needs_regression",
+      "reason": "The empty catch exists, but the current mutating caller treats a failed lookup as a missing record. ensureStudentRecordsForRoster first reads an existing settings snapshot, then getStudentRecordByName rereads storage through fail-soft getRawSettings. A transient failure on that second read returns null, causing a second record for the same name/ID to be appended to the already loaded settings array. This is a source-supported conditional duplicate-metadata candidate; it needs a dedicated regression before a fix is accepted. Removing this catch alone would not fix the inner fail-soft read.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2302,
+          "end_line": 2312,
+          "role": "optional identity feature with a mutating caller"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2311,
+          "end_line": 2311,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional identity feature with a mutating caller",
+      "failure_behavior": "The empty catch exists, but the current mutating caller treats a failed lookup as a missing record. ensureStudentRecordsForRoster first reads an existing settings snapshot, then getStudentRecordByName rereads storage through fail-soft getRawSettings. A transient failure on that second read returns null, causing a second record for the same name/ID to be appended to the already loaded settings array. This is a source-supported conditional duplicate-metadata candidate; it needs a dedicated regression before a fix is accepted. Removing this catch alone would not fix the inner fail-soft read.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_73b80266603d7896f995",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "getStudentRecordById",
+      "line": 2322,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This lookup returns null when no usable metadata record is available. Its current call is a read-only optional-API test; required async portfolio name/ID resolution uses readWftRequiredStorage directly instead. No current mutating caller relies on null here as proof that a record can safely be created.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2315,
+          "end_line": 2323,
+          "role": "optional read-only identity lookup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2322,
+          "end_line": 2322,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional read-only identity lookup",
+      "failure_behavior": "This lookup returns null when no usable metadata record is available. Its current call is a read-only optional-API test; required async portfolio name/ID resolution uses readWftRequiredStorage directly instead. No current mutating caller relies on null here as proof that a record can safely be created.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_cfe4655da07db0e031ca",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "ensureStudentRecordsForRoster",
+      "line": 2351,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Roster initialization starts with its existing settings/roster list and only augments names from the portfolio. An unavailable portfolio does not erase those existing names or primary portfolio bytes; saving the metadata uses the guarded settings writer. The separate duplicate-lookup issue is recorded against the named lookup/caller, not hidden by this disposition.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2326,
+          "end_line": 2375,
+          "role": "optional portfolio-name augmentation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2351,
+          "end_line": 2351,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional portfolio-name augmentation",
+      "failure_behavior": "Roster initialization starts with its existing settings/roster list and only augments names from the portfolio. An unavailable portfolio does not erase those existing names or primary portfolio bytes; saving the metadata uses the guarded settings writer. The separate duplicate-lookup issue is recorded against the named lookup/caller, not hidden by this disposition.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_a676bd99b260bc23f13f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "getWftDriveFolderId",
+      "line": 2440,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The active in-memory folder ID wins. A failed fallback cache read returns an empty ID; child-folder creation rejects a missing parent rather than sending an upload to an arbitrary location. This is a location hint, not stored writing or an authentication token.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2438,
+          "end_line": 2446,
+          "role": "optional root-folder cache read"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2440,
+          "end_line": 2440,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional root-folder cache read",
+      "failure_behavior": "The active in-memory folder ID wins. A failed fallback cache read returns an empty ID; child-folder creation rejects a missing parent rather than sending an upload to an arbitrary location. This is a location hint, not stored writing or an authentication token.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_45b70249c4ffc6443fe5",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "ensureWftStudentsFolderPromise",
+      "line": 2489,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "A missing/unreadable cached students-folder ID takes the normal ensure/discovery path. A usable cached ID is validated against ID, name, type, trashed state and current parent. Connection validation and actual Drive errors remain rejecting operations.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2486,
+          "end_line": 2505,
+          "role": "optional students-folder cache read"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2489,
+          "end_line": 2489,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional students-folder cache read",
+      "failure_behavior": "A missing/unreadable cached students-folder ID takes the normal ensure/discovery path. A usable cached ID is validated against ID, name, type, trashed state and current parent. Connection validation and actual Drive errors remain rejecting operations.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_0c4bc10b50af7687ccba",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 2500,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Failure to remove an invalid cached students-folder hint does not make it valid: the current operation still ensures the folder and checks connection ownership. A later read will validate the stale hint again. No primary writing or token is deleted in this catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2491,
+          "end_line": 2505,
+          "role": "optional invalid-folder cache eviction"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2500,
+          "end_line": 2500,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional invalid-folder cache eviction",
+      "failure_behavior": "Failure to remove an invalid cached students-folder hint does not make it valid: the current operation still ensures the folder and checks connection ownership. A later read will validate the stale hint again. No primary writing or token is deleted in this catch.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_38fc04fbc968b93d0391",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 2504,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The ensured newId is returned directly after the current-connection assertion even if local caching fails. Required folder resolution errors remain outside this best-effort write and reject the operation.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2497,
+          "end_line": 2505,
+          "role": "optional students-folder cache write"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2504,
+          "end_line": 2504,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional students-folder cache write",
+      "failure_behavior": "The ensured newId is returned directly after the current-connection assertion even if local caching fails. Required folder resolution errors remain outside this best-effort write and reject the operation.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_4a8e629c288c372da189",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "ensureWftMediaFolderPromise",
+      "line": 2511,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Failure to read the media-folder hint takes ensureWftSubfolderPromise(media,currentRoot). Missing-parent, search/create and upload failures still reject through the surrounding promise chain. This catch changes only whether the cache is used.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2509,
+          "end_line": 2516,
+          "role": "optional media-folder cache read"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2511,
+          "end_line": 2511,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional media-folder cache read",
+      "failure_behavior": "Failure to read the media-folder hint takes ensureWftSubfolderPromise(media,currentRoot). Missing-parent, search/create and upload failures still reject through the surrounding promise chain. This catch changes only whether the cache is used.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_10f61d35f1aa42a6e1fa",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 2514,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The newly ensured media folder ID is returned regardless of whether it can be cached locally. This avoids treating a successful remote folder resolution as a failed data operation merely because a reusable hint could not be persisted.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2509,
+          "end_line": 2516,
+          "role": "optional media-folder cache write"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2514,
+          "end_line": 2514,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional media-folder cache write",
+      "failure_behavior": "The newly ensured media folder ID is returned regardless of whether it can be cached locally. This avoids treating a successful remote folder resolution as a failed data operation merely because a reusable hint could not be persisted.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_db3372678b3e62a8c2c7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "ensureWftStudentMediaFolderPromise",
+      "line": 2522,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "An unreadable per-student media hint leaves cachedId empty and triggers folder discovery/creation beneath the resolved media folder. It does not substitute empty writing or acknowledge a failed media upload.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2519,
+          "end_line": 2530,
+          "role": "optional per-student media-folder cache read"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2522,
+          "end_line": 2522,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional per-student media-folder cache read",
+      "failure_behavior": "An unreadable per-student media hint leaves cachedId empty and triggers folder discovery/creation beneath the resolved media folder. It does not substitute empty writing or acknowledge a failed media upload.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_eec9e3971aba9df7e472",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 2527,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The resolved student media folder newId remains the promise result when local caching fails. Required remote folder and media operations still have rejecting paths; the cache write is not their acknowledgement boundary.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2524,
+          "end_line": 2530,
+          "role": "optional per-student media-folder cache write"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2527,
+          "end_line": 2527,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional per-student media-folder cache write",
+      "failure_behavior": "The resolved student media folder newId remains the promise result when local caching fails. Required remote folder and media operations still have rejecting paths; the cache write is not their acknowledgement boundary.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_e128e7f8aa5527a937b4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 2597,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The canonical remote ID is used directly for the student download after this cache write. Current connection, returned studentId and format are checked afterward; errors are delivered to callback(err,null). A cache failure cannot masquerade as a successful student download.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2593,
+          "end_line": 2606,
+          "role": "optional student-file location hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2597,
+          "end_line": 2597,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional student-file location hint",
+      "failure_behavior": "The canonical remote ID is used directly for the student download after this cache write. Current connection, returned studentId and format are checked afterward; errors are delivered to callback(err,null). A cache failure cannot masquerade as a successful student download.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_d6058db028bbc3ef0568",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 2628,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This cache write occurs after upload response validation and a current-connection assertion. The callback returns the actual uploaded file ID, not the result of caching it. Folder/upload/ownership errors still reach the error callback.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2618,
+          "end_line": 2633,
+          "role": "optional uploaded student-file hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2628,
+          "end_line": 2628,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional uploaded student-file hint",
+      "failure_behavior": "This cache write occurs after upload response validation and a current-connection assertion. The callback returns the actual uploaded file ID, not the result of caching it. Folder/upload/ownership errors still reach the error callback.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_c9981aa381c390ebb755",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": null,
+      "line": 2944,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The guarded startup ID-map initialization is ancillary to opening the application and is off in the shipped ID-map configuration. Its initializer already reports failures through wftDebugWarn and guarded settings writes; this outer defensive catch must not stop startup or clear canonical writing. The separate repeated-lookup metadata issue remains an explicit follow-up.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2942,
+          "end_line": 2945,
+          "role": "optional startup metadata initialization"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2944,
+          "end_line": 2944,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional startup metadata initialization",
+      "failure_behavior": "The guarded startup ID-map initialization is ancillary to opening the application and is off in the shipped ID-map configuration. Its initializer already reports failures through wftDebugWarn and guarded settings writes; this outer defensive catch must not stop startup or clear canonical writing. The separate repeated-lookup metadata issue remains an explicit follow-up.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_eee33d14b85f755b849b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "wftSyncLog",
+      "line": 3016,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "wftSyncLog is debug-gated and formats/redacts before calling console.log. If redaction or console invocation fails, dropping this diagnostic avoids recursive logging and avoids a raw-argument fallback that could expose private data. It must not throw through a real sync operation.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3008,
+          "end_line": 3017,
+          "role": "optional redacted debug logging"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3016,
+          "end_line": 3016,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional redacted debug logging",
+      "failure_behavior": "wftSyncLog is debug-gated and formats/redacts before calling console.log. If redaction or console invocation fails, dropping this diagnostic avoids recursive logging and avoids a raw-argument fallback that could expose private data. It must not throw through a real sync operation.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_e181390bac7f21e963d8",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "wftSyncWarn",
+      "line": 3027,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "wftSyncWarn is debug-gated and redacts before console.warn. Failure of this secondary logger should neither replace the operation error/status nor retry with unredacted values; no required save is performed inside the catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3019,
+          "end_line": 3028,
+          "role": "optional redacted warning logging"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3027,
+          "end_line": 3027,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional redacted warning logging",
+      "failure_behavior": "wftSyncWarn is debug-gated and redacts before console.warn. Failure of this secondary logger should neither replace the operation error/status nor retry with unredacted values; no required save is performed inside the catch.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_e3efdc4af519461794d0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "wftSyncErrorLog",
+      "line": 3038,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "wftSyncErrorLog is an optional debug sink. Failure to redact or invoke console.error is not allowed to break handleWftSyncError, whose user-facing status is a separate operation. No raw logging fallback is added.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3030,
+          "end_line": 3039,
+          "role": "optional redacted error logging"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3038,
+          "end_line": 3038,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional redacted error logging",
+      "failure_behavior": "wftSyncErrorLog is an optional debug sink. Failure to redact or invoke console.error is not allowed to break handleWftSyncError, whose user-facing status is a separate operation. No raw logging fallback is added.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_5bf74f394c8a838a9668",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "syncStateFromLegacyGoogleGlobals",
+      "line": 3144,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This reads a saved expiry only when the active state has no expiry. getWftSessionTokenExpiry itself returns zero on unavailable/malformed storage; validity requires a nonempty token and a future finite expiry. Failure leaves zero and cannot authorize an expired/unverifiable token.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3123,
+          "end_line": 3149,
+          "role": "optional expiry hint with fail-closed validation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3144,
+          "end_line": 3144,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional expiry hint with fail-closed validation",
+      "failure_behavior": "This reads a saved expiry only when the active state has no expiry. getWftSessionTokenExpiry itself returns zero on unavailable/malformed storage; validity requires a nonempty token and a future finite expiry. Failure leaves zero and cannot authorize an expired/unverifiable token.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_a8fbe9fa3ab024ef52dc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 3176,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Only cached user/connected identity hints are removed here. Actual legacy-token removal is performed separately, returned as a boolean and checked by sign-out. These hints cannot authorize Drive, so their cleanup must not prevent the token-disconnect flow.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3164,
+          "end_line": 3178,
+          "role": "optional sign-out identity-hint cleanup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3176,
+          "end_line": 3176,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional sign-out identity-hint cleanup",
+      "failure_behavior": "Only cached user/connected identity hints are removed here. Actual legacy-token removal is performed separately, returned as a boolean and checked by sign-out. These hints cannot authorize Drive, so their cleanup must not prevent the token-disconnect flow.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_316818f9b20b33331b71",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "getCachedGoogleUser",
+      "line": 3189,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "A missing, malformed or unreadable cached user becomes null. Sign-in uses a fresh/active user or a generic Connected display instead; authorization is based on the independently validated active/session token, not this identity hint.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3181,
+          "end_line": 3190,
+          "role": "optional cached display identity"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3189,
+          "end_line": 3189,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional cached display identity",
+      "failure_behavior": "A missing, malformed or unreadable cached user becomes null. Sign-in uses a fresh/active user or a generic Connected display instead; authorization is based on the independently validated active/session token, not this identity hint.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_92281015b6558a25ccf4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 3249,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The migration result is already applied to in-memory googleUser when this hint is written. Required migration/remapping and connection failures reach the outer error status; essential token persistence has its own checked path in completeWftGoogleSignInWithAccessToken.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3242,
+          "end_line": 3251,
+          "role": "optional post-migration display-identity cache"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3249,
+          "end_line": 3249,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional post-migration display-identity cache",
+      "failure_behavior": "The migration result is already applied to in-memory googleUser when this hint is written. Required migration/remapping and connection failures reach the outer error status; essential token persistence has its own checked path in completeWftGoogleSignInWithAccessToken.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_82a1305c8c6ea7f18054",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "completeWftGoogleSignInWithAccessToken",
+      "line": 3268,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The connected flag is a UI hint. Token validity, checked session persistence, legacy-token cleanup and an explicit persistence warning are handled separately before the active signed-in state is published. Losing this hint does not lose writing or grant authentication.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3255,
+          "end_line": 3284,
+          "role": "optional connected display hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3268,
+          "end_line": 3268,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional connected display hint",
+      "failure_behavior": "The connected flag is a UI hint. Token validity, checked session persistence, legacy-token cleanup and an explicit persistence warning are handled separately before the active signed-in state is published. Losing this hint does not lose writing or grant authentication.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_9b637db612c321b9d935",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "completeWftGoogleSignInWithAccessToken",
+      "line": 3278,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This removes a noncredential instruction to retry sync after redirect; the active auth callback and validated token remain available. Failure may retain a stale request hint, but it does not clear the actual pending portfolio or acknowledge it as saved. Current manual-save preparation checks pending/current analysis before committing.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3255,
+          "end_line": 3284,
+          "role": "optional completed-action hint cleanup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3278,
+          "end_line": 3278,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional completed-action hint cleanup",
+      "failure_behavior": "This removes a noncredential instruction to retry sync after redirect; the active auth callback and validated token remain available. Failure may retain a stale request hint, but it does not clear the actual pending portfolio or acknowledge it as saved. Current manual-save preparation checks pending/current analysis before committing.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_48ecc6ce9ca0e204604a",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "checkHashForOAuthTokens",
+      "line": 3338,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The auth-error branch already publishes the provider failure and returns false. History cleanup failure leaves the error fragment in the address bar but does not treat a token as accepted. The credential-bearing success-path cleanup is tracked separately as a repair candidate; a shared cleanup repair should cover both branches.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3332,
+          "end_line": 3339,
+          "role": "best-effort cleanup after already reported auth failure"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3338,
+          "end_line": 3338,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "best-effort cleanup after already reported auth failure",
+      "failure_behavior": "The auth-error branch already publishes the provider failure and returns false. History cleanup failure leaves the error fragment in the address bar but does not treat a token as accepted. The credential-bearing success-path cleanup is tracked separately as a repair candidate; a shared cleanup repair should cover both branches.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_05b33b2d236e13ab956c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "checkHashForOAuthTokens",
+      "line": 3348,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "source_supported_oauth_fragment_cleanup_candidate",
+      "proposed_status": "candidate_needs_regression",
+      "reason": "After an access_token fragment is processed, a throwing history.replaceState is swallowed and the function returns handled without any fallback or cleanup-failure notice. The fragment remains in the visible/current-history URL. There is no other hash cleanup in the repository. The existing native auth assertion checks only successful removal. This conditional privacy failure is established by control flow; a failing native regression must precede the repair. No live credential exposure was observed in this read-only pass.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3342,
+          "end_line": 3352,
+          "role": "credential-bearing URL cleanup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3348,
+          "end_line": 3348,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "credential-bearing URL cleanup",
+      "failure_behavior": "After an access_token fragment is processed, a throwing history.replaceState is swallowed and the function returns handled without any fallback or cleanup-failure notice. The fragment remains in the visible/current-history URL. There is no other hash cleanup in the repository. The existing native auth assertion checks only successful removal. This conditional privacy failure is established by control flow; a failing native regression must precede the repair. No live credential exposure was observed in this read-only pass.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_1eb82956f0c43b5c3eca",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "restoreWftOAuthDraftAfterRedirect",
+      "line": 3477,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The in-memory selection and recovered textarea are restored independently of this localStorage hint. Required draft read, validation, exact-text verification and draft removal remain under the outer recovery-preserving catch. Existing native tests explicitly accept selection-hint failure without losing the restored draft.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3456,
+          "end_line": 3500,
+          "role": "optional restored student-selection hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3477,
+          "end_line": 3477,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional restored student-selection hint",
+      "failure_behavior": "The in-memory selection and recovered textarea are restored independently of this localStorage hint. Required draft read, validation, exact-text verification and draft removal remain under the outer recovery-preserving catch. Existing native tests explicitly accept selection-hint failure without losing the restored draft.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_3d17096d3720efd5988e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "requestDriveAccess",
+      "line": 3511,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Writing the sync-intent marker can fail without blocking popup sign-in with the current callback. Redirect recovery may require the user to retry Sync, but the pending writing/draft preservation checks are separate required operations before navigation. This does not claim that sync completed.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3504,
+          "end_line": 3514,
+          "role": "optional post-auth action hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3511,
+          "end_line": 3511,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional post-auth action hint",
+      "failure_behavior": "Writing the sync-intent marker can fail without blocking popup sign-in with the current callback. Redirect recovery may require the user to retry Sync, but the pending writing/draft preservation checks are separate required operations before navigation. This does not claim that sync completed.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_c6c437a3f5d906220e7e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 3593,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Current-operation/token checks precede the update; googleUser and wftSyncState.googleUser already hold the fetched result before caching. Cache failure must not discard the valid current identity or prevent the guarded sync startup. It is not token persistence.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3585,
+          "end_line": 3607,
+          "role": "optional fresh user-profile cache"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3593,
+          "end_line": 3593,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional fresh user-profile cache",
+      "failure_behavior": "Current-operation/token checks precede the update; googleUser and wftSyncState.googleUser already hold the fetched result before caching. Cache failure must not discard the valid current identity or prevent the guarded sync startup. It is not token persistence.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_29a6dc1f54e5f6712827",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "clearWftLocalStorageAfterSignOut",
+      "line": 3725,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This only enumerates file/folder cache keys for cleanup. Canonical portfolios, settings, roster, selection and pending writing are explicitly excluded. Actual token removal is separately checked; inability to enumerate these noncredential hints must not prevent disconnect.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3685,
+          "end_line": 3731,
+          "role": "optional disconnected file-cache enumeration"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3725,
+          "end_line": 3725,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional disconnected file-cache enumeration",
+      "failure_behavior": "This only enumerates file/folder cache keys for cleanup. Canonical portfolios, settings, roster, selection and pending writing are explicitly excluded. Actual token removal is separately checked; inability to enumerate these noncredential hints must not prevent disconnect.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_9b5c010df5cc52cd6ceb",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "clearWftLocalStorageAfterSignOut",
+      "line": 3730,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Per-key failures concern remote location/action hints, not the saved class data or bearer tokens. Sign-out checks session/legacy token removal separately and warns when those required removals fail. A later folder/file resolution validates/discovers stale IDs rather than treating this cleanup as an upload success.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3685,
+          "end_line": 3754,
+          "role": "optional disconnected file-cache eviction"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3730,
+          "end_line": 3730,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional disconnected file-cache eviction",
+      "failure_behavior": "Per-key failures concern remote location/action hints, not the saved class data or bearer tokens. Sign-out checks session/legacy token removal separately and warns when those required removals fail. A later folder/file resolution validates/discovers stale IDs rather than treating this cleanup as an upload success.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_ff2fa11f62abe960d003",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "finishSignOut",
+      "line": 3755,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The active sign-out state, timer stops and truthful token-removal status are already published before the optional portfolio-button refresh. A broken button update must not turn a completed disconnect into a rejected data operation.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3736,
+          "end_line": 3755,
+          "role": "optional button refresh after disconnect"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3755,
+          "end_line": 3755,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional button refresh after disconnect",
+      "failure_behavior": "The active sign-out state, timer stops and truthful token-removal status are already published before the optional portfolio-button refresh. A broken button update must not turn a completed disconnect into a rejected data operation.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_d5c9f34e1f0076814706",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "parseWftGoogleApiErrorText",
+      "line": 3805,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The parser starts with the original response text as message/raw. Non-JSON or unexpected JSON leaves that diagnostic usable instead of throwing while handling the original Drive failure. wftDriveFetch attaches response status and throws the resulting error; this is not swallowing a successful data read.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3784,
+          "end_line": 3807,
+          "role": "fallback decoding of a remote error body"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3805,
+          "end_line": 3805,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "fallback decoding of a remote error body",
+      "failure_behavior": "The parser starts with the original response text as message/raw. Non-JSON or unexpected JSON leaves that diagnostic usable instead of throwing while handling the original Drive failure. wftDriveFetch attaches response status and throws the resulting error; this is not swallowing a successful data read.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_002942509f9f668c5bf1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "setCachedWftDriveFolderId",
+      "line": 3904,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The active globals and sync state receive the resolved folder ID before the local hint write. Cache failure leaves the in-memory location intact and does not hide a remote folder validation failure.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3898,
+          "end_line": 3905,
+          "role": "optional resolved folder-ID cache write"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3904,
+          "end_line": 3904,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional resolved folder-ID cache write",
+      "failure_behavior": "The active globals and sync state receive the resolved folder ID before the local hint write. Cache failure leaves the in-memory location intact and does not hide a remote folder validation failure.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_c8b13530cfcd50f78b70",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "setCachedWftDriveFileId",
+      "line": 3938,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Settings/portfolio/deletion file IDs are assigned in active sync state before this local hint write; an index ID can be rediscovered by name. The cache write is not the required upload acknowledgement or primary-data persistence boundary.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3926,
+          "end_line": 3939,
+          "role": "optional resolved file-ID cache write"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3938,
+          "end_line": 3938,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional resolved file-ID cache write",
+      "failure_behavior": "Settings/portfolio/deletion file IDs are assigned in active sync state before this local hint write; an index ID can be rediscovered by name. The cache write is not the required upload acknowledgement or primary-data persistence boundary.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_12c7f03482c92310bf6d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "clearCachedWftDriveFileId",
+      "line": 3953,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The matching in-memory file ID is cleared before the disk hint is removed. A failed disk removal leaves a stale location hint for later validation/discovery, not an accepted response or a deletion of writing. Required current-connection and remote error handling stay outside this catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3941,
+          "end_line": 3954,
+          "role": "optional stale file-ID cache eviction"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3953,
+          "end_line": 3953,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional stale file-ID cache eviction",
+      "failure_behavior": "The matching in-memory file ID is cleared before the disk hint is removed. A failed disk removal leaves a stale location hint for later validation/discovery, not an accepted response or a deletion of writing. Required current-connection and remote error handling stay outside this catch.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_25f9c687f74bb140cca7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "recordSessionDeletion",
+      "line": 4695,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "A deletion always records studentName and sessionId, plus the canonical name/session key. A stable studentId is extra metadata when available. Required tombstone/portfolio persistence is handled by saveDeletionsData or the staged saveWftStudentChange transaction, whose failure is not swallowed here.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4683,
+          "end_line": 4712,
+          "role": "optional stable-ID addition to a deletion tombstone"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4695,
+          "end_line": 4695,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional stable-ID addition to a deletion tombstone",
+      "failure_behavior": "A deletion always records studentName and sessionId, plus the canonical name/session key. A stable studentId is extra metadata when available. Required tombstone/portfolio persistence is handled by saveDeletionsData or the staged saveWftStudentChange transaction, whose failure is not swallowed here.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_e0eb4bd9894d70ec8a28",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 5846,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This broadcast happens only after the deletion/settings/portfolio/index work, current-connection checks, strict storage preflight and dirty-index gate. A closed/unavailable channel must not misreport those completed operations as a failed sync; other tabs retain their own polling path.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5835,
+          "end_line": 5854,
+          "role": "optional post-sync cross-tab notification"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5846,
+          "end_line": 5846,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional post-sync cross-tab notification",
+      "failure_behavior": "This broadcast happens only after the deletion/settings/portfolio/index work, current-connection checks, strict storage preflight and dirty-index gate. A closed/unavailable channel must not misreport those completed operations as a failed sync; other tabs retain their own polling path.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_567c2c3fe1148fb6204e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": null,
+      "line": 5914,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Assigning the diagnostics accessor to window is a convenience for inspection. Failure to export it performs no sync or storage mutation, and must not stop lifecycle initialization or required error handling.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5886,
+          "end_line": 5914,
+          "role": "optional diagnostic global export"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5914,
+          "end_line": 5914,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional diagnostic global export",
+      "failure_behavior": "Assigning the diagnostics accessor to window is a convenience for inspection. Failure to export it performs no sync or storage mutation, and must not stop lifecycle initialization or required error handling.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_40506fc89c1b3ae5d0e0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "saveWftLocalSnapshotsBeforeHide",
+      "line": 5978,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Page-hide first blocks recovery/unreadable required storage, restores suppression in finally, then reads the strict current portfolio snapshot. The optional final rewrite cannot replace unreadable bytes: savePortfolioLocalOnly validates and logs/rethrows a failed write, while localStorage retains the prior stored value. No Synced acknowledgement is emitted by this catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5961,
+          "end_line": 5979,
+          "role": "best-effort rewrite of an already durable snapshot"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5978,
+          "end_line": 5978,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "best-effort rewrite of an already durable snapshot",
+      "failure_behavior": "Page-hide first blocks recovery/unreadable required storage, restores suppression in finally, then reads the strict current portfolio snapshot. The optional final rewrite cannot replace unreadable bytes: savePortfolioLocalOnly validates and logs/rethrows a failed write, while localStorage retains the prior stored value. No Synced acknowledgement is emitted by this catch.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_156db6ee1ab11f402cfe",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 6027,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The receiver validates message type and numeric timestamp before updating only lastPollAt. Malformed/throwing event data is ignored; it neither merges writing nor marks any local/remote save as acknowledged. Independent polling remains available.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6011,
+          "end_line": 6037,
+          "role": "optional received broadcast hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6027,
+          "end_line": 6027,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional received broadcast hint",
+      "failure_behavior": "The receiver validates message type and numeric timestamp before updating only lastPollAt. Malformed/throwing event data is ignored; it neither merges writing nor marks any local/remote save as acknowledged. Independent polling remains available.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_dba32f79d863b2dbc216",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "<anonymous>",
+      "line": 6052,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The beforeunload handler first protects pending recovery and performs the lifecycle snapshot work. Closing the optional BroadcastChannel is last; a close failure must not suppress those earlier safeguards or create a new persistence action.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6041,
+          "end_line": 6053,
+          "role": "optional unload resource cleanup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6052,
+          "end_line": 6052,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional unload resource cleanup",
+      "failure_behavior": "The beforeunload handler first protects pending recovery and performs the lifecycle snapshot work. Closing the optional BroadcastChannel is last; a close failure must not suppress those earlier safeguards or create a new persistence action.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_6ba8692dd09e4d1554ac",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "saveStudentSession",
+      "line": 6792,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The early session date/ID normalization is opportunistic. The session is then included in the portfolio and savePortfolioData performs strict source/shape validation and full normalization; its failures rethrow before cache publication/rendering. This catch cannot make a failed primary save return as durable success.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6790,
+          "end_line": 6820,
+          "role": "preliminary optional normalization; strict save remains required"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6792,
+          "end_line": 6792,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "preliminary optional normalization; strict save remains required",
+      "failure_behavior": "The early session date/ID normalization is opportunistic. The session is then included in the portfolio and savePortfolioData performs strict source/shape validation and full normalization; its failures rethrow before cache publication/rendering. This catch cannot make a failed primary save return as durable success.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_22fc6fec08d1b93873e2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "saveStudentSession",
+      "line": 6800,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Failure to stamp the optional Lamport field retains the documented timestamp-based merge fallback. The canonical portfolio save still follows and throws on failure; this clock hint is not an acknowledgement of durable writing.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6793,
+          "end_line": 6807,
+          "role": "optional Lamport metadata with supported timestamp fallback"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6800,
+          "end_line": 6800,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional Lamport metadata with supported timestamp fallback",
+      "failure_behavior": "Failure to stamp the optional Lamport field retains the documented timestamp-based merge fallback. The canonical portfolio save still follows and throws on failure; this clock hint is not an acknowledgement of durable writing.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_d342aecb83e0282c5fd2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "saveStudentSession",
+      "line": 6812,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "savePortfolioData has already committed before the optional IndexedDB mirror starts. A synchronous cache/ID lookup failure does not undo writing; the facade also absorbs optional async cache failures. Current async portfolio reads use the strict primary snapshot, and native tests verify failed primary writes never publish cache data.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6804,
+          "end_line": 6819,
+          "role": "optional cache mirror after required primary save"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6812,
+          "end_line": 6812,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional cache mirror after required primary save",
+      "failure_behavior": "savePortfolioData has already committed before the optional IndexedDB mirror starts. A synchronous cache/ID lookup failure does not undo writing; the facade also absorbs optional async cache failures. Current async portfolio reads use the strict primary snapshot, and native tests verify failed primary writes never publish cache data.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_e6856bfa0d603fa582a2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "openStudentPortfolio",
+      "line": 7151,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The active selectedStudent and the real student/portfolio selects are updated separately. A failed remembered-selection write must not prevent opening the requested saved portfolio. It does not change ownership of an analysis, which captures the current DOM selection.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7147,
+          "end_line": 7159,
+          "role": "optional open-portfolio selection hint"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7151,
+          "end_line": 7151,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional open-portfolio selection hint",
+      "failure_behavior": "The active selectedStudent and the real student/portfolio selects are updated separately. A failed remembered-selection write must not prevent opening the requested saved portfolio. It does not change ownership of an analysis, which captures the current DOM selection.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_5fcc9daff01d66f13e80",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "destroyWftPortfolioCharts",
+      "line": 7418,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Each existing chart is destroyed independently and its registry entry is deleted even if destroy throws. Continuing releases the remaining charts and permits the actual portfolio render; no saved writing or score record is modified by this cleanup.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7413,
+          "end_line": 7421,
+          "role": "optional third-party chart cleanup"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7418,
+          "end_line": 7418,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional third-party chart cleanup",
+      "failure_behavior": "Each existing chart is destroyed independently and its registry entry is deleted even if destroy throws. Continuing releases the remaining charts and permits the actual portfolio render; no saved writing or score record is modified by this cleanup.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    },
+    {
+      "record_id": "code_health:finding_4f4a40401b66f5644289",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "getActivePortfolioStudentName",
+      "line": 8087,
+      "held": true,
+      "detector_kind": "swallowed_catch",
+      "classification": "intentional_best_effort_or_fallback",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The current DOM selection is assigned to selectedStudent and returned regardless of hint persistence. Analysis/media context ownership therefore uses the current value, not a stale remembered student. The failed hint write cannot substitute another student or consume pending writing.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8081,
+          "end_line": 8104,
+          "role": "optional selection persistence during context capture"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8087,
+          "end_line": 8087,
+          "role": "Verified reported catch anchor at assigned source"
+        }
+      ],
+      "required_or_optional": "optional selection persistence during context capture",
+      "failure_behavior": "The current DOM selection is assigned to selectedStudent and returned regardless of hint persistence. Analysis/media context ownership therefore uses the current value, not a stale remembered student. The failed hint write cannot substitute another student or consume pending writing.",
+      "needs_user_attention": false,
+      "source_edit_made": false,
+      "scanner_clearance_claimed": false,
+      "remaining_scanner_expectation": "No source edit: the scanner is expected to retain this catch until coordinator action."
+    }
+  ],
+  "repair_candidates": [
+    {
+      "record_id": "code_health:finding_5e1517d62b1781066e9b",
+      "title": "Keep optional student-record enrichment consistent when a repeated lookup read fails",
+      "confidence": "Conditional behavior established by source; native failure regression not run in this read-only task.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 617,
+          "end_line": 623,
+          "role": "getRawSettings converts storage read failure to an empty object"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2302,
+          "end_line": 2312,
+          "role": "Lookup converts missing/failing metadata to null"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2330,
+          "end_line": 2374,
+          "role": "Already loaded settings array is appended to after the second lookup reports null"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "start_line": 48,
+          "end_line": 59,
+          "role": "Existing normal-path record creation and roster initialization assertions"
+        }
+      ],
+      "minimal_regression_plan": [
+        "Use existing local browser harness and synthetic settings containing one roster student, one stable ID and one matching studentRecords entry.",
+        "Enable the supported ID-map feature. Let the outer settings read succeed, then fail only the nested lookup read for wft_settings once.",
+        "Call ensureStudentRecordsForRoster. Assert that it preserves one record for that name/ID, the existing map and exact primary writing, or explicitly refuses persistence; current control flow appends a duplicate to its already loaded array.",
+        "Restore native storage access and check idempotent retry plus normal missing-record creation."
+      ],
+      "minimal_fix_direction": "Use the already loaded/validated settings snapshot for the mutating initializer lookup, or distinguish lookup failure from absence. Do not make the broad display getRawSettings helper strict without checking all callers.",
+      "not_claimed": "No session loss, duplicate student identity in a live account, or default-enabled ID-map defect was dynamically demonstrated."
+    },
+    {
+      "record_id": "code_health:finding_05b33b2d236e13ab956c",
+      "title": "Handle failure to remove a credential-bearing OAuth URL fragment",
+      "confidence": "Conditional URL-retention path established by source; native throwing-History regression not run.",
+      "related_record_id": "code_health:finding_48ecc6ce9ca0e204604a",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3328,
+          "end_line": 3352,
+          "role": "The only fragment cleanup uses a silently swallowed History call"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "start_line": 148,
+          "end_line": 159,
+          "role": "Existing startup case requires successful fragment removal but does not inject cleanup failure"
+        }
+      ],
+      "minimal_regression_plan": [
+        "Reuse the intercepted auth startup harness with a deliberately synthetic noncredential fragment.",
+        "Make history.replaceState throw before checkHashForOAuthTokens runs; stub migration/network work using the existing local responders.",
+        "Assert that cleanup either safely removes the fragment via a same-document fallback or reports an actionable cleanup failure; current code silently returns handled with the fragment intact.",
+        "Verify the draft/pending writing, validated sign-in state, callback ownership and normal/error redirect paths remain coherent. Add a both-cleanup-mechanisms-fail case if a fallback is chosen."
+      ],
+      "minimal_fix_direction": "Keep the validated auth/data state while adding a safe cleanup fallback or explicit failure handling. A shared cleanup operation can cover both existing History call sites; avoid a reload that discards tab-only work.",
+      "not_claimed": "No real token, provider interaction, actual disclosure or browser-specific production failure was observed."
+    }
+  ],
+  "caller_and_boundary_evidence": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 1218,
+      "end_line": 1251,
+      "role": "Stable-ID creation uses strict settings read and a required settings save"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 1649,
+      "end_line": 1686,
+      "role": "Derived-index upload validates strict primary snapshot, connection and dirty acknowledgement"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 1980,
+      "end_line": 2027,
+      "role": "Supported async portfolio facade reads/writes the strict local primary data"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 2261,
+      "end_line": 2273,
+      "role": "Optional cache facade resolves/returns a miss on cache failure"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 4715,
+      "end_line": 4773,
+      "role": "Deletion/class transaction rolls back or retains recovery bytes; publication follows required writes"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 5567,
+      "end_line": 5579,
+      "role": "Merged/local-only snapshot writer validates and logs/rethrows failures before dirty marking"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 6378,
+      "end_line": 6385,
+      "role": "Display reader explicitly reports unreadable portfolio and returns a display-only fallback"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 6437,
+      "end_line": 6469,
+      "role": "Primary portfolio save validates existing bytes and shape, retries quota safely and rethrows a failed retry"
+    },
+    {
+      "file": "js/app/storage-recovery.js",
+      "start_line": 146,
+      "end_line": 186,
+      "role": "Strict storage/recovery reads and preflight requirements"
+    },
+    {
+      "file": "index.html",
+      "start_line": 3751,
+      "end_line": 3751,
+      "role": "Actual index-reload button checks the error callback and shows a retry warning"
+    }
+  ],
+  "test_evidence": {
+    "launched_in_this_review": [],
+    "reason": "Read-only verification while coordinator full gate owns frozen source.",
+    "existing_exact_source_focused_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "suites": 8,
+      "syntax_checks": 89,
+      "finished": "2026-10-15T18:44:49.544Z",
+      "selected_suites": [
+        "tests/auth-integrity.browser.cjs",
+        "tests/correction-performance.browser.cjs",
+        "tests/notebook-guidance-repair.browser.cjs",
+        "tests/notebook-guide.browser.cjs",
+        "tests/optional-storage.browser.cjs",
+        "tests/recovery-cache.browser.cjs",
+        "tests/script-loading.browser.cjs",
+        "tests/storage-health.cjs"
+      ]
+    },
+    "full_gate_snapshot_at_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-001\\full\\suite-results.json",
+      "started": "2026-10-15T18:47:22.362Z",
+      "inventory": 75,
+      "completed": 69,
+      "complete": false,
+      "passed": false,
+      "recorded_failures": [],
+      "note": "Point-in-time receipt only. Do not describe an incomplete full gate as passed."
+    },
+    "inspected_assertions": [
+      {
+        "file": "tests/auth-integrity.browser.cjs",
+        "lines": "66-77",
+        "case": "draft read/remove/selection-hint failure and retry; optional hint need not block consumption"
+      },
+      {
+        "file": "tests/auth-integrity.browser.cjs",
+        "lines": "148-159",
+        "case": "normal redirect startup callback and hash removal; throwing cleanup is not covered"
+      },
+      {
+        "file": "tests/optional-storage.browser.cjs",
+        "lines": "56-84",
+        "case": "unavailable IDB fallback, failed cache transaction after actual session save, failed primary save never publishes cache, strict async name/ID reads"
+      },
+      {
+        "file": "tests/portfolio-index.browser.cjs",
+        "lines": "281-285",
+        "case": "unreadable optional cached file ID retains score summary and exact primary bytes"
+      },
+      {
+        "file": "tests/drive-lifecycle.browser.cjs",
+        "lines": "262-266",
+        "case": "student-file connection changes and cached-folder permission failures refuse acknowledgement/upload"
+      },
+      {
+        "file": "tests/preference-integrity-scenarios.js",
+        "lines": "90-99",
+        "case": "required preflight preserves saved preferences/raw bytes and restores page-hide suppression"
+      },
+      {
+        "file": "tests/record-identity.browser.cjs",
+        "lines": "48-67",
+        "case": "normal stable-ID creation/roster/rename and name-keyed index/deletion identity"
+      },
+      {
+        "file": "tests/storage-integrity.browser.cjs",
+        "lines": "278-280",
+        "case": "explicit hide/visibility/unload invocation routes are included in the corruption scenarios"
+      }
+    ]
+  },
+  "limits": [
+    "No source, tests, tracker, docs, branch or index was changed. No browser/test process, dependency, paid call or external service was launched.",
+    "Two conditional failure paths are source-supported leads for regression/repair, not claims of reproduced live data loss or credential exposure.",
+    "The ID-map feature is shipped disabled; its supported optional path still needs consistent metadata when enabled.",
+    "Existing focused suite results do not prove that every one of these 57 exception branches was fault-injected.",
+    "The older 909 baseline is not claimed to be an exact whole-file baseline for the deletion-only 4c39 source.",
+    "Retained catches are not scanner clearances or a health-score improvement. Coordinator must independently accept the proposed outcomes."
+  ],
+  "scope_checks": {
+    "no_source_edits": true,
+    "no_tests_launched": true,
+    "no_git_mutation": true,
+    "no_tracker_or_docs_edits": true,
+    "no_repowise_mutation": true,
+    "no_new_chats_or_agents": true,
+    "no_other_chat_messages": true,
+    "no_next_issue_selected": true
+  },
+  "source_pin_validation": {
+    "files_checked": 89,
+    "all_match_coordinator_frozen_bytes": true,
+    "app_test_script_diff_to_head": []
+  }
+}

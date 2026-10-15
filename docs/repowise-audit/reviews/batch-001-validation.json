@@ -1,0 +1,560 @@
+{
+  "batch": "batch-001",
+  "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+  "tested_branch_head_at_start": "Source4c39f16; later coordinator commits only changed tracker documentation.",
+  "full_runner_exit_code": 0,
+  "full_suite_passed": true,
+  "suites": 75,
+  "syntax_checks": 89,
+  "runner_selfcheck_passed": true,
+  "started": "2026-10-15T18:47:22.362Z",
+  "finished": "2026-10-15T19:08:16.038Z",
+  "source_pins": {
+    "google-drive-migration.js": "444f21014a872da31ec38886bd7d3c5f1df37120624b9cae97a85e531b670f9b",
+    "js/app/00-storage-sync-patches.js": "3fe34c0fe41f000f5079eec08482268fe5de63093ce6705aac1c5e28159ffb69",
+    "js/app/10-main-app.js": "40e699fbadd2fd53f295c4adf088dcbee7fac6b5facf093d2ff33298cbcde74d",
+    "js/app/99-lightbox.js": "0ca315422d1850cb7a35c5a3a9ff04440789c91eab84ffb9dc5bba4a17c6d453",
+    "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+    "js/app/photo-crop.js": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+    "js/app/portfolio-export.js": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+    "js/app/storage-recovery.js": "f3f0e10775b443b055ec81d57d59b2e94e97207b2025eb22c5777d009e1a523c",
+    "scripts/check-test-runner.cjs": "2a12cf7690ea2613ec38adb469945242196b474bed0c9f54ba1327900550919f",
+    "scripts/run-tests.cjs": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca",
+    "test-google-drive-migration.cjs": "08ef907851a567997abc3c1bba884a702e7c4ab9abab751cfd6fca94666393a8",
+    "tests/analysis-identity.browser.cjs": "f0ee4d47417a09edac1f2cceefb59fe19ce757792e086c7b5e7fbcff7668a952",
+    "tests/analysis-pipeline.browser.cjs": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+    "tests/analysis-policy.browser.cjs": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2",
+    "tests/archive-connection.browser.cjs": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+    "tests/archive-failures.browser.cjs": "748e335a4c8757d49ab2ac6d17f03f392a49b374cab79409c83bebdc464e045b",
+    "tests/archive-integrity.browser.cjs": "11f7807415cea27c165ad2584c37e7d58e81a0649acc9b0927ff243dc808029b",
+    "tests/auth-integrity.browser.cjs": "54ef8461fd776a4ddca2d0912000a00db02d357e51c743a0f1c941444598ef91",
+    "tests/class-deletion.browser.cjs": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48",
+    "tests/class-deletion.cjs": "602de41f7472e6014dded1c05de286758a500f71f82738e7542c6f36d582dcd1",
+    "tests/correction-performance.browser.cjs": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+    "tests/corrupt-portfolio.browser.cjs": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+    "tests/crop-ownership.browser.cjs": "b5a6f6354c1c34bbe2a9c785a983e1b7c101ecfece212ae45bf627e157ac5181",
+    "tests/crop-transparency.browser.cjs": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+    "tests/csv-formula.browser.cjs": "d119d1f3fda0594f4443655353e8518b7a9643665b5c59153639182ee6f086db",
+    "tests/deletion-durability.browser.cjs": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+    "tests/deletion-merge.browser.cjs": "1b85dbcb9c92f8bb011fb99c2b8940fd12436c25e63368cf14bb024176f02987",
+    "tests/deletion-merge.cjs": "78d5027dea341e573cbd28eb021d973852df599a3b4d66d30b1b40083f2102a2",
+    "tests/deletion-recovery.browser.cjs": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+    "tests/detailed-parser.browser.cjs": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+    "tests/drive-folder-selection.cjs": "59849b8e7e8b4eeec98514737da522266104ce47ac93baa3ab9d89ae59845e74",
+    "tests/drive-lifecycle.browser.cjs": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+    "tests/feedback-compatibility.browser.cjs": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+    "tests/fixtures/analysis-pipeline-baseline.js": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+    "tests/fixtures/portfolio-renderer-baseline.js": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+    "tests/image-preparation.browser.cjs": "97c63242cd57bddb7963b2946377b816b645ecb98a57aa5573a1cc3f0f462f19",
+    "tests/main-app-health.browser.cjs": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+    "tests/media-ownership.browser.cjs": "ac2bbc54d727e69525ef318d9b4404515b4691b0e96b5de0c00b294e114b93ab",
+    "tests/media-upload-boundary.browser.cjs": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+    "tests/missing-feedback.browser.cjs": "42ef342368cddd5a733066316aefd82cec9c5ce693e54b9ffa0b0a904dce99aa",
+    "tests/neatness-boundaries.browser.cjs": "a49615fd6124e05ebb1fdbaa15ff122c972dbfadb0ce5633493d6385acbacdf7",
+    "tests/neatness-scoring.browser.cjs": "a61c68eaeb8ae88b5c9bfc86690f4d73fe7eb763312d768b57ca44d71e4a32da",
+    "tests/neatness-scoring.cjs": "e8483eb8350a6eccd00b35efb09bc85296de8dfc75ca5a25c5113deb6aebe1aa",
+    "tests/notebook-guidance-repair.browser.cjs": "00ddca7a4a79ccb79e3446765cdefbb18373e9e542297d9537f826c112baa067",
+    "tests/notebook-guide.browser.cjs": "851afd0acd495bab673f81b1400513901b3db22891c29ee5ef61d0b6d5657ba3",
+    "tests/notebook-print-failure.browser.cjs": "3fce2779ac86c73cd66a4c6ff20c095ef12a4ff19e9d1b42d61ceda6b61888ce",
+    "tests/openrouter-admission.browser.cjs": "f838ecef4bb64fd03ca8c74754d09e3bfd5015d35c3e8366a6f0e44455a71003",
+    "tests/openrouter-failures.browser.cjs": "d5b20c0095cbe8d1c3531e8ba548016886e0f0c235c003f9da28cd464595673d",
+    "tests/openrouter-request.cjs": "5ee701f9eaa2cc2ee17874b11a1764587367605910c77b3cfb3c1e4ed0bf1a6a",
+    "tests/optional-storage.browser.cjs": "483bb01e62c94effe1d89dd26c3c903bd9d64fd3be1c606fe01543e8d84849b8",
+    "tests/pending-commit-publication.browser.cjs": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86",
+    "tests/pending-portfolio.browser.cjs": "3e6a9a33da4a3635994d1fa60398adfc3503823b71d4b53d855f6162aee52a5e",
+    "tests/pending-portfolio.cjs": "bd5860e352705c86fe312b9a489c437612771567921d5dd616ea3ef0c1db65bf",
+    "tests/portfolio-html.browser.cjs": "2589050e344520270160db5a89f99a71f438785a71be20f808689e2032697c5f",
+    "tests/portfolio-image-slots.browser.cjs": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974",
+    "tests/portfolio-index-load.cjs": "5c1c302e687f69775c74aab362cdb024376b92b245c6715b6bcb269a521a7bbb",
+    "tests/portfolio-index.browser.cjs": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+    "tests/portfolio-removal.browser.cjs": "005bc8ee18110db59ad8b73c104767bc8386e76c2d9cdd5ef3ce88464d10256a",
+    "tests/portfolio-removal.cjs": "f6b36ee12d418b5cfb7d047c1f7bdc749799289973608e59eeadb3049be52da1",
+    "tests/portfolio-render-failures.browser.cjs": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+    "tests/portfolio-renderer.browser.cjs": "d7aaa80468c5a3a1af2133030d660d16e9728bafde5172c98d4e11334edfe469",
+    "tests/portfolio-replacement.browser.cjs": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5",
+    "tests/portfolio-replacement.cjs": "b74b165c729016147e87e58a530a756f6c94a96b44dbefc6eae87be148d4d178",
+    "tests/portfolio-save.cjs": "9099f36f39157506192976e6da44a5038e519d36f13fac62101598f4e95c05a7",
+    "tests/portfolio-sync.browser.cjs": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066",
+    "tests/portfolio-sync.cjs": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4",
+    "tests/preference-integrity-scenarios.js": "fcefe8a4c870e310d99548640d56110bb7f529eccc56f783748c8b95434839bb",
+    "tests/preference-integrity.browser.cjs": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+    "tests/record-identity.browser.cjs": "a92587d528dd76219f5c3523a854c31f1195445d0c3e2e420cf4934d92877347",
+    "tests/record-identity.cjs": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d",
+    "tests/recovery-cache.browser.cjs": "64d4e42085305446f09063bb1f6f786dfcdd51e1fa6ce19925ca8f7e2cb92972",
+    "tests/rename-confirmation.browser.cjs": "7b68949c0e314fef5df02f7cdbe5ec2e47f254ce94e41e29ad81fbefde1221ba",
+    "tests/script-loading.browser.cjs": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+    "tests/session-retention.browser.cjs": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de",
+    "tests/session-retention.cjs": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+    "tests/settings-deletions-sync.browser.cjs": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+    "tests/settings-deletions-sync.cjs": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+    "tests/split-storage.browser.cjs": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b",
+    "tests/storage-dialog-keyboard.browser.cjs": "9931415e110418757f2babc83750a4d761f63a8c3f027afd818c3d6b2163b73c",
+    "tests/storage-health.cjs": "6d6eb9a782b1a889a2dc2568d448053bc21c8c331493cf12db4346a815585ce5",
+    "tests/storage-held-request.browser.cjs": "2fcb3300e5d9b35f4daa3bad6a8ce521e3d073d1262eef3d8cf4e576d14bbdd7",
+    "tests/storage-integrity.browser.cjs": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+    "tests/storage-public-ui.browser.cjs": "9a4750e2912db5287cc8b44263af22a520c181bb137f1507eb8e333901d61264",
+    "tests/storage-upload-ownership.browser.cjs": "63d86ad3bbe41ec9cbe98fbeecf554a7887f953ac62a24f400151524c3d1ff89",
+    "tests/student-read-ownership.browser.cjs": "0cea2436dcd6ccef925a50236d7d23b5e68f6650afc28cc9b0d3ee06b718fdb1",
+    "tests/student-rename.browser.cjs": "228cfd9540fd24ee9f813310133de140b794f01c02ae7db247c57690eccc0613",
+    "tests/student-rename.cjs": "555f18cffcd227057c6dfda7ebfd432e73c6cb9b24f6a429952dbc8d9964812b",
+    "tests/student-selection-storage.browser.cjs": "a507351f3c4d5485ffc4240153c42a2765dbb03fdc20bf385b96acea03ff7115",
+    "tests/support/local-app-route.js": "7657a3597c09ebfbd426140208ec9a679e0ac8ccb4d13b4f7976a945a9346250"
+  },
+  "source_unchanged_through_run": true,
+  "suite_results": [
+    {
+      "suite": "test-google-drive-migration.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.631
+    },
+    {
+      "suite": "tests/analysis-identity.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 37.27
+    },
+    {
+      "suite": "tests/analysis-pipeline.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 174.947
+    },
+    {
+      "suite": "tests/analysis-policy.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 102.479
+    },
+    {
+      "suite": "tests/archive-connection.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 17.51
+    },
+    {
+      "suite": "tests/archive-failures.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 11.26
+    },
+    {
+      "suite": "tests/archive-integrity.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 6.865
+    },
+    {
+      "suite": "tests/auth-integrity.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 39.481
+    },
+    {
+      "suite": "tests/class-deletion.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 6.15
+    },
+    {
+      "suite": "tests/class-deletion.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.102
+    },
+    {
+      "suite": "tests/correction-performance.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 12.179
+    },
+    {
+      "suite": "tests/corrupt-portfolio.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 12.711
+    },
+    {
+      "suite": "tests/crop-ownership.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 34.229
+    },
+    {
+      "suite": "tests/crop-transparency.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.47
+    },
+    {
+      "suite": "tests/csv-formula.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 3.273
+    },
+    {
+      "suite": "tests/deletion-durability.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 53.851
+    },
+    {
+      "suite": "tests/deletion-merge.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 2.865
+    },
+    {
+      "suite": "tests/deletion-merge.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.11
+    },
+    {
+      "suite": "tests/deletion-recovery.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.106
+    },
+    {
+      "suite": "tests/detailed-parser.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 8.212
+    },
+    {
+      "suite": "tests/drive-folder-selection.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.221
+    },
+    {
+      "suite": "tests/drive-lifecycle.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 72.908
+    },
+    {
+      "suite": "tests/feedback-compatibility.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.779
+    },
+    {
+      "suite": "tests/image-preparation.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 6.164
+    },
+    {
+      "suite": "tests/main-app-health.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.86
+    },
+    {
+      "suite": "tests/media-ownership.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 49.578
+    },
+    {
+      "suite": "tests/media-upload-boundary.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 26.321
+    },
+    {
+      "suite": "tests/missing-feedback.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.096
+    },
+    {
+      "suite": "tests/neatness-boundaries.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 3.503
+    },
+    {
+      "suite": "tests/neatness-scoring.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 3.67
+    },
+    {
+      "suite": "tests/neatness-scoring.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.177
+    },
+    {
+      "suite": "tests/notebook-guidance-repair.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.846
+    },
+    {
+      "suite": "tests/notebook-guide.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 7.089
+    },
+    {
+      "suite": "tests/notebook-print-failure.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.334
+    },
+    {
+      "suite": "tests/openrouter-admission.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 39.745
+    },
+    {
+      "suite": "tests/openrouter-failures.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 26.604
+    },
+    {
+      "suite": "tests/openrouter-request.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.736
+    },
+    {
+      "suite": "tests/optional-storage.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 47.513
+    },
+    {
+      "suite": "tests/pending-commit-publication.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 8.8
+    },
+    {
+      "suite": "tests/pending-portfolio.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.629
+    },
+    {
+      "suite": "tests/pending-portfolio.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.294
+    },
+    {
+      "suite": "tests/portfolio-html.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 12.085
+    },
+    {
+      "suite": "tests/portfolio-image-slots.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.834
+    },
+    {
+      "suite": "tests/portfolio-index-load.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.175
+    },
+    {
+      "suite": "tests/portfolio-index.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 3.649
+    },
+    {
+      "suite": "tests/portfolio-removal.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.726
+    },
+    {
+      "suite": "tests/portfolio-removal.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.238
+    },
+    {
+      "suite": "tests/portfolio-render-failures.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.746
+    },
+    {
+      "suite": "tests/portfolio-renderer.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 47.323
+    },
+    {
+      "suite": "tests/portfolio-replacement.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 3.458
+    },
+    {
+      "suite": "tests/portfolio-replacement.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.097
+    },
+    {
+      "suite": "tests/portfolio-save.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.081
+    },
+    {
+      "suite": "tests/portfolio-sync.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 6.159
+    },
+    {
+      "suite": "tests/portfolio-sync.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.198
+    },
+    {
+      "suite": "tests/preference-integrity.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.364
+    },
+    {
+      "suite": "tests/record-identity.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 12.28
+    },
+    {
+      "suite": "tests/record-identity.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.142
+    },
+    {
+      "suite": "tests/recovery-cache.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 58.709
+    },
+    {
+      "suite": "tests/rename-confirmation.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 35.51
+    },
+    {
+      "suite": "tests/script-loading.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 5.594
+    },
+    {
+      "suite": "tests/session-retention.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.328
+    },
+    {
+      "suite": "tests/session-retention.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.09
+    },
+    {
+      "suite": "tests/settings-deletions-sync.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 2.784
+    },
+    {
+      "suite": "tests/settings-deletions-sync.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.173
+    },
+    {
+      "suite": "tests/split-storage.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 31.735
+    },
+    {
+      "suite": "tests/storage-dialog-keyboard.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 44.815
+    },
+    {
+      "suite": "tests/storage-health.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.113
+    },
+    {
+      "suite": "tests/storage-held-request.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.753
+    },
+    {
+      "suite": "tests/storage-integrity.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 22.179
+    },
+    {
+      "suite": "tests/storage-public-ui.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 17.445
+    },
+    {
+      "suite": "tests/storage-upload-ownership.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 16.288
+    },
+    {
+      "suite": "tests/student-read-ownership.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 20.104
+    },
+    {
+      "suite": "tests/student-rename.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.74
+    },
+    {
+      "suite": "tests/student-rename.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 0.299
+    },
+    {
+      "suite": "tests/student-selection-storage.browser.cjs",
+      "status": 0,
+      "error": null,
+      "seconds": 4.542
+    }
+  ],
+  "limits": [
+    "No fresh coverage captured.",
+    "No live Drive/OAuth/model calls; native browser tests intercept services."
+  ]
+}

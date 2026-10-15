@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T02:06:13.751024+07:00",
+  "updated_at": "2026-10-16T02:12:01.351197+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active",
-  "active_repair": "repair-006",
+  "active_repair": null,
   "index_provenance": {
     "last_sync_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
     "repository_metadata_head": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
@@ -35,8 +35,8 @@
     },
     "by_status": {
       "unreviewed": 834,
-      "reviewed_no_change": 90,
-      "in_progress": 57
+      "reviewed_no_change": 145,
+      "candidate_needs_regression": 2
     },
     "by_severity": {
       "medium": 363,
@@ -47,12 +47,12 @@
     },
     "all_rows_by_status": {
       "unreviewed": 834,
-      "reviewed_no_change": 91,
-      "in_progress": 57,
+      "reviewed_no_change": 146,
+      "candidate_needs_regression": 2,
       "fixed_verified": 11
     },
     "verified_fixed": 11,
-    "unresolved_present": 891,
+    "unresolved_present": 836,
     "unresolved_absent": 0
   },
   "repairs": [
@@ -177,7 +177,7 @@
       "id": "repair-006",
       "title": "Storage failure safeguards",
       "thread_id": "01a140ec-31a8-7ff3-9317-e3bde4ecce48",
-      "status": "in_progress",
+      "status": "reviewed_complete",
       "scope": [
         "code_health:finding_9e5285cbf5a78d3654d0",
         "code_health:finding_38ba295af9ce6d8d26f1",
@@ -238,7 +238,12 @@
         "code_health:finding_4f4a40401b66f5644289"
       ],
       "base_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
-      "read_only": true
+      "read_only": true,
+      "outcome": "55 intentional fallback/cleanup catches retained;2 source-supported candidates remain unresolved pending native regressions.",
+      "follow_up_ids": [
+        "code_health:finding_5e1517d62b1781066e9b",
+        "code_health:finding_05b33b2d236e13ab956c"
+      ]
     },
     {
       "id": "history-context-review-4c39f16",
@@ -3478,7 +3483,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "16c01ece70c71d05308cc373ca5d4bbb8db9f813d1c8565b699f9e34d420e47a",
@@ -8586,7 +8591,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required.",
         "source_equivalence_revalidation": {
           "commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
@@ -12587,9 +12592,33 @@
       "scanner_id": "46fc1f7621ea48fabc612d1202d11f98",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The unhandled-rejection listener logs the normalized original error before attempting the sync-status update. This catch prevents a broken status widget from creating a second rejection; it neither consumes a required save result nor changes stored data.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1120,
+            "end_line": 1129,
+            "role": "optional secondary error UI"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1128,
+            "end_line": 1128,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The unhandled-rejection listener logs the normalized original error before attempting the sync-status update. This catch prevents a broken status widget from creating a second rejection; it neither consumes a required save result nor changes stored data.",
+        "required_or_optional": "optional secondary error UI",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "5885007c64ca2089c2591ce024de4f67cfcb7abb7e30a15e75a894f67ca8a0ca",
       "observation": {
         "id": "46fc1f7621ea48fabc612d1202d11f98",
@@ -12758,9 +12787,33 @@
       "scanner_id": "7cd1923c332a41c7a97d43a0fbcdf7e5",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Schema normalization keeps every name-keyed session even if the optional ID-map enrichment cannot obtain or persist an ID. getOrCreateStudentId uses strict settings reads/writes; its failure does not erase the name-keyed portfolio. Required portfolio persistence is validated separately.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1333,
+            "end_line": 1361,
+            "role": "optional identity enrichment"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1356,
+            "end_line": 1356,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Schema normalization keeps every name-keyed session even if the optional ID-map enrichment cannot obtain or persist an ID. getOrCreateStudentId uses strict settings reads/writes; its failure does not erase the name-keyed portfolio. Required portfolio persistence is validated separately.",
+        "required_or_optional": "optional identity enrichment",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "5bd4dbeb92f15b224e183014197696ba51b17352f84395cf9bb0b3710f934baf",
       "observation": {
         "id": "7cd1923c332a41c7a97d43a0fbcdf7e5",
@@ -12928,9 +12981,33 @@
       "scanner_id": "0f74835f0f3e49b996aec260045bea92",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Index construction can omit studentId and retain the display-name/legacy-name key, sessions, counts and scores. This is derived index metadata, not permission to overwrite the canonical portfolio. Index upload revalidates its strict source snapshot.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1596,
+            "end_line": 1624,
+            "role": "optional identity lookup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1605,
+            "end_line": 1605,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Index construction can omit studentId and retain the display-name/legacy-name key, sessions, counts and scores. This is derived index metadata, not permission to overwrite the canonical portfolio. Index upload revalidates its strict source snapshot.",
+        "required_or_optional": "optional identity lookup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "9c53f548df85bcddecab6eef40fdee1d59d24e61678c1803144d153516d87b98",
       "observation": {
         "id": "0f74835f0f3e49b996aec260045bea92",
@@ -13098,9 +13175,33 @@
       "scanner_id": "45162f124c5e4f248e986c0e9fb63dc5",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "A failed per-student file-ID cache read leaves studentFileId empty. The derived entry still retains the student identity, session count and score summary; it does not modify primary writing. The existing index test explicitly injects this read failure.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1608,
+            "end_line": 1624,
+            "role": "optional cached file location"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1612,
+            "end_line": 1612,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "A failed per-student file-ID cache read leaves studentFileId empty. The derived entry still retains the student identity, session count and score summary; it does not modify primary writing. The existing index test explicitly injects this read failure.",
+        "required_or_optional": "optional cached file location",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "1f5b95a858ac9e12b92a89f38fb1c766bd10903915a8fb3164f33f0bc3b8a42c",
       "observation": {
         "id": "45162f124c5e4f248e986c0e9fb63dc5",
@@ -13268,9 +13369,33 @@
       "scanner_id": "68a23e012ecb476c9462acba2b78c259",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Failure to read the cached index file ID falls through to name-based file discovery. Discovery/download failures reach callback(err,null); this catch does not convert a failed download into successful data or overwrite local writing.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1699,
+            "end_line": 1742,
+            "role": "optional index-file location cache"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1700,
+            "end_line": 1700,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Failure to read the cached index file ID falls through to name-based file discovery. Discovery/download failures reach callback(err,null); this catch does not convert a failed download into successful data or overwrite local writing.",
+        "required_or_optional": "optional index-file location cache",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "f207d8ae258c6fc519530fc9e74eb43b1d71b2c7168b7977ab7bbcaf63fc2081",
       "observation": {
         "id": "68a23e012ecb476c9462acba2b78c259",
@@ -13438,9 +13563,33 @@
       "scanner_id": "d27614f1699340a8816c10cb55cad6eb",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The discovered canonical fileId stays in the local variable and is used directly for download even when its cache write fails. Subsequent download/shape failures propagate through the promise chain to the caller.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1719,
+            "end_line": 1742,
+            "role": "optional discovered file-ID hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1724,
+            "end_line": 1724,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The discovered canonical fileId stays in the local variable and is used directly for download even when its cache write fails. Subsequent download/shape failures propagate through the promise chain to the caller.",
+        "required_or_optional": "optional discovered file-ID hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "14f3cc18932764b03bed8fb098828ead0c652657cd6824f18b63ed9ee7ed07c1",
       "observation": {
         "id": "d27614f1699340a8816c10cb55cad6eb",
@@ -13609,9 +13758,33 @@
       "scanner_id": "8fad147dac514fe7a770e20185373736",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Updating the duplicate-file maintenance display is ancillary to a discovered index download. A broken maintenance widget must not discard the canonical ID or prevent the actual download/error callback.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1719,
+            "end_line": 1742,
+            "role": "optional duplicate-maintenance UI"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1726,
+            "end_line": 1726,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Updating the duplicate-file maintenance display is ancillary to a discovered index download. A broken maintenance widget must not discard the canonical ID or prevent the actual download/error callback.",
+        "required_or_optional": "optional duplicate-maintenance UI",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "f99fb4ad3f094fd3a7e2bfcab382361415d68b81758ced9488d4645be359499e",
       "observation": {
         "id": "8fad147dac514fe7a770e20185373736",
@@ -13780,9 +13953,33 @@
       "scanner_id": "8dcdddeaf14144dba2aa910a247c6b06",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "An ID-generation/persistence failure leaves the existing name-keyed entry intact. Rebuild constructs the index again from the strict primary snapshot; the subsequent upload and dirty acknowledgement have separate required checks. No session is removed by this catch.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1749,
+            "end_line": 1792,
+            "role": "optional ID enrichment of a derived index"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1754,
+            "end_line": 1754,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "An ID-generation/persistence failure leaves the existing name-keyed entry intact. Rebuild constructs the index again from the strict primary snapshot; the subsequent upload and dirty acknowledgement have separate required checks. No session is removed by this catch.",
+        "required_or_optional": "optional ID enrichment of a derived index",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "75093117726434fdf72c4011298319ec310e664fc6adb95d79e5c11ac3c2fe3c",
       "observation": {
         "id": "8dcdddeaf14144dba2aa910a247c6b06",
@@ -13950,9 +14147,33 @@
       "scanner_id": "3660d9fb9d064664a842dc49282c127f",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This catch surrounds only the cached-student/session count read for the health panel. getPortfolioData already reports unreadable primary bytes and returns a display fallback; persistence/sync use the strict reader. The diagnostic count is not a save acknowledgement.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1843,
+            "end_line": 1858,
+            "role": "optional health-display counts"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1849,
+            "end_line": 1849,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This catch surrounds only the cached-student/session count read for the health panel. getPortfolioData already reports unreadable primary bytes and returns a display fallback; persistence/sync use the strict reader. The diagnostic count is not a save acknowledgement.",
+        "required_or_optional": "optional health-display counts",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "8f4a070aadfba4386a6e1699df5a003c5e5d9cec4a0d9701a9357075152be9ee",
       "observation": {
         "id": "3660d9fb9d064664a842dc49282c127f",
@@ -14120,9 +14341,33 @@
       "scanner_id": "25d8ab93d7df4f6fb33b61d5237f8176",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The function deliberately returns an approximate byte count, possibly partial if storage enumeration/read is unavailable. It performs no writes and is used as an estimated health-display value, not as a durability or quota-success decision.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1889,
+            "end_line": 1898,
+            "role": "optional approximate storage-size display"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 1897,
+            "end_line": 1897,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The function deliberately returns an approximate byte count, possibly partial if storage enumeration/read is unavailable. It performs no writes and is used as an estimated health-display value, not as a durability or quota-success decision.",
+        "required_or_optional": "optional approximate storage-size display",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "25d8ab93d7df4f6fb33b61d5237f8176",
@@ -14290,9 +14535,33 @@
       "scanner_id": "76071793caff4b76baaf8125105f7aa4",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "candidate_needs_regression",
+      "classification": "source_supported_identity_metadata_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The empty catch exists, but the current mutating caller treats a failed lookup as a missing record. ensureStudentRecordsForRoster first reads an existing settings snapshot, then getStudentRecordByName rereads storage through fail-soft getRawSettings. A transient failure on that second read returns null, causing a second record for the same name/ID to be appended to the already loaded settings array. This is a source-supported conditional duplicate-metadata candidate; it needs a dedicated regression before a fix is accepted. Removing this catch alone would not fix the inner fail-soft read.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2302,
+            "end_line": 2312,
+            "role": "optional identity feature with a mutating caller"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2311,
+            "end_line": 2311,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The empty catch exists, but the current mutating caller treats a failed lookup as a missing record. ensureStudentRecordsForRoster first reads an existing settings snapshot, then getStudentRecordByName rereads storage through fail-soft getRawSettings. A transient failure on that second read returns null, causing a second record for the same name/ID to be appended to the already loaded settings array. This is a source-supported conditional duplicate-metadata candidate; it needs a dedicated regression before a fix is accepted. Removing this catch alone would not fix the inner fail-soft read.",
+        "required_or_optional": "optional identity feature with a mutating caller",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "76071793caff4b76baaf8125105f7aa4",
@@ -14460,9 +14729,33 @@
       "scanner_id": "d70085c8663d446c91d067f8ce0b6b54",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This lookup returns null when no usable metadata record is available. Its current call is a read-only optional-API test; required async portfolio name/ID resolution uses readWftRequiredStorage directly instead. No current mutating caller relies on null here as proof that a record can safely be created.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2315,
+            "end_line": 2323,
+            "role": "optional read-only identity lookup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2322,
+            "end_line": 2322,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This lookup returns null when no usable metadata record is available. Its current call is a read-only optional-API test; required async portfolio name/ID resolution uses readWftRequiredStorage directly instead. No current mutating caller relies on null here as proof that a record can safely be created.",
+        "required_or_optional": "optional read-only identity lookup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "d70085c8663d446c91d067f8ce0b6b54",
@@ -14630,9 +14923,33 @@
       "scanner_id": "ee1139687abf4bcaaa296d571e0a1641",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Roster initialization starts with its existing settings/roster list and only augments names from the portfolio. An unavailable portfolio does not erase those existing names or primary portfolio bytes; saving the metadata uses the guarded settings writer. The separate duplicate-lookup issue is recorded against the named lookup/caller, not hidden by this disposition.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2326,
+            "end_line": 2375,
+            "role": "optional portfolio-name augmentation"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2351,
+            "end_line": 2351,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Roster initialization starts with its existing settings/roster list and only augments names from the portfolio. An unavailable portfolio does not erase those existing names or primary portfolio bytes; saving the metadata uses the guarded settings writer. The separate duplicate-lookup issue is recorded against the named lookup/caller, not hidden by this disposition.",
+        "required_or_optional": "optional portfolio-name augmentation",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "1f9ea013b10b6387f9eaf8f5aba7ff32304080b6cc37eecf0c3e0c6097597b89",
       "observation": {
         "id": "ee1139687abf4bcaaa296d571e0a1641",
@@ -14800,9 +15117,33 @@
       "scanner_id": "08414905d61c4ccf863add22eae2c922",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The active in-memory folder ID wins. A failed fallback cache read returns an empty ID; child-folder creation rejects a missing parent rather than sending an upload to an arbitrary location. This is a location hint, not stored writing or an authentication token.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2438,
+            "end_line": 2446,
+            "role": "optional root-folder cache read"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2440,
+            "end_line": 2440,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The active in-memory folder ID wins. A failed fallback cache read returns an empty ID; child-folder creation rejects a missing parent rather than sending an upload to an arbitrary location. This is a location hint, not stored writing or an authentication token.",
+        "required_or_optional": "optional root-folder cache read",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "c17b1fdc6b3050b3ac5e5b2740bbbfa4b4d456bcb9d158690727c6551146b777",
       "observation": {
         "id": "08414905d61c4ccf863add22eae2c922",
@@ -14970,9 +15311,33 @@
       "scanner_id": "2222808f701b4ce19c905412ec431419",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "A missing/unreadable cached students-folder ID takes the normal ensure/discovery path. A usable cached ID is validated against ID, name, type, trashed state and current parent. Connection validation and actual Drive errors remain rejecting operations.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2486,
+            "end_line": 2505,
+            "role": "optional students-folder cache read"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2489,
+            "end_line": 2489,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "A missing/unreadable cached students-folder ID takes the normal ensure/discovery path. A usable cached ID is validated against ID, name, type, trashed state and current parent. Connection validation and actual Drive errors remain rejecting operations.",
+        "required_or_optional": "optional students-folder cache read",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "32c25fdf46ad1d64b9f40201674176ca124f689b01b5f2795043fdf12f995e2c",
       "observation": {
         "id": "2222808f701b4ce19c905412ec431419",
@@ -15140,9 +15505,33 @@
       "scanner_id": "1485c6daf7a642d3b4bc101bf5676588",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Failure to remove an invalid cached students-folder hint does not make it valid: the current operation still ensures the folder and checks connection ownership. A later read will validate the stale hint again. No primary writing or token is deleted in this catch.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2491,
+            "end_line": 2505,
+            "role": "optional invalid-folder cache eviction"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2500,
+            "end_line": 2500,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Failure to remove an invalid cached students-folder hint does not make it valid: the current operation still ensures the folder and checks connection ownership. A later read will validate the stale hint again. No primary writing or token is deleted in this catch.",
+        "required_or_optional": "optional invalid-folder cache eviction",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "c2fe5a24c8dc3ef716df4701e1d7047bb00c801a35a74454a8aa2386f3fea135",
       "observation": {
         "id": "1485c6daf7a642d3b4bc101bf5676588",
@@ -15312,9 +15701,33 @@
       "scanner_id": "177f12b2c2bb47e2a7166a8588e56d6c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The ensured newId is returned directly after the current-connection assertion even if local caching fails. Required folder resolution errors remain outside this best-effort write and reject the operation.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2497,
+            "end_line": 2505,
+            "role": "optional students-folder cache write"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2504,
+            "end_line": 2504,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The ensured newId is returned directly after the current-connection assertion even if local caching fails. Required folder resolution errors remain outside this best-effort write and reject the operation.",
+        "required_or_optional": "optional students-folder cache write",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "e974fd39b12123b726197cd01c62f1980ff1ad0aa01bcd7b33b755c86b3e7627",
       "observation": {
         "id": "177f12b2c2bb47e2a7166a8588e56d6c",
@@ -15484,9 +15897,33 @@
       "scanner_id": "9b06707172ab4ed9a4e7a43aadbf32b4",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Failure to read the media-folder hint takes ensureWftSubfolderPromise(media,currentRoot). Missing-parent, search/create and upload failures still reject through the surrounding promise chain. This catch changes only whether the cache is used.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2509,
+            "end_line": 2516,
+            "role": "optional media-folder cache read"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2511,
+            "end_line": 2511,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Failure to read the media-folder hint takes ensureWftSubfolderPromise(media,currentRoot). Missing-parent, search/create and upload failures still reject through the surrounding promise chain. This catch changes only whether the cache is used.",
+        "required_or_optional": "optional media-folder cache read",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "a2b38a300f93e6402bab163f90e393d348751fe6825a398bf0617f5ec8eaaa42",
       "observation": {
         "id": "9b06707172ab4ed9a4e7a43aadbf32b4",
@@ -15654,9 +16091,33 @@
       "scanner_id": "a876cc9f4ee34699a87ab49694ccd90e",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The newly ensured media folder ID is returned regardless of whether it can be cached locally. This avoids treating a successful remote folder resolution as a failed data operation merely because a reusable hint could not be persisted.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2509,
+            "end_line": 2516,
+            "role": "optional media-folder cache write"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2514,
+            "end_line": 2514,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The newly ensured media folder ID is returned regardless of whether it can be cached locally. This avoids treating a successful remote folder resolution as a failed data operation merely because a reusable hint could not be persisted.",
+        "required_or_optional": "optional media-folder cache write",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "0b59c49fa93ba381923357688a75ea8c338130140f97d9fb6a4a3e3136915c56",
       "observation": {
         "id": "a876cc9f4ee34699a87ab49694ccd90e",
@@ -15826,9 +16287,33 @@
       "scanner_id": "9a92731613e74fb0869ed2827710c027",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "An unreadable per-student media hint leaves cachedId empty and triggers folder discovery/creation beneath the resolved media folder. It does not substitute empty writing or acknowledge a failed media upload.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2519,
+            "end_line": 2530,
+            "role": "optional per-student media-folder cache read"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2522,
+            "end_line": 2522,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "An unreadable per-student media hint leaves cachedId empty and triggers folder discovery/creation beneath the resolved media folder. It does not substitute empty writing or acknowledge a failed media upload.",
+        "required_or_optional": "optional per-student media-folder cache read",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "36661844f3cd9da1c02733d395e8aea598509ebde402989631f7a6b0ab1ca2a6",
       "observation": {
         "id": "9a92731613e74fb0869ed2827710c027",
@@ -15996,9 +16481,33 @@
       "scanner_id": "32b77cf67f1e4188aa8679b8611cd7ee",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The resolved student media folder newId remains the promise result when local caching fails. Required remote folder and media operations still have rejecting paths; the cache write is not their acknowledgement boundary.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2524,
+            "end_line": 2530,
+            "role": "optional per-student media-folder cache write"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2527,
+            "end_line": 2527,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The resolved student media folder newId remains the promise result when local caching fails. Required remote folder and media operations still have rejecting paths; the cache write is not their acknowledgement boundary.",
+        "required_or_optional": "optional per-student media-folder cache write",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "653871c0814a43d85033aa56384780dd21a91bf57c54f2fdf13fa3b216dc5a81",
       "observation": {
         "id": "32b77cf67f1e4188aa8679b8611cd7ee",
@@ -16168,9 +16677,33 @@
       "scanner_id": "dae26323217443ac97231c0b2c4ecf47",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The canonical remote ID is used directly for the student download after this cache write. Current connection, returned studentId and format are checked afterward; errors are delivered to callback(err,null). A cache failure cannot masquerade as a successful student download.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2593,
+            "end_line": 2606,
+            "role": "optional student-file location hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2597,
+            "end_line": 2597,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The canonical remote ID is used directly for the student download after this cache write. Current connection, returned studentId and format are checked afterward; errors are delivered to callback(err,null). A cache failure cannot masquerade as a successful student download.",
+        "required_or_optional": "optional student-file location hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "8a20ba54ceb516ecfe90311c5e2f774a102d4374c5d677640669ca054e06a359",
       "observation": {
         "id": "dae26323217443ac97231c0b2c4ecf47",
@@ -16340,9 +16873,33 @@
       "scanner_id": "805d4e0a6ec349c4bdddcaa7f76da39e",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This cache write occurs after upload response validation and a current-connection assertion. The callback returns the actual uploaded file ID, not the result of caching it. Folder/upload/ownership errors still reach the error callback.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2618,
+            "end_line": 2633,
+            "role": "optional uploaded student-file hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2628,
+            "end_line": 2628,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This cache write occurs after upload response validation and a current-connection assertion. The callback returns the actual uploaded file ID, not the result of caching it. Folder/upload/ownership errors still reach the error callback.",
+        "required_or_optional": "optional uploaded student-file hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "695e45aaca085f66a42d3eb54d5fe40711b984c508d38e0a7ce4356c5a70a519",
       "observation": {
         "id": "805d4e0a6ec349c4bdddcaa7f76da39e",
@@ -16512,9 +17069,33 @@
       "scanner_id": "14e062674bdb4bfba91e1c430ca46d12",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The guarded startup ID-map initialization is ancillary to opening the application and is off in the shipped ID-map configuration. Its initializer already reports failures through wftDebugWarn and guarded settings writes; this outer defensive catch must not stop startup or clear canonical writing. The separate repeated-lookup metadata issue remains an explicit follow-up.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2942,
+            "end_line": 2945,
+            "role": "optional startup metadata initialization"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 2944,
+            "end_line": 2944,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The guarded startup ID-map initialization is ancillary to opening the application and is off in the shipped ID-map configuration. Its initializer already reports failures through wftDebugWarn and guarded settings writes; this outer defensive catch must not stop startup or clear canonical writing. The separate repeated-lookup metadata issue remains an explicit follow-up.",
+        "required_or_optional": "optional startup metadata initialization",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "3f97ff5c496638848c25a3f88a255cdafb50148a68951f78d4ea673a9a771198",
       "observation": {
         "id": "14e062674bdb4bfba91e1c430ca46d12",
@@ -16681,9 +17262,33 @@
       "scanner_id": "788179e722a24e41ac6ce7db001d2eb4",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "wftSyncLog is debug-gated and formats/redacts before calling console.log. If redaction or console invocation fails, dropping this diagnostic avoids recursive logging and avoids a raw-argument fallback that could expose private data. It must not throw through a real sync operation.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3008,
+            "end_line": 3017,
+            "role": "optional redacted debug logging"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3016,
+            "end_line": 3016,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "wftSyncLog is debug-gated and formats/redacts before calling console.log. If redaction or console invocation fails, dropping this diagnostic avoids recursive logging and avoids a raw-argument fallback that could expose private data. It must not throw through a real sync operation.",
+        "required_or_optional": "optional redacted debug logging",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "788179e722a24e41ac6ce7db001d2eb4",
@@ -16851,9 +17456,33 @@
       "scanner_id": "b2741dff89bd4715b74c3427a9ea08be",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "wftSyncWarn is debug-gated and redacts before console.warn. Failure of this secondary logger should neither replace the operation error/status nor retry with unredacted values; no required save is performed inside the catch.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3019,
+            "end_line": 3028,
+            "role": "optional redacted warning logging"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3027,
+            "end_line": 3027,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "wftSyncWarn is debug-gated and redacts before console.warn. Failure of this secondary logger should neither replace the operation error/status nor retry with unredacted values; no required save is performed inside the catch.",
+        "required_or_optional": "optional redacted warning logging",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "b2741dff89bd4715b74c3427a9ea08be",
@@ -17021,9 +17650,33 @@
       "scanner_id": "ff9f5ea935564338ad7ed5fbdc7ca244",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "wftSyncErrorLog is an optional debug sink. Failure to redact or invoke console.error is not allowed to break handleWftSyncError, whose user-facing status is a separate operation. No raw logging fallback is added.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3030,
+            "end_line": 3039,
+            "role": "optional redacted error logging"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3038,
+            "end_line": 3038,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "wftSyncErrorLog is an optional debug sink. Failure to redact or invoke console.error is not allowed to break handleWftSyncError, whose user-facing status is a separate operation. No raw logging fallback is added.",
+        "required_or_optional": "optional redacted error logging",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "ff9f5ea935564338ad7ed5fbdc7ca244",
@@ -17191,9 +17844,33 @@
       "scanner_id": "0519d457b9de4b238b94fcd936cf0138",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This reads a saved expiry only when the active state has no expiry. getWftSessionTokenExpiry itself returns zero on unavailable/malformed storage; validity requires a nonempty token and a future finite expiry. Failure leaves zero and cannot authorize an expired/unverifiable token.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3123,
+            "end_line": 3149,
+            "role": "optional expiry hint with fail-closed validation"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3144,
+            "end_line": 3144,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This reads a saved expiry only when the active state has no expiry. getWftSessionTokenExpiry itself returns zero on unavailable/malformed storage; validity requires a nonempty token and a future finite expiry. Failure leaves zero and cannot authorize an expired/unverifiable token.",
+        "required_or_optional": "optional expiry hint with fail-closed validation",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "39b559d11d75eba59aa5ece6fc2d3040d25bc37392ce5878d82343b33d22a635",
       "observation": {
         "id": "0519d457b9de4b238b94fcd936cf0138",
@@ -17361,9 +18038,33 @@
       "scanner_id": "795754c8366e4d7793a921e94593790c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Only cached user/connected identity hints are removed here. Actual legacy-token removal is performed separately, returned as a boolean and checked by sign-out. These hints cannot authorize Drive, so their cleanup must not prevent the token-disconnect flow.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3164,
+            "end_line": 3178,
+            "role": "optional sign-out identity-hint cleanup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3176,
+            "end_line": 3176,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Only cached user/connected identity hints are removed here. Actual legacy-token removal is performed separately, returned as a boolean and checked by sign-out. These hints cannot authorize Drive, so their cleanup must not prevent the token-disconnect flow.",
+        "required_or_optional": "optional sign-out identity-hint cleanup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "54c0712c4132388117ceaa64c9410db68e6566df5cb5d4f0096cd6bb544840ed",
       "observation": {
         "id": "795754c8366e4d7793a921e94593790c",
@@ -17533,9 +18234,33 @@
       "scanner_id": "11a9f3344ef44d1e99228cc19134b8fe",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "A missing, malformed or unreadable cached user becomes null. Sign-in uses a fresh/active user or a generic Connected display instead; authorization is based on the independently validated active/session token, not this identity hint.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3181,
+            "end_line": 3190,
+            "role": "optional cached display identity"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3189,
+            "end_line": 3189,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "A missing, malformed or unreadable cached user becomes null. Sign-in uses a fresh/active user or a generic Connected display instead; authorization is based on the independently validated active/session token, not this identity hint.",
+        "required_or_optional": "optional cached display identity",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "11a9f3344ef44d1e99228cc19134b8fe",
@@ -17703,9 +18428,33 @@
       "scanner_id": "3f6b3031bd384075809b8b55fb8f3329",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The migration result is already applied to in-memory googleUser when this hint is written. Required migration/remapping and connection failures reach the outer error status; essential token persistence has its own checked path in completeWftGoogleSignInWithAccessToken.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3242,
+            "end_line": 3251,
+            "role": "optional post-migration display-identity cache"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3249,
+            "end_line": 3249,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The migration result is already applied to in-memory googleUser when this hint is written. Required migration/remapping and connection failures reach the outer error status; essential token persistence has its own checked path in completeWftGoogleSignInWithAccessToken.",
+        "required_or_optional": "optional post-migration display-identity cache",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "aaeda0f0751bd32db48dbaafad0fdd14838a32c523a6104e661216d0b072a730",
       "observation": {
         "id": "3f6b3031bd384075809b8b55fb8f3329",
@@ -17875,9 +18624,33 @@
       "scanner_id": "d266b5e0ec294f3baff0731b71483fbf",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The connected flag is a UI hint. Token validity, checked session persistence, legacy-token cleanup and an explicit persistence warning are handled separately before the active signed-in state is published. Losing this hint does not lose writing or grant authentication.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3255,
+            "end_line": 3284,
+            "role": "optional connected display hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3268,
+            "end_line": 3268,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The connected flag is a UI hint. Token validity, checked session persistence, legacy-token cleanup and an explicit persistence warning are handled separately before the active signed-in state is published. Losing this hint does not lose writing or grant authentication.",
+        "required_or_optional": "optional connected display hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "e25a752871dd4c500461b6ec0241387171805a5108e288091a1b8b6fd9fdfbc1",
       "observation": {
         "id": "d266b5e0ec294f3baff0731b71483fbf",
@@ -18045,9 +18818,33 @@
       "scanner_id": "ec111378a0c04cb5889d928d6f831ae6",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This removes a noncredential instruction to retry sync after redirect; the active auth callback and validated token remain available. Failure may retain a stale request hint, but it does not clear the actual pending portfolio or acknowledge it as saved. Current manual-save preparation checks pending/current analysis before committing.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3255,
+            "end_line": 3284,
+            "role": "optional completed-action hint cleanup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3278,
+            "end_line": 3278,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This removes a noncredential instruction to retry sync after redirect; the active auth callback and validated token remain available. Failure may retain a stale request hint, but it does not clear the actual pending portfolio or acknowledge it as saved. Current manual-save preparation checks pending/current analysis before committing.",
+        "required_or_optional": "optional completed-action hint cleanup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "1e784c89677e8435fc0e33239edd746cb8aeba18a09ee903171f2396500eddfc",
       "observation": {
         "id": "ec111378a0c04cb5889d928d6f831ae6",
@@ -18215,9 +19012,33 @@
       "scanner_id": "5d12a29799bf4a3f9cc42726fabf2e74",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The auth-error branch already publishes the provider failure and returns false. History cleanup failure leaves the error fragment in the address bar but does not treat a token as accepted. The credential-bearing success-path cleanup is tracked separately as a repair candidate; a shared cleanup repair should cover both branches.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3332,
+            "end_line": 3339,
+            "role": "best-effort cleanup after already reported auth failure"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3338,
+            "end_line": 3338,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The auth-error branch already publishes the provider failure and returns false. History cleanup failure leaves the error fragment in the address bar but does not treat a token as accepted. The credential-bearing success-path cleanup is tracked separately as a repair candidate; a shared cleanup repair should cover both branches.",
+        "required_or_optional": "best-effort cleanup after already reported auth failure",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "4f2e4a8bc91f9a5ff2c8b9de6e51f61cbb50a85257644a3477a326a850eea1e7",
       "observation": {
         "id": "5d12a29799bf4a3f9cc42726fabf2e74",
@@ -18385,9 +19206,33 @@
       "scanner_id": "70bcf1c2640348fbb50c984ec18e9c61",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "candidate_needs_regression",
+      "classification": "source_supported_oauth_fragment_cleanup_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "After an access_token fragment is processed, a throwing history.replaceState is swallowed and the function returns handled without any fallback or cleanup-failure notice. The fragment remains in the visible/current-history URL. There is no other hash cleanup in the repository. The existing native auth assertion checks only successful removal. This conditional privacy failure is established by control flow; a failing native regression must precede the repair. No live credential exposure was observed in this read-only pass.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3342,
+            "end_line": 3352,
+            "role": "credential-bearing URL cleanup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3348,
+            "end_line": 3348,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "After an access_token fragment is processed, a throwing history.replaceState is swallowed and the function returns handled without any fallback or cleanup-failure notice. The fragment remains in the visible/current-history URL. There is no other hash cleanup in the repository. The existing native auth assertion checks only successful removal. This conditional privacy failure is established by control flow; a failing native regression must precede the repair. No live credential exposure was observed in this read-only pass.",
+        "required_or_optional": "credential-bearing URL cleanup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "e99c1fc2e22e91a8a1510e14a1df92d0ecc19dfcd1b0721be923faad9c1b8366",
       "observation": {
         "id": "70bcf1c2640348fbb50c984ec18e9c61",
@@ -18555,9 +19400,33 @@
       "scanner_id": "24b0ce01f0084d5089d0c6c334ec141f",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The in-memory selection and recovered textarea are restored independently of this localStorage hint. Required draft read, validation, exact-text verification and draft removal remain under the outer recovery-preserving catch. Existing native tests explicitly accept selection-hint failure without losing the restored draft.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3456,
+            "end_line": 3500,
+            "role": "optional restored student-selection hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3477,
+            "end_line": 3477,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The in-memory selection and recovered textarea are restored independently of this localStorage hint. Required draft read, validation, exact-text verification and draft removal remain under the outer recovery-preserving catch. Existing native tests explicitly accept selection-hint failure without losing the restored draft.",
+        "required_or_optional": "optional restored student-selection hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "62f0830640e7d9162147244ebea76dd6e973bb959b09061468252c82074b97fc",
       "observation": {
         "id": "24b0ce01f0084d5089d0c6c334ec141f",
@@ -18725,9 +19594,33 @@
       "scanner_id": "36dbfc56b4f0433db058ccd2e65b8632",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Writing the sync-intent marker can fail without blocking popup sign-in with the current callback. Redirect recovery may require the user to retry Sync, but the pending writing/draft preservation checks are separate required operations before navigation. This does not claim that sync completed.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3504,
+            "end_line": 3514,
+            "role": "optional post-auth action hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3511,
+            "end_line": 3511,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Writing the sync-intent marker can fail without blocking popup sign-in with the current callback. Redirect recovery may require the user to retry Sync, but the pending writing/draft preservation checks are separate required operations before navigation. This does not claim that sync completed.",
+        "required_or_optional": "optional post-auth action hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "c9ea2ed3620d7644d5e539dc2df3de28f6f35c9413f966b506dc482d5cc357e3",
       "observation": {
         "id": "36dbfc56b4f0433db058ccd2e65b8632",
@@ -18895,9 +19788,33 @@
       "scanner_id": "f93811f4257c44ddb24dd457c6e1e931",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Current-operation/token checks precede the update; googleUser and wftSyncState.googleUser already hold the fetched result before caching. Cache failure must not discard the valid current identity or prevent the guarded sync startup. It is not token persistence.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3585,
+            "end_line": 3607,
+            "role": "optional fresh user-profile cache"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3593,
+            "end_line": 3593,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Current-operation/token checks precede the update; googleUser and wftSyncState.googleUser already hold the fetched result before caching. Cache failure must not discard the valid current identity or prevent the guarded sync startup. It is not token persistence.",
+        "required_or_optional": "optional fresh user-profile cache",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "a4c1e8e11d6c963d11115b3c5ed1c9dfbf977a21711f56bf5064c6442d4b389f",
       "observation": {
         "id": "f93811f4257c44ddb24dd457c6e1e931",
@@ -19067,9 +19984,33 @@
       "scanner_id": "ffba4523a42841798990ee63302d3351",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This only enumerates file/folder cache keys for cleanup. Canonical portfolios, settings, roster, selection and pending writing are explicitly excluded. Actual token removal is separately checked; inability to enumerate these noncredential hints must not prevent disconnect.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3685,
+            "end_line": 3731,
+            "role": "optional disconnected file-cache enumeration"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3725,
+            "end_line": 3725,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This only enumerates file/folder cache keys for cleanup. Canonical portfolios, settings, roster, selection and pending writing are explicitly excluded. Actual token removal is separately checked; inability to enumerate these noncredential hints must not prevent disconnect.",
+        "required_or_optional": "optional disconnected file-cache enumeration",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "ffba4523a42841798990ee63302d3351",
@@ -19237,9 +20178,33 @@
       "scanner_id": "7134339a0e42485097ea0b6d160da5e0",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Per-key failures concern remote location/action hints, not the saved class data or bearer tokens. Sign-out checks session/legacy token removal separately and warns when those required removals fail. A later folder/file resolution validates/discovers stale IDs rather than treating this cleanup as an upload success.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3685,
+            "end_line": 3754,
+            "role": "optional disconnected file-cache eviction"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3730,
+            "end_line": 3730,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Per-key failures concern remote location/action hints, not the saved class data or bearer tokens. Sign-out checks session/legacy token removal separately and warns when those required removals fail. A later folder/file resolution validates/discovers stale IDs rather than treating this cleanup as an upload success.",
+        "required_or_optional": "optional disconnected file-cache eviction",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "6c67a6be66b64350dd17d6b4f1719b0cf66fb8714b3a47ee32084bdb4bc8e7bd",
       "observation": {
         "id": "7134339a0e42485097ea0b6d160da5e0",
@@ -19407,9 +20372,33 @@
       "scanner_id": "8a858b4ed1d34f0bb1dc1ceb4dfaf549",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The active sign-out state, timer stops and truthful token-removal status are already published before the optional portfolio-button refresh. A broken button update must not turn a completed disconnect into a rejected data operation.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3736,
+            "end_line": 3755,
+            "role": "optional button refresh after disconnect"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3755,
+            "end_line": 3755,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The active sign-out state, timer stops and truthful token-removal status are already published before the optional portfolio-button refresh. A broken button update must not turn a completed disconnect into a rejected data operation.",
+        "required_or_optional": "optional button refresh after disconnect",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "ce66b9a3964b5cbd8ca933f0dfd26d0bb9d4e85b18bbf91ffe39835d920ffd98",
       "observation": {
         "id": "8a858b4ed1d34f0bb1dc1ceb4dfaf549",
@@ -19577,9 +20566,33 @@
       "scanner_id": "b7159e7b13a6412aa29a73b696c8eefb",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The parser starts with the original response text as message/raw. Non-JSON or unexpected JSON leaves that diagnostic usable instead of throwing while handling the original Drive failure. wftDriveFetch attaches response status and throws the resulting error; this is not swallowing a successful data read.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3784,
+            "end_line": 3807,
+            "role": "fallback decoding of a remote error body"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3805,
+            "end_line": 3805,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The parser starts with the original response text as message/raw. Non-JSON or unexpected JSON leaves that diagnostic usable instead of throwing while handling the original Drive failure. wftDriveFetch attaches response status and throws the resulting error; this is not swallowing a successful data read.",
+        "required_or_optional": "fallback decoding of a remote error body",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "b7159e7b13a6412aa29a73b696c8eefb",
@@ -19747,9 +20760,33 @@
       "scanner_id": "9ec0fa0ab62d41f8963666dce814b45a",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The active globals and sync state receive the resolved folder ID before the local hint write. Cache failure leaves the in-memory location intact and does not hide a remote folder validation failure.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3898,
+            "end_line": 3905,
+            "role": "optional resolved folder-ID cache write"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3904,
+            "end_line": 3904,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The active globals and sync state receive the resolved folder ID before the local hint write. Cache failure leaves the in-memory location intact and does not hide a remote folder validation failure.",
+        "required_or_optional": "optional resolved folder-ID cache write",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "9ec0fa0ab62d41f8963666dce814b45a",
@@ -19917,9 +20954,33 @@
       "scanner_id": "cd68c94cee6d4747bba0a8aed18e6dbb",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Settings/portfolio/deletion file IDs are assigned in active sync state before this local hint write; an index ID can be rediscovered by name. The cache write is not the required upload acknowledgement or primary-data persistence boundary.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3926,
+            "end_line": 3939,
+            "role": "optional resolved file-ID cache write"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3938,
+            "end_line": 3938,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Settings/portfolio/deletion file IDs are assigned in active sync state before this local hint write; an index ID can be rediscovered by name. The cache write is not the required upload acknowledgement or primary-data persistence boundary.",
+        "required_or_optional": "optional resolved file-ID cache write",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "cd68c94cee6d4747bba0a8aed18e6dbb",
@@ -20087,9 +21148,33 @@
       "scanner_id": "2d30d32f659b49848e0300cb7f284cf1",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The matching in-memory file ID is cleared before the disk hint is removed. A failed disk removal leaves a stale location hint for later validation/discovery, not an accepted response or a deletion of writing. Required current-connection and remote error handling stay outside this catch.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3941,
+            "end_line": 3954,
+            "role": "optional stale file-ID cache eviction"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 3953,
+            "end_line": 3953,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The matching in-memory file ID is cleared before the disk hint is removed. A failed disk removal leaves a stale location hint for later validation/discovery, not an accepted response or a deletion of writing. Required current-connection and remote error handling stay outside this catch.",
+        "required_or_optional": "optional stale file-ID cache eviction",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b86c71a7e8f0b94ec6342c9eaac1a4e08a8903ad83edca010e6a3b122804bf23",
       "observation": {
         "id": "2d30d32f659b49848e0300cb7f284cf1",
@@ -20257,9 +21342,33 @@
       "scanner_id": "65ae4bf011b348e3b1a9da9d1d3321cf",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "A deletion always records studentName and sessionId, plus the canonical name/session key. A stable studentId is extra metadata when available. Required tombstone/portfolio persistence is handled by saveDeletionsData or the staged saveWftStudentChange transaction, whose failure is not swallowed here.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 4683,
+            "end_line": 4712,
+            "role": "optional stable-ID addition to a deletion tombstone"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 4695,
+            "end_line": 4695,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "A deletion always records studentName and sessionId, plus the canonical name/session key. A stable studentId is extra metadata when available. Required tombstone/portfolio persistence is handled by saveDeletionsData or the staged saveWftStudentChange transaction, whose failure is not swallowed here.",
+        "required_or_optional": "optional stable-ID addition to a deletion tombstone",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "65ae4bf011b348e3b1a9da9d1d3321cf",
@@ -20427,9 +21536,33 @@
       "scanner_id": "da242d57685743578053c893a8dc135c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "This broadcast happens only after the deletion/settings/portfolio/index work, current-connection checks, strict storage preflight and dirty-index gate. A closed/unavailable channel must not misreport those completed operations as a failed sync; other tabs retain their own polling path.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 5835,
+            "end_line": 5854,
+            "role": "optional post-sync cross-tab notification"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 5846,
+            "end_line": 5846,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "This broadcast happens only after the deletion/settings/portfolio/index work, current-connection checks, strict storage preflight and dirty-index gate. A closed/unavailable channel must not misreport those completed operations as a failed sync; other tabs retain their own polling path.",
+        "required_or_optional": "optional post-sync cross-tab notification",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "efc7d4888f42d82ad9e0dcb0d225f42899e5b0ebd3242c773617293a4a8353e2",
       "observation": {
         "id": "da242d57685743578053c893a8dc135c",
@@ -20599,9 +21732,33 @@
       "scanner_id": "8fe5e2559fd04472b4d08b69370c93a2",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Assigning the diagnostics accessor to window is a convenience for inspection. Failure to export it performs no sync or storage mutation, and must not stop lifecycle initialization or required error handling.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 5886,
+            "end_line": 5914,
+            "role": "optional diagnostic global export"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 5914,
+            "end_line": 5914,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Assigning the diagnostics accessor to window is a convenience for inspection. Failure to export it performs no sync or storage mutation, and must not stop lifecycle initialization or required error handling.",
+        "required_or_optional": "optional diagnostic global export",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "f16d8c156cc1e55aff5d8f91625b4d28d94b4e94af7ad588f84d1b7aaacbcf70",
       "observation": {
         "id": "8fe5e2559fd04472b4d08b69370c93a2",
@@ -20768,9 +21925,33 @@
       "scanner_id": "df8ff5603fb8403d85a168722d26e099",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Page-hide first blocks recovery/unreadable required storage, restores suppression in finally, then reads the strict current portfolio snapshot. The optional final rewrite cannot replace unreadable bytes: savePortfolioLocalOnly validates and logs/rethrows a failed write, while localStorage retains the prior stored value. No Synced acknowledgement is emitted by this catch.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 5961,
+            "end_line": 5979,
+            "role": "best-effort rewrite of an already durable snapshot"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 5978,
+            "end_line": 5978,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Page-hide first blocks recovery/unreadable required storage, restores suppression in finally, then reads the strict current portfolio snapshot. The optional final rewrite cannot replace unreadable bytes: savePortfolioLocalOnly validates and logs/rethrows a failed write, while localStorage retains the prior stored value. No Synced acknowledgement is emitted by this catch.",
+        "required_or_optional": "best-effort rewrite of an already durable snapshot",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "a384c5863f1369c3aa7ddb347033730c78d4bc93d2adc91b3b9406694b54372f",
       "observation": {
         "id": "df8ff5603fb8403d85a168722d26e099",
@@ -20938,9 +22119,33 @@
       "scanner_id": "a2e8346f5a084104b8743feaa62bb9b4",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The receiver validates message type and numeric timestamp before updating only lastPollAt. Malformed/throwing event data is ignored; it neither merges writing nor marks any local/remote save as acknowledged. Independent polling remains available.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6011,
+            "end_line": 6037,
+            "role": "optional received broadcast hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6027,
+            "end_line": 6027,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The receiver validates message type and numeric timestamp before updating only lastPollAt. Malformed/throwing event data is ignored; it neither merges writing nor marks any local/remote save as acknowledged. Independent polling remains available.",
+        "required_or_optional": "optional received broadcast hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "9e96624599ff6d7c877f6fc41f93fe70c9de16e1650f7eed81392a3c6f8cc297",
       "observation": {
         "id": "a2e8346f5a084104b8743feaa62bb9b4",
@@ -21110,9 +22315,33 @@
       "scanner_id": "e9f9ef1333f04561869a7a4ddd304893",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The beforeunload handler first protects pending recovery and performs the lifecycle snapshot work. Closing the optional BroadcastChannel is last; a close failure must not suppress those earlier safeguards or create a new persistence action.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6041,
+            "end_line": 6053,
+            "role": "optional unload resource cleanup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6052,
+            "end_line": 6052,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The beforeunload handler first protects pending recovery and performs the lifecycle snapshot work. Closing the optional BroadcastChannel is last; a close failure must not suppress those earlier safeguards or create a new persistence action.",
+        "required_or_optional": "optional unload resource cleanup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "48f27cfb8297973462f90f4d7ce58af2b3951cef0c83ade83f203fa207f07651",
       "observation": {
         "id": "e9f9ef1333f04561869a7a4ddd304893",
@@ -21282,9 +22511,33 @@
       "scanner_id": "216f05b9908d47eab1e9891290cfd5c9",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The early session date/ID normalization is opportunistic. The session is then included in the portfolio and savePortfolioData performs strict source/shape validation and full normalization; its failures rethrow before cache publication/rendering. This catch cannot make a failed primary save return as durable success.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6790,
+            "end_line": 6820,
+            "role": "preliminary optional normalization; strict save remains required"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6792,
+            "end_line": 6792,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The early session date/ID normalization is opportunistic. The session is then included in the portfolio and savePortfolioData performs strict source/shape validation and full normalization; its failures rethrow before cache publication/rendering. This catch cannot make a failed primary save return as durable success.",
+        "required_or_optional": "preliminary optional normalization; strict save remains required",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "7b3877deac8e5d602b06d81dcc62c8b70bd64f2bc4453b5b366f0a922543527b",
       "observation": {
         "id": "216f05b9908d47eab1e9891290cfd5c9",
@@ -21452,9 +22705,33 @@
       "scanner_id": "95c9eca1bea249be84c5cd8a2936dfa2",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Failure to stamp the optional Lamport field retains the documented timestamp-based merge fallback. The canonical portfolio save still follows and throws on failure; this clock hint is not an acknowledgement of durable writing.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6793,
+            "end_line": 6807,
+            "role": "optional Lamport metadata with supported timestamp fallback"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6800,
+            "end_line": 6800,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Failure to stamp the optional Lamport field retains the documented timestamp-based merge fallback. The canonical portfolio save still follows and throws on failure; this clock hint is not an acknowledgement of durable writing.",
+        "required_or_optional": "optional Lamport metadata with supported timestamp fallback",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "9b33430c71837d27e9e153e995f70a43126c08613f7f05eeff2eb5b847f244ff",
       "observation": {
         "id": "95c9eca1bea249be84c5cd8a2936dfa2",
@@ -21622,9 +22899,33 @@
       "scanner_id": "5911b97ba2f643f3b18c4fc2cb125fed",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "savePortfolioData has already committed before the optional IndexedDB mirror starts. A synchronous cache/ID lookup failure does not undo writing; the facade also absorbs optional async cache failures. Current async portfolio reads use the strict primary snapshot, and native tests verify failed primary writes never publish cache data.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6804,
+            "end_line": 6819,
+            "role": "optional cache mirror after required primary save"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 6812,
+            "end_line": 6812,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "savePortfolioData has already committed before the optional IndexedDB mirror starts. A synchronous cache/ID lookup failure does not undo writing; the facade also absorbs optional async cache failures. Current async portfolio reads use the strict primary snapshot, and native tests verify failed primary writes never publish cache data.",
+        "required_or_optional": "optional cache mirror after required primary save",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "1f9ea013b10b6387f9eaf8f5aba7ff32304080b6cc37eecf0c3e0c6097597b89",
       "observation": {
         "id": "5911b97ba2f643f3b18c4fc2cb125fed",
@@ -21792,9 +23093,33 @@
       "scanner_id": "7598eaaaff5645129e7be34d1cb579cc",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The active selectedStudent and the real student/portfolio selects are updated separately. A failed remembered-selection write must not prevent opening the requested saved portfolio. It does not change ownership of an analysis, which captures the current DOM selection.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 7147,
+            "end_line": 7159,
+            "role": "optional open-portfolio selection hint"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 7151,
+            "end_line": 7151,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The active selectedStudent and the real student/portfolio selects are updated separately. A failed remembered-selection write must not prevent opening the requested saved portfolio. It does not change ownership of an analysis, which captures the current DOM selection.",
+        "required_or_optional": "optional open-portfolio selection hint",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "8fe465e9ad981578ba525b1658575c6cdef59ed6ddf5b83cb24fe7d93af9bc5e",
       "observation": {
         "id": "7598eaaaff5645129e7be34d1cb579cc",
@@ -21962,9 +23287,33 @@
       "scanner_id": "c9b9547ca9274789a55f0369dc9e6a4b",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "Each existing chart is destroyed independently and its registry entry is deleted even if destroy throws. Continuing releases the remaining charts and permits the actual portfolio render; no saved writing or score record is modified by this cleanup.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 7413,
+            "end_line": 7421,
+            "role": "optional third-party chart cleanup"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 7418,
+            "end_line": 7418,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "Each existing chart is destroyed independently and its registry entry is deleted even if destroy throws. Continuing releases the remaining charts and permits the actual portfolio render; no saved writing or score record is modified by this cleanup.",
+        "required_or_optional": "optional third-party chart cleanup",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "9310ca0e2e839c041a9f0dd675dd9d34dd91a42a57849dd005ffb099bee4d9c1",
       "observation": {
         "id": "c9b9547ca9274789a55f0369dc9e6a4b",
@@ -22132,9 +23481,33 @@
       "scanner_id": "14a4acd60ac44f57a4630ded6082e251",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_best_effort_or_fallback",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
+        "source_hash_verified": true,
+        "reason": "The current DOM selection is assigned to selectedStudent and returned regardless of hint persistence. Analysis/media context ownership therefore uses the current value, not a stale remembered student. The failed hint write cannot substitute another student or consume pending writing.",
+        "anchors": [
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 8081,
+            "end_line": 8104,
+            "role": "optional selection persistence during context capture"
+          },
+          {
+            "file": "js/app/00-storage-sync-patches.js",
+            "start_line": 8087,
+            "end_line": 8087,
+            "role": "Verified reported catch anchor at assigned source"
+          }
+        ],
+        "failure_behavior": "The current DOM selection is assigned to selectedStudent and returned regardless of hint persistence. Analysis/media context ownership therefore uses the current value, not a stale remembered student. The failed hint write cannot substitute another student or consume pending writing.",
+        "required_or_optional": "optional selection persistence during context capture",
+        "report": "reviews/repair-006-storage-errors.json",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Read-only source/caller review. Existing suites do not prove every catch was fault-injected."
+      },
       "evidence_fingerprint": "b938c6849fc8d017bc097e4c4fb8a0de9529f35f2d2222d23dbbddb7bc70db4b",
       "observation": {
         "id": "14a4acd60ac44f57a4630ded6082e251",
@@ -39362,7 +40735,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "7a81d006fd45ae509bdfdbb8a810ed0838a885177f515432ec11a015b2ba3d65",
@@ -64040,7 +65413,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": null,
@@ -64148,7 +65521,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "ed619856968c5306c4ce3cca16ea0025a60e89acd426146b0fb515abac09d4bb",
@@ -64242,7 +65615,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "16c01ece70c71d05308cc373ca5d4bbb8db9f813d1c8565b699f9e34d420e47a",
@@ -64341,7 +65714,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "18c127b088975f5eaa5816f3c01d3d948c95453ab8fe1c2345025c00e8a19db5",
@@ -64436,7 +65809,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "e0cc31d2940e04a4d8e01e969bb34411bef1fc0e56c6da701eb7e07316e08e3a",
@@ -64541,7 +65914,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "0bdb78c1be6dfe650feada50113199b81a6e057258cbc4b0f1b2e4f85d79cd63",
@@ -64646,7 +66019,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "e9aa348209ddeee9f55d73630d9a4df1dc4e976b6d9adca811cb0674e9c8127f",
@@ -64741,7 +66114,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "a37a3fb746067d9401438ec7347e9ba60342c694b80678b955cfb2069adf53d1",
@@ -64835,7 +66208,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "b74bd30cf4db88b6affce13163924e524b8a9d5648376b4bd096a876ff72b395",
@@ -64934,7 +66307,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "e0f0305d2bf995067084cac3867b220f02f42b5cd9d7722f4164e4abc43ecafe",
@@ -65114,7 +66487,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "6aed451dd2d2c56b3f56c913e01f5b6d65cd6ac977d90ea3d6c309048548dbf4",
@@ -65209,7 +66582,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "0464a0f36920ca3cd2944939d7470b178c74fe31a85a7e796e5374e37a19774c",
@@ -65319,7 +66692,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "7a81d006fd45ae509bdfdbb8a810ed0838a885177f515432ec11a015b2ba3d65",
@@ -65413,7 +66786,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "May remain visible; individual no-change disposition is required."
       },
       "evidence_fingerprint": "493b6228d2e53891c4dfc038daf3bc97921412634b0c68103f38a3dad12a8134",
@@ -70230,7 +71603,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70238,7 +71611,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "f60535a2edf07334bffcdc449ce8ff2a1ae57a3b9c23fb6d5c73325fdf3170eb",
@@ -70392,7 +71765,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70400,7 +71773,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "4cc138d9acff0b70e8f6e05d1c029aa3e93803806d2be701ddb693c127c3d662",
@@ -70482,7 +71855,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70490,7 +71863,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "f60535a2edf07334bffcdc449ce8ff2a1ae57a3b9c23fb6d5c73325fdf3170eb",
@@ -70572,7 +71945,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70580,7 +71953,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "52f256f0d1a6a6d02b4c3533e618b17815f3b966921bd581f08610a445cc0115",
@@ -70662,7 +72035,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70670,7 +72043,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "8f687f494b0e4cb4c4268bdc283886be8f84055c33366d8899992bcf83364a68",
@@ -70752,7 +72125,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70760,7 +72133,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "c362f193eb6565c475704a093be7a6e8cde063eb4f02ef5882847a53cac96807",
@@ -70842,7 +72215,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70850,7 +72223,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "3559c44c56a26a8c29361bbbdb1e2d4a130a797dbb16120bdb46223c26263c6f",
@@ -70932,7 +72305,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -70940,7 +72313,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "fcbb609ef20f0040c3ecd6c66604f5bda7f7775c150962b1a1949780e28ea02d",
@@ -71022,7 +72395,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -71030,7 +72403,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "ef15a95b48d22bf585ab5b01763633d5f6e419d6c6aed1b6af5fd732858803a3",
@@ -71112,7 +72485,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -71120,7 +72493,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "515d4fcd796903709f26c690933cdf3aeaddac636caab5e4965c6cce80687cbd",
@@ -71202,7 +72575,7 @@
         },
         "source_diff_independently_verified": true,
         "report": "reviews/repair-005-unused-helpers.json",
-        "validation": "Exact-source75suite baseline; eight relevant after suites+89syntax passed; full batch gate running.",
+        "validation": "Eight focused after suites, full75-suite repository gate,89syntax checks and runner selfcheck passed on pinned4c39 source.",
         "scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
         "fix_commit": "4c39f162f816eb191e92f9a61ee0ec935b2f991e",
         "clearance": {
@@ -71210,7 +72583,7 @@
           "scanner_absence_confirmed": true,
           "source_deletion_independently_verified": true,
           "relevant_tests_passed": true,
-          "full_batch_gate": "running"
+          "full_batch_gate": "passed75suites/89syntax"
         }
       },
       "evidence_fingerprint": "700a6f9eb3f2e556619e0d9c58e38dfbf76c23813a06aea340da41959bcea4b2",
@@ -106695,14 +108068,18 @@
       "repairs": [
         "repair-005"
       ],
-      "status": "full_validation_running",
+      "status": "validated_pending_merge",
       "focused_suites_passed": 8,
       "syntax_checks_passed": 89,
       "runner_selfcheck_passed": true,
       "source_pins": 89,
       "verified_findings_cleared": 11,
       "full_validation_receipt": "work/repowise-batch-001/full/suite-results.json",
-      "live_services_tested": false
+      "live_services_tested": false,
+      "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/182",
+      "full_suites_passed": 75,
+      "source_unchanged_through_run": true,
+      "validation_report": "reviews/batch-001-validation.json"
     }
   ]
 }
