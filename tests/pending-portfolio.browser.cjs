@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
+const cases = [];
 
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
@@ -41,15 +42,15 @@ const root = path.resolve(__dirname, '..');
                 } };
                 const original = pendingPortfolioSync;
                 const setItem = Storage.prototype.setItem;
-                let writes = 0, error = '';
+                let writes = 0, error = '', durable;
                 Storage.prototype.setItem = function(key, value) {
                     if (key === PENDING_PORTFOLIO_SYNC_KEY && (++writes === 1 || failBoth)) throw new DOMException('Storage full', 'QuotaExceededError');
                     return setItem.call(this, key, value);
                 };
-                try { persistPendingPortfolioSync(); } catch (failure) { error = failure.name; }
+                try { durable = persistPendingPortfolioSync(); } catch (failure) { error = failure.name; }
                 finally { Storage.prototype.setItem = setItem; }
                 updateSyncPortfolioButtonState();
-                return { writes, error, sameObject: getPendingPortfolioSync() === original,
+                return { writes, error, durable, warning: document.getElementById('syncPortfolioBtnBottomPersistenceNotice').textContent, sameObject: getPendingPortfolioSync() === original,
                     dataKept: getPendingPortfolioSync().sessionData.images[0].dataUrl === dataUrl,
                     uploadable: pendingPortfolioSessionHasUploadableImages(getPendingPortfolioSync()),
                     persisted: localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY),
@@ -60,6 +61,8 @@ const root = path.resolve(__dirname, '..');
             assert.equal(prepared.uploadable, true);
             assert.equal(prepared.writes, 2);
             assert.equal(prepared.error, failBoth ? 'QuotaExceededError' : '');
+            assert.equal(prepared.durable, failBoth ? undefined : false);
+            assert.match(prepared.warning, /only in this tab/);
             if (!failBoth) {
                 const storedImage = JSON.parse(prepared.persisted).sessionData.images[0];
                 assert.equal(storedImage.dataUrl, '');
@@ -80,8 +83,81 @@ const root = path.resolve(__dirname, '..');
             assert.equal(result.cloud.length, 1);
             assert.ok(result.cloud[0].Alice.sessions.some(session => session.id === result.saved.id && session.images[0].driveFileId === 'drive-photo'));
             assert.equal(result.persistedPending, null);
+            cases.push({ name: failBoth ? 'failed storage retains photos for actual sync retry' : 'quota fallback retains photos for actual sync retry', passed: true });
+        }
+        for (const mode of ['full', 'quota', 'retry', 'fail-both', 'drive-backed']) {
+            const prepared = await page.evaluate(mode => {
+                stopWftSyncPolling(); stopDriveAutoSync(); scheduleWftCloudSync = () => {};
+                localStorage.clear(); wftStudentChangeRecovery = null;
+                localStorage.setItem('wft_portfolio', '{"Alice":{"sessions":[]}}');
+                const previous = JSON.stringify({ studentName: 'Alice', sessionData: { id: 'previous', originalText: 'Previous draft', images: [] } });
+                if (mode === 'fail-both') localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, previous);
+                const dataUrl = 'data:image/png;base64,AAAA';
+                pendingPortfolioSync = { studentName: 'Alice', signature: mode, sessionData: {
+                    id: mode, createdAt: '2026-10-15T00:00:00Z', originalText: 'Reload protected writing', overall: 0,
+                    images: [{ dataUrl, originalDataUrl: dataUrl, pendingDriveUpload: mode !== 'drive-backed', ...(mode === 'drive-backed' ? { driveFileId: 'durable-photo' } : {}) }]
+                } };
+                const original = pendingPortfolioSync, set = Storage.prototype.setItem;
+                let writes = 0, outcome, error = '';
+                Storage.prototype.setItem = function(key, value) {
+                    if (key === PENDING_PORTFOLIO_SYNC_KEY && ++writes && (mode === 'fail-both' || (mode !== 'full' && writes === 1))) throw new DOMException('Synthetic quota', 'QuotaExceededError');
+                    return set.call(this, key, value);
+                };
+                try { outcome = persistPendingPortfolioSync(); } catch (failure) { error = failure.name; }
+                finally { Storage.prototype.setItem = set; }
+                const fallbackOutcome = outcome;
+                if (mode === 'retry') outcome = persistPendingPortfolioSync();
+                updateSyncPortfolioButtonState();
+                const notice = document.getElementById('syncPortfolioBtnBottomPersistenceNotice');
+                return { outcome, fallbackOutcome, error, sameObject: pendingPortfolioSync === original,
+                    photo: pendingPortfolioSync.sessionData.images[0].dataUrl,
+                    status: pendingPortfolioSyncPersistence, warning: notice && !notice.hidden ? notice.textContent : '',
+                    previousRetained: localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY) === previous,
+                    indexedDbEnabled: WFT_INDEXEDDB_CACHE_V1 };
+            }, mode);
+            assert.equal(prepared.sameObject, true);
+            assert.equal(prepared.photo, 'data:image/png;base64,AAAA');
+            assert.equal(prepared.indexedDbEnabled, false);
+            if (mode === 'quota' || mode === 'retry') assert.equal(prepared.fallbackOutcome, false);
+            if (mode === 'quota') {
+                assert.equal(prepared.outcome, false); assert.equal(prepared.status, 'photos-in-tab');
+                assert.match(prepared.warning, /before closing or reloading/);
+            } else if (mode === 'fail-both') {
+                assert.equal(prepared.error, 'QuotaExceededError'); assert.equal(prepared.previousRetained, true);
+                assert.equal(prepared.status, 'memory'); assert.match(prepared.warning, /Emergency Backup/);
+            } else {
+                assert.equal(prepared.outcome, true); assert.equal(prepared.status, 'full'); assert.equal(prepared.warning, '');
+            }
+            await page.reload({ waitUntil: 'load' });
+            const reloaded = await page.evaluate(mode => {
+                stopWftSyncPolling(); stopDriveAutoSync(); scheduleWftCloudSync = () => {};
+                const pending = getPendingPortfolioSync(); updateSyncPortfolioButtonState();
+                const before = localStorage.getItem('wft_portfolio'), signature = lastSyncedPortfolioSessionSignature;
+                const committed = mode === 'quota' ? commitPendingPortfolioSync() : null;
+                const notice = document.getElementById('syncPortfolioBtnBottomPersistenceNotice');
+                return { id: pending.sessionData.id, text: pending.sessionData.originalText, score: pending.sessionData.overall,
+                    photo: pending.sessionData.images[0] || null, status: pendingPortfolioSyncPersistence,
+                    warning: notice && !notice.hidden ? notice.textContent : '', committed,
+                    unchangedPortfolio: before === localStorage.getItem('wft_portfolio'),
+                    retained: getPendingPortfolioSync() === pending && !!localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY),
+                    unchangedSignature: signature === lastSyncedPortfolioSessionSignature };
+            }, mode);
+            assert.equal(reloaded.id, mode === 'fail-both' ? 'previous' : mode);
+            assert.equal(reloaded.unchangedPortfolio, true);
+            if (mode === 'quota') {
+                assert.equal(reloaded.photo.dataUrl, ''); assert.equal(reloaded.photo.dataUrlRemovedForStorage, true);
+                assert.equal(reloaded.status, 'missing-photos'); assert.match(reloaded.warning, /Reattach the photos and analyze again/);
+                assert.equal(reloaded.committed, false); assert.equal(reloaded.retained, true); assert.equal(reloaded.unchangedSignature, true);
+            } else if (mode === 'drive-backed') {
+                assert.equal(reloaded.photo.driveFileId, 'durable-photo'); assert.equal(reloaded.warning, '');
+            } else if (mode !== 'fail-both') {
+                assert.equal(reloaded.photo.dataUrl, 'data:image/png;base64,AAAA'); assert.equal(reloaded.warning, '');
+            }
+            if (mode !== 'fail-both') { assert.equal(reloaded.text, 'Reload protected writing'); assert.equal(reloaded.score, 0); }
+            cases.push({ name: mode + ' draft durability and reload', passed: true, prepared, reloaded });
         }
         assert.deepEqual(errors, []);
-        console.log('Browser pending-photo test passed: quota fallback and failed retry retain the original image bytes, and the actual Sync button uploads them before committing their Drive reference.');
+        if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify({ cases, passed: cases.length, failed: 0 }, null, 2));
+        console.log('Pending portfolio browser checks passed: ' + cases.length + ' sync, durability and reload scenarios.');
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

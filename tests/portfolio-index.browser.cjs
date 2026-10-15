@@ -61,6 +61,25 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
                     check(name + ' split', split.students['synthetic-id'].averageScore === expected, split.students['synthetic-id']);
                     check(name + ' metadata/immutable', Object.keys(main.students).length === 1 && main.students.Synthetic.sessionCount === sessions.length && main.students.Synthetic.latestSessionAt === sessions[0].createdAt && JSON.stringify(portfolio) === before);
                 });
+                await run('live legacy session summaries', name => {
+                    const reads = [], sessions = [{
+                        get createdAt() { reads.push('date'); return 'Sun, 01 Feb 2026 00:00:00 GMT'; },
+                        get overall() { reads.push('score'); sessions.push({ createdAt: '2026-03-01T00:00:00Z', overallScore: '80' }); return '0'; }
+                    }];
+                    const portfolio = Object.fromEntries([
+                        ['__proto__', { sessions }], ['constructor', [{ createdAt: '2026-02-01', overall: null, overallScore: 100 }]],
+                        ['_meta', { ignored: true }], ['updatedAt', 'ignored'], ['syncMeta', {}]
+                    ]);
+                    const before = localStorage.getItem('wft_portfolio'), index = buildPortfolioIndexFromPortfolio(portfolio);
+                    check(name + ' live reads and chronological summary', reads.join(',') === 'date,date,score' && index.students.__proto__.sessionCount === 2 && index.students.__proto__.averageScore === 40 && index.students.__proto__.latestSessionAt === '2026-03-01T00:00:00Z', { reads, serialized: JSON.stringify(index) });
+                    check(name + ' own keys and legacy array/null precedence', Object.getPrototypeOf(index.students) === null && Object.keys(index.students).join(',') === '__proto__,constructor' && index.students.constructor.averageScore === null && index.students.constructor.sessionCount === 1);
+                    check(name + ' authoritative storage unchanged', before === localStorage.getItem('wft_portfolio'));
+                    const sentinel = { reason: 'Synthetic score getter failure' };
+                    let thrown;
+                    try { buildPortfolioIndexFromPortfolio({ Synthetic: { sessions: [{ get overall() { throw sentinel; } }] } }); }
+                    catch (error) { thrown = error; }
+                    check(name + ' thrown getter identity', thrown === sentinel);
+                });
             }
             async function verifyNativeCommits() {
                 await run('native saved index bytes and same-snapshot ack', async name => {
