@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T03:59:53.257523+07:00.
+Updated 2026-10-16T04:12:14.622168+07:00.
 
-Source: 9ec840eb3aabf028d34bde60868a6021c9db633d. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: b11516f1775653c5d2216ee83c0b51181c2c2417. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,19 +10,19 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 907 |
+| code_health | 909 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 191, "unreviewed": 788}.
+Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 191, "unreviewed": 790}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 18, "reviewed_no_change": 193, "unreviewed": 788}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 18, "reviewed_no_change": 193, "unreviewed": 790}.
 
 Findings confirmed cleared: 18. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Behavior repairs with regression evidence: 3.
+Behavior repairs with regression evidence: 4.
 
 Supporting refactoring plans: 107; grouped refactoring opportunities: 23.
 
@@ -47,15 +47,16 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-010: Review notebook guide validation and assembly - reviewed_complete.
 - repair-011: Review preference and portfolio commit safeguards - reviewed_complete.
 - repair-012: Review feedback goal and action checklist policy - reviewed_complete.
+- repair-013: Preserve settings when renaming students - behavior_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-013: Preserve settings when renaming students - reviewed_pending_refresh.
+- repair-014: Correct notebook text dictionary lookups - reviewed_pending_refresh.
 
 ## Additional source leads
 
 These are review leads, separate from scanner observations. They require their own verification.
 
 - rename-transient-settings-read: renameStudent in js/app/10-main-app.js — fixed_verified. renameStudent obtains settings from getRawSettings, which returns {} after any read/parse failure, then passes that truthy empty object to saveWftStudentChange. A transient failure limited to that read can end before the transaction preflight and subsequent strict reads. The transaction prefers supplied change.settings and carries only apiKey from the later storedSettings snapshot, so a successful rename could replace other saved preferences/unknown fields/student metadata with the sparse staged object. With the shipped ID-map flag false, metadata can simply be omitted; enabling the flag can instead create replacement metadata. Persistent/corrupt reads are already stopped by later strict checks; the uncovered lead is a one-time failure followed by readable storage.
-- notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — candidate_needs_regression. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
+- notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — fixed_verified. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
 - preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — candidate_needs_regression. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
 - checklist-second-person-contraction: buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist in js/app/10-main-app.js — candidate_needs_regression. toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.
 
@@ -251,6 +252,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_308c12524a7013521290 | high | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / complex_method | yes | unreviewed |
 | code_health:finding_d6d201d5eca456e8aaac | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / complex_method | yes | unreviewed |
 | code_health:finding_fefff15de578d7225bee | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / large_method | yes | unreviewed |
+| code_health:finding_aaf383178b76f56da2be | high | code_health | tests/rename-confirmation.browser.cjs:20 | setupRenameFixture / complex_method | yes | unreviewed |
+| code_health:finding_b04caf15b6931492d5ea | high | code_health | tests/rename-confirmation.browser.cjs:123 | assertRenamedData / complex_method | yes | unreviewed |
 | code_health:finding_53cd03ddef0fff61c0fa | high | code_health | tests/script-loading.browser.cjs:5 | <anonymous@5> / complex_method | yes | unreviewed |
 | code_health:finding_dffe523407bccdaa39b7 | high | code_health | tests/session-retention.browser.cjs:5 | exerciseSessionRetention / large_method | yes | unreviewed |
 | code_health:finding_a6e8de9e2a9b5306df36 | high | code_health | tests/session-retention.browser.cjs:63 | checkRetentionModes / complex_method | yes | unreviewed |
@@ -587,10 +590,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_14213736db7f2152b9ad | medium | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / primitive_obsession | yes | unreviewed |
 | code_health:finding_1d84136c5f403c3c95a2 | medium | code_health | tests/recovery-cache.browser.cjs:68 | performRecoveryAction / complex_method | yes | unreviewed |
 | code_health:finding_d8c235f3f911a0b79d0f | medium | code_health | tests/recovery-cache.browser.cjs:228 | io_in_loop | yes | unreviewed |
-| code_health:finding_aaf383178b76f56da2be | medium | code_health | tests/rename-confirmation.browser.cjs:20 | setupRenameFixture / complex_method | yes | unreviewed |
-| code_health:finding_67e0cd1b6a8c92f79e5c | medium | code_health | tests/rename-confirmation.browser.cjs:71 | exerciseRenameDialogs / complex_method | yes | unreviewed |
-| code_health:finding_b04caf15b6931492d5ea | medium | code_health | tests/rename-confirmation.browser.cjs:103 | assertRenamedData / complex_method | yes | unreviewed |
-| code_health:finding_ca57037d27555320805f | medium | code_health | tests/rename-confirmation.browser.cjs:118 | <anonymous@118> / nested_complexity | yes | unreviewed |
+| code_health:finding_67e0cd1b6a8c92f79e5c | medium | code_health | tests/rename-confirmation.browser.cjs:91 | exerciseRenameDialogs / complex_method | yes | unreviewed |
+| code_health:finding_ca57037d27555320805f | medium | code_health | tests/rename-confirmation.browser.cjs:143 | <anonymous@143> / nested_complexity | yes | unreviewed |
+| code_health:finding_5d1eb75cd297ec384b50 | medium | code_health | tests/rename-confirmation.browser.cjs:143 | <anonymous@143> / complex_method | yes | unreviewed |
 | code_health:finding_2a1382c40c21517b7c37 | medium | code_health | tests/script-loading.browser.cjs:5 | <anonymous@5> / nested_complexity | yes | unreviewed |
 | code_health:finding_9dc817c0443cf17b94cf | medium | code_health | tests/session-retention.browser.cjs:63 | checkRetentionModes / nested_complexity | yes | unreviewed |
 | code_health:finding_c23168ca6063f958c85e | medium | code_health | tests/session-retention.browser.cjs:121 | checkPendingFailureRecovery / complex_method | yes | unreviewed |
@@ -964,7 +966,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_35edf9740e8a2fa057b5 | low | code_health | tests/recovery-cache.browser.cjs:57 | checkCacheScenario / complex_conditional | yes | unreviewed |
 | code_health:finding_1c43466359debf8ce43c | low | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / bumpy_road | yes | unreviewed |
 | code_health:finding_8fdb4f9986350503ab5b | low | code_health | tests/recovery-cache.browser.cjs:220 | dry_violation | yes | unreviewed |
-| code_health:finding_241aec90374475ff57a6 | low | code_health | tests/rename-confirmation.browser.cjs:115 | dry_violation | yes | unreviewed |
+| code_health:finding_17ce0cce1930c0bc5070 | low | code_health | tests/rename-confirmation.browser.cjs:20 | setupRenameFixture / large_method | yes | unreviewed |
+| code_health:finding_241aec90374475ff57a6 | low | code_health | tests/rename-confirmation.browser.cjs:140 | dry_violation | yes | unreviewed |
 | code_health:finding_bc5b71332347bd24eed1 | low | code_health | tests/script-loading.browser.cjs:5 | <anonymous@5> / large_method | yes | unreviewed |
 | code_health:finding_16db8cc9c2b3d4382f78 | low | code_health | tests/script-loading.browser.cjs:28 | dry_violation | yes | unreviewed |
 | code_health:finding_c44eb8fdd08311d35209 | low | code_health | tests/session-retention.browser.cjs | prior_defect | yes | reviewed_no_change |

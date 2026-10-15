@@ -6134,7 +6134,7 @@ function getNotebookGuideContentWords(text) {
         "because": true
     };
     for (var i = 0; i < parts.length; i += 1) {
-        if (parts[i].length > 2 && !stopWords[parts[i]]) {
+        if (parts[i].length > 2 && !Object.prototype.hasOwnProperty.call(stopWords, parts[i])) {
             words.push(parts[i]);
         }
     }
@@ -6909,7 +6909,7 @@ function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreI
     var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
     var sanitized = [];
     var selected = [];
-    var seen = {};
+    var seen = Object.create(null);
     var selectedCategories = {};
     var i;
 

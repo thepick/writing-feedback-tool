@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "repair": "repair-014",
+  "title": "Use own dictionary keys for notebook content and quote selection",
+  "created_at_utc": "2026-10-15T21:10:49.532157+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "b11516f1775653c5d2216ee83c0b51181c2c2417",
+  "branch": "codex/repowise-batch-003-20261016",
+  "lead_id": "notebook-prototype-key-collision",
+  "lead_held": true,
+  "behavior_fix_verified": true,
+  "summary": {
+    "application_lines_changed": 2,
+    "source_files_changed": 2,
+    "native_guidance_cases": 95,
+    "old_app_expected_failures": 5,
+    "old_app_existing_cases_passed": 88,
+    "new_controls_passed_before": 2,
+    "after_guidance_cases_passed": 95,
+    "selected_suites_passed_after": 3,
+    "syntax_checks_before_and_after": 89,
+    "other87_source_files_raw_identical": true,
+    "application_metrics_unchanged": true,
+    "scanner_clearance_claimed": false,
+    "needs_user_attention": false
+  },
+  "changed_repository_files": [
+    "js/app/10-main-app.js",
+    "tests/notebook-guidance-repair.browser.cjs"
+  ],
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "before_sha256_raw": "93bd4b40d64eb751b2ac31c01163229830ca0d1b20010be61239c2ab1ddbd783",
+      "after_sha256_raw": "a64d12eee0b7f667aebd40f2f6b84246a2f272504929a2d354d9051f2bee69f2",
+      "before_sha256_normalized_lf": "6bd5a9c7b5d939d76e26b1ef4f86664eec60fa62f7d010e9deeb91f1c41aa3cf",
+      "after_sha256_normalized_lf": "f70d3f11c7b7bf6d7331efb1e71731dc05bac7d97229bcb9a5f7d11a5d5887c0"
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "before_sha256_raw": "00ddca7a4a79ccb79e3446765cdefbb18373e9e542297d9537f826c112baa067",
+      "after_sha256_raw": "c03040caa3a987add5613bc3106cd615a4244d7f2ab244568b7bbfd9e05a1556",
+      "before_sha256_normalized_lf": "8ddf098701dd3a6e66ff70072c0d29f781072407d105efebf1a7e3c447a3ce35",
+      "after_sha256_normalized_lf": "2eb5f16f15cafecf589142a25656631c0aa33a559e96418c766ae4c7b4bbbd71"
+    }
+  },
+  "scope_proof": {
+    "exact_two_statement_reconstruction_verified": true,
+    "all_other_application_bytes_identical": true,
+    "all_other87_source_files_raw_identical": true,
+    "golden_fixtures_unchanged": true,
+    "evidence": [
+      "work/repowise-repair-014/before.json",
+      "work/repowise-repair-014/after.json"
+    ],
+    "method": "Full raw-file reconstruction replaces only the stop-word membership predicate and the quote-map initializer; all89 source hashes rechecked after tests."
+  },
+  "changes": [
+    {
+      "function": "getNotebookGuideContentWords",
+      "before": "Inherited Object.prototype.constructor was treated as an entry in the fixed stopWords table.",
+      "after": "Use the existing Object.prototype.hasOwnProperty.call idiom, so only declared stop-word entries filter content.",
+      "preserved": "The complete stop-word list, lowercasing, punctuation cleanup, minimum token length, numeric token behavior and token order are unchanged."
+    },
+    {
+      "function": "assembleNotebookGuideFromCandidates",
+      "before": "The first __proto__ quote looked already seen and assigning seen[__proto__]=true could not create an ordinary own membership entry.",
+      "after": "Use the existing null-prototype dictionary idiom for arbitrary quote keys; first candidates are eligible and repeated keys are stored/deduplicated.",
+      "preserved": "Sanitization, original-writing grounding, category membership/precedence, example cap, duplicate-category/quote options, fallback order and final guide schema are unchanged."
+    }
+  ],
+  "caller_order_evidence": [
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 6104,
+      "end_line": 6142,
+      "role": "Fixed content-word table and own-membership predicate."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 6165,
+      "end_line": 6179,
+      "role": "Shared text-connection validator consumes the word list without changing its overlap threshold."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 6561,
+      "end_line": 6573,
+      "role": "Corrected-quote overlap scorer reuses the same corrected content-word reader."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 6904,
+      "end_line": 6989,
+      "role": "Shared local addExample records quote keys across required-category and later candidate passes."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 7078,
+      "end_line": 7107,
+      "role": "ensureNotebookGuide remains the production assembly caller; saved-guide reconstruction retains its current path."
+    }
+  ],
+  "regressions": {
+    "before_failures": [
+      {
+        "name": "constructor remains a content word",
+        "passed": false,
+        "observed": []
+      },
+      {
+        "name": "grounded constructor candidate accepted",
+        "passed": false,
+        "observed": null
+      },
+      {
+        "name": "constructor candidate retained in guide",
+        "passed": false,
+        "observed": []
+      },
+      {
+        "name": "first prototype quote retained and duplicate rejected",
+        "passed": false,
+        "observed": [
+          {
+            "area": "Grammar",
+            "skill": "Making Sentences Clearer",
+            "page1Connection": "Grammar",
+            "originalQuote": "__proto__",
+            "nextTimeExample": "proto",
+            "whyThisWorks": "This version fixes the grammar in the sentence while keeping your idea."
+          }
+        ]
+      },
+      {
+        "name": "prototype quote retained after required category without duplicate",
+        "passed": false,
+        "observed": [
+          {
+            "area": "Grammar",
+            "skill": "Complete phrase",
+            "page1Connection": "Grammar",
+            "originalQuote": "We was happy.",
+            "nextTimeExample": "We were happy.",
+            "whyThisWorks": "This makes the phrase clearer."
+          }
+        ]
+      }
+    ],
+    "accepted_contract_control": "The __proto__ candidate already passed the existing sanitizer before any app edit. No input/validation contract was widened to manufacture the selection failure.",
+    "ordinary_control": "Declared stop words, ordinary words, lowercasing, short tokens and three-digit numeric token behavior pass before and after.",
+    "selection_controls": "First supplied __proto__ candidate is retained in the required-category pass and after an ordinary required example; repeated __proto__ quotes stay excluded and order stays intact.",
+    "baseline": "All88 preexisting guidance assertions and both related suites passed on the old app. Seven new assertions add five expected failures and two passing controls."
+  },
+  "tests": {
+    "before": {
+      "receipt": "work/repowise-repair-014/before/suite-results.json",
+      "native_receipt": "work/repowise-repair-014/before/notebook-guidance-repair.browser.json",
+      "runner_exit_code": 1,
+      "complete": true,
+      "passed": false,
+      "syntax_checks": 89,
+      "native_cases": 95,
+      "native_passed": 90,
+      "started": "2026-10-15T21:08:02.920Z",
+      "finished": "2026-10-15T21:08:33.626Z",
+      "suites": [
+        {
+          "suite": "tests/main-app-health.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 6.346,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-014\\before\\main-app-health.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 1,
+          "error": "Empty or failed case report",
+          "seconds": 5.78,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-014\\before\\notebook-guidance-repair.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 7.242,
+          "report": null
+        }
+      ]
+    },
+    "after": {
+      "receipt": "work/repowise-repair-014/after/suite-results.json",
+      "native_receipt": "work/repowise-repair-014/after/notebook-guidance-repair.browser.json",
+      "runner_exit_code": 0,
+      "complete": true,
+      "passed": true,
+      "syntax_checks": 89,
+      "native_cases": 95,
+      "native_passed": 95,
+      "started": "2026-10-15T21:09:08.342Z",
+      "finished": "2026-10-15T21:09:30.881Z",
+      "suites": [
+        {
+          "suite": "tests/main-app-health.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 4.705,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-014\\after\\main-app-health.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 4.657,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-014\\after\\notebook-guidance-repair.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 6.216,
+          "report": null
+        }
+      ]
+    }
+  },
+  "application_metrics": {
+    "before": {
+      "assembleNotebookGuideFromCandidates": {
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "start_line": 6904,
+        "end_line": 6989
+      },
+      "getNotebookGuideContentWords": {
+        "ccn": 5,
+        "cognitive": 5,
+        "nloc": 39,
+        "max_nesting": 2,
+        "start_line": 6104,
+        "end_line": 6142
+      }
+    },
+    "after": {
+      "assembleNotebookGuideFromCandidates": {
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "start_line": 6904,
+        "end_line": 6989
+      },
+      "getNotebookGuideContentWords": {
+        "ccn": 5,
+        "cognitive": 5,
+        "nloc": 39,
+        "max_nesting": 2,
+        "start_line": 6104,
+        "end_line": 6142
+      }
+    },
+    "method": "Installed read-only RepoWise complexity walker; no index writes."
+  },
+  "remaining_expectations": [
+    "The text dictionary behavior lead is repaired. Existing notebook complexity/shape observations are not claimed cleared; all measured function metrics are unchanged.",
+    "Coordinator must accept/commit, refresh RepoWise and run the later publication batch gate. Source remains uncommitted."
+  ],
+  "limits": [
+    "No broad75-suite run, fresh coverage capture, live Google/Drive/model calls, real accounts or student data.",
+    "This demonstrates incorrect text membership/selection, not prototype pollution or a browser exploit.",
+    "No Git mutation, tracker/docs/index writes, other chats/subagents or external messages."
+  ]
+}

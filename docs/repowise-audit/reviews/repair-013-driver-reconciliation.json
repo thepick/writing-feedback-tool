@@ -1,0 +1,31 @@
+{
+  "file": "tests/rename-confirmation.browser.cjs",
+  "old_driver": {
+    "line": 118,
+    "ancestor_types": [
+      "parenthesized_expression",
+      "call_expression",
+      "member_expression",
+      "call_expression",
+      "expression_statement",
+      "program"
+    ]
+  },
+  "new_driver": {
+    "line": 143,
+    "ancestor_types": [
+      "parenthesized_expression",
+      "call_expression",
+      "member_expression",
+      "call_expression",
+      "expression_statement",
+      "program"
+    ]
+  },
+  "before_sha256_raw": "7b68949c0e314fef5df02f7cdbe5ec2e47f254ce94e41e29ad81fbefde1221ba",
+  "after_sha256_raw": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+  "campaign_id_retained": "code_health:finding_ca57037d27555320805f",
+  "latest_observed_id": "code_health:finding_9f466b2ae60dfb0ea3c0",
+  "reason": "Same unique top-level async test driver and AST ancestor path. Added regression/retry cases changed its body and source line; the nesting observation continues unreviewed rather than becoming a claimed clearance.",
+  "report": "reviews/repair-013-rename-settings.json"
+}

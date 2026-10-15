@@ -72,6 +72,27 @@ function runNotebookGuidanceCases() {
         }
     }
     checkGroundedExamples();
+    const dictionaryPriorities = [{category:'Grammar'}];
+    const constructorCandidate = {area:'Grammar', skill:'Complete phrase', page1Connection:'Grammar', originalQuote:'constructor',
+        nextTimeExample:'The constructor', whyThisWorks:'This makes the phrase clearer.'};
+    const constructorWords = getNotebookGuideContentWords('constructor');
+    check('constructor remains a content word', JSON.stringify(constructorWords) === JSON.stringify(['constructor']), constructorWords);
+    const constructorSanitized = sanitizeNotebookGuideCandidate(constructorCandidate, 'I saw the constructor near the bridge.', null, dictionaryPriorities);
+    check('grounded constructor candidate accepted', constructorSanitized?.nextTimeExample === constructorCandidate.nextTimeExample, constructorSanitized);
+    const constructorGuide = assembleNotebookGuideFromCandidates([constructorCandidate], 'I saw the constructor near the bridge.', null, dictionaryPriorities, {});
+    check('constructor candidate retained in guide', constructorGuide.examples.some(ex => ex.originalQuote === 'constructor' && ex.nextTimeExample === constructorCandidate.nextTimeExample), constructorGuide.examples);
+    const protoCandidate = {...constructorCandidate, originalQuote:'__proto__', nextTimeExample:'The __proto__ value'};
+    const protoDuplicate = {...protoCandidate, nextTimeExample:'A __proto__ value'};
+    const protoSanitized = sanitizeNotebookGuideCandidate(protoCandidate, '__proto__', null, dictionaryPriorities);
+    check('prototype quote already meets candidate contract', protoSanitized?.nextTimeExample === protoCandidate.nextTimeExample, protoSanitized);
+    const protoGuide = assembleNotebookGuideFromCandidates([protoCandidate, protoDuplicate], '__proto__', null, dictionaryPriorities, {});
+    check('first prototype quote retained and duplicate rejected', protoGuide.examples.length === 1 && protoGuide.examples[0].nextTimeExample === protoCandidate.nextTimeExample, protoGuide.examples);
+    const ordinaryCandidate = {...constructorCandidate, originalQuote:'We was happy.', nextTimeExample:'We were happy.'};
+    const extraProtoGuide = assembleNotebookGuideFromCandidates([ordinaryCandidate, protoCandidate, protoDuplicate], 'We was happy. __proto__', null, dictionaryPriorities, {});
+    check('prototype quote retained after required category without duplicate',
+        JSON.stringify(extraProtoGuide.examples.map(ex => ex.nextTimeExample)) === JSON.stringify([ordinaryCandidate.nextTimeExample, protoCandidate.nextTimeExample]), extraProtoGuide.examples);
+    const ordinaryContentWords = getNotebookGuideContentWords('THE and while cats play with toy 123');
+    check('declared stop words and ordinary token rules unchanged', JSON.stringify(ordinaryContentWords) === JSON.stringify(['cats', 'play', 'toy', '123']), ordinaryContentWords);
     function checkParagraphRevisions() {
         const paragraphOnly = sanitize({});
         check('paragraph only concrete and retained', paragraphOnly?.nextTimeExample === revision, paragraphOnly);
