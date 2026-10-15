@@ -25,11 +25,7 @@ async function assertNotebookPrintColors(page) {
  });
 }
 
-(async () => {
- const browser = await chromium.launch({channel: 'msedge', headless: true});
- try {
- const page = await browser.newPage({viewport:{width:1000,height:1100}});
- const errors=[];
+async function openNotebookGuideTestPage(page, errors) {
  page.on('pageerror', e => errors.push(e.message));
  await page.route('**/*', route => {
   const url=new URL(route.request().url());
@@ -40,6 +36,9 @@ async function assertNotebookPrintColors(page) {
  });
  await page.goto('http://127.0.0.1:8765', {waitUntil:'domcontentloaded'});
  await page.waitForFunction(() => typeof ensureNotebookGuide === 'function');
+}
+
+async function createNotebookGuideAssessment(page) {
  const result = await page.evaluate(() => {
   const original = 'I went to the park. I saw a dog. The dog was nice. I play with the dog yesterday.';
   const candidates = [
@@ -76,6 +75,10 @@ async function assertNotebookPrintColors(page) {
   const legacy=refreshNotebookPage2Guide(newSnapshot,'Test Student',{...session,notebookGuide:null});
   return {prompt,savedCount:saved && saved.notebookGuide.examples.length,savedSnapshot:saved && saved.notebookPrintHtml,count:guide.examples.length,areas:guide.examples.map(e=>e.page1Connection),parsed:parsed.notebookGuideCandidates.length,invalid,generic,malformed,low,missing,refreshed,legacy,rendered:document.getElementById('notebookPage2Content').innerText,html:buildNotebookPrintDocument(newSnapshot,'Test Student','A Friendly Dog'),portfolioHtml:buildNotebookPrintDocument(reconstructed,'Test Student','A Friendly Dog')};
  });
+ return result;
+}
+
+function assertNotebookGuideAssessment(result) {
  assert.equal(result.parsed,3);
  assert.match(result.prompt,/Notebook Guide Candidate JSON/);
  assert.match(result.prompt,/I play with the dog yesterday/);
@@ -83,18 +86,26 @@ async function assertNotebookPrintColors(page) {
  assert.match(result.savedSnapshot,/Next Time Writing Guide/);
  assert.equal(result.count,3);
  assert.deepEqual(new Set(result.areas),new Set(['Flow','Word Choice','Grammar']));
+}
+
+function assertNotebookGuideFallbacks(result) {
  assert.equal(result.invalid,null);
  assert.equal(result.generic,null);
  assert.deepEqual(result.malformed,[]);
  assert.equal(result.low.examples.length,0);
  assert.match(result.low.focusItems[0],/full sentence/);
  assert.equal(result.missing[0].category,'Flow');
+}
+
+function assertNotebookGuideSavedSnapshots(result) {
  assert.match(result.refreshed,/Keep this saved page one/);
  assert.match(result.refreshed,/Next Time Writing Guide/);
  assert.doesNotMatch(result.refreshed,/Old text/);
  assert.match(result.legacy,/EXAMPLE 3/);
  assert.match(result.rendered,/Why this works:/i);
- assert.deepEqual(errors,[]);
+}
+
+async function checkNotebookPrintPreview(page, result) {
  fs.writeFileSync(path.join(artifactDir,'guide-preview.html'),result.html);
  await page.setContent(result.html,{waitUntil:'domcontentloaded'});
  await page.evaluate(()=>window.fitAllNotebookPages());
@@ -114,11 +125,30 @@ async function assertNotebookPrintColors(page) {
  await page.pdf({path:path.join(artifactDir,'guide-test.pdf'),preferCSSPageSize:true,printBackground:true});
  await page.pdf({path:path.join(artifactDir,'guide-no-backgrounds.pdf'),preferCSSPageSize:true,printBackground:false});
  console.log('Print preview artifacts: '+artifactDir);
+ return layout;
+}
+
+async function checkSavedNotebookPrint(page, result) {
  await page.setContent(result.portfolioHtml,{waitUntil:'domcontentloaded'});
  await page.evaluate(()=>window.fitAllNotebookPages());
  await assertNotebookPrintColors(page);
  assert.equal(await page.locator('.guide-example').count(),3);
  assert.equal(await page.locator('.fit-warning').count(),0);
+}
+
+(async () => {
+ const browser = await chromium.launch({channel: 'msedge', headless: true});
+ try {
+ const page = await browser.newPage({viewport:{width:1000,height:1100}});
+ const errors=[];
+ await openNotebookGuideTestPage(page, errors);
+ const result = await createNotebookGuideAssessment(page);
+ assertNotebookGuideAssessment(result);
+ assertNotebookGuideFallbacks(result);
+ assertNotebookGuideSavedSnapshots(result);
+ assert.deepEqual(errors,[]);
+ const layout = await checkNotebookPrintPreview(page, result);
+ await checkSavedNotebookPrint(page, result);
  console.log(JSON.stringify({passed:true,examples:result.count,areas:result.areas,layout,checks:['candidate parsing','exact source quotes','generic advice rejection','malformed response fallback','low sample coaching','missing scores','new assessment rendering','saved portfolio rendering','legacy snapshot preservation','two-page print fit','no browser exceptions']}));
  } finally {await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
