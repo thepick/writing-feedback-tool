@@ -26,6 +26,9 @@ async function checkBackupScenario(scenario, observed, downloads, requests, aler
     if (driveSuccess) { const upload = requests.find(r => r.url.includes('/upload/')); backup = upload && JSON.parse(upload.body.split(/\r\n\r\n|\r\n--/)[3]); check('native upload carries valid parent and acknowledged backup', upload && upload.method === 'POST' && upload.body.includes('root-folder')); }
     if (backup) {
         check('export redacts credential', !JSON.stringify(backup).includes('synthetic-private-key'));
+        const expectedDraft = scenario === 'backup-corrupt' ? observed.originals.wft_oauth_textarea_draft_v1 : JSON.parse(observed.originals.wft_oauth_textarea_draft_v1);
+        check('export preserves saved sign-in draft writing student and genres', JSON.stringify(backup.contents.wft_oauth_textarea_draft_v1) === JSON.stringify(expectedDraft));
+        check('backup leaves saved draft bytes unchanged', observed.contents.wft_oauth_textarea_draft_v1 === observed.originals.wft_oauth_textarea_draft_v1);
         check('export includes full pending photo/writing and persisted pending root', backup.pendingPortfolioSync?.sessionData.originalText === 'Pending exact writing' && backup.pendingPortfolioSync?.sessionData.images[0].dataUrl === 'data:image/png;base64,c3ludGhldGlj' && backup.contents.wft_pending_portfolio_sync_v1?.sessionData.id === 'pending');
         check('corrupt and recovery writing retained', scenario === 'backup-corrupt' ? backup.contents.wft_portfolio === '{damaged writing' : scenario === 'backup-recovery' ? JSON.parse(backup.studentChangeRecovery.wft_portfolio).Synthetic.sessions[0].originalText === 'Saved exact writing' : true);
         if (scenario === 'backup-unreadable') check('unreadable root explicitly marked and incomplete backup reported', backup.readErrors?.includes('wft_portfolio') && alerts.some(a => /could not be read|incomplete/i.test(a)));
@@ -124,6 +127,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
             wft_portfolio: JSON.stringify({ Synthetic: { sessions: [{ id: 'saved', originalText: 'Saved exact writing', images: [{ driveFileId: 'photo-file' }] }] } }),
             wft_settings: JSON.stringify({ students: ['Synthetic'], unknown: 'keep', apiKey: 'synthetic-private-key' }),
             wft_students: '["Synthetic"]', wft_deletions: '{"records":[]}',
+            wft_oauth_textarea_draft_v1: JSON.stringify({ text: 'Only unsaved synthetic writing', selectedStudent: 'Synthetic draft student', manualGenreOverrideValue: 'opinion', writingGenreSelectValue: 'narrative' }),
             wft_storage_meta: JSON.stringify({ safeMode: scenario === 'safe-exit-write-error', safeModeReason: 'fixture', activePortfolioFormat: 'monolithic-v1' }),
             wft_pending_portfolio_sync_v1: JSON.stringify({ studentName: 'Synthetic', signature: 'pending', sessionData: { id: 'pending', originalText: 'Pending exact writing', images: [{ dataUrl: '', dataUrlRemovedForStorage: true }] } })
         };
@@ -148,6 +152,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
         }
         function installScenarioFaults(scenario) {
             if (['backup-corrupt', 'cache-corrupt'].includes(scenario)) { localStorage.setItem('wft_portfolio', '{damaged writing'); originals.wft_portfolio = '{damaged writing'; }
+            if (scenario === 'backup-corrupt') localStorage.setItem('wft_oauth_textarea_draft_v1', originals.wft_oauth_textarea_draft_v1 = '{damaged unsaved synthetic writing');
             if (['cache-settings-corrupt', 'cache-roster-corrupt', 'cache-deletions-corrupt', 'safe-corrupt'].includes(scenario)) {
                 const key = { 'cache-settings-corrupt': 'wft_settings', 'cache-roster-corrupt': 'wft_students', 'cache-deletions-corrupt': 'wft_deletions', 'safe-corrupt': 'wft_storage_meta' }[scenario];
                 originalSet.call(localStorage, key, originals[key] = '{damaged');

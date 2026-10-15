@@ -240,7 +240,8 @@ function buildWftEmergencyBackupObject() {
         "wft_deletions", "wft_storage_meta", "wft_selectedStudent",
         "wft_drive_folder_id", "wft_drive_settings_file_id",
         "wft_drive_portfolio_file_id", "wft_drive_deletions_file_id",
-        "wft_google_user", "wft_google_connected", "wft_pending_portfolio_sync_v1"
+        "wft_google_user", "wft_google_connected", "wft_pending_portfolio_sync_v1",
+        "wft_oauth_textarea_draft_v1"
     ];
 
     for (var bi = 0; bi < keysToBackup.length; bi++) {
