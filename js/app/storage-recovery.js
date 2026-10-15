@@ -174,7 +174,8 @@ function validateWftRequiredStorage(key, data) {
             if (Object.prototype.hasOwnProperty.call(data, field) && !Array.isArray(data[field])) valid = false;
         });
     }
-    if (valid && key === 'wft_settings' && Object.prototype.hasOwnProperty.call(data, 'students') && !Array.isArray(data.students)) valid = false;
+    var checkSettings = valid && key === 'wft_settings';
+    if (checkSettings && Object.prototype.hasOwnProperty.call(data, 'students') && !Array.isArray(data.students)) valid = false;
     if (!valid) throw new Error('Saved ' + key + ' data could not be read. Download Emergency Backup and repair the saved data before retrying.');
 }
 
