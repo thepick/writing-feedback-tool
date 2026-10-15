@@ -842,7 +842,7 @@ Example for handwritten work:
 
 function parseNeatnessAssessmentResponse(response) {
     function parseNeatnessSubScore(label, responseText) {
-        var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5(?![\\w]|\\.\\d)', 'i');
+        var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5(?![\\w]|[.,]\\d)', 'i');
         var m = responseText.match(rx);
         if (!m) return null;
         return /missing/i.test(m[1]) ? null : Number(m[1]);
@@ -952,16 +952,16 @@ function parseNeatnessAssessmentResponse(response) {
     }
 
     // Parse the response - expected pattern: - Neatness: [score]/10 ([score]/5 - [level]) - [observation]
-    var match = response.match(/-\s*Neatness:\s*((?:10|8|6|4|2)|Missing)\s*\/10(?![\w]|\.\d)(?:\s*\([^)]*\))?\s*-\s*([^\n]+)/i);
+    var match = response.match(/-\s*Neatness:\s*((?:10|8|6|4|2)|Missing)\s*\/10(?![\w]|[.,]\d)(?:\s*\([^)]*\))?\s*-\s*([^\n]+)/i);
     var growthTipMatch = response.match(/\*\*Neatness Growth Tip:\*\*\s*([^\n]+)/i);
     var parsedGrowthTip = growthTipMatch ? growthTipMatch[1].trim() : null;
 
     function parseNeatnessFallback() {
         // Fallback: score present but observation was not in the expected format.
-        var scoreMatch = response.match(/(?:^|[^\w.,+-])((?:10|8|6|4|2))\s*\/10(?![\w]|\.\d)/i);
+        var scoreMatch = response.match(/(?:^|[^\w.,+-])((?:10|8|6|4|2))\s*\/10(?![\w]|[.,]\d)/i);
         if (scoreMatch || computedTen != null) {
             var score = computedTen != null ? computedTen : Number(scoreMatch[1]);
-            var sentenceMatch = response.match(/([^.\n]*(?:^|[^\w.,+-])(?:10|8|6|4|2)\s*\/10(?![\w]|\.\d)[^.\n]*\.?)/i);
+            var sentenceMatch = response.match(/([^.\n]*(?:^|[^\w.,+-])(?:10|8|6|4|2)\s*\/10(?![\w]|[.,]\d)[^.\n]*\.?)/i);
             var extractedReason = sentenceMatch ? sentenceMatch[0].replace(/^\s*[-*\d.]+\s*/, '').trim() : '';
             var reason = extractedReason.length > 10 ? extractedReason : null;
             rubric = {

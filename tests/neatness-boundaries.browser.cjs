@@ -14,7 +14,7 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
         });
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
         const inputs = [];
-        for (const malformed of ['18/10', '12/10', '7.8/10', '7,8/10', '-8/10', '+8/10', '8/100', '8/10.5', '8/10oops']) {
+        for (const malformed of ['18/10', '12/10', '7.8/10', '7,8/10', '-8/10', '+8/10', '8/100', '8/10.5', '8/10,5', '8/10oops']) {
             inputs.push({ name: 'labeled-' + malformed, text: '- Neatness: ' + malformed + ' - Synthetic observation.', score: null });
             inputs.push({ name: 'legacy-' + malformed, text: 'Neatness result: ' + malformed + '.', score: null });
         }
@@ -23,7 +23,10 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             inputs.push({ name: 'legacy-valid-' + score, text: 'Neatness result: ' + score + '/10.', score });
         }
         const labels = ['Letter Formation', 'Spacing', 'Staying on the Line', 'Size Consistency', 'Pen Control and Marks', 'Page Layout and Paragraphs'];
-        for (const denominator of ['50', '5.5', '5oops']) inputs.push({ name: 'subscore-denominator-' + denominator, text: labels.map(label => '- ' + label + ': 4/' + denominator).join('\n') + '\n- Neatness: Missing/10 - No valid score.', score: null });
+        for (const denominator of ['50', '5.5', '5,5', '5oops']) inputs.push({ name: 'subscore-denominator-' + denominator, text: labels.map(label => '- ' + label + ': 4/' + denominator).join('\n') + '\n- Neatness: Missing/10 - No valid score.', score: null });
+        inputs.push({ name: 'legacy-sentence-comma-space', text: 'Neatness result: 8/10, with clear spacing.', score: 8 });
+        inputs.push({ name: 'legacy-sentence-comma-text', text: 'Neatness result: 8/10,with clear spacing.', score: 8 });
+        inputs.push({ name: 'valid-subscore-comma-prose', text: labels.map(label => '- ' + label + ': 4/5, with clear marks.').join('\n') + '\n- Neatness: Missing/10 - Complete criteria.', score: 8 });
         inputs.push({ name: 'valid-subscore-sentence-punctuation', text: labels.map(label => '- ' + label + ': 4/5.').join('\n') + '\n- Neatness: Missing/10 - Complete criteria.', score: 8 });
         inputs.push({ name: 'complete-criteria-survive-malformed-overall', text: labels.map(label => '- ' + label + ': 4/5').join('\n') + '\n- Neatness: 18/10 - Complete criteria.', score: 8 });
         const observed = await page.evaluate(inputs => {
