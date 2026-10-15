@@ -2,8 +2,8 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path');
 const localAppRoute = require('./support/local-app-route');
 const root = path.resolve(__dirname, '..');
-const modes = ['non-json', 'payload-400', 'no-choices', 'non-string', 'http-401', 'http-429', 'network', 'timeout'];
-const scenarios = [...['text', 'image'].flatMap(kind => modes.map(mode => ({ kind, mode }))), ...['non-json', 'http-401', 'network', 'timeout'].map(mode => ({ kind: 'analysis', mode }))];
+const modes = ['non-json', 'payload-400', 'no-choices', 'non-string', 'http-401', 'http-429', 'network', 'timeout', 'empty', 'whitespace', 'plain-http-401'];
+const scenarios = [...['text', 'image'].flatMap(kind => modes.map(mode => ({ kind, mode }))), ...['non-json', 'http-401', 'network', 'timeout', 'empty', 'whitespace', 'plain-http-401'].map(mode => ({ kind: 'analysis', mode }))];
 
 async function runFailureScenario({ kind, mode }) {
     stopWftSyncPolling(); stopDriveAutoSync(); scheduleWftCloudSync = () => {};
@@ -32,16 +32,18 @@ async function runFailureScenario({ kind, mode }) {
             timers.values().next().value();
         }) };
         const bodies = { 'non-json': '{broken', 'payload-400': JSON.stringify({ error: { code: 400, message: 'Synthetic refusal' } }), 'no-choices': '{"choices":[]}', 'non-string': '{"choices":[{"message":{"content":12}}]}' };
+        if (mode === 'empty' || mode === 'whitespace') return new Response(JSON.stringify({ choices: [{ message: { content: mode === 'empty' ? '' : ' \n\t ' } }] }));
+        if (mode === 'plain-http-401') return new Response('Authentication refused by upstream', { status: 401 });
         const status = mode === 'http-401' ? 401 : mode === 'http-429' ? 429 : 200;
         return new Response(bodies[mode] || '{"error":{"message":"Synthetic service refusal"}}', { status });
     }
 
     function checkTerminalFailure(error) {
-        const nonretryable = ['payload-400', 'http-401'].includes(mode), expectedAttempts = nonretryable ? 1 : expectedModels.length * 2;
+        const nonretryable = ['payload-400', 'http-401', 'plain-http-401'].includes(mode), expectedAttempts = nonretryable ? 1 : expectedModels.length * 2;
         check('terminal failure consumes only configured attempt budget', models.length === expectedAttempts);
         check('model order remains bounded', JSON.stringify(models) === JSON.stringify(nonretryable ? [expectedModels[0]] : expectedModels.flatMap(model => [model, model])));
         check('nonretryable failure never backs off', nonretryable ? waits.length === 0 : waits.length === expectedAttempts - 1);
-        const expectedError = mode === 'non-json' ? /non-JSON/ : mode === 'no-choices' ? /no choices/ : mode === 'non-string' ? /response shape/ : mode === 'timeout' ? /timed out/ : mode === 'network' ? /Failed to fetch/ : /401|429|payload error/;
+        const expectedError = mode === 'non-json' ? /non-JSON/ : mode === 'no-choices' ? /no choices/ : mode === 'non-string' ? /response shape/ : mode === 'empty' || mode === 'whitespace' ? /empty content/ : mode === 'timeout' ? /timed out/ : mode === 'network' ? /Failed to fetch/ : /401|429|payload error/;
         check('terminal error remains useful', expectedError.test(kind === 'analysis' ? el('debugRaw').textContent : error));
     }
 
@@ -96,6 +98,6 @@ async function runScenario(browser, scenario) {
     } finally { await browser.close(); }
     const failures = cases.filter(c => !c.passed);
     if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify({ root, cases, failures, boundary: 'Synthetic provider fetch/body/timers; shipped native wrappers and Analyze caller; no live AI.' }, null, 2));
-    assert.equal(cases.length, 20); assert.deepEqual(failures, [], 'Native provider failure outcomes');
+    assert.equal(cases.length, 29); assert.deepEqual(failures, [], 'Native provider failure outcomes');
     console.log('Native provider failure outcomes: ' + cases.length + ' passed.');
 })().catch(e => { console.error(e); process.exitCode = 1; });

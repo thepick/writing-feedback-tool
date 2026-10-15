@@ -2794,19 +2794,19 @@ function normalizeOpenRouterError(prefix, err, attempts) {
 }
 
 function parseOpenRouterResponse(res, rawText) {
-    var data;
-    try {
-        data = JSON.parse(rawText);
-    } catch (e) {
-        throw new Error("OpenRouter returned non-JSON: " + rawText);
-    }
-
     if (!res.ok) {
         var statusMessage = summarizeOpenRouterFailure(res.status, rawText);
         var err = new Error("OpenRouter error " + res.status + ": " + statusMessage + " Raw: " + rawText);
         err.status = res.status;
         err.rawText = rawText;
         throw err;
+    }
+
+    var data;
+    try {
+        data = JSON.parse(rawText);
+    } catch (e) {
+        throw new Error("OpenRouter returned non-JSON: " + rawText);
     }
 
     if (data.error) {
@@ -2822,6 +2822,9 @@ function parseOpenRouterResponse(res, rawText) {
 
     if (!data.choices[0].message || typeof data.choices[0].message.content !== "string") {
         throw new Error("Unexpected OpenRouter response shape: " + rawText);
+    }
+    if (!data.choices[0].message.content.trim()) {
+        throw new Error("OpenRouter returned empty content: " + rawText);
     }
 
     return data.choices[0].message.content;
