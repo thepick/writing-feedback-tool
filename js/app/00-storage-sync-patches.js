@@ -3379,6 +3379,16 @@ var WFT_OAUTH_TEXTAREA_DRAFT_KEY = "wft_oauth_textarea_draft_v1";
 
 function saveWftOAuthDraftBeforeRedirect(reason) {
     try {
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        // A redirect destroys this tab; the text draft does not contain pending work or selected photos.
+        if (getPendingPortfolioSync() && !persistPendingPortfolioSync()) {
+            setDriveSyncStatus('error', 'Writing or photos cannot be fully recovered after redirect sign-in. Keep this tab open and retry Sign In when the Google popup is available, or download Emergency Backup.');
+            return false;
+        }
+        if (selectedImages.some(function(image) { return image && !image.driveFileId && (image.dataUrl || image.originalDataUrl); })) {
+            setDriveSyncStatus('error', 'Google redirect sign-in cannot restore selected photos. Keep this tab open and retry Sign In when the Google popup is available.');
+            return false;
+        }
         var ta = document.getElementById("studentWriting");
         var text = ta ? String(ta.value || "") : "";
         var genreSelect = document.getElementById("writingGenreSelect");
@@ -3401,7 +3411,7 @@ function saveWftOAuthDraftBeforeRedirect(reason) {
         localStorage.setItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY, JSON.stringify(draft));
         return true;
     } catch (e) {
-        setDriveSyncStatus('error', 'Unsaved writing could not be preserved for Google sign-in. Your writing is still here; retry or copy it before leaving.');
+        setDriveSyncStatus('error', 'Unsaved writing or photos could not be preserved for Google sign-in. Keep this tab open; retry or copy your work before leaving.');
         return false;
     }
 

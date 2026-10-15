@@ -196,6 +196,64 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
             });
         }
         await checkSignInModes();
+        async function checkRedirectRecovery() {
+            const modes = ['quota', 'memory', 'retry', 'full', 'drive-backed', 'selected-photo', 'selected-original', 'rollback-recovery', 'popup-throws', 'popup-success', 'popup-cancel', 'popup-error'];
+            for (const mode of modes) await run('redirect preserves current work ' + mode, async () => {
+                const p = await pageFor(); let navigations = 0;
+                await p.route('https://accounts.google.com/**', route => { navigations++; return route.abort(); });
+                await p.evaluate(mode => {
+                    localStorage.clear(); sessionStorage.clear();
+                    document.getElementById('studentWriting').value = 'Current synthetic recovery writing';
+                    selectedStudent = 'Alice';
+                    window.__photo = 'data:image/png;base64,AAAA'; window.__callbacks = 0;
+                    pendingPortfolioSync = { studentName: 'Alice', signature: 'recovery', sessionData: { id: 'recovery', originalText: 'Current synthetic recovery writing', images: [{ dataUrl: __photo, originalDataUrl: __photo, pendingDriveUpload: true }] } };
+                    if (mode === 'drive-backed') { pendingPortfolioSync.sessionData.images[0].driveFileId = 'durable-photo'; pendingPortfolioSync.sessionData.images[0].pendingDriveUpload = false; }
+                    if (mode.startsWith('selected-') || mode === 'rollback-recovery') pendingPortfolioSync = null;
+                    selectedImages = mode.startsWith('selected-') ? [{ [mode === 'selected-original' ? 'originalDataUrl' : 'dataUrl']: __photo }] : [];
+                    window.__pendingBefore = pendingPortfolioSync; window.__selectedBefore = selectedImages;
+                    const set = Storage.prototype.setItem; window.__restoreStorage = () => { Storage.prototype.setItem = set; };
+                    window.__blockPending = !['full', 'retry'].includes(mode);
+                    Storage.prototype.setItem = function(key, value) {
+                        if (key === PENDING_PORTFOLIO_SYNC_KEY && __blockPending && (mode === 'memory' || String(value).includes(__photo))) throw new DOMException('Synthetic quota', 'QuotaExceededError');
+                        return set.call(this, key, value);
+                    };
+                    if (mode === 'retry') { __blockPending = true; persistPendingPortfolioSync(); __blockPending = false; }
+                    else if (pendingPortfolioSync) { try { persistPendingPortfolioSync(); } catch (e) {} }
+                    wftStudentChangeRecovery = mode === 'rollback-recovery' ? { wft_portfolio: 'Synthetic before-image' } : null;
+                    GoogleDriveMigration.ensure = async () => ({ user: { name: 'Synthetic user' } });
+                    window.google = mode.startsWith('popup-') ? { accounts: { oauth2: { initTokenClient: config => ({ requestAccessToken() {
+                        if (mode === 'popup-throws') throw new Error('Synthetic unavailable popup');
+                        if (mode === 'popup-cancel') config.callback({ error: 'access_denied' });
+                        else if (mode === 'popup-error') config.error_callback({ type: 'popup_closed' });
+                        else config.callback({ access_token: 'synthetic-popup', expires_in: 3600 });
+                    } }) } } } : undefined;
+                }, mode);
+                // Exercise the sync and Sign In entry points, including callback sign-in via the popup.
+                await p.evaluate(mode => {
+                    if (mode.startsWith('selected-') || mode === 'rollback-recovery') handleGoogleSignIn();
+                    else if (['quota', 'memory', 'retry', 'full', 'drive-backed', 'popup-throws'].includes(mode)) manualSaveToDrive();
+                    else requestDriveAccess(() => __callbacks++);
+                }, mode);
+                await p.waitForTimeout(100);
+                const allowedRedirect = ['full', 'retry', 'drive-backed'].includes(mode);
+                assert.equal(navigations, allowedRedirect ? 1 : 0, 'Unsafe redirect must not leave the tab');
+                if (!allowedRedirect) {
+                    lastObserved = await p.evaluate(() => ({
+                        samePending: pendingPortfolioSync === __pendingBefore, sameSelected: selectedImages === __selectedBefore,
+                        photoRetained: pendingPortfolioSync ? pendingPortfolioSync.sessionData.images[0].dataUrl === __photo : !selectedImages.length || (selectedImages[0].dataUrl || selectedImages[0].originalDataUrl) === __photo,
+                        text: document.getElementById('studentWriting').value, student: selectedStudent,
+                        draft: localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY), callbacks: __callbacks,
+                        status: document.getElementById('driveSyncTextHeader').textContent
+                    }));
+                    assert.equal(lastObserved.samePending, true); assert.equal(lastObserved.sameSelected, true); assert.equal(lastObserved.photoRetained, true);
+                    assert.equal(lastObserved.text, 'Current synthetic recovery writing'); assert.equal(lastObserved.student, 'Alice');
+                    assert.equal(lastObserved.draft, null); assert.equal(lastObserved.callbacks, mode === 'popup-success' ? 1 : 0);
+                    if (!['popup-success', 'popup-cancel', 'popup-error'].includes(mode)) assert.match(lastObserved.status, /tab|popup|recover/i);
+                }
+                await p.close();
+            });
+        }
+        await checkRedirectRecovery();
         async function checkTokenStorage() {
             const tokenPage = await pageFor();
             async function tokenScenarioCases() {
