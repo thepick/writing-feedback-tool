@@ -161,6 +161,64 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
             });
         }
         await checkStartup();
+        async function checkFragmentCleanupFailures() {
+            for (const mode of ['token', 'error', 'notice-unavailable', 'status-unavailable']) await run('OAuth fragment cleanup failure ' + mode, async () => {
+                const p = await pageFor(), notices = [];
+                p.on('dialog', async dialog => { notices.push(dialog.message()); await dialog.dismiss(); });
+                await p.evaluate(mode => {
+                    GoogleDriveMigration.ensure = async () => ({ user: { name: 'Synthetic cleanup' } });
+                    window.__cleanupCallbacks = 0; manualSaveToDrive = () => __cleanupCallbacks++;
+                    document.getElementById('studentWriting').value = 'Tab-only cleanup writing';
+                    selectedStudent = 'Alice';
+                    pendingPortfolioSync = { studentName: 'Alice', sessionData: { id: 'cleanup', originalText: 'Tab-only cleanup writing', images: [{ dataUrl: 'data:image/png;base64,AAAA', pendingDriveUpload: true }] } };
+                    window.__cleanupPending = pendingPortfolioSync;
+                    window.__cleanupPendingBytes = JSON.stringify(pendingPortfolioSync);
+                    window.__cleanupDocument = document;
+                    localStorage.setItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY, 'Synthetic recovery bytes');
+                    window.__cleanupDraft = localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
+                    window.__cleanupDiagnostics = [];
+                    wftDebugWarn = wftDebugError = (...args) => __cleanupDiagnostics.push(args.map(String).join(' '));
+                    const fragment = mode === 'error' ? '#error=access_denied&error_description=Synthetic+denial' : '#access_token=synthetic-cleanup-secret&expires_in=3600';
+                    history.replaceState(null, '', location.pathname + '?cleanup=1' + fragment);
+                    window.__cleanupHash = location.hash;
+                    history.replaceState = () => { throw Error('Synthetic history failure ' + location.href); };
+                    if (mode === 'notice-unavailable') window.alert = () => { throw Error('Synthetic notice failure ' + location.href); };
+                    if (mode === 'status-unavailable') setOcrStatus = () => { throw Error('Synthetic status failure ' + location.href); };
+                    window.__cleanupHandled = checkHashForOAuthTokens();
+                }, mode);
+                await p.waitForTimeout(80);
+                lastObserved = await p.evaluate(() => ({
+                    handled: __cleanupHandled, connected: wftSyncState.signedIn && isWftTokenValid(), callbacks: __cleanupCallbacks,
+                    sameDocument: document === __cleanupDocument, hashRetained: location.hash === __cleanupHash,
+                    writingPreserved: document.getElementById('studentWriting').value === 'Tab-only cleanup writing',
+                    pendingPreserved: pendingPortfolioSync === __cleanupPending && JSON.stringify(pendingPortfolioSync) === __cleanupPendingBytes,
+                    draftPreserved: localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY) === __cleanupDraft,
+                    notice: document.getElementById('ocrStatus').textContent,
+                    diagnosticLeakedUrl: __cleanupDiagnostics.some(text => text.includes('synthetic-cleanup-secret') || text.includes('http://127.0.0.1')),
+                    queryPreserved: location.search === '?cleanup=1', providerError: document.getElementById('driveSyncTextHeader').textContent.includes('Synthetic denial')
+                }));
+                assert.equal(lastObserved.handled, mode !== 'error'); assert.equal(lastObserved.connected, mode !== 'error');
+                assert.equal(lastObserved.callbacks, mode === 'error' ? 0 : 1);
+                for (const key of ['sameDocument', 'hashRetained', 'writingPreserved', 'pendingPreserved', 'draftPreserved', 'queryPreserved']) assert.equal(lastObserved[key], true, key);
+                const notice = mode === 'status-unavailable' ? notices[0] : lastObserved.notice;
+                assert.match(notice, /could not.*address/i); assert.match(notice, /save.*writing.*close.*reopen/i);
+                assert.equal(notices.length, mode === 'notice-unavailable' ? 0 : 1);
+                assert.equal(lastObserved.diagnosticLeakedUrl, false);
+                if (mode === 'error') assert.equal(lastObserved.providerError, true);
+                await p.close();
+            });
+            await run('ordinary URL fragment is not OAuth cleanup work', async () => {
+                const p = await pageFor();
+                lastObserved = await p.evaluate(() => {
+                    history.replaceState(null, '', location.pathname + '?ordinary=1#writing');
+                    let calls = 0; history.replaceState = () => calls++;
+                    return { handled: checkHashForOAuthTokens(), calls, unchanged: location.search === '?ordinary=1' && location.hash === '#writing' };
+                });
+                assert.equal(lastObserved.handled, false); assert.equal(lastObserved.calls, 0); assert.equal(lastObserved.unchanged, true);
+                await p.close();
+            });
+        }
+        await checkFragmentCleanupFailures();
         async function checkSignInModes() {
             for (const mode of ['write-fails', 'popup-throws-write-fails', 'redirect', 'popup-success', 'popup-cancel', 'popup-error']) await run('actual sign-in UI ' + mode, async () => {
                 const p = await pageFor(); let navigations = 0;

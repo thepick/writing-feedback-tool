@@ -1,0 +1,507 @@
+{
+  "schema_version": 1,
+  "repair": "repair-011",
+  "title": "Read-only preference form and pending replacement review",
+  "created_at_utc": "2026-10-15T20:36:11.511053+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "summary": {
+    "findings_reviewed": 5,
+    "critical_metrics_verified": 2,
+    "reviewed_no_change": 5,
+    "additional_unreproduced_leads": 1,
+    "source_edits": 0,
+    "tests_run": 0,
+    "scanner_clearances_claimed": 0,
+    "needs_user_attention": 0
+  },
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "sha256_raw": "d10d9f9e308951e40ea77659738399e01637924b0776194790704c7120fd89e1",
+      "sha256_normalized_lf": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7"
+    }
+  },
+  "all89_frozen_source_hashes_match": true,
+  "source_pin_receipt": "work/repowise-coordinator/batch-002-source-pins.json",
+  "metric_method": "Installed read-only tree-sitter complexity walker and complex-conditional detector definition; all5 source span fingerprints and stored metrics matched. No application evaluation, tests or index writes.",
+  "metric_evidence": "work/repowise-repair-011/source-evidence.json",
+  "function_flow": [
+    {
+      "function": "applyWftPreferenceForm",
+      "callers": [
+        "saveSettingsToLocalStorage rollback at580",
+        "loadSettingsFromLocalStorage startup at608",
+        "applyLoadedSettings post-commit publication at6318"
+      ],
+      "invariants": "Missing optional controls remain guarded; explicit false checkbox values accepted; legacy class/student grade override and parse fallback order retained; grade/range/description/toggle/meter publication order unchanged. This function itself performs no persistence."
+    },
+    {
+      "function": "commitPendingPortfolioReplacement",
+      "callers": [
+        "commitPendingPortfolioSync at8356; direct calls in existing unit/native retention/index tests"
+      ],
+      "invariants": "Synchronous helper never clears pending itself. Production caller checks expected pending identity and required storage, retains photos/pending on failure, snapshots portfolio/markers for rollback, then checks the same pending reference before clear. Missing original returns before mutation. Same-student position and cross-student retention/tombstone semantics differ deliberately."
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_ab36eacc023d669202f4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "applyWftPreferenceForm",
+      "marker": "complex_method",
+      "line": 6255,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_guarded_form_or_transaction_retained",
+      "reason": "CCN26 is accurate across36 nonblank lines with maximum nesting2. This is one preference-form application, not a deeply nested algorithm. Each optional control has its own presence guard and field-specific acceptance rule: model/target/grammar use truthiness, checkboxes preserve explicit false through null checks, grade controls parse and fall back to class/default5, and the legacy override is inferred only when its explicit flag is missing. Grade/range/description/meter publication order also matters to rollback and startup. Existing grade and UI helpers are already reused. A generic field/property setter or options map would relocate these different rules into new machinery; caching every DOM lookup would add local plumbing without removing the rules. No small structural change with a net clarity benefit was identified. Retain the accurate metric, separately from the null checkbox/disabled-state lead below.",
+      "verified_metrics": {
+        "start_line": 6255,
+        "end_line": 6290,
+        "ccn": 26,
+        "cognitive": 27,
+        "nloc": 36,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "dispatch_share": 0.0
+      },
+      "verified_conditional": null,
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6255,
+          "end_line": 6290,
+          "role": "Complete guarded form application and publication order"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 552,
+          "end_line": 608,
+          "role": "Three local save-rollback/startup call paths"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6292,
+          "end_line": 6318,
+          "role": "Cloud settings validate and persist before publishing the form"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "start_line": 58,
+          "end_line": 84,
+          "role": "Required-save failure restores prior form, disabled policy, grammar label, grade range and native handler behavior"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "start_line": 132,
+          "end_line": 153,
+          "role": "Successful custom/default grades and explicit false word-target policy"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "start_line": 176,
+          "end_line": 218,
+          "role": "Multi-key failures keep form unpublished; successful loaded settings preserve metadata and grade/checkbox policy"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "start_line": 23,
+          "end_line": 39,
+          "role": "Complete native startup continues loading preferences after an independent credential-storage failure"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_4f159d3281c1bca6dd40",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "commitPendingPortfolioReplacement",
+      "marker": "complex_method",
+      "line": 8307,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_guarded_form_or_transaction_retained",
+      "reason": "CCN26 is accurate across31 nonblank lines with maximum nesting2. The helper performs one synchronous replace-or-move transaction: resolve current/legacy source identity, find the exact original before mutation, preserve same-student position, reserve a retained destination slot for a move, record a source tombstone only when identity/student changes, and save portfolio plus markers atomically through the existing saveWftStudentChange helper. Existing findPortfolioSessionIndex, retainWftStudentSessions and transaction helpers already isolate reusable work. Extracting the source aliases or deletion predicate into one-use wrappers would only move defaults and guards. Combining same-student replacement with the move branch would alter retention/position or tombstone rules. Retain this compact operation and its guards; no useful structural simplification was found.",
+      "verified_metrics": {
+        "start_line": 8307,
+        "end_line": 8340,
+        "ccn": 26,
+        "cognitive": 28,
+        "nloc": 31,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "dispatch_share": 0.0
+      },
+      "verified_conditional": null,
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8307,
+          "end_line": 8340,
+          "role": "Complete synchronous replacement/move operation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8343,
+          "end_line": 8380,
+          "role": "Sole production caller preflights storage, checks expected pending identity, snapshots and rolls back before clearing"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4778,
+          "role": "Existing strict multi-key save/rollback and post-commit publication"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7402,
+          "end_line": 7415,
+          "role": "Stable IDs precede legacy timestamps and ID-less positions"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 45,
+          "end_line": 102,
+          "role": "Missing originals preserve pending work; exact/legacy IDs, same-student replacement and cross-student tombstones"
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 104,
+          "end_line": 123,
+          "role": "Retention cap, required-save failure, post-save renderer failure and null input"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 107,
+          "end_line": 116,
+          "role": "Same-student replacement preserves all positions and avoids a tombstone for the same ID"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 120,
+          "end_line": 153,
+          "role": "Required portfolio/deletion/pending-clear/corruption/normalization/rollback failures preserve bytes and allow one successful retry"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_ce0ef519180cad77d766",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "commitPendingPortfolioReplacement",
+      "marker": "complex_conditional",
+      "line": 8308,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_guarded_form_or_transaction_retained",
+      "reason": "The line8308 envelope guard has three OR operators across four required values. It returns false before dereferencing the source or reading/mutating a portfolio when pending work, target student, session data or replacement source is absent. This is a flat, directly readable required-input checklist. Separate guard statements or a one-use predicate would expand or relocate it without simplifying the contract; removing a term would change invalid-input handling.",
+      "verified_metrics": {
+        "start_line": 8307,
+        "end_line": 8340,
+        "ccn": 26,
+        "cognitive": 28,
+        "nloc": 31,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "dispatch_share": 0.0
+      },
+      "verified_conditional": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 8307
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8307,
+          "end_line": 8340,
+          "role": "Complete synchronous replacement/move operation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8343,
+          "end_line": 8380,
+          "role": "Sole production caller preflights storage, checks expected pending identity, snapshots and rolls back before clearing"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4778,
+          "role": "Existing strict multi-key save/rollback and post-commit publication"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7402,
+          "end_line": 7415,
+          "role": "Stable IDs precede legacy timestamps and ID-less positions"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 45,
+          "end_line": 102,
+          "role": "Missing originals preserve pending work; exact/legacy IDs, same-student replacement and cross-student tombstones"
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 104,
+          "end_line": 123,
+          "role": "Retention cap, required-save failure, post-save renderer failure and null input"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 107,
+          "end_line": 116,
+          "role": "Same-student replacement preserves all positions and avoids a tombstone for the same ID"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 120,
+          "end_line": 153,
+          "role": "Required portfolio/deletion/pending-clear/corruption/normalization/rollback failures preserve bytes and allow one successful retry"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_f761b8085338ef63b4df",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "commitPendingPortfolioReplacement",
+      "marker": "complex_conditional",
+      "line": 8314,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_guarded_form_or_transaction_retained",
+      "reason": "The line8314 resolved-reference guard has three OR operators. It checks the captured source student/session aliases and target student/session before portfolio access. The target/session checks overlap the envelope guard for ordinary stable objects; shaving that overlap would reduce the counter but leave the actual alias-validation operation unchanged and alter defensive/property-access behavior for unusual inputs. Keeping the four resolved references together is clear at this short transaction boundary. No helper, loop or split justified by readability was found under the exact-behavior scope.",
+      "verified_metrics": {
+        "start_line": 8307,
+        "end_line": 8340,
+        "ccn": 26,
+        "cognitive": 28,
+        "nloc": 31,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "dispatch_share": 0.0
+      },
+      "verified_conditional": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 8307
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8307,
+          "end_line": 8340,
+          "role": "Complete synchronous replacement/move operation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8343,
+          "end_line": 8380,
+          "role": "Sole production caller preflights storage, checks expected pending identity, snapshots and rolls back before clearing"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4778,
+          "role": "Existing strict multi-key save/rollback and post-commit publication"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7402,
+          "end_line": 7415,
+          "role": "Stable IDs precede legacy timestamps and ID-less positions"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 45,
+          "end_line": 102,
+          "role": "Missing originals preserve pending work; exact/legacy IDs, same-student replacement and cross-student tombstones"
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 104,
+          "end_line": 123,
+          "role": "Retention cap, required-save failure, post-save renderer failure and null input"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 107,
+          "end_line": 116,
+          "role": "Same-student replacement preserves all positions and avoids a tombstone for the same ID"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 120,
+          "end_line": 153,
+          "role": "Required portfolio/deletion/pending-clear/corruption/normalization/rollback failures preserve bytes and allow one successful retry"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_f61621b5ff2044276dae",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "commitPendingPortfolioReplacement",
+      "marker": "complex_conditional",
+      "line": 8333,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_guarded_form_or_transaction_retained",
+      "reason": "The line8333 identity condition accurately counts three OR operators, including the new-session ID/timestamp fallbacks. A cross-student move must tombstone the source even when the session ID is unchanged; an in-place replacement needs a marker only when normalized old/new IDs differ. Existing legacy createdAt fallbacks and String comparison are intentional. The two-line marker operation is already delegated to recordSessionDeletion. A named one-use predicate would hide this decisive move-versus-in-place rule without reducing its logic; dropping the cross-student or fallback portion would break existing assertions.",
+      "verified_metrics": {
+        "start_line": 8307,
+        "end_line": 8340,
+        "ccn": 26,
+        "cognitive": 28,
+        "nloc": 31,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "dispatch_share": 0.0
+      },
+      "verified_conditional": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 8307
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8307,
+          "end_line": 8340,
+          "role": "Complete synchronous replacement/move operation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8343,
+          "end_line": 8380,
+          "role": "Sole production caller preflights storage, checks expected pending identity, snapshots and rolls back before clearing"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4778,
+          "role": "Existing strict multi-key save/rollback and post-commit publication"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7402,
+          "end_line": 7415,
+          "role": "Stable IDs precede legacy timestamps and ID-less positions"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 45,
+          "end_line": 102,
+          "role": "Missing originals preserve pending work; exact/legacy IDs, same-student replacement and cross-student tombstones"
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 104,
+          "end_line": 123,
+          "role": "Retention cap, required-save failure, post-save renderer failure and null input"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 107,
+          "end_line": 116,
+          "role": "Same-student replacement preserves all positions and avoids a tombstone for the same ID"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "start_line": 120,
+          "end_line": 153,
+          "role": "Required portfolio/deletion/pending-clear/corruption/normalization/rollback failures preserve bytes and allow one successful retry"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "preference-null-word-target-toggle",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "nullable_preference_can_desynchronize_checkbox_and_disabled_field",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "applyWftPreferenceForm",
+      "relation_to_assigned_findings": "Separate behavior lead inside the reviewed form function; it does not invalidate the complexity metric and is not a scanner clearance.",
+      "reason": "The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6256,
+          "end_line": 6260,
+          "role": "Null can override default while skipping checkbox assignment"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6285,
+          "end_line": 6286,
+          "role": "Numeric disabled state uses the nullable settings field"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5226,
+          "end_line": 5262,
+          "role": "Own settings fields are merged without null-field filtering"
+        },
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 160,
+          "end_line": 179,
+          "role": "Settings validation checks root/roster shape, not the toggle type"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 4927,
+          "end_line": 4930,
+          "role": "Effective target policy reads the actual checkbox"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8319,
+          "end_line": 8325,
+          "role": "Normal listener keeps disabled state consistent with actual checkbox"
+        }
+      ],
+      "regression_recommendation": "After the gate, extend the existing local native preference-integrity scenarios. Start with the actual checkbox checked and an editable target, apply loaded settings containing useWordCountTarget:null, and assert the checkbox/effective target policy and numeric disabled state remain consistent; include an initially unchecked case, explicit true/false and missing field controls, plus failed-save rollback/unknown metadata preservation. Confirm intended null-as-unset behavior before choosing the minimal local fix; do not change broad storage validation or bypass required saves.",
+      "reproduced": false,
+      "fix_applied": false,
+      "needs_user_attention": false
+    }
+  ],
+  "tests": {
+    "run_by_this_review": [],
+    "assertions_read": true,
+    "publication_gate": "Running elsewhere; no completion or pass claim is made by this report."
+  },
+  "limits": [
+    "Read-only source/metric/caller review; no app/test execution or before/after behavior comparison.",
+    "No new behavioral lead has a failing native regression yet. Existing test references are evidence of intended boundaries, not a new test result.",
+    "The five scanner warnings remain open; no source change or clearance is claimed.",
+    "No live provider/Drive/model calls, credential inspection, Git mutation, tracker/docs edits or RepoWise writes."
+  ]
+}

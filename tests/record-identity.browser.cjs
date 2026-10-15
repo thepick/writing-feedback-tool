@@ -66,6 +66,70 @@ async function runStudentIdentityCases(run) {
                 return { index, split, record: getDeletionsData().records[0] };
             }, r => { assert.ok(Object.hasOwn(r.index.students, name)); assert.ok(Object.hasOwn(r.split.students, name)); assert.equal(r.record.studentId, ''); }, name);
         }
+        for (const failure of ['initial', 'lookup']) {
+            await run('student-record-initialization-read-failure-' + failure, failure => {
+                WFT_STUDENT_ID_MAP_V1 = true;
+                const originalSettings = {
+                    students: ['AliceOld', 'New'],
+                    studentIdMap: { Alice: 'stu_alice', AliceOld: 'stu_alice', Bob: 'stu_bob' },
+                    studentRecords: [
+                        { studentId: 'stu_alice', displayName: 'Alice', legacyNameKeys: ['Alice', 'AliceOld'], createdAt: '2026-10-01' },
+                        { studentId: 'stu_bob', displayName: 'Bob', legacyNameKeys: ['Bob'], createdAt: '2026-10-02' }
+                    ]
+                };
+                localStorage.setItem('wft_settings', JSON.stringify(originalSettings));
+                localStorage.setItem('wft_students', JSON.stringify(originalSettings.students));
+                localStorage.setItem('wft_portfolio', JSON.stringify({ AliceOld: { sessions: [{ id: 'essay', originalText: 'Preserved writing.', images: [] }] } }));
+                const before = localStorage.getItem('wft_settings'), writing = localStorage.getItem('wft_portfolio');
+                const get = Storage.prototype.getItem, lookup = getStudentRecordByName;
+                let insideLookup = false, failedReads = 0, lookupReads = 0;
+                getStudentRecordByName = function() {
+                    insideLookup = true;
+                    try { return lookup.apply(this, arguments); } finally { insideLookup = false; }
+                };
+                Storage.prototype.getItem = function(key) {
+                    if (key === 'wft_settings') {
+                        if (insideLookup) lookupReads++;
+                        if (!failedReads && (failure === 'initial' || insideLookup)) {
+                            failedReads++;
+                            throw Error('Synthetic settings read failure');
+                        }
+                    }
+                    return get.call(this, key);
+                };
+                try { ensureStudentRecordsForRoster(); }
+                finally { Storage.prototype.getItem = get; getStudentRecordByName = lookup; }
+                const firstRaw = localStorage.getItem('wft_settings'), first = JSON.parse(firstRaw);
+                ensureStudentRecordsForRoster(); const retry = getRawSettings();
+                ensureStudentRecordsForRoster(); const repeated = getRawSettings();
+                return { failure, originalSettings, before, firstRaw, first, retry, repeated, failedReads, lookupReads,
+                    writingUnchanged: localStorage.getItem('wft_portfolio') === writing };
+            }, r => {
+                if (r.failure === 'initial') { assert.equal(r.failedReads, 1); assert.equal(r.firstRaw, r.before); }
+                else { assert.equal(r.first.studentRecords.length, 3); assert.equal(r.lookupReads, 0); }
+                assert.deepEqual(r.retry.studentRecords.slice(0, 2), r.originalSettings.studentRecords);
+                for (const name of ['Alice', 'AliceOld', 'Bob']) assert.equal(r.retry.studentIdMap[name], r.originalSettings.studentIdMap[name]);
+                assert.equal(r.retry.studentRecords.length, 3);
+                assert.equal(r.retry.studentRecords.filter(record => record.displayName === 'New').length, 1);
+                assert.equal(r.retry.studentRecords[2].studentId, r.retry.studentIdMap.New);
+                assert.deepEqual(r.repeated.studentRecords, r.retry.studentRecords);
+                assert.deepEqual(r.repeated.studentIdMap, r.retry.studentIdMap);
+                assert.equal(r.writingUnchanged, true);
+            }, failure);
+        }
+        await run('student-record-read-only-lookup-keeps-first-match-and-soft-failure', () => {
+            localStorage.setItem('wft_settings', JSON.stringify({ studentRecords: [
+                { studentId: 'first', displayName: 'Current', legacyNameKeys: ['Alias'] },
+                { studentId: 'later', displayName: 'Alias', legacyNameKeys: [] }
+            ] }));
+            const before = localStorage.getItem('wft_settings'), first = getStudentRecordByName('Alias');
+            const get = Storage.prototype.getItem;
+            let absent;
+            Storage.prototype.getItem = function(key) { if (key === 'wft_settings') throw Error('Synthetic lookup read failure'); return get.call(this, key); };
+            try { absent = getStudentRecordByName('Alias'); }
+            finally { Storage.prototype.getItem = get; }
+            return { first, absent, unchanged: localStorage.getItem('wft_settings') === before };
+        }, r => { assert.equal(r.first.studentId, 'first'); assert.equal(r.absent, null); assert.equal(r.unchanged, true); });
 }
 
 (async () => {

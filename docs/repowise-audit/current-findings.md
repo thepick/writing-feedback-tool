@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T02:12:01.351197+07:00.
+Updated 2026-10-16T03:45:15.585737+07:00.
 
-Source: 4c39f162f816eb191e92f9a61ee0ec935b2f991e. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 0ef4475a8c240d11d1fc888f6197c2f61bde980f. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,19 +10,21 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 906 |
+| code_health | 908 |
 | security | 29 |
-| dead_code | 16 |
+| dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"candidate_needs_regression": 2, "reviewed_no_change": 145, "unreviewed": 834}.
+Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 192, "unreviewed": 788}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 2, "fixed_verified": 11, "reviewed_no_change": 146, "unreviewed": 834}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 18, "reviewed_no_change": 193, "unreviewed": 788}.
 
-Verified source fixes: 11. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+Findings confirmed cleared: 18. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Supporting refactoring plans: 104; grouped refactoring opportunities: 23.
+Behavior repairs with regression evidence: 2.
+
+Supporting refactoring plans: 107; grouped refactoring opportunities: 23.
 
 These plans and opportunities can overlap findings; their counts are not added as distinct bugs.
 
@@ -33,9 +35,28 @@ These plans and opportunities can overlap findings; their counts are not added a
 - history-context-review: Interpret git-only risk signals â€” reviewed_complete.
 - repair-004: Historical security signals â€” reviewed_complete.
 - repair-005: Remove verified unused helpers â€” reviewed_complete.
-- repair-001: Verify security signals â€” reviewed_complete.
 - repair-006: Storage failure safeguards â€” reviewed_complete.
 - history-context-review-4c39f16: Revalidate history after cleanup â€” reviewed_complete.
+- history-context-review-1402503: Revalidate history on published main â€” reviewed_complete.
+- repair-007: Preserve student identity metadata on read failure â€” reviewed_complete.
+- history-context-review-abfcec3: Revalidate history after identity repair â€” reviewed_complete.
+- repair-008: Handle failed OAuth URL cleanup â€” fixed_verified.
+- repair-008b: Flatten OAuth cleanup notice sequence â€” fixed_verified.
+- repair-005b: Remove two orphaned token predicates â€” fixed_verified.
+- repair-001: Verify security signals â€” reviewed_complete.
+- repair-009: Review remaining failure guards â€” reviewed_complete.
+- repair-010: Review notebook guide validation and assembly â€” reviewed_complete.
+- repair-011: Review preference and portfolio commit safeguards â€” reviewed_complete.
+- repair-012: Review feedback goal and action checklist policy â€” reviewed_complete.
+
+## Additional source leads
+
+These are review leads, separate from scanner observations. They require their own verification.
+
+- rename-transient-settings-read: renameStudent in js/app/10-main-app.js — candidate_needs_regression. renameStudent obtains settings from getRawSettings, which returns {} after any read/parse failure, then passes that truthy empty object to saveWftStudentChange. A transient failure limited to that read can end before the transaction preflight and subsequent strict reads. The transaction prefers supplied change.settings and carries only apiKey from the later storedSettings snapshot, so a successful rename could replace other saved preferences/unknown fields/student metadata with the sparse staged object. With the shipped ID-map flag false, metadata can simply be omitted; enabling the flag can instead create replacement metadata. Persistent/corrupt reads are already stopped by later strict checks; the uncovered lead is a one-time failure followed by readable storage.
+- notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — candidate_needs_regression. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
+- preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — candidate_needs_regression. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
+- checklist-second-person-contraction: buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist in js/app/10-main-app.js — candidate_needs_regression. toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.
 
 ## Complete inventory
 
@@ -45,17 +66,17 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | --- | --- | --- | --- | --- | --- |
 | code_health:finding_8900a9c008833aefb538 | critical | code_health | js/app/00-storage-sync-patches.js | change_entropy | reviewed_no_change |
 | code_health:finding_bdb66e3d75f9a2c6eef0 | critical | code_health | js/app/00-storage-sync-patches.js | prior_defect | reviewed_no_change |
-| code_health:finding_4ff0c4251265ee529750 | critical | code_health | js/app/00-storage-sync-patches.js:3456 | restoreWftOAuthDraftAfterRedirect / complex_method | reviewed_no_change |
-| code_health:finding_ab36eacc023d669202f4 | critical | code_health | js/app/00-storage-sync-patches.js:6235 | applyWftPreferenceForm / complex_method | unreviewed |
-| code_health:finding_e877852414106a9c7183 | critical | code_health | js/app/00-storage-sync-patches.js:7672 | saveCurrentSessionToPortfolio / complex_method | reviewed_no_change |
-| code_health:finding_4f159d3281c1bca6dd40 | critical | code_health | js/app/00-storage-sync-patches.js:8287 | commitPendingPortfolioReplacement / complex_method | unreviewed |
+| code_health:finding_4ff0c4251265ee529750 | critical | code_health | js/app/00-storage-sync-patches.js:3476 | restoreWftOAuthDraftAfterRedirect / complex_method | reviewed_no_change |
+| code_health:finding_ab36eacc023d669202f4 | critical | code_health | js/app/00-storage-sync-patches.js:6255 | applyWftPreferenceForm / complex_method | reviewed_no_change |
+| code_health:finding_e877852414106a9c7183 | critical | code_health | js/app/00-storage-sync-patches.js:7692 | saveCurrentSessionToPortfolio / complex_method | reviewed_no_change |
+| code_health:finding_4f159d3281c1bca6dd40 | critical | code_health | js/app/00-storage-sync-patches.js:8307 | commitPendingPortfolioReplacement / complex_method | reviewed_no_change |
 | code_health:finding_f505e8ce9087ba531b4a | critical | code_health | js/app/10-main-app.js | change_entropy | reviewed_no_change |
 | code_health:finding_da2a6cf442a22fa0e95f | critical | code_health | js/app/10-main-app.js | prior_defect | reviewed_no_change |
-| code_health:finding_360e96c0bf7e43661286 | critical | code_health | js/app/10-main-app.js:5904 | getGoalPlan / complex_method | unreviewed |
-| code_health:finding_30846f5c87e3f081cd02 | critical | code_health | js/app/10-main-app.js:6282 | buildNotebookGuidePrioritiesFromRawInput / complex_method | unreviewed |
-| code_health:finding_0be1d750101405d79892 | critical | code_health | js/app/10-main-app.js:6361 | sanitizeNotebookGuideCandidate / complex_method | unreviewed |
-| code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6912 | assembleNotebookGuideFromCandidates / complex_method | unreviewed |
-| code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7118 | buildNotebookReconstructionDataFromSession / complex_method | unreviewed |
+| code_health:finding_360e96c0bf7e43661286 | critical | code_health | js/app/10-main-app.js:5896 | getGoalPlan / complex_method | reviewed_no_change |
+| code_health:finding_30846f5c87e3f081cd02 | critical | code_health | js/app/10-main-app.js:6274 | buildNotebookGuidePrioritiesFromRawInput / complex_method | reviewed_no_change |
+| code_health:finding_0be1d750101405d79892 | critical | code_health | js/app/10-main-app.js:6353 | sanitizeNotebookGuideCandidate / complex_method | reviewed_no_change |
+| code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6904 | assembleNotebookGuideFromCandidates / complex_method | reviewed_no_change |
+| code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7110 | buildNotebookReconstructionDataFromSession / complex_method | reviewed_no_change |
 | code_health:finding_2f3ed327ca58291a143e | critical | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / large_method | unreviewed |
 | code_health:finding_615d19856374d52a4a9b | critical | code_health | tests/archive-integrity.browser.cjs | change_entropy | reviewed_no_change |
 | code_health:finding_3dffc42c2f6cdecd5764 | critical | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / complex_method | unreviewed |
@@ -80,88 +101,88 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_c5754b3008cce04a947d | high | code_health | js/app/00-storage-sync-patches.js:2712 | isStudentSessionDeleted / complex_method | unreviewed |
 | code_health:finding_327ffe7802bf5064d920 | high | code_health | js/app/00-storage-sync-patches.js:2799 | rebuildIndexFromStudentFiles / complex_method | unreviewed |
 | code_health:finding_8daa013c7519c2c2d6a5 | high | code_health | js/app/00-storage-sync-patches.js:2953 | redactWftSyncLogValue / complex_method | unreviewed |
-| code_health:finding_d3148a775cf7154fe106 | high | code_health | js/app/00-storage-sync-patches.js:4063 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_d00b9d5502398c47c254 | high | code_health | js/app/00-storage-sync-patches.js:4189 | ensureDriveFolderPromise / brain_method | unreviewed |
-| code_health:finding_cb937b1294bc411abc3f | high | code_health | js/app/00-storage-sync-patches.js:4439 | getLocalSettingsSnapshot / complex_method | unreviewed |
-| code_health:finding_b7d345bc52fe3457ba20 | high | code_health | js/app/00-storage-sync-patches.js:4715 | saveWftStudentChange / complex_method | unreviewed |
-| code_health:finding_0438f4d267deb61d65f1 | high | code_health | js/app/00-storage-sync-patches.js:4715 | saveWftStudentChange / bumpy_road | unreviewed |
-| code_health:finding_57bf7e0e594ad2aeb062 | high | code_health | js/app/00-storage-sync-patches.js:4792 | applyDeletionsToPortfolio / complex_method | unreviewed |
-| code_health:finding_ea31773c37d0074f31d2 | high | code_health | js/app/00-storage-sync-patches.js:5015 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_4db26584b9741348c94f | high | code_health | js/app/00-storage-sync-patches.js:5206 | mergeWftSettings / complex_method | unreviewed |
-| code_health:finding_02c704b94cb1a85a55ef | high | code_health | js/app/00-storage-sync-patches.js:5449 | addImage / complex_method | unreviewed |
-| code_health:finding_cbe86c69e41718143128 | high | code_health | js/app/00-storage-sync-patches.js:5500 | mergeWftPortfolios / complex_method | unreviewed |
-| code_health:finding_c3f2f127bb0b956fafd1 | high | code_health | js/app/00-storage-sync-patches.js:5708 | handleWftSyncError / complex_method | unreviewed |
-| code_health:finding_8439ac91fb299207a6e9 | high | code_health | js/app/00-storage-sync-patches.js:5747 | syncWftNow / brain_method | unreviewed |
-| code_health:finding_ead34325951527c35fd0 | high | code_health | js/app/00-storage-sync-patches.js:5747 | syncWftNow / complex_method | unreviewed |
-| code_health:finding_ab0a8010627d9e203fec | high | code_health | js/app/00-storage-sync-patches.js:5886 | getWftSyncDiagnostics / complex_method | unreviewed |
-| code_health:finding_193eef374799108f654b | high | code_health | js/app/00-storage-sync-patches.js:5917 | shouldPollWftCloudNow / complex_method | unreviewed |
-| code_health:finding_316c9c90c39eb353ff7e | high | code_health | js/app/00-storage-sync-patches.js:6437 | savePortfolioData / complex_method | unreviewed |
-| code_health:finding_d2e17a6f2a3c946cdf22 | high | code_health | js/app/00-storage-sync-patches.js:6730 | buildPortfolioDetailedFeedback / complex_method | unreviewed |
-| code_health:finding_5b685ceb1955a261c1eb | high | code_health | js/app/00-storage-sync-patches.js:6755 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_92d392954c103b46d657 | high | code_health | js/app/00-storage-sync-patches.js:6790 | saveStudentSession / complex_method | unreviewed |
-| code_health:finding_28e616ea3e52a8bb7d01 | high | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / brain_method | unreviewed |
-| code_health:finding_302dbc0b60d9c7879a9d | high | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / large_method | unreviewed |
-| code_health:finding_e96067246b2b35f12f3f | high | code_health | js/app/00-storage-sync-patches.js:6998 | nextUpload / brain_method | unreviewed |
-| code_health:finding_208c5411ec68f45b4ab0 | high | code_health | js/app/00-storage-sync-patches.js:6998 | nextUpload / complex_method | unreviewed |
-| code_health:finding_73bec908e177949698d7 | high | code_health | js/app/00-storage-sync-patches.js:7047 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_c7032b60a83d25295aed | high | code_health | js/app/00-storage-sync-patches.js:7317 | renderPortfolioGrowGoalBlock / complex_method | unreviewed |
-| code_health:finding_1582cf75d826c8ccf5f4 | high | code_health | js/app/00-storage-sync-patches.js:7592 | renderStudentPortfolio / brain_method | unreviewed |
-| code_health:finding_419468d595b912adfb7d | high | code_health | js/app/00-storage-sync-patches.js:8244 | updateSyncPortfolioButtonState / complex_method | unreviewed |
-| code_health:finding_96179f2cb386a54e873f | high | code_health | js/app/00-storage-sync-patches.js:8322 | commitPendingPortfolioSync / complex_method | unreviewed |
+| code_health:finding_d3148a775cf7154fe106 | high | code_health | js/app/00-storage-sync-patches.js:4083 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_d00b9d5502398c47c254 | high | code_health | js/app/00-storage-sync-patches.js:4209 | ensureDriveFolderPromise / brain_method | unreviewed |
+| code_health:finding_cb937b1294bc411abc3f | high | code_health | js/app/00-storage-sync-patches.js:4459 | getLocalSettingsSnapshot / complex_method | unreviewed |
+| code_health:finding_b7d345bc52fe3457ba20 | high | code_health | js/app/00-storage-sync-patches.js:4735 | saveWftStudentChange / complex_method | unreviewed |
+| code_health:finding_0438f4d267deb61d65f1 | high | code_health | js/app/00-storage-sync-patches.js:4735 | saveWftStudentChange / bumpy_road | unreviewed |
+| code_health:finding_57bf7e0e594ad2aeb062 | high | code_health | js/app/00-storage-sync-patches.js:4812 | applyDeletionsToPortfolio / complex_method | unreviewed |
+| code_health:finding_ea31773c37d0074f31d2 | high | code_health | js/app/00-storage-sync-patches.js:5035 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_4db26584b9741348c94f | high | code_health | js/app/00-storage-sync-patches.js:5226 | mergeWftSettings / complex_method | unreviewed |
+| code_health:finding_02c704b94cb1a85a55ef | high | code_health | js/app/00-storage-sync-patches.js:5469 | addImage / complex_method | unreviewed |
+| code_health:finding_cbe86c69e41718143128 | high | code_health | js/app/00-storage-sync-patches.js:5520 | mergeWftPortfolios / complex_method | unreviewed |
+| code_health:finding_c3f2f127bb0b956fafd1 | high | code_health | js/app/00-storage-sync-patches.js:5728 | handleWftSyncError / complex_method | unreviewed |
+| code_health:finding_8439ac91fb299207a6e9 | high | code_health | js/app/00-storage-sync-patches.js:5767 | syncWftNow / brain_method | unreviewed |
+| code_health:finding_ead34325951527c35fd0 | high | code_health | js/app/00-storage-sync-patches.js:5767 | syncWftNow / complex_method | unreviewed |
+| code_health:finding_ab0a8010627d9e203fec | high | code_health | js/app/00-storage-sync-patches.js:5906 | getWftSyncDiagnostics / complex_method | unreviewed |
+| code_health:finding_193eef374799108f654b | high | code_health | js/app/00-storage-sync-patches.js:5937 | shouldPollWftCloudNow / complex_method | unreviewed |
+| code_health:finding_316c9c90c39eb353ff7e | high | code_health | js/app/00-storage-sync-patches.js:6457 | savePortfolioData / complex_method | unreviewed |
+| code_health:finding_d2e17a6f2a3c946cdf22 | high | code_health | js/app/00-storage-sync-patches.js:6750 | buildPortfolioDetailedFeedback / complex_method | unreviewed |
+| code_health:finding_5b685ceb1955a261c1eb | high | code_health | js/app/00-storage-sync-patches.js:6775 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_92d392954c103b46d657 | high | code_health | js/app/00-storage-sync-patches.js:6810 | saveStudentSession / complex_method | unreviewed |
+| code_health:finding_28e616ea3e52a8bb7d01 | high | code_health | js/app/00-storage-sync-patches.js:6967 | uploadSessionImagesToDrive / brain_method | unreviewed |
+| code_health:finding_302dbc0b60d9c7879a9d | high | code_health | js/app/00-storage-sync-patches.js:6967 | uploadSessionImagesToDrive / large_method | unreviewed |
+| code_health:finding_e96067246b2b35f12f3f | high | code_health | js/app/00-storage-sync-patches.js:7018 | nextUpload / brain_method | unreviewed |
+| code_health:finding_208c5411ec68f45b4ab0 | high | code_health | js/app/00-storage-sync-patches.js:7018 | nextUpload / complex_method | unreviewed |
+| code_health:finding_73bec908e177949698d7 | high | code_health | js/app/00-storage-sync-patches.js:7067 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_c7032b60a83d25295aed | high | code_health | js/app/00-storage-sync-patches.js:7337 | renderPortfolioGrowGoalBlock / complex_method | unreviewed |
+| code_health:finding_1582cf75d826c8ccf5f4 | high | code_health | js/app/00-storage-sync-patches.js:7612 | renderStudentPortfolio / brain_method | unreviewed |
+| code_health:finding_419468d595b912adfb7d | high | code_health | js/app/00-storage-sync-patches.js:8264 | updateSyncPortfolioButtonState / complex_method | unreviewed |
+| code_health:finding_96179f2cb386a54e873f | high | code_health | js/app/00-storage-sync-patches.js:8342 | commitPendingPortfolioSync / complex_method | unreviewed |
 | code_health:finding_2ddd6e095fd9837509d1 | high | code_health | js/app/10-main-app.js | co_change_scatter | reviewed_no_change |
 | code_health:finding_f1a85ebe6badc0db9024 | high | code_health | js/app/10-main-app.js:333 | renameStudent / brain_method | unreviewed |
 | code_health:finding_0e39cb918814ab53819c | high | code_health | js/app/10-main-app.js:333 | renameStudent / complex_method | unreviewed |
 | code_health:finding_31c686c7b1d48ddf441b | high | code_health | js/app/10-main-app.js:921 | getSampleStatusData / complex_method | unreviewed |
 | code_health:finding_1cec729b60c0910038a8 | high | code_health | js/app/10-main-app.js:1018 | <anonymous> / complex_method | unreviewed |
 | code_health:finding_145a0781f727e8563613 | high | code_health | js/app/10-main-app.js:1111 | updateScoreDisplay / complex_method | unreviewed |
-| code_health:finding_a6967871bb410dcb0e40 | high | code_health | js/app/10-main-app.js:1318 | tokenNeedsLeadingSpace / complex_method | unreviewed |
-| code_health:finding_188a9a7004d426cc48df | high | code_health | js/app/10-main-app.js:1446 | analyzeSentenceVariety / brain_method | unreviewed |
-| code_health:finding_5bf728a3e3dc8811e436 | high | code_health | js/app/10-main-app.js:1446 | analyzeSentenceVariety / complex_method | unreviewed |
-| code_health:finding_ee1a994e15011c910493 | high | code_health | js/app/10-main-app.js:1612 | calculateWordCountAdjustment / complex_method | unreviewed |
-| code_health:finding_da71eb8351ac6076820a | high | code_health | js/app/10-main-app.js:1703 | teacherizeWording / complex_method | unreviewed |
-| code_health:finding_7b8b4488e4ea626cee14 | high | code_health | js/app/10-main-app.js:1817 | getDiffOperations / complex_method | unreviewed |
-| code_health:finding_da709d52b659e28345f7 | high | code_health | js/app/10-main-app.js:1940 | buildFlowReasonFromData / complex_method | unreviewed |
-| code_health:finding_b081ee300825a09eabdc | high | code_health | js/app/10-main-app.js:1985 | buildFlowEvidenceFromData / complex_method | unreviewed |
-| code_health:finding_0ea916c0ea8d320c671f | high | code_health | js/app/10-main-app.js:2028 | buildGrammarPatternNotes / complex_method | unreviewed |
-| code_health:finding_aab0b3084854dc5c7686 | high | code_health | js/app/10-main-app.js:2057 | normalizeNoticeRows / complex_method | unreviewed |
-| code_health:finding_388712b85a162a306869 | high | code_health | js/app/10-main-app.js:2072 | polishFeedback / complex_method | unreviewed |
-| code_health:finding_b5d8eafd6a4bd0367d8d | high | code_health | js/app/10-main-app.js:2072 | polishFeedback / bumpy_road | unreviewed |
-| code_health:finding_8a378ce2e4aa25c3c760 | high | code_health | js/app/10-main-app.js:2265 | parseDetailedAssessment / large_method | unreviewed |
-| code_health:finding_c646e256c7bae6ac93e0 | high | code_health | js/app/10-main-app.js:2419 | applyWordCountToIdeas / complex_method | unreviewed |
-| code_health:finding_831b9c9992d43fcc64c9 | high | code_health | js/app/10-main-app.js:2565 | buildFlowPatternSummary / complex_method | unreviewed |
-| code_health:finding_e9fabed7ada8fc27ebc3 | high | code_health | js/app/10-main-app.js:2585 | buildFlowPatternNotes / complex_method | unreviewed |
-| code_health:finding_935cafeb9b03bf1e6d7e | high | code_health | js/app/10-main-app.js:2620 | applyComputedFlowToFlow / complex_method | unreviewed |
-| code_health:finding_db4e7c9b1ab45d742573 | high | code_health | js/app/10-main-app.js:2761 | requestOpenRouterWithFallback / brain_method | unreviewed |
-| code_health:finding_accfd50defd9b707a8cb | high | code_health | js/app/10-main-app.js:2761 | requestOpenRouterWithFallback / complex_method | unreviewed |
-| code_health:finding_3e3fe17b6405143e08e9 | high | code_health | js/app/10-main-app.js:3128 | resetCurrentClassData / complex_method | unreviewed |
-| code_health:finding_45b725ac14e6b01af784 | high | code_health | js/app/10-main-app.js:3203 | updateSelectedImagePreview / complex_method | unreviewed |
-| code_health:finding_923f8b26e74d245f0060 | high | code_health | js/app/10-main-app.js:3291 | handleSelectedImages / complex_method | unreviewed |
-| code_health:finding_e2af21eb0f97cffb7a98 | high | code_health | js/app/10-main-app.js:3428 | bindPreviewReorderHandlers / large_method | unreviewed |
-| code_health:finding_ad7c01937836a1871672 | high | code_health | js/app/10-main-app.js:3530 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_c265a3a523c583f74560 | high | code_health | js/app/10-main-app.js:3677 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_3ccac7951387eba2bc17 | high | code_health | js/app/10-main-app.js:3897 | buildStep3Prompt / brain_method | unreviewed |
-| code_health:finding_57b4e6dc07e078be7f9a | high | code_health | js/app/10-main-app.js:3897 | buildStep3Prompt / complex_method | unreviewed |
-| code_health:finding_e80e6459cb0f8eec82fd | high | code_health | js/app/10-main-app.js:3897 | buildStep3Prompt / large_method | unreviewed |
-| code_health:finding_c2c09734de489bfe0c43 | high | code_health | js/app/10-main-app.js:3897 | buildStep3Prompt / primitive_obsession | unreviewed |
-| code_health:finding_8518ceb3be5bf2c125b1 | high | code_health | js/app/10-main-app.js:4239 | buildEvidenceBasedTeacherComment / complex_method | unreviewed |
-| code_health:finding_1807aa3acdf28aad29d0 | high | code_health | js/app/10-main-app.js:4335 | buildActionGrowthTip / bumpy_road | unreviewed |
-| code_health:finding_709433cd9c383145550f | high | code_health | js/app/10-main-app.js:4469 | getNeatnessComment / bumpy_road | unreviewed |
-| code_health:finding_fc2d511f3416246213eb | high | code_health | js/app/10-main-app.js:4656 | renderDetailedAssessment / complex_method | unreviewed |
-| code_health:finding_d0f1ba0563e806953c38 | high | code_health | js/app/10-main-app.js:4951 | updateMeter / complex_method | unreviewed |
-| code_health:finding_1c0079bb97b26cbf34ea | high | code_health | js/app/10-main-app.js:5138 | extractWritingTitleParts / complex_method | unreviewed |
-| code_health:finding_7bac15813de051bb7ed9 | high | code_health | js/app/10-main-app.js:5399 | detectWritingGenreInfo / complex_method | unreviewed |
-| code_health:finding_6ab2c53b3fdff625ecb9 | high | code_health | js/app/10-main-app.js:5582 | buildEncouragingClosing / complex_method | unreviewed |
-| code_health:finding_c10a692a806495a7c968 | high | code_health | js/app/10-main-app.js:5701 | pickTeacherComment / complex_method | unreviewed |
-| code_health:finding_2e009e93a06fee79a31d | high | code_health | js/app/10-main-app.js:5792 | buildNotebookActionChecklist / complex_method | unreviewed |
-| code_health:finding_c8995c9fef2bc75e5f0b | high | code_health | js/app/10-main-app.js:6700 | buildFallbackExampleForPriority / brain_method | unreviewed |
-| code_health:finding_e6c13bd33f14c45f3bd2 | high | code_health | js/app/10-main-app.js:6700 | buildFallbackExampleForPriority / large_method | unreviewed |
-| code_health:finding_72946e150a8efed522fa | high | code_health | js/app/10-main-app.js:6876 | buildNotebookGuideFallback / complex_method | unreviewed |
-| code_health:finding_2e922e3c247099d7d561 | high | code_health | js/app/10-main-app.js:6912 | assembleNotebookGuideFromCandidates / brain_method | unreviewed |
-| code_health:finding_a0bc5269056689b0f926 | high | code_health | js/app/10-main-app.js:7087 | ensureNotebookGuide / complex_method | unreviewed |
-| code_health:finding_388125686d54705ffbee | high | code_health | js/app/10-main-app.js:7150 | fillNotebookSummary / complex_method | unreviewed |
-| code_health:finding_46523b22d5ed554a99ea | high | code_health | js/app/10-main-app.js:7472 | buildNotebookPrintHtmlFromPortfolioSession / complex_method | unreviewed |
-| code_health:finding_fa1b31a336377742bafa | high | code_health | js/app/10-main-app.js:7672 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_0d7c6ff5f039bc409ce8 | high | code_health | js/app/10-main-app.js:8191 | analyzeWriting / complex_method | unreviewed |
+| code_health:finding_a6967871bb410dcb0e40 | high | code_health | js/app/10-main-app.js:1310 | tokenNeedsLeadingSpace / complex_method | unreviewed |
+| code_health:finding_188a9a7004d426cc48df | high | code_health | js/app/10-main-app.js:1438 | analyzeSentenceVariety / brain_method | unreviewed |
+| code_health:finding_5bf728a3e3dc8811e436 | high | code_health | js/app/10-main-app.js:1438 | analyzeSentenceVariety / complex_method | unreviewed |
+| code_health:finding_ee1a994e15011c910493 | high | code_health | js/app/10-main-app.js:1604 | calculateWordCountAdjustment / complex_method | unreviewed |
+| code_health:finding_da71eb8351ac6076820a | high | code_health | js/app/10-main-app.js:1695 | teacherizeWording / complex_method | unreviewed |
+| code_health:finding_7b8b4488e4ea626cee14 | high | code_health | js/app/10-main-app.js:1809 | getDiffOperations / complex_method | unreviewed |
+| code_health:finding_da709d52b659e28345f7 | high | code_health | js/app/10-main-app.js:1932 | buildFlowReasonFromData / complex_method | unreviewed |
+| code_health:finding_b081ee300825a09eabdc | high | code_health | js/app/10-main-app.js:1977 | buildFlowEvidenceFromData / complex_method | unreviewed |
+| code_health:finding_0ea916c0ea8d320c671f | high | code_health | js/app/10-main-app.js:2020 | buildGrammarPatternNotes / complex_method | unreviewed |
+| code_health:finding_aab0b3084854dc5c7686 | high | code_health | js/app/10-main-app.js:2049 | normalizeNoticeRows / complex_method | unreviewed |
+| code_health:finding_388712b85a162a306869 | high | code_health | js/app/10-main-app.js:2064 | polishFeedback / complex_method | unreviewed |
+| code_health:finding_b5d8eafd6a4bd0367d8d | high | code_health | js/app/10-main-app.js:2064 | polishFeedback / bumpy_road | unreviewed |
+| code_health:finding_8a378ce2e4aa25c3c760 | high | code_health | js/app/10-main-app.js:2257 | parseDetailedAssessment / large_method | unreviewed |
+| code_health:finding_c646e256c7bae6ac93e0 | high | code_health | js/app/10-main-app.js:2411 | applyWordCountToIdeas / complex_method | unreviewed |
+| code_health:finding_831b9c9992d43fcc64c9 | high | code_health | js/app/10-main-app.js:2557 | buildFlowPatternSummary / complex_method | unreviewed |
+| code_health:finding_e9fabed7ada8fc27ebc3 | high | code_health | js/app/10-main-app.js:2577 | buildFlowPatternNotes / complex_method | unreviewed |
+| code_health:finding_935cafeb9b03bf1e6d7e | high | code_health | js/app/10-main-app.js:2612 | applyComputedFlowToFlow / complex_method | unreviewed |
+| code_health:finding_db4e7c9b1ab45d742573 | high | code_health | js/app/10-main-app.js:2753 | requestOpenRouterWithFallback / brain_method | unreviewed |
+| code_health:finding_accfd50defd9b707a8cb | high | code_health | js/app/10-main-app.js:2753 | requestOpenRouterWithFallback / complex_method | unreviewed |
+| code_health:finding_3e3fe17b6405143e08e9 | high | code_health | js/app/10-main-app.js:3120 | resetCurrentClassData / complex_method | unreviewed |
+| code_health:finding_45b725ac14e6b01af784 | high | code_health | js/app/10-main-app.js:3195 | updateSelectedImagePreview / complex_method | unreviewed |
+| code_health:finding_923f8b26e74d245f0060 | high | code_health | js/app/10-main-app.js:3283 | handleSelectedImages / complex_method | unreviewed |
+| code_health:finding_e2af21eb0f97cffb7a98 | high | code_health | js/app/10-main-app.js:3420 | bindPreviewReorderHandlers / large_method | unreviewed |
+| code_health:finding_ad7c01937836a1871672 | high | code_health | js/app/10-main-app.js:3522 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_c265a3a523c583f74560 | high | code_health | js/app/10-main-app.js:3669 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_3ccac7951387eba2bc17 | high | code_health | js/app/10-main-app.js:3889 | buildStep3Prompt / brain_method | unreviewed |
+| code_health:finding_57b4e6dc07e078be7f9a | high | code_health | js/app/10-main-app.js:3889 | buildStep3Prompt / complex_method | unreviewed |
+| code_health:finding_e80e6459cb0f8eec82fd | high | code_health | js/app/10-main-app.js:3889 | buildStep3Prompt / large_method | unreviewed |
+| code_health:finding_c2c09734de489bfe0c43 | high | code_health | js/app/10-main-app.js:3889 | buildStep3Prompt / primitive_obsession | unreviewed |
+| code_health:finding_8518ceb3be5bf2c125b1 | high | code_health | js/app/10-main-app.js:4231 | buildEvidenceBasedTeacherComment / complex_method | unreviewed |
+| code_health:finding_1807aa3acdf28aad29d0 | high | code_health | js/app/10-main-app.js:4327 | buildActionGrowthTip / bumpy_road | unreviewed |
+| code_health:finding_709433cd9c383145550f | high | code_health | js/app/10-main-app.js:4461 | getNeatnessComment / bumpy_road | unreviewed |
+| code_health:finding_fc2d511f3416246213eb | high | code_health | js/app/10-main-app.js:4648 | renderDetailedAssessment / complex_method | unreviewed |
+| code_health:finding_d0f1ba0563e806953c38 | high | code_health | js/app/10-main-app.js:4943 | updateMeter / complex_method | unreviewed |
+| code_health:finding_1c0079bb97b26cbf34ea | high | code_health | js/app/10-main-app.js:5130 | extractWritingTitleParts / complex_method | unreviewed |
+| code_health:finding_7bac15813de051bb7ed9 | high | code_health | js/app/10-main-app.js:5391 | detectWritingGenreInfo / complex_method | unreviewed |
+| code_health:finding_6ab2c53b3fdff625ecb9 | high | code_health | js/app/10-main-app.js:5574 | buildEncouragingClosing / complex_method | unreviewed |
+| code_health:finding_c10a692a806495a7c968 | high | code_health | js/app/10-main-app.js:5693 | pickTeacherComment / complex_method | unreviewed |
+| code_health:finding_2e009e93a06fee79a31d | high | code_health | js/app/10-main-app.js:5784 | buildNotebookActionChecklist / complex_method | reviewed_no_change |
+| code_health:finding_c8995c9fef2bc75e5f0b | high | code_health | js/app/10-main-app.js:6692 | buildFallbackExampleForPriority / brain_method | unreviewed |
+| code_health:finding_e6c13bd33f14c45f3bd2 | high | code_health | js/app/10-main-app.js:6692 | buildFallbackExampleForPriority / large_method | unreviewed |
+| code_health:finding_72946e150a8efed522fa | high | code_health | js/app/10-main-app.js:6868 | buildNotebookGuideFallback / complex_method | unreviewed |
+| code_health:finding_2e922e3c247099d7d561 | high | code_health | js/app/10-main-app.js:6904 | assembleNotebookGuideFromCandidates / brain_method | reviewed_no_change |
+| code_health:finding_a0bc5269056689b0f926 | high | code_health | js/app/10-main-app.js:7079 | ensureNotebookGuide / complex_method | unreviewed |
+| code_health:finding_388125686d54705ffbee | high | code_health | js/app/10-main-app.js:7142 | fillNotebookSummary / complex_method | unreviewed |
+| code_health:finding_46523b22d5ed554a99ea | high | code_health | js/app/10-main-app.js:7464 | buildNotebookPrintHtmlFromPortfolioSession / complex_method | unreviewed |
+| code_health:finding_fa1b31a336377742bafa | high | code_health | js/app/10-main-app.js:7664 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_0d7c6ff5f039bc409ce8 | high | code_health | js/app/10-main-app.js:8183 | analyzeWriting / complex_method | unreviewed |
 | code_health:finding_4057876aba2cd2a0cf7b | high | code_health | js/app/99-lightbox.js | coverage_gradient | unreviewed |
 | code_health:finding_0b15a07e6a17aa631487 | high | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / complex_method | unreviewed |
 | code_health:finding_da551e170029b179c512 | high | code_health | scripts/check-test-runner.cjs | change_entropy | reviewed_no_change |
@@ -176,7 +197,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_f215a3da5418d44ab994 | high | code_health | tests/archive-connection.browser.cjs:34 | respondToArchiveConnectionRequest / complex_method | unreviewed |
 | code_health:finding_42bfe284bb0b87e01389 | high | code_health | tests/archive-integrity.browser.cjs | churn_risk | reviewed_no_change |
 | code_health:finding_9ed9ee996a2e3ba97e2e | high | code_health | tests/auth-integrity.browser.cjs:82 | checkDraftOccupancy / complex_method | unreviewed |
-| code_health:finding_97506bb4c786936411e9 | high | code_health | tests/auth-integrity.browser.cjs:199 | checkRedirectRecovery / complex_method | unreviewed |
+| code_health:finding_97506bb4c786936411e9 | high | code_health | tests/auth-integrity.browser.cjs:257 | checkRedirectRecovery / complex_method | unreviewed |
 | code_health:finding_873694a833229c403503 | high | code_health | tests/correction-performance.browser.cjs:4 | <anonymous@4> / complex_method | unreviewed |
 | code_health:finding_3251f9ac3bc3f1b15073 | high | code_health | tests/crop-ownership.browser.cjs:23 | evaluateCropScenario / complex_method | unreviewed |
 | code_health:finding_1fc065ce84d5a0964ae5 | high | code_health | tests/crop-ownership.browser.cjs:23 | evaluateCropScenario / large_method | unreviewed |
@@ -216,7 +237,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_d71333b5f8e26e1a7718 | high | code_health | tests/preference-integrity-scenarios.js:338 | checkKeyPersistenceAndHandlers / complex_method | unreviewed |
 | code_health:finding_541a0914ff6d42267451 | high | code_health | tests/preference-integrity-scenarios.js:396 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_532b474a093fc3ebb820 | high | code_health | tests/preference-integrity-scenarios.js:494 | checkOutgoingCredentialRedaction / complex_method | unreviewed |
-| code_health:finding_78862c658763199794b0 | high | code_health | tests/record-identity.browser.cjs:71 | <anonymous@71> / complex_method | unreviewed |
+| code_health:finding_aa964992afa4814d7c64 | high | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / large_method | unreviewed |
+| code_health:finding_78862c658763199794b0 | high | code_health | tests/record-identity.browser.cjs:135 | <anonymous@135> / complex_method | unreviewed |
 | code_health:finding_41d0abbe064ca79a7dcc | high | code_health | tests/recovery-cache.browser.cjs | churn_risk | reviewed_no_change |
 | code_health:finding_308c12524a7013521290 | high | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / complex_method | unreviewed |
 | code_health:finding_d6d201d5eca456e8aaac | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / complex_method | unreviewed |
@@ -259,6 +281,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_41f1c98f03d5ab70b068 | medium | code_health | js/app/00-storage-sync-patches.js:1932 | clearWftLocalCache / complex_method | reviewed_no_change |
 | code_health:finding_d6fe9a1e2d9c86e011a9 | medium | code_health | js/app/00-storage-sync-patches.js:1989 | <anonymous> / nested_complexity | unreviewed |
 | code_health:finding_2063be3138b94708785b | medium | code_health | js/app/00-storage-sync-patches.js:2009 | <anonymous> / nested_complexity | unreviewed |
+| code_health:finding_4acf83c3283ca556effe | medium | code_health | js/app/00-storage-sync-patches.js:2302 | getStudentRecordByName / complex_method | reviewed_no_change |
 | code_health:finding_0d58c6763761293e9a6e | medium | code_health | js/app/00-storage-sync-patches.js:2326 | ensureStudentRecordsForRoster / nested_complexity | unreviewed |
 | code_health:finding_0ff88595b09107caf0b3 | medium | code_health | js/app/00-storage-sync-patches.js:2377 | resolveStudentPortfolioKey / nested_complexity | unreviewed |
 | code_health:finding_91f79ffa71c58cd99db3 | medium | code_health | js/app/00-storage-sync-patches.js:2395 | updateStudentRecordOnRename / complex_method | unreviewed |
@@ -268,71 +291,72 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_e6a8dcdcd8e8e8e77ae3 | medium | code_health | js/app/00-storage-sync-patches.js:3041 | getWftSyncDebugSnapshot / complex_method | unreviewed |
 | code_health:finding_f2f5fc196d1368f6353f | medium | code_health | js/app/00-storage-sync-patches.js:3210 | <anonymous> / complex_method | unreviewed |
 | code_health:finding_f0ffb4d38fa5294004d9 | medium | code_health | js/app/00-storage-sync-patches.js:3255 | completeWftGoogleSignInWithAccessToken / complex_method | unreviewed |
-| code_health:finding_366568245ad14b8654ad | medium | code_health | js/app/00-storage-sync-patches.js:3328 | checkHashForOAuthTokens / nested_complexity | unreviewed |
-| code_health:finding_ca1f9972c2cf6daa75a9 | medium | code_health | js/app/00-storage-sync-patches.js:3328 | checkHashForOAuthTokens / complex_method | unreviewed |
-| code_health:finding_dc5417fc9d643005862c | medium | code_health | js/app/00-storage-sync-patches.js:3356 | restoreGoogleStateFromStorage / complex_method | unreviewed |
-| code_health:finding_d3be814e187dbe8a1464 | medium | code_health | js/app/00-storage-sync-patches.js:3446 | isPreviousDraftCompatible / complex_method | unreviewed |
-| code_health:finding_31894d13c79e9cd5f5de | medium | code_health | js/app/00-storage-sync-patches.js:3504 | requestDriveAccess / complex_method | unreviewed |
-| code_health:finding_1f4b2c0b0071ee3639a2 | medium | code_health | js/app/00-storage-sync-patches.js:3521 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_fc5abed9bdccdfa7d549 | medium | code_health | js/app/00-storage-sync-patches.js:3326 | clearWftOAuthFragment / nested_complexity | fixed_verified |
+| code_health:finding_366568245ad14b8654ad | medium | code_health | js/app/00-storage-sync-patches.js:3328 | checkHashForOAuthTokens / nested_complexity | fixed_verified |
+| code_health:finding_ca1f9972c2cf6daa75a9 | medium | code_health | js/app/00-storage-sync-patches.js:3328 | checkHashForOAuthTokens / complex_method | fixed_verified |
+| code_health:finding_dc5417fc9d643005862c | medium | code_health | js/app/00-storage-sync-patches.js:3376 | restoreGoogleStateFromStorage / complex_method | unreviewed |
+| code_health:finding_d3be814e187dbe8a1464 | medium | code_health | js/app/00-storage-sync-patches.js:3466 | isPreviousDraftCompatible / complex_method | unreviewed |
+| code_health:finding_31894d13c79e9cd5f5de | medium | code_health | js/app/00-storage-sync-patches.js:3524 | requestDriveAccess / complex_method | unreviewed |
+| code_health:finding_1f4b2c0b0071ee3639a2 | medium | code_health | js/app/00-storage-sync-patches.js:3541 | <anonymous> / complex_method | unreviewed |
 | code_health:finding_0c9b8fe38c8f10880db3 | medium | code_health | js/app/00-storage-sync-patches.js:3588 | showDriveDisconnectedState / complex_method | fixed_verified |
-| code_health:finding_8c30481081ed05ba172a | medium | code_health | js/app/00-storage-sync-patches.js:3622 | showSignedInState / complex_method | unreviewed |
-| code_health:finding_73631653667bec4679f6 | medium | code_health | js/app/00-storage-sync-patches.js:3685 | clearWftLocalStorageAfterSignOut / nested_complexity | unreviewed |
-| code_health:finding_dd8fb02464ca2f8542d6 | medium | code_health | js/app/00-storage-sync-patches.js:3685 | clearWftLocalStorageAfterSignOut / complex_method | unreviewed |
-| code_health:finding_f5063b8834d488cbffac | medium | code_health | js/app/00-storage-sync-patches.js:3769 | setDriveSyncStatus / complex_method | unreviewed |
-| code_health:finding_68f7ee0e0b913e2c6dca | medium | code_health | js/app/00-storage-sync-patches.js:3784 | parseWftGoogleApiErrorText / complex_method | unreviewed |
-| code_health:finding_f947131d17a6a38f1ee7 | medium | code_health | js/app/00-storage-sync-patches.js:3821 | wftDriveFetch / complex_method | unreviewed |
-| code_health:finding_0968a631eb7c5f5e1d95 | medium | code_health | js/app/00-storage-sync-patches.js:4001 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_463c90fd2de6356ae2db | medium | code_health | js/app/00-storage-sync-patches.js:4174 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_368b80509a8e9d4eae46 | medium | code_health | js/app/00-storage-sync-patches.js:4189 | ensureDriveFolderPromise / complex_method | unreviewed |
-| code_health:finding_3c7e058b65c8ca9a24a2 | medium | code_health | js/app/00-storage-sync-patches.js:4322 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_dda353f9f59e6a52421c | medium | code_health | js/app/00-storage-sync-patches.js:4493 | compactDeletions / nested_complexity | unreviewed |
-| code_health:finding_5b9479addfbfe7efc78a | medium | code_health | js/app/00-storage-sync-patches.js:4493 | compactDeletions / complex_method | unreviewed |
-| code_health:finding_a5802959d4da1cf79531 | medium | code_health | js/app/00-storage-sync-patches.js:4541 | normalizeDeletionsData / complex_method | unreviewed |
-| code_health:finding_4bf6ae89b4dd80f1f147 | medium | code_health | js/app/00-storage-sync-patches.js:4621 | isStudentDeletedByTombstone / complex_method | unreviewed |
-| code_health:finding_b1942152e23eceee7be9 | medium | code_health | js/app/00-storage-sync-patches.js:4650 | restoreStudentDeletion / complex_method | unreviewed |
-| code_health:finding_2152c2f19d3ffe71e9c4 | medium | code_health | js/app/00-storage-sync-patches.js:4683 | recordSessionDeletion / complex_method | unreviewed |
-| code_health:finding_990e0395dd7d82aaac43 | medium | code_health | js/app/00-storage-sync-patches.js:4948 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_95da106900a2c477e281 | medium | code_health | js/app/00-storage-sync-patches.js:5026 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_ca33c20e174a2bfda950 | medium | code_health | js/app/00-storage-sync-patches.js:5038 | uploadWftJsonFilePromise / complex_method | unreviewed |
-| code_health:finding_7cf232b061699f0ff1c4 | medium | code_health | js/app/00-storage-sync-patches.js:5079 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_671540889fa536be2e31 | medium | code_health | js/app/00-storage-sync-patches.js:5172 | mergeWftStudents / complex_method | unreviewed |
-| code_health:finding_2ff46a2378726dc81a97 | medium | code_health | js/app/00-storage-sync-patches.js:5302 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_2f138c7deab593679403 | medium | code_health | js/app/00-storage-sync-patches.js:5389 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_ad0ca082ca47da651418 | medium | code_health | js/app/00-storage-sync-patches.js:5441 | mergeSessionImageRefs / complex_method | unreviewed |
-| code_health:finding_450dd0c9bb941a47e1a7 | medium | code_health | js/app/00-storage-sync-patches.js:5747 | syncWftNow / large_method | unreviewed |
-| code_health:finding_1a34a0bbf46ddefab5e7 | medium | code_health | js/app/00-storage-sync-patches.js:5835 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_d8efee12893b85aa3963 | medium | code_health | js/app/00-storage-sync-patches.js:6272 | applyLoadedSettings / complex_method | unreviewed |
-| code_health:finding_750d0054ac70a8565c25 | medium | code_health | js/app/00-storage-sync-patches.js:6337 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_659258563fb64c05b01b | medium | code_health | js/app/00-storage-sync-patches.js:6345 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_9fbb8c985399646392b7 | medium | code_health | js/app/00-storage-sync-patches.js:6393 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_aa72763e7f980e196e85 | medium | code_health | js/app/00-storage-sync-patches.js:6399 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_c07b722b69fa2e172071 | medium | code_health | js/app/00-storage-sync-patches.js:6437 | savePortfolioData / nested_complexity | unreviewed |
-| code_health:finding_70c2709f24f09b856658 | medium | code_health | js/app/00-storage-sync-patches.js:6718 | buildSessionFeedbackSummary / complex_method | unreviewed |
-| code_health:finding_2d208e4c30ee82fb58d1 | medium | code_health | js/app/00-storage-sync-patches.js:6790 | saveStudentSession / nested_complexity | unreviewed |
-| code_health:finding_b772cb0e474a867c6a0b | medium | code_health | js/app/00-storage-sync-patches.js:6790 | saveStudentSession / bumpy_road | unreviewed |
-| code_health:finding_c1810fefa912af17bacb | medium | code_health | js/app/00-storage-sync-patches.js:6823 | removeStudentSession / complex_method | unreviewed |
-| code_health:finding_c10259400e5c0857bbc5 | medium | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / complex_method | unreviewed |
-| code_health:finding_a1105537f3efefcc76dc | medium | code_health | js/app/00-storage-sync-patches.js:6948 | uploadSessionImagesToDrive / complex_conditional | unreviewed |
-| code_health:finding_b355d7e617534febc944 | medium | code_health | js/app/00-storage-sync-patches.js:6977 | findCurrentImage / complex_method | unreviewed |
-| code_health:finding_add44f6ffde542978602 | medium | code_health | js/app/00-storage-sync-patches.js:6998 | nextUpload / nested_complexity | unreviewed |
-| code_health:finding_b9ce9226d15ad39d7611 | medium | code_health | js/app/00-storage-sync-patches.js:6998 | nextUpload / bumpy_road | unreviewed |
-| code_health:finding_db81152159f3182b6759 | medium | code_health | js/app/00-storage-sync-patches.js:7031 | validateCurrentUpload / complex_method | unreviewed |
-| code_health:finding_a785a09dfafbeb9573d0 | medium | code_health | js/app/00-storage-sync-patches.js:7047 | <anonymous> / bumpy_road | unreviewed |
-| code_health:finding_cecbe8636e3d91233515 | medium | code_health | js/app/00-storage-sync-patches.js:7099 | nextStudent / nested_complexity | unreviewed |
-| code_health:finding_aeeba123d237efa7f611 | medium | code_health | js/app/00-storage-sync-patches.js:7147 | openStudentPortfolio / complex_method | unreviewed |
-| code_health:finding_1eb81af14115d6558a96 | medium | code_health | js/app/00-storage-sync-patches.js:7371 | openPortfolioDetailedFeedback / complex_method | unreviewed |
-| code_health:finding_c99e888f784b0bc76750 | medium | code_health | js/app/00-storage-sync-patches.js:7396 | openPortfolioCategoryFeedback / complex_method | unreviewed |
-| code_health:finding_2869a3657f251ae42502 | medium | code_health | js/app/00-storage-sync-patches.js:7413 | destroyWftPortfolioCharts / nested_complexity | unreviewed |
-| code_health:finding_08148a5fbe3130655bba | medium | code_health | js/app/00-storage-sync-patches.js:7592 | renderStudentPortfolio / complex_method | unreviewed |
-| code_health:finding_d4954938b0245dea0b84 | medium | code_health | js/app/00-storage-sync-patches.js:7737 | setSyncButtonsBusy / complex_method | unreviewed |
-| code_health:finding_3a1b9b63082ed59d733c | medium | code_health | js/app/00-storage-sync-patches.js:7766 | setSyncButtonsFailure / complex_method | unreviewed |
-| code_health:finding_b2a0b905ca7c2f210685 | medium | code_health | js/app/00-storage-sync-patches.js:7792 | pendingPortfolioSessionHasUploadableImages / complex_method | unreviewed |
-| code_health:finding_6ab7dd261477cb43f4e7 | medium | code_health | js/app/00-storage-sync-patches.js:7812 | uploadPendingPortfolioMediaBeforeCommit / complex_method | unreviewed |
-| code_health:finding_c41bba6fd11258d23e87 | medium | code_health | js/app/00-storage-sync-patches.js:7849 | manualSaveToDrive / large_method | unreviewed |
-| code_health:finding_ee563f008ccb5e1394f5 | medium | code_health | js/app/00-storage-sync-patches.js:7884 | finishManualSaveToDrive / brain_method | unreviewed |
-| code_health:finding_d6815d339003e60e0a6b | medium | code_health | js/app/00-storage-sync-patches.js:7884 | finishManualSaveToDrive / complex_method | unreviewed |
-| code_health:finding_7e5e160a165282d1b84f | medium | code_health | js/app/00-storage-sync-patches.js:7928 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_6c622b0a80727a851775 | medium | code_health | js/app/00-storage-sync-patches.js:8024 | showDiffView / complex_method | reviewed_no_change |
+| code_health:finding_8c30481081ed05ba172a | medium | code_health | js/app/00-storage-sync-patches.js:3642 | showSignedInState / complex_method | unreviewed |
+| code_health:finding_73631653667bec4679f6 | medium | code_health | js/app/00-storage-sync-patches.js:3705 | clearWftLocalStorageAfterSignOut / nested_complexity | unreviewed |
+| code_health:finding_dd8fb02464ca2f8542d6 | medium | code_health | js/app/00-storage-sync-patches.js:3705 | clearWftLocalStorageAfterSignOut / complex_method | unreviewed |
+| code_health:finding_f5063b8834d488cbffac | medium | code_health | js/app/00-storage-sync-patches.js:3789 | setDriveSyncStatus / complex_method | unreviewed |
+| code_health:finding_68f7ee0e0b913e2c6dca | medium | code_health | js/app/00-storage-sync-patches.js:3804 | parseWftGoogleApiErrorText / complex_method | unreviewed |
+| code_health:finding_f947131d17a6a38f1ee7 | medium | code_health | js/app/00-storage-sync-patches.js:3841 | wftDriveFetch / complex_method | unreviewed |
+| code_health:finding_0968a631eb7c5f5e1d95 | medium | code_health | js/app/00-storage-sync-patches.js:4021 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_463c90fd2de6356ae2db | medium | code_health | js/app/00-storage-sync-patches.js:4194 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_368b80509a8e9d4eae46 | medium | code_health | js/app/00-storage-sync-patches.js:4209 | ensureDriveFolderPromise / complex_method | unreviewed |
+| code_health:finding_3c7e058b65c8ca9a24a2 | medium | code_health | js/app/00-storage-sync-patches.js:4342 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_dda353f9f59e6a52421c | medium | code_health | js/app/00-storage-sync-patches.js:4513 | compactDeletions / nested_complexity | unreviewed |
+| code_health:finding_5b9479addfbfe7efc78a | medium | code_health | js/app/00-storage-sync-patches.js:4513 | compactDeletions / complex_method | unreviewed |
+| code_health:finding_a5802959d4da1cf79531 | medium | code_health | js/app/00-storage-sync-patches.js:4561 | normalizeDeletionsData / complex_method | unreviewed |
+| code_health:finding_4bf6ae89b4dd80f1f147 | medium | code_health | js/app/00-storage-sync-patches.js:4641 | isStudentDeletedByTombstone / complex_method | unreviewed |
+| code_health:finding_b1942152e23eceee7be9 | medium | code_health | js/app/00-storage-sync-patches.js:4670 | restoreStudentDeletion / complex_method | unreviewed |
+| code_health:finding_2152c2f19d3ffe71e9c4 | medium | code_health | js/app/00-storage-sync-patches.js:4703 | recordSessionDeletion / complex_method | unreviewed |
+| code_health:finding_990e0395dd7d82aaac43 | medium | code_health | js/app/00-storage-sync-patches.js:4968 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_95da106900a2c477e281 | medium | code_health | js/app/00-storage-sync-patches.js:5046 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_ca33c20e174a2bfda950 | medium | code_health | js/app/00-storage-sync-patches.js:5058 | uploadWftJsonFilePromise / complex_method | unreviewed |
+| code_health:finding_7cf232b061699f0ff1c4 | medium | code_health | js/app/00-storage-sync-patches.js:5099 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_671540889fa536be2e31 | medium | code_health | js/app/00-storage-sync-patches.js:5192 | mergeWftStudents / complex_method | unreviewed |
+| code_health:finding_2ff46a2378726dc81a97 | medium | code_health | js/app/00-storage-sync-patches.js:5322 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_2f138c7deab593679403 | medium | code_health | js/app/00-storage-sync-patches.js:5409 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_ad0ca082ca47da651418 | medium | code_health | js/app/00-storage-sync-patches.js:5461 | mergeSessionImageRefs / complex_method | unreviewed |
+| code_health:finding_450dd0c9bb941a47e1a7 | medium | code_health | js/app/00-storage-sync-patches.js:5767 | syncWftNow / large_method | unreviewed |
+| code_health:finding_1a34a0bbf46ddefab5e7 | medium | code_health | js/app/00-storage-sync-patches.js:5855 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_d8efee12893b85aa3963 | medium | code_health | js/app/00-storage-sync-patches.js:6292 | applyLoadedSettings / complex_method | unreviewed |
+| code_health:finding_750d0054ac70a8565c25 | medium | code_health | js/app/00-storage-sync-patches.js:6357 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_659258563fb64c05b01b | medium | code_health | js/app/00-storage-sync-patches.js:6365 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_9fbb8c985399646392b7 | medium | code_health | js/app/00-storage-sync-patches.js:6413 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_aa72763e7f980e196e85 | medium | code_health | js/app/00-storage-sync-patches.js:6419 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_c07b722b69fa2e172071 | medium | code_health | js/app/00-storage-sync-patches.js:6457 | savePortfolioData / nested_complexity | unreviewed |
+| code_health:finding_70c2709f24f09b856658 | medium | code_health | js/app/00-storage-sync-patches.js:6738 | buildSessionFeedbackSummary / complex_method | unreviewed |
+| code_health:finding_2d208e4c30ee82fb58d1 | medium | code_health | js/app/00-storage-sync-patches.js:6810 | saveStudentSession / nested_complexity | unreviewed |
+| code_health:finding_b772cb0e474a867c6a0b | medium | code_health | js/app/00-storage-sync-patches.js:6810 | saveStudentSession / bumpy_road | unreviewed |
+| code_health:finding_c1810fefa912af17bacb | medium | code_health | js/app/00-storage-sync-patches.js:6843 | removeStudentSession / complex_method | unreviewed |
+| code_health:finding_c10259400e5c0857bbc5 | medium | code_health | js/app/00-storage-sync-patches.js:6967 | uploadSessionImagesToDrive / complex_method | unreviewed |
+| code_health:finding_a1105537f3efefcc76dc | medium | code_health | js/app/00-storage-sync-patches.js:6968 | uploadSessionImagesToDrive / complex_conditional | unreviewed |
+| code_health:finding_b355d7e617534febc944 | medium | code_health | js/app/00-storage-sync-patches.js:6997 | findCurrentImage / complex_method | unreviewed |
+| code_health:finding_add44f6ffde542978602 | medium | code_health | js/app/00-storage-sync-patches.js:7018 | nextUpload / nested_complexity | unreviewed |
+| code_health:finding_b9ce9226d15ad39d7611 | medium | code_health | js/app/00-storage-sync-patches.js:7018 | nextUpload / bumpy_road | unreviewed |
+| code_health:finding_db81152159f3182b6759 | medium | code_health | js/app/00-storage-sync-patches.js:7051 | validateCurrentUpload / complex_method | unreviewed |
+| code_health:finding_a785a09dfafbeb9573d0 | medium | code_health | js/app/00-storage-sync-patches.js:7067 | <anonymous> / bumpy_road | unreviewed |
+| code_health:finding_cecbe8636e3d91233515 | medium | code_health | js/app/00-storage-sync-patches.js:7119 | nextStudent / nested_complexity | unreviewed |
+| code_health:finding_aeeba123d237efa7f611 | medium | code_health | js/app/00-storage-sync-patches.js:7167 | openStudentPortfolio / complex_method | unreviewed |
+| code_health:finding_1eb81af14115d6558a96 | medium | code_health | js/app/00-storage-sync-patches.js:7391 | openPortfolioDetailedFeedback / complex_method | unreviewed |
+| code_health:finding_c99e888f784b0bc76750 | medium | code_health | js/app/00-storage-sync-patches.js:7416 | openPortfolioCategoryFeedback / complex_method | unreviewed |
+| code_health:finding_2869a3657f251ae42502 | medium | code_health | js/app/00-storage-sync-patches.js:7433 | destroyWftPortfolioCharts / nested_complexity | unreviewed |
+| code_health:finding_08148a5fbe3130655bba | medium | code_health | js/app/00-storage-sync-patches.js:7612 | renderStudentPortfolio / complex_method | unreviewed |
+| code_health:finding_d4954938b0245dea0b84 | medium | code_health | js/app/00-storage-sync-patches.js:7757 | setSyncButtonsBusy / complex_method | unreviewed |
+| code_health:finding_3a1b9b63082ed59d733c | medium | code_health | js/app/00-storage-sync-patches.js:7786 | setSyncButtonsFailure / complex_method | unreviewed |
+| code_health:finding_b2a0b905ca7c2f210685 | medium | code_health | js/app/00-storage-sync-patches.js:7812 | pendingPortfolioSessionHasUploadableImages / complex_method | unreviewed |
+| code_health:finding_6ab7dd261477cb43f4e7 | medium | code_health | js/app/00-storage-sync-patches.js:7832 | uploadPendingPortfolioMediaBeforeCommit / complex_method | unreviewed |
+| code_health:finding_c41bba6fd11258d23e87 | medium | code_health | js/app/00-storage-sync-patches.js:7869 | manualSaveToDrive / large_method | unreviewed |
+| code_health:finding_ee563f008ccb5e1394f5 | medium | code_health | js/app/00-storage-sync-patches.js:7904 | finishManualSaveToDrive / brain_method | unreviewed |
+| code_health:finding_d6815d339003e60e0a6b | medium | code_health | js/app/00-storage-sync-patches.js:7904 | finishManualSaveToDrive / complex_method | unreviewed |
+| code_health:finding_7e5e160a165282d1b84f | medium | code_health | js/app/00-storage-sync-patches.js:7948 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_6c622b0a80727a851775 | medium | code_health | js/app/00-storage-sync-patches.js:8044 | showDiffView / complex_method | reviewed_no_change |
 | code_health:finding_f6834b9c5e4e8fceaddc | medium | code_health | js/app/10-main-app.js:27 | switchTab / complex_method | unreviewed |
 | code_health:finding_55123223b3537cb6beee | medium | code_health | js/app/10-main-app.js:150 | removeStudent / complex_method | unreviewed |
 | code_health:finding_10e7dca06a9c039721b2 | medium | code_health | js/app/10-main-app.js:180 | getPreferredStudentForManagement / complex_method | unreviewed |
@@ -343,83 +367,83 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_b37fbb90b7c90f70de7c | medium | code_health | js/app/10-main-app.js:941 | getSampleStatusData / complex_conditional | unreviewed |
 | code_health:finding_add1570706440ac5d6c3 | medium | code_health | js/app/10-main-app.js:985 | buildLowSampleAnalysis / brain_method | unreviewed |
 | code_health:finding_cb53739209c1f71bdb7a | medium | code_health | js/app/10-main-app.js:985 | buildLowSampleAnalysis / complex_method | unreviewed |
-| code_health:finding_91b9a8251ba0cff648ab | medium | code_health | js/app/10-main-app.js:1291 | buildMinimalCorrectionMarkup / complex_method | unreviewed |
-| code_health:finding_71b8c35d5c1cce2bdb4e | medium | code_health | js/app/10-main-app.js:1331 | renderCorrected / complex_method | unreviewed |
-| code_health:finding_ebb204a5868a15946e25 | medium | code_health | js/app/10-main-app.js:1411 | analyzeSentenceStarters / complex_method | unreviewed |
-| code_health:finding_2bdd007e9f7d0211503b | medium | code_health | js/app/10-main-app.js:1446 | analyzeSentenceVariety / large_method | unreviewed |
-| code_health:finding_d8b64c85428c74a85bc3 | medium | code_health | js/app/10-main-app.js:1572 | buildComputedFlowTip / complex_method | unreviewed |
-| code_health:finding_9652bf583d3a536c3ce6 | medium | code_health | js/app/10-main-app.js:1650 | grammarDensityBand / complex_method | unreviewed |
-| code_health:finding_c77269488091be9c398f | medium | code_health | js/app/10-main-app.js:1665 | computeOverallScore / complex_method | unreviewed |
-| code_health:finding_093a5b89338891a83bb9 | medium | code_health | js/app/10-main-app.js:1738 | teacherizeWording / complex_conditional | unreviewed |
-| code_health:finding_f940e3f053441fc31563 | medium | code_health | js/app/10-main-app.js:1751 | detectConventionIssues / complex_method | unreviewed |
-| code_health:finding_8142e2f50ce57c01cca8 | medium | code_health | js/app/10-main-app.js:1784 | buildConventionReason / complex_method | unreviewed |
-| code_health:finding_e0017e08473e350a01ab | medium | code_health | js/app/10-main-app.js:1854 | analyzeGrammarChanges / complex_method | unreviewed |
-| code_health:finding_d101f599d7efdce35b73 | medium | code_health | js/app/10-main-app.js:1894 | buildGrammarReasonFromData / complex_method | unreviewed |
-| code_health:finding_612b7a712640a912fac4 | medium | code_health | js/app/10-main-app.js:2111 | polishCategoryWording / complex_method | unreviewed |
-| code_health:finding_c72ee67ef2d568b7cc3b | medium | code_health | js/app/10-main-app.js:2154 | parseStep1 / complex_method | unreviewed |
-| code_health:finding_2027f723da8a822bca97 | medium | code_health | js/app/10-main-app.js:2244 | parseWhatINoticedRowsFromBody / complex_method | unreviewed |
-| code_health:finding_61ae3487dee679ba3273 | medium | code_health | js/app/10-main-app.js:2275 | captureCategory / complex_method | unreviewed |
-| code_health:finding_add6b1fe2e80774a4452 | medium | code_health | js/app/10-main-app.js:2487 | getDominantSentenceBand / complex_method | unreviewed |
-| code_health:finding_1951be36963b01b65962 | medium | code_health | js/app/10-main-app.js:2503 | flowCommentMentionsFalseShortProblem / complex_method | unreviewed |
-| code_health:finding_dd31592202f5c0bf9100 | medium | code_health | js/app/10-main-app.js:2520 | buildComputedFlowQuickNote / complex_method | unreviewed |
-| code_health:finding_69e53eede398fea73a81 | medium | code_health | js/app/10-main-app.js:2542 | buildSentenceLengthQuickNote / complex_method | unreviewed |
-| code_health:finding_df9b7907f423db937055 | medium | code_health | js/app/10-main-app.js:2724 | parseOpenRouterResponse / complex_method | unreviewed |
-| code_health:finding_ea199b21114b3bb88a9d | medium | code_health | js/app/10-main-app.js:2796 | checkOpenRouterRetry / complex_method | unreviewed |
-| code_health:finding_04d3d1b24822e961163f | medium | code_health | js/app/10-main-app.js:2829 | requestOpenRouterWithFallback / io_in_loop | unreviewed |
-| code_health:finding_e8cc8c120b2d5102edee | medium | code_health | js/app/10-main-app.js:2918 | updateOcrControls / complex_method | unreviewed |
-| code_health:finding_1f5c8ffa1136e017d383 | medium | code_health | js/app/10-main-app.js:3128 | resetCurrentClassData / bumpy_road | unreviewed |
-| code_health:finding_212f64bf7e0d299b02c0 | medium | code_health | js/app/10-main-app.js:3340 | getDroppedImageFiles / complex_method | unreviewed |
-| code_health:finding_fa1d91a12c1ab82ba63e | medium | code_health | js/app/10-main-app.js:3495 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_fcbf91717c7b0b330799 | medium | code_health | js/app/10-main-app.js:3628 | extractTextFromSelectedImage / brain_method | unreviewed |
-| code_health:finding_691819b607d0c2ab6370 | medium | code_health | js/app/10-main-app.js:3628 | extractTextFromSelectedImage / complex_method | unreviewed |
-| code_health:finding_1a5454e6e63026044dbb | medium | code_health | js/app/10-main-app.js:3628 | extractTextFromSelectedImage / large_method | unreviewed |
-| code_health:finding_355f2c8c145443a2c91f | medium | code_health | js/app/10-main-app.js:3677 | <anonymous> / nested_complexity | unreviewed |
-| code_health:finding_b069b026d6e2c6735605 | medium | code_health | js/app/10-main-app.js:3742 | getGrammarStrictness / complex_method | unreviewed |
-| code_health:finding_5d620393555ff50afc4c | medium | code_health | js/app/10-main-app.js:4140 | getEvidenceTokens / complex_method | unreviewed |
-| code_health:finding_a12d8ec9390f76b1aaad | medium | code_health | js/app/10-main-app.js:4171 | isValidTeacherComment / complex_method | unreviewed |
-| code_health:finding_5954cec915712fef2661 | medium | code_health | js/app/10-main-app.js:4213 | pickNoticeComment / complex_method | unreviewed |
-| code_health:finding_5656ce3ea2f986ff0085 | medium | code_health | js/app/10-main-app.js:4299 | isGenericGrowthTip / complex_method | unreviewed |
-| code_health:finding_ac0528d81066bb73b342 | medium | code_health | js/app/10-main-app.js:4546 | addNoticeRowIfNew / complex_method | unreviewed |
-| code_health:finding_0ca073a7f0bb73202d1b | medium | code_health | js/app/10-main-app.js:4635 | alignGrammarWordingWithErrorData / complex_method | unreviewed |
-| code_health:finding_029e6991171b7c743b8d | medium | code_health | js/app/10-main-app.js:4724 | getAuditRawRows / complex_method | unreviewed |
-| code_health:finding_d97607b9caf7c718fee8 | medium | code_health | js/app/10-main-app.js:4802 | buildAuditValidationRows / complex_method | unreviewed |
-| code_health:finding_3fe12dd27aa07dcffadb | medium | code_health | js/app/10-main-app.js:4822 | getAuditBuilderRows / complex_method | unreviewed |
-| code_health:finding_797243d7fc1eee66e607 | medium | code_health | js/app/10-main-app.js:5068 | formatToken / complex_method | unreviewed |
-| code_health:finding_30c5b963c3cbba9327b0 | medium | code_health | js/app/10-main-app.js:5111 | isTitleCaseish / complex_method | unreviewed |
-| code_health:finding_cee752fc5633ce157f49 | medium | code_health | js/app/10-main-app.js:5127 | isLikelyStandaloneTitle / complex_method | unreviewed |
-| code_health:finding_6cc23b99db537ad525a4 | medium | code_health | js/app/10-main-app.js:5291 | normalizeWritingGenreInfo / complex_method | unreviewed |
-| code_health:finding_af328843a23eda60d8e8 | medium | code_health | js/app/10-main-app.js:5318 | getWritingGenreInfoFromSession / complex_method | unreviewed |
-| code_health:finding_be7169774d0b3e171f27 | medium | code_health | js/app/10-main-app.js:5341 | hasLetterFeatures / complex_method | unreviewed |
-| code_health:finding_108b576ddc9a4fbc4f04 | medium | code_health | js/app/10-main-app.js:5371 | looksLikePoem / complex_method | unreviewed |
-| code_health:finding_e0ba9c50da01859bca21 | medium | code_health | js/app/10-main-app.js:5502 | sanitizeGenreReferenceInFeedback / complex_method | unreviewed |
-| code_health:finding_6aa8dd9c0ba6b9ece072 | medium | code_health | js/app/10-main-app.js:5533 | updateGenreReviewBox / complex_method | unreviewed |
-| code_health:finding_94f366547c7c0bde19f4 | medium | code_health | js/app/10-main-app.js:5755 | extractNotebookActionItems / complex_method | unreviewed |
-| code_health:finding_7a4eb428dcd144100e52 | medium | code_health | js/app/10-main-app.js:5979 | renderNotebookDetailedAssessment / complex_method | unreviewed |
-| code_health:finding_63e6a4380bc461fc83e1 | medium | code_health | js/app/10-main-app.js:6061 | normalizeNotebookGuideCategoryName / complex_method | unreviewed |
-| code_health:finding_e733e20899c9ec8001a8 | medium | code_health | js/app/10-main-app.js:6159 | isGenericNotebookNextTimeExample / complex_method | unreviewed |
-| code_health:finding_076f946c496a4a85483d | medium | code_health | js/app/10-main-app.js:6262 | getNotebookGuideCategoryFocusSource / complex_method | unreviewed |
-| code_health:finding_08b13adf7c4b98cebed0 | medium | code_health | js/app/10-main-app.js:6291 | addPriority / complex_method | unreviewed |
-| code_health:finding_88d56b7b2769df774320 | medium | code_health | js/app/10-main-app.js:6417 | notebookGuideExampleMatchesPriority / complex_method | unreviewed |
-| code_health:finding_b6db1589f4e852efbdf4 | medium | code_health | js/app/10-main-app.js:6510 | getNotebookGuideRequiredCategories / complex_method | unreviewed |
-| code_health:finding_f88d29b4ba219e82b036 | medium | code_health | js/app/10-main-app.js:6652 | inferConventionSkill / complex_method | unreviewed |
-| code_health:finding_d41a46dccd3be770d913 | medium | code_health | js/app/10-main-app.js:6700 | buildFallbackExampleForPriority / complex_method | unreviewed |
-| code_health:finding_1c5b8851a55d1dda3282 | medium | code_health | js/app/10-main-app.js:6835 | addNotebookGuideFallbackExample / complex_method | unreviewed |
-| code_health:finding_906c639a49387285cfa4 | medium | code_health | js/app/10-main-app.js:6855 | buildNotebookGuideFocusItemsFromExamples / complex_method | unreviewed |
-| code_health:finding_954463e2c9a968745031 | medium | code_health | js/app/10-main-app.js:6930 | addExample / complex_method | unreviewed |
-| code_health:finding_864bef6e21e94b0d1bbf | medium | code_health | js/app/10-main-app.js:7035 | renderNotebookGuideExamples / complex_method | unreviewed |
-| code_health:finding_e890cbbd9e7f4daf0522 | medium | code_health | js/app/10-main-app.js:7434 | renderNotebookDetailedAssessmentFromSavedSession / complex_method | unreviewed |
-| code_health:finding_b3313ac8bbb7938fdc52 | medium | code_health | js/app/10-main-app.js:7508 | setActiveStudentForPortfolioReassessment / complex_method | unreviewed |
-| code_health:finding_1cdab62e523ba3c26976 | medium | code_health | js/app/10-main-app.js:7587 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_c27d53fe6a0a339c37c2 | medium | code_health | js/app/10-main-app.js:7590 | <anonymous> / complex_method | unreviewed |
-| code_health:finding_6abe7cc396ba01536e50 | medium | code_health | js/app/10-main-app.js:7619 | reassessPortfolioSession / brain_method | unreviewed |
-| code_health:finding_cb05a47a890f2d721e5f | medium | code_health | js/app/10-main-app.js:7619 | reassessPortfolioSession / complex_method | unreviewed |
-| code_health:finding_0f615577a20e82dd9090 | medium | code_health | js/app/10-main-app.js:7754 | syncUiState / complex_method | unreviewed |
-| code_health:finding_af12c52b65a991a95ba6 | medium | code_health | js/app/10-main-app.js:7810 | applyComputedGrammarAssessment / complex_method | unreviewed |
-| code_health:finding_766147c5eccb9857e907 | medium | code_health | js/app/10-main-app.js:7810 | applyComputedGrammarAssessment / primitive_obsession | unreviewed |
-| code_health:finding_b869cb483502e197316b | medium | code_health | js/app/10-main-app.js:7910 | buildAnalysisCategoryScores / complex_method | unreviewed |
-| code_health:finding_c2c599be4dc619dfd33b | medium | code_health | js/app/10-main-app.js:7931 | reconcileScoredAssessment / primitive_obsession | unreviewed |
-| code_health:finding_64d289cb54e8a515f0f4 | medium | code_health | js/app/10-main-app.js:8006 | renderScoredAnalysisDebug / complex_method | unreviewed |
-| code_health:finding_5d743917e463897a3133 | medium | code_health | js/app/10-main-app.js:8516 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_91b9a8251ba0cff648ab | medium | code_health | js/app/10-main-app.js:1283 | buildMinimalCorrectionMarkup / complex_method | unreviewed |
+| code_health:finding_71b8c35d5c1cce2bdb4e | medium | code_health | js/app/10-main-app.js:1323 | renderCorrected / complex_method | unreviewed |
+| code_health:finding_ebb204a5868a15946e25 | medium | code_health | js/app/10-main-app.js:1403 | analyzeSentenceStarters / complex_method | unreviewed |
+| code_health:finding_2bdd007e9f7d0211503b | medium | code_health | js/app/10-main-app.js:1438 | analyzeSentenceVariety / large_method | unreviewed |
+| code_health:finding_d8b64c85428c74a85bc3 | medium | code_health | js/app/10-main-app.js:1564 | buildComputedFlowTip / complex_method | unreviewed |
+| code_health:finding_9652bf583d3a536c3ce6 | medium | code_health | js/app/10-main-app.js:1642 | grammarDensityBand / complex_method | unreviewed |
+| code_health:finding_c77269488091be9c398f | medium | code_health | js/app/10-main-app.js:1657 | computeOverallScore / complex_method | unreviewed |
+| code_health:finding_093a5b89338891a83bb9 | medium | code_health | js/app/10-main-app.js:1730 | teacherizeWording / complex_conditional | unreviewed |
+| code_health:finding_f940e3f053441fc31563 | medium | code_health | js/app/10-main-app.js:1743 | detectConventionIssues / complex_method | unreviewed |
+| code_health:finding_8142e2f50ce57c01cca8 | medium | code_health | js/app/10-main-app.js:1776 | buildConventionReason / complex_method | unreviewed |
+| code_health:finding_e0017e08473e350a01ab | medium | code_health | js/app/10-main-app.js:1846 | analyzeGrammarChanges / complex_method | unreviewed |
+| code_health:finding_d101f599d7efdce35b73 | medium | code_health | js/app/10-main-app.js:1886 | buildGrammarReasonFromData / complex_method | unreviewed |
+| code_health:finding_612b7a712640a912fac4 | medium | code_health | js/app/10-main-app.js:2103 | polishCategoryWording / complex_method | unreviewed |
+| code_health:finding_c72ee67ef2d568b7cc3b | medium | code_health | js/app/10-main-app.js:2146 | parseStep1 / complex_method | unreviewed |
+| code_health:finding_2027f723da8a822bca97 | medium | code_health | js/app/10-main-app.js:2236 | parseWhatINoticedRowsFromBody / complex_method | unreviewed |
+| code_health:finding_61ae3487dee679ba3273 | medium | code_health | js/app/10-main-app.js:2267 | captureCategory / complex_method | unreviewed |
+| code_health:finding_add6b1fe2e80774a4452 | medium | code_health | js/app/10-main-app.js:2479 | getDominantSentenceBand / complex_method | unreviewed |
+| code_health:finding_1951be36963b01b65962 | medium | code_health | js/app/10-main-app.js:2495 | flowCommentMentionsFalseShortProblem / complex_method | unreviewed |
+| code_health:finding_dd31592202f5c0bf9100 | medium | code_health | js/app/10-main-app.js:2512 | buildComputedFlowQuickNote / complex_method | unreviewed |
+| code_health:finding_69e53eede398fea73a81 | medium | code_health | js/app/10-main-app.js:2534 | buildSentenceLengthQuickNote / complex_method | unreviewed |
+| code_health:finding_df9b7907f423db937055 | medium | code_health | js/app/10-main-app.js:2716 | parseOpenRouterResponse / complex_method | unreviewed |
+| code_health:finding_ea199b21114b3bb88a9d | medium | code_health | js/app/10-main-app.js:2788 | checkOpenRouterRetry / complex_method | unreviewed |
+| code_health:finding_04d3d1b24822e961163f | medium | code_health | js/app/10-main-app.js:2821 | requestOpenRouterWithFallback / io_in_loop | unreviewed |
+| code_health:finding_e8cc8c120b2d5102edee | medium | code_health | js/app/10-main-app.js:2910 | updateOcrControls / complex_method | unreviewed |
+| code_health:finding_1f5c8ffa1136e017d383 | medium | code_health | js/app/10-main-app.js:3120 | resetCurrentClassData / bumpy_road | unreviewed |
+| code_health:finding_212f64bf7e0d299b02c0 | medium | code_health | js/app/10-main-app.js:3332 | getDroppedImageFiles / complex_method | unreviewed |
+| code_health:finding_fa1d91a12c1ab82ba63e | medium | code_health | js/app/10-main-app.js:3487 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_fcbf91717c7b0b330799 | medium | code_health | js/app/10-main-app.js:3620 | extractTextFromSelectedImage / brain_method | unreviewed |
+| code_health:finding_691819b607d0c2ab6370 | medium | code_health | js/app/10-main-app.js:3620 | extractTextFromSelectedImage / complex_method | unreviewed |
+| code_health:finding_1a5454e6e63026044dbb | medium | code_health | js/app/10-main-app.js:3620 | extractTextFromSelectedImage / large_method | unreviewed |
+| code_health:finding_355f2c8c145443a2c91f | medium | code_health | js/app/10-main-app.js:3669 | <anonymous> / nested_complexity | unreviewed |
+| code_health:finding_b069b026d6e2c6735605 | medium | code_health | js/app/10-main-app.js:3734 | getGrammarStrictness / complex_method | unreviewed |
+| code_health:finding_5d620393555ff50afc4c | medium | code_health | js/app/10-main-app.js:4132 | getEvidenceTokens / complex_method | unreviewed |
+| code_health:finding_a12d8ec9390f76b1aaad | medium | code_health | js/app/10-main-app.js:4163 | isValidTeacherComment / complex_method | unreviewed |
+| code_health:finding_5954cec915712fef2661 | medium | code_health | js/app/10-main-app.js:4205 | pickNoticeComment / complex_method | unreviewed |
+| code_health:finding_5656ce3ea2f986ff0085 | medium | code_health | js/app/10-main-app.js:4291 | isGenericGrowthTip / complex_method | unreviewed |
+| code_health:finding_ac0528d81066bb73b342 | medium | code_health | js/app/10-main-app.js:4538 | addNoticeRowIfNew / complex_method | unreviewed |
+| code_health:finding_0ca073a7f0bb73202d1b | medium | code_health | js/app/10-main-app.js:4627 | alignGrammarWordingWithErrorData / complex_method | unreviewed |
+| code_health:finding_029e6991171b7c743b8d | medium | code_health | js/app/10-main-app.js:4716 | getAuditRawRows / complex_method | unreviewed |
+| code_health:finding_d97607b9caf7c718fee8 | medium | code_health | js/app/10-main-app.js:4794 | buildAuditValidationRows / complex_method | unreviewed |
+| code_health:finding_3fe12dd27aa07dcffadb | medium | code_health | js/app/10-main-app.js:4814 | getAuditBuilderRows / complex_method | unreviewed |
+| code_health:finding_797243d7fc1eee66e607 | medium | code_health | js/app/10-main-app.js:5060 | formatToken / complex_method | unreviewed |
+| code_health:finding_30c5b963c3cbba9327b0 | medium | code_health | js/app/10-main-app.js:5103 | isTitleCaseish / complex_method | unreviewed |
+| code_health:finding_cee752fc5633ce157f49 | medium | code_health | js/app/10-main-app.js:5119 | isLikelyStandaloneTitle / complex_method | unreviewed |
+| code_health:finding_6cc23b99db537ad525a4 | medium | code_health | js/app/10-main-app.js:5283 | normalizeWritingGenreInfo / complex_method | unreviewed |
+| code_health:finding_af328843a23eda60d8e8 | medium | code_health | js/app/10-main-app.js:5310 | getWritingGenreInfoFromSession / complex_method | unreviewed |
+| code_health:finding_be7169774d0b3e171f27 | medium | code_health | js/app/10-main-app.js:5333 | hasLetterFeatures / complex_method | unreviewed |
+| code_health:finding_108b576ddc9a4fbc4f04 | medium | code_health | js/app/10-main-app.js:5363 | looksLikePoem / complex_method | unreviewed |
+| code_health:finding_e0ba9c50da01859bca21 | medium | code_health | js/app/10-main-app.js:5494 | sanitizeGenreReferenceInFeedback / complex_method | unreviewed |
+| code_health:finding_6aa8dd9c0ba6b9ece072 | medium | code_health | js/app/10-main-app.js:5525 | updateGenreReviewBox / complex_method | unreviewed |
+| code_health:finding_94f366547c7c0bde19f4 | medium | code_health | js/app/10-main-app.js:5747 | extractNotebookActionItems / complex_method | unreviewed |
+| code_health:finding_7a4eb428dcd144100e52 | medium | code_health | js/app/10-main-app.js:5971 | renderNotebookDetailedAssessment / complex_method | unreviewed |
+| code_health:finding_63e6a4380bc461fc83e1 | medium | code_health | js/app/10-main-app.js:6053 | normalizeNotebookGuideCategoryName / complex_method | unreviewed |
+| code_health:finding_e733e20899c9ec8001a8 | medium | code_health | js/app/10-main-app.js:6151 | isGenericNotebookNextTimeExample / complex_method | unreviewed |
+| code_health:finding_076f946c496a4a85483d | medium | code_health | js/app/10-main-app.js:6254 | getNotebookGuideCategoryFocusSource / complex_method | unreviewed |
+| code_health:finding_08b13adf7c4b98cebed0 | medium | code_health | js/app/10-main-app.js:6283 | addPriority / complex_method | unreviewed |
+| code_health:finding_88d56b7b2769df774320 | medium | code_health | js/app/10-main-app.js:6409 | notebookGuideExampleMatchesPriority / complex_method | unreviewed |
+| code_health:finding_b6db1589f4e852efbdf4 | medium | code_health | js/app/10-main-app.js:6502 | getNotebookGuideRequiredCategories / complex_method | unreviewed |
+| code_health:finding_f88d29b4ba219e82b036 | medium | code_health | js/app/10-main-app.js:6644 | inferConventionSkill / complex_method | unreviewed |
+| code_health:finding_d41a46dccd3be770d913 | medium | code_health | js/app/10-main-app.js:6692 | buildFallbackExampleForPriority / complex_method | unreviewed |
+| code_health:finding_1c5b8851a55d1dda3282 | medium | code_health | js/app/10-main-app.js:6827 | addNotebookGuideFallbackExample / complex_method | unreviewed |
+| code_health:finding_906c639a49387285cfa4 | medium | code_health | js/app/10-main-app.js:6847 | buildNotebookGuideFocusItemsFromExamples / complex_method | unreviewed |
+| code_health:finding_954463e2c9a968745031 | medium | code_health | js/app/10-main-app.js:6922 | addExample / complex_method | unreviewed |
+| code_health:finding_864bef6e21e94b0d1bbf | medium | code_health | js/app/10-main-app.js:7027 | renderNotebookGuideExamples / complex_method | unreviewed |
+| code_health:finding_e890cbbd9e7f4daf0522 | medium | code_health | js/app/10-main-app.js:7426 | renderNotebookDetailedAssessmentFromSavedSession / complex_method | unreviewed |
+| code_health:finding_b3313ac8bbb7938fdc52 | medium | code_health | js/app/10-main-app.js:7500 | setActiveStudentForPortfolioReassessment / complex_method | unreviewed |
+| code_health:finding_1cdab62e523ba3c26976 | medium | code_health | js/app/10-main-app.js:7579 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_c27d53fe6a0a339c37c2 | medium | code_health | js/app/10-main-app.js:7582 | <anonymous> / complex_method | unreviewed |
+| code_health:finding_6abe7cc396ba01536e50 | medium | code_health | js/app/10-main-app.js:7611 | reassessPortfolioSession / brain_method | unreviewed |
+| code_health:finding_cb05a47a890f2d721e5f | medium | code_health | js/app/10-main-app.js:7611 | reassessPortfolioSession / complex_method | unreviewed |
+| code_health:finding_0f615577a20e82dd9090 | medium | code_health | js/app/10-main-app.js:7746 | syncUiState / complex_method | unreviewed |
+| code_health:finding_af12c52b65a991a95ba6 | medium | code_health | js/app/10-main-app.js:7802 | applyComputedGrammarAssessment / complex_method | unreviewed |
+| code_health:finding_766147c5eccb9857e907 | medium | code_health | js/app/10-main-app.js:7802 | applyComputedGrammarAssessment / primitive_obsession | unreviewed |
+| code_health:finding_b869cb483502e197316b | medium | code_health | js/app/10-main-app.js:7902 | buildAnalysisCategoryScores / complex_method | unreviewed |
+| code_health:finding_c2c599be4dc619dfd33b | medium | code_health | js/app/10-main-app.js:7923 | reconcileScoredAssessment / primitive_obsession | unreviewed |
+| code_health:finding_64d289cb54e8a515f0f4 | medium | code_health | js/app/10-main-app.js:7998 | renderScoredAnalysisDebug / complex_method | unreviewed |
+| code_health:finding_5d743917e463897a3133 | medium | code_health | js/app/10-main-app.js:8508 | <anonymous> / complex_method | unreviewed |
 | code_health:finding_5d6d32a8f92f3d71f53b | medium | code_health | js/app/99-lightbox.js:2 | openImageLightbox / complex_method | reviewed_no_change |
 | code_health:finding_c4ec7ba6b31459fd0ccb | medium | code_health | js/app/dialogs.js:116 | <anonymous> / complex_method | unreviewed |
 | code_health:finding_bae51d347f9911061cfa | medium | code_health | js/app/dialogs.js:116 | <anonymous> / large_method | unreviewed |
@@ -453,14 +477,16 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_eb23143f973d0b6f92ec | medium | code_health | tests/archive-integrity.browser.cjs:113 | observePhotoExport / complex_method | unreviewed |
 | code_health:finding_6d67cb0b1d9803f92f47 | medium | code_health | tests/archive-integrity.browser.cjs:128 | checkPhotoExportSources / complex_method | unreviewed |
 | code_health:finding_b6389b9811aeedd4ac00 | medium | code_health | tests/archive-integrity.browser.cjs:140 | observeArchiveChange / complex_method | unreviewed |
+| code_health:finding_4fac48e803a52200e11a | medium | code_health | tests/auth-integrity.browser.cjs | churn_risk | reviewed_no_change |
 | code_health:finding_07852add7f2c9cf7efbc | medium | code_health | tests/auth-integrity.browser.cjs | change_entropy | reviewed_no_change |
 | code_health:finding_e673407f389e26d90ad5 | medium | code_health | tests/auth-integrity.browser.cjs:47 | checkDraftRestoration / complex_method | unreviewed |
 | code_health:finding_d70b311c8cef34ed959d | medium | code_health | tests/auth-integrity.browser.cjs:65 | checkDraftStorageFailures / complex_method | unreviewed |
 | code_health:finding_bf74a4880d990f5c83c7 | medium | code_health | tests/auth-integrity.browser.cjs:108 | checkDraftPreservation / complex_method | unreviewed |
-| code_health:finding_73792a574b42e8236c19 | medium | code_health | tests/auth-integrity.browser.cjs:199 | checkRedirectRecovery / nested_complexity | unreviewed |
-| code_health:finding_fa1e3f3fce82ffa1cfd4 | medium | code_health | tests/auth-integrity.browser.cjs:265 | checkTokenValidation / complex_method | unreviewed |
-| code_health:finding_0870c25d4075e0357488 | medium | code_health | tests/auth-integrity.browser.cjs:281 | checkSignOutRetention / complex_method | unreviewed |
-| code_health:finding_a0776e0bdddefccee43d | medium | code_health | tests/auth-integrity.browser.cjs:356 | observeOwnership / complex_method | unreviewed |
+| code_health:finding_a4fcf0b1e3303769475c | medium | code_health | tests/auth-integrity.browser.cjs:164 | checkFragmentCleanupFailures / complex_method | unreviewed |
+| code_health:finding_73792a574b42e8236c19 | medium | code_health | tests/auth-integrity.browser.cjs:257 | checkRedirectRecovery / nested_complexity | unreviewed |
+| code_health:finding_fa1e3f3fce82ffa1cfd4 | medium | code_health | tests/auth-integrity.browser.cjs:323 | checkTokenValidation / complex_method | unreviewed |
+| code_health:finding_0870c25d4075e0357488 | medium | code_health | tests/auth-integrity.browser.cjs:339 | checkSignOutRetention / complex_method | unreviewed |
+| code_health:finding_a0776e0bdddefccee43d | medium | code_health | tests/auth-integrity.browser.cjs:414 | observeOwnership / complex_method | unreviewed |
 | code_health:finding_39972fb07ea171d91fde | medium | code_health | tests/class-deletion.browser.cjs:7 | <anonymous@7> / complex_method | unreviewed |
 | code_health:finding_717f58b2083cafd32ed4 | medium | code_health | tests/class-deletion.browser.cjs:7 | <anonymous@7> / large_method | unreviewed |
 | code_health:finding_1d843be7f50439511641 | medium | code_health | tests/class-deletion.browser.cjs:44 | dry_violation | unreviewed |
@@ -547,6 +573,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_50f759c7ce8caf72ba0f | medium | code_health | tests/preference-integrity-scenarios.js:457 | checkKeyReadsAndRetainedLegacy / complex_method | unreviewed |
 | code_health:finding_f91d9ed74c28e5ef0ee7 | medium | code_health | tests/preference-integrity-scenarios.js:500 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_7041aa95c1ab7c98200b | medium | code_health | tests/preference-integrity.browser.cjs:10 | dry_violation | unreviewed |
+| code_health:finding_922daa780754711de593 | medium | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / complex_method | unreviewed |
 | code_health:finding_92d6531aeae640c31cf2 | medium | code_health | tests/recovery-cache.browser.cjs | change_entropy | reviewed_no_change |
 | code_health:finding_a3c658d1d9476710ffd9 | medium | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / complex_method | unreviewed |
 | code_health:finding_14213736db7f2152b9ad | medium | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / primitive_obsession | unreviewed |
@@ -611,7 +638,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_bc84d26d5eac20ff69b6 | low | code_health | js/app/00-storage-sync-patches.js:1759 | rebuildPortfolioIndex / bumpy_road | unreviewed |
 | code_health:finding_334b8bc581310ce17f48 | low | code_health | js/app/00-storage-sync-patches.js:1849 | error_handling | reviewed_no_change |
 | code_health:finding_37c2ddecfa1ce89e3871 | low | code_health | js/app/00-storage-sync-patches.js:1897 | error_handling | reviewed_no_change |
-| code_health:finding_5e1517d62b1781066e9b | low | code_health | js/app/00-storage-sync-patches.js:2311 | error_handling | candidate_needs_regression |
+| code_health:finding_5e1517d62b1781066e9b | low | code_health | js/app/00-storage-sync-patches.js:2311 | error_handling | reviewed_no_change |
 | code_health:finding_73b80266603d7896f995 | low | code_health | js/app/00-storage-sync-patches.js:2322 | error_handling | reviewed_no_change |
 | code_health:finding_cfe4655da07db0e031ca | low | code_health | js/app/00-storage-sync-patches.js:2351 | error_handling | reviewed_no_change |
 | code_health:finding_a676bd99b260bc23f13f | low | code_health | js/app/00-storage-sync-patches.js:2440 | error_handling | reviewed_no_change |
@@ -639,188 +666,189 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_879a20d0d0bc9e7a59ac | low | code_health | js/app/00-storage-sync-patches.js:3255 | completeWftGoogleSignInWithAccessToken / primitive_obsession | unreviewed |
 | code_health:finding_82a1305c8c6ea7f18054 | low | code_health | js/app/00-storage-sync-patches.js:3268 | error_handling | reviewed_no_change |
 | code_health:finding_9b637db612c321b9d935 | low | code_health | js/app/00-storage-sync-patches.js:3278 | error_handling | reviewed_no_change |
-| code_health:finding_48ecc6ce9ca0e204604a | low | code_health | js/app/00-storage-sync-patches.js:3338 | error_handling | reviewed_no_change |
-| code_health:finding_05b33b2d236e13ab956c | low | code_health | js/app/00-storage-sync-patches.js:3348 | error_handling | candidate_needs_regression |
-| code_health:finding_1eb82956f0c43b5c3eca | low | code_health | js/app/00-storage-sync-patches.js:3477 | error_handling | reviewed_no_change |
-| code_health:finding_a8a87935472a58468993 | low | code_health | js/app/00-storage-sync-patches.js:3504 | requestDriveAccess / bumpy_road | unreviewed |
-| code_health:finding_3d17096d3720efd5988e | low | code_health | js/app/00-storage-sync-patches.js:3511 | error_handling | reviewed_no_change |
-| code_health:finding_c6c437a3f5d906220e7e | low | code_health | js/app/00-storage-sync-patches.js:3593 | error_handling | reviewed_no_change |
-| code_health:finding_8f9b29415e86e102be0c | low | code_health | js/app/00-storage-sync-patches.js:3685 | clearWftLocalStorageAfterSignOut / bumpy_road | unreviewed |
-| code_health:finding_29a6dc1f54e5f6712827 | low | code_health | js/app/00-storage-sync-patches.js:3725 | error_handling | reviewed_no_change |
-| code_health:finding_9b5c010df5cc52cd6ceb | low | code_health | js/app/00-storage-sync-patches.js:3730 | error_handling | reviewed_no_change |
-| code_health:finding_ff2fa11f62abe960d003 | low | code_health | js/app/00-storage-sync-patches.js:3755 | error_handling | reviewed_no_change |
-| code_health:finding_d5c9f34e1f0076814706 | low | code_health | js/app/00-storage-sync-patches.js:3805 | error_handling | reviewed_no_change |
-| code_health:finding_002942509f9f668c5bf1 | low | code_health | js/app/00-storage-sync-patches.js:3904 | error_handling | reviewed_no_change |
-| code_health:finding_c8b13530cfcd50f78b70 | low | code_health | js/app/00-storage-sync-patches.js:3938 | error_handling | reviewed_no_change |
-| code_health:finding_12c7f03482c92310bf6d | low | code_health | js/app/00-storage-sync-patches.js:3953 | error_handling | reviewed_no_change |
-| code_health:finding_e7551d61caac0aa4e1e6 | low | code_health | js/app/00-storage-sync-patches.js:4119 | saveFileToDrive / large_method | unreviewed |
-| code_health:finding_a84beffd019dbbae5cda | low | code_health | js/app/00-storage-sync-patches.js:4119 | saveFileToDrive / primitive_obsession | unreviewed |
-| code_health:finding_b7be92ac9d86ce17b33e | low | code_health | js/app/00-storage-sync-patches.js:4189 | ensureDriveFolderPromise / large_method | unreviewed |
-| code_health:finding_25f9c687f74bb140cca7 | low | code_health | js/app/00-storage-sync-patches.js:4695 | error_handling | reviewed_no_change |
-| code_health:finding_a1d3edb67f1235db4b52 | low | code_health | js/app/00-storage-sync-patches.js:5038 | uploadWftJsonFilePromise / large_method | unreviewed |
-| code_health:finding_f68f0f8e1f2e30f76ee5 | low | code_health | js/app/00-storage-sync-patches.js:5236 | mergeWftSettings / complex_conditional | unreviewed |
-| code_health:finding_dffec2060f1195e595db | low | code_health | js/app/00-storage-sync-patches.js:5253 | syncWftSettingsIfNeeded / large_method | unreviewed |
-| code_health:finding_c7eaf07e563a1b77b630 | low | code_health | js/app/00-storage-sync-patches.js:5343 | syncWftDeletionsIfNeeded / large_method | unreviewed |
-| code_health:finding_9ae6fddb1587d38c6426 | low | code_health | js/app/00-storage-sync-patches.js:5376 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_83aadb338a812a5c1310 | low | code_health | js/app/00-storage-sync-patches.js:5590 | syncWftPortfolioIfNeeded / large_method | unreviewed |
-| code_health:finding_72bb568aecd724a691c3 | low | code_health | js/app/00-storage-sync-patches.js:5734 | handleWftSyncError / complex_conditional | unreviewed |
-| code_health:finding_e0eb4bd9894d70ec8a28 | low | code_health | js/app/00-storage-sync-patches.js:5846 | error_handling | reviewed_no_change |
-| code_health:finding_567c2c3fe1148fb6204e | low | code_health | js/app/00-storage-sync-patches.js:5914 | error_handling | reviewed_no_change |
-| code_health:finding_d523b84a45d044f4c0f5 | low | code_health | js/app/00-storage-sync-patches.js:5961 | saveWftLocalSnapshotsBeforeHide / bumpy_road | unreviewed |
-| code_health:finding_40506fc89c1b3ae5d0e0 | low | code_health | js/app/00-storage-sync-patches.js:5978 | error_handling | reviewed_no_change |
-| code_health:finding_38c0855f7dc3861622c9 | low | code_health | js/app/00-storage-sync-patches.js:5981 | initWftSyncLifecycleHandlers / large_method | unreviewed |
-| code_health:finding_156db6ee1ab11f402cfe | low | code_health | js/app/00-storage-sync-patches.js:6027 | error_handling | reviewed_no_change |
-| code_health:finding_dba32f79d863b2dbc216 | low | code_health | js/app/00-storage-sync-patches.js:6052 | error_handling | reviewed_no_change |
-| code_health:finding_8c1e5a2b0423614dea4b | low | code_health | js/app/00-storage-sync-patches.js:6179 | uploadBlobToDrive / primitive_obsession | unreviewed |
-| code_health:finding_eba7f088a4fab7fddea3 | low | code_health | js/app/00-storage-sync-patches.js:6371 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_9594f4eb52ffbcf09db0 | low | code_health | js/app/00-storage-sync-patches.js:6664 | setWftSanitizedInnerHtml / complex_conditional | unreviewed |
-| code_health:finding_6ba8692dd09e4d1554ac | low | code_health | js/app/00-storage-sync-patches.js:6792 | error_handling | reviewed_no_change |
-| code_health:finding_22fc6fec08d1b93873e2 | low | code_health | js/app/00-storage-sync-patches.js:6800 | error_handling | reviewed_no_change |
-| code_health:finding_d342aecb83e0282c5fd2 | low | code_health | js/app/00-storage-sync-patches.js:6812 | error_handling | reviewed_no_change |
-| code_health:finding_44a8d8bf9c9caf35a45e | low | code_health | js/app/00-storage-sync-patches.js:6883 | syncAllToDrive / bumpy_road | unreviewed |
-| code_health:finding_20894b7df80971e6e886 | low | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / bumpy_road | unreviewed |
-| code_health:finding_8db10553c83e85be9dd7 | low | code_health | js/app/00-storage-sync-patches.js:6947 | uploadSessionImagesToDrive / primitive_obsession | unreviewed |
-| code_health:finding_0dd0b44ef3cf9a917f4b | low | code_health | js/app/00-storage-sync-patches.js:6998 | nextUpload / large_method | unreviewed |
-| code_health:finding_0ebf1243a621949a6e83 | low | code_health | js/app/00-storage-sync-patches.js:7032 | validateCurrentUpload / complex_conditional | unreviewed |
-| code_health:finding_e6856bfa0d603fa582a2 | low | code_health | js/app/00-storage-sync-patches.js:7151 | error_handling | reviewed_no_change |
-| code_health:finding_07c825055cecc7b49cbc | low | code_health | js/app/00-storage-sync-patches.js:7180 | getSessionCategoryKeys / complex_conditional | unreviewed |
-| code_health:finding_321f99e606cfd1e7915e | low | code_health | js/app/00-storage-sync-patches.js:7295 | renderPortfolioFeedbackRows / string_concat_in_loop | unreviewed |
-| code_health:finding_5fcc9daff01d66f13e80 | low | code_health | js/app/00-storage-sync-patches.js:7418 | error_handling | reviewed_no_change |
-| code_health:finding_7e9e3bd687e666b878c1 | low | code_health | js/app/00-storage-sync-patches.js:7539 | setupWftPortfolioCharts / primitive_obsession | unreviewed |
-| code_health:finding_bd262137e5d6d346dc75 | low | code_health | js/app/00-storage-sync-patches.js:7592 | renderStudentPortfolio / large_method | unreviewed |
-| code_health:finding_4cc8d496bdb9e7a9baaf | low | code_health | js/app/00-storage-sync-patches.js:7672 | saveCurrentSessionToPortfolio / large_method | reviewed_no_change |
-| code_health:finding_011d338cf5eaa80b7fbe | low | code_health | js/app/00-storage-sync-patches.js:7812 | uploadPendingPortfolioMediaBeforeCommit / bumpy_road | unreviewed |
-| code_health:finding_dda7cb8583c1ac2b8c1b | low | code_health | js/app/00-storage-sync-patches.js:7884 | finishManualSaveToDrive / large_method | unreviewed |
-| code_health:finding_0956f3c90bb76c36955b | low | code_health | js/app/00-storage-sync-patches.js:8005 | updateStatusBar / primitive_obsession | unreviewed |
-| code_health:finding_4f4a40401b66f5644289 | low | code_health | js/app/00-storage-sync-patches.js:8087 | error_handling | reviewed_no_change |
-| code_health:finding_a2f159e8a65910389542 | low | code_health | js/app/00-storage-sync-patches.js:8265 | updateSyncPortfolioButtonState / complex_conditional | unreviewed |
-| code_health:finding_ce0ef519180cad77d766 | low | code_health | js/app/00-storage-sync-patches.js:8288 | commitPendingPortfolioReplacement / complex_conditional | unreviewed |
-| code_health:finding_f761b8085338ef63b4df | low | code_health | js/app/00-storage-sync-patches.js:8294 | commitPendingPortfolioReplacement / complex_conditional | unreviewed |
-| code_health:finding_f61621b5ff2044276dae | low | code_health | js/app/00-storage-sync-patches.js:8313 | commitPendingPortfolioReplacement / complex_conditional | unreviewed |
+| code_health:finding_066e0fdf8ed72188e4bb | low | code_health | js/app/00-storage-sync-patches.js:3326 | clearWftOAuthFragment / bumpy_road | reviewed_no_change |
+| code_health:finding_48ecc6ce9ca0e204604a | low | code_health | js/app/00-storage-sync-patches.js:3338 | error_handling | fixed_verified |
+| code_health:finding_05b33b2d236e13ab956c | low | code_health | js/app/00-storage-sync-patches.js:3348 | error_handling | fixed_verified |
+| code_health:finding_1eb82956f0c43b5c3eca | low | code_health | js/app/00-storage-sync-patches.js:3497 | error_handling | reviewed_no_change |
+| code_health:finding_a8a87935472a58468993 | low | code_health | js/app/00-storage-sync-patches.js:3524 | requestDriveAccess / bumpy_road | unreviewed |
+| code_health:finding_3d17096d3720efd5988e | low | code_health | js/app/00-storage-sync-patches.js:3531 | error_handling | reviewed_no_change |
+| code_health:finding_c6c437a3f5d906220e7e | low | code_health | js/app/00-storage-sync-patches.js:3613 | error_handling | reviewed_no_change |
+| code_health:finding_8f9b29415e86e102be0c | low | code_health | js/app/00-storage-sync-patches.js:3705 | clearWftLocalStorageAfterSignOut / bumpy_road | unreviewed |
+| code_health:finding_29a6dc1f54e5f6712827 | low | code_health | js/app/00-storage-sync-patches.js:3745 | error_handling | reviewed_no_change |
+| code_health:finding_9b5c010df5cc52cd6ceb | low | code_health | js/app/00-storage-sync-patches.js:3750 | error_handling | reviewed_no_change |
+| code_health:finding_ff2fa11f62abe960d003 | low | code_health | js/app/00-storage-sync-patches.js:3775 | error_handling | reviewed_no_change |
+| code_health:finding_d5c9f34e1f0076814706 | low | code_health | js/app/00-storage-sync-patches.js:3825 | error_handling | reviewed_no_change |
+| code_health:finding_002942509f9f668c5bf1 | low | code_health | js/app/00-storage-sync-patches.js:3924 | error_handling | reviewed_no_change |
+| code_health:finding_c8b13530cfcd50f78b70 | low | code_health | js/app/00-storage-sync-patches.js:3958 | error_handling | reviewed_no_change |
+| code_health:finding_12c7f03482c92310bf6d | low | code_health | js/app/00-storage-sync-patches.js:3973 | error_handling | reviewed_no_change |
+| code_health:finding_e7551d61caac0aa4e1e6 | low | code_health | js/app/00-storage-sync-patches.js:4139 | saveFileToDrive / large_method | unreviewed |
+| code_health:finding_a84beffd019dbbae5cda | low | code_health | js/app/00-storage-sync-patches.js:4139 | saveFileToDrive / primitive_obsession | unreviewed |
+| code_health:finding_b7be92ac9d86ce17b33e | low | code_health | js/app/00-storage-sync-patches.js:4209 | ensureDriveFolderPromise / large_method | unreviewed |
+| code_health:finding_25f9c687f74bb140cca7 | low | code_health | js/app/00-storage-sync-patches.js:4715 | error_handling | reviewed_no_change |
+| code_health:finding_a1d3edb67f1235db4b52 | low | code_health | js/app/00-storage-sync-patches.js:5058 | uploadWftJsonFilePromise / large_method | unreviewed |
+| code_health:finding_f68f0f8e1f2e30f76ee5 | low | code_health | js/app/00-storage-sync-patches.js:5256 | mergeWftSettings / complex_conditional | unreviewed |
+| code_health:finding_dffec2060f1195e595db | low | code_health | js/app/00-storage-sync-patches.js:5273 | syncWftSettingsIfNeeded / large_method | unreviewed |
+| code_health:finding_c7eaf07e563a1b77b630 | low | code_health | js/app/00-storage-sync-patches.js:5363 | syncWftDeletionsIfNeeded / large_method | unreviewed |
+| code_health:finding_9ae6fddb1587d38c6426 | low | code_health | js/app/00-storage-sync-patches.js:5396 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_83aadb338a812a5c1310 | low | code_health | js/app/00-storage-sync-patches.js:5610 | syncWftPortfolioIfNeeded / large_method | unreviewed |
+| code_health:finding_72bb568aecd724a691c3 | low | code_health | js/app/00-storage-sync-patches.js:5754 | handleWftSyncError / complex_conditional | unreviewed |
+| code_health:finding_e0eb4bd9894d70ec8a28 | low | code_health | js/app/00-storage-sync-patches.js:5866 | error_handling | reviewed_no_change |
+| code_health:finding_567c2c3fe1148fb6204e | low | code_health | js/app/00-storage-sync-patches.js:5934 | error_handling | reviewed_no_change |
+| code_health:finding_d523b84a45d044f4c0f5 | low | code_health | js/app/00-storage-sync-patches.js:5981 | saveWftLocalSnapshotsBeforeHide / bumpy_road | unreviewed |
+| code_health:finding_40506fc89c1b3ae5d0e0 | low | code_health | js/app/00-storage-sync-patches.js:5998 | error_handling | reviewed_no_change |
+| code_health:finding_38c0855f7dc3861622c9 | low | code_health | js/app/00-storage-sync-patches.js:6001 | initWftSyncLifecycleHandlers / large_method | unreviewed |
+| code_health:finding_156db6ee1ab11f402cfe | low | code_health | js/app/00-storage-sync-patches.js:6047 | error_handling | reviewed_no_change |
+| code_health:finding_dba32f79d863b2dbc216 | low | code_health | js/app/00-storage-sync-patches.js:6072 | error_handling | reviewed_no_change |
+| code_health:finding_8c1e5a2b0423614dea4b | low | code_health | js/app/00-storage-sync-patches.js:6199 | uploadBlobToDrive / primitive_obsession | unreviewed |
+| code_health:finding_eba7f088a4fab7fddea3 | low | code_health | js/app/00-storage-sync-patches.js:6391 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_9594f4eb52ffbcf09db0 | low | code_health | js/app/00-storage-sync-patches.js:6684 | setWftSanitizedInnerHtml / complex_conditional | unreviewed |
+| code_health:finding_6ba8692dd09e4d1554ac | low | code_health | js/app/00-storage-sync-patches.js:6812 | error_handling | reviewed_no_change |
+| code_health:finding_22fc6fec08d1b93873e2 | low | code_health | js/app/00-storage-sync-patches.js:6820 | error_handling | reviewed_no_change |
+| code_health:finding_d342aecb83e0282c5fd2 | low | code_health | js/app/00-storage-sync-patches.js:6832 | error_handling | reviewed_no_change |
+| code_health:finding_44a8d8bf9c9caf35a45e | low | code_health | js/app/00-storage-sync-patches.js:6903 | syncAllToDrive / bumpy_road | unreviewed |
+| code_health:finding_20894b7df80971e6e886 | low | code_health | js/app/00-storage-sync-patches.js:6967 | uploadSessionImagesToDrive / bumpy_road | unreviewed |
+| code_health:finding_8db10553c83e85be9dd7 | low | code_health | js/app/00-storage-sync-patches.js:6967 | uploadSessionImagesToDrive / primitive_obsession | unreviewed |
+| code_health:finding_0dd0b44ef3cf9a917f4b | low | code_health | js/app/00-storage-sync-patches.js:7018 | nextUpload / large_method | unreviewed |
+| code_health:finding_0ebf1243a621949a6e83 | low | code_health | js/app/00-storage-sync-patches.js:7052 | validateCurrentUpload / complex_conditional | unreviewed |
+| code_health:finding_e6856bfa0d603fa582a2 | low | code_health | js/app/00-storage-sync-patches.js:7171 | error_handling | reviewed_no_change |
+| code_health:finding_07c825055cecc7b49cbc | low | code_health | js/app/00-storage-sync-patches.js:7200 | getSessionCategoryKeys / complex_conditional | unreviewed |
+| code_health:finding_321f99e606cfd1e7915e | low | code_health | js/app/00-storage-sync-patches.js:7315 | renderPortfolioFeedbackRows / string_concat_in_loop | unreviewed |
+| code_health:finding_5fcc9daff01d66f13e80 | low | code_health | js/app/00-storage-sync-patches.js:7438 | error_handling | reviewed_no_change |
+| code_health:finding_7e9e3bd687e666b878c1 | low | code_health | js/app/00-storage-sync-patches.js:7559 | setupWftPortfolioCharts / primitive_obsession | unreviewed |
+| code_health:finding_bd262137e5d6d346dc75 | low | code_health | js/app/00-storage-sync-patches.js:7612 | renderStudentPortfolio / large_method | unreviewed |
+| code_health:finding_4cc8d496bdb9e7a9baaf | low | code_health | js/app/00-storage-sync-patches.js:7692 | saveCurrentSessionToPortfolio / large_method | reviewed_no_change |
+| code_health:finding_011d338cf5eaa80b7fbe | low | code_health | js/app/00-storage-sync-patches.js:7832 | uploadPendingPortfolioMediaBeforeCommit / bumpy_road | unreviewed |
+| code_health:finding_dda7cb8583c1ac2b8c1b | low | code_health | js/app/00-storage-sync-patches.js:7904 | finishManualSaveToDrive / large_method | unreviewed |
+| code_health:finding_0956f3c90bb76c36955b | low | code_health | js/app/00-storage-sync-patches.js:8025 | updateStatusBar / primitive_obsession | unreviewed |
+| code_health:finding_4f4a40401b66f5644289 | low | code_health | js/app/00-storage-sync-patches.js:8107 | error_handling | reviewed_no_change |
+| code_health:finding_a2f159e8a65910389542 | low | code_health | js/app/00-storage-sync-patches.js:8285 | updateSyncPortfolioButtonState / complex_conditional | unreviewed |
+| code_health:finding_ce0ef519180cad77d766 | low | code_health | js/app/00-storage-sync-patches.js:8308 | commitPendingPortfolioReplacement / complex_conditional | reviewed_no_change |
+| code_health:finding_f761b8085338ef63b4df | low | code_health | js/app/00-storage-sync-patches.js:8314 | commitPendingPortfolioReplacement / complex_conditional | reviewed_no_change |
+| code_health:finding_f61621b5ff2044276dae | low | code_health | js/app/00-storage-sync-patches.js:8333 | commitPendingPortfolioReplacement / complex_conditional | reviewed_no_change |
 | code_health:finding_ed8d28d0b9704fee151c | low | code_health | js/app/10-main-app.js | coverage_gradient | unreviewed |
-| code_health:finding_6c2ec360fa4b7b1de8aa | low | code_health | js/app/10-main-app.js:89 | error_handling | unreviewed |
-| code_health:finding_35fae69e8e4211472329 | low | code_health | js/app/10-main-app.js:116 | error_handling | unreviewed |
+| code_health:finding_6c2ec360fa4b7b1de8aa | low | code_health | js/app/10-main-app.js:89 | error_handling | reviewed_no_change |
+| code_health:finding_35fae69e8e4211472329 | low | code_health | js/app/10-main-app.js:116 | error_handling | reviewed_no_change |
 | code_health:finding_d0630a1456fd1926a3a9 | low | code_health | js/app/10-main-app.js:150 | removeStudent / bumpy_road | unreviewed |
-| code_health:finding_05ff7605620e26c0197d | low | code_health | js/app/10-main-app.js:175 | error_handling | unreviewed |
-| code_health:finding_01d263f0dbac65941392 | low | code_health | js/app/10-main-app.js:176 | error_handling | unreviewed |
-| code_health:finding_015f337771eb382208b7 | low | code_health | js/app/10-main-app.js:317 | error_handling | unreviewed |
+| code_health:finding_05ff7605620e26c0197d | low | code_health | js/app/10-main-app.js:175 | error_handling | reviewed_no_change |
+| code_health:finding_01d263f0dbac65941392 | low | code_health | js/app/10-main-app.js:176 | error_handling | reviewed_no_change |
+| code_health:finding_015f337771eb382208b7 | low | code_health | js/app/10-main-app.js:317 | error_handling | reviewed_no_change |
 | code_health:finding_43c4f37218a3d7d78f2b | low | code_health | js/app/10-main-app.js:333 | renameStudent / large_method | unreviewed |
-| code_health:finding_0660813ea9b9cd681a3e | low | code_health | js/app/10-main-app.js:421 | error_handling | unreviewed |
-| code_health:finding_97817cb0739e6ae0d0ca | low | code_health | js/app/10-main-app.js:428 | error_handling | unreviewed |
-| code_health:finding_d6b3bf73992d07195bd2 | low | code_health | js/app/10-main-app.js:429 | error_handling | unreviewed |
+| code_health:finding_0660813ea9b9cd681a3e | low | code_health | js/app/10-main-app.js:421 | error_handling | reviewed_no_change |
+| code_health:finding_97817cb0739e6ae0d0ca | low | code_health | js/app/10-main-app.js:428 | error_handling | reviewed_no_change |
+| code_health:finding_d6b3bf73992d07195bd2 | low | code_health | js/app/10-main-app.js:429 | error_handling | reviewed_no_change |
 | code_health:finding_79e1b20adb32b9182b1b | low | code_health | js/app/10-main-app.js:930 | getSampleStatusData / complex_conditional | unreviewed |
 | code_health:finding_3b7008f933f118f15ac3 | low | code_health | js/app/10-main-app.js:985 | buildLowSampleAnalysis / large_method | unreviewed |
 | code_health:finding_14c98c45fd927d16130a | low | code_health | js/app/10-main-app.js:1020 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_f61b81e17239b007f947 | low | code_health | js/app/10-main-app.js:1021 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_cf938a3cb775f4a9762b | low | code_health | js/app/10-main-app.js:1025 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_47fc675f46a03662abad | low | code_health | js/app/10-main-app.js:1352 | renderCorrected / string_concat_in_loop | unreviewed |
-| code_health:finding_632d120e20b45e7d610c | low | code_health | js/app/10-main-app.js:1353 | renderCorrected / string_concat_in_loop | unreviewed |
-| code_health:finding_a7ff4e2cacfbde3a3b06 | low | code_health | js/app/10-main-app.js:2051 | renderNoticeTable / string_concat_in_loop | unreviewed |
-| code_health:finding_da2b2ef9a672b56e85c4 | low | code_health | js/app/10-main-app.js:2072 | polishFeedback / primitive_obsession | unreviewed |
-| code_health:finding_c0f9bb7da8550f66432a | low | code_health | js/app/10-main-app.js:2077 | polishFeedback / complex_conditional | unreviewed |
-| code_health:finding_3856a4f577518ea32781 | low | code_health | js/app/10-main-app.js:2419 | applyWordCountToIdeas / primitive_obsession | unreviewed |
-| code_health:finding_3d107669bd8eaedca599 | low | code_health | js/app/10-main-app.js:2579 | buildFlowPatternSummary / complex_conditional | unreviewed |
-| code_health:finding_4908307b68a52238a52f | low | code_health | js/app/10-main-app.js:2596 | buildFlowPatternNotes / complex_conditional | unreviewed |
-| code_health:finding_415557c855bfd3dd897c | low | code_health | js/app/10-main-app.js:2620 | applyComputedFlowToFlow / bumpy_road | unreviewed |
-| code_health:finding_817cc8a555d69214a026 | low | code_health | js/app/10-main-app.js:2706 | summarizeOpenRouterFailure / complex_conditional | unreviewed |
-| code_health:finding_686cbca1ed33c485434a | low | code_health | js/app/10-main-app.js:2761 | requestOpenRouterWithFallback / large_method | unreviewed |
-| code_health:finding_25cfcad7b6b9aeda0afd | low | code_health | js/app/10-main-app.js:3128 | resetCurrentClassData / large_method | unreviewed |
-| code_health:finding_6a5e541f0cde455874c4 | low | code_health | js/app/10-main-app.js:3212 | updateSelectedImagePreview / string_concat_in_loop | unreviewed |
-| code_health:finding_fe492c49b9e78bfdb45b | low | code_health | js/app/10-main-app.js:3342 | getDroppedImageFiles / complex_conditional | unreviewed |
-| code_health:finding_73f08f5a32f57a488037 | low | code_health | js/app/10-main-app.js:3483 | error_handling | unreviewed |
-| code_health:finding_c4999a76f9166ab1a7d5 | low | code_health | js/app/10-main-app.js:3750 | error_handling | unreviewed |
-| code_health:finding_c1ab54e79ed097c54312 | low | code_health | js/app/10-main-app.js:3767 | error_handling | unreviewed |
-| code_health:finding_4324376bb7f15d887a99 | low | code_health | js/app/10-main-app.js:3835 | buildStep2Prompt / primitive_obsession | unreviewed |
-| code_health:finding_3d4ce77d3c9108a187ad | low | code_health | js/app/10-main-app.js:4239 | buildEvidenceBasedTeacherComment / bumpy_road | unreviewed |
-| code_health:finding_422849494d832f75eae6 | low | code_health | js/app/10-main-app.js:4551 | addNoticeRowIfNew / complex_conditional | unreviewed |
-| code_health:finding_351ee22dd4a7d9655bbe | low | code_health | js/app/10-main-app.js:4675 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_f12b4d2969f91e0f4849 | low | code_health | js/app/10-main-app.js:4676 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_3de6c1ab9ae09d51df53 | low | code_health | js/app/10-main-app.js:4677 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_4db352f80d6d5c7a19eb | low | code_health | js/app/10-main-app.js:4679 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_c8ebce4520d250e6f25c | low | code_health | js/app/10-main-app.js:4680 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_59891f8809ca49ea5883 | low | code_health | js/app/10-main-app.js:4802 | buildAuditValidationRows / primitive_obsession | unreviewed |
-| code_health:finding_00cf7f5f7763c29eedcf | low | code_health | js/app/10-main-app.js:4838 | renderAuditRowsTable / string_concat_in_loop | unreviewed |
-| code_health:finding_db08e25c416f8a1cb0fa | low | code_health | js/app/10-main-app.js:4847 | renderAuditValidationTable / string_concat_in_loop | unreviewed |
-| code_health:finding_21a1f8b7493375e4702a | low | code_health | js/app/10-main-app.js:4848 | renderAuditValidationTable / string_concat_in_loop | unreviewed |
-| code_health:finding_d1d6ed8840d18d9a3a31 | low | code_health | js/app/10-main-app.js:4849 | renderAuditValidationTable / string_concat_in_loop | unreviewed |
-| code_health:finding_706e0058345dbe436134 | low | code_health | js/app/10-main-app.js:4859 | renderAuditEvidenceList / string_concat_in_loop | unreviewed |
-| code_health:finding_8438b285c6cd5ae740c2 | low | code_health | js/app/10-main-app.js:4874 | getTeacherAuditOrder / complex_conditional | unreviewed |
-| code_health:finding_481e80ea101b4f6b1a46 | low | code_health | js/app/10-main-app.js:4899 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_188cccdbfb50c3248a5c | low | code_health | js/app/10-main-app.js:4900 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_cadc28a9f002e3a72495 | low | code_health | js/app/10-main-app.js:4901 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_bb494461e3c095cfa0de | low | code_health | js/app/10-main-app.js:4902 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_c14f5de85f3b8e281e75 | low | code_health | js/app/10-main-app.js:4903 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_f490f9c869d69bd05518 | low | code_health | js/app/10-main-app.js:4904 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_a32e86743cd8f1aa0125 | low | code_health | js/app/10-main-app.js:4905 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_933a9fb59741a0e3042b | low | code_health | js/app/10-main-app.js:4906 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_2ecd60586fbebb0b64a6 | low | code_health | js/app/10-main-app.js:4907 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_e7d8f5c49e1a40ee1cf8 | low | code_health | js/app/10-main-app.js:4908 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_86f2716705aebc009c07 | low | code_health | js/app/10-main-app.js:4909 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
-| code_health:finding_42034da6d555de0625e3 | low | code_health | js/app/10-main-app.js:5028 | titleCaseGeneratedWritingTitle / large_method | unreviewed |
-| code_health:finding_116b62f2c6940da9dded | low | code_health | js/app/10-main-app.js:5281 | makeWritingGenreInfo / primitive_obsession | unreviewed |
-| code_health:finding_860035c4a626f17c5d07 | low | code_health | js/app/10-main-app.js:5399 | detectWritingGenreInfo / large_method | unreviewed |
-| code_health:finding_29f0311595e8d8ff7770 | low | code_health | js/app/10-main-app.js:5538 | updateGenreReviewBox / complex_conditional | unreviewed |
-| code_health:finding_8500ae12a975ea5b7683 | low | code_health | js/app/10-main-app.js:5588 | buildEncouragingClosing / complex_conditional | unreviewed |
-| code_health:finding_ab05ea1a9ee32eb3296d | low | code_health | js/app/10-main-app.js:5792 | buildNotebookActionChecklist / bumpy_road | unreviewed |
-| code_health:finding_f78ccd93ab136f279585 | low | code_health | js/app/10-main-app.js:6007 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_7116df66eec9c8fc4acd | low | code_health | js/app/10-main-app.js:6008 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_ed219546d0477a86fffd | low | code_health | js/app/10-main-app.js:6009 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_653129774356a3195d7d | low | code_health | js/app/10-main-app.js:6010 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_2da05b675c1b335ace65 | low | code_health | js/app/10-main-app.js:6011 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_fb792c60b32a4966f14c | low | code_health | js/app/10-main-app.js:6012 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_7a89da6c3ecbed3cd3b3 | low | code_health | js/app/10-main-app.js:6013 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
-| code_health:finding_c9050b12d552d2835ae6 | low | code_health | js/app/10-main-app.js:6032 | error_handling | unreviewed |
-| code_health:finding_504afd2a07fe51d8e8b3 | low | code_health | js/app/10-main-app.js:6036 | error_handling | unreviewed |
-| code_health:finding_845f971e196e18607fe6 | low | code_health | js/app/10-main-app.js:6225 | originalTextContainsNotebookQuote / complex_conditional | unreviewed |
-| code_health:finding_aff95dd9e196478bf792 | low | code_health | js/app/10-main-app.js:6238 | getNotebookGuideDefaultFocus / bumpy_road | unreviewed |
-| code_health:finding_600fd69a4a17836d4be1 | low | code_health | js/app/10-main-app.js:6282 | buildNotebookGuidePrioritiesFromRawInput / bumpy_road | unreviewed |
-| code_health:finding_f06389d3d183b5b7fa65 | low | code_health | js/app/10-main-app.js:6688 | makeNotebookGuideExample / primitive_obsession | unreviewed |
-| code_health:finding_1b54f65228745086620d | low | code_health | js/app/10-main-app.js:6700 | buildFallbackExampleForPriority / bumpy_road | unreviewed |
-| code_health:finding_a868a94954804e2bff54 | low | code_health | js/app/10-main-app.js:6835 | addNotebookGuideFallbackExample / primitive_obsession | unreviewed |
-| code_health:finding_ce819733bea699e05190 | low | code_health | js/app/10-main-app.js:6876 | buildNotebookGuideFallback / primitive_obsession | unreviewed |
-| code_health:finding_0e7b44e9f3055d01febe | low | code_health | js/app/10-main-app.js:6912 | assembleNotebookGuideFromCandidates / bumpy_road | unreviewed |
-| code_health:finding_19451019efc2d01c7332 | low | code_health | js/app/10-main-app.js:6912 | assembleNotebookGuideFromCandidates / large_method | unreviewed |
-| code_health:finding_8533ebb93bfd8fa4850c | low | code_health | js/app/10-main-app.js:6912 | assembleNotebookGuideFromCandidates / primitive_obsession | unreviewed |
-| code_health:finding_5140626fb0ae2120defa | low | code_health | js/app/10-main-app.js:7030 | renderNotebookGuideFocusList / string_concat_in_loop | unreviewed |
-| code_health:finding_55e3e7b0a65983157130 | low | code_health | js/app/10-main-app.js:7041 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_e7c1a6c3daeef1e5b31f | low | code_health | js/app/10-main-app.js:7042 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_bb4e85b2531da176296e | low | code_health | js/app/10-main-app.js:7043 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_7f9d145151ea2de2578b | low | code_health | js/app/10-main-app.js:7044 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_32b689e2f4f668a925d0 | low | code_health | js/app/10-main-app.js:7045 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_84fed470e5cd1474663a | low | code_health | js/app/10-main-app.js:7046 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_b1d9c46289a2cb313ffa | low | code_health | js/app/10-main-app.js:7047 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_ee6dd3ede28b6377f740 | low | code_health | js/app/10-main-app.js:7048 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_3e50ed60460f1941461e | low | code_health | js/app/10-main-app.js:7049 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_73b86080f023ca22b853 | low | code_health | js/app/10-main-app.js:7050 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
-| code_health:finding_1e428f32ae6e9f768e81 | low | code_health | js/app/10-main-app.js:7064 | renderNotebookQuickCheckList / string_concat_in_loop | unreviewed |
-| code_health:finding_524a0b39a71fa1f643f8 | low | code_health | js/app/10-main-app.js:7343 | error_handling | unreviewed |
-| code_health:finding_c0289b8facadeca0647f | low | code_health | js/app/10-main-app.js:7350 | error_handling | unreviewed |
-| code_health:finding_0276419a105c6242f13d | low | code_health | js/app/10-main-app.js:7355 | error_handling | unreviewed |
-| code_health:finding_ccdce65fd75cb30112a0 | low | code_health | js/app/10-main-app.js:7456 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
-| code_health:finding_5c339e38023b4cc71478 | low | code_health | js/app/10-main-app.js:7457 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
-| code_health:finding_1ab5e0d4d435d307009c | low | code_health | js/app/10-main-app.js:7458 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
-| code_health:finding_5d7e16fcf8dd26f060cc | low | code_health | js/app/10-main-app.js:7459 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
-| code_health:finding_cacae3136160a8d497aa | low | code_health | js/app/10-main-app.js:7460 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
-| code_health:finding_560f2e42892b746b439d | low | code_health | js/app/10-main-app.js:7461 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
-| code_health:finding_782b6ad5a140a0fde7e2 | low | code_health | js/app/10-main-app.js:7511 | error_handling | unreviewed |
-| code_health:finding_8044bd2dfe671b84ae02 | low | code_health | js/app/10-main-app.js:7544 | error_handling | unreviewed |
-| code_health:finding_701d382f4514d56049a6 | low | code_health | js/app/10-main-app.js:7619 | reassessPortfolioSession / large_method | unreviewed |
-| code_health:finding_f950a77aba91ce1f3c19 | low | code_health | js/app/10-main-app.js:7842 | reconcileDetailedAnalysis / primitive_obsession | unreviewed |
-| code_health:finding_aa040416ab14e29024fa | low | code_health | js/app/10-main-app.js:7955 | buildAnalysisResult / primitive_obsession | unreviewed |
-| code_health:finding_7c122b322da6ef3fb555 | low | code_health | js/app/10-main-app.js:8006 | renderScoredAnalysisDebug / large_method | unreviewed |
-| code_health:finding_eb37461abdf66043fb60 | low | code_health | js/app/10-main-app.js:8006 | renderScoredAnalysisDebug / primitive_obsession | unreviewed |
-| code_health:finding_a588ab315453a61edf9d | low | code_health | js/app/10-main-app.js:8191 | analyzeWriting / large_method | unreviewed |
-| code_health:finding_cb75b06f17c7ca01125c | low | code_health | js/app/10-main-app.js:8322 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_e8948681e0b2a9493e98 | low | code_health | js/app/10-main-app.js:8447 | error_handling | unreviewed |
-| code_health:finding_87305a727729ced01817 | low | code_health | js/app/10-main-app.js:8449 | error_handling | unreviewed |
-| code_health:finding_bb01f5e2cea645103864 | low | code_health | js/app/10-main-app.js:8480 | error_handling | unreviewed |
-| code_health:finding_59b9470c43c933b96fb5 | low | code_health | js/app/10-main-app.js:8488 | error_handling | unreviewed |
-| code_health:finding_ada488f36dc2a7d66ff8 | low | code_health | js/app/10-main-app.js:8495 | error_handling | unreviewed |
-| code_health:finding_9bd5f85768cebd1be3fd | low | code_health | js/app/10-main-app.js:8504 | error_handling | unreviewed |
+| code_health:finding_47fc675f46a03662abad | low | code_health | js/app/10-main-app.js:1344 | renderCorrected / string_concat_in_loop | unreviewed |
+| code_health:finding_632d120e20b45e7d610c | low | code_health | js/app/10-main-app.js:1345 | renderCorrected / string_concat_in_loop | unreviewed |
+| code_health:finding_a7ff4e2cacfbde3a3b06 | low | code_health | js/app/10-main-app.js:2043 | renderNoticeTable / string_concat_in_loop | unreviewed |
+| code_health:finding_da2b2ef9a672b56e85c4 | low | code_health | js/app/10-main-app.js:2064 | polishFeedback / primitive_obsession | unreviewed |
+| code_health:finding_c0f9bb7da8550f66432a | low | code_health | js/app/10-main-app.js:2069 | polishFeedback / complex_conditional | unreviewed |
+| code_health:finding_3856a4f577518ea32781 | low | code_health | js/app/10-main-app.js:2411 | applyWordCountToIdeas / primitive_obsession | unreviewed |
+| code_health:finding_3d107669bd8eaedca599 | low | code_health | js/app/10-main-app.js:2571 | buildFlowPatternSummary / complex_conditional | unreviewed |
+| code_health:finding_4908307b68a52238a52f | low | code_health | js/app/10-main-app.js:2588 | buildFlowPatternNotes / complex_conditional | unreviewed |
+| code_health:finding_415557c855bfd3dd897c | low | code_health | js/app/10-main-app.js:2612 | applyComputedFlowToFlow / bumpy_road | unreviewed |
+| code_health:finding_817cc8a555d69214a026 | low | code_health | js/app/10-main-app.js:2698 | summarizeOpenRouterFailure / complex_conditional | unreviewed |
+| code_health:finding_686cbca1ed33c485434a | low | code_health | js/app/10-main-app.js:2753 | requestOpenRouterWithFallback / large_method | unreviewed |
+| code_health:finding_25cfcad7b6b9aeda0afd | low | code_health | js/app/10-main-app.js:3120 | resetCurrentClassData / large_method | unreviewed |
+| code_health:finding_6a5e541f0cde455874c4 | low | code_health | js/app/10-main-app.js:3204 | updateSelectedImagePreview / string_concat_in_loop | unreviewed |
+| code_health:finding_fe492c49b9e78bfdb45b | low | code_health | js/app/10-main-app.js:3334 | getDroppedImageFiles / complex_conditional | unreviewed |
+| code_health:finding_73f08f5a32f57a488037 | low | code_health | js/app/10-main-app.js:3475 | error_handling | reviewed_no_change |
+| code_health:finding_c4999a76f9166ab1a7d5 | low | code_health | js/app/10-main-app.js:3742 | error_handling | reviewed_no_change |
+| code_health:finding_c1ab54e79ed097c54312 | low | code_health | js/app/10-main-app.js:3759 | error_handling | reviewed_no_change |
+| code_health:finding_4324376bb7f15d887a99 | low | code_health | js/app/10-main-app.js:3827 | buildStep2Prompt / primitive_obsession | unreviewed |
+| code_health:finding_3d4ce77d3c9108a187ad | low | code_health | js/app/10-main-app.js:4231 | buildEvidenceBasedTeacherComment / bumpy_road | unreviewed |
+| code_health:finding_422849494d832f75eae6 | low | code_health | js/app/10-main-app.js:4543 | addNoticeRowIfNew / complex_conditional | unreviewed |
+| code_health:finding_351ee22dd4a7d9655bbe | low | code_health | js/app/10-main-app.js:4667 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_f12b4d2969f91e0f4849 | low | code_health | js/app/10-main-app.js:4668 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_3de6c1ab9ae09d51df53 | low | code_health | js/app/10-main-app.js:4669 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_4db352f80d6d5c7a19eb | low | code_health | js/app/10-main-app.js:4671 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_c8ebce4520d250e6f25c | low | code_health | js/app/10-main-app.js:4672 | renderDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_59891f8809ca49ea5883 | low | code_health | js/app/10-main-app.js:4794 | buildAuditValidationRows / primitive_obsession | unreviewed |
+| code_health:finding_00cf7f5f7763c29eedcf | low | code_health | js/app/10-main-app.js:4830 | renderAuditRowsTable / string_concat_in_loop | unreviewed |
+| code_health:finding_db08e25c416f8a1cb0fa | low | code_health | js/app/10-main-app.js:4839 | renderAuditValidationTable / string_concat_in_loop | unreviewed |
+| code_health:finding_21a1f8b7493375e4702a | low | code_health | js/app/10-main-app.js:4840 | renderAuditValidationTable / string_concat_in_loop | unreviewed |
+| code_health:finding_d1d6ed8840d18d9a3a31 | low | code_health | js/app/10-main-app.js:4841 | renderAuditValidationTable / string_concat_in_loop | unreviewed |
+| code_health:finding_706e0058345dbe436134 | low | code_health | js/app/10-main-app.js:4851 | renderAuditEvidenceList / string_concat_in_loop | unreviewed |
+| code_health:finding_8438b285c6cd5ae740c2 | low | code_health | js/app/10-main-app.js:4866 | getTeacherAuditOrder / complex_conditional | unreviewed |
+| code_health:finding_481e80ea101b4f6b1a46 | low | code_health | js/app/10-main-app.js:4891 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_188cccdbfb50c3248a5c | low | code_health | js/app/10-main-app.js:4892 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_cadc28a9f002e3a72495 | low | code_health | js/app/10-main-app.js:4893 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_bb494461e3c095cfa0de | low | code_health | js/app/10-main-app.js:4894 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_c14f5de85f3b8e281e75 | low | code_health | js/app/10-main-app.js:4895 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_f490f9c869d69bd05518 | low | code_health | js/app/10-main-app.js:4896 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_a32e86743cd8f1aa0125 | low | code_health | js/app/10-main-app.js:4897 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_933a9fb59741a0e3042b | low | code_health | js/app/10-main-app.js:4898 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_2ecd60586fbebb0b64a6 | low | code_health | js/app/10-main-app.js:4899 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_e7d8f5c49e1a40ee1cf8 | low | code_health | js/app/10-main-app.js:4900 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_86f2716705aebc009c07 | low | code_health | js/app/10-main-app.js:4901 | renderTeacherAuditView / string_concat_in_loop | unreviewed |
+| code_health:finding_42034da6d555de0625e3 | low | code_health | js/app/10-main-app.js:5020 | titleCaseGeneratedWritingTitle / large_method | unreviewed |
+| code_health:finding_116b62f2c6940da9dded | low | code_health | js/app/10-main-app.js:5273 | makeWritingGenreInfo / primitive_obsession | unreviewed |
+| code_health:finding_860035c4a626f17c5d07 | low | code_health | js/app/10-main-app.js:5391 | detectWritingGenreInfo / large_method | unreviewed |
+| code_health:finding_29f0311595e8d8ff7770 | low | code_health | js/app/10-main-app.js:5530 | updateGenreReviewBox / complex_conditional | unreviewed |
+| code_health:finding_8500ae12a975ea5b7683 | low | code_health | js/app/10-main-app.js:5580 | buildEncouragingClosing / complex_conditional | unreviewed |
+| code_health:finding_ab05ea1a9ee32eb3296d | low | code_health | js/app/10-main-app.js:5784 | buildNotebookActionChecklist / bumpy_road | reviewed_no_change |
+| code_health:finding_f78ccd93ab136f279585 | low | code_health | js/app/10-main-app.js:5999 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_7116df66eec9c8fc4acd | low | code_health | js/app/10-main-app.js:6000 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_ed219546d0477a86fffd | low | code_health | js/app/10-main-app.js:6001 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_653129774356a3195d7d | low | code_health | js/app/10-main-app.js:6002 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_2da05b675c1b335ace65 | low | code_health | js/app/10-main-app.js:6003 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_fb792c60b32a4966f14c | low | code_health | js/app/10-main-app.js:6004 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_7a89da6c3ecbed3cd3b3 | low | code_health | js/app/10-main-app.js:6005 | renderNotebookDetailedAssessment / string_concat_in_loop | unreviewed |
+| code_health:finding_c9050b12d552d2835ae6 | low | code_health | js/app/10-main-app.js:6024 | error_handling | reviewed_no_change |
+| code_health:finding_504afd2a07fe51d8e8b3 | low | code_health | js/app/10-main-app.js:6028 | error_handling | reviewed_no_change |
+| code_health:finding_845f971e196e18607fe6 | low | code_health | js/app/10-main-app.js:6217 | originalTextContainsNotebookQuote / complex_conditional | unreviewed |
+| code_health:finding_aff95dd9e196478bf792 | low | code_health | js/app/10-main-app.js:6230 | getNotebookGuideDefaultFocus / bumpy_road | unreviewed |
+| code_health:finding_600fd69a4a17836d4be1 | low | code_health | js/app/10-main-app.js:6274 | buildNotebookGuidePrioritiesFromRawInput / bumpy_road | reviewed_no_change |
+| code_health:finding_f06389d3d183b5b7fa65 | low | code_health | js/app/10-main-app.js:6680 | makeNotebookGuideExample / primitive_obsession | unreviewed |
+| code_health:finding_1b54f65228745086620d | low | code_health | js/app/10-main-app.js:6692 | buildFallbackExampleForPriority / bumpy_road | unreviewed |
+| code_health:finding_a868a94954804e2bff54 | low | code_health | js/app/10-main-app.js:6827 | addNotebookGuideFallbackExample / primitive_obsession | unreviewed |
+| code_health:finding_ce819733bea699e05190 | low | code_health | js/app/10-main-app.js:6868 | buildNotebookGuideFallback / primitive_obsession | unreviewed |
+| code_health:finding_0e7b44e9f3055d01febe | low | code_health | js/app/10-main-app.js:6904 | assembleNotebookGuideFromCandidates / bumpy_road | reviewed_no_change |
+| code_health:finding_19451019efc2d01c7332 | low | code_health | js/app/10-main-app.js:6904 | assembleNotebookGuideFromCandidates / large_method | reviewed_no_change |
+| code_health:finding_8533ebb93bfd8fa4850c | low | code_health | js/app/10-main-app.js:6904 | assembleNotebookGuideFromCandidates / primitive_obsession | reviewed_no_change |
+| code_health:finding_5140626fb0ae2120defa | low | code_health | js/app/10-main-app.js:7022 | renderNotebookGuideFocusList / string_concat_in_loop | unreviewed |
+| code_health:finding_55e3e7b0a65983157130 | low | code_health | js/app/10-main-app.js:7033 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_e7c1a6c3daeef1e5b31f | low | code_health | js/app/10-main-app.js:7034 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_bb4e85b2531da176296e | low | code_health | js/app/10-main-app.js:7035 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_7f9d145151ea2de2578b | low | code_health | js/app/10-main-app.js:7036 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_32b689e2f4f668a925d0 | low | code_health | js/app/10-main-app.js:7037 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_84fed470e5cd1474663a | low | code_health | js/app/10-main-app.js:7038 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_b1d9c46289a2cb313ffa | low | code_health | js/app/10-main-app.js:7039 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_ee6dd3ede28b6377f740 | low | code_health | js/app/10-main-app.js:7040 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_3e50ed60460f1941461e | low | code_health | js/app/10-main-app.js:7041 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_73b86080f023ca22b853 | low | code_health | js/app/10-main-app.js:7042 | renderNotebookGuideExamples / string_concat_in_loop | unreviewed |
+| code_health:finding_1e428f32ae6e9f768e81 | low | code_health | js/app/10-main-app.js:7056 | renderNotebookQuickCheckList / string_concat_in_loop | unreviewed |
+| code_health:finding_524a0b39a71fa1f643f8 | low | code_health | js/app/10-main-app.js:7335 | error_handling | candidate_needs_regression |
+| code_health:finding_c0289b8facadeca0647f | low | code_health | js/app/10-main-app.js:7342 | error_handling | reviewed_no_change |
+| code_health:finding_0276419a105c6242f13d | low | code_health | js/app/10-main-app.js:7347 | error_handling | reviewed_no_change |
+| code_health:finding_ccdce65fd75cb30112a0 | low | code_health | js/app/10-main-app.js:7448 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
+| code_health:finding_5c339e38023b4cc71478 | low | code_health | js/app/10-main-app.js:7449 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
+| code_health:finding_1ab5e0d4d435d307009c | low | code_health | js/app/10-main-app.js:7450 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
+| code_health:finding_5d7e16fcf8dd26f060cc | low | code_health | js/app/10-main-app.js:7451 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
+| code_health:finding_cacae3136160a8d497aa | low | code_health | js/app/10-main-app.js:7452 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
+| code_health:finding_560f2e42892b746b439d | low | code_health | js/app/10-main-app.js:7453 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | unreviewed |
+| code_health:finding_782b6ad5a140a0fde7e2 | low | code_health | js/app/10-main-app.js:7503 | error_handling | reviewed_no_change |
+| code_health:finding_8044bd2dfe671b84ae02 | low | code_health | js/app/10-main-app.js:7536 | error_handling | reviewed_no_change |
+| code_health:finding_701d382f4514d56049a6 | low | code_health | js/app/10-main-app.js:7611 | reassessPortfolioSession / large_method | unreviewed |
+| code_health:finding_f950a77aba91ce1f3c19 | low | code_health | js/app/10-main-app.js:7834 | reconcileDetailedAnalysis / primitive_obsession | unreviewed |
+| code_health:finding_aa040416ab14e29024fa | low | code_health | js/app/10-main-app.js:7947 | buildAnalysisResult / primitive_obsession | unreviewed |
+| code_health:finding_7c122b322da6ef3fb555 | low | code_health | js/app/10-main-app.js:7998 | renderScoredAnalysisDebug / large_method | unreviewed |
+| code_health:finding_eb37461abdf66043fb60 | low | code_health | js/app/10-main-app.js:7998 | renderScoredAnalysisDebug / primitive_obsession | unreviewed |
+| code_health:finding_a588ab315453a61edf9d | low | code_health | js/app/10-main-app.js:8183 | analyzeWriting / large_method | unreviewed |
+| code_health:finding_cb75b06f17c7ca01125c | low | code_health | js/app/10-main-app.js:8314 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_e8948681e0b2a9493e98 | low | code_health | js/app/10-main-app.js:8439 | error_handling | reviewed_no_change |
+| code_health:finding_87305a727729ced01817 | low | code_health | js/app/10-main-app.js:8441 | error_handling | reviewed_no_change |
+| code_health:finding_bb01f5e2cea645103864 | low | code_health | js/app/10-main-app.js:8472 | error_handling | reviewed_no_change |
+| code_health:finding_59b9470c43c933b96fb5 | low | code_health | js/app/10-main-app.js:8480 | error_handling | reviewed_no_change |
+| code_health:finding_ada488f36dc2a7d66ff8 | low | code_health | js/app/10-main-app.js:8487 | error_handling | reviewed_no_change |
+| code_health:finding_9bd5f85768cebd1be3fd | low | code_health | js/app/10-main-app.js:8496 | error_handling | reviewed_no_change |
 | code_health:finding_7cafeb9e1b470fe325be | low | code_health | js/app/dialogs.js | coverage_gradient | unreviewed |
 | code_health:finding_44e764606a039a6b13e8 | low | code_health | js/app/dialogs.js:32 | <anonymous> / large_method | unreviewed |
-| code_health:finding_74656979868084cda402 | low | code_health | js/app/dialogs.js:108 | error_handling | unreviewed |
-| code_health:finding_b056139b0d0c461e7869 | low | code_health | js/app/dialogs.js:227 | error_handling | unreviewed |
+| code_health:finding_74656979868084cda402 | low | code_health | js/app/dialogs.js:108 | error_handling | reviewed_no_change |
+| code_health:finding_b056139b0d0c461e7869 | low | code_health | js/app/dialogs.js:227 | error_handling | reviewed_no_change |
 | code_health:finding_e8fa786727ce7172a436 | low | code_health | js/app/photo-crop.js | coverage_gradient | unreviewed |
 | code_health:finding_67272701e9295673aac2 | low | code_health | js/app/portfolio-export.js | coverage_gradient | unreviewed |
 | code_health:finding_e0e2c68f45d9cbfb0853 | low | code_health | js/app/portfolio-export.js | churn_risk | reviewed_no_change |
@@ -854,8 +882,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_eba234f172007837bb09 | low | code_health | tests/archive-failures.browser.cjs:15 | runArchiveScenario / large_method | unreviewed |
 | code_health:finding_a3e6b3a5c6fa0e0e9a5c | low | code_health | tests/archive-failures.browser.cjs:103 | dry_violation | unreviewed |
 | code_health:finding_c0f0e57ae1b6bd084044 | low | code_health | tests/archive-integrity.browser.cjs:271 | dry_violation | unreviewed |
-| code_health:finding_5306a999694aea8b140a | low | code_health | tests/auth-integrity.browser.cjs:217 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_d9c4a8589183add6d1da | low | code_health | tests/auth-integrity.browser.cjs:221 | error_handling | unreviewed |
+| code_health:finding_5306a999694aea8b140a | low | code_health | tests/auth-integrity.browser.cjs:275 | <anonymous> / complex_conditional | unreviewed |
+| code_health:finding_d9c4a8589183add6d1da | low | code_health | tests/auth-integrity.browser.cjs:279 | error_handling | reviewed_no_change |
 | code_health:finding_e127d96b7167f455505c | low | code_health | tests/correction-performance.browser.cjs:3 | dry_violation | unreviewed |
 | code_health:finding_3950fcf55e93d82f8063 | low | code_health | tests/corrupt-portfolio.browser.cjs:88 | exerciseCloudCorruption / bumpy_road | unreviewed |
 | code_health:finding_c4b9d1280f5f8806538e | low | code_health | tests/crop-ownership.browser.cjs:13 | dry_violation | unreviewed |
@@ -920,9 +948,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_7d7006df9ec6314480bd | low | code_health | tests/preference-integrity-scenarios.js:338 | checkKeyPersistenceAndHandlers / bumpy_road | unreviewed |
 | code_health:finding_d85646f671cd92e5433a | low | code_health | tests/preference-integrity-scenarios.js:388 | checkKeyRecovery / large_method | unreviewed |
 | code_health:finding_7abfbf4a2f826653796d | low | code_health | tests/preference-integrity-scenarios.js:488 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_aa964992afa4814d7c64 | low | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / large_method | unreviewed |
-| code_health:finding_e1cab3eb1c1950913fb5 | low | code_health | tests/record-identity.browser.cjs:69 | dry_violation | unreviewed |
-| code_health:finding_9dfe63deb01f1eb80636 | low | code_health | tests/record-identity.browser.cjs:71 | <anonymous@71> / large_method | unreviewed |
+| code_health:finding_1a6100f7f36b934266e6 | low | code_health | tests/record-identity.browser.cjs | prior_defect | reviewed_no_change |
+| code_health:finding_e1cab3eb1c1950913fb5 | low | code_health | tests/record-identity.browser.cjs:132 | dry_violation | unreviewed |
+| code_health:finding_9dfe63deb01f1eb80636 | low | code_health | tests/record-identity.browser.cjs:135 | <anonymous@135> / large_method | unreviewed |
 | code_health:finding_ab3e620dca9faaf23458 | low | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / primitive_obsession | unreviewed |
 | code_health:finding_4cf99259c01d5a05625d | low | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / primitive_obsession | unreviewed |
 | code_health:finding_35edf9740e8a2fa057b5 | low | code_health | tests/recovery-cache.browser.cjs:57 | checkCacheScenario / complex_conditional | unreviewed |
@@ -958,8 +986,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | security:bfc72ca167afa1b3143bbefc | low | security | tests/auth-integrity.browser.cjs:181 | hardcoded_secret | reviewed_no_change |
 | security:1c8343a610e2d1038308bf3e | low | security | tests/auth-integrity.browser.cjs:181 | hardcoded_secret | reviewed_no_change |
 | security:2cfb2e20a67eb2459bee96ae | low | security | tests/auth-integrity.browser.cjs:205 | hardcoded_secret | reviewed_no_change |
-| security:b18d3a0708852936037b27f5 | low | security | tests/auth-integrity.browser.cjs:263 | hardcoded_secret | reviewed_no_change |
 | security:b94c83f6bf871aafc5143b88 | low | security | tests/auth-integrity.browser.cjs:263 | hardcoded_secret | reviewed_no_change |
+| security:b18d3a0708852936037b27f5 | low | security | tests/auth-integrity.browser.cjs:321 | hardcoded_secret | reviewed_no_change |
 | security:85fae45534526a62396933f9 | low | security | tests/media-upload-boundary.browser.cjs:14 | hardcoded_secret | reviewed_no_change |
 | security:52e9c08a45fe446382066f0f | low | security | tests/media-upload-boundary.browser.cjs:14 | hardcoded_secret | reviewed_no_change |
 | security:667f3fd9f5bcb2b534f0f38c | low | security | tests/media-upload-boundary.browser.cjs:14 | hardcoded_secret | reviewed_no_change |
@@ -969,7 +997,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | security:3cf392171f171b02d49ac025 | low | security | tests/media-upload-boundary.browser.cjs:48 | hardcoded_secret | reviewed_no_change |
 | security:825d54c5f90e6260cf37a637 | low | security | tests/media-upload-boundary.browser.cjs:63 | hardcoded_secret | reviewed_no_change |
 | security:971c453312549e98434b3ab3 | low | security | tests/optional-storage.browser.cjs:238 | eval_call | reviewed_no_change |
-| security:673b162570d924cb66fcc015 | low | security | tests/record-identity.browser.cjs:93 | eval_call | reviewed_no_change |
+| security:673b162570d924cb66fcc015 | low | security | tests/record-identity.browser.cjs:157 | eval_call | reviewed_no_change |
 | security:80412ff6c2285dd7e9d6ba53 | low | security | tests/storage-upload-ownership.browser.cjs:11 | hardcoded_secret | reviewed_no_change |
 | security:2c255b9986626c01c4310695 | low | security | tests/storage-upload-ownership.browser.cjs:11 | hardcoded_secret | reviewed_no_change |
 | security:102e2163c0c86a7d4463e542 | low | security | tests/storage-upload-ownership.browser.cjs:11 | hardcoded_secret | reviewed_no_change |
@@ -985,23 +1013,23 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | dead_code:bbaf4fa0b4887da4c6353791 | unrated | dead_code | js/app/00-storage-sync-patches.js:1980 | wftPromiseCallback / unused_internal | fixed_verified |
 | dead_code:a996a3bd24f5f52a11a88cf8 | unrated | dead_code | js/app/00-storage-sync-patches.js:1984 | savePortfolioAsync / unused_internal | reviewed_no_change |
 | dead_code:b1056e3a6024464b5dd96865 | unrated | dead_code | js/app/00-storage-sync-patches.js:3588 | showDriveDisconnectedState / unused_internal | fixed_verified |
-| dead_code:9ed1c00c05745426c83402f2 | unrated | dead_code | js/app/00-storage-sync-patches.js:6432 | stripPortfolioImageDataUrls / unused_internal | reviewed_no_change |
+| dead_code:9ed1c00c05745426c83402f2 | unrated | dead_code | js/app/00-storage-sync-patches.js:6452 | stripPortfolioImageDataUrls / unused_internal | reviewed_no_change |
 | dead_code:29b3767245d590cc9c0aff38 | unrated | dead_code | js/app/00-storage-sync-patches.js:6586 | getSessionPlainCorrectedText / unused_internal | fixed_verified |
-| dead_code:6fd854b95a9a8e1fb09452b8 | unrated | dead_code | js/app/00-storage-sync-patches.js:6864 | toggleRosterVisibility / unused_internal | reviewed_no_change |
-| dead_code:8c4649f3df792f5b02d0edf8 | unrated | dead_code | js/app/00-storage-sync-patches.js:8024 | showDiffView / unused_internal | reviewed_no_change |
+| dead_code:6fd854b95a9a8e1fb09452b8 | unrated | dead_code | js/app/00-storage-sync-patches.js:6884 | toggleRosterVisibility / unused_internal | reviewed_no_change |
+| dead_code:8c4649f3df792f5b02d0edf8 | unrated | dead_code | js/app/00-storage-sync-patches.js:8044 | showDiffView / unused_internal | reviewed_no_change |
 | dead_code:81444af29b2c7901d4e2f997 | unrated | dead_code | js/app/10-main-app.js:110 | updateSelectedStudent / unused_internal | reviewed_no_change |
 | dead_code:81f6015ac175b6d3bcec9434 | unrated | dead_code | js/app/10-main-app.js:322 | manageSelectedStudent / unused_internal | reviewed_no_change |
 | dead_code:fed5a743e627ead83760517c | unrated | dead_code | js/app/10-main-app.js:453 | exportStudents / unused_internal | reviewed_no_change |
-| dead_code:9d75931b1c8bab4f0aa65bca | unrated | dead_code | js/app/10-main-app.js:1159 | isWordToken / unused_internal | unreviewed |
-| dead_code:f421a2898f25969c27f3ebe9 | unrated | dead_code | js/app/10-main-app.js:1163 | isNewlineToken / unused_internal | unreviewed |
+| dead_code:9d75931b1c8bab4f0aa65bca | unrated | dead_code | js/app/10-main-app.js:1159 | isWordToken / unused_internal | fixed_verified |
+| dead_code:f421a2898f25969c27f3ebe9 | unrated | dead_code | js/app/10-main-app.js:1163 | isNewlineToken / unused_internal | fixed_verified |
 | dead_code:9ff2290b78ea0c845fb65bbc | unrated | dead_code | js/app/10-main-app.js:1167 | isPunctuationToken / unused_internal | fixed_verified |
 | dead_code:ffa5118598342feda92f942a | unrated | dead_code | js/app/10-main-app.js:1171 | levenshteinDistance / unused_internal | fixed_verified |
-| dead_code:9e9991881b9480a1139c8285 | unrated | dead_code | js/app/10-main-app.js:3087 | moveDuplicateSyncFilesToBackup / unused_internal | reviewed_no_change |
+| dead_code:9e9991881b9480a1139c8285 | unrated | dead_code | js/app/10-main-app.js:3079 | moveDuplicateSyncFilesToBackup / unused_internal | reviewed_no_change |
 | dead_code:5157e2be2f285b3fe0d88970 | unrated | dead_code | js/app/10-main-app.js:5550 | inferWritingGenre / unused_internal | fixed_verified |
 | dead_code:f9f6e9cbbd9b4c29526c67ba | unrated | dead_code | js/app/10-main-app.js:6054 | wrapCorrectedHtmlForNotebookPrint / unused_internal | fixed_verified |
 | dead_code:78e142a25a36d5a12768970a | unrated | dead_code | js/app/10-main-app.js:6321 | getNotebookDecisionFocusText / unused_internal | fixed_verified |
 | dead_code:40d6aafd4be5f1d995bbeb06 | unrated | dead_code | js/app/10-main-app.js:6623 | getNotebookGuideSentenceStarter / unused_internal | fixed_verified |
-| dead_code:5e39a7b5baa3b7f5b489d741 | unrated | dead_code | js/app/10-main-app.js:8290 | clearWritingArea / unused_internal | reviewed_no_change |
+| dead_code:5e39a7b5baa3b7f5b489d741 | unrated | dead_code | js/app/10-main-app.js:8282 | clearWritingArea / unused_internal | reviewed_no_change |
 | dead_code:fac391cf5eae4325c6a8fe33 | unrated | dead_code | js/app/99-lightbox.js:2 | openImageLightbox / unused_internal | reviewed_no_change |
 | dead_code:23339cdb528915be789a74e4 | unrated | dead_code | js/app/storage-recovery.js:16 | generateWFTShortId / unused_internal | fixed_verified |
 | dead_code:5ebe6bb7152d3166eef9f0e3 | unrated | dead_code | js/app/storage-recovery.js:129 | toggleWftSafeMode / unused_internal | reviewed_no_change |
@@ -1043,5 +1071,5 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 - Disappearance from a scan is not accepted as proof of resolution.
 - Immutable history metrics require documented interpretation; never rewrite history to improve a score.
 - Security snippets are excluded to avoid copying potential credentials.
-- Full-history security scan completed; all29 current/historical signals have individual verified outcomes, without exporting credential values.
+- Full-history security scan completed; see security_history_scan and individual security outcomes.
 - Coverage is older source evidence. Source validation is recorded per repair/publication; live model/Drive calls were not tested.

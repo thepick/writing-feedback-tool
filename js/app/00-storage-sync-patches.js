@@ -2299,9 +2299,9 @@ var WftStorage = {
 // PATCH 7 — STUDENT ID MAP
 // ═══════════════════════════════════════════════════════════════════════════
 
-function getStudentRecordByName(name) {
+function getStudentRecordByName(name, settings) {
     try {
-        var settings = getRawSettings ? getRawSettings() : {};
+        settings = settings || (getRawSettings ? getRawSettings() : {});
         if (!settings.studentRecords) { return null; }
         for (var sri = 0; sri < settings.studentRecords.length; sri++) {
             var rec = settings.studentRecords[sri];
@@ -2328,7 +2328,7 @@ function ensureStudentRecordsForRoster() {
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) { return; }
 
     try {
-        var settings = getRawSettings ? getRawSettings() : {};
+        var settings = readWftRequiredStorage('wft_settings');
         if (!settings.studentRecords) { settings.studentRecords = []; }
         settings.studentIdMap = Object.assign(Object.create(null), settings.studentIdMap || {});
 
@@ -2355,7 +2355,7 @@ function ensureStudentRecordsForRoster() {
             if (!settings.studentIdMap[name]) {
                 settings.studentIdMap[name] = createStableStudentId(name, settings.studentIdMap);
             }
-            var rec = getStudentRecordByName(name);
+            var rec = getStudentRecordByName(name, settings);
             if (!rec) {
                 settings.studentRecords.push({
                     studentId: settings.studentIdMap[name],
@@ -3323,6 +3323,26 @@ function isWftGisTokenClientAvailable() {
         && typeof window.google.accounts.oauth2.initTokenClient === "function");
 }
 
+function clearWftOAuthFragment() {
+    var message;
+    try {
+        history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
+        return;
+    } catch (error) {
+        message = "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.";
+    }
+    try {
+        setOcrStatus(message, 'error');
+    } catch (noticeError) {
+        wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery notice could not be shown.');
+    }
+    try {
+        alert(message);
+    } catch (alertError) {
+        wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery alert could not be shown.');
+    }
+}
+
 // Read OAuth tokens delivered via the URL fragment (#) after Google redirects
 // back to the app using the implicit grant fallback flow.
 function checkHashForOAuthTokens() {
@@ -3335,7 +3355,7 @@ function checkHashForOAuthTokens() {
         if (authError) {
             var errorDescription = params.get('error_description') || authError;
             setDriveSyncStatus("error", "Google sign-in did not complete: " + errorDescription);
-            try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e1) { }
+            clearWftOAuthFragment();
             return false;
         }
 
@@ -3345,7 +3365,7 @@ function checkHashForOAuthTokens() {
         if (!accessToken) return false;
 
         var handled = finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, params.get("scope") || "", "oauth-redirect", function() { manualSaveToDrive(); });
-        try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e2) { }
+        clearWftOAuthFragment();
         return handled;
     } catch (e) {
         wftDebugError('[WFT Auth] Error reading OAuth tokens from hash:', e);

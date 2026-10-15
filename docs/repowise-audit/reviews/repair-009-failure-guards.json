@@ -1,0 +1,995 @@
+{
+  "schema_version": 1,
+  "repair": "repair-009",
+  "title": "Read-only review of remaining failure guards",
+  "created_at_utc": "2026-10-15T20:23:32.404849+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "summary": {
+    "findings_reviewed": 27,
+    "reviewed_no_change": 26,
+    "candidate_needs_regression": 1,
+    "additional_unreproduced_leads": 1,
+    "needs_user_attention": 0,
+    "source_edits": 0,
+    "tests_run": 0,
+    "scanner_clearances_claimed": 0
+  },
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "sha256_raw": "1cf34c7924721f2cfd198420b5f6696770db1688a3622710da0212d4230e322d",
+      "sha256_normalized_lf": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "sha256_raw": "d10d9f9e308951e40ea77659738399e01637924b0776194790704c7120fd89e1",
+      "sha256_normalized_lf": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7"
+    },
+    "js/app/storage-recovery.js": {
+      "sha256_raw": "f3f0e10775b443b055ec81d57d59b2e94e97207b2025eb22c5777d009e1a523c",
+      "sha256_normalized_lf": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636"
+    },
+    "js/app/dialogs.js": {
+      "sha256_raw": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+      "sha256_normalized_lf": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c"
+    },
+    "tests/auth-integrity.browser.cjs": {
+      "sha256_raw": "79b4b1ae8b0778ae7de4c81f8ef11c44c7a75c33e6e4fedde7290321af5951da",
+      "sha256_normalized_lf": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512"
+    }
+  },
+  "all89_frozen_source_hashes_match": true,
+  "source_pin_receipt": "work/repowise-coordinator/batch-002-source-pins.json",
+  "findings": [
+    {
+      "record_id": "code_health:finding_6c2ec360fa4b7b1de8aa",
+      "file": "js/app/10-main-app.js",
+      "line": 89,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional dependent dropdown rendering",
+      "owner": "renderStudentList",
+      "callers": "renderStudentList callers: add/remove/rename/import/reset/startup and archive UI",
+      "reason": "The roster list and count are already rebuilt before this guarded secondary dropdown refresh. refreshPortfolioDropdown only rebuilds options from the in-memory roster and updates export-button availability; it performs no persistence. Required class changes use saveWftStudentChange before rendering. Keeping the roster usable when an optional dependent control fails is intentional; this catch does not acknowledge a failed save.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 65,
+          "end_line": 90,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7143,
+          "end_line": 7166,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4793,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_35fae69e8e4211472329",
+      "file": "js/app/10-main-app.js",
+      "line": 116,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional repeated sync-button rendering",
+      "owner": "updateSelectedStudent",
+      "callers": "index.html studentSelect onchange; syncUiState",
+      "reason": "The selected student is assigned from the current DOM and the remembered-selection write has its own warning. syncUiState runs before this catch and already invokes updateSyncPortfolioButtonState. The guarded second call is a display refresh, not the selection/ownership or required-storage boundary; a failure here cannot replace the current student with an older remembered value.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 110,
+          "end_line": 117,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7746,
+          "end_line": 7780,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8264,
+          "end_line": 8306,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_05ff7605620e26c0197d",
+      "file": "js/app/10-main-app.js",
+      "line": 175,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional post-commit dropdown refresh",
+      "owner": "removeStudent",
+      "callers": "roster Delete button -> removeStudent -> saveWftStudentChange",
+      "reason": "Confirmation and the staged portfolio/deletion/roster transaction precede the catch. A transaction failure alerts and returns before UI publication; its rollback restores saved bytes. The caught refresh happens after a successful commit and after renderStudentList/populateStudentDropdown. A secondary UI exception must not roll back an already committed deletion or repeat it.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 150,
+          "end_line": 177,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4793,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7143,
+          "end_line": 7166,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_01d263f0dbac65941392",
+      "file": "js/app/10-main-app.js",
+      "line": 176,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional post-commit portfolio rendering",
+      "owner": "removeStudent",
+      "callers": "roster Delete button -> removeStudent; renderStudentPortfolio",
+      "reason": "This independent renderer guard follows the successful class transaction and dropdown refresh. The renderer reads the selected portfolio and updates charts/content; it is not the deletion writer. Keeping the other committed UI updates when chart/DOM rendering fails is intentional. No successful persistence is inferred from this catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 150,
+          "end_line": 177,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7612,
+          "end_line": 7647,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4793,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_015f337771eb382208b7",
+      "file": "js/app/10-main-app.js",
+      "line": 317,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional initial focus",
+      "owner": "chooseStudentToManage timeout",
+      "callers": "manageSelectedStudent -> chooseStudentToManage -> renameStudent",
+      "reason": "Only the delayed student-select focus attempt is caught. The dialog is already mounted with labeled selection, cancel/rename buttons, Escape/Enter handling and explicit promise settlement. A focus exception neither chooses a student nor bypasses confirmation. Preserve the focus attempt and controls; adding a persistence-style error here would conflate an enhancement failure with an accepted rename.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 198,
+          "end_line": 319,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 321,
+          "end_line": 331,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_0660813ea9b9cd681a3e",
+      "file": "js/app/10-main-app.js",
+      "line": 421,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional post-commit dropdown refresh",
+      "owner": "renameStudent",
+      "callers": "manageSelectedStudent and direct roster/test callers -> renameStudent",
+      "reason": "The caught dropdown refresh is after saveWftStudentChange returned, the roster/list controls were rebuilt, and the current student was assigned. The transaction catch above alerts and returns on failed required writes. This particular refresh is presentation-only. A separate settings-read lead earlier in this same function is recorded below and is not attributed to this catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 375,
+          "end_line": 430,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4793,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7143,
+          "end_line": 7166,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_97817cb0739e6ae0d0ca",
+      "file": "js/app/10-main-app.js",
+      "line": 428,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional post-commit portfolio rendering",
+      "owner": "renameStudent",
+      "callers": "renameStudent -> renderStudentPortfolio",
+      "reason": "The portfolio select is first changed to the newly committed roster name. The guarded renderer only rebuilds read-only charts/session content after the transaction; an exception cannot reverse or re-run the rename. The transaction failure path is separate and visible. Retain the catch while the independent staged-settings read lead remains unresolved.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 403,
+          "end_line": 430,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7612,
+          "end_line": 7647,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_d6b3bf73992d07195bd2",
+      "file": "js/app/10-main-app.js",
+      "line": 429,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional export-button refresh",
+      "owner": "renameStudent",
+      "callers": "renameStudent -> updateExportSelectedStudentButton",
+      "reason": "This final UI refresh only toggles a button from the current portfolio select. It does not persist/export writing, and the rename transaction has already completed. The confirmation alert refers to the committed rename rather than this optional button state. No required save error is swallowed at this location.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 403,
+          "end_line": 430,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7160,
+          "end_line": 7166,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_73f08f5a32f57a488037",
+      "file": "js/app/10-main-app.js",
+      "line": 3475,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional custom MIME drag payload",
+      "owner": "preview dragstart callback",
+      "callers": "bindPreviewReorderHandlers dragstart/drop and isPreviewReorderDrag",
+      "reason": "text/plain is populated before the guarded custom MIME setData. Same-page drag identity is also held in previewDragIndex; isPreviewReorderDrag accepts that active index and drop falls back through custom data, text/plain, then the index. A browser refusing the custom type therefore retains the actual reorder route. The catch does not discard image bytes.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 3352,
+          "end_line": 3359,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 3463,
+          "end_line": 3480,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 3522,
+          "end_line": 3546,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_c4999a76f9166ab1a7d5",
+      "file": "js/app/10-main-app.js",
+      "line": 3742,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional grade-profile default lookup",
+      "owner": "getGrammarStrictness",
+      "callers": "assessment policy/getGoalPlan callers and settings snapshots",
+      "reason": "A failed optional profile lookup leaves the explicit fallback of3. The actual DOM control still takes precedence; stored settings are tried only if the DOM does not provide a usable value. The function finally bounds the result to1..5. No settings are written and no failed save is acknowledged. Removing fallback handling would make policy reads crash rather than remain bounded.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 3734,
+          "end_line": 3766,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 815,
+          "end_line": 818,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 574,
+          "end_line": 592,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_c1ab54e79ed097c54312",
+      "file": "js/app/10-main-app.js",
+      "line": 3759,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional persisted preference fallback",
+      "owner": "getGrammarStrictness",
+      "callers": "assessment policy/getGoalPlan callers and settings snapshots",
+      "reason": "The storage/JSON read is only attempted when no usable current DOM strictness exists. If unavailable or malformed, the already determined profile/default value is returned after1..5 bounds. This is a read-only policy fallback; required preference writes use their separate transactional paths. Do not broaden strictness here merely to erase an empty-catch marker.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 3734,
+          "end_line": 3766,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 617,
+          "end_line": 624,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_c9050b12d552d2835ae6",
+      "file": "js/app/10-main-app.js",
+      "line": 6024,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "expected first parse failure",
+      "owner": "parseFirstJsonObject",
+      "callers": "parseNotebookGuideCandidatesFromStep3Text -> sanitization/grounding",
+      "reason": "The first parse deliberately tries the entire stripped response. Failure proceeds to a braced-object extraction rather than claiming success. The caller accepts only array-shaped candidate collections and sanitizes each candidate against original writing. A malformed model response is ordinary fallback input, not a required storage failure.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6022,
+          "end_line": 6031,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6392,
+          "end_line": 6408,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_504afd2a07fe51d8e8b3",
+      "file": "js/app/10-main-app.js",
+      "line": 6028,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "expected fallback parse failure",
+      "owner": "parseFirstJsonObject",
+      "callers": "parseNotebookGuideCandidatesFromStep3Text -> sanitization/grounding",
+      "reason": "A failed second parse returns null, and the caller produces an empty candidate list for the existing grounded-guide fallback. No unparsed data is treated as a valid candidate and no source writing is mutated. Throwing or logging every malformed response here would change an intentional parser contract.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6022,
+          "end_line": 6031,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6392,
+          "end_line": 6408,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_524a0b39a71fa1f643f8",
+      "file": "js/app/10-main-app.js",
+      "line": 7335,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "candidate_needs_regression",
+      "classification": "print_isolation_failure_candidate",
+      "required_or_optional": "required print-window isolation attempt",
+      "owner": "writeWftPrintWindow",
+      "callers": "printNotebookSummary and printPortfolioNotebookSummary -> writeWftPrintWindow",
+      "reason": "The catch suppresses a failed opener=null assignment and immediately proceeds to document.open/write/close. Both callers open a normal blank window and depend on this helper to detach the parent. The regular popup test verifies successful detachment, but no failure-path proof was found. Sanitized stored notebook HTML can retain http(s) anchors, so continuing with a live opener deserves a focused failure regression before being accepted as intentional. This is a conditional source-supported isolation lead, not a demonstrated browser exploit.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7334,
+          "end_line": 7339,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7377,
+          "end_line": 7388,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7716,
+          "end_line": 7726,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6614,
+          "end_line": 6646,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "tests/storage-public-ui.browser.cjs",
+          "start_line": 44,
+          "end_line": 54,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": "Use the existing local native popup harness. Force the opener setter to throw (or remain non-null) before writeWftPrintWindow; verify no printable/imported HTML is written and no scheduled print occurs, a generic recoverable notice is shown, and the original writing/session remains exact. Normal current-analysis and saved-session printing must still detach the opener and print. Investigate a fail-closed isolation guard and caller success checks rather than replacing window.open with noopener without checking its returned-handle semantics."
+    },
+    {
+      "record_id": "code_health:finding_c0289b8facadeca0647f",
+      "file": "js/app/10-main-app.js",
+      "line": 7342,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional initial popup focus",
+      "owner": "scheduleWftPrintWindow",
+      "callers": "both notebook print actions -> shared scheduler",
+      "reason": "Only focusing the already populated print window is caught here; scheduling still occurs after a focus refusal. The actual document has a visible Print / Save as PDF control and the timer still attempts print. Focus is not a saved-writing or print-document creation boundary.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7341,
+          "end_line": 7349,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7361,
+          "end_line": 7370,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_0276419a105c6242f13d",
+      "file": "js/app/10-main-app.js",
+      "line": 7347,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional automatic fit/print convenience",
+      "owner": "scheduleWftPrintWindow timeout",
+      "callers": "both notebook print actions -> shared scheduler; explicit popup print button",
+      "reason": "The timer attempts layout fit and automatic printing after the document has been fully written. A blocked/closed popup or failed fit/print leaves the original saved session unchanged; an open document retains its explicit Print / Save as PDF button. A fit exception also skips that automatic print call, which is a limitation of the convenience path, not loss of the printable document. No fix is justified solely by the catch marker; preserve the manual fallback. This review did not inject these failures.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7334,
+          "end_line": 7349,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7351,
+          "end_line": 7370,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7383,
+          "end_line": 7388,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_782b6ad5a140a0fde7e2",
+      "file": "js/app/10-main-app.js",
+      "line": 7503,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional remembered selection hint",
+      "owner": "setActiveStudentForPortfolioReassessment",
+      "callers": "reassessPortfolioSession -> current student/DOM setup",
+      "reason": "The current selectedStudent is assigned before the remembered-selection write, and the student select is still updated afterward, adding a missing option when needed. Reassessment ownership and input context use current in-memory/DOM selection; a failed reload hint must not prevent loading saved writing or substitute a stale owner.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7500,
+          "end_line": 7519,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7641,
+          "end_line": 7659,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_8044bd2dfe671b84ae02",
+      "file": "js/app/10-main-app.js",
+      "line": 7536,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional weighting description refresh",
+      "owner": "setNeatnessForPortfolioReassessment",
+      "callers": "reassessPortfolioSession async image success/failure continuations",
+      "reason": "saveSettingsToLocalStorage runs outside this catch and propagates required preference failures to reassessment callers, which show a warning and stop the success path. The caught refresh only regenerates explanatory weighting text after persistence. Retain this boundary so a display failure does not falsely undo a committed preference.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7532,
+          "end_line": 7537,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7663,
+          "end_line": 7693,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_e8948681e0b2a9493e98",
+      "file": "js/app/10-main-app.js",
+      "line": 8439,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional OAuth resume hint",
+      "owner": "load callback pending action read",
+      "callers": "window.load after draft/session restoration and checkHashForOAuthTokens",
+      "reason": "An unavailable localStorage hint leaves pendingAction undefined and skips only the convenience delayed sync. Auth and draft recovery already ran; no credentials or pending writing are consumed by this read. The teacher can still use the explicit Sync action. This nonsecret hint is not an authentication source of truth.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8408,
+          "end_line": 8449,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3524,
+          "end_line": 3534,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7869,
+          "end_line": 7905,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_87305a727729ced01817",
+      "file": "js/app/10-main-app.js",
+      "line": 8441,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional one-shot hint cleanup",
+      "owner": "load callback pending action removal",
+      "callers": "window.load -> captured auth operation -> delayed manualSaveToDrive",
+      "reason": "A failed removal can leave the nonsecret sync hint for another load, but the delayed operation still checks current captured auth ownership and a valid token before explicit sync. Required portfolio preparation/save and pending-state ownership remain in manualSaveToDrive. There is no false token deletion or credential-clearance claim here. Retain as best-effort hint cleanup, with possible repeated convenience scheduling documented.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8437,
+          "end_line": 8449,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7869,
+          "end_line": 7940,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_bb01f5e2cea645103864",
+      "file": "js/app/10-main-app.js",
+      "line": 8472,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "best-effort last-chance persistence; required lower-level validation retained",
+      "owner": "pagehide V2 callback",
+      "callers": "window.pagehide -> saveWftLocalSnapshotsBeforeHide",
+      "reason": "The shipped V2 path invokes the existing snapshot helper and returns without starting a Drive upload. That helper respects unresolved rollback recovery, preflights required storage, restores dirty-suppression state and uses strict portfolio reading/writing. This outer lifecycle guard adds no success acknowledgement or destructive fallback. Failing an unload-time retry cannot be repaired by propagating through the browser event.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8469,
+          "end_line": 8481,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5981,
+          "end_line": 6000,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5587,
+          "end_line": 5599,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_59b9470c43c933b96fb5",
+      "file": "js/app/10-main-app.js",
+      "line": 8480,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "best-effort legacy last-chance persistence; disabled by shipped V2 flag",
+      "owner": "pagehide legacy callback",
+      "callers": "window.pagehide with WFT_SYNC_ENGINE_V2=false",
+      "reason": "This compatibility branch is not selected by the shipped true V2 flag. Even there savePortfolioData preflights and strictly re-reads the stored portfolio before a write, so getPortfolioData display fallback cannot overwrite damaged bytes. A thrown save skips syncAllToDrive. The catch makes no successful-save claim and preserves existing bytes; it is not permission to weaken strict readers.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8469,
+          "end_line": 8481,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1061,
+          "end_line": 1061,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6398,
+          "end_line": 6406,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6457,
+          "end_line": 6490,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_ada488f36dc2a7d66ff8",
+      "file": "js/app/10-main-app.js",
+      "line": 8487,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "best-effort hidden-page snapshot",
+      "owner": "visibilitychange V2 callback",
+      "callers": "document.visibilitychange hidden -> saveWftLocalSnapshotsBeforeHide",
+      "reason": "Visible events return without saving. Hidden events use the same guarded strict snapshot helper as pagehide, then return before legacy cloud work. Required mutations and failure handling remain inside the helper; the outer catch avoids an unhandled lifecycle exception and never marks a failed sync complete. Source tests explicitly exercise this call-order boundary, but this review did not run them.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8483,
+          "end_line": 8497,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 5981,
+          "end_line": 6000,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 103,
+          "end_line": 120,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_9bd5f85768cebd1be3fd",
+      "file": "js/app/10-main-app.js",
+      "line": 8496,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "best-effort legacy hidden-page retry; disabled by shipped V2 flag",
+      "owner": "visibilitychange legacy callback",
+      "callers": "document.visibilitychange hidden with WFT_SYNC_ENGINE_V2=false",
+      "reason": "The hidden-only legacy branch uses savePortfolioData, whose strict preflight/snapshot validation prevents writes from the display reader fallback; only a successful synchronous save reaches syncAllToDrive. Existing async sync helpers own their failure callbacks/status. Propagating from a hidden-page event adds no durable recovery. Retain the guarded retry without claiming every injected failure has been tested here.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8483,
+          "end_line": 8497,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6457,
+          "end_line": 6490,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6903,
+          "end_line": 6950,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 103,
+          "end_line": 120,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_74656979868084cda402",
+      "file": "js/app/dialogs.js",
+      "line": 108,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional initial cancel-button focus; confirmation controls retained",
+      "owner": "wftConfirm timeout",
+      "callers": "remove/reset/clear/rename/archive/cache-delete/reassess callers",
+      "reason": "The catch wraps only initial focus of the cancel button. The labeled aria-modal dialog, Escape cancellation, cancel/continue click handlers and guarded promise settlement are already installed. Failure cannot resolve true or run the destructive caller; the explicit user action remains required. Keep the focus attempt and accessibility metadata rather than deleting them to change a metric.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 30,
+          "end_line": 110,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_b056139b0d0c461e7869",
+      "file": "js/app/dialogs.js",
+      "line": 227,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "optional initial field focus/selection; input/confirmation controls retained",
+      "owner": "wftTextInput timeout",
+      "callers": "renameStudent and archive school-year prompt",
+      "reason": "Only the delayed focus/select enhancement is caught. The labeled field, input value, Escape cancellation, Enter submission (with composition guard), cancel/continue buttons and promise close handler are installed independently. Focus/selection failure cannot fabricate a name or bypass the caller validation and confirmation.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 114,
+          "end_line": 230,
+          "role": "Verified source/caller boundary"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 333,
+          "end_line": 374,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    },
+    {
+      "record_id": "code_health:finding_d9c4a8589183add6d1da",
+      "file": "tests/auth-integrity.browser.cjs",
+      "line": 279,
+      "marker": "error_handling",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_fallback_or_lifecycle_guard",
+      "required_or_optional": "expected fault-injection setup failure",
+      "owner": "checkRedirectRecovery test scenario",
+      "callers": "auth-integrity suite run wrapper -> redirect recovery assertions",
+      "reason": "The test deliberately attempts to persist pending work under a synthetic quota block; some scenarios must retain it only in memory. Catching that setup failure permits the actual sign-in/sync entry point to be exercised. Assertions afterward independently verify navigation blocking, exact pending/selected identities, photo/text/student preservation and callback counts. No assertion is inside this catch and no real credential is required. The fixture values are not copied into this report.",
+      "evidence_anchors": [
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "start_line": 257,
+          "end_line": 313,
+          "role": "Verified source/caller boundary"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "regression_recommendation": null
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "rename-transient-settings-read",
+      "proposed_status": "candidate_needs_regression",
+      "file": "js/app/10-main-app.js",
+      "function": "renameStudent",
+      "classification": "write_caller_uses_fail_soft_settings_reader",
+      "relation_to_assigned_findings": "Observed inside the listed rename function while checking its post-commit catches. It is not caused by those three optional rendering catches and must not be counted as their scanner clearance.",
+      "reason": "renameStudent obtains settings from getRawSettings, which returns {} after any read/parse failure, then passes that truthy empty object to saveWftStudentChange. A transient failure limited to that read can end before the transaction preflight and subsequent strict reads. The transaction prefers supplied change.settings and carries only apiKey from the later storedSettings snapshot, so a successful rename could replace other saved preferences/unknown fields/student metadata with the sparse staged object. With the shipped ID-map flag false, metadata can simply be omitted; enabling the flag can instead create replacement metadata. Persistent/corrupt reads are already stopped by later strict checks; the uncovered lead is a one-time failure followed by readable storage.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 403,
+          "end_line": 410,
+          "role": "Soft read is supplied as transaction input"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 617,
+          "end_line": 624,
+          "role": "Failure becomes an empty object"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 2395,
+          "end_line": 2428,
+          "role": "Conditional metadata mutation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4735,
+          "end_line": 4754,
+          "role": "Supplied settings preferred; only credential field preserved from later strict snapshot"
+        },
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 146,
+          "end_line": 157,
+          "role": "Existing strict settings reader"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "start_line": 58,
+          "end_line": 65,
+          "role": "Existing read-failure case targets portfolio, not a one-time settings failure"
+        }
+      ],
+      "regression_recommendation": "Extend the existing native rename-confirmation harness: seed unrelated settings plus two student records, fail the single wft_settings read made for rename staging while later reads succeed, then verify all original five storage-key bytes/current writing/roster/selection remain exact and a retry preserves unrelated fields and stable IDs. Test the shipped flag state first; retain a meaningful ID-map compatibility check if that supported path is included. No mock should swallow the test assertion. The probable small fix is using readWftRequiredStorage for the staged rename settings inside its existing error-reporting transaction try, not changing broad read-only getRawSettings behavior.",
+      "reproduced": false,
+      "fix_applied": false,
+      "needs_user_attention": false
+    }
+  ],
+  "tests": {
+    "run_by_this_review": [],
+    "coordinator_gate": "Running independently on frozen source; this report makes no pass claim for that gate.",
+    "existing_source_inspected": [
+      "tests/rename-confirmation.browser.cjs",
+      "tests/storage-public-ui.browser.cjs",
+      "tests/main-app-health.browser.cjs",
+      "tests/storage-integrity.browser.cjs",
+      "tests/auth-integrity.browser.cjs"
+    ]
+  },
+  "limits": [
+    "Read-only source/caller review: neither candidate has a failing native regression yet.",
+    "No live OAuth/Drive/model calls, external navigation/exploit demonstration, credential inspection or rotation.",
+    "Retained optional UI/focus/automatic-print guards can still leave a stale or degraded presentation when their host operation throws; this report does not claim a forced-failure test for every guard.",
+    "The opener-isolation lead is conditional; normal opener detachment is already asserted by an existing native popup test. No real exposure is demonstrated.",
+    "No tracker/docs edits, Git mutations, RepoWise writes, source/test edits or tests were performed."
+  ]
+}

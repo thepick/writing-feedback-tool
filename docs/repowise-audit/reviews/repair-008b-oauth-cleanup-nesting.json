@@ -1,0 +1,51 @@
+{
+  "repair": "008b",
+  "finding": "code_health:finding_fc5abed9bdccdfa7d549",
+  "finding_verified": true,
+  "base_commit": "4ae621b2d9dc75adbca58ee4b1393be592410dc1",
+  "file": "js/app/00-storage-sync-patches.js",
+  "function": "clearWftOAuthFragment",
+  "change": "Return after successful replaceState; execute the same independently guarded recovery notices after the cleanup catch.",
+  "behavior": "Successful cleanup still returns undefined without notices. Cleanup failure assigns the identical message, attempts status then alert with identical independent catches and generic diagnostics. No new navigation, logging, API, or product wording.",
+  "before_sha256_raw": "d1f9d9b0c986e272d8856710a782b694fe8d1dc7c81448c0c71b94c3c97c0267",
+  "after_sha256_raw": "d10d9f9e308951e40ea77659738399e01637924b0776194790704c7120fd89e1",
+  "metrics": {
+    "before": {"ccn": 5, "cognitive": 18, "max_nesting": 4, "nloc": 17},
+    "after": {"ccn": 5, "cognitive": 10, "max_nesting": 2, "nloc": 19},
+    "method": "Installed RepoWise read-only tree-sitter complexity walker; no index update."
+  },
+  "scope_proof": {
+    "baseline_all89_source_hashes_match": true,
+    "all_other88_source_files_byte_identical": true,
+    "target_prefix_and_suffix_outside_helper_byte_identical": true,
+    "tests_unchanged": true,
+    "after_run_source_hash_rechecked": true,
+    "evidence": "work/repowise-repair-008/flattened/before.json and after.json"
+  },
+  "baseline": {
+    "receipt": "work/repowise-repair-008/peer-final/suite-results.json",
+    "complete": true,
+    "passed": true,
+    "auth_cases_passed": 111,
+    "syntax_checks_passed": 89,
+    "reuse_reason": "All 89 current source hashes matched the exact completed peer-final baseline before editing."
+  },
+  "after": {
+    "command": "node scripts/run-tests.cjs --out <task>/work/repowise-repair-008/flattened/after-tests --suite tests/auth-integrity.browser.cjs",
+    "receipt": "work/repowise-repair-008/flattened/after-tests/suite-results.json",
+    "native_case_receipt": "work/repowise-repair-008/flattened/after-tests/auth-integrity.browser.json",
+    "process_exit": 0,
+    "complete": true,
+    "passed": true,
+    "auth_cases": 111,
+    "auth_cases_passed": 111,
+    "syntax_checks": 89,
+    "syntax_checks_passed": 89,
+    "started_utc": "2026-10-15T20:07:06.441Z",
+    "finished_utc": "2026-10-15T20:08:09.592Z",
+    "after_test_runs": 1
+  },
+  "status": "Source change uncommitted; ready for coordinator acceptance and RepoWise refresh.",
+  "not_done": ["No commit, push, merge, tracker edit, index update, or health recompute in this child task.", "No full batch suite or live Google/Drive/model calls."],
+  "remaining": "Coordinator must refresh RepoWise to confirm the stored finding closes; no refreshed health score is claimed here."
+}
