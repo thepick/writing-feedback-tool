@@ -35,6 +35,43 @@ function runNotebookGuidanceCases() {
         check('fallback no convention change', buildFallbackExampleForPriority(priority, 'My cat is big.', 'My cat is big.') === null);
     }
     checkConventionCases();
+    function checkGroundedExamples() {
+        const priority = {category:'Spelling & Punctuation'};
+        for (const before of ['The mans hat fell.', 'The womans coat is blue.', 'The childs toy broke.', 'The bunnys ears are long.']) {
+            const ex = buildFallbackExampleForPriority(priority, before, before);
+            check('no guessed plural ' + before, ex === null, ex);
+        }
+        const possessive = buildFallbackExampleForPriority(priority, 'The mans hat fell.', "The man's hat fell.");
+        check('corrected possessive retained', possessive?.nextTimeExample === "The man's hat fell.", possessive);
+        const plural = buildFallbackExampleForPriority(priority, 'The bunnys hopped.', 'The bunnies hopped.');
+        check('corrected plural retained', plural?.nextTimeExample === 'The bunnies hopped.', plural);
+        const capital = buildFallbackExampleForPriority(priority, 'i went home.', 'i went home.');
+        check('safe capitalization fallback retained', capital?.nextTimeExample === 'I went home.', capital);
+        const saved = getNotebookGuideFromPortfolioSession({originalText:'The mans hat fell.', correctedPlainText:'The mans hat fell.',
+            categoryScores:{'Spelling & Punctuation':0}, detailedFeedback:{categories:{}}});
+        check('saved guide reconstruction does not guess plural', saved.examples.length === 0, saved);
+        const source = 'i play with my dogs. I wonder about them.';
+        const quoteCandidate = quote => ({area:'Grammar', skill:'Past tense', page1Connection:'Grammar', originalQuote:quote,
+            nextTimeExample:quote.replace('play', 'played').replace('won', 'won yesterday'), whyThisWorks:'This shows past time.'});
+        for (const quote of ['I play with my dogs.', 'i play with my dog', 'I won']) {
+            const c = quoteCandidate(quote);
+            check('fabricated quote rejected ' + quote, sanitizeNotebookGuideCandidate(c, source, null, null) === null);
+            const guide = assembleNotebookGuideFromCandidates([c], source, null, [{category:'Grammar'}], {correctedText:source});
+            check('fabricated quote absent from guide ' + quote, !guide.examples.some(ex => ex.originalQuote === quote), guide.examples);
+        }
+        for (const [text, quote] of [
+            [source, 'i play with my dogs.'],
+            ['I wonder. I won!', 'I won'],
+            ['The dog ran.', 'dog'],
+            ['She said “go home.”', 'She said "go home."'],
+            ['We played.\n\nWe ate.', 'We played. We ate.']
+        ]) check('exact quote retained ' + quote, originalTextContainsNotebookQuote(text, quote));
+        for (const [text, quote] of [['The wildcats sleep.', 'cats sleep.'], ["The dog's hat fell.", 'dog'],
+            ['We re-play today.', 'play today.'], ['The café opens.', 'caf']]) {
+            check('word fragment rejected ' + quote, !originalTextContainsNotebookQuote(text, quote));
+        }
+    }
+    checkGroundedExamples();
     function checkParagraphRevisions() {
         const paragraphOnly = sanitize({});
         check('paragraph only concrete and retained', paragraphOnly?.nextTimeExample === revision, paragraphOnly);
