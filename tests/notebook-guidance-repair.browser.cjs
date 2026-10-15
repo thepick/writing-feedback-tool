@@ -177,6 +177,22 @@ function runNotebookGuidanceCases() {
         check('live checklist retains two actions without fallback', JSON.stringify(checklist) === JSON.stringify(actions), checklist);
         const compressed = extractNotebookActionItems('Next time, check your verbs (past tense).\nAdd ' + 'clear details '.repeat(30));
         check('per item compression first person and limit', compressed.length === 2 && /^Check my verbs\s*\.$/.test(compressed[0]) && compressed.every(s => s.length <= 160), compressed);
+        for (const [name, text, expected] of [
+            ['ASCII contraction', "You're checking your verbs.", 'I am checking my verbs.'],
+            ['curly contraction', 'you\u2019re checking your verbs.', 'I am checking my verbs.'],
+            ['full you are', 'You are checking your verbs.', 'I am checking my verbs.'],
+            ['imperative', 'Check your verbs.', 'Check my verbs.'],
+            ['existing first person', 'Read my writing aloud.', 'Read my writing aloud.'],
+            ['plain you', 'Check that you use clear verbs.', 'Check that I use clear verbs.']
+        ]) {
+            const actual = buildNotebookActionChecklist({categoryScores:{Grammar:4}, detailed:{categories:{Grammar:{growthTip:text + '\nAdd clear details.'}}}}, [], '', '');
+            check('live first-person ' + name, JSON.stringify(actual) === JSON.stringify([expected, 'Add clear details.']), actual);
+        }
+        const contractionData = {categoryScores:{Grammar:4}, detailed:{categories:{Grammar:{growthTip:"You're checking your verbs.\nYou are checking your verbs.\nRead your story aloud.\nAdd clear details."}}}};
+        const contractionSnapshot = JSON.stringify(contractionData);
+        const contractionActions = buildNotebookActionChecklist(contractionData, ['Unrelated fallback.'], '', '');
+        check('live first-person deduplication order and two-item cap', JSON.stringify(contractionActions) === JSON.stringify(['I am checking my verbs.', 'Read my writing aloud.']), contractionActions);
+        check('live first-person input unchanged', JSON.stringify(contractionData) === contractionSnapshot, contractionData);
     }
     checkActionItems();
     function checkNotebookGuidanceDecisions() {

@@ -5650,6 +5650,7 @@ function toFirstPersonChecklist(text) {
     value = value.replace(/\byour writing\b/ig, "my writing");
     value = value.replace(/\byour\b/ig, "my");
     value = value.replace(/\byou are\b/ig, "I am");
+    value = value.replace(/\byou['\u2019]re\b/ig, "I am");
     value = value.replace(/\byou\b/ig, "I");
     value = value.replace(/\bme work\b/ig, "my work");
     return value;
