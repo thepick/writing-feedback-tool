@@ -618,10 +618,6 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
     var includeImages = options && options.includeImages;
     var usedNames = Object.create(null);
     var i;
-    var j;
-    var session;
-    var images;
-    var image;
 
     if (!includeImages) {
         imageFolder.file("Photos not included.txt", "Images/photos were not included in this export. Re-run the export with the image option checked if needed.");
@@ -669,15 +665,18 @@ function addAvailableImagesToStudentFolder(folder, studentName, studentData, opt
         }
     }
 
-    for (i = 0; i < sessions.length; i += 1) {
-        session = sessions[i] || {};
-        images = Array.isArray(session.images) && session.images.length ? session.images : session.photos || [];
+    function addSessionImages(session, sessionIndex) {
+        var images = Array.isArray(session.images) && session.images.length ? session.images : session.photos || [];
         if (!Array.isArray(images)) images = [];
 
-        for (j = 0; j < images.length; j += 1) {
-            image = images[j] || {};
-            addImageExport(session, image, i, j);
+        for (var j = 0; j < images.length; j += 1) {
+            var image = images[j] || {};
+            addImageExport(session, image, sessionIndex, j);
         }
+    }
+
+    for (i = 0; i < sessions.length; i += 1) {
+        addSessionImages(sessions[i] || {}, i);
     }
 
     if (!tasks.length) {
