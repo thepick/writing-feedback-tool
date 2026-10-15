@@ -3705,7 +3705,6 @@ async function extractTextFromSelectedImage(isAutomatic) {
     if (selectedImages.length === 1) {
         syncSelectedImageState();
         if (selectedImageExtractionPromise) return selectedImageExtractionPromise;
-        if (selectedImageExtractedText) return selectedImageExtractedText;
     }
 
     var context = isAutomatic ? activeAnalysisContext : { input: captureCurrentWritingContext(), cancelled: false };
@@ -3733,7 +3732,8 @@ async function extractTextFromSelectedImage(isAutomatic) {
         "7. Focus only on the main page centered in the image. Ignore partial pages, page edges, or neighboring writing visible to the left or right of the page in focus."
     ].join("\n");
 
-    selectedImageExtractionPromise = (async function() {
+    // Install the shared promise before cached pages can finish and clear it.
+    selectedImageExtractionPromise = Promise.resolve().then(async function() {
         try {
             var combinedParts = [];
             for (var i = 0; i < images.length; i++) {
@@ -3790,7 +3790,7 @@ async function extractTextFromSelectedImage(isAutomatic) {
                 syncUiState();
             }
         }
-    })();
+    });
 
     return selectedImageExtractionPromise;
 }
