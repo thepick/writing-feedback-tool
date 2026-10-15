@@ -32,6 +32,8 @@ function getUniqueFolderName(baseName, usedNames) {
 
 function csvEscape(value) {
     var text = String(value == null ? "" : value);
+    // Keep formula-like student text inert in spreadsheet exports.
+    if (typeof value === "string" && /^\s*[=+\-@]/.test(text)) return '"\t' + text.replace(/"/g, '""') + '"';
     if (/[",\r\n]/.test(text)) {
         return '"' + text.replace(/"/g, '""') + '"';
     }
