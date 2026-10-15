@@ -131,7 +131,8 @@ function applyCrop() {
     if (!isCurrentCropSession(session)) return;
     if (!session.ready) return;
     var canvas = document.getElementById("cropCanvas");
-    if (!canvas || !_cropRect || Math.abs(_cropRect.w) < 5 || Math.abs(_cropRect.h) < 5) {
+    var cropUnavailable = !canvas || !_cropRect;
+    if (cropUnavailable || Math.abs(_cropRect.w) < 5 || Math.abs(_cropRect.h) < 5) {
         setOcrStatus("Please draw a crop region on the image first.", "error");
         return;
     }
