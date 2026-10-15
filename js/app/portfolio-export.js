@@ -210,12 +210,16 @@ function buildStudentPortfolioHtml(studentName, studentData, schoolYear) {
 function buildStudentPortfolioHeaderHtml(studentName, sessions, schoolYear) {
     var latestSession = sessions[0];
     var prevSession = sessions.length >= 2 ? sessions[1] : null;
-    var overalls = sessions.map(function(s) { return s.overall != null ? Number(s.overall) : null; }).filter(function(v) { return v != null && !isNaN(v); });
-    var avgOverall = overalls.length ? Math.round(overalls.reduce(function(a, b) { return a + b; }, 0) / overalls.length) : null;
-    var latestOverall = latestSession.overall != null ? Number(latestSession.overall) : null;
-    var prevOverall = prevSession && prevSession.overall != null ? Number(prevSession.overall) : null;
-    var trend = latestOverall != null && prevOverall != null ? latestOverall - prevOverall : null;
-    var bestOverall = overalls.length ? Math.max.apply(null, overalls) : null;
+    var avgOverall, latestOverall, trend, bestOverall;
+    function calculateOverallScores() {
+        var overalls = sessions.map(function(s) { return s.overall != null ? Number(s.overall) : null; }).filter(function(v) { return v != null && !isNaN(v); });
+        avgOverall = overalls.length ? Math.round(overalls.reduce(function(a, b) { return a + b; }, 0) / overalls.length) : null;
+        latestOverall = latestSession.overall != null ? Number(latestSession.overall) : null;
+        var prevOverall = prevSession && prevSession.overall != null ? Number(prevSession.overall) : null;
+        trend = latestOverall != null && prevOverall != null ? latestOverall - prevOverall : null;
+        bestOverall = overalls.length ? Math.max.apply(null, overalls) : null;
+    }
+    calculateOverallScores();
     var categoryAverages = getCategoryAverageMap(sessions);
     var portfolioCategoryKeys = getPortfolioCategoryKeys(sessions);
     var weakestCategory = null;
