@@ -300,13 +300,16 @@ function buildStudentPortfolioSessionHtml(sess) {
     }
 
     html += '<div class="session-card">';
-    // Header row
-    html += '<div class="session-card-header">';
-    html += '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(getSessionDate(sess) || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(getSessionTitle(sess) || 'Untitled') + '</span></div>';
-    html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>';
-    html += '</div>';
-    // Meta
-    html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
+    function appendSessionHeader() {
+        // Header row
+        html += '<div class="session-card-header">';
+        html += '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(getSessionDate(sess) || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(getSessionTitle(sess) || 'Untitled') + '</span></div>';
+        html += '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>';
+        html += '</div>';
+        // Meta
+        html += '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' &mdash; ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
+    }
+    appendSessionHeader();
     // Chips
     html += '<div class="chip-row">' + chipsHtml + '</div>';
     // Artifact grid: Original | Corrected | Notes
