@@ -1,0 +1,980 @@
+{
+  "schema_version": 1,
+  "task": "Focused RepoWise repair005: unused internal helper cleanup",
+  "created_at_utc": "2026-10-15T18:46:37.139777+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "observed_head_at_finish": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "summary": {
+    "findings_reviewed": 28,
+    "unused_functions_removed": 10,
+    "source_lines_removed": 107,
+    "source_lines_added": 0,
+    "findings_fixed_in_source_pending_refresh": 11,
+    "runtime_or_entrypoint_false_positives_retained": 12,
+    "valid_metrics_or_interfaces_retained": 5,
+    "needs_user_attention": 0,
+    "scanner_clearance_claimed": false
+  },
+  "changed_repository_files": [
+    "js/app/00-storage-sync-patches.js",
+    "js/app/10-main-app.js",
+    "js/app/storage-recovery.js"
+  ],
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "before_sha256_raw": "02bb9fd078d0ffb983aee51117a55217ce01da76ffcf6a1cef06c5d698029562",
+      "after_sha256_raw": "3fe34c0fe41f000f5079eec08482268fe5de63093ce6705aac1c5e28159ffb69",
+      "before_sha256_normalized_lf": "05c6fecae3aeef58bf900abf3c7f9d39978951048c1389ed85acf6891135e15d",
+      "after_sha256_normalized_lf": "72f2992898f8f2cd401b4de36d5a6b31ac0eb47ee61334b3dd1c4e847f6ce2aa"
+    },
+    "js/app/10-main-app.js": {
+      "before_sha256_raw": "2e43d5e806614f8271a873e637ba3efe72b0c6337a316954de03f7867e188a3c",
+      "after_sha256_raw": "40e699fbadd2fd53f295c4adf088dcbee7fac6b5facf093d2ff33298cbcde74d",
+      "before_sha256_normalized_lf": "b3fe88af3d31a1b6c41352f9a131f873ee4a3b92c640c8a40a1007a7f68f69e8",
+      "after_sha256_normalized_lf": "c0625eabfeca02e8a176463e35da6df6792936b84149b0674e0d75b859fdd678"
+    },
+    "js/app/storage-recovery.js": {
+      "before_sha256_raw": "6654a3fd6063ebdef9c6b372babdc61b390d34c52097486e21c93c9abdb1540d",
+      "after_sha256_raw": "f3f0e10775b443b055ec81d57d59b2e94e97207b2025eb22c5777d009e1a523c",
+      "before_sha256_normalized_lf": "b4eb32f50346ed1dbc636bcf52c06cc3eeb15b461a038f463842c2034cf4b1bf",
+      "after_sha256_normalized_lf": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "dead_code:8fdd2d90552f9bcdd818b083",
+      "file": "test-google-drive-migration.cjs",
+      "symbol": null,
+      "marker": "unreachable_file",
+      "held": false,
+      "classification": "scanner_false_positive_test_entrypoint",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The file is an executable migration test, not an imported library. scripts/run-tests.cjs explicitly places test-google-drive-migration.cjs in its discovered inventory and launches it with Node. The verified 75-suite baseline ran it successfully. Retained the suite; no-importer reachability is the wrong entrypoint model.",
+      "evidence_anchors": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "line": 81,
+          "role": "Explicit test inventory entry; runner child execution follows in the same function"
+        },
+        {
+          "file": "test-google-drive-migration.cjs",
+          "line": 1,
+          "role": "Executable assertion-based migration test"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:96bb904c466709ce59c99bf9",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "closeSettingsDrawer",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The settings overlay and Close button invoke this classic-script global from index.html. It saves preferences before closing. The import graph misses inline HTML handlers, so the unused/private claim is false; retained unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 388,
+          "end_line": 392,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3644,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "index.html",
+          "line": 3648,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "tests/script-loading.browser.cjs",
+          "line": 41,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:d4ef341211b3f20b52044da4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "clearWftLocalCache",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The Clear Local Cache button invokes this global from index.html. It is a live recovery control, not unused internal code. Retained confirmation, preflight, ownership/race check, rollback/recovery state and truthful partial-failure notice unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1932,
+          "end_line": 1969,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3750,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:bbaf4fa0b4887da4c6353791",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "wftPromiseCallback",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The callback adapter had only its declaration. No source, HTML handler, generated handler, test, dynamic lookup or documented interface registers it. Active portfolio wrappers return their own Promises directly. Removing the unused adapter leaves their rejection timing and callbacks unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1980,
+          "end_line": 1987,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:a996a3bd24f5f52a11a88cf8",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "savePortfolioAsync",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "supported_async_interface_retained",
+      "proposed_status": "reviewed_no_change",
+      "reason": "No default UI caller was found, but this is an explicitly retained async portfolio API, not an obsolete private callback helper. The historical audit records the load/save async family as a shipped supported optional contract; current native tests exercise its rejected-Promise behavior for synchronous write failure. Kept the three-line facade and its unchanged paired APIs. The production-reachability observation is accurate; removal would discard an existing supported contract for negligible benefit.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1993,
+          "end_line": 1995,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "line": 1984,
+          "role": "Current declaration or supporting reference"
+        },
+        {
+          "file": "tests/storage-health.cjs",
+          "line": 51,
+          "role": "Current declaration or supporting reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:b1056e3a6024464b5dd96865",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "showDriveDisconnectedState",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The legacy disconnected-state updater had no callers or registration. Active sign-in/session restoration and sign-out functions do not reference it. Removing this dead alternative leaves every live auth state declaration byte-identical; the native authentication suite passes.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3588,
+          "end_line": 3615,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:9ed1c00c05745426c83402f2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "stripPortfolioImageDataUrls",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "intentional_compatibility_alias_retained",
+      "proposed_status": "reviewed_no_change",
+      "reason": "No current in-repository caller was found, but the declaration explicitly preserves a backward-compatible name for older save paths. Retained this four-line alias to the active stripPortfolioHeavyFields implementation. The reachability observation is accurate; it does not justify removing the stated compatibility contract.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6470,
+          "end_line": 6473,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "line": 6432,
+          "role": "Current declaration or supporting reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:29b3767245d590cc9c0aff38",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "getSessionPlainCorrectedText",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The old global/DOM text accessor had no callers. Current saveCurrentSessionToPortfolio builds correctedPlainText directly from its verified analysisData input. Removed the obsolete accessor; the active save construction and shared text helpers remain unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6586,
+          "end_line": 6592,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:6fd854b95a9a8e1fb09452b8",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "toggleRosterVisibility",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The roster toggle button calls this global in index.html; a native unit harness also loads it. The no-call finding misses the HTML handler. Retained its guards, visibility update and error handling unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6910,
+          "end_line": 6927,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3332,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "line": 6879,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "line": 17,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:8c4649f3df792f5b02d0edf8",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "showDiffView",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Both Original and Corrected buttons call this global in index.html. It also coordinates the live mutation observer through _diffSwitching. The unused claim is false; sanitization, button state and delayed unlock remain unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8070,
+          "end_line": 8089,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3520,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "index.html",
+          "line": 3521,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "line": 8557,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:81444af29b2c7901d4e2f997",
+      "file": "js/app/10-main-app.js",
+      "symbol": "updateSelectedStudent",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The student select onchange handler invokes this global from index.html. Selection persistence, UI refresh and sync-button updates are live. Retained unchanged; the graph missed the inline handler.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 110,
+          "end_line": 117,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3411,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:81f6015ac175b6d3bcec9434",
+      "file": "js/app/10-main-app.js",
+      "symbol": "manageSelectedStudent",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The Manage Student button invokes this global from index.html. It opens the chooser and rename flow with cancellation/empty-roster guards. Retained this reachable UI operation unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 322,
+          "end_line": 331,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3344,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:fed5a743e627ead83760517c",
+      "file": "js/app/10-main-app.js",
+      "symbol": "exportStudents",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The roster Export button invokes this global from index.html; a native unit harness also loads it. Retained the live text-file export and empty-roster guard. Lack of JS importers does not establish dead code.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 453,
+          "end_line": 465,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3343,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "tests/class-deletion.cjs",
+          "line": 15,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:9ff2290b78ea0c845fb65bbc",
+      "file": "js/app/10-main-app.js",
+      "symbol": "isPunctuationToken",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "Only the declaration referenced this unused token-classification wrapper. The current correction renderer and its active word/newline helpers do not call it; no string dispatch or interface exposes it. The correction performance/regression suite passes after removal.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 1167,
+          "end_line": 1169,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:ffa5118598342feda92f942a",
+      "file": "js/app/10-main-app.js",
+      "symbol": "levenshteinDistance",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "Only the declaration referenced this abandoned edit-distance implementation. Current correction rendering never calls or registers it. Removed its unused matrix-building code while preserving every active correction declaration; the correction suite passes.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 1171,
+          "end_line": 1195,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:9e9991881b9480a1139c8285",
+      "file": "js/app/10-main-app.js",
+      "symbol": "moveDuplicateSyncFilesToBackup",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The duplicate-sync cleanup button invokes this global from index.html. Its initially hidden state does not make it unreachable: duplicate-maintenance UI reveals the control. Retained confirmation, sequential backup operations and completion/failure reporting unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 3117,
+          "end_line": 3156,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3365,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:5157e2be2f285b3fe0d88970",
+      "file": "js/app/10-main-app.js",
+      "symbol": "inferWritingGenre",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "This safe-reference wrapper had no callers. Active genre flows call detectWritingGenreInfo/normalizeWritingGenreInfo directly. Removed only the obsolete wrapper; the detector and selection handling are unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5550,
+          "end_line": 5552,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:f9f6e9cbbd9b4c29526c67ba",
+      "file": "js/app/10-main-app.js",
+      "symbol": "wrapCorrectedHtmlForNotebookPrint",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The print-format adapter had no source, HTML, generated handler or test references. Current notebook construction does not call it. Removed only this unused adapter; all live print, reflow and sanitization declarations remain byte-identical and notebook suites pass.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6054,
+          "end_line": 6061,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:78e142a25a36d5a12768970a",
+      "file": "js/app/10-main-app.js",
+      "symbol": "getNotebookDecisionFocusText",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The old field-precedence accessor had no callers. Current notebook priority construction uses getNotebookGuideCategoryFocusSource instead. Removed the unused accessor without changing the active priority policy; notebook guidance suites pass.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6321,
+          "end_line": 6330,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:40d6aafd4be5f1d995bbeb06",
+      "file": "js/app/10-main-app.js",
+      "symbol": "getNotebookGuideSentenceStarter",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "Only the declaration referenced this single-word sentence accessor. Current sentence/content-word analysis does not use it. Removed the obsolete accessor; active sentence validation and guide generation are unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6623,
+          "end_line": 6627,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:5e39a7b5baa3b7f5b489d741",
+      "file": "js/app/10-main-app.js",
+      "symbol": "clearWritingArea",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The writing-field Clear button invokes this global from index.html. It resets reassessment, writing and genre state, then refreshes the UI. Retained this reachable user action unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8350,
+          "end_line": 8362,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3442,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:fac391cf5eae4325c6a8fe33",
+      "file": "js/app/99-lightbox.js",
+      "symbol": "openImageLightbox",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "Generated image HTML invokes this global from both selected-image preview and portfolio image renderers. The script-loading suite verifies browser handler availability. Retained the live preview operation and all image/caption guards unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/99-lightbox.js",
+          "start_line": 2,
+          "end_line": 21,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "line": 7263,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "line": 7268,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "line": 3213,
+          "role": "Current runtime/test reference"
+        },
+        {
+          "file": "tests/script-loading.browser.cjs",
+          "line": 41,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:23339cdb528915be789a74e4",
+      "file": "js/app/storage-recovery.js",
+      "symbol": "generateWFTShortId",
+      "marker": "unused_internal",
+      "held": true,
+      "classification": "unused_internal_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "The uppercase-WFT spelling was a declaration-only duplicate alias, with no handler, dynamic lookup, test or documented contract. Existing callers use _wftGenShortId and the lowercase-Wft fallback. Removed this unused spelling while preserving both active generator declarations byte-for-byte.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 16,
+          "end_line": 16,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "dead_code:5ebe6bb7152d3166eef9f0e3",
+      "file": "js/app/storage-recovery.js",
+      "symbol": "toggleWftSafeMode",
+      "marker": "unused_internal",
+      "held": false,
+      "classification": "scanner_false_positive_runtime_handler",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The Safe Mode button invokes this global from index.html. Its state toggle and storage-write failure message are live recovery behavior. Retained unchanged; the no-call claim misses the inline handler.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 130,
+          "end_line": 138,
+          "version": "assigned before deletion"
+        },
+        {
+          "file": "index.html",
+          "line": 3752,
+          "role": "Current runtime/test reference"
+        }
+      ],
+      "verified_metrics": null,
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_41f1c98f03d5ab70b068",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "clearWftLocalCache",
+      "marker": "complex_method",
+      "held": true,
+      "classification": "intentional_code_retained",
+      "proposed_status": "reviewed_no_change",
+      "reason": "CCN10 holds across36 nonblank lines. The short ordered cache-clear transaction needs confirmation/cancellation, storage preflight, async mutation/race validation, rollback on partial failure and accurate outcome reporting. These are independent data-loss safeguards, not redundant branches. Retained the coherent transaction rather than relocating its checks into one-use helpers.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1932,
+          "end_line": 1969,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": {
+        "before": {
+          "ccn": 10,
+          "nloc": 36,
+          "max_nesting": 3,
+          "start_line": 1932,
+          "end_line": 1969
+        },
+        "after": {
+          "ccn": 10,
+          "nloc": 36,
+          "max_nesting": 3,
+          "start_line": 1932,
+          "end_line": 1969
+        }
+      },
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_0c9b8fe38c8f10880db3",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "showDriveDisconnectedState",
+      "marker": "complex_method",
+      "held": true,
+      "classification": "obsolete_function_removed",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "CCN11 held in the original declaration. The separate dead-code investigation proved that the whole legacy state updater had no caller or contract, so it was removed instead of refactored. This metric should disappear with the dead declaration, pending coordinator scan confirmation.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 3588,
+          "end_line": 3615,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": {
+        "before": {
+          "ccn": 11,
+          "nloc": 23,
+          "max_nesting": 2,
+          "start_line": 3588,
+          "end_line": 3615
+        }
+      },
+      "remaining_scanner_expectation": "Expected absent after coordinator refresh; not yet scanner-confirmed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_6c622b0a80727a851775",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "showDiffView",
+      "marker": "complex_method",
+      "held": true,
+      "classification": "intentional_code_retained",
+      "proposed_status": "reviewed_no_change",
+      "reason": "CCN9 holds across19 nonblank lines. One small two-mode UI update guards optional DOM controls and text fallbacks while locking/unlocking its observer. Splitting it adds indirection without removing decisions; removing guards or the timeout changes behavior. Retained unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8070,
+          "end_line": 8089,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": {
+        "before": {
+          "ccn": 9,
+          "nloc": 19,
+          "max_nesting": 2,
+          "start_line": 8070,
+          "end_line": 8089
+        },
+        "after": {
+          "ccn": 9,
+          "nloc": 19,
+          "max_nesting": 2,
+          "start_line": 8024,
+          "end_line": 8043
+        }
+      },
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_5d6d32a8f92f3d71f53b",
+      "file": "js/app/99-lightbox.js",
+      "symbol": "openImageLightbox",
+      "marker": "complex_method",
+      "held": true,
+      "classification": "intentional_code_retained",
+      "proposed_status": "reviewed_no_change",
+      "reason": "CCN9 holds across17 nonblank lines. Required image/lightbox guards, optional caption and accessible fallback text, and backdrop-only dismissal belong to one compact action. Retained these checks unchanged rather than extracting single-use wrappers.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/99-lightbox.js",
+          "start_line": 2,
+          "end_line": 21,
+          "version": "assigned before deletion"
+        }
+      ],
+      "verified_metrics": {
+        "before": {
+          "ccn": 9,
+          "nloc": 17,
+          "max_nesting": 1,
+          "start_line": 2,
+          "end_line": 21
+        },
+        "after": {
+          "ccn": 9,
+          "nloc": 17,
+          "max_nesting": 1,
+          "start_line": 2,
+          "end_line": 21
+        }
+      },
+      "remaining_scanner_expectation": "May remain visible; individual no-change disposition is required.",
+      "needs_user_attention": false
+    }
+  ],
+  "source_verification": {
+    "before_all89_match_assigned_and_passing909cdca_normalized_lf": true,
+    "after_only3_of89_changed": true,
+    "final_all89_match_tested_candidate_raw_hashes": true,
+    "surviving_top_level_nodes_byte_identical": true,
+    "proof": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\source-structure-proof.json",
+    "before_pins": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\before-source-hashes.json",
+    "after_pins": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after-source-hashes.json",
+    "deletions": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\deletions.json",
+    "reference_inventory": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\references-after.json"
+  },
+  "supported_interfaces_considered": [
+    {
+      "symbol": "savePortfolioAsync",
+      "retained": true,
+      "contract_evidence": "audit-ledger.json storage_followup.queue[3].scope_and_reachability.retained_public_APIs; confirmed against current Promise facade, paired API family and fresh storage-health/optional-storage tests. No current UI caller claimed."
+    },
+    {
+      "symbol": "stripPortfolioImageDataUrls",
+      "retained": true,
+      "contract_evidence": "Explicit backward-compatible-name comment; four-line alias to active stripping helper remains byte-identical."
+    },
+    {
+      "symbol": "generateWFTShortId",
+      "retained": false,
+      "contract_evidence": "Declaration-only uppercase spelling; no current documented/test/dynamic contract. Actual ID paths call _wftGenShortId or generateWftShortId, both unchanged."
+    }
+  ],
+  "tests": {
+    "before": {
+      "kind": "Reused verified exact-source publication baseline; no redundant fresh before run",
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\publication-20261016\\full\\suite-results.json",
+      "summary_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\do-next-publication-tests.json",
+      "passed": true,
+      "complete": true,
+      "suites": 75,
+      "syntax_checks": 89,
+      "started": "2026-10-15T17:28:13.505Z",
+      "finished": "2026-10-15T17:53:03.617Z",
+      "source_equality_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\before-source-hashes.json"
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "partial": true,
+      "suites": 8,
+      "syntax_checks": 89,
+      "started": "2026-10-15T18:41:57.644Z",
+      "finished": "2026-10-15T18:44:49.544Z",
+      "selected_suites": [
+        {
+          "suite": "tests/auth-integrity.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:42:05.603Z",
+          "seconds": 41.716,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\auth-integrity.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\auth-integrity.browser.json",
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/correction-performance.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:42:47.323Z",
+          "seconds": 12.887,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\correction-performance.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\correction-performance.browser.json",
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:43:00.211Z",
+          "seconds": 3.234,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\notebook-guidance-repair.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\notebook-guidance-repair.browser.json",
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:43:03.447Z",
+          "seconds": 6.526,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\notebook-guide.browser.log",
+          "report": null,
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/optional-storage.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:43:09.975Z",
+          "seconds": 39.416,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\optional-storage.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\optional-storage.browser.json",
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/recovery-cache.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:43:49.393Z",
+          "seconds": 54.807,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\recovery-cache.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\recovery-cache.browser.json",
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/script-loading.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:44:44.201Z",
+          "seconds": 5.254,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\script-loading.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\script-loading.browser.json",
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/storage-health.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:44:49.457Z",
+          "seconds": 0.086,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-005\\after\\storage-health.log",
+          "report": null,
+          "nativeInstrumented": false
+        }
+      ]
+    },
+    "tests_added_or_changed": [],
+    "additional_checks": [
+      "Git diff --check passed.",
+      "All removed names have zero remaining non-audit references.",
+      "Installed AST comparison confirms only the10 selected declarations were removed; all other top-level nodes and comments are byte-identical.",
+      "Installed read-only RepoWise walker independently confirms the4 selected complexity metrics; three remain unchanged and one declaration is gone."
+    ]
+  },
+  "scope_checks": {
+    "no_tracker_or_docs_edit": true,
+    "no_branch_switch": true,
+    "no_staging_commit_push_merge": true,
+    "no_index_write_or_refresh": true,
+    "no_new_dependencies": true,
+    "no_chats_agents_or_interchat_messages": true,
+    "source_frozen_for_coordinator_full_batch_gate": true
+  },
+  "limits": [
+    "Coordinator must independently review the deletion diff, run the full batch gate, commit and refresh RepoWise before claiming findings cleared or any health score change.",
+    "No live Google/Drive/OpenRouter calls, real accounts, paid requests or student data were used.",
+    "Current in-repository/runtime/dynamic/documented interfaces were checked; this application declares no external consumer contract for the removed internal globals.",
+    "The12 false positives and5 retained metric/interface observations may remain scanner-visible; they were addressed by individual evidence, not suppression."
+  ],
+  "tooling_notes": [
+    "Initial source print hit Windows console encoding on an emoji after successful source pinning; reprinted the remaining scope with UTF-8.",
+    "One documentation search used an unsupported Windows wildcard path and an incorrect relative exclusion; corrected to root-relative glob filters. No findings were accepted from that failed search."
+  ]
+}

@@ -1164,36 +1164,6 @@ function isNewlineToken(token) {
     return /^\n+$/.test(token || "");
 }
 
-function isPunctuationToken(token) {
-    return !!token && !isWordToken(token) && !isNewlineToken(token);
-}
-
-function levenshteinDistance(a, b) {
-    var s = String(a || "").toLowerCase();
-    var t = String(b || "").toLowerCase();
-    var rows = s.length + 1;
-    var cols = t.length + 1;
-    var dp = [];
-    var i;
-    var j;
-    for (i = 0; i < rows; i++) {
-        dp[i] = [];
-        dp[i][0] = i;
-    }
-    for (j = 0; j < cols; j++) dp[0][j] = j;
-    for (i = 1; i < rows; i++) {
-        for (j = 1; j < cols; j++) {
-            var cost = s.charAt(i - 1) === t.charAt(j - 1) ? 0 : 1;
-            dp[i][j] = Math.min(
-                dp[i - 1][j] + 1,
-                dp[i][j - 1] + 1,
-                dp[i - 1][j - 1] + cost
-            );
-        }
-    }
-    return dp[s.length][t.length];
-}
-
 var SAFE_INSERT_WORD_SET = {
     "a": true, "an": true, "the": true,
     "is": true, "are": true, "am": true, "was": true, "were": true,
@@ -5547,10 +5517,6 @@ function sanitizeGenreReferenceInFeedback(text, genreInfo) {
     return value.replace(/\s+/g, " ").trim();
 }
 
-function inferWritingGenre(text) {
-    return detectWritingGenreInfo(text).safeReference;
-}
-
 function populateWritingGenreSelect() {
     var select = document.getElementById("writingGenreSelect");
     if (!select || select.getAttribute("data-populated") === "true") return;
@@ -6051,15 +6017,6 @@ function renderNotebookDetailedAssessment(detailed) {
     return html;
 }
 
-function wrapCorrectedHtmlForNotebookPrint(html) {
-    var value = reflowCorrectedHtmlForDisplay(html || "").trim();
-    if (!value) return '<p>-</p>';
-    value = value.replace(/(?:\s*<br\s*\/?>(?:\s|&nbsp;)*){2,}/gi, '</p><p>');
-    value = value.replace(/\s*<br\s*\/?>(?:\s|&nbsp;)*/gi, ' ');
-    if (!/^\s*<p[\s>]/i.test(value)) value = '<p>' + value + '</p>';
-    return sanitizeWftHtmlFragment(value);
-}
-
 function toNotebookTitleCase(value) {
     value = String(value || "piece of writing").replace(/\s+/g, " ").trim();
     if (!value) return "Piece of Writing";
@@ -6316,17 +6273,6 @@ function getNotebookGuideCategoryFocusSource(category, data) {
         item.flowPattern || "",
         item.rawBody || ""
     ].join(" "));
-}
-
-function getNotebookDecisionFocusText(categoryDetails, key) {
-    var detail = categoryDetails && categoryDetails[key];
-    if (!detail) return "";
-    if (detail.guideFocusText) return detail.guideFocusText;
-    if (detail.focusArea) return detail.focusArea;
-    if (detail.teacherComment) return detail.teacherComment;
-    if (detail.noticed) return detail.noticed;
-    if (detail.tip) return detail.tip;
-    return "";
 }
 
 function buildNotebookGuidePriorities(data) {
@@ -6618,12 +6564,6 @@ function getNotebookGuideSentenceList(text) {
         if (sentence) out.push(sentence);
     }
     return out;
-}
-
-function getNotebookGuideSentenceStarter(sentence) {
-    var s = cleanNotebookGuideText(sentence).replace(/^['\"]+/, "");
-    var m = s.match(/^([A-Za-z]+)/);
-    return m ? m[1].toLowerCase() : "";
 }
 
 function getNotebookGuideTokenOverlapScore(a, b) {

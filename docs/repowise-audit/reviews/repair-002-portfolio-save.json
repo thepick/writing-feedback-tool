@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "task": "Focused RepoWise repair 002: saveCurrentSessionToPortfolio review",
+  "created_at_utc": "2026-10-15T18:25:01.356497+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "observed_head_at_finish": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "summary": {
+    "findings_reviewed": 2,
+    "findings_held": 2,
+    "source_fixes": 0,
+    "recommended_intentional_retained": 2,
+    "needs_user_attention": false,
+    "source_changed": false,
+    "claim_of_scanner_clearance": false
+  },
+  "changed_repository_files": [],
+  "created_evidence_files": [
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-002-portfolio-save.json",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\source-evidence.json",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\suite-results.json"
+  ],
+  "source_hashes": {
+    "file": "js/app/00-storage-sync-patches.js",
+    "baseline_working_tree_sha256": "02bb9fd078d0ffb983aee51117a55217ce01da76ffcf6a1cef06c5d698029562",
+    "current_working_tree_sha256": "02bb9fd078d0ffb983aee51117a55217ce01da76ffcf6a1cef06c5d698029562",
+    "assigned_commit_sha256": "05c6fecae3aeef58bf900abf3c7f9d39978951048c1389ed85acf6891135e15d",
+    "current_sha256_normalized_lf": "05c6fecae3aeef58bf900abf3c7f9d39978951048c1389ed85acf6891135e15d",
+    "function_sha256_normalized_lf": "1106cbbbeaab6430d056977a815421b1545f09bb30bcf2a18bd9f9f45b330a7e",
+    "unchanged_against_assigned_commit_after_newline_normalization": true,
+    "all_89_source_files_match_assigned_and_publication_commits_after_newline_normalization": true,
+    "full_source_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\source-evidence.json"
+  },
+  "metrics_before": {
+    "start_line": 7718,
+    "end_line": 7779,
+    "ccn": 35,
+    "cognitive": 35,
+    "nloc": 62,
+    "max_nesting": 2
+  },
+  "metrics_after": {
+    "start_line": 7718,
+    "end_line": 7779,
+    "ccn": 35,
+    "cognitive": 35,
+    "nloc": 62,
+    "max_nesting": 2
+  },
+  "decision_breakdown": {
+    "base": 1,
+    "if_statements": 3,
+    "logical_or": 24,
+    "logical_and": 1,
+    "conditional_expressions": 6,
+    "sum_ccn": 35,
+    "session_record_fields": 31,
+    "session_record_decision_increments": 25,
+    "loops": 0,
+    "awaits": 0,
+    "guard_returns": 2,
+    "method": "Read-only installed RepoWise complexity walker, cross-checked against the function text. No index write or health recomputation."
+  },
+  "production_callers_reviewed": [
+    {
+      "file": "js/app/10-main-app.js",
+      "line": 8213,
+      "function": "prepareAnalysisPortfolioSync",
+      "flow": "Both low-sample and scored analyzeWriting paths call this wrapper. It catches preparation errors, logs, publishes error status, then refreshes the sync buttons."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 8178,
+      "function": "prepareCurrentAnalysisForPortfolioSync",
+      "flow": "Retains an existing pending record, rejects stale/missing analysis and an already-synced signature, invokes target synchronously, then checks pending state. manualSaveToDrive calls this before obtaining Drive access and catches errors before continuing."
+    }
+  ],
+  "test_callers_reviewed": [
+    "tests/analysis-identity.browser.cjs:56",
+    "tests/analysis-pipeline.browser.cjs:125",
+    "tests/notebook-guide.browser.cjs:68",
+    "tests/notebook-guidance-repair.browser.cjs:206",
+    "tests/portfolio-index.browser.cjs:97",
+    "tests/fixtures/analysis-pipeline-baseline.js:86",
+    "tests/fixtures/analysis-pipeline-baseline.js:338"
+  ],
+  "helpers_reviewed": [
+    "cloneWftJson",
+    "buildSessionFeedbackSummary",
+    "buildPortfolioDetailedFeedback",
+    "captureCurrentWritingContext",
+    "isCurrentWritingContext",
+    "getCurrentPortfolioSessionSignature",
+    "persistPendingPortfolioSync",
+    "getPendingPortfolioSync",
+    "updateSyncPortfolioButtonState",
+    "normalizeWritingGenreInfo",
+    "ensureNotebookGuide",
+    "captureNotebookPrintSnapshotForCurrentAnalysis"
+  ],
+  "behavior_and_order_evidence": [
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:7719",
+      "verified": "Stale/missing analysis returns before any save. Student name is taken from the verified input context; missing student emits the original token-dependent error and returns."
+    },
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:7729",
+      "verified": "One Date instance, original random call, ID/date formatting, object field order, score references, null/falsy fallback rules, repeated property reads, escaping and correction helpers remain byte-identical."
+    },
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:7752",
+      "verified": "writingGenreInfo can detect from current DOM text, while the four legacy genre fields have a different empty-object fallback. Combining/caching these expressions is not a proven equivalent replacement."
+    },
+    {
+      "anchor": "js/app/10-main-app.js:7147",
+      "verified": "ensureNotebookGuide mutates analysisData.notebookGuide/version before image cloning and the optional notebook print snapshot; moving object sections can reorder observable work."
+    },
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:7766",
+      "verified": "Builds pending state including signature and cloned replacement source before clearing activePortfolioReassessmentSource and analysisData.inputContext.reassessmentSource. Signature checks the current writing context, so moving it after clearing would change behavior."
+    },
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:7774",
+      "verified": "persistPendingPortfolioSync runs synchronously before button refresh and final ready/warning status; a thrown persistence error skips those final operations and is handled by the caller."
+    },
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:8243",
+      "verified": "Persistence helper retries with stripped durable photo payloads while retaining original in-memory photo bytes; retry failure rethrows after its recovery notice. The caller uses its full-persistence boolean for the exact tab-only warning."
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_e877852414106a9c7183",
+      "kind": "complex_method",
+      "severity": "critical",
+      "held": true,
+      "verified_metrics": {
+        "start_line": 7718,
+        "end_line": 7779,
+        "ccn": 35,
+        "cognitive": 35,
+        "nloc": 62,
+        "max_nesting": 2
+      },
+      "recommended_disposition": "intentional_code_retained",
+      "needs_user_attention": false,
+      "reason": "CCN 35 is accurate, but 25 of its 34 increments are inline fallback/selection expressions within a single 31-field session record. Only three if statements and two guard returns exist; no loop or await. Existing domain operations already use named helpers. Extracting the whole literal only relocates almost all complexity; splitting grade/correction/genre fragments adds schema assembly indirection without removing a demonstrated maintenance defect. Combining repeated reads changes evaluation semantics and the genre fallbacks differ. Retain the coherent constructor and documented save ordering.",
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "code_health:finding_4cc8d496bdb9e7a9baaf",
+      "kind": "large_method",
+      "severity": "low",
+      "held": true,
+      "verified_metrics": {
+        "start_line": 7718,
+        "end_line": 7779,
+        "ccn": 35,
+        "cognitive": 35,
+        "nloc": 62,
+        "max_nesting": 2
+      },
+      "recommended_disposition": "intentional_code_retained",
+      "needs_user_attention": false,
+      "reason": "NLOC 62 is accurate. The 31-field session schema accounts for most lines; guards precede it and a short pending-state/persistence publication sequence follows it. Keeping one complete literal makes the saved schema and evaluation order inspectable in one place. Moving fields to one-use helpers or compressing formatting would reduce the reported size without a corresponding maintenance benefit. No small cohesive improvement was identified within the assigned scope.",
+      "scanner_finding_expected_to_remain_open": true
+    }
+  ],
+  "tests": {
+    "before": {
+      "type": "Reused verified exact-source publication baseline",
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\do-next-publication-tests.json",
+      "passed": true,
+      "complete": true,
+      "suites": 75,
+      "syntax_checks": 89,
+      "started": "2026-10-15T17:28:13.505Z",
+      "finished": "2026-10-15T17:53:03.617Z",
+      "source_verification": "All 89 source files match the baseline committed source after CRLF normalization. Six raw pin differences in unrelated tests are newline representation only; target raw SHA matches the publication pin."
+    },
+    "current_verification": {
+      "type": "Fresh unchanged-source verification; no candidate edit",
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "syntax_checks": 89,
+      "selected_suites": [
+        {
+          "suite": "tests/analysis-identity.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 22.375,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\analysis-identity.browser.log",
+          "report": null
+        },
+        {
+          "suite": "tests/analysis-pipeline.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 130.209,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\analysis-pipeline.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\analysis-pipeline.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 3.45,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\notebook-guidance-repair.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\notebook-guidance-repair.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 5.218,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\notebook-guide.browser.log",
+          "report": null
+        },
+        {
+          "suite": "tests/pending-portfolio.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 4.097,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\pending-portfolio.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\pending-portfolio.browser.json"
+        },
+        {
+          "suite": "tests/portfolio-index.browser.cjs",
+          "status": 0,
+          "error": null,
+          "seconds": 3.459,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\portfolio-index.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-002\\verification\\portfolio-index.browser.json"
+        }
+      ],
+      "started": "2026-10-15T18:20:38.207Z",
+      "finished": "2026-10-15T18:23:35.516Z",
+      "coverage": "Native Edge: stale result/student guards, analysis save integration including reassessment and storage failures, native pending schema/commit/index, photo quota/reload recovery, saved notebook guide and print snapshot. Analysis pipeline uses the frozen original orchestration fixture on one side and current orchestration on the other; both use the unchanged native save function."
+    },
+    "after_edit": "Not applicable: no application/test edit was made. The fresh verification above passed on the unchanged reviewed source.",
+    "tests_added": []
+  },
+  "done_condition": {
+    "scanner_finding_clearance_confirmed": false,
+    "explanation": "These are valid metric observations intentionally recommended for retention, not fixes and not false positives. Coordinator should review and record the individual intentional-code dispositions. No score change is claimed.",
+    "repowise_refreshed": false,
+    "tracker_edited": false
+  },
+  "concerns_and_limits": [
+    "No paid AI or live Google Drive/OAuth calls; external services were intercepted by existing browser suites.",
+    "No full 75-suite rerun for this read-only review; exact-source publication baseline was verified and six relevant suites were rerun.",
+    "No fresh getter/effect-order test matrix was added because no code changed. Ordering conclusions are source review evidence, not newly instrumented getter probes.",
+    "The scanner will continue reporting both metrics unless its own disposition system consumes the coordinator review; do not mark them fixed or hide the file."
+  ],
+  "tooling_notes": [
+    "One initial package source-file read used complexity.py rather than the installed complexity package directory; corrected to its actual module location.",
+    "An optional whole-file direct AST exploration exited 1 without output; it was not used as verification. Installed complexity walker and direct function-text counts successfully provided the reported metrics.",
+    "A historical ledger read used the Windows default encoding and failed; no historical disposition was relied on."
+  ],
+  "coordinator_owned_changes_left_untouched": [
+    " M docs/repowise-audit/current-findings.json",
+    " M docs/repowise-audit/current-findings.md",
+    "?? docs/repowise-audit/security-history-scan.json"
+  ],
+  "scope_checks": {
+    "no_branch_switch": true,
+    "no_staging_commit_push_merge": true,
+    "no_tracker_audit_edit": true,
+    "no_index_write_refresh_or_recompute": true,
+    "no_other_chats_or_agents_created_or_messaged": true,
+    "next_issue_not_selected": true
+  }
+}

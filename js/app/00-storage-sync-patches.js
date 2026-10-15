@@ -1977,15 +1977,6 @@ async function clearWftLocalCache() {
 // PATCH 4 — ASYNC PORTFOLIO ACCESS WRAPPERS
 // ═══════════════════════════════════════════════════════════════════════════
 
-function wftPromiseCallback(promise, callback) {
-    if (!callback) { return promise; }
-    promise.then(
-        function(result) { callback(null, result); },
-        function(err) { callback(err || new Error("Promise rejected"), null); }
-    );
-    return promise;
-}
-
 function loadPortfolioAsync() {
     return Promise.resolve().then(function() { return getLocalPortfolioSnapshot(); });
 }
@@ -3583,35 +3574,6 @@ function showSignedOutState() {
     if (userInfoHeader) userInfoHeader.style.display = "none";
     setDriveSyncStatus("", "Not synced");
     setDuplicateSyncMaintenanceStatus("Sign in with Google Drive to check for duplicate sync files.", 0, false);
-}
-
-function showDriveDisconnectedState(message) {
-    driveAccessToken = null;
-    driveFolderId = null;
-    stopDriveAutoSync();
-
-    var cachedUser = getCachedGoogleUser();
-    if (!googleUser && cachedUser) {
-        googleUser = cachedUser;
-    }
-
-    if (!googleUser && hasPersistedGoogleConnection()) {
-        googleUser = { name: "Connected" };
-    }
-
-    var signInBtnHeader = document.getElementById("googleSignInBtnHeader");
-    var userInfoHeader = document.getElementById("googleUserInfoHeader");
-
-    if (googleUser) {
-        if (signInBtnHeader) signInBtnHeader.style.display = "none";
-        if (userInfoHeader) userInfoHeader.style.display = "flex";
-        showSignedInState(googleUser);
-    } else {
-        if (signInBtnHeader) signInBtnHeader.style.display = "flex";
-        if (userInfoHeader) userInfoHeader.style.display = "none";
-    }
-
-    setDriveSyncStatus("error", message || "Drive disconnected - click Sync to reconnect");
 }
 
 function restoreGoogleSessionOnce() {
@@ -6581,14 +6543,6 @@ function getRubricScoreColorClass(score) {
     if (value >= 7) return 'score-blue';
     if (value >= 5) return 'score-amber';
     return 'score-red';
-}
-
-function getSessionPlainCorrectedText() {
-    if (latestAnalysisData && latestAnalysisData.correctedStory) {
-        return stripCorrectionMarkdown(latestAnalysisData.correctedStory).trim();
-    }
-    var corrected = document.getElementById('correctedStory');
-    return corrected ? String(corrected.innerText || corrected.textContent || '').trim() : '';
 }
 
 function getSessionImagePayloads() {
