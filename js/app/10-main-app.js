@@ -1556,26 +1556,8 @@ function analyzeSentenceVariety(lengths, sentences) {
     };
 
     function getSentenceVarietyScore() {
-        var bandsPresent = 0;
-        if (shortCount > 0) bandsPresent += 1;
-        if (mediumCount > 0) bandsPresent += 1;
-        if (longCount > 0) bandsPresent += 1;
-
-        var dominant = Math.max(shortCount, mediumCount, longCount);
-        var dominantRatio = dominant / total;
-        var score = 0;
-
-        if (bandsPresent === 3) score += 35;
-        else if (bandsPresent === 2) score += 22;
-        else score += 8;
-
-        if (dominantRatio <= 0.60) score += 35;
-        else if (dominantRatio <= 0.75) score += 22;
-        else score += 10;
-
-        if (maxLen >= Math.max(1, minLen * 2)) score += 30;
-        else if (maxLen - minLen >= 5) score += 20;
-        else score += 10;
+        var score = getDistributionScore();
+        score += getLengthRangeScore();
 
         starterInfo = analyzeSentenceStarters(sentences || []);
         if (starterInfo.ratio > 0.6) score -= 20;
@@ -1588,6 +1570,32 @@ function analyzeSentenceVariety(lengths, sentences) {
         if (score < 0) score = 0;
         if (score > 100) score = 100;
         return score;
+
+        function getDistributionScore() {
+            var bandsPresent = 0;
+            if (shortCount > 0) bandsPresent += 1;
+            if (mediumCount > 0) bandsPresent += 1;
+            if (longCount > 0) bandsPresent += 1;
+
+            var dominant = Math.max(shortCount, mediumCount, longCount);
+            var dominantRatio = dominant / total;
+            var score = 0;
+
+            if (bandsPresent === 3) score += 35;
+            else if (bandsPresent === 2) score += 22;
+            else score += 8;
+
+            if (dominantRatio <= 0.60) score += 35;
+            else if (dominantRatio <= 0.75) score += 22;
+            else score += 10;
+            return score;
+        }
+
+        function getLengthRangeScore() {
+            if (maxLen >= Math.max(1, minLen * 2)) return 30;
+            else if (maxLen - minLen >= 5) return 20;
+            else return 10;
+        }
     }
 }
 
@@ -2349,6 +2357,25 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
         };
     }
 
+    function storeCapturedCategory(name, category) {
+        if (category) result.categories[name] = category;
+    }
+
+    function fillMissingCategory(name, captured, aliases) {
+        if (captured) return;
+        var score = extractScoreNearLabel(step3Text, aliases);
+        if (score != null) {
+            result.categories[name] = {
+                score: score,
+                evidence: "",
+                growthTip: "",
+                contentOrganization: "",
+                sentenceVariety: "",
+                rawBody: ""
+            };
+        }
+    }
+
     var c1 = captureCategory("1. Clear Ideas & Details");
     var c2 = captureCategory("2. Grammar");
     var c3 = captureCategory("3. Word Choice");
@@ -2356,121 +2383,49 @@ function parseDetailedAssessment(step3Text, originalText, optGenreInfo) {
     var c5_flow = captureCategory("5. Flow");
     var c5 = captureCategory("6. Spelling & Punctuation");
 
-    if (c1) result.categories["Ideas & Details"] = c1;
-    if (c2) result.categories["Grammar"] = c2;
-    if (c3) result.categories["Word Choice"] = c3;
-    if (c4) result.categories["Organization"] = c4;
-    if (c5_flow) result.categories["Flow"] = c5_flow;
-    if (c5) result.categories["Spelling & Punctuation"] = c5;
+    storeCapturedCategory("Ideas & Details", c1);
+    storeCapturedCategory("Grammar", c2);
+    storeCapturedCategory("Word Choice", c3);
+    storeCapturedCategory("Organization", c4);
+    storeCapturedCategory("Flow", c5_flow);
+    storeCapturedCategory("Spelling & Punctuation", c5);
 
     // NOTE: Neatness is NOT parsed from Step 3 — it is assessed separately by assessNeatnessFromImage()
     // and injected into detailed.categories["Neatness"] via the inheritance loop in analyzeWriting().
 
-    if (!c1) {
-        var sIdeas = extractScoreNearLabel(step3Text, [
-            "1. Clear Ideas & Details",
-            "Clear Ideas & Details",
-            "Ideas & Details",
-            "Clear Ideas and Details"
-        ]);
-        if (sIdeas != null) {
-            result.categories["Ideas & Details"] = {
-                score: sIdeas,
-                evidence: "",
-                growthTip: "",
-                contentOrganization: "",
-                sentenceVariety: "",
-                rawBody: ""
-            };
-        }
-    }
+    fillMissingCategory("Ideas & Details", c1, [
+        "1. Clear Ideas & Details",
+        "Clear Ideas & Details",
+        "Ideas & Details",
+        "Clear Ideas and Details"
+    ]);
 
-    if (!c2) {
-        var sGrammar = extractScoreNearLabel(step3Text, [
-            "2. Grammar",
-            "Grammar"
-        ]);
-        if (sGrammar != null) {
-            result.categories["Grammar"] = {
-                score: sGrammar,
-                evidence: "",
-                growthTip: "",
-                contentOrganization: "",
-                sentenceVariety: "",
-                rawBody: ""
-            };
-        }
-    }
+    fillMissingCategory("Grammar", c2, [
+        "2. Grammar",
+        "Grammar"
+    ]);
 
-    if (!c3) {
-        var sWordChoice = extractScoreNearLabel(step3Text, [
-            "3. Word Choice",
-            "Word Choice"
-        ]);
-        if (sWordChoice != null) {
-            result.categories["Word Choice"] = {
-                score: sWordChoice,
-                evidence: "",
-                growthTip: "",
-                contentOrganization: "",
-                sentenceVariety: "",
-                rawBody: ""
-            };
-        }
-    }
+    fillMissingCategory("Word Choice", c3, [
+        "3. Word Choice",
+        "Word Choice"
+    ]);
 
-    if (!c4) {
-        var sOrg = extractScoreNearLabel(step3Text, [
-            "4. Organization",
-            "Organization"
-        ]);
-        if (sOrg != null) {
-            result.categories["Organization"] = {
-                score: sOrg,
-                evidence: "",
-                growthTip: "",
-                contentOrganization: "",
-                sentenceVariety: "",
-                rawBody: ""
-            };
-        }
-    }
+    fillMissingCategory("Organization", c4, [
+        "4. Organization",
+        "Organization"
+    ]);
 
-    if (!c5_flow) {
-        var sFlow = extractScoreNearLabel(step3Text, [
-            "5. Flow",
-            "Flow"
-        ]);
-        if (sFlow != null) {
-            result.categories["Flow"] = {
-                score: sFlow,
-                evidence: "",
-                growthTip: "",
-                contentOrganization: "",
-                sentenceVariety: "",
-                rawBody: ""
-            };
-        }
-    }
+    fillMissingCategory("Flow", c5_flow, [
+        "5. Flow",
+        "Flow"
+    ]);
 
-    if (!c5) {
-        var sSpellingPunctuation = extractScoreNearLabel(step3Text, [
-            "6. Spelling & Punctuation",
-            "5. Spelling & Punctuation",
-            "Spelling & Punctuation",
-            "Spelling and Punctuation"
-        ]);
-        if (sSpellingPunctuation != null) {
-            result.categories["Spelling & Punctuation"] = {
-                score: sSpellingPunctuation,
-                evidence: "",
-                growthTip: "",
-                contentOrganization: "",
-                sentenceVariety: "",
-                rawBody: ""
-            };
-        }
-    }
+    fillMissingCategory("Spelling & Punctuation", c5, [
+        "6. Spelling & Punctuation",
+        "5. Spelling & Punctuation",
+        "Spelling & Punctuation",
+        "Spelling and Punctuation"
+    ]);
 
     var s1 = step3Text.match(/\*\*Your Writing Strength:\*\*\s*([^\n]+)/i);
     if (s1) result.strength = s1[1].trim();
@@ -7951,31 +7906,7 @@ function reconcileDetailedAnalysis(parsed1, detailed, text, flowData, eligibilit
         var inheritKey = activeKeys[inheritIndex];
         if (!detailed.categories[inheritKey] && parsed1.quickRubric[inheritKey]) {
             var qr = parsed1.quickRubric[inheritKey];
-            if (inheritKey === "Neatness") {
-                // For Neatness the quick rubric 'reason' is an observation (evidence),
-                // and 'growthTip' is the separate actionable tip from the image prompt.
-                detailed.categories[inheritKey] = {
-                    score: qr.score,
-                    evidence: qr.reason || "",
-                    growthTip: qr.growthTip || "",
-                    contentOrganization: "",
-                    sentenceVariety: "",
-                    rawBody: "",
-                    subScores: qr.subScores || null,
-                    sourceType: qr.sourceType || "",
-                    notAssessedReason: qr.notAssessedReason || "",
-                    scoreBasis: qr.scoreBasis || ""
-                };
-            } else {
-                detailed.categories[inheritKey] = {
-                    score: qr.score,
-                    evidence: "",
-                    growthTip: qr.reason || "",
-                    contentOrganization: "",
-                    sentenceVariety: "",
-                    rawBody: ""
-                };
-            }
+            detailed.categories[inheritKey] = buildInheritedCategory(inheritKey, qr);
         }
     }
 
@@ -7983,21 +7914,57 @@ function reconcileDetailedAnalysis(parsed1, detailed, text, flowData, eligibilit
     applyEligibilityToDetailed(detailed, eligibility);
     polishFeedback(parsed1.quickRubric, detailed, text, parsed1.correctedStory, flowData);
 
-    for (var i = 0; i < CATEGORY_KEYS.length; i++) {
-        var key = CATEGORY_KEYS[i];
-        if (!parsed1.quickRubric[key] || !parsed1.quickRubric[key].reason) {
-            var dKey = detailed.categories[key];
-            parsed1.quickRubric[key] = {
-                score: dKey ? dKey.score : null,
-                reason: dKey && dKey.growthTip ? dKey.growthTip : getEvidenceNote(key)
-            };
-        }
-    }
+    fillQuickRubricReasons();
 
     detailed.categories["Flow"].sentenceVariety = "";
     detailed.categories["Flow"].flowPattern = detailed.categories["Flow"].flowPattern || buildFlowPatternSummary(flowData);
     detailed.categories["Flow"].patternNotes = detailed.categories["Flow"].patternNotes || buildFlowPatternNotes(flowData);
     if (!detailed.categories["Flow"].growthTip) detailed.categories["Flow"].growthTip = parsed1.flowTip;
+
+    function buildInheritedCategory(inheritKey, qr) {
+        if (inheritKey === "Neatness") {
+            return buildInheritedNeatnessCategory(qr);
+        } else {
+            return {
+                score: qr.score,
+                evidence: "",
+                growthTip: qr.reason || "",
+                contentOrganization: "",
+                sentenceVariety: "",
+                rawBody: ""
+            };
+        }
+    }
+
+    function buildInheritedNeatnessCategory(qr) {
+        // For Neatness the quick rubric 'reason' is an observation (evidence),
+        // and 'growthTip' is the separate actionable tip from the image prompt.
+        return {
+            score: qr.score,
+            evidence: qr.reason || "",
+            growthTip: qr.growthTip || "",
+            contentOrganization: "",
+            sentenceVariety: "",
+            rawBody: "",
+            subScores: qr.subScores || null,
+            sourceType: qr.sourceType || "",
+            notAssessedReason: qr.notAssessedReason || "",
+            scoreBasis: qr.scoreBasis || ""
+        };
+    }
+
+    function fillQuickRubricReasons() {
+        for (var i = 0; i < CATEGORY_KEYS.length; i++) {
+            var key = CATEGORY_KEYS[i];
+            if (!parsed1.quickRubric[key] || !parsed1.quickRubric[key].reason) {
+                var dKey = detailed.categories[key];
+                parsed1.quickRubric[key] = {
+                    score: dKey ? dKey.score : null,
+                    reason: dKey && dKey.growthTip ? dKey.growthTip : getEvidenceNote(key)
+                };
+            }
+        }
+    }
 }
 
 function buildAnalysisCategoryScores(parsed1, detailed, eligibility, grammarScore) {
@@ -8160,20 +8127,7 @@ function renderScoredAnalysisDebug(data, parsed1, step1, step2, step3) {
         "Word count adjustment:\n" + JSON.stringify(adjustment, null, 2);
 }
 
-async function analyzeWriting() {
-    if (isAnalyzing) return;
-    var text = document.getElementById("studentWriting").value.trim();
-    var policy = captureAssessmentPolicy();
-    var targetWords = policy.targetWords;
-    var model = policy.model;
-    var gradeProfile = policy.gradeProfile;
-    if (!text && !(selectedImages && selectedImages.length)) {
-        alert("Please paste student writing first.");
-        return;
-    }
-
-    var btn = document.getElementById("analyzeBtn");
-    var stopBtn = document.getElementById("stopAnalysisBtn");
+function beginWritingAnalysis(btn, stopBtn, policy) {
     isAnalyzing = true;
     cancelAnalysis = false;
     analysisAbortController = new AbortController();
@@ -8186,30 +8140,136 @@ async function analyzeWriting() {
     setLoadingButtonState(stopBtn, false);
     stopBtn.textContent = 'Stop Analysis';
     stopBtn.disabled = false;
+    return context;
+}
 
-    function preparePortfolioSync(errorMessage) {
-        try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolio) {
-            wftDebugError(errorMessage, ePortfolio);
-            setDriveSyncStatus('error', 'Could not prepare portfolio sync');
-            updateSyncPortfolioButtonState();
-        }
+function applyCorrectedWritingMetrics(parsed1, correctedText) {
+    parsed1.errorCounts.grammar = countBoldedSegments(correctedText);
+    parsed1.errorCounts.punctuation = 0;
+    parsed1.errorCounts.spelling = 0;
+    var correctedPlainText = stripCorrectionMarkdown(correctedText);
+    var correctedSentences = splitSentences(correctedPlainText);
+    var flowData = analyzeSentenceVariety(getSentenceLengths(correctedPlainText), correctedSentences);
+    parsed1.sentenceCount = flowData.sentenceCount;
+    parsed1.wordsPerSentence = flowData.average ? flowData.average.toFixed(1) + " words each" : "";
+    parsed1.varietyScore = flowData.varietyScore;
+    parsed1.flowRating = flowData.flowRating;
+    parsed1.flowTip = buildComputedFlowTip(flowData);
+    return flowData;
+}
+
+function buildPendingNeatnessDetail(neatnessResult) {
+    var nqr = neatnessResult.quickRubric || {};
+    return {
+        score: nqr.score,
+        evidence: nqr.reason || "",
+        growthTip: nqr.growthTip || "",
+        subScores: nqr.subScores || null,
+        sourceType: nqr.sourceType || "",
+        notAssessedReason: nqr.notAssessedReason || "",
+        scoreBasis: nqr.scoreBasis || "",
+        contentOrganization: "",
+        sentenceVariety: "",
+        rawBody: ""
+    };
+}
+
+function showWritingAnalysisFailure(context, e) {
+    if (e.message === "Analysis cancelled by user.") {
+        document.getElementById("debugRaw").textContent = "Analysis stopped by user.";
+        showTeacherReview();
+    } else if (!isCurrentWritingContext(context.input)) {
+        document.getElementById("debugRaw").textContent = "Writing changed. Analyze the current writing again.";
+        alert("Writing changed. Analyze the current writing again.");
+        showTeacherReview();
+    } else if (JSON.stringify(context.policy) !== JSON.stringify(captureAssessmentPolicy())) {
+        document.getElementById("debugRaw").textContent = "Assessment settings changed. Analyze the current writing again.";
+        alert("Assessment settings changed. Analyze the current writing again.");
+        showTeacherReview();
+    } else {
+        document.getElementById("debugRaw").textContent = "Error:\n" + e.message;
+        alert("Analysis failed. See Debug for details.");
+        showTeacherReview();
     }
+}
+
+function finishWritingAnalysisUi(btn) {
+    activeAnalysisContext = null;
+    isAnalyzing = false;
+    cancelAnalysis = false;
+    analysisAbortController = null;
+    var thinking = document.getElementById("thinking");
+    if (thinking) thinking.classList.remove("show");
+    setLoadingButtonState(btn, false);
+    var stopBtnFinal = document.getElementById("stopAnalysisBtn");
+    if (stopBtnFinal) {
+        setLoadingButtonState(stopBtnFinal, false);
+        stopBtnFinal.disabled = true;
+    }
+    syncUiState();
+}
+
+function prepareAnalysisPortfolioSync(errorMessage) {
+    try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolio) {
+        wftDebugError(errorMessage, ePortfolio);
+        setDriveSyncStatus('error', 'Could not prepare portfolio sync');
+        updateSyncPortfolioButtonState();
+    }
+}
+
+function parseWritingAnalysisDetail(step3, text, writingGenreInfo, pendingNeatnessDetail) {
+    var detailed = parseDetailedAssessment(step3, text, writingGenreInfo);
+    detailed.writingGenre = writingGenreInfo;
+    if (detailed.keepWriting) detailed.keepWriting = sanitizeGenreReferenceInFeedback(detailed.keepWriting, writingGenreInfo);
+    if (pendingNeatnessDetail) {
+        detailed.categories["Neatness"] = pendingNeatnessDetail;
+    }
+    return detailed;
+}
+
+function prepareWritingAnalysisDetailInput(quickRubric, flowData) {
+    var quickRubricText = buildQuickRubricText(quickRubric);
+    var notebookGuidePriorities = buildNotebookGuidePriorities({
+        categoryScores: Object.fromEntries(Object.keys(quickRubric).map(function(key) {
+            return [key, quickRubric[key].score];
+        })),
+        flowData: flowData
+    });
+    return { quickRubricText: quickRubricText, notebookGuidePriorities: notebookGuidePriorities };
+}
+
+function acceptExtractedWritingText(context, text) {
+    if (!text) {
+        alert("Please paste student writing first.");
+        return false;
+    }
+    document.getElementById("studentWriting").value = text;
+    context.input.writingText = text;
+    return true;
+}
+
+async function analyzeWriting() {
+    if (isAnalyzing) return;
+    var text = document.getElementById("studentWriting").value.trim();
+    var policy = captureAssessmentPolicy();
+    var { targetWords, model, gradeProfile } = policy;
+    if (!text && !(selectedImages && selectedImages.length)) {
+        alert("Please paste student writing first.");
+        return;
+    }
+
+    var btn = document.getElementById("analyzeBtn"), stopBtn = document.getElementById("stopAnalysisBtn");
+    var context = beginWritingAnalysis(btn, stopBtn, policy);
 
     try {
         if (!text) {
             text = String(await extractTextFromSelectedImage(true) || "").trim();
             assertCurrentAnalysisContext(context);
-            if (!text) {
-                alert("Please paste student writing first.");
-                return;
-            }
-            document.getElementById("studentWriting").value = text;
-            context.input.writingText = text;
+            if (!acceptExtractedWritingText(context, text)) return;
         }
         assertCurrentAnalysisContext(context);
         originalTextForDiff = context.input.writingText;
-        var actualWords = countWords(text);
-        var writingGenreInfo = getWritingGenreInfoFromUi(text);
+        var actualWords = countWords(text), writingGenreInfo = getWritingGenreInfoFromUi(text);
         currentWritingGenreInfo = writingGenreInfo;
         updateGenreReviewBox();
         var sampleStatus = getSampleStatusData(text, gradeProfile);
@@ -8219,30 +8279,18 @@ async function analyzeWriting() {
             latestAnalysisData = buildAnalysisResult(context, text, actualWords, writingGenreInfo, sampleStatus, lowSample);
             presentAnalysisResult(latestAnalysisData, text);
             renderLowSampleAnalysisDebug(latestAnalysisData, lowSample);
-            preparePortfolioSync('Could not prepare low-sample portfolio sync:');
+            prepareAnalysisPortfolioSync('Could not prepare low-sample portfolio sync:');
             return;
         }
 
-        var step1Prompt = buildStep1Prompt(text, gradeProfile);
-        var step1 = await callOpenRouter(model, step1Prompt);
+        var step1 = await callOpenRouter(model, buildStep1Prompt(text, gradeProfile));
         assertCurrentAnalysisContext(context);
         var parsed1 = parseStep1(step1, text, targetWords);
 
         var correctedText = parsed1.correctedStory || text;
-        parsed1.errorCounts.grammar = countBoldedSegments(correctedText);
-        parsed1.errorCounts.punctuation = 0;
-        parsed1.errorCounts.spelling = 0;
-        var correctedPlainText = stripCorrectionMarkdown(correctedText);
-        var correctedSentences = splitSentences(correctedPlainText);
-        var flowData = analyzeSentenceVariety(getSentenceLengths(correctedPlainText), correctedSentences);
-        parsed1.sentenceCount = flowData.sentenceCount;
-        parsed1.wordsPerSentence = flowData.average ? flowData.average.toFixed(1) + " words each" : "";
-        parsed1.varietyScore = flowData.varietyScore;
-        parsed1.flowRating = flowData.flowRating;
-        parsed1.flowTip = buildComputedFlowTip(flowData);
+        var flowData = applyCorrectedWritingMetrics(parsed1, correctedText);
 
-        var step2Prompt = buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, writingGenreInfo);
-        var step2 = await callOpenRouter(model, step2Prompt);
+        var step2 = await callOpenRouter(model, buildStep2Prompt(text, correctedText, targetWords, actualWords, gradeProfile, writingGenreInfo));
         assertCurrentAnalysisContext(context);
         parsed1.quickRubric = parseStep2QuickRubric(step2, text, targetWords);
         var eligibility = getCategoryEligibility(sampleStatus);
@@ -8256,81 +8304,30 @@ async function analyzeWriting() {
             assertCurrentAnalysisContext(context);
             if (neatnessResult) {
                 parsed1.quickRubric["Neatness"] = neatnessResult.quickRubric;
-                var nqr = neatnessResult.quickRubric || {};
-                pendingNeatnessDetail = {
-                    score: nqr.score,
-                    evidence: nqr.reason || "",
-                    growthTip: nqr.growthTip || "",
-                    subScores: nqr.subScores || null,
-                    sourceType: nqr.sourceType || "",
-                    notAssessedReason: nqr.notAssessedReason || "",
-                    scoreBasis: nqr.scoreBasis || "",
-                    contentOrganization: "",
-                    sentenceVariety: "",
-                    rawBody: ""
-                };
+                pendingNeatnessDetail = buildPendingNeatnessDetail(neatnessResult);
             }
         }
 
-        var quickRubricText = buildQuickRubricText(parsed1.quickRubric);
-        var notebookGuidePriorities = buildNotebookGuidePriorities({
-            categoryScores: Object.fromEntries(Object.keys(parsed1.quickRubric).map(function(key) {
-                return [key, parsed1.quickRubric[key].score];
-            })),
-            flowData: flowData
-        });
-        var step3Prompt = buildStep3Prompt(correctedText, quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo, text, notebookGuidePriorities);
-        var step3 = await callOpenRouter(model, step3Prompt);
+        var detailInput = prepareWritingAnalysisDetailInput(parsed1.quickRubric, flowData);
+        var step3 = await callOpenRouter(model, buildStep3Prompt(correctedText, detailInput.quickRubricText, flowData, targetWords, actualWords, gradeProfile, writingGenreInfo, text, detailInput.notebookGuidePriorities));
         assertCurrentAnalysisContext(context);
-        var detailed = parseDetailedAssessment(step3, text, writingGenreInfo);
-        detailed.writingGenre = writingGenreInfo;
-        if (detailed.keepWriting) detailed.keepWriting = sanitizeGenreReferenceInFeedback(detailed.keepWriting, writingGenreInfo);
-        if (pendingNeatnessDetail) {
-            detailed.categories["Neatness"] = pendingNeatnessDetail;
-        }
+        var detailed = parseWritingAnalysisDetail(step3, text, writingGenreInfo, pendingNeatnessDetail);
 
         var assessment = reconcileScoredAssessment(parsed1, detailed, text, flowData, eligibility, actualWords, policy);
 
         assertCurrentAnalysisContext(context);
         latestAnalysisData = buildAnalysisResult(context, text, actualWords, writingGenreInfo, sampleStatus, assessment);
         presentAnalysisResult(latestAnalysisData, text);
-        preparePortfolioSync('Could not prepare portfolio sync:');
+        prepareAnalysisPortfolioSync('Could not prepare portfolio sync:');
 
         renderScoredAnalysisDebug(latestAnalysisData, parsed1, step1, step2, step3);
 
     } catch (e) {
         if (activeAnalysisContext !== context) return;
-        if (e.message === "Analysis cancelled by user.") {
-            document.getElementById("debugRaw").textContent = "Analysis stopped by user.";
-            showTeacherReview();
-        } else if (!isCurrentWritingContext(context.input)) {
-            document.getElementById("debugRaw").textContent = "Writing changed. Analyze the current writing again.";
-            alert("Writing changed. Analyze the current writing again.");
-            showTeacherReview();
-        } else if (JSON.stringify(context.policy) !== JSON.stringify(captureAssessmentPolicy())) {
-            document.getElementById("debugRaw").textContent = "Assessment settings changed. Analyze the current writing again.";
-            alert("Assessment settings changed. Analyze the current writing again.");
-            showTeacherReview();
-        } else {
-            document.getElementById("debugRaw").textContent = "Error:\n" + e.message;
-            alert("Analysis failed. See Debug for details.");
-            showTeacherReview();
-        }
+        showWritingAnalysisFailure(context, e);
     } finally {
         if (activeAnalysisContext !== context) return;
-        activeAnalysisContext = null;
-        isAnalyzing = false;
-        cancelAnalysis = false;
-        analysisAbortController = null;
-        var thinking = document.getElementById("thinking");
-        if (thinking) thinking.classList.remove("show");
-        setLoadingButtonState(btn, false);
-        var stopBtnFinal = document.getElementById("stopAnalysisBtn");
-        if (stopBtnFinal) {
-            setLoadingButtonState(stopBtnFinal, false);
-            stopBtnFinal.disabled = true;
-        }
-        syncUiState();
+        finishWritingAnalysisUi(btn);
     }
 }
 

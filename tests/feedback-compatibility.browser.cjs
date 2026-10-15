@@ -1,6 +1,15 @@
 const { chromium } = require('playwright');
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
+const sanitizerCases = [
+ ['<p>Before<!--discard--><strong title="ok" onclick="bad()">Safe</strong>After</p>', '<p>Before<strong title="ok">Safe</strong>After</p>'],
+ ['<script>bad()</script><unknown><b>text</b></unknown>', 'bad()text'],
+ ['<a href="https://example.test">web</a><a href="mailto:a@example.test">mail</a><a href="#part">part</a>', '<a href="https://example.test">web</a><a href="mailto:a@example.test">mail</a><a href="#part">part</a>'],
+ ['<a href="javascript:bad()" target="_blank" data-id="one" class="ok">link</a>', '<a data-id="one" class="ok">link</a>'],
+ ['<span style="color: red" role="note" aria-label="note">safe</span>', '<span style="color: red" role="note" aria-label="note">safe</span>'],
+ ...['expression(bad())', 'background: url(x)', 'javascript:bad()', 'behavior: x', '-moz-binding: x', ''].map(style => ['<span style="'+style+'">text</span>', '<span>text</span>']),
+ ['<table><tbody><tr><td colspan="2" rowspan="3">cell</td></tr></tbody></table>', '<table><tbody><tr><td colspan="2" rowspan="3">cell</td></tr></tbody></table>']
+];
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     try {
@@ -13,8 +22,8 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
             return route.fulfill(fs.existsSync(file) ? { contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) } : { status: 404, body: '' });
         });
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-        // Retain the coordinator's 19 renderer assertions against full native scripts.
-        const renderer = await page.evaluate(() => {
+        // Check the renderer and imported HTML policy against full native scripts.
+        const renderer = await page.evaluate(sanitizerCases => {
 stopWftSyncPolling();scheduleWftCloudSync=()=>{};const cases=[];const check=(name,ok)=>{if(!ok)throw new Error(name);cases.push(name);};
 const raw='<img src=x onerror="window.syntheticMarker=1">';window.syntheticMarker=0;
 const rows=[{area:raw,comment:'**Clear** '+raw}];
@@ -22,12 +31,13 @@ for(const n of ['renderAuditEvidenceList','renderNoticeTable','renderPortfolioFe
 const neutral=renderPortfolioFeedbackCategoryBlock(raw,{score:null,teacherComment:raw,noticeRows:rows,growthTip:raw},true);check('category null and escaped label',neutral.includes('Not scored')&&neutral.includes('&lt;img')&&!neutral.includes('<img'));check('category zero retained',renderPortfolioFeedbackCategoryBlock('Grammar',{score:0},false).includes('0/10'));
 const goal=renderPortfolioGrowGoalBlock({growGoal:{strength:'**Clear**',growGoal:raw,nextTime:'Check verbs.',closing:'Keep writing.'}},{});check('goal escape/bold/sections',goal.includes('<strong>Clear</strong>')&&goal.includes('&lt;img')&&!goal.includes('<img'));check('goal fallback',renderPortfolioGrowGoalBlock(null,{growGoal:'Revise a sentence.'}).includes('Revise a sentence.'));check('goal empty',renderPortfolioGrowGoalBlock(null,{})==='');
 const el=document.createElement('div');setWftSanitizedInnerHtml(el,'<strong>Safe</strong>'+raw);check('sanitized direct target',el.textContent==='Safe'&&!el.querySelector('img'));setWftSanitizedInnerHtml(el,null,'<em>Fallback</em>');check('sanitized fallback',el.innerHTML==='<em>Fallback</em>');setWftSanitizedInnerHtml('missing-synthetic-target',raw);check('sanitized missing target',true);
+check('sanitizer nested tags and attribute policy', sanitizerCases.every(([input, expected]) => sanitizeWftHtmlFragment(input) === expected));
 localStorage.setItem('wft_portfolio',JSON.stringify({Alice:{sessions:[{id:'one',title:raw,overall:0,detailedFeedback:{categories:{Grammar:{score:null,teacherComment:raw,noticeRows:rows,growthTip:'Revise.'}},growGoal:{growGoal:raw}}}]}}));
 openPortfolioCategoryFeedback('Alice','one','Grammar');let modal=document.getElementById('portfolioFeedbackModalBackdrop');check('category modal actual shell',modal.textContent.includes('Not scored')&&modal.textContent.includes('0%')&&!modal.querySelector('img'));modal.querySelector('.btn-view-detailed-feedback').click();modal=document.getElementById('portfolioFeedbackModalBackdrop');check('detail navigation actual click',modal.querySelector('h2').textContent==='Detailed Writing Feedback'&&modal.textContent.includes('Not scored'));closePortfolioFeedbackModal();openPortfolioDetailedFeedback('Alice','missing');check('missing detail fallback',document.getElementById('portfolioFeedbackModalBackdrop').textContent.includes('older portfolio'));closePortfolioFeedbackModal();
 const analysis={writingGenre:{mainGenre:'Narrative / Story',safeReference:'story'},categoryScores:{Grammar:7},detailed:{categories:{Grammar:{score:7,teacherComment:'Clear verbs',evidence:'Clear verbs',noticeRows:[{area:'Verbs',comment:'Check tense.'}],growthTip:'Check verbs.'}},strength:'Clear ideas',growGoal:'Revise verbs',nextTime:'Read aloud.',keepWriting:'Keep writing.'}};
 const saved=buildPortfolioDetailedFeedback(analysis),summary=buildSessionFeedbackSummary(analysis);check('saved record score and goals',saved.categories.Grammar.score===7&&saved.growGoal.growGoal==='Revise verbs'&&summary.growGoal==='Revise verbs'&&summary.writingGenre.mainGenre==='Narrative / Story');
 check('no imported image execution',window.syntheticMarker===0);return{cases,scope:'Full native scripts at WFT_TEST_ROOT; synthetic DOM/portfolio and intercepted external requests.'};
-        });
+        }, sanitizerCases);
         // Retain all assertions in the coordinator's 10 Flow/grammar checks.
         const flow = await page.evaluate(() => {
             const assert = {
@@ -52,10 +62,10 @@ check('convention focused heuristics',()=>{assert.deepEqual(plain(window.detectC
             return { cases };
         });
         assert.deepEqual(errors, []);
-        assert.equal(renderer.cases.length, 19);
+        assert.equal(renderer.cases.length, 20);
         assert.equal(flow.cases.length, 10);
-        const result = { count: 29, passed: 29, renderer, flow, errors, scope: 'Native Edge compatibility assertions, no service calls or grading-calibration change.' };
+        const result = { count: 30, passed: 30, renderer, flow, errors, scope: 'Native Edge compatibility assertions, no service calls or grading-calibration change.' };
         if (process.env.WFT_COMPAT_REPORT) fs.writeFileSync(process.env.WFT_COMPAT_REPORT, JSON.stringify(result, null, 2) + '\n');
-        console.log('Feedback compatibility: 19 renderer + 10 Flow/grammar checks passed.');
+        console.log('Feedback compatibility: 20 renderer + 10 Flow/grammar checks passed.');
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

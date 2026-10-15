@@ -840,90 +840,141 @@ Example for handwritten work:
     return null;
 }
 
-function parseNeatnessAssessmentResponse(response) {
-    function parseNeatnessSubScore(label, responseText) {
-        var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5(?![\\w]|[.,]\\d)', 'i');
-        var m = responseText.match(rx);
-        if (!m) return null;
-        return /missing/i.test(m[1]) ? null : Number(m[1]);
-    }
+function parseNeatnessSubScore(label, responseText) {
+    var rx = new RegExp('-\\s*' + label + '\\s*:\\s*((?:5|4|3|2|1)|Missing)\\s*\\/5(?![\\w]|[.,]\\d)', 'i');
+    var m = responseText.match(rx);
+    if (!m) return null;
+    return /missing/i.test(m[1]) ? null : Number(m[1]);
+}
 
-    function parseNeatnessSourceType(responseText) {
-        var text = String(responseText || '').replace(/\*\*/g, '');
-        var sourceMatch = text.match(/(?:\*\*)?Source\s*Type(?:\*\*)?\s*:\s*(HANDWRITTEN|TYPED_OR_PRINTED|MIXED|NOT_SCORABLE)/i);
-        if (sourceMatch) return sourceMatch[1].toUpperCase();
-        if (/\b(TYPED_OR_PRINTED|typed\s+or\s+printed|typed\s+work|printed\s+work|appears\s+to\s+be\s+typed|mostly\s+typed|computer\s+typed)\b/i.test(text)) return 'TYPED_OR_PRINTED';
-        if (/\b(NOT_SCORABLE|not\s+scorable|cannot\s+score|not\s+enough\s+handwriting|does\s+not\s+show\s+enough\s+handwriting)\b/i.test(text)) return 'NOT_SCORABLE';
-        return '';
-    }
+function parseNeatnessSourceType(responseText) {
+    var text = String(responseText || '').replace(/\*\*/g, '');
+    var sourceMatch = text.match(/(?:\*\*)?Source\s*Type(?:\*\*)?\s*:\s*(HANDWRITTEN|TYPED_OR_PRINTED|MIXED|NOT_SCORABLE)/i);
+    if (sourceMatch) return sourceMatch[1].toUpperCase();
+    if (/\b(TYPED_OR_PRINTED|typed\s+or\s+printed|typed\s+work|printed\s+work|appears\s+to\s+be\s+typed|mostly\s+typed|computer\s+typed)\b/i.test(text)) return 'TYPED_OR_PRINTED';
+    if (/\b(NOT_SCORABLE|not\s+scorable|cannot\s+score|not\s+enough\s+handwriting|does\s+not\s+show\s+enough\s+handwriting)\b/i.test(text)) return 'NOT_SCORABLE';
+    return '';
+}
 
-    function parseNeatnessSourceReason(responseText) {
-        var text = String(responseText || '').replace(/\*\*/g, '');
-        var reasonMatch = text.match(/(?:\*\*)?Source\s*Type\s*Reason(?:\*\*)?\s*:\s*([^\n]+)/i);
-        return reasonMatch ? reasonMatch[1].trim() : '';
-    }
+function parseNeatnessSourceReason(responseText) {
+    var text = String(responseText || '').replace(/\*\*/g, '');
+    var reasonMatch = text.match(/(?:\*\*)?Source\s*Type\s*Reason(?:\*\*)?\s*:\s*([^\n]+)/i);
+    return reasonMatch ? reasonMatch[1].trim() : '';
+}
 
-    function buildUnscoredNeatnessResult(sourceType, reason) {
-        sourceType = sourceType || 'NOT_SCORABLE';
-        reason = String(reason || '').trim();
-        if (!reason) {
-            if (sourceType === 'TYPED_OR_PRINTED') {
-                reason = 'Neatness was not assessed because this sample appears to be typed or printed.';
-            } else {
-                reason = 'Neatness was not assessed because there was not enough clear handwriting to score fairly.';
-            }
+function buildUnscoredNeatnessResult(sourceType, reason) {
+    sourceType = sourceType || 'NOT_SCORABLE';
+    reason = String(reason || '').trim();
+    if (!reason) {
+        if (sourceType === 'TYPED_OR_PRINTED') {
+            reason = 'Neatness was not assessed because this sample appears to be typed or printed.';
+        } else {
+            reason = 'Neatness was not assessed because there was not enough clear handwriting to score fairly.';
         }
-        return {
-            quickRubric: {
-                score: null,
-                reason: reason,
-                growthTip: 'No handwriting score was added to the overall grade for this sample.',
-                subScores: {
-                    letterFormation: null,
-                    spacing: null,
-                    stayingOnLine: null,
-                    sizeConsistency: null,
-                    penControl: null,
-                    pageLayoutParagraphs: null
-                },
-                neatnessScoreFive: null,
-                neatnessWeightedFive: null,
-                sourceType: sourceType,
-                notAssessedReason: reason,
-                scoreBasis: 'Skipped before scoring because the image source type was ' + sourceType + '.'
-            }
+    }
+    return {
+        quickRubric: {
+            score: null,
+            reason: reason,
+            growthTip: 'No handwriting score was added to the overall grade for this sample.',
+            subScores: {
+                letterFormation: null,
+                spacing: null,
+                stayingOnLine: null,
+                sizeConsistency: null,
+                penControl: null,
+                pageLayoutParagraphs: null
+            },
+            neatnessScoreFive: null,
+            neatnessWeightedFive: null,
+            sourceType: sourceType,
+            notAssessedReason: reason,
+            scoreBasis: 'Skipped before scoring because the image source type was ' + sourceType + '.'
+        }
+    };
+}
+
+function calculateWeightedNeatnessFive(subScores) {
+    if (!subScores) return null;
+    var values = [
+        subScores.letterFormation,
+        subScores.spacing,
+        subScores.stayingOnLine,
+        subScores.sizeConsistency,
+        subScores.penControl,
+        subScores.pageLayoutParagraphs
+    ];
+    for (var i = 0; i < values.length; i++) {
+        if (!Number.isFinite(values[i])) return null;
+    }
+    return (Number(subScores.letterFormation) * 0.20) +
+           (Number(subScores.spacing) * 0.15) +
+           (Number(subScores.stayingOnLine) * 0.15) +
+           (Number(subScores.sizeConsistency) * 0.15) +
+           (Number(subScores.penControl) * 0.15) +
+           (Number(subScores.pageLayoutParagraphs) * 0.20);
+}
+
+function convertNeatnessFiveToTen(scoreFive) {
+    var n = Number(scoreFive);
+    if (!isFinite(n)) return null;
+    if (n < 1) n = 1;
+    if (n > 5) n = 5;
+    return Math.round(n) * 2;
+}
+
+function buildNeatnessScoreMetrics(subScores) {
+    var weightedFive = calculateWeightedNeatnessFive(subScores);
+    var roundedFive = weightedFive != null ? Math.round(weightedFive) : null;
+    var computedTen = roundedFive != null ? convertNeatnessFiveToTen(roundedFive) : null;
+    return { subScores: subScores, weightedFive: weightedFive, roundedFive: roundedFive, computedTen: computedTen };
+}
+
+function buildMissingNeatnessResult(metrics, response, sourceType, sourceReason) {
+    if (metrics.computedTen == null && /Missing\s*\/10/i.test(response)) {
+        return buildUnscoredNeatnessResult(sourceType || 'NOT_SCORABLE', sourceReason || 'Neatness was not assessed because there was not enough clear handwriting to score fairly.');
+    }
+    return null;
+}
+
+function parseNeatnessFallback(response, metrics, sourceType, parsedGrowthTip) {
+    var rubric = {};
+    // Fallback: score present but observation was not in the expected format.
+    var scoreMatch = response.match(/(?:^|[^\w.,+-])((?:10|8|6|4|2))\s*\/10(?![\w]|[.,]\d)/i);
+    if (scoreMatch || metrics.computedTen != null) {
+        var score = metrics.computedTen != null ? metrics.computedTen : Number(scoreMatch[1]);
+        var sentenceMatch = response.match(/([^.\n]*(?:^|[^\w.,+-])(?:10|8|6|4|2)\s*\/10(?![\w]|[.,]\d)[^.\n]*\.?)/i);
+        var extractedReason = sentenceMatch ? sentenceMatch[0].replace(/^\s*[-*\d.]+\s*/, '').trim() : '';
+        var reason = extractedReason.length > 10 ? extractedReason : null;
+        rubric = {
+            score: score,
+            reason: reason,
+            growthTip: parsedGrowthTip,
+            subScores: metrics.subScores,
+            neatnessScoreFive: metrics.roundedFive,
+            neatnessWeightedFive: metrics.weightedFive,
+            sourceType: sourceType || 'HANDWRITTEN',
+            scoreBasis: metrics.computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response fallback.'
         };
     }
+    return rubric;
+}
 
-    function calculateWeightedNeatnessFive(subScores) {
-        if (!subScores) return null;
-        var values = [
-            subScores.letterFormation,
-            subScores.spacing,
-            subScores.stayingOnLine,
-            subScores.sizeConsistency,
-            subScores.penControl,
-            subScores.pageLayoutParagraphs
-        ];
-        for (var i = 0; i < values.length; i++) {
-            if (!Number.isFinite(values[i])) return null;
-        }
-        return (Number(subScores.letterFormation) * 0.20) +
-               (Number(subScores.spacing) * 0.15) +
-               (Number(subScores.stayingOnLine) * 0.15) +
-               (Number(subScores.sizeConsistency) * 0.15) +
-               (Number(subScores.penControl) * 0.15) +
-               (Number(subScores.pageLayoutParagraphs) * 0.20);
-    }
+function parseMatchedNeatnessRubric(match, metrics, sourceType, parsedGrowthTip) {
+    var parsedTen = /missing/i.test(match[1]) ? null : Number(match[1]);
+    return {
+        score: metrics.computedTen != null ? metrics.computedTen : parsedTen,
+        reason: (match[2] || '').trim(),
+        growthTip: parsedGrowthTip,
+        subScores: metrics.subScores,
+        neatnessScoreFive: metrics.roundedFive,
+        neatnessWeightedFive: metrics.weightedFive,
+        sourceType: sourceType || 'HANDWRITTEN',
+        scoreBasis: metrics.computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response.'
+    };
+}
 
-    function convertNeatnessFiveToTen(scoreFive) {
-        var n = Number(scoreFive);
-        if (!isFinite(n)) return null;
-        if (n < 1) n = 1;
-        if (n > 5) n = 5;
-        return Math.round(n) * 2;
-    }
-
+function parseNeatnessAssessmentResponse(response) {
     var rubric = {};
     var sourceType = parseNeatnessSourceType(response);
     var sourceReason = parseNeatnessSourceReason(response);
@@ -942,55 +993,21 @@ function parseNeatnessAssessmentResponse(response) {
         pageLayoutParagraphs: parseNeatnessSubScore('Page Layout and Paragraphs', response)
     };
 
-    var weightedFive = calculateWeightedNeatnessFive(subScores);
-    var roundedFive = weightedFive != null ? Math.round(weightedFive) : null;
-    var computedTen = roundedFive != null ? convertNeatnessFiveToTen(roundedFive) : null;
+    var metrics = buildNeatnessScoreMetrics(subScores);
 
     // If the model did not provide a usable score, preserve the unscored state instead of guessing.
-    if (computedTen == null && /Missing\s*\/10/i.test(response)) {
-        return buildUnscoredNeatnessResult(sourceType || 'NOT_SCORABLE', sourceReason || 'Neatness was not assessed because there was not enough clear handwriting to score fairly.');
-    }
+    var missingResult = buildMissingNeatnessResult(metrics, response, sourceType, sourceReason);
+    if (missingResult) return missingResult;
 
     // Parse the response - expected pattern: - Neatness: [score]/10 ([score]/5 - [level]) - [observation]
     var match = response.match(/-\s*Neatness:\s*((?:10|8|6|4|2)|Missing)\s*\/10(?![\w]|[.,]\d)(?:\s*\([^)]*\))?\s*-\s*([^\n]+)/i);
     var growthTipMatch = response.match(/\*\*Neatness Growth Tip:\*\*\s*([^\n]+)/i);
     var parsedGrowthTip = growthTipMatch ? growthTipMatch[1].trim() : null;
 
-    function parseNeatnessFallback() {
-        // Fallback: score present but observation was not in the expected format.
-        var scoreMatch = response.match(/(?:^|[^\w.,+-])((?:10|8|6|4|2))\s*\/10(?![\w]|[.,]\d)/i);
-        if (scoreMatch || computedTen != null) {
-            var score = computedTen != null ? computedTen : Number(scoreMatch[1]);
-            var sentenceMatch = response.match(/([^.\n]*(?:^|[^\w.,+-])(?:10|8|6|4|2)\s*\/10(?![\w]|[.,]\d)[^.\n]*\.?)/i);
-            var extractedReason = sentenceMatch ? sentenceMatch[0].replace(/^\s*[-*\d.]+\s*/, '').trim() : '';
-            var reason = extractedReason.length > 10 ? extractedReason : null;
-            rubric = {
-                score: score,
-                reason: reason,
-                growthTip: parsedGrowthTip,
-                subScores: subScores,
-                neatnessScoreFive: roundedFive,
-                neatnessWeightedFive: weightedFive,
-                sourceType: sourceType || 'HANDWRITTEN',
-                scoreBasis: computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response fallback.'
-            };
-        }
-    }
-
     if (match) {
-        var parsedTen = /missing/i.test(match[1]) ? null : Number(match[1]);
-        rubric = {
-            score: computedTen != null ? computedTen : parsedTen,
-            reason: (match[2] || '').trim(),
-            growthTip: parsedGrowthTip,
-            subScores: subScores,
-            neatnessScoreFive: roundedFive,
-            neatnessWeightedFive: weightedFive,
-            sourceType: sourceType || 'HANDWRITTEN',
-            scoreBasis: computedTen != null ? 'Computed from handwriting sub-scores.' : 'Parsed from neatness response.'
-        };
+        rubric = parseMatchedNeatnessRubric(match, metrics, sourceType, parsedGrowthTip);
     } else {
-        parseNeatnessFallback();
+        rubric = parseNeatnessFallback(response, metrics, sourceType, parsedGrowthTip);
     }
 
     if (rubric && (rubric.score !== undefined)) {
@@ -1700,18 +1717,16 @@ function loadPortfolioIndexFromDrive(callback) {
         if (typeof findWftFilesByNamePromise === "function" && typeof isWftTokenValid === "function" && isWftTokenValid()) {
             findWftFilesByNamePromise("portfolio-index.json")
                 .then(function(files) {
-                    if (files && files.length > 0) {
-                        var canonical = (typeof chooseCanonicalWftFile === "function") ? chooseCanonicalWftFile(files) : files[0];
-                        var fileId = canonical && canonical.id ? canonical.id : "";
-                        if (fileId) {
-                            try { setCachedWftDriveFileId("portfolio-index.json", fileId); } catch (e) {}
-                            if (typeof updateDuplicateSyncMaintenanceFromFiles === "function") {
-                                try { updateDuplicateSyncMaintenanceFromFiles("portfolio-index.json", files); } catch (e2) {}
-                            }
-                            if (typeof downloadWftJsonFilePromise === "function") {
-                                return downloadWftJsonFilePromise(fileId, 'index');
-                            }
-                        }
+                    if (!(files && files.length > 0)) return null;
+                    var canonical = (typeof chooseCanonicalWftFile === "function") ? chooseCanonicalWftFile(files) : files[0];
+                    var fileId = canonical && canonical.id ? canonical.id : "";
+                    if (!fileId) return null;
+                    try { setCachedWftDriveFileId("portfolio-index.json", fileId); } catch (e) {}
+                    if (typeof updateDuplicateSyncMaintenanceFromFiles === "function") {
+                        try { updateDuplicateSyncMaintenanceFromFiles("portfolio-index.json", files); } catch (e2) {}
+                    }
+                    if (typeof downloadWftJsonFilePromise === "function") {
+                        return downloadWftJsonFilePromise(fileId, 'index');
                     }
                     return null;
                 })
@@ -2709,13 +2724,21 @@ function isStudentSessionDeleted(sessionId, studentId, deletions, sessionUpdated
     var sessionUpdateMs = (sessionUpdatedAt && !isNaN(Date.parse(sessionUpdatedAt))) ? Date.parse(sessionUpdatedAt) : 0;
     var normalizedStudentId = String(studentId || "");
     function matchesStudentOwner(d, legacyKey, keyedSession, suffix) {
-        if (keyedSession && !d.studentId && !d.studentName) {
+        function keyedOwnerDoesNotMatch() {
+            if (!(keyedSession && !d.studentId && !d.studentName)) return false;
             var owner = legacyKey.slice(8, -suffix.length);
-            if (owner && owner !== normalizedStudentId && owner.toLowerCase() !== String(studentName || '').trim().toLowerCase()) return false;
+            return owner && owner !== normalizedStudentId && owner.toLowerCase() !== String(studentName || '').trim().toLowerCase();
         }
-        if (studentName && d.studentId && !normalizedStudentId && !d.studentName) return false;
+        function ownerIdCannotBeVerified() {
+            return studentName && d.studentId && !normalizedStudentId && !d.studentName;
+        }
+        function namedOwnerDoesNotMatch() {
+            return studentName && d.studentName && !(normalizedStudentId && d.studentId) && String(d.studentName).trim().toLowerCase() !== String(studentName).trim().toLowerCase();
+        }
+        if (keyedOwnerDoesNotMatch()) return false;
+        if (ownerIdCannotBeVerified()) return false;
         if (normalizedStudentId && d.studentId && String(d.studentId) !== normalizedStudentId) { return false; }
-        if (studentName && d.studentName && !(normalizedStudentId && d.studentId) && String(d.studentName).trim().toLowerCase() !== String(studentName).trim().toLowerCase()) return false;
+        if (namedOwnerDoesNotMatch()) return false;
         return true;
     }
 
@@ -3384,27 +3407,8 @@ var WFT_OAUTH_TEXTAREA_DRAFT_KEY = "wft_oauth_textarea_draft_v1";
 
 function saveWftOAuthDraftBeforeRedirect(reason) {
     try {
-        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
-        // A redirect destroys this tab; the text draft does not contain pending work or selected photos.
-        if (getPendingPortfolioSync() && !persistPendingPortfolioSync()) {
-            setDriveSyncStatus('error', 'Writing or photos cannot be fully recovered after redirect sign-in. Keep this tab open and retry Sign In when the Google popup is available, or download Emergency Backup.');
-            return false;
-        }
-        if (selectedImages.some(function(image) { return image && !image.driveFileId && (image.dataUrl || image.originalDataUrl); })) {
-            setDriveSyncStatus('error', 'Google redirect sign-in cannot restore selected photos. Keep this tab open and retry Sign In when the Google popup is available.');
-            return false;
-        }
-        var ta = document.getElementById("studentWriting");
-        var text = ta ? String(ta.value || "") : "";
-        var genreSelect = document.getElementById("writingGenreSelect");
-        var draft = {
-            reason: reason || "google-oauth",
-            savedAt: new Date().toISOString(),
-            text: text,
-            selectedStudent: selectedStudent || "",
-            manualGenreOverrideValue: manualGenreOverrideValue || "__auto__",
-            writingGenreSelectValue: genreSelect ? genreSelect.value : "__auto__"
-        };
+        if (!canPreserveRedirectWork()) return false;
+        var draft = captureCurrentDraft();
         var previousRaw = localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
         if (previousRaw) {
             var previous = JSON.parse(previousRaw);
@@ -3418,6 +3422,34 @@ function saveWftOAuthDraftBeforeRedirect(reason) {
     } catch (e) {
         setDriveSyncStatus('error', 'Unsaved writing or photos could not be preserved for Google sign-in. Keep this tab open; retry or copy your work before leaving.');
         return false;
+    }
+
+    function canPreserveRedirectWork() {
+        if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        // A redirect destroys this tab; the text draft does not contain pending work or selected photos.
+        if (getPendingPortfolioSync() && !persistPendingPortfolioSync()) {
+            setDriveSyncStatus('error', 'Writing or photos cannot be fully recovered after redirect sign-in. Keep this tab open and retry Sign In when the Google popup is available, or download Emergency Backup.');
+            return false;
+        }
+        if (selectedImages.some(function(image) { return image && !image.driveFileId && (image.dataUrl || image.originalDataUrl); })) {
+            setDriveSyncStatus('error', 'Google redirect sign-in cannot restore selected photos. Keep this tab open and retry Sign In when the Google popup is available.');
+            return false;
+        }
+        return true;
+    }
+
+    function captureCurrentDraft() {
+        var ta = document.getElementById("studentWriting");
+        var text = ta ? String(ta.value || "") : "";
+        var genreSelect = document.getElementById("writingGenreSelect");
+        return {
+            reason: reason || "google-oauth",
+            savedAt: new Date().toISOString(),
+            text: text,
+            selectedStudent: selectedStudent || "",
+            manualGenreOverrideValue: manualGenreOverrideValue || "__auto__",
+            writingGenreSelectValue: genreSelect ? genreSelect.value : "__auto__"
+        };
     }
 
     function isPreviousDraftCompatible() {
@@ -4080,10 +4112,15 @@ function chooseCanonicalDriveFolderPromise(folders, archiveConnection) {
             if (summaries[i].hasDeletions) score += 5;
             if (summaries[i].newestTime) score += 1;
 
-            if (!best || score > bestScore || (score === bestScore && String(summaries[i].newestTime || summaries[i].folder.modifiedTime || "") > String(best.newestTime || best.folder.modifiedTime || ""))) {
+            if (!best || score > bestScore || isNewerTiedSummary()) {
                 best = summaries[i];
                 bestScore = score;
             }
+        }
+
+        function isNewerTiedSummary() {
+            if (score !== bestScore) return false;
+            return String(summaries[i].newestTime || summaries[i].folder.modifiedTime || "") > String(best.newestTime || best.folder.modifiedTime || "");
         }
 
         if (!best) return folders[0];
@@ -6619,6 +6656,24 @@ function sanitizeWftHtmlFragment(html) {
     var wrapper = document.createElement("template");
     wrapper.innerHTML = value;
 
+    function cleanLinkOrStyleAttribute(child, attr, name, attrValue) {
+        var safe = name === "href" ? /^(https?:|mailto:|#)/i.test(attrValue) : isWftSafeInlineStyle(attrValue);
+        if (safe) child.setAttribute(name, attrValue);
+        else child.removeAttribute(attr.name);
+    }
+
+    function cleanAttribute(child, attr) {
+        var name = String(attr.name || "").toLowerCase();
+        var attrValue = String(attr.value || "");
+        if (name.indexOf("on") === 0) {
+            child.removeAttribute(attr.name);
+        } else if (name === "href" || name === "style") {
+            cleanLinkOrStyleAttribute(child, attr, name, attrValue);
+        } else if (!allowedAttrs[name] && name.indexOf("data-") !== 0) {
+            child.removeAttribute(attr.name);
+        }
+    }
+
     function cleanNode(node) {
         var child = node.firstChild;
         while (child) {
@@ -6633,20 +6688,7 @@ function sanitizeWftHtmlFragment(html) {
                 }
                 var attrs = Array.prototype.slice.call(child.attributes || []);
                 for (var i = 0; i < attrs.length; i++) {
-                    var attr = attrs[i];
-                    var name = String(attr.name || "").toLowerCase();
-                    var attrValue = String(attr.value || "");
-                    if (name.indexOf("on") === 0) {
-                        child.removeAttribute(attr.name);
-                    } else if (name === "href") {
-                        if (/^(https?:|mailto:|#)/i.test(attrValue)) child.setAttribute("href", attrValue);
-                        else child.removeAttribute(attr.name);
-                    } else if (name === "style") {
-                        if (isWftSafeInlineStyle(attrValue)) child.setAttribute("style", attrValue);
-                        else child.removeAttribute(attr.name);
-                    } else if (!allowedAttrs[name] && name.indexOf("data-") !== 0) {
-                        child.removeAttribute(attr.name);
-                    }
+                    cleanAttribute(child, attrs[i]);
                 }
                 cleanNode(child);
             } else if (child.nodeType === 8) {
@@ -7434,14 +7476,32 @@ function showWftChartUnavailableMessage(canvasId) {
     canvas.parentNode.replaceChild(msg, canvas);
 }
 
+function renderWftPortfolioScoreStatHtml(label, score, trendHtml) {
+    return '<div class="portfolio-stat-card"><div class="stat-label">' + label + '</div><div class="stat-value">' + (score != null ? score + '%' : '-') + '</div>' + trendHtml + '</div>';
+}
+
 function renderWftPortfolioStatsHtml(sessions, portfolioCategoryKeys) {
+    function calculateTrend() {
+        var prevOverall = prevSession && prevSession.overall != null ? Number(prevSession.overall) : null;
+        return latestOverall != null && prevOverall != null ? latestOverall - prevOverall : null;
+    }
+
+    function renderTrendHtml() {
+        var trendHtml = '';
+        if (trend != null) {
+            if (trend > 0) trendHtml = '<div class="stat-trend trend-up">+' + trend + '% vs last</div>';
+            else if (trend < 0) trendHtml = '<div class="stat-trend trend-down">' + trend + '% vs last</div>';
+            else trendHtml = '<div class="stat-trend trend-flat">Same as last</div>';
+        }
+        return trendHtml;
+    }
+
     var latestSession = sessions[sessions.length - 1];
     var prevSession = sessions.length >= 2 ? sessions[sessions.length - 2] : null;
     var overalls = sessions.map(function(session) { return session.overall != null ? Number(session.overall) : null; }).filter(function(value) { return value != null && !isNaN(value); });
     var avgOverall = overalls.length ? Math.round(overalls.reduce(function(a, b) { return a + b; }, 0) / overalls.length) : null;
     var latestOverall = latestSession.overall != null ? Number(latestSession.overall) : null;
-    var prevOverall = prevSession && prevSession.overall != null ? Number(prevSession.overall) : null;
-    var trend = latestOverall != null && prevOverall != null ? latestOverall - prevOverall : null;
+    var trend = calculateTrend();
     var bestOverall = overalls.length ? Math.max.apply(null, overalls) : null;
     var categoryAverages = getCategoryAverageMap(sessions);
     var weakestCategory = null;
@@ -7451,20 +7511,38 @@ function renderWftPortfolioStatsHtml(sessions, portfolioCategoryKeys) {
         if (strongestCategory == null || categoryAverages[key] > categoryAverages[strongestCategory]) strongestCategory = key;
         if (weakestCategory == null || categoryAverages[key] < categoryAverages[weakestCategory]) weakestCategory = key;
     });
-    var trendHtml = '';
-    if (trend != null) {
-        if (trend > 0) trendHtml = '<div class="stat-trend trend-up">+' + trend + '% vs last</div>';
-        else if (trend < 0) trendHtml = '<div class="stat-trend trend-down">' + trend + '% vs last</div>';
-        else trendHtml = '<div class="stat-trend trend-flat">Same as last</div>';
-    }
+    var trendHtml = renderTrendHtml();
     return '<div class="portfolio-stats-grid">'
-        + '<div class="portfolio-stat-card"><div class="stat-label">Latest Score</div><div class="stat-value">' + (latestOverall != null ? latestOverall + '%' : '-') + '</div>' + trendHtml + '</div>'
-        + '<div class="portfolio-stat-card"><div class="stat-label">Average Score</div><div class="stat-value">' + (avgOverall != null ? avgOverall + '%' : '-') + '</div></div>'
-        + '<div class="portfolio-stat-card"><div class="stat-label">Best Score</div><div class="stat-value">' + (bestOverall != null ? bestOverall + '%' : '-') + '</div></div>'
+        + renderWftPortfolioScoreStatHtml('Latest Score', latestOverall, trendHtml)
+        + renderWftPortfolioScoreStatHtml('Average Score', avgOverall, '')
+        + renderWftPortfolioScoreStatHtml('Best Score', bestOverall, '')
         + '<div class="portfolio-stat-card"><div class="stat-label">Submissions</div><div class="stat-value">' + sessions.length + '</div></div>'
         + '<div class="portfolio-stat-card"><div class="stat-label">Strongest Area</div><div class="stat-value" style="font-size:0.85rem;">' + escapeHtml(strongestCategory || '-') + '</div></div>'
         + '<div class="portfolio-stat-card"><div class="stat-label">Focus Area</div><div class="stat-value" style="font-size:0.85rem;">' + escapeHtml(weakestCategory || '-') + '</div></div>'
         + '</div>';
+}
+
+function renderWftPortfolioSessionHeaderHtml(sess, scoreColor) {
+    return '<div class="session-card-header">'
+    + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
+    + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>'
+    + '</div>';
+}
+
+function renderWftPortfolioSessionMetaHtml(sess) {
+    return '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>';
+}
+
+function renderWftPortfolioTeacherNotesHtml(feedback) {
+    return renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.');
+}
+
+function renderWftPortfolioSessionActionsHtml(name, sess, si) {
+    return '<div class="session-card-actions">'
+    + '<button type="button" class="btn-reprint" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="printPortfolioNotebookSummary(this.dataset.student, this.dataset.session)">Re-print Notebook Summary</button>'
+    + '<button type="button" class="btn-reassess" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="reassessPortfolioSession(this.dataset.student, this.dataset.session)">Reassess Writing</button>'
+    + '<button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button>'
+    + '</div>';
 }
 
 function renderWftPortfolioSessionCardHtml(name, sess, si) {
@@ -7490,24 +7568,17 @@ function renderWftPortfolioSessionCardHtml(name, sess, si) {
         }).join('') + '</div>';
     }
     return '<div class="session-card">'
-        + '<div class="session-card-header">'
-        + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
-        + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>'
-        + '</div>'
-        + '<div class="session-meta">Grade level: ' + escapeHtml(sess.gradeLabel || ('Grade ' + (sess.gradeLevel || 5))) + ' - ' + escapeHtml((sess.sourceType || 'typed').replace('+', ' + ')) + ' submission' + (sess.createdAt ? ' - ' + escapeHtml(new Date(sess.createdAt).toLocaleString()) : '') + ' - Writing type: ' + escapeHtml(getWritingGenreInfoFromSession(sess).mainGenre) + '</div>'
+        + renderWftPortfolioSessionHeaderHtml(sess, scoreColor)
+        + renderWftPortfolioSessionMetaHtml(sess)
         + '<div class="session-chip-row">' + chipsHtml + '</div>'
         + detailedFeedbackButtonHtml
         + '<div class="session-artifact-grid">'
         + '<div class="session-artifact-box"><h5>Original Writing</h5><pre>' + escapeHtml(sess.originalText || '') + '</pre></div>'
         + '<div class="session-artifact-box"><h5>Corrected Writing</h5><div class="session-rich-html corrected-writing-html">' + getPortfolioCorrectedHtml(sess) + '</div></div>'
-        + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderSimpleMarkdown([feedback.strength ? ('Strength: ' + feedback.strength) : '', feedback.nextTime ? ('Next step: ' + feedback.nextTime) : '', feedback.growGoal ? ('Goal: ' + feedback.growGoal) : '', feedback.closing ? ('Encouragement: ' + feedback.closing) : ''].filter(function(line) { return line; }).join('\n\n') || 'No notes saved.') + '</div></div>'
+        + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderWftPortfolioTeacherNotesHtml(feedback) + '</div></div>'
         + '</div>'
         + imageStripHtml
-        + '<div class="session-card-actions">'
-        + '<button type="button" class="btn-reprint" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="printPortfolioNotebookSummary(this.dataset.student, this.dataset.session)">Re-print Notebook Summary</button>'
-        + '<button type="button" class="btn-reassess" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="reassessPortfolioSession(this.dataset.student, this.dataset.session)">Reassess Writing</button>'
-        + '<button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button>'
-        + '</div>'
+        + renderWftPortfolioSessionActionsHtml(name, sess, si)
         + '</div>';
 }
 
@@ -8170,6 +8241,20 @@ function stripPendingPortfolioImageDataUrls(pending) {
 }
 
 function persistPendingPortfolioSync() {
+    function persistWithoutEmbeddedPhotos() {
+        try {
+            // Keep the full in-memory photos available for the pending Drive upload.
+            // shortcut: quota fallback cannot restore unuploaded photos after reload; add durable media storage if reload recovery is needed.
+            var cleaned = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
+            localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(cleaned));
+            pendingPortfolioSyncPersistence = hasMissingPendingPortfolioPhotos(cleaned) ? 'photos-in-tab' : 'full';
+        } catch (e2) {
+            wftDebugError('Pending portfolio save retry also failed:', e2);
+            updatePendingPortfolioPersistenceNotice(pendingPortfolioSync);
+            throw e2;
+        }
+    }
+
     if (pendingPortfolioSync && pendingPortfolioSync.studentName && pendingPortfolioSync.sessionData) {
         pendingPortfolioSyncPersistence = 'memory';
         try {
@@ -8177,17 +8262,7 @@ function persistPendingPortfolioSync() {
             pendingPortfolioSyncPersistence = hasMissingPendingPortfolioPhotos(pendingPortfolioSync) ? 'missing-photos' : 'full';
         } catch (e) {
             wftDebugWarn('Pending portfolio save exceeded localStorage; saving without embedded image data.', e);
-            try {
-                // Keep the full in-memory photos available for the pending Drive upload.
-                // shortcut: quota fallback cannot restore unuploaded photos after reload; add durable media storage if reload recovery is needed.
-                var cleaned = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
-                localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(cleaned));
-                pendingPortfolioSyncPersistence = hasMissingPendingPortfolioPhotos(cleaned) ? 'photos-in-tab' : 'full';
-            } catch (e2) {
-                wftDebugError('Pending portfolio save retry also failed:', e2);
-                updatePendingPortfolioPersistenceNotice(pendingPortfolioSync);
-                throw e2;
-            }
+            persistWithoutEmbeddedPhotos();
         }
     } else {
         localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
