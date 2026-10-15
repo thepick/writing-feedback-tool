@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "task": "Focused RepoWise repair 003: OAuth draft recovery complexity review",
+  "created_at_utc": "2026-10-15T18:32:56.176663+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "observed_head_at_finish": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "summary": {
+    "findings_reviewed": 1,
+    "findings_held": 1,
+    "source_fixes": 0,
+    "recommended_intentional_retained": 1,
+    "needs_user_attention": false,
+    "source_changed": false,
+    "claim_of_scanner_clearance": false
+  },
+  "changed_repository_files": [],
+  "source_hashes": {
+    "file": "js/app/00-storage-sync-patches.js",
+    "baseline_working_tree_sha256": "02bb9fd078d0ffb983aee51117a55217ce01da76ffcf6a1cef06c5d698029562",
+    "current_working_tree_sha256": "02bb9fd078d0ffb983aee51117a55217ce01da76ffcf6a1cef06c5d698029562",
+    "current_sha256_normalized_lf": "05c6fecae3aeef58bf900abf3c7f9d39978951048c1389ed85acf6891135e15d",
+    "function_sha256_normalized_lf": "5418f74c4ef60aa218b6a584338acef132924cf84e00ac59034cf6da53b985b2",
+    "all_89_source_files_match_assigned_and_publication_commits_after_newline_normalization": true,
+    "all_89_source_raw_hashes_match_previous_review": true,
+    "full_source_evidence": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-003\\source-evidence.json"
+  },
+  "metrics_before": {
+    "name": "restoreWftOAuthDraftAfterRedirect",
+    "start_line": 3465,
+    "end_line": 3511,
+    "ccn": 29,
+    "cognitive": 45,
+    "nloc": 45,
+    "max_nesting": 3
+  },
+  "metrics_after": {
+    "name": "restoreWftOAuthDraftAfterRedirect",
+    "start_line": 3465,
+    "end_line": 3511,
+    "ccn": 29,
+    "cognitive": 45,
+    "nloc": 45,
+    "max_nesting": 3
+  },
+  "decision_breakdown": {
+    "base": 1,
+    "if_statements": 10,
+    "catch_clauses": 2,
+    "logical_and": 7,
+    "logical_or": 9,
+    "ternary": 0
+  },
+  "other_shape": {
+    "loops": 0,
+    "awaits": 0,
+    "nested_named_functions": 0,
+    "inline_predicates": 2
+  },
+  "metric_method": "Read-only installed RepoWise walker and tree-sitter AST. No index recomputation or write.",
+  "production_callers_reviewed": [
+    {
+      "file": "js/app/10-main-app.js",
+      "line": 8484,
+      "function": "window load handler"
+    }
+  ],
+  "test_callers_reviewed": [
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "lines": [
+        51,
+        57,
+        61,
+        71,
+        77,
+        85,
+        89,
+        93,
+        96,
+        100,
+        104
+      ]
+    }
+  ],
+  "related_scope_reviewed": [
+    "saveWftOAuthDraftBeforeRedirect",
+    "requestDriveAccess redirect entry",
+    "syncUiState",
+    "setOcrStatus",
+    "tests/auth-integrity.browser.cjs draft scenarios and startup",
+    "tests/recovery-cache.browser.cjs raw draft emergency-backup coverage"
+  ],
+  "behavior_and_order_evidence": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3467,
+      "verified": "Read raw draft first; missing/empty raw value returns false without mutation. Invalid JSON, non-string text, and non-string provided identity/genre fields go through the recovery-preserving outer catch."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3477,
+      "verified": "Already-restored comparison short-circuits in text/student/manual-genre/select-genre order. It allows a removal retry only for the same complete context; whitespace current writing remains occupied. Fallback precedence for select genre is explicit select value, manual value, then __auto__."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3485,
+      "verified": "Text is written before selectedStudent. Optional localStorage selection hint failure is swallowed intentionally; failure must not block restoration or consume the wrong draft."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3487,
+      "verified": "Missing student option is synthesized only in the select, with textContent, never added to the students roster. Missing select is tolerated; existing options are reused."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3497,
+      "verified": "Manual genre and genre select follow student restoration, preserving distinct fallback expressions. syncUiState executes only after the complete field update."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3501,
+      "verified": "Exact writing verification precedes raw-draft removal. Removal failure leaves restored UI and original bytes available for a coherent retry. A success notice follows removal and only applies to nonblank text."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3508,
+      "verified": "Required read, parse, DOM, sync, verification or removal failure reports recovery error and returns false without deleting raw draft bytes."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "line": 8484,
+      "verified": "The sole production caller is the window load handler. It clears the fresh text field, restores the OAuth draft, then initializes pending portfolio work, sync UI and Google session/redirect completion in that order."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3408,
+      "verified": "The paired save function refuses unsafe redirects for tab-only pending work/photos and preserves an incompatible previous draft. It writes exactly the fields consumed here and does not offer a reusable DOM restore helper."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "line": 7814,
+      "verified": "syncUiState may clear stale analysis and update feedback, image/genre controls and sync buttons. Moving it before full restoration would expose a different input context."
+    }
+  ],
+  "alternatives_considered": [
+    "Extract draft validation and already-restored comparison: adds single-use predicates while retaining all schema/default/identity decisions; no caller reuse or duplicate validation to remove.",
+    "Extract student/genre restoration: removes the recovery mutation ordering from a short top-level transaction; still needs the same globals, optional storage catch and DOM branches.",
+    "Replace current comparisons/defaults with normalization, bulk assignment or a loop: changes or obscures value precedence, short-circuit reads, mutation order or missing-field behavior.",
+    "Drop the optional hint catch, strict raw validation, occupancy guard or post-sync exact-text check: changes the established recovery contract and was rejected."
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_4ff0c4251265ee529750",
+      "kind": "complex_method",
+      "severity": "critical",
+      "held": true,
+      "verified_metrics": {
+        "name": "restoreWftOAuthDraftAfterRedirect",
+        "start_line": 3465,
+        "end_line": 3511,
+        "ccn": 29,
+        "cognitive": 45,
+        "nloc": 45,
+        "max_nesting": 3
+      },
+      "recommended_disposition": "intentional_code_retained",
+      "needs_user_attention": false,
+      "reason": "CCN 29 is accurate: 10 if statements, two catches, seven && and nine || operators plus the entry path. The function is 45 nonblank lines, has no loops or awaits, and implements one synchronous recovery transaction. Validation and exact four-field identity checks protect malformed draft bytes and prevent replacing occupied writing; selection recovery keeps the chosen student represented without restoring a deleted roster; the inner catch makes a selection hint optional while the outer catch preserves required recovery failures. Draft removal follows UI restoration and exact text verification. Most comparisons/defaults cannot be removed without changing accepted data, conflict rules or error behavior. A split into one-use schema, identity and field-update helpers would move checks away from this short transaction and add call/closure boundaries without eliminating decisions or duplication. No existing helper performs this OAuth-specific operation. Retain the coherent transaction rather than introduce a score-only decomposition.",
+      "scanner_finding_expected_to_remain_open": true
+    }
+  ],
+  "tests": {
+    "before": {
+      "type": "Fresh unchanged-source relevant suite before decision",
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-003\\before\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "syntax_checks": 89,
+      "selected_suites": [
+        {
+          "suite": "tests/auth-integrity.browser.cjs",
+          "status": 0,
+          "signal": null,
+          "error": null,
+          "started": "2026-10-15T18:29:16.378Z",
+          "seconds": 42.832,
+          "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-003\\before\\auth-integrity.browser.log",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-003\\before\\auth-integrity.browser.json",
+          "nativeInstrumented": false
+        }
+      ],
+      "case_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-003\\before\\auth-integrity.browser.json",
+      "cases": 106,
+      "passed_cases": 106,
+      "failed_cases": 0,
+      "started": "2026-10-15T18:29:08.630Z",
+      "finished": "2026-10-15T18:29:59.213Z"
+    },
+    "broader_exact_source_baseline": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\do-next-publication-tests.json",
+      "source_commit": "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7",
+      "suites": 75,
+      "syntax_checks": 89,
+      "passed": true,
+      "complete": true,
+      "source_equality_verified": true,
+      "started": "2026-10-15T17:28:13.505Z",
+      "finished": "2026-10-15T17:53:03.617Z"
+    },
+    "after_edit": "Not applicable: no application or test edit. Source remained byte-identical across the fresh suite and review; repeating it as a separate after run would add no coverage.",
+    "coverage": [
+      "Malformed raw bytes and invalid field types stay recoverable",
+      "Valid draft fields restore and consume once",
+      "Read/removal/optional-selection-hint failures and retries",
+      "Occupied writing, whitespace and different current owner/genre remain coherent",
+      "Supported empty/whitespace drafts and a missing roster option restore safely",
+      "Native window-load integration preserves recovered writing",
+      "Redirect preservation stops unsafe tab-only work/photo loss; provider navigation intercepted",
+      "Token, sign-out, delayed callback and current-operation ownership cases also pass in the same suite"
+    ],
+    "tests_added": []
+  },
+  "done_condition": {
+    "scanner_finding_clearance_confirmed": false,
+    "explanation": "Valid metric intentionally recommended for retention with live source/test evidence. Coordinator must accept or reject the individual disposition. The warning remains open; no health score change is claimed.",
+    "repowise_refreshed": false,
+    "tracker_edited": false
+  },
+  "concerns_and_limits": [
+    "No live Google OAuth, Drive, AI, real accounts or student data; existing suite intercepts external traffic.",
+    "No new getter/effect-order probe matrix: no candidate change exists. Ordering evidence is source review plus existing native cases.",
+    "No fresh full 75-suite rerun for this read-only review; all 89 JS files matched the passing publication source and the relevant authentication suite was rerun.",
+    "Do not describe this outcome as a fix, false positive, removed warning or improved score."
+  ],
+  "tooling_notes": [
+    "An initial installed-package lookup omitted the health subpackage; corrected to the actual installed complexity walker.",
+    "Optional Acorn lookup found it unavailable; no package was installed. Existing installed tree-sitter provided the AST.",
+    "The first independent CCN breakdown counted one && inside a nested anonymous predicate; adjusted to the installed walker's separate function scopes. The corrected breakdown sums to the verified CCN29.",
+    "An initial wildcard path search was rejected by Windows; corrected to explicit directories and file globs."
+  ],
+  "scope_checks": {
+    "no_branch_switch": true,
+    "no_staging_commit_push_merge": true,
+    "no_tracker_audit_edit": true,
+    "no_index_write_refresh_or_recompute": true,
+    "no_other_chats_or_agents_created_or_messaged": true,
+    "next_issue_not_selected": true
+  }
+}

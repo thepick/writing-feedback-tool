@@ -13,7 +13,6 @@ function _wftGenShortId(len) {
     return result;
 }
 function generateWftShortId(len) { return _wftGenShortId(len || 8); }
-function generateWFTShortId(len) { return _wftGenShortId(len || 8); }
 
 // ── Storage metadata helpers ──
 function _wftDefaultStorageMeta() {

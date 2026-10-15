@@ -1,0 +1,974 @@
+{
+  "schema_version": 1,
+  "task": "Focused RepoWise repair004: historical hardcoded-secret signals",
+  "created_at_utc": "2026-10-15T18:37:28.358490+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "observed_head_at_finish": "5529f8e25e6a2a60842acc54f00130b4b1b76b2c",
+  "summary": {
+    "signals_reviewed": 19,
+    "historical_blobs_verified": 15,
+    "synthetic_test_fixture_signals": 19,
+    "confirmed_credential_exposures": 0,
+    "needs_user_attention": 0,
+    "source_changes_justified": 0
+  },
+  "findings": [
+    {
+      "record_id": "security:ca8b522f9699985e30e28036",
+      "file": "tests/archive-connection.browser.cjs",
+      "commit_sha": "691fffdcb8613d8dabba6f837da4a0cebc0f2ec9",
+      "line": 18,
+      "blob_sha": "52e6cd53100ce4bcebfad9a9c0a062e2b8f6b26b",
+      "blob_sha256": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The historical archive test seeds a fixed connection identity alongside synthetic class/essay data, then changes that identity at controlled async boundaries. Its fetch replacement records Authorization and constructs local Response/Blob objects. The browser route serves local app/ZIP-library bytes and aborts other requests. The literal equals the reviewed current synthetic fixture; no real account credential is read or supplied.",
+      "evidence_anchors": [
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "691fffdcb8613d8dabba6f837da4a0cebc0f2ec9",
+          "start_line": 18,
+          "end_line": 18,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "691fffdcb8613d8dabba6f837da4a0cebc0f2ec9",
+          "start_line": 10,
+          "end_line": 23,
+          "role": "Synthetic class/connection seeding"
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "691fffdcb8613d8dabba6f837da4a0cebc0f2ec9",
+          "start_line": 55,
+          "end_line": 60,
+          "role": "Local fetch responder"
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "691fffdcb8613d8dabba6f837da4a0cebc0f2ec9",
+          "start_line": 91,
+          "end_line": 98,
+          "role": "Fresh context and nonlocal request abort"
+        }
+      ],
+      "current_fixture_line": 18,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:b94c83f6bf871aafc5143b88",
+      "file": "tests/auth-integrity.browser.cjs",
+      "commit_sha": "9734fcd28d0ccfbf3fbdc4a69bb19d34f51d70a4",
+      "line": 263,
+      "blob_sha": "0348940caa5f1acfcc34f6500c8fb6c6fa971be3",
+      "blob_sha256": "b37de291c7f28f5b2ccd350839f0a600fe4660b5f3aa8e9a71a42e997490ae05",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The connect helper defaults to a fixed test identity, synthesizes signed-in state and a short expiry, and is reset between token-validation/sign-out cases. The original page setup stops sync and replaces fetch with a local Response; its catch-all route serves repository files and aborts nonlocal requests. This is the same fixture literal used by the independently reviewed current test, not a credential obtained from Google or an environment variable.",
+      "evidence_anchors": [
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "9734fcd28d0ccfbf3fbdc4a69bb19d34f51d70a4",
+          "start_line": 263,
+          "end_line": 263,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "9734fcd28d0ccfbf3fbdc4a69bb19d34f51d70a4",
+          "start_line": 8,
+          "end_line": 23,
+          "role": "Fresh page, catch-all route, sync shutdown and synthetic fetch"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "9734fcd28d0ccfbf3fbdc4a69bb19d34f51d70a4",
+          "start_line": 260,
+          "end_line": 266,
+          "role": "Reset/connect/run helpers synthesize and clear token state"
+        }
+      ],
+      "current_fixture_line": 263,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:52e9c08a45fe446382066f0f",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+      "line": 14,
+      "blob_sha": "3104120e3e6d5721985977c259720f4e182eb791",
+      "blob_sha256": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The literal is the initial synthetic upload owner in generated image/session scenarios. Fetch records the proposed multipart request and returns a locally constructed response, while delayed folder/compression callbacks trigger controlled ownership changes. The browser route aborts nonlocal traffic. The literal is identical to the corresponding current fixture; no provider credential acquisition or production account is involved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 14,
+          "end_line": 14,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 12,
+          "end_line": 29,
+          "role": "Synthetic ownership setup and in-page fetch"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 46,
+          "end_line": 56,
+          "role": "Controlled connection mutation"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 104,
+          "end_line": 112,
+          "role": "Fresh page and local-only route"
+        }
+      ],
+      "current_fixture_line": 14,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:b369ae361180166cba124184",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+      "line": 48,
+      "blob_sha": "3104120e3e6d5721985977c259720f4e182eb791",
+      "blob_sha256": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The literal is the replacement connection used to test stale-owner rejection in generated image/session scenarios. Fetch records the proposed multipart request and returns a locally constructed response, while delayed folder/compression callbacks trigger controlled ownership changes. The browser route aborts nonlocal traffic. The literal is identical to the corresponding current fixture; no provider credential acquisition or production account is involved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 48,
+          "end_line": 48,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 12,
+          "end_line": 29,
+          "role": "Synthetic ownership setup and in-page fetch"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 46,
+          "end_line": 56,
+          "role": "Controlled connection mutation"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "870005e10e2c49e2c3397dee1962625338273cba",
+          "start_line": 104,
+          "end_line": 112,
+          "role": "Fresh page and local-only route"
+        }
+      ],
+      "current_fixture_line": 48,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:2c255b9986626c01c4310695",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "commit_sha": "6d86ad6eb4469faa46d3cede4f127e4e488a0606",
+      "line": 11,
+      "blob_sha": "1d478aa5ce5a94389f36ba39df0fe4ecda1a5c00",
+      "blob_sha256": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The test seeds a fabricated session, fixed ownership token, signed-in flag and future expiry after clearing test storage. Its fresh browser context intercepts every request; service replies/uploads are fulfilled from local Maps, held requests are released or aborted by the test, and unrelated origins abort. The original blob imports only browser/filesystem/assertion libraries and contains no request passthrough. The literal equals the reviewed current synthetic owner fixture.",
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "6d86ad6eb4469faa46d3cede4f127e4e488a0606",
+          "start_line": 11,
+          "end_line": 11,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "6d86ad6eb4469faa46d3cede4f127e4e488a0606",
+          "start_line": 6,
+          "end_line": 14,
+          "role": "Synthetic storage/session/owner initialization"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "6d86ad6eb4469faa46d3cede4f127e4e488a0606",
+          "start_line": 29,
+          "end_line": 59,
+          "role": "Fresh context and complete local service responder"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "6d86ad6eb4469faa46d3cede4f127e4e488a0606",
+          "start_line": 66,
+          "end_line": 69,
+          "role": "Local upload acceptance and simulated reconnect"
+        }
+      ],
+      "current_fixture_line": 11,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:0aa5e6ed95f04b0ee1433e90",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+      "line": 25,
+      "blob_sha": "07f89430163b7cacc27c15d4b1b5534285b8c0f9",
+      "blob_sha256": "02c190a01a9824715c8c13b12ab4d8b6604f81ea270a74a40fbf8c041feae0f5",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This is the replacement owner injected while a student read is intercepted. The test fabricates folders, student records and returned writing, captures Authorization for stale-owner assertions, and fulfills Google-shaped requests locally. Its catch-all route aborts unrelated origins and never continues a request to a service. The literal matches the corresponding reviewed current fixture; it is not a real access token.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 25,
+          "end_line": 25,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 13,
+          "end_line": 35,
+          "role": "Local app/service responder and controlled owner mutation"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 37,
+          "end_line": 44,
+          "role": "Synthetic initial selection, storage and owner setup"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 62,
+          "end_line": 66,
+          "role": "Stale-owner rejection assertions"
+        }
+      ],
+      "current_fixture_line": 25,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:5ca789d5fa40b70bdced4d78",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+      "line": 41,
+      "blob_sha": "07f89430163b7cacc27c15d4b1b5534285b8c0f9",
+      "blob_sha256": "02c190a01a9824715c8c13b12ab4d8b6604f81ea270a74a40fbf8c041feae0f5",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "This is the initial owner seeded for the student-read scenario. The test fabricates folders, student records and returned writing, captures Authorization for stale-owner assertions, and fulfills Google-shaped requests locally. Its catch-all route aborts unrelated origins and never continues a request to a service. The literal matches the corresponding reviewed current fixture; it is not a real access token.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 41,
+          "end_line": 41,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 13,
+          "end_line": 35,
+          "role": "Local app/service responder and controlled owner mutation"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 37,
+          "end_line": 44,
+          "role": "Synthetic initial selection, storage and owner setup"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "commit_sha": "e6554443d5c3b865b653e229010f82d103193468",
+          "start_line": 62,
+          "end_line": 66,
+          "role": "Stale-owner rejection assertions"
+        }
+      ],
+      "current_fixture_line": 41,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:102e2163c0c86a7d4463e542",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "commit_sha": "1737ed9cc04d28c130d8d1c3271cf0a3b8a60c25",
+      "line": 11,
+      "blob_sha": "45f5d500fba88bbdf03156a690c9d21ffddfb877",
+      "blob_sha256": "d3b5edd9458e1595907ccc28827d482db5fb62be474705f30e4db1cee2d6d34b",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The test seeds a fabricated session, fixed ownership token, signed-in flag and future expiry after clearing test storage. Its fresh browser context intercepts every request; service replies/uploads are fulfilled from local Maps, held requests are released or aborted by the test, and unrelated origins abort. The original blob imports only browser/filesystem/assertion libraries and contains no request passthrough. The literal equals the reviewed current synthetic owner fixture.",
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "1737ed9cc04d28c130d8d1c3271cf0a3b8a60c25",
+          "start_line": 11,
+          "end_line": 11,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "1737ed9cc04d28c130d8d1c3271cf0a3b8a60c25",
+          "start_line": 6,
+          "end_line": 14,
+          "role": "Synthetic storage/session/owner initialization"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "1737ed9cc04d28c130d8d1c3271cf0a3b8a60c25",
+          "start_line": 29,
+          "end_line": 59,
+          "role": "Fresh context and complete local service responder"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "1737ed9cc04d28c130d8d1c3271cf0a3b8a60c25",
+          "start_line": 66,
+          "end_line": 69,
+          "role": "Local upload acceptance and simulated reconnect"
+        }
+      ],
+      "current_fixture_line": 11,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:2cfb2e20a67eb2459bee96ae",
+      "file": "tests/auth-integrity.browser.cjs",
+      "commit_sha": "e6a999707b869b4d3d4aab06c07bcb6520dae2f9",
+      "line": 205,
+      "blob_sha": "0e1d74f9a28473324d1a667b066cb08f02bb1f77",
+      "blob_sha256": "19f7182b1c83f29030dc4f7fe9b302ab077eec80f7e6334385346ef04e76668f",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The connect helper defaults to a fixed test identity, synthesizes signed-in state and a short expiry, and is reset between token-validation/sign-out cases. The original page setup stops sync and replaces fetch with a local Response; its catch-all route serves repository files and aborts nonlocal requests. This is the same fixture literal used by the independently reviewed current test, not a credential obtained from Google or an environment variable.",
+      "evidence_anchors": [
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "e6a999707b869b4d3d4aab06c07bcb6520dae2f9",
+          "start_line": 205,
+          "end_line": 205,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "e6a999707b869b4d3d4aab06c07bcb6520dae2f9",
+          "start_line": 8,
+          "end_line": 23,
+          "role": "Fresh page, catch-all route, sync shutdown and synthetic fetch"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "e6a999707b869b4d3d4aab06c07bcb6520dae2f9",
+          "start_line": 202,
+          "end_line": 208,
+          "role": "Reset/connect/run helpers synthesize and clear token state"
+        }
+      ],
+      "current_fixture_line": 263,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:bea16f88d42691a26c98cec7",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "commit_sha": "d13962ebf8ab115b727af0628a76e601a3107420",
+      "line": 46,
+      "blob_sha": "5f4059b5d8ce25850cb13b668c429303bac5c9de",
+      "blob_sha256": "24b5ced9ade5c7c011940bc8b12858a46fb84a3e5713bedc4f3e6c0c1e74737d",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The test seeds a fabricated session, fixed ownership token, signed-in flag and future expiry after clearing test storage. Its fresh browser context intercepts every request; service replies/uploads are fulfilled from local Maps, held requests are released or aborted by the test, and unrelated origins abort. The original blob imports only browser/filesystem/assertion libraries and contains no request passthrough. The literal equals the reviewed current synthetic owner fixture.",
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "d13962ebf8ab115b727af0628a76e601a3107420",
+          "start_line": 46,
+          "end_line": 46,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "d13962ebf8ab115b727af0628a76e601a3107420",
+          "start_line": 41,
+          "end_line": 49,
+          "role": "Synthetic storage/session/owner initialization"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "d13962ebf8ab115b727af0628a76e601a3107420",
+          "start_line": 9,
+          "end_line": 39,
+          "role": "Fresh context and complete local service responder"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "d13962ebf8ab115b727af0628a76e601a3107420",
+          "start_line": 54,
+          "end_line": 54,
+          "role": "Local upload acceptance"
+        }
+      ],
+      "current_fixture_line": 11,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:bfc72ca167afa1b3143bbefc",
+      "file": "tests/auth-integrity.browser.cjs",
+      "commit_sha": "b8d13b839e665a9f8a288cbad8a7d2c137645329",
+      "line": 181,
+      "blob_sha": "302d5858b2742d26892265da8a8e7312805b31bf",
+      "blob_sha256": "71618782a5faf9c4ed3a5f2d1b58f597011102cb00fff473f3022ce2fe3a23ce",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The connect helper defaults to a fixed test identity, synthesizes signed-in state and a short expiry, and is reset between token-validation/sign-out cases. The original page setup stops sync and replaces fetch with a local Response; its catch-all route serves repository files and aborts nonlocal requests. This is the same fixture literal used by the independently reviewed current test, not a credential obtained from Google or an environment variable.",
+      "evidence_anchors": [
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "b8d13b839e665a9f8a288cbad8a7d2c137645329",
+          "start_line": 181,
+          "end_line": 181,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "b8d13b839e665a9f8a288cbad8a7d2c137645329",
+          "start_line": 8,
+          "end_line": 23,
+          "role": "Fresh page, catch-all route, sync shutdown and synthetic fetch"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "b8d13b839e665a9f8a288cbad8a7d2c137645329",
+          "start_line": 178,
+          "end_line": 184,
+          "role": "Reset/connect/run helpers synthesize and clear token state"
+        }
+      ],
+      "current_fixture_line": 263,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:bc48d0bc30483923ca2b0627",
+      "file": "tests/archive-connection.browser.cjs",
+      "commit_sha": "61b615b9a56a06806fdefbdce145031bbcf464f9",
+      "line": 30,
+      "blob_sha": "632575ea5a7781df3cb1aec34debad49ab7e9486",
+      "blob_sha256": "ad76a317934e3b9c1ffe2d204a103b56474bb758c54fb3a60c3a34ecf248e482",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The historical archive test seeds a fixed connection identity alongside synthetic class/essay data, then changes that identity at controlled async boundaries. Its fetch replacement records Authorization and constructs local Response/Blob objects. The browser route serves local app/ZIP-library bytes and aborts other requests. The literal equals the reviewed current synthetic fixture; no real account credential is read or supplied.",
+      "evidence_anchors": [
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "61b615b9a56a06806fdefbdce145031bbcf464f9",
+          "start_line": 30,
+          "end_line": 30,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "61b615b9a56a06806fdefbdce145031bbcf464f9",
+          "start_line": 25,
+          "end_line": 35,
+          "role": "Synthetic class/connection seeding and simulated connection change"
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "61b615b9a56a06806fdefbdce145031bbcf464f9",
+          "start_line": 46,
+          "end_line": 69,
+          "role": "Local fetch responder"
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "commit_sha": "61b615b9a56a06806fdefbdce145031bbcf464f9",
+          "start_line": 11,
+          "end_line": 18,
+          "role": "Fresh context; local ZIP/app fulfillment and external abort"
+        }
+      ],
+      "current_fixture_line": 18,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:ce1d49bcb1a9d95efc75f470",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+      "line": 30,
+      "blob_sha": "e7e7d974884bea8c3513ce58d596a88363d62aae",
+      "blob_sha256": "c4f004e9258fa08850b5a77858e8341ef23eeff956270f4dc60eb80969f04a56",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The literal is the initial synthetic upload owner in generated image/session scenarios. Fetch records the proposed multipart request and returns a locally constructed response, while delayed folder/compression callbacks trigger controlled ownership changes. The browser route aborts nonlocal traffic. The literal is identical to the corresponding current fixture; no provider credential acquisition or production account is involved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 30,
+          "end_line": 30,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 28,
+          "end_line": 44,
+          "role": "Synthetic ownership setup and in-page fetch"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 61,
+          "end_line": 66,
+          "role": "Controlled connection mutation"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 17,
+          "end_line": 25,
+          "role": "Fresh page and local-only route"
+        }
+      ],
+      "current_fixture_line": 14,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:825d54c5f90e6260cf37a637",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+      "line": 63,
+      "blob_sha": "e7e7d974884bea8c3513ce58d596a88363d62aae",
+      "blob_sha256": "c4f004e9258fa08850b5a77858e8341ef23eeff956270f4dc60eb80969f04a56",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The literal is the replacement connection used to test stale-owner rejection in generated image/session scenarios. Fetch records the proposed multipart request and returns a locally constructed response, while delayed folder/compression callbacks trigger controlled ownership changes. The browser route aborts nonlocal traffic. The literal is identical to the corresponding current fixture; no provider credential acquisition or production account is involved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 63,
+          "end_line": 63,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 28,
+          "end_line": 44,
+          "role": "Synthetic ownership setup and in-page fetch"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 61,
+          "end_line": 66,
+          "role": "Controlled connection mutation"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "2897358574960b8077fd51a445d50014cf0b3eee",
+          "start_line": 17,
+          "end_line": 25,
+          "role": "Fresh page and local-only route"
+        }
+      ],
+      "current_fixture_line": 48,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:1f380d22b29e6aee90c2176c",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "commit_sha": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+      "line": 43,
+      "blob_sha": "490353d2f600ed0ba75cc0d8e60905cd6e39adc8",
+      "blob_sha256": "b519aef6f2174cfd0201d565853e113e687cabcc27cee21a13d21cb325c87ee3",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The test seeds a fabricated session, fixed ownership token, signed-in flag and future expiry after clearing test storage. Its fresh browser context intercepts every request; service replies/uploads are fulfilled from local Maps, held requests are released or aborted by the test, and unrelated origins abort. The original blob imports only browser/filesystem/assertion libraries and contains no request passthrough. The literal equals the reviewed current synthetic owner fixture.",
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+          "start_line": 43,
+          "end_line": 43,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+          "start_line": 38,
+          "end_line": 47,
+          "role": "Synthetic storage/session/owner initialization"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+          "start_line": 9,
+          "end_line": 36,
+          "role": "Fresh context and complete local service responder"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "bb2022fd086ea170ea200b0273822ade11c4b8f5",
+          "start_line": 51,
+          "end_line": 51,
+          "role": "Local upload acceptance"
+        }
+      ],
+      "current_fixture_line": 11,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:667f3fd9f5bcb2b534f0f38c",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+      "line": 14,
+      "blob_sha": "51e50cdd5d8ef87b2f35bfadfca7f8f4ce16e3d8",
+      "blob_sha256": "874e4802efd82c12eb76c8ac33fc7398545051bfe2e77626fb520b86cb81411c",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The literal is the initial synthetic upload owner in generated image/session scenarios. Fetch records the proposed multipart request and returns a locally constructed response, while delayed folder/compression callbacks trigger controlled ownership changes. The browser route aborts nonlocal traffic. The literal is identical to the corresponding current fixture; no provider credential acquisition or production account is involved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 14,
+          "end_line": 14,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 12,
+          "end_line": 29,
+          "role": "Synthetic ownership setup and in-page fetch"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 46,
+          "end_line": 56,
+          "role": "Controlled connection mutation"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 85,
+          "end_line": 94,
+          "role": "Fresh page and local-only route"
+        }
+      ],
+      "current_fixture_line": 14,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:3cf392171f171b02d49ac025",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+      "line": 48,
+      "blob_sha": "51e50cdd5d8ef87b2f35bfadfca7f8f4ce16e3d8",
+      "blob_sha256": "874e4802efd82c12eb76c8ac33fc7398545051bfe2e77626fb520b86cb81411c",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The literal is the replacement connection used to test stale-owner rejection in generated image/session scenarios. Fetch records the proposed multipart request and returns a locally constructed response, while delayed folder/compression callbacks trigger controlled ownership changes. The browser route aborts nonlocal traffic. The literal is identical to the corresponding current fixture; no provider credential acquisition or production account is involved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 48,
+          "end_line": 48,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 12,
+          "end_line": 29,
+          "role": "Synthetic ownership setup and in-page fetch"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 46,
+          "end_line": 56,
+          "role": "Controlled connection mutation"
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit_sha": "81f0319c45758d2aef8d8402a6915d42bbc6c362",
+          "start_line": 85,
+          "end_line": 94,
+          "role": "Fresh page and local-only route"
+        }
+      ],
+      "current_fixture_line": 48,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:ea7c0d7d33c0b03267fb963c",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "commit_sha": "a8820046fd6280d786cbd8d1937340d6c1b13d69",
+      "line": 43,
+      "blob_sha": "97ec66a4277e1a984ff2cf341bbe53f682994647",
+      "blob_sha256": "9b94b91c847d185488eb6b99cbcbd2849bc54ca910edfb28e9a06da3a666ccd8",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The test seeds a fabricated session, fixed ownership token, signed-in flag and future expiry after clearing test storage. Its fresh browser context intercepts every request; service replies/uploads are fulfilled from local Maps, held requests are released or aborted by the test, and unrelated origins abort. The original blob imports only browser/filesystem/assertion libraries and contains no request passthrough. The literal equals the reviewed current synthetic owner fixture.",
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "a8820046fd6280d786cbd8d1937340d6c1b13d69",
+          "start_line": 43,
+          "end_line": 43,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "a8820046fd6280d786cbd8d1937340d6c1b13d69",
+          "start_line": 38,
+          "end_line": 47,
+          "role": "Synthetic storage/session/owner initialization"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "a8820046fd6280d786cbd8d1937340d6c1b13d69",
+          "start_line": 9,
+          "end_line": 36,
+          "role": "Fresh context and complete local service responder"
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "commit_sha": "a8820046fd6280d786cbd8d1937340d6c1b13d69",
+          "start_line": 51,
+          "end_line": 51,
+          "role": "Local upload acceptance"
+        }
+      ],
+      "current_fixture_line": 11,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    },
+    {
+      "record_id": "security:1c8343a610e2d1038308bf3e",
+      "file": "tests/auth-integrity.browser.cjs",
+      "commit_sha": "e2625b3776e61a8a379d5bde2d183bb1e4b9db76",
+      "line": 181,
+      "blob_sha": "7a739f7f94a6b838ecf3e9e2095571df4ed56e11",
+      "blob_sha256": "654f9f786f46028ee74d5ee017c7ca3d3fba8c745f36238ec0b27798fe989def",
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "credential_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "proposed_status": "reviewed_no_change",
+      "reason": "The connect helper defaults to a fixed test identity, synthesizes signed-in state and a short expiry, and is reset between token-validation/sign-out cases. The original page setup stops sync and replaces fetch with a local Response; its catch-all route serves repository files and aborts nonlocal requests. This is the same fixture literal used by the independently reviewed current test, not a credential obtained from Google or an environment variable.",
+      "evidence_anchors": [
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "e2625b3776e61a8a379d5bde2d183bb1e4b9db76",
+          "start_line": 181,
+          "end_line": 181,
+          "role": "Flagged literal assignment in original commit; value omitted"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "e2625b3776e61a8a379d5bde2d183bb1e4b9db76",
+          "start_line": 8,
+          "end_line": 23,
+          "role": "Fresh page, catch-all route, sync shutdown and synthetic fetch"
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "commit_sha": "e2625b3776e61a8a379d5bde2d183bb1e4b9db76",
+          "start_line": 178,
+          "end_line": 184,
+          "role": "Reset/connect/run helpers synthesize and clear token state"
+        }
+      ],
+      "current_fixture_line": 263,
+      "literal_identity_to_current_verified_without_export": true,
+      "needs_user_attention": false,
+      "scanner_finding_expected_to_remain_open": true
+    }
+  ],
+  "source_hashes": {
+    "tests/archive-connection.browser.cjs": {
+      "sha256_normalized_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "matches_previous_current_tree_review": true
+    },
+    "tests/auth-integrity.browser.cjs": {
+      "sha256_normalized_lf": "b37de291c7f28f5b2ccd350839f0a600fe4660b5f3aa8e9a71a42e997490ae05",
+      "matches_previous_current_tree_review": true
+    },
+    "tests/media-upload-boundary.browser.cjs": {
+      "sha256_normalized_lf": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "matches_previous_current_tree_review": true
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "sha256_normalized_lf": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97",
+      "matches_previous_current_tree_review": true
+    },
+    "tests/student-read-ownership.browser.cjs": {
+      "sha256_normalized_lf": "02c190a01a9824715c8c13b12ab4d8b6604f81ea270a74a40fbf8c041feae0f5",
+      "matches_previous_current_tree_review": true
+    }
+  },
+  "current_source_changes": [],
+  "verification": {
+    "all_record_ids_unique": true,
+    "all_commit_blobs_read_and_git_blob_sha_verified": true,
+    "all_historical_fixture_values_match_corresponding_current_reviewed_fixture": true,
+    "all_15_blob_imports_browser_or_standard_library_only": true,
+    "all_15_blobs_have_no_route_continue_or_fallback": true,
+    "all_15_blobs_have_no_persistent_browser_profile_or_storageState": true,
+    "historical_sources_executed": false,
+    "credential_values_copied_to_report": false,
+    "tests_run": "None: read-only historical inspection, no application/test edit. No before/after behavior change to test.",
+    "baseline_note": "Coordinator provided a passing75-suite/89-syntax source baseline at909cdca/5529f8e. This pass verifies the five current fixture files against repair001 hashes; it does not independently recertify the full suite."
+  },
+  "limits": [
+    "No live Google authentication, credential-validity probe, real account, student data or external request was used.",
+    "This disposition covers these19 exact historical observations, not all possible secrets across Git history.",
+    "The scanner continues to report the intentional literals. No clearance or score change is claimed.",
+    "Current fixture review001 was supporting evidence; original commit blobs, local response construction, request interception, imports and literal identity were separately checked."
+  ],
+  "scope_checks": {
+    "tracker_or_docs_edited": false,
+    "source_edited": false,
+    "history_rewritten": false,
+    "credentials_rotated": false,
+    "dependencies_installed": false,
+    "chats_or_agents_created": false,
+    "other_chats_messaged": false,
+    "branch_or_git_publication_changed": false,
+    "repowise_refreshed": false
+  }
+}

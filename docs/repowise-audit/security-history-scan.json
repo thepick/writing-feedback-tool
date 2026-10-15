@@ -1,0 +1,14 @@
+{
+  "commits_scanned": 646,
+  "blobs_scanned": 1407,
+  "files_scanned": 704,
+  "findings_inserted": 19,
+  "by_severity": {
+    "low": 19
+  },
+  "by_kind": {
+    "hardcoded_secret": 19
+  },
+  "source_code_head_at_start": "909cdcad0f341f91980b376f8bf54a317aa6d55c",
+  "scope": "Full reachable Git history at scan start; current and historical flags kept separate."
+}
