@@ -6287,9 +6287,18 @@ function normalizeNotebookQuoteText(text) {
 }
 
 function originalTextContainsNotebookQuote(originalText, quote) {
-    var a = normalizeNotebookQuoteText(originalText).toLowerCase();
-    var b = normalizeNotebookQuoteText(quote).toLowerCase();
-    return !!(b && a.indexOf(b) !== -1);
+    var a = normalizeNotebookQuoteText(originalText);
+    var b = normalizeNotebookQuoteText(quote);
+    if (!b) return false;
+    var wordPart = /[\p{L}\p{N}_'’-]/u;
+    var start = a.indexOf(b);
+    while (start !== -1) {
+        var end = start + b.length;
+        if (!(wordPart.test(b.charAt(0)) && wordPart.test(a.charAt(start - 1))) &&
+            !(wordPart.test(b.charAt(b.length - 1)) && wordPart.test(a.charAt(end)))) return true;
+        start = a.indexOf(b, start + 1);
+    }
+    return false;
 }
 
 function inferNotebookGuideCategoryFromText(text) {
@@ -6728,10 +6737,7 @@ function buildSimpleRunOnSentenceBreakModel(sentence) {
 function buildSimpleConventionModel(sentence) {
     var model = cleanNotebookGuideText(sentence || "");
     if (!model) return "";
-    model = model.replace(/\bbunnys\b/g, "bunnies").replace(/\bBunnys\b/g, "Bunnies");
-    model = model.replace(/\bchilds\b/g, "children").replace(/\bChilds\b/g, "Children");
-    model = model.replace(/\bwomans\b/g, "women").replace(/\bWomans\b/g, "Women");
-    model = model.replace(/\bmans\b/g, "men").replace(/\bMans\b/g, "Men");
+    // Plural-looking misspellings can be possessives; those need corrected-text evidence.
     model = model.replace(/(^|[.!?]\s+)i\b/g, function(match, prefix) {
         return prefix + "I";
     });
