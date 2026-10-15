@@ -1,0 +1,14 @@
+{
+  "before_commit": "abfcec375bfd59dede36bbc5e3521c1873b63e7e",
+  "after_commit": "4ae621b2d9dc75adbca58ee4b1393be592410dc1",
+  "file": "js/app/00-storage-sync-patches.js",
+  "changed_functions": [
+    "checkHashForOAuthTokens"
+  ],
+  "new_functions": [
+    "clearWftOAuthFragment"
+  ],
+  "all_other_application_text_identical": true,
+  "before_normalized_sha256": "e79032cea4d0348782aa6538b2b6c58f54a832c5c4f0e110fd813b4bc4881f8f",
+  "after_normalized_sha256": "132e4eff1834cea2188c14a5ad902695504213cf02490f95c346657d7ae48f43"
+}

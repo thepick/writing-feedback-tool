@@ -3324,20 +3324,22 @@ function isWftGisTokenClientAvailable() {
 }
 
 function clearWftOAuthFragment() {
+    var message;
     try {
         history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
+        return;
     } catch (error) {
-        var message = "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.";
-        try {
-            setOcrStatus(message, 'error');
-        } catch (noticeError) {
-            wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery notice could not be shown.');
-        }
-        try {
-            alert(message);
-        } catch (alertError) {
-            wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery alert could not be shown.');
-        }
+        message = "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.";
+    }
+    try {
+        setOcrStatus(message, 'error');
+    } catch (noticeError) {
+        wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery notice could not be shown.');
+    }
+    try {
+        alert(message);
+    } catch (alertError) {
+        wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery alert could not be shown.');
     }
 }
 
