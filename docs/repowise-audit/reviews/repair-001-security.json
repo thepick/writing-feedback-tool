@@ -1,0 +1,482 @@
+{
+  "schema_version": 1,
+  "task": "Focused RepoWise repair 001: verify ten working-tree security signals",
+  "created_at_utc": "2026-10-15T18:08:42.783519+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "verified_source_commit": "909cdcad0f341f91980b376f8bf54a317aa6d55c",
+  "observed_head_at_start": "909cdcad0f341f91980b376f8bf54a317aa6d55c",
+  "observed_head_at_finish": "909cdcad0f341f91980b376f8bf54a317aa6d55c",
+  "summary": {
+    "signals_reviewed": 10,
+    "synthetic_credential_fixtures": 7,
+    "trusted_test_evaluation_sites": 3,
+    "confirmed_vulnerabilities": 0,
+    "code_changes_justified": 0,
+    "all_locations_verified": true
+  },
+  "source_hashes": {
+    "tests/analysis-pipeline.browser.cjs": {
+      "sha256_raw": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+      "sha256_normalized_lf": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+      "bytes": 22684,
+      "matches_assigned_commit": true
+    },
+    "tests/archive-connection.browser.cjs": {
+      "sha256_raw": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "sha256_normalized_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "bytes": 9984,
+      "matches_assigned_commit": true
+    },
+    "tests/auth-integrity.browser.cjs": {
+      "sha256_raw": "54ef8461fd776a4ddca2d0912000a00db02d357e51c743a0f1c941444598ef91",
+      "sha256_normalized_lf": "b37de291c7f28f5b2ccd350839f0a600fe4660b5f3aa8e9a71a42e997490ae05",
+      "bytes": 42209,
+      "matches_assigned_commit": true
+    },
+    "tests/media-upload-boundary.browser.cjs": {
+      "sha256_raw": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "sha256_normalized_lf": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "bytes": 9795,
+      "matches_assigned_commit": true
+    },
+    "tests/optional-storage.browser.cjs": {
+      "sha256_raw": "483bb01e62c94effe1d89dd26c3c903bd9d64fd3be1c606fe01543e8d84849b8",
+      "sha256_normalized_lf": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe",
+      "bytes": 26287,
+      "matches_assigned_commit": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "sha256_raw": "a92587d528dd76219f5c3523a854c31f1195445d0c3e2e420cf4934d92877347",
+      "sha256_normalized_lf": "a92587d528dd76219f5c3523a854c31f1195445d0c3e2e420cf4934d92877347",
+      "bytes": 12790,
+      "matches_assigned_commit": true
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "sha256_raw": "63d86ad3bbe41ec9cbe98fbeecf554a7887f953ac62a24f400151524c3d1ff89",
+      "sha256_normalized_lf": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97",
+      "bytes": 13219,
+      "matches_assigned_commit": true
+    },
+    "tests/student-read-ownership.browser.cjs": {
+      "sha256_raw": "0cea2436dcd6ccef925a50236d7d23b5e68f6650afc28cc9b0d3ee06b718fdb1",
+      "sha256_normalized_lf": "02c190a01a9824715c8c13b12ab4d8b6604f81ea270a74a40fbf8c041feae0f5",
+      "bytes": 7600,
+      "matches_assigned_commit": true
+    }
+  },
+  "frozen_reference": {
+    "file": "tests/fixtures/analysis-pipeline-baseline.js",
+    "sha256_normalized_lf": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+    "hash_gate": "tests/analysis-pipeline.browser.cjs:5-6",
+    "matches_assigned_commit": true
+  },
+  "findings": [
+    {
+      "id": "repair-001-security-01",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "line": 249,
+      "kind": "eval_call",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "intentional_trusted_test_evaluation",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "The evaluated reference is read from the tracked analysis-pipeline-baseline.js fixture; its normalized SHA-256 is asserted before browser launch.",
+        "Only the original comparison side evaluates that reference. It is not assembled from writing, AI output, a service reply, or scenario arguments.",
+        "A new browser context is created for each side; all nonlocal application HTTP requests are aborted, and model transports return synthetic responses."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/analysis-pipeline.browser.cjs",
+          "start_line": 4,
+          "end_line": 6
+        },
+        {
+          "file": "tests/analysis-pipeline.browser.cjs",
+          "start_line": 138,
+          "end_line": 155
+        },
+        {
+          "file": "tests/analysis-pipeline.browser.cjs",
+          "start_line": 237,
+          "end_line": 253
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-02",
+      "file": "tests/archive-connection.browser.cjs",
+      "line": 18,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "The assigned value is a descriptive synthetic connection fixture, seeded alongside a synthetic class and essay.",
+        "The in-page fetch function records headers and returns local Response objects. Its response builder creates only fixture folders, photos and upload IDs.",
+        "The fresh context routes local app files and a locally installed ZIP library; all other requests abort before page navigation. The authorization assertion checks fixture ownership."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "start_line": 10,
+          "end_line": 23
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "start_line": 34,
+          "end_line": 60
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "start_line": 76,
+          "end_line": 85
+        },
+        {
+          "file": "tests/archive-connection.browser.cjs",
+          "start_line": 89,
+          "end_line": 105
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-03",
+      "file": "tests/auth-integrity.browser.cjs",
+      "line": 263,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "The connect helper defaults to a descriptive synthetic token and is declared inside the token test scenario function.",
+        "Each case restores Storage methods and clears local/session storage before and after testing token persistence or sign-out.",
+        "pageFor uses a fresh browser page, aborts nonlocal HTTP requests and replaces fetch with a local Response stub before token cases run. No persistent browser profile or real sign-in credentials are read."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "start_line": 6,
+          "end_line": 24
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "start_line": 258,
+          "end_line": 278
+        },
+        {
+          "file": "tests/auth-integrity.browser.cjs",
+          "start_line": 313,
+          "end_line": 331
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-04",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "line": 14,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "The initial owner token is a descriptive synthetic fixture paired with generated canvas image bytes and synthetic student/session records.",
+        "The mocked fetch validates the expected upload endpoint, records headers/body and returns a fixture upload ID without sending a request.",
+        "Every scenario starts in a fresh page; a catch-all HTTP route aborts every nonlocal origin before navigation."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "start_line": 12,
+          "end_line": 28
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "start_line": 99,
+          "end_line": 120
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-05",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "line": 48,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "This replaces the initial synthetic owner token only in a held token-change scenario; it is a second test connection, not a credential supplied to the deployed app.",
+        "The same local fetch stub and pre-navigation nonlocal request abort apply.",
+        "The outcome assertions require stale operations to send zero requests, while successful controls assert the original fixture owner."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "start_line": 25,
+          "end_line": 28
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "start_line": 38,
+          "end_line": 60
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "start_line": 81,
+          "end_line": 95
+        },
+        {
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "start_line": 103,
+          "end_line": 115
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-06",
+      "file": "tests/optional-storage.browser.cjs",
+      "line": 238,
+      "kind": "eval_call",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "intentional_trusted_test_evaluation",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "The run helper receives exercise functions declared in this tracked test file by runNativeStorageScenarios, runAsyncPortfolioScenarios, runDropdownScenarios and runLazyPortfolioScenarios.",
+        "Only exercise.toString() enters the evaluated function expression; arg is passed separately as a function argument, not interpolated into executable source.",
+        "Each case has a fresh page, fixture storage and HTTP interception: local app files are fulfilled locally, Google-shaped requests receive synthetic replies, and other origins abort. No route continues to a service."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "start_line": 5,
+          "end_line": 22
+        },
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "start_line": 76,
+          "end_line": 80
+        },
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "start_line": 104,
+          "end_line": 108
+        },
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "start_line": 131,
+          "end_line": 137
+        },
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "start_line": 195,
+          "end_line": 224
+        },
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "start_line": 225,
+          "end_line": 248
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-07",
+      "file": "tests/record-identity.browser.cjs",
+      "line": 93,
+      "kind": "eval_call",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "intentional_trusted_test_evaluation",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "The exercise parameter is a function declared in this test file, passed by its own identity/prototype-key test cases.",
+        "exercise.toString() supplies the function expression. Prototype-shaped names and other fixture arguments are passed separately as data; returned JSON preserves own-key semantics.",
+        "The test uses a fresh browser page with local storage reset, fulfills only local app files, aborts every nonlocal application HTTP request, and mocks the later sync helper responses."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "start_line": 8,
+          "end_line": 16
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "start_line": 71,
+          "end_line": 95
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "start_line": 97,
+          "end_line": 125
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-08",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "line": 11,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "initializeOwnershipState assigns a descriptive synthetic token after clearing both storage areas and seeding synthetic writing.",
+        "The initializer is passed as a function to page.evaluate after a fresh browser context has installed its catch-all route.",
+        "The route fulfills local app files, mocked revoke/userinfo/list/read/upload replies and held upload responses; all other origins abort. Authorization values are recorded only by the test route and fixture maps."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "start_line": 1,
+          "end_line": 15
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "start_line": 26,
+          "end_line": 62
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "start_line": 65,
+          "end_line": 69
+        },
+        {
+          "file": "tests/storage-upload-ownership.browser.cjs",
+          "start_line": 119,
+          "end_line": 126
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-09",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "line": 25,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "This assigns a second descriptive synthetic connection inside the test route to simulate an account change at a listing/download boundary.",
+        "The route returns only locally constructed fixture JSON for Google-shaped requests and aborts other external origins; it does not continue any request to Google.",
+        "Each mode/boundary uses a fresh page. Assertions require changed-account rejection, no upload, and no request under the replacement account."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 35
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 59,
+          "end_line": 77
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    },
+    {
+      "id": "repair-001-security-10",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "line": 41,
+      "kind": "hardcoded_secret",
+      "scanner_severity": "low",
+      "lexical_match_holds": true,
+      "claimed_vulnerability_holds": false,
+      "classification": "synthetic_test_fixture_no_secret",
+      "recommended_disposition": "verified_no_code_change",
+      "evidence": [
+        "This assigns the first descriptive synthetic connection after clearing storage and creating fixture-only class and portfolio data.",
+        "It runs inside page.evaluate after the local-only/fixture HTTP route is installed on a fresh page.",
+        "The route records the resulting headers in memory and fulfills requests locally. Initial and changed tokens test ownership invariants, not real authentication."
+      ],
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 22
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 36,
+          "end_line": 43
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 59,
+          "end_line": 77
+        }
+      ],
+      "actual_exposure": "No genuine credential exposure or untrusted-source evaluation identified in this reviewed test path.",
+      "recommended_fix": null,
+      "revisit_when": "The token becomes a real service credential, evaluated source becomes externally supplied, or the test adds service passthrough or a persistent user profile."
+    }
+  ],
+  "validation": {
+    "method": "Read-only source/data-flow review and assert-based integrity checks; no evaluated test/application code executed in this verification.",
+    "checks_passed": [
+      "All eight reviewed files match the assigned commit after LF normalization and stayed byte-identical during review.",
+      "All ten exact line locations contain the reported lexical signal.",
+      "All seven flagged token literals are explicit synthetic fixture values.",
+      "Both function-serialization eval sites pass scenario arguments separately.",
+      "The frozen reference matches its in-test SHA-256 gate and assigned Git source.",
+      "Each relevant harness has HTTP interception and abort behavior, no route.continue passthrough, and no persistent/browser-attachment launch.",
+      "index.html does not load the test scripts."
+    ],
+    "full_suite_rerun": false,
+    "reason": "No repository code was edited; existing 75-suite/89-syntax publication results are baseline evidence only, not the basis for these dispositions."
+  },
+  "scope_limits": [
+    "This verifies the ten listed working-tree signals, not the entire application or Git history.",
+    "Application HTTP requests are intercepted; this is not a claim of process-level network sandboxing.",
+    "The harness trusts checked-in source and operator-controlled test roots; it is not a sandbox for running an untrusted repository.",
+    "No live authentication, token validity, Google Drive, or OpenRouter request was attempted."
+  ],
+  "repository_files_edited": [],
+  "branch_changed": false,
+  "committed": false,
+  "pushed": false,
+  "repowise_refreshed": false,
+  "recommendation": "Record all ten signals as verified intentional test constructs with no code change. Keep the scanner findings visible or linked to these dispositions; do not rename fixtures or rewrite eval solely to silence the scanner."
+}
