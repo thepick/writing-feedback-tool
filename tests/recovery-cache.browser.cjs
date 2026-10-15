@@ -78,9 +78,17 @@ async function performRecoveryAction(page, scenario, check) {
         await page.locator('#btnSafeMode').click();
         if (scenario === 'safe-toggle') { check('enter mode reflected by actual button', await page.locator('#btnSafeMode').textContent() === 'Exit Safe Mode'); await page.locator('#btnSafeMode').click(); }
     } else {
-        await page.getByRole('button', { name: scenario === 'backup-download-error' ? 'Download Emergency Backup' : 'Create Drive Backup', exact: true }).click();
+        const download = ['backup-drive', 'backup-download-error', 'backup-fallback-error'].includes(scenario)
+            ? null : page.waitForEvent('download', { timeout: 5000 });
+        await Promise.all([download, page.getByRole('button', { name: scenario === 'backup-download-error' ? 'Download Emergency Backup' : 'Create Drive Backup', exact: true }).click()]);
     }
     return dialogText;
+}
+
+async function waitForRecoveryCompletion(page, scenario) {
+    if (scenario.startsWith('backup-') && scenario !== 'backup-download-error')
+        await page.waitForFunction(() => backupCallbacks.length > 0, null, { timeout: 5000 });
+    else await page.waitForTimeout(150);
 }
 
 async function runRecoveryScenario(browser, scenario, cases) {
@@ -171,7 +179,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
     await page.getByRole('button', { name: 'Open settings', exact: true }).click();
     const checks = [], check = (label, passed) => checks.push({ label, passed: !!passed });
     const dialogText = await performRecoveryAction(page, scenario, check);
-    await page.waitForTimeout(150);
+    await waitForRecoveryCompletion(page, scenario);
     const observed = await page.evaluate(async () => {
         Storage.prototype.getItem = originalGet; Storage.prototype.setItem = originalSet; Storage.prototype.removeItem = originalRemove;
         IDBDatabase.prototype.transaction = originalTransaction; IDBObjectStore.prototype.clear = originalClear; IDBFactory.prototype.open = originalOpen; URL.createObjectURL = originalUrl; saveFileToDrive = originalSave;
@@ -198,7 +206,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
         if (scenario !== 'safe-toggle') check('failed safe transition preserves exact metadata bytes', observed.contents.wft_storage_meta === observed.originals.wft_storage_meta);
     }
     check('no uncaught browser errors', errors.length === 0);
-    cases.push({ scenario, passed: checks.every(c => c.passed), assertions: checks, observed, alerts, errors, requests, downloads: downloads.map(d => d.suggestedFilename()) });
+    cases.push({ scenario, passed: checks.every(c => c.passed), assertions: checks, observed, alerts: alerts.slice(), errors: errors.slice(), requests: requests.slice(), downloads: downloads.map(d => d.suggestedFilename()) });
     await page.close();
 }
 
