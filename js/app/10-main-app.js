@@ -109,7 +109,8 @@ function populateStudentDropdown() {
 function updateSelectedStudent() {
     var select = document.getElementById("studentSelect");
     selectedStudent = select ? select.value : "";
-    localStorage.setItem("wft_selectedStudent", selectedStudent);
+    try { localStorage.setItem("wft_selectedStudent", selectedStudent); }
+    catch (e) { wftDebugWarn("Could not remember the selected student:", e); }
     syncUiState();
     try { updateSyncPortfolioButtonState(); } catch (e) {}
 }
