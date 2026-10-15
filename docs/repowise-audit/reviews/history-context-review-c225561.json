@@ -1,0 +1,1155 @@
+{
+  "review_id": "history-context-review",
+  "created_at": "2026-10-16T05:19:52.095233+07:00",
+  "source_commit": "c225561882e845a905a32c32d6321e3b815b14e9",
+  "scope": "43 git-only signals; function_hotspot excluded because it also consumes live complexity/blame.",
+  "method": "Read installed detector definitions, replay each against fresh CLI-equivalent GitIndexer metadata, verify recent file commits exist in Git. This rebuilds metadata in memory without changing the store.",
+  "source_edits": [],
+  "tests": "This read-only history review changes no application/test source and runs no browser tests. Refer to repair/publication validation for the source at this commit.",
+  "findings": [
+    {
+      "record_id": "code_health:finding_8900a9c008833aefb538",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/00-storage-sync-patches.js: 66 indexed commits/90d and entropy rank 98.9th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 31.2039,
+        "change_entropy_pct": 98.9,
+        "commit_count_90d": 66
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 31.137669,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "419cc9a2fc2c7e55002eba799e51b0d7dfbaaa9e|2026-10-15T18:47:34+07:00|Reject comma-decimal handwriting score denominators"
+      ],
+      "individual_structural_findings_still_queued": 172
+    },
+    {
+      "record_id": "code_health:finding_b820d2d24da772091e34",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "co_change_scatter",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/00-storage-sync-patches.js: 40 distinct co-change partners (25 retained in the capped partner list), rank 97.7th percentile across 66 commits. Historical co-editing does not establish current runtime coupling. Keep cross-file callers/tests in repair scope; do not introduce modules or rewrite history solely to change this metric.",
+      "verified_detector_details": {
+        "scatter": 40,
+        "recorded_partners": 25,
+        "co_change_mass": 48.0181,
+        "co_change_scatter_pct": 97.7,
+        "commit_count_90d": 66
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\co_change_scatter.py",
+      "detector_sha256": "8e093d9afdbffb1b1550d9094ebb1d492312b6478e0f81dcec2f7f8e93660d30",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "419cc9a2fc2c7e55002eba799e51b0d7dfbaaa9e|2026-10-15T18:47:34+07:00|Reject comma-decimal handwriting score denominators"
+      ],
+      "individual_structural_findings_still_queued": 172
+    },
+    {
+      "record_id": "code_health:finding_bdb66e3d75f9a2c6eef0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/00-storage-sync-patches.js: 6 classified fixes in the indexed 180-day window, rank 98.9th percentile. These are past fixes, not 6 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 6,
+        "prior_defect_pct": 98.9,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "419cc9a2fc2c7e55002eba799e51b0d7dfbaaa9e|2026-10-15T18:47:34+07:00|Reject comma-decimal handwriting score denominators"
+      ],
+      "individual_structural_findings_still_queued": 172
+    },
+    {
+      "record_id": "code_health:finding_f505e8ce9087ba531b4a",
+      "file": "js/app/10-main-app.js",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/10-main-app.js: 54 indexed commits/90d and entropy rank 97.7th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 26.3028,
+        "change_entropy_pct": 97.7,
+        "commit_count_90d": 54
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 25.556814,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "1f723b286ae5d6b548daa09a7a81a6d299161950|2026-10-15T20:42:17+07:00|Flatten OpenRouter fallback retry nesting"
+      ],
+      "individual_structural_findings_still_queued": 178
+    },
+    {
+      "record_id": "code_health:finding_2ddd6e095fd9837509d1",
+      "file": "js/app/10-main-app.js",
+      "marker": "co_change_scatter",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/10-main-app.js: 28 distinct co-change partners (25 retained in the capped partner list), rank 95.3th percentile across 54 commits. Historical co-editing does not establish current runtime coupling. Keep cross-file callers/tests in repair scope; do not introduce modules or rewrite history solely to change this metric.",
+      "verified_detector_details": {
+        "scatter": 28,
+        "recorded_partners": 25,
+        "co_change_mass": 39.2465,
+        "co_change_scatter_pct": 95.3,
+        "commit_count_90d": 54
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\co_change_scatter.py",
+      "detector_sha256": "8e093d9afdbffb1b1550d9094ebb1d492312b6478e0f81dcec2f7f8e93660d30",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "1f723b286ae5d6b548daa09a7a81a6d299161950|2026-10-15T20:42:17+07:00|Flatten OpenRouter fallback retry nesting"
+      ],
+      "individual_structural_findings_still_queued": 178
+    },
+    {
+      "record_id": "code_health:finding_da2a6cf442a22fa0e95f",
+      "file": "js/app/10-main-app.js",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/10-main-app.js: 6 classified fixes in the indexed 180-day window, rank 98.9th percentile. These are past fixes, not 6 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 6,
+        "prior_defect_pct": 98.9,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "1f723b286ae5d6b548daa09a7a81a6d299161950|2026-10-15T20:42:17+07:00|Flatten OpenRouter fallback retry nesting"
+      ],
+      "individual_structural_findings_still_queued": 178
+    },
+    {
+      "record_id": "code_health:finding_e0e2c68f45d9cbfb0853",
+      "file": "js/app/portfolio-export.js",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/portfolio-export.js: indexed additions 1237 + deletions 145 over 941 NLOC give 1.47x churn across 11 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 1.47,
+        "churn_percentile": 93.3,
+        "lines_added_90d": 1237,
+        "lines_deleted_90d": 145,
+        "commit_count_90d": 11,
+        "nloc": 941
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "4505e0230efcc84115bd03e0c2ef617abdcf72cc|2026-10-15T18:40:21+07:00|Export formula-like CSV fields as spreadsheet text",
+        "a02ed09e6104b4b3a519c28bf91c666e5ede4dc3|2026-10-15T10:51:38+07:00|Simplify portfolio photo enumeration",
+        "3a63f6652f9ead83389baa12eb3a61b06ff6579d|2026-10-15T08:37:37+07:00|Refactor portfolio session header rendering",
+        "0de581572b4466941dc31737abdac0cebfac6229|2026-10-15T07:00:30+07:00|Refactor portfolio header score calculations",
+        "bfc5560b19550dd3c98199608f598e6de6936ede|2026-10-15T04:56:32+07:00|Extract per-image export preparation"
+      ],
+      "individual_structural_findings_still_queued": 8
+    },
+    {
+      "record_id": "code_health:finding_52dd694654409f08a520",
+      "file": "js/app/storage-recovery.js",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "js/app/storage-recovery.js: 5 indexed commits/90d and entropy rank 82.8th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.552,
+        "change_entropy_pct": 82.8,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 1.845827,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "14025032df09b23b84e400c9ca12561902714942|2026-10-16T02:12:53+07:00|Remove unused browser helpers and record verified RepoWise outcomes (#182)",
+        "14e7102f3c4c65ba02bd733abe4b372ba2d27c7b|2026-10-15T13:15:15+07:00|Prevent damaged settings from leaking credentials in backups",
+        "d918e87d3bfd2f37e539a3460b0a7fa33a9fab36|2026-10-15T11:24:36+07:00|Include retained sign-in drafts in emergency backups",
+        "b3340db960bf0a6fab2b5964e893cdc36eac30f5|2026-10-15T09:26:48+07:00|Simplify required storage settings guard",
+        "9f22453928e71b3af144709f392cd4df7f26d7b1|2026-10-13T01:50:28+07:00|Organize browser scripts by responsibility"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_da551e170029b179c512",
+      "file": "scripts/check-test-runner.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "scripts/check-test-runner.cjs: 5 indexed commits/90d and entropy rank 94.3th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.3078,
+        "change_entropy_pct": 94.3,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.294983,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "8df57f894735090d5bc7bbdb0a2018440033d193|2026-10-15T18:09:53+07:00|Reject empty and failed case-report payloads",
+        "58403b410cada2b4297f3d415d9246b1171055dc|2026-10-15T11:03:21+07:00|Reject explicit pass false in case reports",
+        "899c26a42242f10b2e7c19f5babd6226770bf8de|2026-10-15T11:03:21+07:00|Declare test case report requirements explicitly",
+        "22a967f6009d49cc8ff11600b5221b84e38d452b|2026-10-13T02:16:35+07:00|Handle Windows paths in optional coverage preload",
+        "d479512cce904b157247d02aa93fb24387dd2fb7|2026-10-13T02:13:50+07:00|Add native failure branch checks and a dependable local test runner"
+      ],
+      "individual_structural_findings_still_queued": 2
+    },
+    {
+      "record_id": "code_health:finding_c488fbf48a69c6dcaa4b",
+      "file": "scripts/check-test-runner.cjs",
+      "marker": "co_change_scatter",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "scripts/check-test-runner.cjs: 2 distinct co-change partners (2 retained in the capped partner list), rank 90.7th percentile across 5 commits. Historical co-editing does not establish current runtime coupling. Keep cross-file callers/tests in repair scope; do not introduce modules or rewrite history solely to change this metric.",
+      "verified_detector_details": {
+        "scatter": 2,
+        "recorded_partners": 2,
+        "co_change_mass": 3.4662,
+        "co_change_scatter_pct": 90.7,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\co_change_scatter.py",
+      "detector_sha256": "8e093d9afdbffb1b1550d9094ebb1d492312b6478e0f81dcec2f7f8e93660d30",
+      "recent_git_commits": [
+        "8df57f894735090d5bc7bbdb0a2018440033d193|2026-10-15T18:09:53+07:00|Reject empty and failed case-report payloads",
+        "58403b410cada2b4297f3d415d9246b1171055dc|2026-10-15T11:03:21+07:00|Reject explicit pass false in case reports",
+        "899c26a42242f10b2e7c19f5babd6226770bf8de|2026-10-15T11:03:21+07:00|Declare test case report requirements explicitly",
+        "22a967f6009d49cc8ff11600b5221b84e38d452b|2026-10-13T02:16:35+07:00|Handle Windows paths in optional coverage preload",
+        "d479512cce904b157247d02aa93fb24387dd2fb7|2026-10-13T02:13:50+07:00|Add native failure branch checks and a dependable local test runner"
+      ],
+      "individual_structural_findings_still_queued": 2
+    },
+    {
+      "record_id": "code_health:finding_0f637d1b3003eea4a93c",
+      "file": "scripts/run-tests.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "scripts/run-tests.cjs: 6 indexed commits/90d and entropy rank 96.6th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.7381,
+        "change_entropy_pct": 96.6,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.725333,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "8df57f894735090d5bc7bbdb0a2018440033d193|2026-10-15T18:09:53+07:00|Reject empty and failed case-report payloads",
+        "58403b410cada2b4297f3d415d9246b1171055dc|2026-10-15T11:03:21+07:00|Reject explicit pass false in case reports",
+        "899c26a42242f10b2e7c19f5babd6226770bf8de|2026-10-15T11:03:21+07:00|Declare test case report requirements explicitly",
+        "22a967f6009d49cc8ff11600b5221b84e38d452b|2026-10-13T02:16:35+07:00|Handle Windows paths in optional coverage preload"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_b2267d45e0c328b33cd3",
+      "file": "scripts/run-tests.cjs",
+      "marker": "co_change_scatter",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "scripts/run-tests.cjs: 2 distinct co-change partners (2 retained in the capped partner list), rank 93.0th percentile across 6 commits. Historical co-editing does not establish current runtime coupling. Keep cross-file callers/tests in repair scope; do not introduce modules or rewrite history solely to change this metric.",
+      "verified_detector_details": {
+        "scatter": 2,
+        "recorded_partners": 2,
+        "co_change_mass": 3.4662,
+        "co_change_scatter_pct": 93.0,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\co_change_scatter.py",
+      "detector_sha256": "8e093d9afdbffb1b1550d9094ebb1d492312b6478e0f81dcec2f7f8e93660d30",
+      "recent_git_commits": [
+        "fbabee1da7ab1a4cf49d5ffb96e42a36446470e7|2026-10-16T00:28:44+07:00|Simplify analysis, portfolio rendering and sync helpers",
+        "8df57f894735090d5bc7bbdb0a2018440033d193|2026-10-15T18:09:53+07:00|Reject empty and failed case-report payloads",
+        "58403b410cada2b4297f3d415d9246b1171055dc|2026-10-15T11:03:21+07:00|Reject explicit pass false in case reports",
+        "899c26a42242f10b2e7c19f5babd6226770bf8de|2026-10-15T11:03:21+07:00|Declare test case report requirements explicitly",
+        "22a967f6009d49cc8ff11600b5221b84e38d452b|2026-10-13T02:16:35+07:00|Handle Windows paths in optional coverage preload"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_85a5756fff7bda0b1490",
+      "file": "tests/analysis-identity.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/analysis-identity.browser.cjs: indexed additions 586 + deletions 244 over 330 NLOC give 2.52x churn across 5 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 2.52,
+        "churn_percentile": 92.1,
+        "lines_added_90d": 586,
+        "lines_deleted_90d": 244,
+        "commit_count_90d": 5,
+        "nloc": 330
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "aacce349ab1c45c24b6b1920f58e9838f2001845|2026-10-15T11:26:28+07:00|Restore cached OCR completion after a stopped extraction",
+        "bd97a04f669d61eb4ea2ede515cd53d84b3aab7b|2026-10-14T11:53:52+07:00|Refactor analysis identity browser test responsibilities",
+        "d479512cce904b157247d02aa93fb24387dd2fb7|2026-10-13T02:13:50+07:00|Add native failure branch checks and a dependable local test runner",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "ef41631f2a76915cb26d3797bf35792c4d3cf01c|2026-10-11T22:02:14+07:00|fix: bind writing analyses to their original inputs"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_04486662f265863bfee5",
+      "file": "tests/analysis-identity.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/analysis-identity.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "aacce349ab1c45c24b6b1920f58e9838f2001845|2026-10-15T11:26:28+07:00|Restore cached OCR completion after a stopped extraction",
+        "bd97a04f669d61eb4ea2ede515cd53d84b3aab7b|2026-10-14T11:53:52+07:00|Refactor analysis identity browser test responsibilities",
+        "d479512cce904b157247d02aa93fb24387dd2fb7|2026-10-13T02:13:50+07:00|Add native failure branch checks and a dependable local test runner",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "ef41631f2a76915cb26d3797bf35792c4d3cf01c|2026-10-11T22:02:14+07:00|fix: bind writing analyses to their original inputs"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_42bfe284bb0b87e01389",
+      "file": "tests/archive-integrity.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/archive-integrity.browser.cjs: indexed additions 532 + deletions 229 over 285 NLOC give 2.67x churn across 8 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 2.67,
+        "churn_percentile": 88.8,
+        "lines_added_90d": 532,
+        "lines_deleted_90d": 229,
+        "commit_count_90d": 8,
+        "nloc": 285
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "cbfa8a652756bac35159a514a2f9644e047f43fe|2026-10-13T08:23:31+07:00|Refactor archive integrity driver into ordered scenarios",
+        "ddc041320601d767900136b21f41339d95afedce|2026-10-12T02:43:49+07:00|Verify original student labels beside Windows-safe archive paths",
+        "e7fc69c500b1e962110cbcaf26b5eb9d2fa6b809|2026-10-12T02:42:53+07:00|Reserve Windows-equivalent archive names without collisions",
+        "fb762a218e466d1bf85e5f3c16f2a66d6449c60a|2026-10-12T02:40:22+07:00|Keep case-variant student folders distinct on Windows",
+        "4650dc10571367e4f3051aee33db5d94d5914332|2026-10-12T02:36:21+07:00|Exercise native crop focus failure after an archive clear"
+      ],
+      "individual_structural_findings_still_queued": 4
+    },
+    {
+      "record_id": "code_health:finding_615d19856374d52a4a9b",
+      "file": "tests/archive-integrity.browser.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/archive-integrity.browser.cjs: 8 indexed commits/90d and entropy rank 95.4th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.4364,
+        "change_entropy_pct": 95.4,
+        "commit_count_90d": 8
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.43642,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "cbfa8a652756bac35159a514a2f9644e047f43fe|2026-10-13T08:23:31+07:00|Refactor archive integrity driver into ordered scenarios",
+        "ddc041320601d767900136b21f41339d95afedce|2026-10-12T02:43:49+07:00|Verify original student labels beside Windows-safe archive paths",
+        "e7fc69c500b1e962110cbcaf26b5eb9d2fa6b809|2026-10-12T02:42:53+07:00|Reserve Windows-equivalent archive names without collisions",
+        "fb762a218e466d1bf85e5f3c16f2a66d6449c60a|2026-10-12T02:40:22+07:00|Keep case-variant student folders distinct on Windows",
+        "4650dc10571367e4f3051aee33db5d94d5914332|2026-10-12T02:36:21+07:00|Exercise native crop focus failure after an archive clear"
+      ],
+      "individual_structural_findings_still_queued": 4
+    },
+    {
+      "record_id": "code_health:finding_4fac48e803a52200e11a",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/auth-integrity.browser.cjs: indexed additions 723 + deletions 251 over 470 NLOC give 2.07x churn across 5 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 2.07,
+        "churn_percentile": 96.6,
+        "lines_added_90d": 723,
+        "lines_deleted_90d": 251,
+        "commit_count_90d": 5,
+        "nloc": 470
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "bffdc3baea2bb5f5ec9473a98b3662858c810cfb|2026-10-15T11:23:01+07:00|Prevent OAuth redirects from discarding tab-only work",
+        "6293bf02110c29021bf530b7985d2db6811c6b1a|2026-10-14T08:47:58+07:00|refactor: group auth integrity browser scenarios",
+        "b8d13b839e665a9f8a288cbad8a7d2c137645329|2026-10-12T09:49:39+07:00|Reject expirations outside the supported date range",
+        "e2625b3776e61a8a379d5bde2d183bb1e4b9db76|2026-10-12T09:45:20+07:00|Preserve OAuth drafts and enforce local auth integrity"
+      ],
+      "individual_structural_findings_still_queued": 11
+    },
+    {
+      "record_id": "code_health:finding_07852add7f2c9cf7efbc",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/auth-integrity.browser.cjs: 5 indexed commits/90d and entropy rank 85.1th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.6796,
+        "change_entropy_pct": 85.1,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.004536,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "9ec840eb3aabf028d34bde60868a6021c9db633d|2026-10-16T03:46:11+07:00|Preserve student metadata on read failures and report OAuth cleanup failures (#183)",
+        "bffdc3baea2bb5f5ec9473a98b3662858c810cfb|2026-10-15T11:23:01+07:00|Prevent OAuth redirects from discarding tab-only work",
+        "6293bf02110c29021bf530b7985d2db6811c6b1a|2026-10-14T08:47:58+07:00|refactor: group auth integrity browser scenarios",
+        "b8d13b839e665a9f8a288cbad8a7d2c137645329|2026-10-12T09:49:39+07:00|Reject expirations outside the supported date range",
+        "e2625b3776e61a8a379d5bde2d183bb1e4b9db76|2026-10-12T09:45:20+07:00|Preserve OAuth drafts and enforce local auth integrity"
+      ],
+      "individual_structural_findings_still_queued": 11
+    },
+    {
+      "record_id": "code_health:finding_f9f2c6b5c37b83e8d423",
+      "file": "tests/class-deletion.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/class-deletion.cjs: 6 indexed commits/90d and entropy rank 87.4th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.747,
+        "change_entropy_pct": 87.4,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 1.87543,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "c79be3384c4cfe7f19c4cbdfb01dcc600b519ab7|2026-10-15T01:37:16+07:00|test: split class deletion success assertions",
+        "9f22453928e71b3af144709f392cd4df7f26d7b1|2026-10-13T01:50:28+07:00|Organize browser scripts by responsibility",
+        "e45145e988f7426328630ad62024459a5c407cdd|2026-10-12T08:58:22+07:00|Preserve durable preferences, metadata and credential recovery",
+        "0266c1af9a989790f575aa8432df44a96cece75a|2026-10-12T02:05:12+07:00|Protect required storage and align deletion chronology",
+        "253d58861b6f04a7d7ee5b6a156ae2dd56d300f6|2026-10-11T22:45:37+07:00|Preserve student changes when deletion storage fails"
+      ],
+      "individual_structural_findings_still_queued": 1
+    },
+    {
+      "record_id": "code_health:finding_255499b1e0ee14708a58",
+      "file": "tests/deletion-durability.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/deletion-durability.browser.cjs: indexed additions 402 + deletions 175 over 212 NLOC give 2.72x churn across 7 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 2.72,
+        "churn_percentile": 87.6,
+        "lines_added_90d": 402,
+        "lines_deleted_90d": 175,
+        "commit_count_90d": 7,
+        "nloc": 212
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "64c04af60adb1bcbed67c63ab0fc07d5e60f048c|2026-10-15T02:25:50+07:00|Separate deletion durability identity fixture seeding",
+        "582a8198da305318442f814c2c89beb9431511e8|2026-10-15T01:28:31+07:00|Flatten deletion durability assertion nesting",
+        "788ed104805c1a8af4472566375d1f0ace3e2926|2026-10-15T00:42:23+07:00|Name the local deletion durability action dispatcher",
+        "8304d7000324320448d33935f1c67f662b37e254|2026-10-14T12:29:17+07:00|Refactor deletion durability browser scenarios and assertions",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks"
+      ],
+      "individual_structural_findings_still_queued": 2
+    },
+    {
+      "record_id": "code_health:finding_5e96838eb294be21f089",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/detailed-parser.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "9d87d47750fdcef92751bc2e6378013cae3ae92d|2026-10-14T11:49:40+07:00|Refactor detailed parser browser test case families",
+        "20430f869b3c1f49223fba680d2d65a260e2bb93|2026-10-12T12:45:09+07:00|Fix detailed assessment category and score boundaries"
+      ],
+      "individual_structural_findings_still_queued": 5
+    },
+    {
+      "record_id": "code_health:finding_5b6315b17f8803c7e046",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/media-ownership.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "c5ea3e6aa0f4e4b300d439c043f768522ed706f7|2026-10-15T05:04:15+07:00|Split media ownership assertions and observations",
+        "a6bd30f2ab4de5997c265b36a9b19da18af6c570|2026-10-15T03:52:26+07:00|Flatten media ownership browser case driver",
+        "9c5dca4d8ee10ef18ba2f5bcf9a3aab831557897|2026-10-13T15:54:41+07:00|Refactor media ownership browser test scenarios",
+        "c541e940b029ff77508f77a919497cb3b8114caa|2026-10-12T00:40:30+07:00|Fix delayed media ownership and cropped photo persistence"
+      ],
+      "individual_structural_findings_still_queued": 10
+    },
+    {
+      "record_id": "code_health:finding_d0678036801b08d91445",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/notebook-guidance-repair.browser.cjs: indexed additions 405 + deletions 121 over 279 NLOC give 1.89x churn across 5 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 1.89,
+        "churn_percentile": 84.3,
+        "lines_added_90d": 405,
+        "lines_deleted_90d": 121,
+        "commit_count_90d": 5,
+        "nloc": 279
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "80e32508082cb859a90e1fad7daf890ed6cd39ac|2026-10-15T13:18:41+07:00|Ground notebook quotes and avoid unsupported plural examples",
+        "100600b87356deaa9d1d1a2febcad6db372476a1|2026-10-15T11:05:47+07:00|Reuse notebook category order and revision validation",
+        "41136a211925548d52df7ffbbcd093cf55476365|2026-10-14T18:25:21+07:00|Refactor notebook guidance browser test scenarios",
+        "cb04dd52f998bbd48e35f956d6038d4855eacf4d|2026-10-12T12:16:19+07:00|Fix notebook convention labels, paragraph examples, and separate actions"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_782b98d52eb223e30e23",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/notebook-guidance-repair.browser.cjs: 5 indexed commits/90d and entropy rank 83.9th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.6716,
+        "change_entropy_pct": 83.9,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 1.91669,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "80e32508082cb859a90e1fad7daf890ed6cd39ac|2026-10-15T13:18:41+07:00|Ground notebook quotes and avoid unsupported plural examples",
+        "100600b87356deaa9d1d1a2febcad6db372476a1|2026-10-15T11:05:47+07:00|Reuse notebook category order and revision validation",
+        "41136a211925548d52df7ffbbcd093cf55476365|2026-10-14T18:25:21+07:00|Refactor notebook guidance browser test scenarios",
+        "cb04dd52f998bbd48e35f956d6038d4855eacf4d|2026-10-12T12:16:19+07:00|Fix notebook convention labels, paragraph examples, and separate actions"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_a412eb95ad4f534d502e",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/notebook-guidance-repair.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "c225561882e845a905a32c32d6321e3b815b14e9|2026-10-16T05:16:05+07:00|Preserve settings and make notebook controls and printing consistent (#184)",
+        "80e32508082cb859a90e1fad7daf890ed6cd39ac|2026-10-15T13:18:41+07:00|Ground notebook quotes and avoid unsupported plural examples",
+        "100600b87356deaa9d1d1a2febcad6db372476a1|2026-10-15T11:05:47+07:00|Reuse notebook category order and revision validation",
+        "41136a211925548d52df7ffbbcd093cf55476365|2026-10-14T18:25:21+07:00|Refactor notebook guidance browser test scenarios",
+        "cb04dd52f998bbd48e35f956d6038d4855eacf4d|2026-10-12T12:16:19+07:00|Fix notebook convention labels, paragraph examples, and separate actions"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_243db0fbfb8a96a7c724",
+      "file": "tests/notebook-guide.browser.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/notebook-guide.browser.cjs: 6 indexed commits/90d and entropy rank 90.8th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.1831,
+        "change_entropy_pct": 90.8,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.193936,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "6d6dcc6e5f6e62c2ce2d2ca69a5cd25cf16d76c2|2026-10-15T10:55:35+07:00|Refactor notebook guide browser checks into named stages",
+        "ef41631f2a76915cb26d3797bf35792c4d3cf01c|2026-10-11T22:02:14+07:00|fix: bind writing analyses to their original inputs",
+        "458c2d231d62af7a48a511fd767d036ff0933342|2026-09-15T14:22:16+07:00|Use a consistent slate, teal and amber notebook print palette",
+        "5afb38231d342dffc407d599ab421b51ebb7ed3e|2026-09-15T12:48:05+07:00|Fix notebook summaries printing without color (#38)",
+        "c32465488365c7454b11cfd47fe20ff71a3e4ea1|2026-09-14T14:04:08+07:00|Default notebook printing to A4 with larger text"
+      ],
+      "individual_structural_findings_still_queued": 1
+    },
+    {
+      "record_id": "code_health:finding_86491e87c4892f377fed",
+      "file": "tests/notebook-guide.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/notebook-guide.browser.cjs: 2 classified fixes in the indexed 180-day window, rank 97.7th percentile. These are past fixes, not 2 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 2,
+        "prior_defect_pct": 97.7,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "6d6dcc6e5f6e62c2ce2d2ca69a5cd25cf16d76c2|2026-10-15T10:55:35+07:00|Refactor notebook guide browser checks into named stages",
+        "ef41631f2a76915cb26d3797bf35792c4d3cf01c|2026-10-11T22:02:14+07:00|fix: bind writing analyses to their original inputs",
+        "458c2d231d62af7a48a511fd767d036ff0933342|2026-09-15T14:22:16+07:00|Use a consistent slate, teal and amber notebook print palette",
+        "5afb38231d342dffc407d599ab421b51ebb7ed3e|2026-09-15T12:48:05+07:00|Fix notebook summaries printing without color (#38)",
+        "c32465488365c7454b11cfd47fe20ff71a3e4ea1|2026-09-14T14:04:08+07:00|Default notebook printing to A4 with larger text"
+      ],
+      "individual_structural_findings_still_queued": 1
+    },
+    {
+      "record_id": "code_health:finding_e43a7acacea5728367d2",
+      "file": "tests/openrouter-request.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/openrouter-request.cjs: 3 indexed commits/90d and entropy rank 81.6th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.5325,
+        "change_entropy_pct": 81.6,
+        "commit_count_90d": 3
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 1.504814,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "1f723b286ae5d6b548daa09a7a81a6d299161950|2026-10-15T20:42:17+07:00|Flatten OpenRouter fallback retry nesting",
+        "30daf52cf6660d0e873125372895763741b49012|2026-10-12T14:16:42+07:00|Reject unavailable API credentials before provider retries",
+        "0a7cf8f2c196b1dcd0e74acf474fa99df5b799f2|2026-10-11T20:27:27+07:00|Keep AI request timeout active until the response body completes"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_a1444930a28a90e830ee",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-index.browser.cjs: indexed additions 652 + deletions 279 over 371 NLOC give 2.51x churn across 5 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 2.51,
+        "churn_percentile": 94.4,
+        "lines_added_90d": 652,
+        "lines_deleted_90d": 279,
+        "commit_count_90d": 5,
+        "nloc": 371
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "6fc2489798d88a69783b73521e1a9077cf74ed9c|2026-10-15T11:08:18+07:00|Separate derived portfolio session summaries from index orchestration",
+        "86b33fc43510a4115d35d02ac4e4c01beec19c47|2026-10-14T06:23:29+07:00|Refactor portfolio index browser scenario groups",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "b8a0f665094c944308e128155ac74fc8d8cda986|2026-10-12T13:22:52+07:00|Rebuild index after persisting student identities",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements"
+      ],
+      "individual_structural_findings_still_queued": 8
+    },
+    {
+      "record_id": "code_health:finding_f6620a424e2963dccb69",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-index.browser.cjs: 5 indexed commits/90d and entropy rank 86.2th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.6982,
+        "change_entropy_pct": 86.2,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 1.735679,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "6fc2489798d88a69783b73521e1a9077cf74ed9c|2026-10-15T11:08:18+07:00|Separate derived portfolio session summaries from index orchestration",
+        "86b33fc43510a4115d35d02ac4e4c01beec19c47|2026-10-14T06:23:29+07:00|Refactor portfolio index browser scenario groups",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "b8a0f665094c944308e128155ac74fc8d8cda986|2026-10-12T13:22:52+07:00|Rebuild index after persisting student identities",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements"
+      ],
+      "individual_structural_findings_still_queued": 8
+    },
+    {
+      "record_id": "code_health:finding_d76a47a3866d90b8049c",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-index.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "6fc2489798d88a69783b73521e1a9077cf74ed9c|2026-10-15T11:08:18+07:00|Separate derived portfolio session summaries from index orchestration",
+        "86b33fc43510a4115d35d02ac4e4c01beec19c47|2026-10-14T06:23:29+07:00|Refactor portfolio index browser scenario groups",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "b8a0f665094c944308e128155ac74fc8d8cda986|2026-10-12T13:22:52+07:00|Rebuild index after persisting student identities",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements"
+      ],
+      "individual_structural_findings_still_queued": 8
+    },
+    {
+      "record_id": "code_health:finding_e6aa12e550a273e0c1d0",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-replacement.cjs: 6 indexed commits/90d and entropy rank 93.1th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.2978,
+        "change_entropy_pct": 93.1,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.470937,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "129721ed02661f1c2b1c1cc6b6491d6d8bea807f|2026-10-15T13:22:20+07:00|Preserve committed portfolio writing after sync UI failures",
+        "9f22453928e71b3af144709f392cd4df7f26d7b1|2026-10-13T01:50:28+07:00|Organize browser scripts by responsibility",
+        "b630911a210483a52d1f7a6d4dc064eacae38fca|2026-10-12T09:22:50+07:00|fix: retain newest prior sessions when saving writing",
+        "0266c1af9a989790f575aa8432df44a96cece75a|2026-10-12T02:05:12+07:00|Protect required storage and align deletion chronology",
+        "253d58861b6f04a7d7ee5b6a156ae2dd56d300f6|2026-10-11T22:45:37+07:00|Preserve student changes when deletion storage fails"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_e3cf5bad6653d6e04b9c",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-replacement.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "129721ed02661f1c2b1c1cc6b6491d6d8bea807f|2026-10-15T13:22:20+07:00|Preserve committed portfolio writing after sync UI failures",
+        "9f22453928e71b3af144709f392cd4df7f26d7b1|2026-10-13T01:50:28+07:00|Organize browser scripts by responsibility",
+        "b630911a210483a52d1f7a6d4dc064eacae38fca|2026-10-12T09:22:50+07:00|fix: retain newest prior sessions when saving writing",
+        "0266c1af9a989790f575aa8432df44a96cece75a|2026-10-12T02:05:12+07:00|Protect required storage and align deletion chronology",
+        "253d58861b6f04a7d7ee5b6a156ae2dd56d300f6|2026-10-11T22:45:37+07:00|Preserve student changes when deletion storage fails"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_9a857800e4e4a5efaaf4",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-sync.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "1ec3a3bc239b209c9d891ce07e1d225a83f32c9a|2026-10-15T00:33:19+07:00|test: separate portfolio sync fixture preparation",
+        "ff5da51a059fef7250d80ecc51c85bf2e19f427f|2026-10-14T17:00:03+07:00|Refactor portfolio sync browser test groups",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements",
+        "9b8254f5a872423f15de21463eeac9935121509e|2026-10-11T22:14:57+07:00|Preserve cloud-only writing during pending portfolio sync",
+        "0795c6dbf132dc5f604b9fb76093812193dbc5b1|2026-10-11T20:15:10+07:00|Preserve newer portfolio saves during in-flight Drive sync"
+      ],
+      "individual_structural_findings_still_queued": 3
+    },
+    {
+      "record_id": "code_health:finding_e3086671fe04a7875905",
+      "file": "tests/portfolio-sync.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-sync.cjs: 6 indexed commits/90d and entropy rank 89.7th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.1767,
+        "change_entropy_pct": 89.7,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.282199,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "6f2dd8bed43f86b8a7de5c0c789004b2fd0329e6|2026-10-14T19:23:57+07:00|Extract synchronous portfolio sync conflict fixture",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements",
+        "0266c1af9a989790f575aa8432df44a96cece75a|2026-10-12T02:05:12+07:00|Protect required storage and align deletion chronology",
+        "882e045533a611cca1f83679f6d11d8e3faf894a|2026-10-11T23:10:14+07:00|Preserve unreadable portfolio storage across save and sync",
+        "9b8254f5a872423f15de21463eeac9935121509e|2026-10-11T22:14:57+07:00|Preserve cloud-only writing during pending portfolio sync"
+      ],
+      "individual_structural_findings_still_queued": 1
+    },
+    {
+      "record_id": "code_health:finding_215719be8ce517d54698",
+      "file": "tests/portfolio-sync.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/portfolio-sync.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "6f2dd8bed43f86b8a7de5c0c789004b2fd0329e6|2026-10-14T19:23:57+07:00|Extract synchronous portfolio sync conflict fixture",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements",
+        "0266c1af9a989790f575aa8432df44a96cece75a|2026-10-12T02:05:12+07:00|Protect required storage and align deletion chronology",
+        "882e045533a611cca1f83679f6d11d8e3faf894a|2026-10-11T23:10:14+07:00|Preserve unreadable portfolio storage across save and sync",
+        "9b8254f5a872423f15de21463eeac9935121509e|2026-10-11T22:14:57+07:00|Preserve cloud-only writing during pending portfolio sync"
+      ],
+      "individual_structural_findings_still_queued": 1
+    },
+    {
+      "record_id": "code_health:finding_41d0abbe064ca79a7dcc",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "churn_risk",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/recovery-cache.browser.cjs: indexed additions 415 + deletions 179 over 228 NLOC give 2.61x churn across 5 commits. A cosmetic rewrite would raise this risk. Preserve the working implementation/test cases and make only justified focused changes; this historical window cannot be fixed by moving lines.",
+      "verified_detector_details": {
+        "relative_churn": 2.61,
+        "churn_percentile": 83.1,
+        "lines_added_90d": 415,
+        "lines_deleted_90d": 179,
+        "commit_count_90d": 5,
+        "nloc": 228
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\churn_risk.py",
+      "detector_sha256": "1f65cd5df8565b05aaa8fe005391a71edba53159f880cf355017b8c1d9dcef5e",
+      "recent_git_commits": [
+        "14e7102f3c4c65ba02bd733abe4b372ba2d27c7b|2026-10-15T13:15:15+07:00|Prevent damaged settings from leaking credentials in backups",
+        "d918e87d3bfd2f37e539a3460b0a7fa33a9fab36|2026-10-15T11:24:36+07:00|Include retained sign-in drafts in emergency backups",
+        "1476f5c92434eda4081852044a3df49b67f09a8a|2026-10-15T09:55:00+07:00|test: wait for recovery backup completion",
+        "170715b4a80cf2a271e0b9e4833e2c9897def86f|2026-10-13T16:39:43+07:00|Refactor recovery cache browser test scenarios",
+        "55f774ff8f355656adc4d0c4eff4860bb791e1cd|2026-10-12T17:56:52+07:00|Protect recovery backups and report cache clear failures truthfully"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_92d6531aeae640c31cf2",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/recovery-cache.browser.cjs: 5 indexed commits/90d and entropy rank 80.5th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 1.5148,
+        "change_entropy_pct": 80.5,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 1.514752,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "14e7102f3c4c65ba02bd733abe4b372ba2d27c7b|2026-10-15T13:15:15+07:00|Prevent damaged settings from leaking credentials in backups",
+        "d918e87d3bfd2f37e539a3460b0a7fa33a9fab36|2026-10-15T11:24:36+07:00|Include retained sign-in drafts in emergency backups",
+        "1476f5c92434eda4081852044a3df49b67f09a8a|2026-10-15T09:55:00+07:00|test: wait for recovery backup completion",
+        "170715b4a80cf2a271e0b9e4833e2c9897def86f|2026-10-13T16:39:43+07:00|Refactor recovery cache browser test scenarios",
+        "55f774ff8f355656adc4d0c4eff4860bb791e1cd|2026-10-12T17:56:52+07:00|Protect recovery backups and report cache clear failures truthfully"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_c44eb8fdd08311d35209",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/session-retention.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "de1779e0ea6a8035acab0c2fb0fdda3c507d2069|2026-10-15T10:59:26+07:00|test: extract session retention quota checks",
+        "bd3e76e46f7170d27c40407e349c08f9601c3129|2026-10-15T05:11:07+07:00|refactor(tests): group ordinary session retention failure checks",
+        "008f15aa8053a202a7e58fc1699ad3ffaa3f5f9c|2026-10-14T04:54:41+07:00|Refactor session retention browser scenarios",
+        "b630911a210483a52d1f7a6d4dc064eacae38fca|2026-10-12T09:22:50+07:00|fix: retain newest prior sessions when saving writing"
+      ],
+      "individual_structural_findings_still_queued": 5
+    },
+    {
+      "record_id": "code_health:finding_5cab96fffb598278e69c",
+      "file": "tests/session-retention.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/session-retention.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "b630911a210483a52d1f7a6d4dc064eacae38fca|2026-10-12T09:22:50+07:00|fix: retain newest prior sessions when saving writing"
+      ],
+      "individual_structural_findings_still_queued": 0
+    },
+    {
+      "record_id": "code_health:finding_06063294410689530866",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "prior_defect",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/settings-deletions-sync.browser.cjs: 1 classified fixes in the indexed 180-day window, rank 85.2th percentile. These are past fixes, not 1 unresolved defects. Retain as a review-priority signal; verify actual current structural/behavior findings separately.",
+      "verified_detector_details": {
+        "prior_defect_count": 1,
+        "prior_defect_pct": 85.2,
+        "window_days": 180
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": null,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\prior_defect.py",
+      "detector_sha256": "0a92940f3619d172a84c6f72f5fa0c3ff7abfbb6712aa1cc1b757d9b21b5315d",
+      "recent_git_commits": [
+        "2bd669b9a85a5e8932c0c071dd619e4a9713c78f|2026-10-15T03:48:34+07:00|Flatten settings and deletion sync scenario nesting",
+        "44b5fea6c8216e027c23dd3dbca457860691a165|2026-10-14T13:03:38+07:00|Refactor settings and deletions sync browser scenarios",
+        "6bb83b6c6cd47d2d9503ec41bf7315bbc6ac4047|2026-10-12T13:13:59+07:00|Fix portfolio index scores and upload acknowledgements",
+        "cd3554386b183ea92eb03e18c8b186fe09adee54|2026-10-11T21:41:12+07:00|Preserve newer settings and deletion changes during sync"
+      ],
+      "individual_structural_findings_still_queued": 3
+    },
+    {
+      "record_id": "code_health:finding_bd2f800fbe50490cc6fb",
+      "file": "tests/storage-health.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/storage-health.cjs: 5 indexed commits/90d and entropy rank 88.5th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.0715,
+        "change_entropy_pct": 88.5,
+        "commit_count_90d": 5
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.119053,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "14e7102f3c4c65ba02bd733abe4b372ba2d27c7b|2026-10-15T13:15:15+07:00|Prevent damaged settings from leaking credentials in backups",
+        "9f22453928e71b3af144709f392cd4df7f26d7b1|2026-10-13T01:50:28+07:00|Organize browser scripts by responsibility",
+        "a20060805d00f1e2204c71881a180287b424946d|2026-10-12T19:04:59+07:00|Preserve optional storage identity and transaction outcomes",
+        "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7|2026-10-12T14:45:40+07:00|Retire unused helper copies and bundled routes while preserving live checks",
+        "4256f5b9c6f0866adf0f3e8c8181c66177ed69b0|2026-10-11T19:37:49+07:00|Preserve backup fallbacks and propagate portfolio lookup errors"
+      ],
+      "individual_structural_findings_still_queued": 4
+    },
+    {
+      "record_id": "code_health:finding_edf631be2ad1ae7ed2d9",
+      "file": "tests/student-rename.cjs",
+      "marker": "change_entropy",
+      "classification": "historical_risk_signal_retained",
+      "proposed_status": "reviewed_no_change",
+      "scanner_remains_open": true,
+      "reason": "tests/student-rename.cjs: 6 indexed commits/90d and entropy rank 92.0th percentile satisfy the stored detector. This describes dispersion of past commits, not a current branch in source. Future repairs stay focused and independently tested; moving functions now would add churn without erasing the measured history.",
+      "verified_detector_details": {
+        "change_entropy": 2.2356,
+        "change_entropy_pct": 92.0,
+        "commit_count_90d": 6
+      },
+      "metadata_basis": "fresh CLI-equivalent GitIndexer",
+      "stored_metadata_raw_value": 2.391655,
+      "detector_source": "C:\\Users\\Michael\\AppData\\Roaming\\uv\\tools\\repowise\\Lib\\site-packages\\repowise\\core\\analysis\\health\\biomarkers\\change_entropy.py",
+      "detector_sha256": "f139ee9bfc460f341eb3ec6d7364c2ba0126094b3c6975707fef77f76b56dc0e",
+      "recent_git_commits": [
+        "9f22453928e71b3af144709f392cd4df7f26d7b1|2026-10-13T01:50:28+07:00|Organize browser scripts by responsibility",
+        "e45145e988f7426328630ad62024459a5c407cdd|2026-10-12T08:58:22+07:00|Preserve durable preferences, metadata and credential recovery",
+        "0266c1af9a989790f575aa8432df44a96cece75a|2026-10-12T02:05:12+07:00|Protect required storage and align deletion chronology",
+        "b76d691d8a9710f6610c2d77e179441fdf148a40|2026-10-12T01:37:12+07:00|Preserve current writing when confirming student rename",
+        "253d58861b6f04a7d7ee5b6a156ae2dd56d300f6|2026-10-11T22:45:37+07:00|Preserve student changes when deletion storage fails"
+      ],
+      "individual_structural_findings_still_queued": 1
+    }
+  ],
+  "limits": [
+    "Scanner counts are message/window/rename/decay based, not a count of outstanding bugs.",
+    "Past commits cannot be repaired by a behavior-preserving source edit. Keep risk visible; focus future changes and test affected user flows.",
+    "No history rewriting, finding suppression, severity overrides or score changes. Structural findings remain in the separate queue."
+  ]
+}
