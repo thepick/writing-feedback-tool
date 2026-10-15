@@ -217,6 +217,54 @@
             equal(localStorage.getItem('wft_settings'), savedBytes, 'invalid apply leaves valid bytes');
         });
     };
+    const checkNullableWordTarget = async function checkNullableWordTarget() {
+        for (const spec of [
+            { initial: true, value: null, expected: true },
+            { initial: false, value: null, expected: false },
+            { initial: false, value: true, expected: true },
+            { initial: true, value: false, expected: false },
+            { initial: false, missing: true, expected: false }
+        ]) await run(`loaded word target/${spec.initial}/${spec.missing ? 'missing' : spec.value}`, () => {
+            const saved = base(); saved.useWordCountTarget = spec.initial;
+            localStorage.setItem('wft_settings', JSON.stringify(saved));
+            el('useWordCountTarget').checked = spec.initial; el('targetWordCount').disabled = !spec.initial;
+            const incoming = spec.missing ? {} : { useWordCountTarget: spec.value }, before = JSON.stringify(incoming);
+            applyLoadedSettings(incoming);
+            equal(JSON.stringify(incoming), before, 'incoming preference unchanged');
+            equal(el('useWordCountTarget').checked, spec.expected, 'null/missing preserve current checkbox; explicit booleans apply');
+            equal(isWordCountTargetEnabled(), spec.expected, 'effective policy agrees with checkbox');
+            equal(el('targetWordCount').disabled, !spec.expected, 'numeric target agrees with effective policy');
+            const stored = JSON.parse(localStorage.getItem('wft_settings'));
+            equal(stored.useWordCountTarget, spec.missing ? spec.initial : spec.value, 'stored nullable field is not coerced');
+            check(stored.unknown.keep, 'unrelated metadata retained');
+        });
+        await run('nullable loaded target required-save failure leaves form unpublished', () => {
+            const settings = localStorage.getItem('wft_settings'), roster = localStorage.getItem('wft_students'); failSettings();
+            check(threw(() => applyLoadedSettings({ useWordCountTarget: null })), 'required save rejects');
+            equal(localStorage.getItem('wft_settings'), settings, 'settings bytes kept');
+            equal(localStorage.getItem('wft_students'), roster, 'roster bytes kept');
+            check(el('useWordCountTarget').checked && !el('targetWordCount').disabled && isWordCountTargetEnabled(), 'prior form and policy retained');
+            committed();
+        });
+        for (const value of [null, true]) await run('missing target checkbox retains raw fallback/' + value, () => {
+            const checkbox = el('useWordCountTarget'), parent = checkbox.parentNode, next = checkbox.nextSibling;
+            const before = localStorage.getItem('wft_settings'); checkbox.remove();
+            try {
+                applyWftPreferenceForm({ useWordCountTarget: value });
+                equal(el('targetWordCount').disabled, !value, 'missing checkbox retains original settings fallback');
+                equal(localStorage.getItem('wft_settings'), before, 'form application does not persist');
+            } finally { parent.insertBefore(checkbox, next); }
+        });
+        await run('missing numeric target remains optional', () => {
+            const target = el('targetWordCount'), parent = target.parentNode, next = target.nextSibling;
+            const before = localStorage.getItem('wft_settings'); target.remove();
+            try {
+                applyWftPreferenceForm({ useWordCountTarget: null });
+                check(el('useWordCountTarget').checked && isWordCountTargetEnabled(), 'nullable checkbox contract retained');
+                equal(localStorage.getItem('wft_settings'), before, 'form application does not persist');
+            } finally { parent.insertBefore(target, next); }
+        });
+    };
     const cloudSetup = function cloudSetup() {
         ensureDriveFolderPromise = async () => 'synthetic-folder'; ensureDriveFolder = callback => callback('synthetic-folder');
         findWftFilesByNamePromise = async name => name === WFT_SETTINGS_FILENAME ? [{ id: 'synthetic-settings' }] : [];
@@ -533,6 +581,7 @@
         await checkSuccessfulPreferenceSaves();
         await checkMetadataMerges();
         await checkSettingsApply();
+        await checkNullableWordTarget();
         await checkCloudSettingsTransport();
         await checkStudentIdentity();
         await checkLegacyKeyMigration();

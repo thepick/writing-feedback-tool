@@ -6,7 +6,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
 const cases = [];
 
 function buildRenameSpecs() {
-    const specs = [];
+    const specs = [false, true].map(idMap => ({ stage: 'confirmation', action: 'settings-read-once', idMap }));
     for (const stage of ['input', 'confirmation']) {
         for (const action of ['save', 'other-save', 'roster-settings', 'source-remove', 'source-rename', 'target-roster', 'target-portfolio', 'cancel', 'corrupt', 'delete-session']) specs.push({ stage, action });
     }
@@ -20,7 +20,7 @@ function buildRenameSpecs() {
 function setupRenameFixture(spec) {
     const oldName = spec.oldName || 'Alice';
     stopWftSyncPolling(); scheduleWftCloudSync = () => {};
-    localStorage.clear(); wftStudentChangeRecovery = null; WFT_STUDENT_ID_MAP_V1 = true;
+    localStorage.clear(); wftStudentChangeRecovery = null; WFT_STUDENT_ID_MAP_V1 = spec.idMap !== false;
     const entry = id => ({ id, originalText: 'Synthetic writing ' + id, images: [{ id: 'photo', imageId: 'image-' + id, imageRevision: 'revision-' + id, driveFileId: 'synthetic-drive-' + id, name: 'synthetic.jpg' }] });
     const sourceIds = ['save', 'cancel', 'failed-write'].includes(spec.action) ? ['first'] : ['first', 'keep'];
     localStorage.setItem('wft_portfolio', JSON.stringify({ [oldName]: { sessions: sourceIds.map(entry) }, Bob: { sessions: [entry('bob')] } }));
@@ -28,10 +28,18 @@ function setupRenameFixture(spec) {
     localStorage.setItem('wft_selectedStudent', oldName);
     localStorage.setItem('wft_settings', JSON.stringify({ students: [oldName, 'Bob'], studentIdMap: { [oldName]: 'id-alice', Bob: 'id-bob' }, studentRecords: [{ studentId: 'id-alice', displayName: oldName, legacyNameKeys: [oldName] }], unknown: 'preserve' }));
     localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify(getEmptyDeletionsData()));
+    if (spec.action === 'settings-read-once') {
+        const settings = JSON.parse(localStorage.getItem('wft_settings'));
+        settings.studentRecords.push({ studentId: 'id-bob', displayName: 'Bob', legacyNameKeys: ['Bob'] });
+        settings.targetWordCount = '321'; settings.customPreference = { retained: ['unrelated', 'metadata'] };
+        localStorage.setItem('wft_settings', JSON.stringify(settings));
+        document.getElementById('studentWriting').value = 'Tab-only writing\nwith exact spacing.  ';
+        pendingPortfolioSync = { studentName: oldName, sessionData: entry('pending') };
+    }
     if (spec.action === 'roster-only') localStorage.setItem('wft_portfolio', '{}');
     students = [oldName, 'Bob']; selectedStudent = oldName; renderStudentList(); populateStudentDropdown();
     globalThis.renameAlerts = []; window.alert = text => renameAlerts.push(text);
-    globalThis.renameSnapshot = () => ({ bytes: Object.fromEntries(['wft_portfolio', WFT_DELETIONS_STORAGE_KEY, 'wft_students', 'wft_selectedStudent', 'wft_settings'].map(key => [key, localStorage.getItem(key)])), roster: students.slice(), selected: selectedStudent, uiSelected: document.getElementById('studentSelect').value, counters: [wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter], pending: [wftSyncState.pendingPortfolioPush, wftSyncState.pendingSettingsPush, wftSyncState.pendingDeletionsPush] });
+    globalThis.renameSnapshot = () => ({ bytes: Object.fromEntries(['wft_portfolio', WFT_DELETIONS_STORAGE_KEY, 'wft_students', 'wft_selectedStudent', 'wft_settings'].map(key => [key, localStorage.getItem(key)])), roster: students.slice(), selected: selectedStudent, uiSelected: document.getElementById('studentSelect').value, counters: [wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter], pending: [wftSyncState.pendingPortfolioPush, wftSyncState.pendingSettingsPush, wftSyncState.pendingDeletionsPush], writing: document.getElementById('studentWriting').value, pendingWork: JSON.stringify(pendingPortfolioSync) });
     globalThis.renameMutate = () => {
         if (['save', 'cancel', 'failed-write'].includes(spec.action)) saveStudentSession(oldName, entry('second'));
         if (spec.action === 'other-save') saveStudentSession('Bob', entry('second-bob'));
@@ -63,6 +71,18 @@ function setupRenameFixture(spec) {
             Storage.prototype.getItem = function(key) { if (key === 'wft_portfolio') throw Error('Synthetic read failure'); return original.call(this, key); };
             globalThis.renameRestoreStorage = () => { Storage.prototype.getItem = original; };
         }
+        if (spec.action === 'settings-read-once') {
+            const original = Storage.prototype.getItem;
+            globalThis.renameSettingsReadFailures = 0;
+            Storage.prototype.getItem = function(key) {
+                if (key === 'wft_settings' && renameSettingsReadFailures === 0) {
+                    renameSettingsReadFailures++;
+                    throw Error('Synthetic one-time settings read failure');
+                }
+                return original.call(this, key);
+            };
+            globalThis.renameRestoreStorage = () => { Storage.prototype.getItem = original; };
+        }
     };
     globalThis.renameDone = false; globalThis.renameError = null;
     renameStudent(oldName).catch(e => { renameError = e.message; }).finally(() => { renameDone = true; });
@@ -86,12 +106,12 @@ async function exerciseRenameDialogs(page, spec) {
 
 function captureRenameResult() {
     if (globalThis.renameRestoreStorage) renameRestoreStorage();
-    return JSON.stringify({ before: renameBefore, after: renameSnapshot(), alerts: renameAlerts, error: renameError, dialogs: document.querySelectorAll('.wft-confirm-backdrop').length, polluted: Object.hasOwn(Object.prototype, 'sessions') });
+    return JSON.stringify({ before: renameBefore, after: renameSnapshot(), alerts: renameAlerts, error: renameError, settingsReadFailures: globalThis.renameSettingsReadFailures || 0, dialogs: document.querySelectorAll('.wft-confirm-backdrop').length, polluted: Object.hasOwn(Object.prototype, 'sessions') });
 }
 
 function assertRenameResult(spec, observed, errors) {
     assert.deepEqual(errors, []); assert.equal(observed.error, null); assert.equal(observed.dialogs, 0); assert.equal(observed.polluted, false);
-    if (['source-remove', 'source-rename', 'target-roster', 'target-portfolio', 'cancel', 'corrupt', 'failed-write', 'read-failure'].includes(spec.action)) {
+    if (['source-remove', 'source-rename', 'target-roster', 'target-portfolio', 'cancel', 'corrupt', 'failed-write', 'read-failure', 'settings-read-once'].includes(spec.action)) {
         assert.deepEqual(observed.after, observed.before, 'Invalid/cancelled/failed rename must retain current storage, roster, selection and sync state');
         assert.equal(observed.alerts.some(text => /^Student renamed to/.test(text)), false, 'No false success');
         if (spec.action !== 'cancel') assert.ok(observed.alerts.some(text => /roster|portfolio|could not/i.test(text)), 'Teacher gets clear failure feedback');
@@ -109,7 +129,12 @@ function assertRenamedData(spec, observed) {
     if (spec.action === 'other-save') assert.deepEqual(portfolio.Bob.sessions.map(s => s.id).sort(), ['bob', 'second-bob']);
     if (spec.action === 'roster-settings') { assert.ok(observed.after.roster.includes('Carol')); assert.equal(portfolio.Carol.sessions[0].id, 'carol'); assert.equal(settings.studentIdMap.Carol, 'id-carol'); assert.equal(settings.studentRecords[1].displayName, 'Carol'); }
     assert.equal(settings.unknown, spec.action === 'roster-settings' ? 'newer' : 'preserve');
-    assert.equal(settings.studentIdMap[newName], 'id-alice'); assert.equal(settings.studentIdMap[spec.oldName || 'Alice'], 'id-alice'); assert.equal(settings.studentRecords[0].displayName, newName);
+    if (spec.idMap === false) {
+        const priorSettings = JSON.parse(observed.before.bytes.wft_settings);
+        assert.deepEqual(settings.studentIdMap, priorSettings.studentIdMap); assert.deepEqual(settings.studentRecords, priorSettings.studentRecords);
+    } else {
+        assert.equal(settings.studentIdMap[newName], 'id-alice'); assert.equal(settings.studentIdMap[spec.oldName || 'Alice'], 'id-alice'); assert.equal(settings.studentRecords[0].displayName, newName);
+    }
     assert.equal(observed.after.selected, newName); assert.equal(observed.after.uiSelected, newName); assert.ok(observed.alerts.some(text => text === 'Student renamed to ' + newName + '.'));
     const markers = JSON.parse(observed.after.bytes.wft_deletions);
     assert.equal(!!markers.deletedStudents['student:' + (spec.oldName || 'Alice').toLowerCase()], newName !== 'ALICE');
@@ -136,6 +161,22 @@ function assertRenamedData(spec, observed) {
                 await exerciseRenameDialogs(page, spec);
                 observed = JSON.parse(await page.evaluate(captureRenameResult));
                 assertRenameResult(spec, observed, errors);
+                if (spec.action === 'settings-read-once') {
+                    assert.equal(observed.settingsReadFailures, 1, 'The staging read fails exactly once');
+                    await page.evaluate(() => {
+                        renameAlerts = []; renameBefore = renameSnapshot(); renameMutate = () => {};
+                        renameDone = false; renameError = null;
+                        renameStudent('Alice').catch(e => { renameError = e.message; }).finally(() => { renameDone = true; });
+                    });
+                    await exerciseRenameDialogs(page, spec);
+                    observed.retry = JSON.parse(await page.evaluate(captureRenameResult));
+                    assert.deepEqual(errors, []); assert.equal(observed.retry.error, null); assert.equal(observed.retry.dialogs, 0);
+                    assertRenamedData(spec, observed.retry);
+                    const settings = JSON.parse(observed.retry.after.bytes.wft_settings);
+                    assert.equal(settings.targetWordCount, '321'); assert.deepEqual(settings.customPreference, { retained: ['unrelated', 'metadata'] });
+                    assert.equal(settings.studentRecords.find(record => record.studentId === 'id-bob').displayName, 'Bob');
+                    assert.equal(observed.retry.after.writing, observed.before.writing); assert.equal(observed.retry.after.pendingWork, observed.before.pendingWork);
+                }
                 cases.push({ ...spec, passed: true, observed });
             } catch (e) { cases.push({ ...spec, passed: false, error: e.message, observed }); }
             finally { await page.close(); }

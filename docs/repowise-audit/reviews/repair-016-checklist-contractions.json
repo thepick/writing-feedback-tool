@@ -1,0 +1,274 @@
+{
+  "repair_id": "repair-016",
+  "source_base": "5992f6261f11956057b1e9d4c60bd6ab3774ac40",
+  "status": "behavior_fixed_verified_pending_coordinator",
+  "summary": "Normalize ASCII and U+2019 you-re contractions to I am before replacing bare you; this also lets existing deduplication retain the next distinct action.",
+  "lead": "checklist-second-person-contraction",
+  "finding_held": true,
+  "scope": {
+    "changed_files": [
+      "js/app/10-main-app.js",
+      "tests/notebook-guidance-repair.browser.cjs"
+    ],
+    "application_function": "toFirstPersonChecklist",
+    "application_lines_added": 1,
+    "callers_verified": [
+      "compressChecklistItem",
+      "extractNotebookActionItems",
+      "buildNotebookActionChecklist",
+      "getGoalPlan"
+    ],
+    "exact_one_line_app_addition": true,
+    "other_87_raw_and_lf_identical": true
+  },
+  "native_regression": {
+    "baseline_existing_passed": 95,
+    "old_app_with_final_tests_passed": 100,
+    "old_app_total": 103,
+    "old_app_failures": [
+      {
+        "name": "live first-person ASCII contraction",
+        "passed": false,
+        "observed": [
+          "I're checking my verbs.",
+          "Add clear details."
+        ]
+      },
+      {
+        "name": "live first-person curly contraction",
+        "passed": false,
+        "observed": [
+          "I\u2019re checking my verbs.",
+          "Add clear details."
+        ]
+      },
+      {
+        "name": "live first-person deduplication order and two-item cap",
+        "passed": false,
+        "observed": [
+          "I're checking my verbs.",
+          "I am checking my verbs."
+        ]
+      }
+    ],
+    "corrected_app_passed": 103,
+    "new_controls": [
+      "full you are",
+      "imperative",
+      "existing first person",
+      "plain you",
+      "input unchanged"
+    ],
+    "integration_assertions": "Actual buildNotebookActionChecklist with Grammar score4 growth tips, explicit U+2019 escape, existing two-item cap/order/dedup, no helper mocking."
+  },
+  "tests": {
+    "baseline": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\baseline\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/main-app-health.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\baseline\\main-app-health.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\baseline\\notebook-guidance-repair.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": null
+        }
+      ]
+    },
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\before\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/main-app-health.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\before\\main-app-health.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 1,
+          "error": "Empty or failed case report",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\before\\notebook-guidance-repair.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": null
+        }
+      ]
+    },
+    "before-corrected": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\before-corrected\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 1,
+          "error": "Empty or failed case report",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\before-corrected\\notebook-guidance-repair.browser.json"
+        }
+      ]
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\after\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/main-app-health.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\after\\main-app-health.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guidance-repair.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\after\\notebook-guidance-repair.browser.json"
+        },
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": null
+        }
+      ]
+    }
+  },
+  "application_metrics": {
+    "before": {
+      "buildNotebookActionChecklist": {
+        "ccn": 21,
+        "cognitive": 24,
+        "nloc": 48,
+        "max_nesting": 2,
+        "start_line": 5784,
+        "end_line": 5841
+      },
+      "extractNotebookActionItems": {
+        "ccn": 11,
+        "cognitive": 14,
+        "nloc": 32,
+        "max_nesting": 2,
+        "start_line": 5747,
+        "end_line": 5782
+      },
+      "compressChecklistItem": {
+        "ccn": 2,
+        "cognitive": 1,
+        "nloc": 32,
+        "max_nesting": 1,
+        "start_line": 5658,
+        "end_line": 5691
+      },
+      "toFirstPersonChecklist": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 12,
+        "max_nesting": 0,
+        "start_line": 5645,
+        "end_line": 5656
+      }
+    },
+    "after": {
+      "buildNotebookActionChecklist": {
+        "ccn": 21,
+        "cognitive": 24,
+        "nloc": 48,
+        "max_nesting": 2,
+        "start_line": 5785,
+        "end_line": 5842
+      },
+      "extractNotebookActionItems": {
+        "ccn": 11,
+        "cognitive": 14,
+        "nloc": 32,
+        "max_nesting": 2,
+        "start_line": 5748,
+        "end_line": 5783
+      },
+      "compressChecklistItem": {
+        "ccn": 2,
+        "cognitive": 1,
+        "nloc": 32,
+        "max_nesting": 1,
+        "start_line": 5659,
+        "end_line": 5692
+      },
+      "toFirstPersonChecklist": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 13,
+        "max_nesting": 0,
+        "start_line": 5645,
+        "end_line": 5657
+      }
+    }
+  },
+  "test_metrics": {
+    "before": {
+      "ccn": 4,
+      "cognitive": 3,
+      "nloc": 22,
+      "max_nesting": 1,
+      "start_line": 159,
+      "end_line": 180
+    },
+    "after": {
+      "ccn": 5,
+      "cognitive": 4,
+      "nloc": 38,
+      "max_nesting": 1,
+      "start_line": 159,
+      "end_line": 196
+    }
+  },
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "before": {
+        "raw": "a64d12eee0b7f667aebd40f2f6b84246a2f272504929a2d354d9051f2bee69f2",
+        "normalized_lf": "f70d3f11c7b7bf6d7331efb1e71731dc05bac7d97229bcb9a5f7d11a5d5887c0"
+      },
+      "after": {
+        "raw": "8bd6741a11e7cf79b54a6eb921f2822891327374fb785a985ccb41ddd91f5875",
+        "normalized_lf": "61d801095c47249f24eb759c42b0d65ab988f8023ea3b733c372e39f83569db5"
+      }
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "before": {
+        "raw": "c03040caa3a987add5613bc3106cd615a4244d7f2ab244568b7bbfd9e05a1556",
+        "normalized_lf": "2eb5f16f15cafecf589142a25656631c0aa33a559e96418c766ae4c7b4bbbd71"
+      },
+      "after": {
+        "raw": "5ac4e2c26c5dadfe5dd1b6fcd52ca7bcee8ced301c8ea5264fb8cbef4250129c",
+        "normalized_lf": "3898a1ec100c062d3c9e66bf4a1de858d19e49aa075e36fff1f7ea91a97aad11"
+      }
+    }
+  },
+  "all_89_source_pins": {
+    "before": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\before.json",
+    "after": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-016\\after.json"
+  },
+  "receipt_correction": "Initial test expectation assumed a one-item checklist, but this API always fills two slots. Corrected tests supply a second explicit action before production changes. The initial before receipt is retained; authoritative old-code regression receipt is before-corrected.",
+  "behavior_preserved": "Only the contracted you-are form changes. Existing generic pronoun and possessive rewrites, imperatives, normalization, ordering, two-item limit, deduplication mechanism, priorities, score guards and input objects remain intact.",
+  "not_checked": [
+    "All75 suite gate (coordinator batch)",
+    "RepoWise refresh or scanner clearance (coordinator)",
+    "Commit/push/merge (coordinator)",
+    "Live model/service calls"
+  ],
+  "risk": "Other second-person contraction forms are outside this bounded repair and are not claimed normalized. No persisted data or external access changes.",
+  "scanner_clearance_claimed": false
+}

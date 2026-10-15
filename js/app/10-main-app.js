@@ -400,7 +400,7 @@ async function renameStudent(oldName) {
         }
         var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
         nextStudents.sort(function(a, b) { return a.localeCompare(b); });
-        var settings = getRawSettings();
+        var settings = readWftRequiredStorage('wft_settings');
         updateStudentRecordOnRename(oldName, newName, settings);
         saveWftStudentChange({ portfolio: portfolio, deletions: deletions, settings: settings,
             students: nextStudents, selectedStudent: newName });
@@ -5650,6 +5650,7 @@ function toFirstPersonChecklist(text) {
     value = value.replace(/\byour writing\b/ig, "my writing");
     value = value.replace(/\byour\b/ig, "my");
     value = value.replace(/\byou are\b/ig, "I am");
+    value = value.replace(/\byou['\u2019]re\b/ig, "I am");
     value = value.replace(/\byou\b/ig, "I");
     value = value.replace(/\bme work\b/ig, "my work");
     return value;
@@ -6134,7 +6135,7 @@ function getNotebookGuideContentWords(text) {
         "because": true
     };
     for (var i = 0; i < parts.length; i += 1) {
-        if (parts[i].length > 2 && !stopWords[parts[i]]) {
+        if (parts[i].length > 2 && !Object.prototype.hasOwnProperty.call(stopWords, parts[i])) {
             words.push(parts[i]);
         }
     }
@@ -6909,7 +6910,7 @@ function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreI
     var requiredCategories = getNotebookGuideRequiredCategories(priorities, maxExamples);
     var sanitized = [];
     var selected = [];
-    var seen = {};
+    var seen = Object.create(null);
     var selectedCategories = {};
     var i;
 
@@ -7332,10 +7333,22 @@ function getNotebookPrintFitScript() {
 
 
 function writeWftPrintWindow(printWindow, printHtml) {
-    try { printWindow.opener = null; } catch (e) { }
-    printWindow.document.open();
-    printWindow.document.write(printHtml);
-    printWindow.document.close();
+    var isolated;
+    try {
+        printWindow.opener = null;
+        isolated = printWindow.opener === null;
+    } catch (e) {
+        isolated = false;
+    }
+    if (isolated) {
+        printWindow.document.open();
+        printWindow.document.write(printHtml);
+        printWindow.document.close();
+        return true;
+    }
+    try { printWindow.close(); } catch (e) { }
+    alert("Could not safely open the notebook summary for printing. Please try again.");
+    return false;
 }
 
 function scheduleWftPrintWindow(printWindow) {
@@ -7383,7 +7396,7 @@ function printNotebookSummary() {
     var studentName = (document.getElementById("notebookStudentName") || {}).textContent || "";
     var writingTitle = (document.getElementById("notebookTitle") || {}).textContent || "";
     var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle);
-    writeWftPrintWindow(printWindow, printHtml);
+    if (!writeWftPrintWindow(printWindow, printHtml)) return;
     scheduleWftPrintWindow(printWindow);
 }
 
@@ -7721,7 +7734,7 @@ function printPortfolioNotebookSummary(studentName, sessionId) {
         return;
     }
     var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary");
-    writeWftPrintWindow(printWindow, printHtml);
+    if (!writeWftPrintWindow(printWindow, printHtml)) return;
     scheduleWftPrintWindow(printWindow);
 }
 

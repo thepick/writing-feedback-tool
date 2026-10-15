@@ -1,0 +1,320 @@
+{
+  "repair_id": "repair-017",
+  "source_base": "2c93cbd93ed2de5c77d787866f33f0307b5ac38e",
+  "status": "behavior_fixed_verified_pending_coordinator",
+  "scanner_record": "code_health:finding_524a0b39a71fa1f643f8",
+  "finding_held": true,
+  "summary": "Verify opener detachment before document writes. On failure, attempt to close the blank popup, show a generic retry notice, and return false so both callers skip scheduled printing.",
+  "scope": {
+    "changed_files": [
+      "js/app/10-main-app.js",
+      "tests/notebook-print-failure.browser.cjs"
+    ],
+    "application_functions": [
+      "writeWftPrintWindow",
+      "printNotebookSummary",
+      "printPortfolioNotebookSummary"
+    ],
+    "all_other_application_bytes_identical": true,
+    "callers_only_receive_one_boolean_guard_each": true,
+    "other_87_raw_and_lf_identical": true,
+    "no_fixture_config_export_changes": true
+  },
+  "source_verification": {
+    "call_sites": [
+      "Top/bottom print buttons -> printNotebookSummary",
+      "Portfolio inline reprint button -> printPortfolioNotebookSummary"
+    ],
+    "shared_helper_call_count": 2,
+    "before_source_supported_conditional_risk": "Old catch ignores failed opener assignment and immediately writes a printable document while the parent remains attached. Sanitized saved content may include http(s) links. No real exposure or external exploit is demonstrated.",
+    "behavioral_failure_proven": "For both actual callers, a real popup with only opener setter failure/ignored assignment substituted receives one real document.write and one scheduled OS-print call on old source. Six failures include close-cleanup failure controls."
+  },
+  "native_regression": {
+    "baseline_existing_cases": 2,
+    "old_app_final_cases": 10,
+    "old_app_passed": 4,
+    "old_app_failures": [
+      {
+        "kind": "current",
+        "mode": "setter-throws",
+        "writes": 1,
+        "prints": 1,
+        "checks": {
+          "oneAttempt": true,
+          "writesAndPrints": false,
+          "notice": false,
+          "isolatedSuccess": true,
+          "failedPopupCleanup": false,
+          "protectedState": true,
+          "noPageErrors": true
+        }
+      },
+      {
+        "kind": "current",
+        "mode": "setter-ignored",
+        "writes": 1,
+        "prints": 1,
+        "checks": {
+          "oneAttempt": true,
+          "writesAndPrints": false,
+          "notice": false,
+          "isolatedSuccess": true,
+          "failedPopupCleanup": false,
+          "protectedState": true,
+          "noPageErrors": true
+        }
+      },
+      {
+        "kind": "current",
+        "mode": "close-throws",
+        "writes": 1,
+        "prints": 1,
+        "checks": {
+          "oneAttempt": true,
+          "writesAndPrints": false,
+          "notice": false,
+          "isolatedSuccess": true,
+          "failedPopupCleanup": false,
+          "protectedState": true,
+          "noPageErrors": true
+        }
+      },
+      {
+        "kind": "saved",
+        "mode": "setter-throws",
+        "writes": 1,
+        "prints": 1,
+        "checks": {
+          "oneAttempt": true,
+          "writesAndPrints": false,
+          "notice": false,
+          "isolatedSuccess": true,
+          "failedPopupCleanup": false,
+          "protectedState": true,
+          "noPageErrors": true
+        }
+      },
+      {
+        "kind": "saved",
+        "mode": "setter-ignored",
+        "writes": 1,
+        "prints": 1,
+        "checks": {
+          "oneAttempt": true,
+          "writesAndPrints": false,
+          "notice": false,
+          "isolatedSuccess": true,
+          "failedPopupCleanup": false,
+          "protectedState": true,
+          "noPageErrors": true
+        }
+      },
+      {
+        "kind": "saved",
+        "mode": "close-throws",
+        "writes": 1,
+        "prints": 1,
+        "checks": {
+          "oneAttempt": true,
+          "writesAndPrints": false,
+          "notice": false,
+          "isolatedSuccess": true,
+          "failedPopupCleanup": false,
+          "protectedState": true,
+          "noPageErrors": true
+        }
+      }
+    ],
+    "final_passed": 10,
+    "case_modes": [
+      "blocked",
+      "setter-throws",
+      "setter-ignored",
+      "close-throws",
+      "success"
+    ],
+    "each_mode_covers": [
+      "current analysis print",
+      "saved portfolio reprint"
+    ],
+    "assertions": [
+      "no write or scheduled print unless opener is null",
+      "generic actionable failure notice",
+      "failed popup close attempted; close failure cannot bypass no-write/no-print guard",
+      "normal real popup detaches opener, renders content, schedules one print",
+      "writing and analysis references, portfolio/roster/pending bytes retained",
+      "no parent-page errors"
+    ],
+    "substitutions": "Real Window/document/render/callers retained. Native window.open used for every non-blocked case. Only opener property failure, close failure and OS print boundaries replaced. Context routes abort all non-local requests."
+  },
+  "tests": {
+    "baseline": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\baseline\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": null
+        },
+        {
+          "suite": "tests/notebook-print-failure.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\baseline\\notebook-print-failure.browser.json"
+        },
+        {
+          "suite": "tests/storage-public-ui.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\baseline\\storage-public-ui.browser.json"
+        }
+      ]
+    },
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\before\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/notebook-print-failure.browser.cjs",
+          "status": 1,
+          "error": "Empty or failed case report",
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\before\\notebook-print-failure.browser.json"
+        }
+      ]
+    },
+    "after-final": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\after-final\\suite-results.json",
+      "syntax_passed": 89,
+      "suites": [
+        {
+          "suite": "tests/notebook-guide.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": null
+        },
+        {
+          "suite": "tests/notebook-print-failure.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\after-final\\notebook-print-failure.browser.json"
+        },
+        {
+          "suite": "tests/storage-public-ui.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\after-final\\storage-public-ui.browser.json"
+        }
+      ]
+    }
+  },
+  "application_metrics": {
+    "before": {
+      "printPortfolioNotebookSummary": {
+        "ccn": 5,
+        "cognitive": 4,
+        "nloc": 17,
+        "max_nesting": 1,
+        "start_line": 7711,
+        "end_line": 7727
+      },
+      "printNotebookSummary": {
+        "ccn": 8,
+        "cognitive": 7,
+        "nloc": 18,
+        "max_nesting": 1,
+        "start_line": 7369,
+        "end_line": 7389
+      },
+      "writeWftPrintWindow": {
+        "ccn": 2,
+        "cognitive": 3,
+        "nloc": 6,
+        "max_nesting": 2,
+        "start_line": 7335,
+        "end_line": 7340
+      }
+    },
+    "after": {
+      "printPortfolioNotebookSummary": {
+        "ccn": 6,
+        "cognitive": 5,
+        "nloc": 17,
+        "max_nesting": 1,
+        "start_line": 7723,
+        "end_line": 7739
+      },
+      "printNotebookSummary": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 18,
+        "max_nesting": 1,
+        "start_line": 7381,
+        "end_line": 7401
+      },
+      "writeWftPrintWindow": {
+        "ccn": 4,
+        "cognitive": 7,
+        "nloc": 18,
+        "max_nesting": 2,
+        "start_line": 7335,
+        "end_line": 7352
+      }
+    }
+  },
+  "application_snippets": {
+    "writeWftPrintWindow": {
+      "before": "function writeWftPrintWindow(printWindow, printHtml) {\r\n    try { printWindow.opener = null; } catch (e) { }\r\n    printWindow.document.open();\r\n    printWindow.document.write(printHtml);\r\n    printWindow.document.close();\r\n}",
+      "after": "function writeWftPrintWindow(printWindow, printHtml) {\r\n    var isolated;\r\n    try {\r\n        printWindow.opener = null;\r\n        isolated = printWindow.opener === null;\r\n    } catch (e) {\r\n        isolated = false;\r\n    }\r\n    if (isolated) {\r\n        printWindow.document.open();\r\n        printWindow.document.write(printHtml);\r\n        printWindow.document.close();\r\n        return true;\r\n    }\r\n    try { printWindow.close(); } catch (e) { }\r\n    alert(\"Could not safely open the notebook summary for printing. Please try again.\");\r\n    return false;\r\n}"
+    },
+    "printNotebookSummary": {
+      "before": "function printNotebookSummary() {\r\n    if (!fillNotebookSummary()) return;\r\n\r\n    var printDoc = document.getElementById(\"notebookPrintDocument\");\r\n    if (!printDoc) {\r\n        alert(\"Notebook summary print document not found.\");\r\n        return;\r\n    }\r\n\r\n    var printWindow = window.open(\"\", \"_blank\", \"width=1200,height=900\");\r\n    if (!printWindow) {\r\n        alert(\"Please allow pop-ups for this page to print the notebook summary.\");\r\n        return;\r\n    }\r\n\r\n    var studentName = (document.getElementById(\"notebookStudentName\") || {}).textContent || \"\";\r\n    var writingTitle = (document.getElementById(\"notebookTitle\") || {}).textContent || \"\";\r\n    var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle);\r\n    writeWftPrintWindow(printWindow, printHtml);\r\n    scheduleWftPrintWindow(printWindow);\r\n}",
+      "after": "function printNotebookSummary() {\r\n    if (!fillNotebookSummary()) return;\r\n\r\n    var printDoc = document.getElementById(\"notebookPrintDocument\");\r\n    if (!printDoc) {\r\n        alert(\"Notebook summary print document not found.\");\r\n        return;\r\n    }\r\n\r\n    var printWindow = window.open(\"\", \"_blank\", \"width=1200,height=900\");\r\n    if (!printWindow) {\r\n        alert(\"Please allow pop-ups for this page to print the notebook summary.\");\r\n        return;\r\n    }\r\n\r\n    var studentName = (document.getElementById(\"notebookStudentName\") || {}).textContent || \"\";\r\n    var writingTitle = (document.getElementById(\"notebookTitle\") || {}).textContent || \"\";\r\n    var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle);\r\n    if (!writeWftPrintWindow(printWindow, printHtml)) return;\r\n    scheduleWftPrintWindow(printWindow);\r\n}"
+    },
+    "printPortfolioNotebookSummary": {
+      "before": "function printPortfolioNotebookSummary(studentName, sessionId) {\r\n    var session = findPortfolioSession(studentName, sessionId);\r\n    if (!session) {\r\n        alert(\"Could not find that saved portfolio entry.\");\r\n        return;\r\n    }\r\n    var printContentHtml = session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session);\r\n    printContentHtml = refreshNotebookPage2Guide(printContentHtml, studentName, session);\r\n    var printWindow = window.open(\"\", \"_blank\", \"width=1200,height=900\");\r\n    if (!printWindow) {\r\n        alert(\"Please allow pop-ups for this page to re-print the notebook summary.\");\r\n        return;\r\n    }\r\n    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || \"Notebook Summary\");\r\n    writeWftPrintWindow(printWindow, printHtml);\r\n    scheduleWftPrintWindow(printWindow);\r\n}",
+      "after": "function printPortfolioNotebookSummary(studentName, sessionId) {\r\n    var session = findPortfolioSession(studentName, sessionId);\r\n    if (!session) {\r\n        alert(\"Could not find that saved portfolio entry.\");\r\n        return;\r\n    }\r\n    var printContentHtml = session.notebookPrintHtml || buildNotebookPrintHtmlFromPortfolioSession(studentName, session);\r\n    printContentHtml = refreshNotebookPage2Guide(printContentHtml, studentName, session);\r\n    var printWindow = window.open(\"\", \"_blank\", \"width=1200,height=900\");\r\n    if (!printWindow) {\r\n        alert(\"Please allow pop-ups for this page to re-print the notebook summary.\");\r\n        return;\r\n    }\r\n    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || \"Notebook Summary\");\r\n    if (!writeWftPrintWindow(printWindow, printHtml)) return;\r\n    scheduleWftPrintWindow(printWindow);\r\n}"
+    }
+  },
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "before": {
+        "raw": "8bd6741a11e7cf79b54a6eb921f2822891327374fb785a985ccb41ddd91f5875",
+        "normalized_lf": "61d801095c47249f24eb759c42b0d65ab988f8023ea3b733c372e39f83569db5"
+      },
+      "after": {
+        "raw": "be45df002484901aacc24ec3d5cdd64a1d4079872652c1b3ec7c3f861c18c5a8",
+        "normalized_lf": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7"
+      }
+    },
+    "tests/notebook-print-failure.browser.cjs": {
+      "before": {
+        "raw": "3fce2779ac86c73cd66a4c6ff20c095ef12a4ff19e9d1b42d61ceda6b61888ce",
+        "normalized_lf": "3fce2779ac86c73cd66a4c6ff20c095ef12a4ff19e9d1b42d61ceda6b61888ce"
+      },
+      "after": {
+        "raw": "be324437f3240b221d4de279e4a0349e4eb479eed471819df23bd8161d41498b",
+        "normalized_lf": "be324437f3240b221d4de279e4a0349e4eb479eed471819df23bd8161d41498b"
+      }
+    }
+  },
+  "all_89_source_pins": {
+    "before": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\before.json",
+    "after": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-017\\after.json"
+  },
+  "behavior_preserved": "Successful current/saved document construction, actual opener detachment, focus/fit/700ms scheduling, blocked-popup messages and rendering preserved. Document open/write/close errors still propagate as before; no broad document-error swallowing. No writes to persisted user state. Only failed isolation stops the operation.",
+  "scanner_expectation": {
+    "primary_error_handling": "Original empty isolation catch is replaced by an explicit failure state and recoverable no-write path; coordinator must confirm scanner refresh.",
+    "new_optional_cleanup_catch": "Empty close catch is intentional best-effort cleanup after required isolation already failed. Forced-close-error cases for both callers verify writing/print remain blocked and notice still appears. Retain this guard if flagged.",
+    "shape": "Helper CCN4,18 nonblank lines,nesting2; each caller adds one early return. Native matrix test shape is functional failure/success coverage, not a production-policy change."
+  },
+  "not_checked": [
+    "Full75 suite gate; coordinator owns",
+    "RepoWise refresh or actual clearance",
+    "Commit/push/merge/publication",
+    "Live external services, real attack or OS print dialog"
+  ],
+  "risk": "If popup closure itself is denied, an empty popup can remain open with its original opener. No printable content is written and no print scheduled; user gets a retry notice. Real credential exposure was not observed.",
+  "intermediate_validation": "Initial fix passed the same three suites, then was flattened before final validation to avoid nested recovery catches. Final authoritative source/receipts are after.json and after-final."
+}
