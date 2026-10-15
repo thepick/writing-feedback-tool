@@ -3338,10 +3338,12 @@ async function optimizeImageForOcr(file) {
     canvas.height = Math.max(1, Math.round(height * scale));
 
     var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
     var output = canvas.toDataURL("image/jpeg", 0.92);
-    if (output.length > originalDataUrl.length && originalDataUrl.indexOf("data:image/") === 0) {
+    if (output.length > originalDataUrl.length && isSafeWftImageDataUrl(originalDataUrl)) {
         return originalDataUrl;
     }
     return output;
