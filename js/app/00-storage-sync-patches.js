@@ -7683,9 +7683,10 @@ function saveCurrentSessionToPortfolio(analysisData) {
     };
     activePortfolioReassessmentSource = null;
     analysisData.inputContext.reassessmentSource = null;
-    persistPendingPortfolioSync();
+    var draftPersisted = persistPendingPortfolioSync();
     updateSyncPortfolioButtonState();
-    setDriveSyncStatus('syncing', 'Ready to sync to portfolio');
+    setDriveSyncStatus(draftPersisted ? 'syncing' : 'warning', draftPersisted
+        ? 'Ready to sync to portfolio' : 'Photos are only in this tab. Sync before closing or reloading.');
 }
 
 var manualSyncInProgress = false;
@@ -8030,6 +8031,7 @@ function triggerResultsSlideIn() {
 
 var PENDING_PORTFOLIO_SYNC_KEY = 'wft_pending_portfolio_sync_v1';
 var pendingPortfolioSync = null;
+var pendingPortfolioSyncPersistence = '';
 var activePortfolioReassessmentSource = null;
 var lastSyncedPortfolioSessionSignature = "";
 
@@ -8094,10 +8096,42 @@ function loadPendingPortfolioSyncFromStorage() {
     try {
         var parsed = JSON.parse(raw);
         if (!parsed || !parsed.studentName || !parsed.sessionData) return null;
+        pendingPortfolioSyncPersistence = hasMissingPendingPortfolioPhotos(parsed) ? 'missing-photos' : 'full';
         return parsed;
     } catch (e) {
         return null;
     }
+}
+
+function hasMissingPendingPortfolioPhotos(pending) {
+    var images = pending && pending.sessionData && pending.sessionData.images;
+    return Array.isArray(images) && images.some(function(image) {
+        return image && image.dataUrlRemovedForStorage && !image.driveFileId && !image.dataUrl;
+    });
+}
+
+function updatePendingPortfolioPersistenceNotice(pending) {
+    var message = '';
+    if (pending) {
+        if (hasMissingPendingPortfolioPhotos(pending)) {
+            message = 'Some photos could not be recovered. Reattach the photos and analyze again before syncing. Your writing is still available.';
+        } else if (pendingPortfolioSyncPersistence === 'photos-in-tab') {
+            message = 'Writing saved in this browser. Photos are only in this tab. Sync to Portfolio before closing or reloading.';
+        } else if (pendingPortfolioSyncPersistence === 'memory') {
+            message = 'Writing and photos are only in this tab. Keep it open and retry Sync to Portfolio, or download Emergency Backup.';
+        }
+    }
+    ['syncPortfolioBtnTop', 'syncPortfolioBtnBottom'].forEach(function(id) {
+        var button = document.getElementById(id);
+        var notice = document.getElementById(id + 'PersistenceNotice');
+        if (!notice && message && button) {
+            notice = document.createElement('p');
+            notice.id = id + 'PersistenceNotice';
+            notice.setAttribute('role', 'alert');
+            button.parentNode.insertAdjacentElement('afterend', notice);
+        }
+        if (notice) { notice.textContent = message; notice.hidden = !message; }
+    });
 }
 
 function stripPendingPortfolioImageDataUrls(pending) {
@@ -8119,8 +8153,10 @@ function stripPendingPortfolioImageDataUrls(pending) {
 
 function persistPendingPortfolioSync() {
     if (pendingPortfolioSync && pendingPortfolioSync.studentName && pendingPortfolioSync.sessionData) {
+        pendingPortfolioSyncPersistence = 'memory';
         try {
             localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(pendingPortfolioSync));
+            pendingPortfolioSyncPersistence = hasMissingPendingPortfolioPhotos(pendingPortfolioSync) ? 'missing-photos' : 'full';
         } catch (e) {
             wftDebugWarn('Pending portfolio save exceeded localStorage; saving without embedded image data.', e);
             try {
@@ -8128,14 +8164,19 @@ function persistPendingPortfolioSync() {
                 // shortcut: quota fallback cannot restore unuploaded photos after reload; add durable media storage if reload recovery is needed.
                 var cleaned = stripPendingPortfolioImageDataUrls(pendingPortfolioSync);
                 localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(cleaned));
+                pendingPortfolioSyncPersistence = hasMissingPendingPortfolioPhotos(cleaned) ? 'photos-in-tab' : 'full';
             } catch (e2) {
                 wftDebugError('Pending portfolio save retry also failed:', e2);
+                updatePendingPortfolioPersistenceNotice(pendingPortfolioSync);
                 throw e2;
             }
         }
     } else {
         localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
+        pendingPortfolioSyncPersistence = '';
     }
+    updatePendingPortfolioPersistenceNotice(pendingPortfolioSync);
+    return pendingPortfolioSyncPersistence === 'full';
 }
 
 function getPendingPortfolioSync() {
@@ -8148,11 +8189,13 @@ function getPendingPortfolioSync() {
 function clearPendingPortfolioSync() {
     localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
     pendingPortfolioSync = null;
+    pendingPortfolioSyncPersistence = '';
     updateSyncPortfolioButtonState();
 }
 
 function updateSyncPortfolioButtonState() {
     var pending = getPendingPortfolioSync();
+    updatePendingPortfolioPersistenceNotice(pending);
     var hasAnalysis = !!latestAnalysisData;
     var activeStudent = getActivePortfolioStudentName();
     var currentSignature = getCurrentPortfolioSessionSignature();
@@ -8236,6 +8279,10 @@ function commitPendingPortfolioSync(expectedPending) {
     try {
         if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
         preflightWftRequiredStorage();
+        if (hasMissingPendingPortfolioPhotos(pending)) {
+            updatePendingPortfolioPersistenceNotice(pending);
+            return false;
+        }
         previous = { wft_portfolio: localStorage.getItem('wft_portfolio'), wft_deletions: localStorage.getItem(WFT_DELETIONS_STORAGE_KEY) };
         if (pending.replaceSource) {
             if (!commitPendingPortfolioReplacement(pending)) return false;

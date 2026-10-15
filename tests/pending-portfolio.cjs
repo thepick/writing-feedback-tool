@@ -6,6 +6,7 @@ const source = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-p
 const start = source.indexOf('function stripPendingPortfolioImageDataUrls(');
 const end = source.indexOf('function getPendingPortfolioSync(', start);
 assert.ok(start >= 0 && end > start);
+const photoCheck = source.slice(source.indexOf('function hasMissingPendingPortfolioPhotos('), source.indexOf('function updatePendingPortfolioPersistenceNotice('));
 const pending = () => ({ studentName: 'Alice', signature: 'assessment', replaceSource: { sourceSessionId: 'old' }, sessionData: {
     id: 'new', originalText: 'Writing to keep', categoryScores: { Grammar: 8 }, images: [
         { id: 'photo', dataUrl: 'data:image/png;base64,AAAA', originalDataUrl: 'original-photo', extractedText: 'OCR text', pendingDriveUpload: true },
@@ -15,8 +16,9 @@ const pending = () => ({ studentName: 'Alice', signature: 'assessment', replaceS
 function setup(mode, value = pending()) {
     let stored = 'previous pending entry';
     const writes = [], removed = [];
-    const app = vm.runInNewContext(source.slice(start, end) + '\n;globalThis', {
+    const app = vm.runInNewContext(photoCheck + source.slice(start, end) + '\n;globalThis', {
         pendingPortfolioSync: value, PENDING_PORTFOLIO_SYNC_KEY: 'pending',
+        pendingPortfolioSyncPersistence: '', updatePendingPortfolioPersistenceNotice() {},
         cloneWftJson: value => JSON.parse(JSON.stringify(value)),
         localStorage: {
             setItem: (key, data) => {
@@ -30,7 +32,8 @@ function setup(mode, value = pending()) {
 }
 const quota = setup('quota');
 const original = JSON.stringify(quota.value);
-quota.app.persistPendingPortfolioSync();
+assert.equal(quota.app.persistPendingPortfolioSync(), false, 'A photo fallback must not acknowledge full draft persistence');
+assert.equal(quota.app.pendingPortfolioSyncPersistence, 'photos-in-tab');
 assert.equal(quota.app.pendingPortfolioSync, quota.value, 'Quota recovery must retain the original pending object for media upload');
 assert.equal(JSON.stringify(quota.app.pendingPortfolioSync), original, 'Photos and OCR must remain in memory');
 assert.equal(quota.writes.length, 2);
@@ -52,9 +55,11 @@ assert.equal(failed.app.pendingPortfolioSync, failed.value);
 assert.equal(JSON.stringify(failed.app.pendingPortfolioSync), before, 'A failed retry must retain the complete in-memory assessment');
 assert.equal(failed.stored, 'previous pending entry');
 assert.equal(failed.writes.length, 2);
+assert.equal(failed.app.pendingPortfolioSyncPersistence, 'memory');
 
 const normal = setup('normal');
-normal.app.persistPendingPortfolioSync();
+assert.equal(normal.app.persistPendingPortfolioSync(), true);
+assert.equal(normal.app.pendingPortfolioSyncPersistence, 'full');
 assert.equal(normal.writes.length, 1);
 assert.equal(normal.stored, JSON.stringify(normal.value));
 for (const value of [null, {}, { studentName: 'Alice' }]) {
@@ -63,4 +68,4 @@ for (const value of [null, {}, { studentName: 'Alice' }]) {
     assert.deepEqual(cleared.removed, ['pending']);
     assert.deepEqual(cleared.writes, []);
 }
-console.log('Pending portfolio tests passed: quota fallback trims only the stored copy, failed retries retain memory and previous storage, and normal saves and clearing remain intact.');
+console.log('Pending portfolio checks passed: full versus photo-fallback outcomes, failed retry retains memory and previous storage, normal saves and clearing remain intact.');
