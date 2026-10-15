@@ -8,7 +8,7 @@ try {
     fs.writeFileSync(path.join(root, 'tests/timeout.cjs'), 'setInterval(() => {}, 1000);');
     fs.writeFileSync(path.join(root, 'tests/signal.cjs'), 'process.kill(process.pid, "SIGTERM");');
     fs.writeFileSync(path.join(root, 'tests/missing.cjs'), 'void process.env["WFT_TEST_" + "REPORT"];');
-    const reports = { valid: { cases: [{ passed: true }] }, empty: { cases: [] }, zeroCases: { cases: 0 }, zeroCount: { count: 0 }, failedCase: { cases: [{ passed: false }] }, failedCount: { failed: 1 }, failures: { failures: ['expected failure'] } };
+    const reports = { valid: { cases: [{ passed: true }] }, validPass: { cases: [{ pass: true }] }, empty: { cases: [] }, zeroCases: { cases: 0 }, zeroCount: { count: 0 }, failedCase: { cases: [{ passed: false }] }, failedPass: { cases: [{ pass: false }] }, failedCount: { failed: 1 }, failures: { failures: ['expected failure'] } };
     for (const [name, data] of Object.entries(reports)) fs.writeFileSync(path.join(root, 'tests/' + name + '.cjs'), 'require("node:fs").writeFileSync(process.env.WFT_GUIDE_REPORT, ' + JSON.stringify(JSON.stringify(data)) + ');');
     fs.writeFileSync(path.join(root, 'tests/malformed.cjs'), 'require("node:fs").writeFileSync(process.env.WFT_TEST_REPORT, "{");');
     fs.writeFileSync(path.join(root, 'tests/blank.cjs'), 'require("node:fs").writeFileSync(process.env.WFT_TEST_REPORT, "");');
@@ -19,7 +19,8 @@ try {
     const timeout = run('timeout'); assert.equal(timeout.passed, false); assert.match(timeout.suites[0].error, /ETIMEDOUT/);
     const signal = run('signal'); assert.equal(signal.passed, false); assert(signal.suites[0].status !== 0 || signal.suites[0].signal, 'Termination must not pass');
     assert.equal(run('valid').passed, true);
-    for (const name of ['empty', 'zeroCases', 'zeroCount', 'failedCase', 'failedCount', 'failures']) {
+    assert.equal(run('validPass').passed, true);
+    for (const name of ['empty', 'zeroCases', 'zeroCount', 'failedCase', 'failedPass', 'failedCount', 'failures']) {
         const failedReport = run(name); assert.equal(failedReport.passed, false); assert.match(failedReport.suites[0].error, /Empty or failed/);
     }
     for (const name of ['malformed', 'blank']) {

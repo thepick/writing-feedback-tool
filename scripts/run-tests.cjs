@@ -35,7 +35,7 @@ function runTests({ root, out, selected = [], timeout = 600000, env = process.en
         const log = path.join(out, path.basename(file, '.cjs') + '.log'); fs.writeFileSync(log, (child.stdout || '') + (child.stderr || ''));
         let reportError = reportRequired && !fs.existsSync(report) ? 'Expected case report missing' : null;
         if (fs.existsSync(report)) {
-            try { const data = JSON.parse(fs.readFileSync(report)); if ((Array.isArray(data.cases) && (!data.cases.length || data.cases.some(row => row.passed === false))) || data.cases === 0 || data.count === 0 || data.failed > 0 || (Array.isArray(data.failures) && data.failures.length)) reportError = 'Empty or failed case report'; }
+            try { const data = JSON.parse(fs.readFileSync(report)); if ((Array.isArray(data.cases) && (!data.cases.length || data.cases.some(row => row.pass === false || row.passed === false))) || data.cases === 0 || data.count === 0 || data.failed > 0 || (Array.isArray(data.failures) && data.failures.length)) reportError = 'Empty or failed case report'; }
             catch (e) { reportError = 'Invalid case report: ' + e.message; }
         }
         const row = { suite: label, status: child.status, signal: child.signal, error: child.error?.message || reportError, started, seconds: (Date.now() - at) / 1000, log, report: fs.existsSync(report) ? report : null, nativeInstrumented: !!childEnv.WFT_COVERAGE_DIR };
