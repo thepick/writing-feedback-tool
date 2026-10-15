@@ -118,7 +118,7 @@ function checkFinalOwnership(scenario,snapshots,check,errors){
   await finishScenario();
   snapshots.final=await capture();
   checkFinalOwnership(scenario,snapshots,check,errors);
-  cases.push({scenario,checks,snapshots,requests,errors});
+  cases.push({scenario,passed:checks.length>0&&checks.every(x=>x.passed),checks,snapshots,requests,errors});
   for(const route of held)await route.abort().catch(()=>{});
   await context.close();console.log(JSON.stringify({scenario,checks}));
  }}finally{await browser.close();if(process.env.WFT_TEST_REPORT)fs.writeFileSync(process.env.WFT_TEST_REPORT,JSON.stringify({cases,sourceRoot:root,browser:browser.version(),productionMethodsReplaced:[],defaultsUnchanged:true},null,2));}
