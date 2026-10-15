@@ -6283,7 +6283,8 @@ function applyWftPreferenceForm(settings) {
     refreshGradeProfileDescription();
     if (typeof updateGradeLevelResultNote === "function") updateGradeLevelResultNote();
     var target = document.getElementById('targetWordCount');
-    if (target) target.disabled = !settings.useWordCountTarget;
+    var targetToggle = document.getElementById('useWordCountTarget');
+    if (target) target.disabled = targetToggle ? !targetToggle.checked : !settings.useWordCountTarget;
     refreshScoreWeightingDescription();
     updateScriptQualityToggleVisibility();
     updateMeter();

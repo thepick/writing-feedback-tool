@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T04:12:14.622168+07:00.
+Updated 2026-10-16T04:25:23.222615+07:00.
 
-Source: b11516f1775653c5d2216ee83c0b51181c2c2417. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: c3e006765ba6f973501398dbd35f728fd02e19f8. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,21 +10,21 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 909 |
+| code_health | 910 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 191, "unreviewed": 790}.
+Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 192, "unreviewed": 790}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 18, "reviewed_no_change": 193, "unreviewed": 790}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 18, "reviewed_no_change": 194, "unreviewed": 790}.
 
 Findings confirmed cleared: 18. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Behavior repairs with regression evidence: 4.
+Behavior repairs with regression evidence: 5.
 
-Supporting refactoring plans: 107; grouped refactoring opportunities: 23.
+Supporting refactoring plans: 108; grouped refactoring opportunities: 24.
 
 These plans and opportunities can overlap findings; their counts are not added as distinct bugs.
 
@@ -48,8 +48,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-011: Review preference and portfolio commit safeguards - reviewed_complete.
 - repair-012: Review feedback goal and action checklist policy - reviewed_complete.
 - repair-013: Preserve settings when renaming students - behavior_fixed_verified.
+- repair-014: Correct notebook text dictionary lookups - behavior_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-014: Correct notebook text dictionary lookups - reviewed_pending_refresh.
+- repair-015: Keep the word-target control consistent after settings load - reviewed_pending_refresh.
 
 ## Additional source leads
 
@@ -57,12 +58,12 @@ These are review leads, separate from scanner observations. They require their o
 
 - rename-transient-settings-read: renameStudent in js/app/10-main-app.js — fixed_verified. renameStudent obtains settings from getRawSettings, which returns {} after any read/parse failure, then passes that truthy empty object to saveWftStudentChange. A transient failure limited to that read can end before the transaction preflight and subsequent strict reads. The transaction prefers supplied change.settings and carries only apiKey from the later storedSettings snapshot, so a successful rename could replace other saved preferences/unknown fields/student metadata with the sparse staged object. With the shipped ID-map flag false, metadata can simply be omitted; enabling the flag can instead create replacement metadata. Persistent/corrupt reads are already stopped by later strict checks; the uncovered lead is a one-time failure followed by readable storage.
 - notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — fixed_verified. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
-- preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — candidate_needs_regression. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
+- preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — fixed_verified. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
 - checklist-second-person-contraction: buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist in js/app/10-main-app.js — candidate_needs_regression. toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.
 
 ## Coverage evidence
 
-91.2% native executable-line coverage from 58 browser suites. 7/8 shipped source files still match that capture. Ingestion: verified_merged_source.
+91.2% native executable-line coverage from 58 browser suites. 6/8 shipped source files still match that capture. Ingestion: verified_merged_source.
 
 Per-file gaps and excluded reference/mutated contexts are recorded in reviews/batch-002-validation.json. This is line coverage, not branch coverage.
 
@@ -471,7 +472,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_b2267d45e0c328b33cd3 | medium | code_health | scripts/run-tests.cjs | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_9a7c8ce0699343322ae5 | medium | code_health | test-google-drive-migration.cjs:4 | setup / complex_method | yes | unreviewed |
 | code_health:finding_ee98c466e8ec65cd1b44 | medium | code_health | test-google-drive-migration.cjs:11 | fileResponse / complex_method | yes | unreviewed |
-| code_health:finding_8c23a5e088578203ac81 | medium | code_health | tests/analysis-identity.browser.cjs | change_entropy | yes | reviewed_no_change |
+| code_health:finding_8c23a5e088578203ac81 | medium | code_health | tests/analysis-identity.browser.cjs | change_entropy | no | reviewed_no_change |
 | code_health:finding_e175c7fa27aa56528269 | medium | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / complex_method | yes | unreviewed |
 | code_health:finding_2cebaec28f1e3464244b | medium | code_health | tests/analysis-identity.browser.cjs:182 | runInterruptedAnalysisCase / complex_method | yes | unreviewed |
 | code_health:finding_a56e02cc5c89d2eb6e9e | medium | code_health | tests/analysis-pipeline.browser.cjs:51 | prepareWriting / complex_method | yes | unreviewed |
@@ -535,8 +536,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_e130e9384515730f3349 | medium | code_health | tests/neatness-boundaries.browser.cjs:4 | <anonymous@4> / complex_method | yes | unreviewed |
 | code_health:finding_334957713e49cc25a47b | medium | code_health | tests/neatness-scoring.browser.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_3e06106d467f48269878 | medium | code_health | tests/neatness-scoring.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
-| code_health:finding_782b98d52eb223e30e23 | medium | code_health | tests/notebook-guidance-repair.browser.cjs | change_entropy | no | reviewed_no_change |
-| code_health:finding_023e9357755094e56ba3 | medium | code_health | tests/notebook-guidance-repair.browser.cjs:215 | <anonymous@215> / complex_method | yes | unreviewed |
+| code_health:finding_d0678036801b08d91445 | medium | code_health | tests/notebook-guidance-repair.browser.cjs | churn_risk | yes | reviewed_no_change |
+| code_health:finding_782b98d52eb223e30e23 | medium | code_health | tests/notebook-guidance-repair.browser.cjs | change_entropy | yes | reviewed_no_change |
+| code_health:finding_023e9357755094e56ba3 | medium | code_health | tests/notebook-guidance-repair.browser.cjs:236 | <anonymous@236> / complex_method | yes | unreviewed |
 | code_health:finding_86491e87c4892f377fed | medium | code_health | tests/notebook-guide.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_e23a276513588c43ca30 | medium | code_health | tests/notebook-print-failure.browser.cjs:3 | dry_violation | yes | unreviewed |
 | code_health:finding_9283e3747b5135c2a7fc | medium | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / nested_complexity | yes | unreviewed |

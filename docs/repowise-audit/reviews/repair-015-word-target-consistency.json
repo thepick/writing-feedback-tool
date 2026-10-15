@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "repair": "repair-015",
+  "title": "Keep nullable word-target form state consistent",
+  "created_at_utc": "2026-10-15T21:21:10.356399+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "c3e006765ba6f973501398dbd35f728fd02e19f8",
+  "branch": "codex/repowise-batch-003-20261016",
+  "lead_id": "preference-null-word-target-toggle",
+  "lead_held": true,
+  "behavior_fix_verified": true,
+  "summary": {
+    "application_lines_added": 1,
+    "application_lines_modified": 1,
+    "source_files_changed": 2,
+    "old_app_expected_failures": 1,
+    "old_app_existing_cases_passed": 96,
+    "new_controls_passed_before": 8,
+    "after_native_cases_passed": 105,
+    "selected_suites_passed_after": 2,
+    "syntax_checks_before_and_after": 89,
+    "other87_source_files_raw_identical": true,
+    "needs_user_attention": false,
+    "scanner_clearance_claimed": false
+  },
+  "changed_repository_files": [
+    "js/app/00-storage-sync-patches.js",
+    "tests/preference-integrity-scenarios.js"
+  ],
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "before_sha256_raw": "d10d9f9e308951e40ea77659738399e01637924b0776194790704c7120fd89e1",
+      "after_sha256_raw": "ca88093125284d2b7cb9efb9e10f5cbcfea0728c683e70bc570be831a4af6a6f",
+      "before_sha256_normalized_lf": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7",
+      "after_sha256_normalized_lf": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2"
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "before_sha256_raw": "fcefe8a4c870e310d99548640d56110bb7f529eccc56f783748c8b95434839bb",
+      "after_sha256_raw": "f24c3c803930b595fefc0c252180ad4abafbb31ba32039f4932338b5bf12513d",
+      "before_sha256_normalized_lf": "312c7a95e04f82af03e314ada038e23136cf78720fe8959202720bbf76c1c081",
+      "after_sha256_normalized_lf": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646"
+    }
+  },
+  "scope_proof": {
+    "exact_raw_application_reconstruction": true,
+    "all_other_application_bytes_identical": true,
+    "all_other87_source_files_raw_identical": true,
+    "golden_fixtures_unchanged": true,
+    "evidence": "work/repowise-repair-015/before-pins.json"
+  },
+  "change": {
+    "before": "Loaded nullable useWordCountTarget is accepted and stored. The existing null guard leaves the checkbox checked, but the numeric target was disabled from the raw null field, disagreeing with the actual policy.",
+    "after": "Use the current checkbox state for disabled state when the checkbox exists, keeping the original raw-settings fallback when it is absent.",
+    "preserved": "Null does not reset/coerce the checkbox or stored field; explicit true/false and missing merged fields retain their existing rules. Required writes still precede form publication. Other control defaults, grade/calibration/range updates, meter/order, rollback and unknown metadata are unchanged."
+  },
+  "caller_order_evidence": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 550,
+      "end_line": 608,
+      "role": "Required-save rollback and startup call the shared form applier; credential and preference startup handling stay separate."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 6255,
+      "end_line": 6291,
+      "role": "Existing nullable checkbox guard retained; target consistency corrected before the unchanged score/toggle/meter refreshes."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 6293,
+      "end_line": 6320,
+      "role": "Loaded settings validate, merge and commit required keys before form publication."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 4927,
+      "end_line": 4930,
+      "role": "Effective target policy reads the checkbox."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 8319,
+      "end_line": 8325,
+      "role": "Normal change handler derives disabled state from that same checkbox."
+    }
+  ],
+  "regression": {
+    "route": "Actual applyLoadedSettings in complete shipped native Edge scripts; nullable field persists without coercion.",
+    "old_failure": "Initially checked + loaded null leaves checkbox/policy true but disables the input.",
+    "controls": "Initially unchecked null, explicit true/false, missing incoming field, required-save rejection preserving bytes/form, missing checkbox null/true raw fallback and missing numeric target. All eight controls pass before/after; the other96 native checks remain passing.",
+    "missing_dom": "Direct form calls remove and restore the existing node, verify no persistence, and retain the prior fallback/optional-input behavior; no schema or policy fallback changes."
+  },
+  "tests": {
+    "before": {
+      "receipt": "work/repowise-repair-015/before/suite-results.json",
+      "native_receipt": "work/repowise-repair-015/before/preference-integrity.browser.json",
+      "runner_exit_code": 1,
+      "complete": true,
+      "passed": false,
+      "native_cases": 105,
+      "native_passed": 104,
+      "native_failed": 1,
+      "failed_cases": [
+        {
+          "name": "loaded word target/true/null",
+          "error": "numeric target agrees with effective policy"
+        }
+      ],
+      "syntax_checks": 89,
+      "unit_suite_passed": true,
+      "started": "2026-10-15T21:19:12.999Z",
+      "finished": "2026-10-15T21:19:35.316Z"
+    },
+    "after": {
+      "receipt": "work/repowise-repair-015/after/suite-results.json",
+      "native_receipt": "work/repowise-repair-015/after/preference-integrity.browser.json",
+      "runner_exit_code": 0,
+      "complete": true,
+      "passed": true,
+      "native_cases": 105,
+      "native_passed": 105,
+      "native_failed": 0,
+      "failed_cases": [],
+      "syntax_checks": 89,
+      "unit_suite_passed": true,
+      "started": "2026-10-15T21:19:47.677Z",
+      "finished": "2026-10-15T21:19:59.289Z"
+    }
+  },
+  "suites": [
+    "tests/preference-integrity.browser.cjs",
+    "tests/settings-deletions-sync.cjs"
+  ],
+  "application_metrics": {
+    "before": {
+      "ccn": 26,
+      "cognitive": 27,
+      "nloc": 36,
+      "max_nesting": 2,
+      "start_line": 6255,
+      "end_line": 6290
+    },
+    "after": {
+      "ccn": 27,
+      "cognitive": 29,
+      "nloc": 37,
+      "max_nesting": 2,
+      "start_line": 6255,
+      "end_line": 6291
+    }
+  },
+  "new_test_group_metrics": {
+    "ccn": 9,
+    "cognitive": 14,
+    "nloc": 48,
+    "max_nesting": 2
+  },
+  "remaining_expectations": [
+    "Existing critical complexity marker is not claimed cleared; CCN increases by one for the necessary optional-checkbox fallback. Coordinator must refresh/review the resulting facts.",
+    "Source is uncommitted; coordinator owns acceptance, Git, RepoWise and publication."
+  ],
+  "limits": [
+    "No full75-suite run or fresh coverage capture. No live Google/Drive/model calls, real accounts or student data.",
+    "Only this nullable-target consistency behavior was repaired; storage validation, merging, default semantics and other preferences were not redesigned."
+  ]
+}
