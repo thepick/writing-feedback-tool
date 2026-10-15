@@ -2576,12 +2576,16 @@ function buildStudentPortfolioFileName(studentId) {
 
 function loadStudentFileFromDrive(studentId, callback) {
     if (!WFT_SPLIT_STUDENT_FILES_V1) { if (callback) { callback(null, null); } return; }
+    var connection = captureWftArchiveConnection();
     var filename = buildStudentPortfolioFileName(studentId);
-    ensureDriveFolderPromise().then(function() {
-        return ensureWftStudentsFolderPromise();
+    ensureDriveFolderPromise(connection).then(function() {
+        assertWftArchiveConnection(connection);
+        return ensureWftStudentsFolderPromise(connection);
     }).then(function(studentsFolderId) {
+        assertWftArchiveConnection(connection);
         return findWftFilesByNameInFolderPromise(filename, studentsFolderId);
     }).then(function(files) {
+        assertWftArchiveConnection(connection);
         var canonical = chooseCanonicalWftFile(files);
         if (canonical && canonical.id) {
             try { localStorage.setItem("wft_drive_student_file_" + studentId, canonical.id); } catch (e) {}
@@ -2589,6 +2593,7 @@ function loadStudentFileFromDrive(studentId, callback) {
         }
         return null;
     }).then(function(data) {
+        assertWftArchiveConnection(connection);
         if (data && data.studentId !== studentId) throw new Error("Student portfolio file belongs to a different student.");
         if (data && data.format === "student-portfolio-v1") { callback(null, data); }
         else { callback(null, null); }
