@@ -155,6 +155,8 @@ function applyCrop() {
         var out = document.createElement("canvas");
         out.width = Math.round(w * scaleX);
         out.height = Math.round(h * scaleY);
+        out.getContext("2d").fillStyle = "#fff";
+        out.getContext("2d").fillRect(0, 0, out.width, out.height);
         out.getContext("2d").drawImage(
             sourceImg,
             Math.round(x * scaleX), Math.round(y * scaleY),
