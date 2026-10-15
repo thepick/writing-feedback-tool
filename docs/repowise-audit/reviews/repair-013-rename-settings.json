@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "repair": "repair-013",
+  "title": "Preserve settings on a transient rename staging read failure",
+  "created_at_utc": "2026-10-15T20:58:41.520164+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "9ec840eb3aabf028d34bde60868a6021c9db633d",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "branch": "codex/repowise-batch-003-20261016",
+  "lead_id": "rename-transient-settings-read",
+  "lead_held": true,
+  "behavior_fix_verified": true,
+  "summary": {
+    "old_app_native_cases": 39,
+    "old_app_expected_failures": 2,
+    "old_app_existing_cases_passed": 37,
+    "after_native_cases_passed": 39,
+    "successful_retry_checks": 2,
+    "selected_suites_passed_after": 2,
+    "syntax_checks_passed_before_and_after": 89,
+    "application_lines_changed": 1,
+    "source_files_changed": 2,
+    "other87_source_files_raw_identical": true,
+    "needs_user_attention": false,
+    "scanner_clearance_claimed": false
+  },
+  "changed_repository_files": [
+    "js/app/10-main-app.js",
+    "tests/rename-confirmation.browser.cjs"
+  ],
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "before_sha256_raw": "1cf34c7924721f2cfd198420b5f6696770db1688a3622710da0212d4230e322d",
+      "after_sha256_raw": "93bd4b40d64eb751b2ac31c01163229830ca0d1b20010be61239c2ab1ddbd783",
+      "before_sha256_normalized_lf": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8",
+      "after_sha256_normalized_lf": "6bd5a9c7b5d939d76e26b1ef4f86664eec60fa62f7d010e9deeb91f1c41aa3cf"
+    },
+    "tests/rename-confirmation.browser.cjs": {
+      "before_sha256_raw": "7b68949c0e314fef5df02f7cdbe5ec2e47f254ce94e41e29ad81fbefde1221ba",
+      "after_sha256_raw": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+      "before_sha256_normalized_lf": "7b68949c0e314fef5df02f7cdbe5ec2e47f254ce94e41e29ad81fbefde1221ba",
+      "after_sha256_normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465"
+    }
+  },
+  "scope_proof": {
+    "exact_raw_application_change": "Only renameStudent staging reader call replaced; reconstructing the prior file with this single literal replacement equals the complete current raw file.",
+    "all_other_application_function_bytes_identical": true,
+    "all_other87_source_files_raw_identical": true,
+    "unit_harness_unchanged": true,
+    "default_feature_flags_unchanged": true,
+    "before_pins": "work/repowise-coordinator/batch-003-before-source-pins.json"
+  },
+  "change": {
+    "before": "getRawSettings catches a one-time storage error and supplies an empty object. A subsequent successful transaction prefers that truthy supplied object, retaining only the stored API-key rule and dropping unrelated settings/identity metadata.",
+    "after": "readWftRequiredStorage('wft_settings') validates the staging snapshot and propagates a failed read into the existing rename catch before persistence or UI publication. Successful reads pass the same settings to the existing identity updater and atomic save.",
+    "preserved": "Broad read-only getRawSettings, confirmations/cancellation, roster revalidation, exact portfolio/media bytes, current writing/pending work, ID-map default false, legacy IDs, marker ordering, strict transaction/rollback and credential rules remain unchanged."
+  },
+  "caller_order_evidence": [
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 325,
+      "end_line": 331,
+      "role": "Production manager chooses a current student then awaits renameStudent."
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "start_line": 333,
+      "end_line": 410,
+      "role": "Real input/confirmation dialogs yield; current roster and strict portfolio are rechecked; staged settings read is inside existing failure-reporting try before identity update and save."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 2395,
+      "end_line": 2428,
+      "role": "Existing identity update only runs when supported ID-map flag is enabled and uses supplied settings."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "start_line": 4735,
+      "end_line": 4793,
+      "role": "Existing multi-key save validates required state, uses supplied settings, preserves API-key rule, rolls back failed writes and publishes only after commit."
+    },
+    {
+      "file": "js/app/storage-recovery.js",
+      "start_line": 146,
+      "end_line": 179,
+      "role": "Existing required reader propagates native read/parse/schema failures rather than constructing a successful empty snapshot."
+    }
+  ],
+  "native_regression": {
+    "failure": "One wft_settings read throws after the actual confirmation; later reads succeed. Both shipped false and supported true ID-map states are tested.",
+    "seed": "Two stable student records, unknown nested preferences, nondefault word target, two portfolios with photo identity, exact tab-only writing and in-memory pending session/photo data.",
+    "failed_rename_assertions": "Exact five storage-key bytes, roster, selected/UI student, sync counters/pending flags, writing and pending-work JSON remain unchanged; no false success and teacher receives existing failure notice.",
+    "retry_assertions": "Same native dialog flow succeeds once storage is readable; unknown preferences, both stable records and default/compatibility identity semantics remain intact, with unchanged writing/pending work and preserved portfolio photo identities.",
+    "old_app_observations": [
+      {
+        "student_id_map_enabled": false,
+        "settings_read_failures": 1,
+        "before_settings_fields": [
+          "customPreference",
+          "studentIdMap",
+          "studentRecords",
+          "students",
+          "targetWordCount",
+          "unknown"
+        ],
+        "after_settings_fields": [
+          "_indexDirty",
+          "_indexDirtyAt",
+          "_indexDirtyReason",
+          "students"
+        ],
+        "unknown_preference_lost": true,
+        "custom_preference_lost": true,
+        "false_success_reported": true
+      },
+      {
+        "student_id_map_enabled": true,
+        "settings_read_failures": 1,
+        "before_settings_fields": [
+          "customPreference",
+          "studentIdMap",
+          "studentRecords",
+          "students",
+          "targetWordCount",
+          "unknown"
+        ],
+        "after_settings_fields": [
+          "_indexDirty",
+          "_indexDirtyAt",
+          "_indexDirtyReason",
+          "studentIdMap",
+          "studentRecords",
+          "students"
+        ],
+        "unknown_preference_lost": true,
+        "custom_preference_lost": true,
+        "false_success_reported": true
+      }
+    ]
+  },
+  "tests": {
+    "before": {
+      "receipt": "work/repowise-repair-013/before/suite-results.json",
+      "runner_exit_code": 1,
+      "native_receipt": "work/repowise-repair-013/before/rename-confirmation.browser.json",
+      "native_passed": 37,
+      "native_expected_failures": 2,
+      "unit_passed": true,
+      "syntax_passed": 89
+    },
+    "after": {
+      "receipt": "work/repowise-repair-013/after/suite-results.json",
+      "runner_exit_code": 0,
+      "native_receipt": "work/repowise-repair-013/after/rename-confirmation.browser.json",
+      "native_passed": 39,
+      "native_failed": 0,
+      "unit_passed": true,
+      "syntax_passed": 89
+    },
+    "suites": [
+      "tests/rename-confirmation.browser.cjs",
+      "tests/student-rename.cjs"
+    ]
+  },
+  "rename_metrics": {
+    "before": {
+      "ccn": 24,
+      "cognitive": 36,
+      "nloc": 87,
+      "max_nesting": 3,
+      "start_line": 333,
+      "end_line": 431
+    },
+    "after": {
+      "ccn": 24,
+      "cognitive": 36,
+      "nloc": 87,
+      "max_nesting": 3,
+      "start_line": 333,
+      "end_line": 431
+    }
+  },
+  "remaining_expectations": [
+    "The source lead is behaviorally repaired. Existing rename complexity and optional renderer catches are not claimed cleared; their local metric facts remain unchanged.",
+    "Coordinator must independently accept/commit, refresh RepoWise and run the publication batch gate. No index write was performed by this repair."
+  ],
+  "limits": [
+    "No full75-suite run, live Google/Drive/model calls, real accounts or student data.",
+    "Native tests reproduce one synchronous staging read failure and normal retry. This does not add cross-tab locking or change transaction/crash recovery architecture.",
+    "No Git mutations, tracker/docs/index edits, other chats/subagents or external messages. Source remains uncommitted for coordinator review."
+  ]
+}

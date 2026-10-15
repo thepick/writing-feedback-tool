@@ -1,0 +1,71 @@
+{
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/183",
+  "merge_commit": "9ec840eb3aabf028d34bde60868a6021c9db633d",
+  "verified_at": "2026-10-15T20:48:52.654752+00:00",
+  "pages_build": "built",
+  "pages_build_commit": "9ec840eb3aabf028d34bde60868a6021c9db633d",
+  "tested_source_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+  "all89_committed_source_blobs_identical": true,
+  "raw_source_pins_match": 88,
+  "checkout_newline_only_changes": [
+    "tests/record-identity.browser.cjs"
+  ],
+  "files": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "http_status": 200,
+      "bytes": 397800,
+      "git_sha256": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7",
+      "live_sha256": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7",
+      "exact_git_bytes": true
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "http_status": 200,
+      "bytes": 421816,
+      "git_sha256": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8",
+      "live_sha256": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static deployment and exact source equivalence; no real accounts, writing, Google, Drive or model calls.",
+  "post_merge_index_verification": {
+    "verified_at": "2026-10-15T20:54:35.355980+00:00",
+    "provenance": {
+      "last_sync_commit": "9ec840eb3aabf028d34bde60868a6021c9db633d",
+      "repository_metadata_head": "9ec840eb3aabf028d34bde60868a6021c9db633d",
+      "health_analyzed_commits": [
+        [
+          "9ec840eb3aabf028d34bde60868a6021c9db633d",
+          87
+        ]
+      ]
+    },
+    "coverage_unique_files": 8,
+    "coverage_lcov_entries": 464,
+    "test_to_file_records": 373,
+    "coverage_source_hashes_normalized_lf": {
+      "google-drive-migration.js": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142",
+      "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+      "js/app/storage-recovery.js": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636",
+      "js/app/00-storage-sync-patches.js": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7",
+      "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "js/app/10-main-app.js": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8",
+      "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "js/app/99-lightbox.js": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087"
+    },
+    "coverage_percent": 91.21206647398844,
+    "all8stored_percentages_independently_matched_capture": true,
+    "dashboard": {
+      "source_commit": "9ec840eb3aabf028d34bde60868a6021c9db633d",
+      "health": 4.5,
+      "maintainability": 4.5,
+      "static_performance": 9.2,
+      "method": "Actual overview reload after merged-source index, fresh58-suite native coverage import and persisted full health; UI nowshows91%current ratherthanolderreport."
+    },
+    "history_review": "reviews/history-context-review-9ec840e.json",
+    "history_signals_replayed": 42,
+    "hooks_unchanged": true
+  }
+}

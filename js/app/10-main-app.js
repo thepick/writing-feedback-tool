@@ -400,7 +400,7 @@ async function renameStudent(oldName) {
         }
         var nextStudents = students.map(function(name) { return name === oldName ? newName : name; });
         nextStudents.sort(function(a, b) { return a.localeCompare(b); });
-        var settings = getRawSettings();
+        var settings = readWftRequiredStorage('wft_settings');
         updateStudentRecordOnRename(oldName, newName, settings);
         saveWftStudentChange({ portfolio: portfolio, deletions: deletions, settings: settings,
             students: nextStudents, selectedStudent: newName });
