@@ -188,7 +188,7 @@ function exerciseSessionRetention() {
                 check(saved && saved.createdAt === createdAt && saved.originalText === session.originalText, 'assigned identity/date/writing survive retry');
                 check(getLocalPortfolioSnapshot().Alice.sessions.length === 50, 'cap');
             });
-            for (const mode of ['pending-add', 'pending-move']) run(`${mode}: quota recovery retains latest writing and photo identity`, () => {
+            function checkQuotaRecovery(mode) {
                 prepare(50, 'iso'); const session = entry(101); session.images[0].dataUrl = 'data:image/png;base64,AAAA';
                 let attempts = 0;
                 Storage.prototype.setItem = function(key, value) { if (key === 'wft_portfolio' && ++attempts === 1) throw new DOMException('Synthetic quota failure', 'QuotaExceededError'); return set.call(this, key, value); };
@@ -198,7 +198,8 @@ function exerciseSessionRetention() {
                 check(attempts === 2 && after[0].originalText === session.originalText, 'actual alternate write used');
                 for (const key of ['imageId', 'imageRevision', 'driveFileId']) equal(after[0].images[0][key], session.images[0][key], 'photo ' + key);
                 check(after[0].images[0].dataUrl === undefined && after[0].images[0].dataUrlRemovedForStorage, 'existing heavy-field quota fallback');
-            });
+            }
+            for (const mode of ['pending-add', 'pending-move']) run(`${mode}: quota recovery retains latest writing and photo identity`, () => checkQuotaRecovery(mode));
             reset(); return cases;
 }
 
