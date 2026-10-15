@@ -1,0 +1,759 @@
+{
+  "schema_version": 1,
+  "repair": "repair-010",
+  "title": "Read-only notebook-guide policy and reconstruction review",
+  "created_at_utc": "2026-10-15T20:30:20.688662+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "summary": {
+    "findings_reviewed": 9,
+    "critical_metrics_verified": 4,
+    "reviewed_no_change": 9,
+    "additional_unreproduced_leads": 1,
+    "source_edits": 0,
+    "tests_run": 0,
+    "scanner_clearances_claimed": 0,
+    "needs_user_attention": 0
+  },
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "sha256_raw": "1cf34c7924721f2cfd198420b5f6696770db1688a3622710da0212d4230e322d",
+      "sha256_normalized_lf": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8"
+    },
+    "index.html": {
+      "sha256_raw": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+      "sha256_normalized_lf": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "sha256_raw": "d10d9f9e308951e40ea77659738399e01637924b0776194790704c7120fd89e1",
+      "sha256_normalized_lf": "eeab5752ea2074f42c856471207e877b4dfbf49412c58df00cd3ff9f0b0aace7"
+    },
+    "tests/notebook-guide.browser.cjs": {
+      "sha256_raw": "851afd0acd495bab673f81b1400513901b3db22891c29ee5ef61d0b6d5657ba3",
+      "sha256_normalized_lf": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497"
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "sha256_raw": "00ddca7a4a79ccb79e3446765cdefbb18373e9e542297d9537f826c112baa067",
+      "sha256_normalized_lf": "8ddf098701dd3a6e66ff70072c0d29f781072407d105efebf1a7e3c447a3ce35"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "sha256_raw": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+      "sha256_normalized_lf": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f"
+    }
+  },
+  "all89_frozen_source_hashes_match": true,
+  "source_pin_receipt": "work/repowise-coordinator/batch-002-source-pins.json",
+  "metric_method": "Read installed RepoWise detector definitions and re-walk frozen source with its read-only tree-sitter complexity walker. No index writes, application evaluation or test execution. All nine stored shape facts and source spans match.",
+  "metric_evidence": "work/repowise-repair-010/source-evidence.json",
+  "centrality_evidence": {
+    "qualifying_incoming_file_edges": [
+      {
+        "source": "index.html",
+        "type": "imports"
+      },
+      {
+        "source": "tests/class-deletion.cjs",
+        "type": "framework"
+      },
+      {
+        "source": "tests/openrouter-request.cjs",
+        "type": "framework"
+      },
+      {
+        "source": "tests/student-rename.cjs",
+        "type": "framework"
+      }
+    ],
+    "co_change_edge_excluded_from_importer_count": "js/app/00-storage-sync-patches.js",
+    "production_symbol_caller": "js/app/10-main-app.js::ensureNotebookGuide at7098",
+    "note": "Stored graph read in read-only SQLite mode; four file import/framework edges are not four production callers of the assembly function."
+  },
+  "function_flow": [
+    {
+      "function": "buildNotebookGuidePrioritiesFromRawInput",
+      "callers": [
+        "buildNotebookGuidePriorities at6270; used by guide fallback/assembly/ensure and analysis prompt preparation at8164"
+      ],
+      "invariants": "Rubric-order ties; invalid scores excluded, zero accepted; lowest/growGoal/nextTime/scores/computedFlow ordered; max4; checklist policy is deliberately different."
+    },
+    {
+      "function": "sanitizeNotebookGuideCandidate",
+      "callers": [
+        "parseNotebookGuideCandidatesFromStep3Text at6403",
+        "Organization fallback at6705",
+        "assembleNotebookGuideFromCandidates at6918"
+      ],
+      "invariants": "Original-writing grounding, six-field normalized result, meaningful local revision, bounded content, no Neatness/off-priority/generic/off-text example."
+    },
+    {
+      "function": "assembleNotebookGuideFromCandidates",
+      "callers": [
+        "ensureNotebookGuide at7098; native tests also call directly"
+      ],
+      "invariants": "Required-category order, keep searching after rejected duplicate, bounded/grounded selection, controlled duplicate-quote fallback; no invented Flow fallback."
+    },
+    {
+      "function": "buildNotebookReconstructionDataFromSession",
+      "callers": [
+        "getNotebookGuideFromPortfolioSession at7104; used by saved-session print/render paths at7487 and7706"
+      ],
+      "invariants": "Legacy string/object goal support, saved field precedence, raw zero/missing scores, genre/corrected-text aliases, current saved guides restored by immediate caller."
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_2e922e3c247099d7d561",
+      "file": "js/app/10-main-app.js",
+      "symbol": "assembleNotebookGuideFromCandidates",
+      "marker": "brain_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "The detector conditions hold:74 nonblank lines,CCN33,nesting3 and four qualifying incoming file edges at the stored floor4. Centrality is a file-level proxy: index.html imports the file and three tests have framework edges; it does not mean this function has four production callers. The current production caller is ensureNotebookGuide. This function coordinates one bounded guide selection transaction, with validation, required-category first selection, duplicate rules and grounded fallback all sharing the same selected/seen/category state. Existing helpers already isolate category policy, validity, fallback generation and rendering. No small reusable split was found that improves this operation while preserving its tested order; moving local addExample out would introduce numerous state/context arguments. Retain this shape warning as documented maintenance context, separately from the unreproduced dictionary-key lead below.",
+      "verified_metrics": {
+        "start_line": 6904,
+        "end_line": 6989,
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6904,
+          "end_line": 6989,
+          "role": "Complete selection transaction"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6922,
+          "end_line": 6941,
+          "role": "Shared local acceptance and state mutation"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6943,
+          "end_line": 6978,
+          "role": "Required-category ordering, candidate passes and coverage fallback"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6817,
+          "end_line": 6836,
+          "role": "Existing fallback adder has a different contract"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 88,
+          "end_line": 99,
+          "role": "Required-category order, rejected-duplicate continued search and grounded fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 110,
+          "end_line": 126,
+          "role": "Model parse, quote deduplication, grounded fallback and bounded candidates"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_30846f5c87e3f081cd02",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookGuidePrioritiesFromRawInput",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "CCN34 holds, across53 nonblank lines with nesting2. This is one ordered priority policy: validate numeric scores, use rubric order for ties, take the lowest score first, incorporate growGoal/nextTime, supplement scores at or below8 while maintaining a two-category minimum, consider computed Flow only with space, and finish with grounded default categories. The local addPriority operation centralizes normalization/deduplication. The checklist policy nearby is not interchangeable: its threshold and two-action limit deliberately differ. Tests explicitly preserve ties, numeric zero, legacy goal precedence, score8 inclusion and the two-category minimum. No small shared operation removes these decisions; splitting ranking or goal fields into one-use helpers relocates policy and fallback precedence without eliminating duplication.",
+      "verified_metrics": {
+        "start_line": 6274,
+        "end_line": 6333,
+        "ccn": 34,
+        "cognitive": 36,
+        "nloc": 53,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6274,
+          "end_line": 6333,
+          "role": "Complete ordered priority policy"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6284,
+          "end_line": 6297,
+          "role": "Local normalization/deduplication closure"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6299,
+          "end_line": 6326,
+          "role": "Score ranking, precedence and computed Flow"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 162,
+          "end_line": 190,
+          "role": "Rubric-order ties, zero/missing scores, legacy precedence, guide score8/two-category policy"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "start_line": 91,
+          "end_line": 98,
+          "role": "Missing-score and low-sample guide assertions"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_0be1d750101405d79892",
+      "file": "js/app/10-main-app.js",
+      "symbol": "sanitizeNotebookGuideCandidate",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "CCN34 holds:17 logical defaults,11 if statements and5 conjunctions plus entry, across37 nonblank lines with nesting1 and no loops. This is a flat trust-boundary validator, not deeply nested orchestration. It preserves legacy field aliases; requires a whole-word-bounded quote from original writing; rejects unknown/Neatness/off-priority categories; bounds text lengths; retains meaningful paragraph breaks; limits expansion and added sentences; rejects generic, unrelated or unchanged revisions through shared isValidNotebookGuideExample; and only then supplies display defaults. Removing checks changes accepted model data. Existing validation helpers already perform the reusable operations; a new one-use object/schema wrapper would merely move defaults away from the complete six-field result. No useful structural edit identified.",
+      "verified_metrics": {
+        "start_line": 6353,
+        "end_line": 6390,
+        "ccn": 34,
+        "cognitive": 33,
+        "nloc": 37,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 4,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6353,
+          "end_line": 6390,
+          "role": "Flat candidate validation and complete output schema"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6165,
+          "end_line": 6222,
+          "role": "Shared grounding, meaningful revision and quote-boundary checks"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 55,
+          "end_line": 106,
+          "role": "Fabricated/boundary quotes, malformed/generic/unrelated revisions, paragraph preservation and truncation guards"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 193,
+          "end_line": 195,
+          "role": "Unchanged revision rejected by shared validator"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_462e05bcd837b7e85209",
+      "file": "js/app/10-main-app.js",
+      "symbol": "assembleNotebookGuideFromCandidates",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "CCN33 is accurate. The decisions enforce candidate sanitization, maximum examples, priority membership, distinct quotes/categories and staged fallback. In particular, a rejected duplicate must keep searching within the required category, required categories precede general candidates, and duplicate-quote fallback is permitted under narrower rules than ordinary selection. Existing addNotebookGuideFallbackExample cannot replace addExample unchanged: it lacks the maximum/priority/category-duplication checks and has different acceptance rules. Generalizing it would expand its signature/options and alter a second selection path. No equivalence-preserving simplification with a net readability gain was identified. Keep these policy decisions; the separate prototype-key lead needs a regression and does not make this complexity marker false.",
+      "verified_metrics": {
+        "start_line": 6904,
+        "end_line": 6989,
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6904,
+          "end_line": 6989,
+          "role": "Complete selection transaction"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6922,
+          "end_line": 6941,
+          "role": "Shared local acceptance and state mutation"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6943,
+          "end_line": 6978,
+          "role": "Required-category ordering, candidate passes and coverage fallback"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6817,
+          "end_line": 6836,
+          "role": "Existing fallback adder has a different contract"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 88,
+          "end_line": 99,
+          "role": "Required-category order, rejected-duplicate continued search and grounded fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 110,
+          "end_line": 126,
+          "role": "Model parse, quote deduplication, grounded fallback and bounded candidates"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_c9cb059592b435e51d58",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookReconstructionDataFromSession",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "CCN30 holds, but all29 increments are28 logical fallback operators and one ternary across a30-line schema adapter; there are no loops or if statements and nesting is1. The ternary handles legacy string growGoal versus the newer object, preserving saved nextTime/strength and feedback fallbacks in explicit order. The result keeps raw overall and categoryScores, so missing/zero scores are not fabricated; it also preserves genre and corrected-text alias precedence. The immediate caller restores saved guide/version before ensureNotebookGuide, which retains current saved examples rather than regenerating them. A split into one-use field mappers would hide the reconstruction schema and only relocate fallback expressions. The existing legacy/zero-score and saved-snapshot assertions support retaining this compact adapter.",
+      "verified_metrics": {
+        "start_line": 7110,
+        "end_line": 7140,
+        "ccn": 30,
+        "cognitive": 29,
+        "nloc": 30,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7110,
+          "end_line": 7140,
+          "role": "Legacy schema adapter"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7078,
+          "end_line": 7107,
+          "role": "Saved-guide preservation and immediate reconstruction caller"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 175,
+          "end_line": 184,
+          "role": "Legacy string goal precedence and zero-score preservation"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "start_line": 100,
+          "end_line": 107,
+          "role": "Saved/legacy notebook snapshot assertions"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_600fd69a4a17836d4be1",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookGuidePrioritiesFromRawInput",
+      "marker": "bumpy_road",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "The three nesting regions hold: the score scan with invalid-score filtering, ranked supplementation with its score/minimum gate, and the optional computed-Flow gate. They are separate evidence sources with different stopping rules and ordered precedence; maximum nesting is only2. Turning them into a generic callback pipeline or independent wrappers would add machinery and can change when priorities reach the four-item cap. Retain the explicit short phases and validation.",
+      "verified_metrics": {
+        "start_line": 6274,
+        "end_line": 6333,
+        "ccn": 34,
+        "cognitive": 36,
+        "nloc": 53,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6274,
+          "end_line": 6333,
+          "role": "Complete ordered priority policy"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6284,
+          "end_line": 6297,
+          "role": "Local normalization/deduplication closure"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6299,
+          "end_line": 6326,
+          "role": "Score ranking, precedence and computed Flow"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 162,
+          "end_line": 190,
+          "role": "Rubric-order ties, zero/missing scores, legacy precedence, guide score8/two-category policy"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "start_line": 91,
+          "end_line": 98,
+          "role": "Missing-score and low-sample guide assertions"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_0e7b44e9f3055d01febe",
+      "file": "js/app/10-main-app.js",
+      "symbol": "assembleNotebookGuideFromCandidates",
+      "marker": "bumpy_road",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "Three nesting regions are accurately reported: sanitize-and-collect, required-category search/fallback, and the final coverage fallback. They express deliberately ordered selection phases; the intermediate candidate passes are simple bounded loops. Combining phases risks choosing a general candidate before a required category or ending a search on a rejected duplicate. Maximum nesting3 is contained and guarded; splitting phases into one-use closures would move the same policy/state across more boundaries. Retain the marker with the phase-order rationale.",
+      "verified_metrics": {
+        "start_line": 6904,
+        "end_line": 6989,
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6904,
+          "end_line": 6989,
+          "role": "Complete selection transaction"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6922,
+          "end_line": 6941,
+          "role": "Shared local acceptance and state mutation"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6943,
+          "end_line": 6978,
+          "role": "Required-category ordering, candidate passes and coverage fallback"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6817,
+          "end_line": 6836,
+          "role": "Existing fallback adder has a different contract"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 88,
+          "end_line": 99,
+          "role": "Required-category order, rejected-duplicate continued search and grounded fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 110,
+          "end_line": 126,
+          "role": "Model parse, quote deduplication, grounded fallback and bounded candidates"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_19451019efc2d01c7332",
+      "file": "js/app/10-main-app.js",
+      "symbol": "assembleNotebookGuideFromCandidates",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "NLOC74 holds; the span contains an explicitly guarded local addExample closure, the ordered selection passes and the final six-field guide schema. The local closure is reused by multiple passes and owns the selected/seen/category maps. Extracting it globally would require passing several mutable arrays/maps plus original text, priorities and the cap, increasing coupling; compressing loops or the result literal only changes line counts. The related fallback helper has materially different acceptance rules. No small coherent extraction that saves more complexity than it introduces was found.",
+      "verified_metrics": {
+        "start_line": 6904,
+        "end_line": 6989,
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6904,
+          "end_line": 6989,
+          "role": "Complete selection transaction"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6922,
+          "end_line": 6941,
+          "role": "Shared local acceptance and state mutation"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6943,
+          "end_line": 6978,
+          "role": "Required-category ordering, candidate passes and coverage fallback"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6817,
+          "end_line": 6836,
+          "role": "Existing fallback adder has a different contract"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 88,
+          "end_line": 99,
+          "role": "Required-category order, rejected-duplicate continued search and grounded fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 110,
+          "end_line": 126,
+          "role": "Model parse, quote deduplication, grounded fallback and bounded candidates"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_8533ebb93bfd8fa4850c",
+      "file": "js/app/10-main-app.js",
+      "symbol": "assembleNotebookGuideFromCandidates",
+      "marker": "primitive_obsession",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_or_schema_shape_retained",
+      "reason": "Five parameters are accurate; typed_param_count and primitive_param_count are both0 because this JavaScript signature is untyped. Their values are not five loose scalars: candidate array, original writing string, genre context, priority array and assessment object. The single production call names these distinct inputs directly. An options wrapper would add an object allocation and property plumbing without removing a parameter, validation rule or demonstrated caller mistake. Retain the count warning; it is not evidence that five primitive domain values need new classes.",
+      "verified_metrics": {
+        "start_line": 6904,
+        "end_line": 6989,
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6904,
+          "end_line": 6989,
+          "role": "Complete selection transaction"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6922,
+          "end_line": 6941,
+          "role": "Shared local acceptance and state mutation"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6943,
+          "end_line": 6978,
+          "role": "Required-category ordering, candidate passes and coverage fallback"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6817,
+          "end_line": 6836,
+          "role": "Existing fallback adder has a different contract"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 88,
+          "end_line": 99,
+          "role": "Required-category order, rejected-duplicate continued search and grounded fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 110,
+          "end_line": 126,
+          "role": "Model parse, quote deduplication, grounded fallback and bounded candidates"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "notebook-prototype-key-collision",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "text_dictionary_uses_inherited_object_keys",
+      "file": "js/app/10-main-app.js",
+      "function": "assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords",
+      "relation_to_assigned_findings": "Separate behavior lead noticed while checking quote deduplication and validator dependencies. It does not make the nine shape metrics false and is not a scanner clearance.",
+      "reason": "The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6104,
+          "end_line": 6141,
+          "role": "Explicit stop-word table and inherited membership lookup"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6205,
+          "end_line": 6222,
+          "role": "Quote normalization retains underscores and permits bounded source identifiers"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 6912,
+          "end_line": 6940,
+          "role": "Ordinary object seen map and first-candidate duplicate lookup"
+        }
+      ],
+      "regression_recommendation": "After the publication gate, extend the existing local native notebook-guidance harness. First assert getNotebookGuideContentWords(\"constructor\") retains that word and a grounded constructor-only quote can pass sanitization. Independently use source containing a bounded __proto__ identifier and a concrete same-word revision such as \"The __proto__ value\"; assert sanitization accepts it before assembly, then assert the first candidate is retained. Keep ordinary duplicate-quote/category rejection, required-category order, bounds and fallback cases. Confirm actual old-app failures before editing. Candidate minimal operations are an own-property stop-word lookup in getNotebookGuideContentWords and a prototype-free arbitrary quote map in assembleNotebookGuideFromCandidates; inspect the fallback quote-map caller contract before choosing complete scope. The stop-word operation is outside the four named functions and needs explicit coordinator scope for a repair.",
+      "reproduced": false,
+      "fix_applied": false,
+      "needs_user_attention": false
+    }
+  ],
+  "tests": {
+    "run_by_this_review": [],
+    "existing_assertions_read": {
+      "buildNotebookGuidePrioritiesFromRawInput": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 162,
+          "end_line": 190,
+          "role": "Rubric-order ties, zero/missing scores, legacy precedence, guide score8/two-category policy"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "start_line": 91,
+          "end_line": 98,
+          "role": "Missing-score and low-sample guide assertions"
+        }
+      ],
+      "sanitizeNotebookGuideCandidate": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 55,
+          "end_line": 106,
+          "role": "Fabricated/boundary quotes, malformed/generic/unrelated revisions, paragraph preservation and truncation guards"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 193,
+          "end_line": 195,
+          "role": "Unchanged revision rejected by shared validator"
+        }
+      ],
+      "assembleNotebookGuideFromCandidates": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "start_line": 88,
+          "end_line": 99,
+          "role": "Required-category order, rejected-duplicate continued search and grounded fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 110,
+          "end_line": 126,
+          "role": "Model parse, quote deduplication, grounded fallback and bounded candidates"
+        }
+      ],
+      "buildNotebookReconstructionDataFromSession": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 175,
+          "end_line": 184,
+          "role": "Legacy string goal precedence and zero-score preservation"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "start_line": 100,
+          "end_line": 107,
+          "role": "Saved/legacy notebook snapshot assertions"
+        }
+      ]
+    },
+    "full_publication_gate": "Owned by coordinator and still in progress when this review finished; no gate result claimed."
+  },
+  "limits": [
+    "No application/test source edits or application/test execution; pure source metrics and hashes only.",
+    "The prototype-key lead is unreproduced and needs a failing native regression before a behavior fix. The source-backed edge case is a possible omitted guide example, not a claim of credential or writing exposure.",
+    "Existing assertions were inspected, not run here; they do not prove every validation combination.",
+    "All nine scanner warnings remain open intentionally, each with an individual cost/benefit rationale. No threshold, exclusion, fixture or scanner data changes.",
+    "No Git mutations, tracker/docs edits, RepoWise writes, live accounts/model/Drive calls, new chats/subagents or cross-chat messages."
+  ]
+}

@@ -1,0 +1,326 @@
+{
+  "schema_version": 1,
+  "repair": "repair-012",
+  "title": "Read-only goal and checklist policy review",
+  "created_at_utc": "2026-10-15T20:42:14.653668+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "source_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "summary": {
+    "findings_reviewed": 3,
+    "critical_metrics_verified": 1,
+    "reviewed_no_change": 3,
+    "additional_unreproduced_leads": 1,
+    "source_edits": 0,
+    "tests_run": 0,
+    "scanner_clearances_claimed": 0,
+    "needs_user_attention": 0
+  },
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "sha256_raw": "1cf34c7924721f2cfd198420b5f6696770db1688a3622710da0212d4230e322d",
+      "sha256_normalized_lf": "74ab4ffa546a33378a1c73c0cf3a0951b4e31b91918e4df4a0587b83b023b7c8"
+    }
+  },
+  "all89_frozen_source_hashes_match": true,
+  "source_pin_receipt": "work/repowise-coordinator/batch-002-source-pins.json",
+  "metric_method": "Re-walk frozen source with installed read-only RepoWise complexity walker; compare all3 stored metric facts and source spans. No application evaluation, tests or index writes.",
+  "metric_evidence": "work/repowise-repair-012/source-evidence.json",
+  "function_flow": [
+    {
+      "function": "getGoalPlan",
+      "callers": [
+        {
+          "function": "buildEncouragingClosing",
+          "line": 5578
+        },
+        {
+          "function": "pickTeacherComment",
+          "line": 5709
+        },
+        {
+          "function": "ensureNotebookGuide",
+          "line": 7083
+        },
+        {
+          "function": "fillNotebookSummary",
+          "line": 7165
+        },
+        {
+          "function": "reconcileScoredAssessment",
+          "line": 7931
+        }
+      ],
+      "invariants": "Short-sample guidance precedes score use; missing/invalid scores do not imply a weak category; zero remains valid; active-category order resolves ties; detailed goal override is non-generic and category-specific; wording/calibration is unchanged."
+    },
+    {
+      "function": "buildNotebookActionChecklist",
+      "callers": [
+        {
+          "function": "getGoalPlan",
+          "line": 5948
+        },
+        "Native tests call it directly"
+      ],
+      "invariants": "Two items; rubric-order tied categories; category score8+ tips excluded; text actions normalized/split/de-duplicated before final checklist fallback; checklist-array fallback has a different generic/splitting contract."
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_2e009e93a06fee79a31d",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookActionChecklist",
+      "marker": "complex_method",
+      "line": 5784,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_ordered_goal_policy_retained",
+      "reason": "CCN21 is accurate across48 nonblank lines, with maximum nesting2. One bounded two-item selection policy ranks usable numeric scores in rubric tie order, takes category growth tips only below8, then considers detailed nextTime, supplied nextTime, growGoal, the supplied checklist and final defaults in that exact order. Existing extractNotebookActionItems/compressChecklistItem and local text admission helper already centralize reusable work. Text admission splits actions and rejects generic guidance, whereas the final checklist-array fallback compresses each supplied item and may intentionally retain generic defaults; reusing the text helper there would change splitting/filtering. The single-use appendFallbackChecklist phase could be inlined, but that only changes helper/parent metric distribution and saves little source without removing policy decisions. No worthwhile exact-behavior simplification identified; retain the explicit precedence and cap rather than add flags or more wrappers.",
+      "verified_metrics": {
+        "start_line": 5784,
+        "end_line": 5841,
+        "ccn": 21,
+        "cognitive": 24,
+        "nloc": 48,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 4,
+        "dispatch_share": 0.4
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5784,
+          "end_line": 5841,
+          "role": "Complete ordered two-item policy"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5744,
+          "end_line": 5782,
+          "role": "Shared text extraction with per-item first-person conversion"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 542,
+          "end_line": 557,
+          "role": "Rubric order and finite numeric score acceptance"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 134,
+          "end_line": 158,
+          "role": "Native action splitting, duplicate/two-item cap, first-person compression, length limit and no-fallback when two growth actions exist"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 162,
+          "end_line": 193,
+          "role": "Rubric-order ties, score8 exclusion, fallback text/checklist order and de-duplication"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_360e96c0bf7e43661286",
+      "file": "js/app/10-main-app.js",
+      "symbol": "getGoalPlan",
+      "marker": "complex_method",
+      "line": 5896,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_ordered_goal_policy_retained",
+      "reason": "CCN28 is accurate across55 nonblank lines with maximum nesting2. The function keeps insufficient/limited samples separate from scorable work, returns teacher review for missing numeric evidence, selects the lowest active category with rubric-order ties, normalizes the category growth tip, applies one of six exact category goal messages, and accepts a non-generic detailed goal only when it names that selected category. Its checklist is then built under the dedicated two-item policy. Six contiguous constant-message branches are an obvious possible table conversion, but a new table/lookup plus unmapped-category behavior would save only a few lines and leave the substantive input/fallback/override decisions intact. Existing default-focus helpers use different pedagogical wording and cannot replace this block unchanged. No reusable operation or net clarity benefit was identified that justifies a new dispatch table or one-use wrappers under the exact wording/calibration scope. Retain the compact policy; no score/category or short-sample guard should be removed to reduce its counter.",
+      "verified_metrics": {
+        "start_line": 5896,
+        "end_line": 5953,
+        "ccn": 28,
+        "cognitive": 31,
+        "nloc": 55,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 1,
+        "dispatch_share": 0.22
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5896,
+          "end_line": 5953,
+          "role": "Complete sample/evidence/category/override policy"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5843,
+          "end_line": 5856,
+          "role": "Lowest active category with strict less-than tie preservation"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 652,
+          "end_line": 666,
+          "role": "Only fixed rubric categories plus optional Neatness are active"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5197,
+          "end_line": 5237,
+          "role": "Existing strategy phrase normalization"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 21,
+          "end_line": 40,
+          "role": "Unsupported/missing scores keep extrema absent and avoid a fabricated details goal"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 61,
+          "end_line": 97,
+          "role": "Numeric zero/string scores, invalid types and known-category goal availability"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "start_line": 53,
+          "end_line": 59,
+          "role": "Insufficient-sample guide path takes the short-sample goal plan"
+        },
+        {
+          "file": "tests/analysis-policy.browser.cjs",
+          "start_line": 48,
+          "end_line": 56,
+          "role": "Publication-boundary hook restores getGoalPlan after policy ownership checks"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_ab05ea1a9ee32eb3296d",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookActionChecklist",
+      "marker": "bumpy_road",
+      "line": 5784,
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_ordered_goal_policy_retained",
+      "reason": "Three nesting regions and maximum nesting2 match the stored detector. The function has bounded ranked-tip selection, text admission/de-duplication and a distinct checklist-array fallback before final fill. Their entry and stopping rules differ, notably score8 exclusion, rejection of generic text versus allowance of final defaults, and the two-item cap. A generic callback/fallback pipeline would relocate those rules or make their priority harder to see; merging passes can displace the selected growth-tip actions. Existing local/standalone helpers are reused where contracts actually match. Retain this shape warning with the ordered-policy rationale.",
+      "verified_metrics": {
+        "start_line": 5784,
+        "end_line": 5841,
+        "ccn": 21,
+        "cognitive": 24,
+        "nloc": 48,
+        "max_nesting": 2,
+        "bumps": 3,
+        "param_count": 4,
+        "dispatch_share": 0.4
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5784,
+          "end_line": 5841,
+          "role": "Complete ordered two-item policy"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5744,
+          "end_line": 5782,
+          "role": "Shared text extraction with per-item first-person conversion"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 542,
+          "end_line": 557,
+          "role": "Rubric order and finite numeric score acceptance"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 134,
+          "end_line": 158,
+          "role": "Native action splitting, duplicate/two-item cap, first-person compression, length limit and no-fallback when two growth actions exist"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 162,
+          "end_line": 193,
+          "role": "Rubric-order ties, score8 exclusion, fallback text/checklist order and de-duplication"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "needs_user_attention": false
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "checklist-second-person-contraction",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "first_person_normalizer_misses_second_person_contraction",
+      "file": "js/app/10-main-app.js",
+      "function": "buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist",
+      "relation_to_assigned_findings": "Observed along the assigned checklist text-admission route. Root cause is a read dependency outside the two-function edit scope; no independent source edit or broader audit was undertaken. This does not invalidate the three shape metrics.",
+      "reason": "toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5645,
+          "end_line": 5654,
+          "role": "Full phrase rule followed by general whole-word pronoun replacement"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5660,
+          "end_line": 5686,
+          "role": "Compression delegates to first-person helper without contraction normalization"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5767,
+          "end_line": 5773,
+          "role": "Action extraction normalizes and compresses each supplied text part"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5789,
+          "end_line": 5797,
+          "role": "Assigned checklist admits extracted non-generic actions"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 5820,
+          "end_line": 5822,
+          "role": "Detailed/supplied nextTime and growGoal routes reach that helper"
+        }
+      ],
+      "regression_recommendation": "After the publication gate, extend the existing local native notebook-guidance harness through buildNotebookActionChecklist with nextTime actions beginning with straight/typographic You are contractions and an existing full you are control. Assert valid first-person output and preserved my verbs wording, two-item order, ordinary imperative actions and source text. First demonstrate the invalid contraction on old code. If confirmed, scope a minimal normalization change in toFirstPersonChecklist before its general you replacement; preserve other wording and do not redesign the language transformer.",
+      "reproduced": false,
+      "fix_applied": false,
+      "needs_user_attention": false
+    }
+  ],
+  "tests": {
+    "run": [],
+    "method": "Read existing assertion/caller source only; coordinator publication gate is separate and no completion claim is made.",
+    "relevant_suites": [
+      "tests/notebook-guidance-repair.browser.cjs",
+      "tests/notebook-guide.browser.cjs",
+      "tests/missing-feedback.browser.cjs",
+      "tests/analysis-policy.browser.cjs",
+      "tests/analysis-pipeline.browser.cjs"
+    ]
+  },
+  "limits": [
+    "No source/test changes, tests/application execution, Git mutations or RepoWise writes.",
+    "Existing assertions cover key selection/fallback boundaries but do not directly assert every exact category goal string, all detailed override combinations or contraction inputs; no exhaustive behavior equivalence is claimed.",
+    "The first-person contraction lead needs a native failing regression before a fix; it is separate from scanner clearance.",
+    "No live Google/Drive/model calls, real accounts, students or credentials were used."
+  ]
+}
