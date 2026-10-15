@@ -8,12 +8,18 @@ try {
     fs.writeFileSync(path.join(root, 'tests/timeout.cjs'), 'setInterval(() => {}, 1000);');
     fs.writeFileSync(path.join(root, 'tests/signal.cjs'), 'process.kill(process.pid, "SIGTERM");');
     fs.writeFileSync(path.join(root, 'tests/missing.cjs'), 'void process.env["WFT_TEST_" + "REPORT"];');
-    const reports = { valid: { cases: [{ passed: true }] }, validPass: { cases: [{ pass: true }] }, empty: { cases: [] }, zeroCases: { cases: 0 }, zeroCount: { count: 0 }, failedCase: { cases: [{ passed: false }] }, failedPass: { cases: [{ pass: false }] }, failedCount: { failed: 1 }, failures: { failures: ['expected failure'] } };
+    const contracts = { emptyObject: {}, arrayReport: [], booleanReport: true, topFailure: { passed: false, cases: [{ passed: true }] }, malformedRows: { cases: [{}] }, failedChecks: { checks: [{ passed: false }] }, failedArray: { count: 1, passed: 1, failed: [{ name: 'failure' }] }, validChecks: { checks: [{ passed: true }] }, validSummary: { count: 2, passed: 2 }, incompleteSummary: { count: 2, passed: 1 } };
+    const reports = { ...contracts, valid: { cases: [{ passed: true }] }, validPass: { cases: [{ pass: true }] }, empty: { cases: [] }, zeroCases: { cases: 0 }, zeroCount: { count: 0 }, failedCase: { cases: [{ passed: false }] }, failedPass: { cases: [{ pass: false }] }, failedCount: { failed: 1 }, failures: { failures: ['expected failure'] } };
     for (const [name, data] of Object.entries(reports)) fs.writeFileSync(path.join(root, 'tests/' + name + '.cjs'), 'require("node:fs").writeFileSync(process.env.WFT_GUIDE_REPORT, ' + JSON.stringify(JSON.stringify(data)) + ');');
     fs.writeFileSync(path.join(root, 'tests/malformed.cjs'), 'require("node:fs").writeFileSync(process.env.WFT_TEST_REPORT, "{");');
     fs.writeFileSync(path.join(root, 'tests/blank.cjs'), 'require("node:fs").writeFileSync(process.env.WFT_TEST_REPORT, "");');
     const reportSuites = [...Object.keys(reports), 'missing', 'malformed', 'blank'].map(name => 'tests/' + name + '.cjs');
     const run = name => runTests({ root, out: path.join(root, 'out-' + name), selected: ['tests/' + name + '.cjs'], timeout: 2000, reportSuites });
+    const contractResults = runTests({ root, out: path.join(root, 'out-contracts'), selected: Object.keys(contracts).map(name => 'tests/' + name + '.cjs'), timeout: 2000, reportSuites });
+    for (const row of contractResults.suites) {
+        const valid = /\/valid(?:Checks|Summary)\.cjs$/.test(row.suite);
+        assert.equal(row.status === 0 && !row.error, valid, 'Report contract: ' + row.suite);
+    }
     assert.equal(run('pass').passed, true);
     const failed = run('fail'); assert.equal(failed.passed, false); assert(fs.readFileSync(failed.suites[0].log, 'utf8').includes('expected child failure'));
     const timeout = run('timeout'); assert.equal(timeout.passed, false); assert.match(timeout.suites[0].error, /ETIMEDOUT/);
