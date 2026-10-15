@@ -72,6 +72,22 @@ function context(source, globals) {
         assert.equal(fallback.studentNames.length, 0);
         assert.equal(fallback.sessionCount, 0);
         assert.equal(fallback.contents.wft_portfolio, '{invalid', 'Unreadable JSON must remain recoverable');
+        for (const raw of ['{"apiKey":"synthetic-private-key",', JSON.stringify('{"apiKey":"synthetic-private-key"}'), '[{"apiKey":"synthetic-private-key"}]']) {
+            for (const recovery of [false, true]) {
+                values.wft_settings = raw;
+                app.wftStudentChangeRecovery = recovery ? { wft_settings: raw, wft_portfolio: '{recovery writing' } : null;
+                const exported = app.buildWftEmergencyBackupObject();
+                assert.equal(JSON.stringify(exported).includes('synthetic-private-key'), false, 'Damaged settings must not bypass backup credential redaction');
+                assert.equal(exported.contents.wft_settings, null);
+                assert.ok(exported.readErrors.includes('wft_settings'), 'Omitted settings must mark the backup incomplete');
+                assert.equal(values.wft_settings, raw, 'Backup must leave damaged stored bytes intact');
+                if (recovery) {
+                    assert.equal(app.wftStudentChangeRecovery.wft_settings, raw, 'Backup must leave recovery bytes intact');
+                    assert.equal(exported.studentChangeRecovery.wft_settings, null);
+                    assert.equal(exported.studentChangeRecovery.wft_portfolio, '{recovery writing');
+                }
+            }
+        }
     }
     console.log('Storage health tests passed for shipped code: ID lookup, no write on lookup failure, promise errors, raw backup preservation, inaccessible keys, metadata exclusion and portfolio fallback.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path');
 const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'));
 const scenarios = ['backup-local', 'backup-drive', 'backup-empty-id', 'backup-upload-error', 'backup-sync-throw', 'backup-no-helper',
-    'backup-download-error', 'backup-fallback-error', 'backup-corrupt', 'backup-unreadable', 'backup-recovery',
+    'backup-download-error', 'backup-fallback-error', 'backup-corrupt', 'backup-unreadable', 'backup-recovery', 'backup-settings-corrupt', 'backup-settings-corrupt-recovery',
     'cache-cancel', 'cache-escape', 'cache-clear', 'cache-remove-error', 'cache-meta-remove-error', 'cache-idb-abort',
     'cache-idb-open-error', 'cache-idb-late-abort', 'cache-idb-clear-throw', 'cache-concurrent-abort', 'cache-concurrent-complete', 'cache-rollback-error', 'cache-corrupt', 'cache-unreadable', 'cache-recovery',
     'cache-settings-corrupt', 'cache-roster-corrupt', 'cache-deletions-corrupt', 'safe-toggle', 'safe-enter-write-error', 'safe-exit-write-error', 'safe-unreadable', 'safe-corrupt'];
@@ -11,12 +11,12 @@ function checkBackupCallback(scenario, observed, check, failingDownload, driveSu
     if (scenario !== 'backup-download-error') {
         check('backup callback settles exactly once', observed.callbacks.length === 1);
         const outcome = observed.callbacks[0];
-        check('callback outcome truthful', outcome && (failingDownload ? !!outcome.error && outcome.result === null : driveSuccess ? !outcome.error && outcome.result === 'backup-file' : ['backup-empty-id', 'backup-upload-error', 'backup-sync-throw'].includes(scenario) ? !!outcome.error && outcome.result === 'fallback-local' : !outcome.error && outcome.result === 'local-only'));
+        check('callback outcome truthful', outcome && (failingDownload ? !!outcome.error && outcome.result === null : driveSuccess ? !outcome.error && outcome.result === 'backup-file' : ['backup-empty-id', 'backup-upload-error', 'backup-sync-throw', 'backup-settings-corrupt'].includes(scenario) ? !!outcome.error && outcome.result === 'fallback-local' : !outcome.error && outcome.result === 'local-only'));
     }
 }
 
 async function checkBackupScenario(scenario, observed, downloads, requests, alerts, check) {
-    check('backup action leaves portfolio and storage metadata byte exact', ['wft_portfolio', 'wft_storage_meta'].every(k => observed.contents[k] === (scenario === 'backup-recovery' && k === 'wft_portfolio' ? '{}' : observed.originals[k])));
+    check('backup action leaves portfolio and storage metadata byte exact', ['wft_portfolio', 'wft_storage_meta'].every(k => observed.contents[k] === (scenario.endsWith('recovery') && k === 'wft_portfolio' ? '{}' : observed.originals[k])));
     const failingDownload = ['backup-download-error', 'backup-fallback-error'].includes(scenario);
     const driveSuccess = scenario === 'backup-drive';
     checkBackupCallback(scenario, observed, check, failingDownload, driveSuccess);
@@ -32,6 +32,11 @@ async function checkBackupScenario(scenario, observed, downloads, requests, aler
         check('export includes full pending photo/writing and persisted pending root', backup.pendingPortfolioSync?.sessionData.originalText === 'Pending exact writing' && backup.pendingPortfolioSync?.sessionData.images[0].dataUrl === 'data:image/png;base64,c3ludGhldGlj' && backup.contents.wft_pending_portfolio_sync_v1?.sessionData.id === 'pending');
         check('corrupt and recovery writing retained', scenario === 'backup-corrupt' ? backup.contents.wft_portfolio === '{damaged writing' : scenario === 'backup-recovery' ? JSON.parse(backup.studentChangeRecovery.wft_portfolio).Synthetic.sessions[0].originalText === 'Saved exact writing' : true);
         if (scenario === 'backup-unreadable') check('unreadable root explicitly marked and incomplete backup reported', backup.readErrors?.includes('wft_portfolio') && alerts.some(a => /could not be read|incomplete/i.test(a)));
+        if (scenario.startsWith('backup-settings-corrupt')) {
+            check('unredactable settings omitted with visible incomplete backup warning', backup.contents.wft_settings === null && backup.readErrors?.includes('wft_settings') && alerts.some(a => /incomplete/i.test(a)));
+            if (scenario === 'backup-settings-corrupt') check('strict Drive storage guard prevents unsafe upload and uses local fallback', !requests.some(r => r.url.includes('/upload/')));
+            if (scenario.endsWith('recovery')) check('export omits unsafe recovery settings without changing retained originals', backup.studentChangeRecovery.wft_settings === null && observed.recovery.wft_settings === observed.originals.wft_settings);
+        }
     }
     if (failingDownload) check('download failure visible with no success', alerts.some(a => /failed|could not/i.test(a)) && !alerts.some(a => /saved|downloaded/i.test(a)));
     check('backup success or fallback visible', failingDownload || alerts.some(a => /Drive|download/i.test(a)));
@@ -144,7 +149,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
         wftSyncState.pendingPortfolioPush = true; wftSyncState.pendingSettingsPush = true; wftSyncState.pendingDeletionsPush = true;
         window.pendingBefore = JSON.stringify(pendingPortfolioSync);
         window.syncBefore = JSON.stringify([wftSyncState.pendingPortfolioPush, wftSyncState.pendingSettingsPush, wftSyncState.pendingDeletionsPush, wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter]);
-        driveAccessToken = wftSyncState.accessToken = scenario.startsWith('backup-') && !['backup-local', 'backup-corrupt', 'backup-unreadable', 'backup-recovery', 'backup-download-error'].includes(scenario) ? 'synthetic-token' : '';
+        driveAccessToken = wftSyncState.accessToken = scenario.startsWith('backup-') && !['backup-local', 'backup-corrupt', 'backup-unreadable', 'backup-recovery', 'backup-settings-corrupt-recovery', 'backup-download-error'].includes(scenario) ? 'synthetic-token' : '';
         wftSyncState.signedIn = !!driveAccessToken; wftSyncState.tokenExpiresAt = Date.now() + 600000;
         driveFolderId = wftSyncState.folderId = 'root-folder';
         if (scenario.startsWith('cache-')) {
@@ -153,6 +158,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
         function installScenarioFaults(scenario) {
             if (['backup-corrupt', 'cache-corrupt'].includes(scenario)) { localStorage.setItem('wft_portfolio', '{damaged writing'); originals.wft_portfolio = '{damaged writing'; }
             if (scenario === 'backup-corrupt') localStorage.setItem('wft_oauth_textarea_draft_v1', originals.wft_oauth_textarea_draft_v1 = '{damaged unsaved synthetic writing');
+            if (scenario.startsWith('backup-settings-corrupt')) localStorage.setItem('wft_settings', originals.wft_settings = '{"apiKey":"synthetic-private-key",');
             if (['cache-settings-corrupt', 'cache-roster-corrupt', 'cache-deletions-corrupt', 'safe-corrupt'].includes(scenario)) {
                 const key = { 'cache-settings-corrupt': 'wft_settings', 'cache-roster-corrupt': 'wft_students', 'cache-deletions-corrupt': 'wft_deletions', 'safe-corrupt': 'wft_storage_meta' }[scenario];
                 originalSet.call(localStorage, key, originals[key] = '{damaged');

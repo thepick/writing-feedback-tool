@@ -249,8 +249,13 @@ function buildWftEmergencyBackupObject() {
         try {
             var raw = readWftStudentChangeStorage(bk);
             if (raw !== null) {
-                backup.contents[bk] = parseWftBackupValue(raw);
-                if (bk === 'wft_settings' && backup.contents[bk] && typeof backup.contents[bk] === 'object') delete backup.contents[bk].apiKey;
+                var value = bk === 'wft_settings' ? JSON.parse(raw) : parseWftBackupValue(raw);
+                if (bk === 'wft_settings') {
+                    // Raw or invalid settings cannot be safely exported with credentials removed.
+                    validateWftRequiredStorage(bk, value);
+                    delete value.apiKey;
+                }
+                backup.contents[bk] = value;
             }
         } catch (e) {
             backup.contents[bk] = null;
@@ -264,10 +269,9 @@ function buildWftEmergencyBackupObject() {
 
     if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) {
         backup.studentChangeRecovery = Object.assign({}, wftStudentChangeRecovery);
-        var recoveredSettings = parseWftBackupValue(backup.studentChangeRecovery.wft_settings);
-        if (recoveredSettings && typeof recoveredSettings === 'object') {
-            delete recoveredSettings.apiKey;
-            backup.studentChangeRecovery.wft_settings = JSON.stringify(recoveredSettings);
+        if (Object.prototype.hasOwnProperty.call(wftStudentChangeRecovery, 'wft_settings')) {
+            var recoveredSettings = backup.contents.wft_settings;
+            backup.studentChangeRecovery.wft_settings = recoveredSettings == null ? null : JSON.stringify(recoveredSettings);
         }
     }
 
