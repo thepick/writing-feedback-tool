@@ -3323,6 +3323,24 @@ function isWftGisTokenClientAvailable() {
         && typeof window.google.accounts.oauth2.initTokenClient === "function");
 }
 
+function clearWftOAuthFragment() {
+    try {
+        history.replaceState(null, document.title || '', window.location.pathname + window.location.search);
+    } catch (error) {
+        var message = "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.";
+        try {
+            setOcrStatus(message, 'error');
+        } catch (noticeError) {
+            wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery notice could not be shown.');
+        }
+        try {
+            alert(message);
+        } catch (alertError) {
+            wftDebugWarn('[WFT Auth] Sign-in address cleanup failed; its recovery alert could not be shown.');
+        }
+    }
+}
+
 // Read OAuth tokens delivered via the URL fragment (#) after Google redirects
 // back to the app using the implicit grant fallback flow.
 function checkHashForOAuthTokens() {
@@ -3335,7 +3353,7 @@ function checkHashForOAuthTokens() {
         if (authError) {
             var errorDescription = params.get('error_description') || authError;
             setDriveSyncStatus("error", "Google sign-in did not complete: " + errorDescription);
-            try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e1) { }
+            clearWftOAuthFragment();
             return false;
         }
 
@@ -3345,7 +3363,7 @@ function checkHashForOAuthTokens() {
         if (!accessToken) return false;
 
         var handled = finishWftGoogleSignInWithAccessToken(accessToken, expiresIn, params.get("scope") || "", "oauth-redirect", function() { manualSaveToDrive(); });
-        try { history.replaceState(null, document.title || '', window.location.pathname + window.location.search); } catch (e2) { }
+        clearWftOAuthFragment();
         return handled;
     } catch (e) {
         wftDebugError('[WFT Auth] Error reading OAuth tokens from hash:', e);

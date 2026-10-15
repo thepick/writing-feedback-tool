@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T02:30:14.052222+07:00.
+Updated 2026-10-16T02:34:12.281828+07:00.
 
-Source: 14025032df09b23b84e400c9ca12561902714942. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: abfcec375bfd59dede36bbc5e3521c1873b63e7e. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,21 +10,21 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 906 |
+| code_health | 909 |
 | security | 29 |
 | dead_code | 16 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"candidate_needs_regression": 1, "reviewed_no_change": 146, "unreviewed": 834}.
+Statuses: {"fixed_pending_refresh": 2, "reviewed_no_change": 147, "unreviewed": 835}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 1, "fixed_verified": 11, "reviewed_no_change": 147, "unreviewed": 834}.
+All tracked rows, including findings absent on the latest scan: {"fixed_pending_refresh": 2, "fixed_verified": 11, "reviewed_no_change": 148, "unreviewed": 835}.
 
 Findings confirmed cleared: 11. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Behavior repairs with regression evidence: 1.
+Behavior repairs with regression evidence: 2.
 
-Supporting refactoring plans: 104; grouped refactoring opportunities: 23.
+Supporting refactoring plans: 105; grouped refactoring opportunities: 23.
 
 These plans and opportunities can overlap findings; their counts are not added as distinct bugs.
 
@@ -37,9 +37,11 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-005: Remove verified unused helpers â€” reviewed_complete.
 - repair-006: Storage failure safeguards â€” reviewed_complete.
 - history-context-review-4c39f16: Revalidate history after cleanup â€” reviewed_complete.
-- repair-001: Verify security signals â€” reviewed_complete.
 - history-context-review-1402503: Revalidate history on published main â€” reviewed_complete.
 - repair-007: Preserve student identity metadata on read failure â€” reviewed_complete.
+- repair-001: Verify security signals â€” reviewed_complete.
+- history-context-review-abfcec3: Revalidate history after identity repair â€” reviewed_complete.
+- repair-008: Handle failed OAuth URL cleanup â€” reviewed_pending_refresh.
 
 ## Complete inventory
 
@@ -220,7 +222,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_d71333b5f8e26e1a7718 | high | code_health | tests/preference-integrity-scenarios.js:338 | checkKeyPersistenceAndHandlers / complex_method | unreviewed |
 | code_health:finding_541a0914ff6d42267451 | high | code_health | tests/preference-integrity-scenarios.js:396 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_532b474a093fc3ebb820 | high | code_health | tests/preference-integrity-scenarios.js:494 | checkOutgoingCredentialRedaction / complex_method | unreviewed |
-| code_health:finding_78862c658763199794b0 | high | code_health | tests/record-identity.browser.cjs:71 | <anonymous@71> / complex_method | unreviewed |
+| code_health:finding_aa964992afa4814d7c64 | high | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / large_method | unreviewed |
+| code_health:finding_78862c658763199794b0 | high | code_health | tests/record-identity.browser.cjs:135 | <anonymous@135> / complex_method | unreviewed |
 | code_health:finding_41d0abbe064ca79a7dcc | high | code_health | tests/recovery-cache.browser.cjs | churn_risk | reviewed_no_change |
 | code_health:finding_308c12524a7013521290 | high | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / complex_method | unreviewed |
 | code_health:finding_d6d201d5eca456e8aaac | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / complex_method | unreviewed |
@@ -263,6 +266,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_41f1c98f03d5ab70b068 | medium | code_health | js/app/00-storage-sync-patches.js:1932 | clearWftLocalCache / complex_method | reviewed_no_change |
 | code_health:finding_d6fe9a1e2d9c86e011a9 | medium | code_health | js/app/00-storage-sync-patches.js:1989 | <anonymous> / nested_complexity | unreviewed |
 | code_health:finding_2063be3138b94708785b | medium | code_health | js/app/00-storage-sync-patches.js:2009 | <anonymous> / nested_complexity | unreviewed |
+| code_health:finding_4acf83c3283ca556effe | medium | code_health | js/app/00-storage-sync-patches.js:2302 | getStudentRecordByName / complex_method | reviewed_no_change |
 | code_health:finding_0d58c6763761293e9a6e | medium | code_health | js/app/00-storage-sync-patches.js:2326 | ensureStudentRecordsForRoster / nested_complexity | unreviewed |
 | code_health:finding_0ff88595b09107caf0b3 | medium | code_health | js/app/00-storage-sync-patches.js:2377 | resolveStudentPortfolioKey / nested_complexity | unreviewed |
 | code_health:finding_91f79ffa71c58cd99db3 | medium | code_health | js/app/00-storage-sync-patches.js:2395 | updateStudentRecordOnRename / complex_method | unreviewed |
@@ -551,6 +555,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_50f759c7ce8caf72ba0f | medium | code_health | tests/preference-integrity-scenarios.js:457 | checkKeyReadsAndRetainedLegacy / complex_method | unreviewed |
 | code_health:finding_f91d9ed74c28e5ef0ee7 | medium | code_health | tests/preference-integrity-scenarios.js:500 | <anonymous> / complex_conditional | unreviewed |
 | code_health:finding_7041aa95c1ab7c98200b | medium | code_health | tests/preference-integrity.browser.cjs:10 | dry_violation | unreviewed |
+| code_health:finding_922daa780754711de593 | medium | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / complex_method | unreviewed |
 | code_health:finding_92d6531aeae640c31cf2 | medium | code_health | tests/recovery-cache.browser.cjs | change_entropy | reviewed_no_change |
 | code_health:finding_a3c658d1d9476710ffd9 | medium | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / complex_method | unreviewed |
 | code_health:finding_14213736db7f2152b9ad | medium | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / primitive_obsession | unreviewed |
@@ -643,8 +648,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_879a20d0d0bc9e7a59ac | low | code_health | js/app/00-storage-sync-patches.js:3255 | completeWftGoogleSignInWithAccessToken / primitive_obsession | unreviewed |
 | code_health:finding_82a1305c8c6ea7f18054 | low | code_health | js/app/00-storage-sync-patches.js:3268 | error_handling | reviewed_no_change |
 | code_health:finding_9b637db612c321b9d935 | low | code_health | js/app/00-storage-sync-patches.js:3278 | error_handling | reviewed_no_change |
-| code_health:finding_48ecc6ce9ca0e204604a | low | code_health | js/app/00-storage-sync-patches.js:3338 | error_handling | reviewed_no_change |
-| code_health:finding_05b33b2d236e13ab956c | low | code_health | js/app/00-storage-sync-patches.js:3348 | error_handling | candidate_needs_regression |
+| code_health:finding_48ecc6ce9ca0e204604a | low | code_health | js/app/00-storage-sync-patches.js:3338 | error_handling | fixed_pending_refresh |
+| code_health:finding_05b33b2d236e13ab956c | low | code_health | js/app/00-storage-sync-patches.js:3348 | error_handling | fixed_pending_refresh |
 | code_health:finding_1eb82956f0c43b5c3eca | low | code_health | js/app/00-storage-sync-patches.js:3477 | error_handling | reviewed_no_change |
 | code_health:finding_a8a87935472a58468993 | low | code_health | js/app/00-storage-sync-patches.js:3504 | requestDriveAccess / bumpy_road | unreviewed |
 | code_health:finding_3d17096d3720efd5988e | low | code_health | js/app/00-storage-sync-patches.js:3511 | error_handling | reviewed_no_change |
@@ -924,9 +929,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_7d7006df9ec6314480bd | low | code_health | tests/preference-integrity-scenarios.js:338 | checkKeyPersistenceAndHandlers / bumpy_road | unreviewed |
 | code_health:finding_d85646f671cd92e5433a | low | code_health | tests/preference-integrity-scenarios.js:388 | checkKeyRecovery / large_method | unreviewed |
 | code_health:finding_7abfbf4a2f826653796d | low | code_health | tests/preference-integrity-scenarios.js:488 | <anonymous> / complex_conditional | unreviewed |
-| code_health:finding_aa964992afa4814d7c64 | low | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / large_method | unreviewed |
-| code_health:finding_e1cab3eb1c1950913fb5 | low | code_health | tests/record-identity.browser.cjs:69 | dry_violation | unreviewed |
-| code_health:finding_9dfe63deb01f1eb80636 | low | code_health | tests/record-identity.browser.cjs:71 | <anonymous@71> / large_method | unreviewed |
+| code_health:finding_1a6100f7f36b934266e6 | low | code_health | tests/record-identity.browser.cjs | prior_defect | reviewed_no_change |
+| code_health:finding_e1cab3eb1c1950913fb5 | low | code_health | tests/record-identity.browser.cjs:132 | dry_violation | unreviewed |
+| code_health:finding_9dfe63deb01f1eb80636 | low | code_health | tests/record-identity.browser.cjs:135 | <anonymous@135> / large_method | unreviewed |
 | code_health:finding_ab3e620dca9faaf23458 | low | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / primitive_obsession | unreviewed |
 | code_health:finding_4cf99259c01d5a05625d | low | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / primitive_obsession | unreviewed |
 | code_health:finding_35edf9740e8a2fa057b5 | low | code_health | tests/recovery-cache.browser.cjs:57 | checkCacheScenario / complex_conditional | unreviewed |
@@ -973,7 +978,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | security:3cf392171f171b02d49ac025 | low | security | tests/media-upload-boundary.browser.cjs:48 | hardcoded_secret | reviewed_no_change |
 | security:825d54c5f90e6260cf37a637 | low | security | tests/media-upload-boundary.browser.cjs:63 | hardcoded_secret | reviewed_no_change |
 | security:971c453312549e98434b3ab3 | low | security | tests/optional-storage.browser.cjs:238 | eval_call | reviewed_no_change |
-| security:673b162570d924cb66fcc015 | low | security | tests/record-identity.browser.cjs:93 | eval_call | reviewed_no_change |
+| security:673b162570d924cb66fcc015 | low | security | tests/record-identity.browser.cjs:157 | eval_call | reviewed_no_change |
 | security:80412ff6c2285dd7e9d6ba53 | low | security | tests/storage-upload-ownership.browser.cjs:11 | hardcoded_secret | reviewed_no_change |
 | security:2c255b9986626c01c4310695 | low | security | tests/storage-upload-ownership.browser.cjs:11 | hardcoded_secret | reviewed_no_change |
 | security:102e2163c0c86a7d4463e542 | low | security | tests/storage-upload-ownership.browser.cjs:11 | hardcoded_secret | reviewed_no_change |

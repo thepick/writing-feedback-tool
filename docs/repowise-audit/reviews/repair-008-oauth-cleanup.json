@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "task": "Focused repair008: explicit OAuth fragment cleanup failure handling",
+  "created_at_utc": "2026-10-15T19:49:57.809544+00:00",
+  "user_timezone": "Asia/Bangkok",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "assigned_source_commit": "abfcec375bfd59dede36bbc5e3521c1873b63e7e",
+  "observed_head_at_finish": "abfcec375bfd59dede36bbc5e3521c1873b63e7e",
+  "summary": {
+    "candidate_reproduced": true,
+    "old_app_cases": 110,
+    "old_app_expected_failures": 3,
+    "final_auth_cases_passed": 111,
+    "syntax_checks_passed": 89,
+    "peer_review_case_added": 1,
+    "source_fix_completed": true,
+    "scanner_clearance_claimed": false,
+    "needs_user_attention": false
+  },
+  "changed_repository_files": [
+    "js/app/00-storage-sync-patches.js",
+    "tests/auth-integrity.browser.cjs"
+  ],
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "before_sha256_raw": "f4c95f2974f315e129c009be0e3a022e70efe911bc62160e343a7ec94b70ec96",
+      "after_sha256_raw": "d1f9d9b0c986e272d8856710a782b694fe8d1dc7c81448c0c71b94c3c97c0267",
+      "before_sha256_normalized_lf": "e79032cea4d0348782aa6538b2b6c58f54a832c5c4f0e110fd813b4bc4881f8f",
+      "after_sha256_normalized_lf": "132e4eff1834cea2188c14a5ad902695504213cf02490f95c346657d7ae48f43"
+    },
+    "tests/auth-integrity.browser.cjs": {
+      "before_sha256_raw": "54ef8461fd776a4ddca2d0912000a00db02d357e51c743a0f1c941444598ef91",
+      "after_sha256_raw": "79b4b1ae8b0778ae7de4c81f8ef11c44c7a75c33e6e4fedde7290321af5951da",
+      "before_sha256_normalized_lf": "b37de291c7f28f5b2ccd350839f0a600fe4660b5f3aa8e9a71a42e997490ae05",
+      "after_sha256_normalized_lf": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512"
+    }
+  },
+  "source_verification": {
+    "all89_peer_final_pins_unchanged": true,
+    "other87_source_files_unchanged_against_HEAD": true,
+    "application_change_proof": "Exact normalized-text comparison: one shared helper inserted, two original History try/catch statements replaced with calls; all other application text unchanged.",
+    "pins": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-008\\peer-final-source-pins.json"
+  },
+  "change": {
+    "behavior": "Both recognized OAuth branches use the same cleanup operation. A refused History edit produces generic inline recovery instructions and a native alert; each notice channel has an independent guard.",
+    "no_navigation": "No fallback navigation/reload is introduced. If History refuses the change, the fragment remains and the message says it could not be removed; save/back up before closing and reopening.",
+    "privacy": "Caught History and notice error objects are never logged or interpolated; secondary diagnostic messages are constant strings.",
+    "preserved": "Provider error status, validated auth state, original handled return values, async callback ownership/order, query strings, unrelated hashes and exact tab-only work remain intact."
+  },
+  "caller_and_order_evidence": [
+    {
+      "file": "js/app/10-main-app.js",
+      "line": 8443,
+      "role": "Only production caller: window-load redirect completion after draft/pending recovery and session restoration."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3326,
+      "role": "Shared cleanup with independent inline/alert failure guards and generic diagnostics."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "line": 3346,
+      "role": "Error path still reports provider error then returns false; token path still starts validated completion before cleanup and returns the unchanged handled result."
+    }
+  ],
+  "tests": {
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-008\\before-regression\\suite-results.json",
+      "app_unchanged": true,
+      "runner_exit_code": 1,
+      "count": 110,
+      "passed": 107,
+      "expected_failures": [
+        "OAuth fragment cleanup failure token",
+        "OAuth fragment cleanup failure error",
+        "OAuth fragment cleanup failure notice-unavailable"
+      ],
+      "meaning": "All106 existing auth cases and the ordinary-fragment case passed; three injected History-failure cases kept the URL fragment without a recovery notice."
+    },
+    "related_after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-008\\after\\suite-results.json",
+      "passed": true,
+      "suites": [
+        "tests/auth-integrity.browser.cjs",
+        "tests/recovery-cache.browser.cjs"
+      ],
+      "scope": "Shared cleanup repair before the independent-channel peer adjustment. Recovery/draft functions were unchanged by that adjustment."
+    },
+    "final_after_peer_review": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-008\\peer-final\\suite-results.json",
+      "passed": true,
+      "complete": true,
+      "auth_cases": 111,
+      "syntax_checks": 89,
+      "source_pins_unchanged": 89,
+      "started": "2026-10-15T19:47:13.781Z",
+      "finished": "2026-10-15T19:48:09.391Z"
+    },
+    "peer_case": "status-unavailable was added after the original old-app run. Native status failure containing the synthetic current URL still permits the native alert, preserves handled/callback/work state, and emits no URL-bearing diagnostic. It is not claimed among the three original before failures.",
+    "focused_observations": [
+      {
+        "name": "OAuth fragment cleanup failure token",
+        "passed": true,
+        "observed": {
+          "handled": true,
+          "connected": true,
+          "callbacks": 1,
+          "sameDocument": true,
+          "hashRetained": true,
+          "writingPreserved": true,
+          "pendingPreserved": true,
+          "draftPreserved": true,
+          "notice": "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.",
+          "diagnosticLeakedUrl": false,
+          "queryPreserved": true,
+          "providerError": false
+        }
+      },
+      {
+        "name": "OAuth fragment cleanup failure error",
+        "passed": true,
+        "observed": {
+          "handled": false,
+          "connected": false,
+          "callbacks": 0,
+          "sameDocument": true,
+          "hashRetained": true,
+          "writingPreserved": true,
+          "pendingPreserved": true,
+          "draftPreserved": true,
+          "notice": "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.",
+          "diagnosticLeakedUrl": false,
+          "queryPreserved": true,
+          "providerError": true
+        }
+      },
+      {
+        "name": "OAuth fragment cleanup failure notice-unavailable",
+        "passed": true,
+        "observed": {
+          "handled": true,
+          "connected": true,
+          "callbacks": 1,
+          "sameDocument": true,
+          "hashRetained": true,
+          "writingPreserved": true,
+          "pendingPreserved": true,
+          "draftPreserved": true,
+          "notice": "Google sign-in details could not be removed from this page's address. Save your writing or download Emergency Backup, then close this tab and reopen the app from its usual address.",
+          "diagnosticLeakedUrl": false,
+          "queryPreserved": true,
+          "providerError": false
+        }
+      },
+      {
+        "name": "OAuth fragment cleanup failure status-unavailable",
+        "passed": true,
+        "observed": {
+          "handled": true,
+          "connected": true,
+          "callbacks": 1,
+          "sameDocument": true,
+          "hashRetained": true,
+          "writingPreserved": true,
+          "pendingPreserved": true,
+          "draftPreserved": true,
+          "notice": "Upload or drag an image, then extract the text.",
+          "diagnosticLeakedUrl": false,
+          "queryPreserved": true,
+          "providerError": false
+        }
+      },
+      {
+        "name": "ordinary URL fragment is not OAuth cleanup work",
+        "passed": true,
+        "observed": {
+          "handled": false,
+          "calls": 0,
+          "unchanged": true
+        }
+      }
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_05b33b2d236e13ab956c",
+      "held": true,
+      "classification": "oauth_cleanup_failure_explicitly_handled",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "Validated token completion no longer silently ignores failed URL cleanup. The user receives save/backup/reopen instructions while the original handled result, current callback and tab-only work remain unchanged.",
+      "remaining_scanner_expectation": "Original empty catches were replaced with shared explicit failure handling. Coordinator must inspect the refreshed scan; no scanner clearance is claimed.",
+      "needs_user_attention": false
+    },
+    {
+      "record_id": "code_health:finding_48ecc6ce9ca0e204604a",
+      "held": true,
+      "classification": "oauth_cleanup_failure_explicitly_handled",
+      "proposed_status": "fixed_pending_refresh",
+      "reason": "Provider-error cleanup uses the same guarded notice without replacing the provider-error status or changing its false return value.",
+      "remaining_scanner_expectation": "Original empty catches were replaced with shared explicit failure handling. Coordinator must inspect the refreshed scan; no scanner clearance is claimed.",
+      "needs_user_attention": false
+    }
+  ],
+  "limits": [
+    "History refusal still leaves the fragment in the current URL until the user follows the recovery notice; no automatic-clearance claim.",
+    "No live Google/Drive/model calls, real credentials, real account or user writing. Test routes abort nonlocal traffic.",
+    "Full75-suite batch gate and RepoWise refresh belong to the coordinator and were not run here."
+  ],
+  "scope_checks": {
+    "no_tracker_docs_edit": true,
+    "no_branch_stage_commit_push_merge": true,
+    "no_index_update_or_recompute": true,
+    "no_other_chats_agents_or_messages": true,
+    "next_issue_not_selected": true
+  },
+  "tooling_notes": [
+    "A two-line existing comment was relocated to remain above its reader; auth was rerun on the frozen final text. The peer-review guard change then received its own fresh111-case auth run."
+  ]
+}
