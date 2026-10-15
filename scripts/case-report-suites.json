@@ -10,6 +10,7 @@
   "tests/detailed-parser.browser.cjs",
   "tests/drive-lifecycle.browser.cjs",
   "tests/feedback-compatibility.browser.cjs",
+  "tests/main-app-health.browser.cjs",
   "tests/media-ownership.browser.cjs",
   "tests/media-upload-boundary.browser.cjs",
   "tests/missing-feedback.browser.cjs",

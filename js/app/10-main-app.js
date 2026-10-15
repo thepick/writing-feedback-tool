@@ -31,7 +31,8 @@ function switchTab(tab) {
     var toolBtn = document.getElementById("toolTabBtn");
     var portfolioBtn = document.getElementById("portfolioTabBtn");
     var adminBtn = document.getElementById("adminTabBtn");
-    if (!toolShell || !adminPanel || !portfolioPanel || !toolBtn || !portfolioBtn || !adminBtn) return;
+    if (!toolShell || !adminPanel || !portfolioPanel) return;
+    if (!toolBtn || !portfolioBtn || !adminBtn) return;
 
     adminPanel.classList.remove("active");
     portfolioPanel.classList.remove("active");
@@ -630,13 +631,17 @@ function parseGradeLevelValue(value) {
 }
 
 function mergeObjects(base, override) {
+    function isObjectProperty(object, key) {
+        return object[key] && typeof object[key] === "object" && !Array.isArray(object[key]);
+    }
+
     var out = {};
     var k;
     base = base || {};
     override = override || {};
     for (k in base) {
         if (Object.prototype.hasOwnProperty.call(base, k)) {
-            if (base[k] && typeof base[k] === "object" && !Array.isArray(base[k])) {
+            if (isObjectProperty(base, k)) {
                 out[k] = mergeObjects(base[k], {});
             } else if (Array.isArray(base[k])) {
                 out[k] = base[k].slice();
@@ -647,7 +652,7 @@ function mergeObjects(base, override) {
     }
     for (k in override) {
         if (Object.prototype.hasOwnProperty.call(override, k)) {
-            if (override[k] && typeof override[k] === "object" && !Array.isArray(override[k]) && out[k] && typeof out[k] === "object" && !Array.isArray(out[k])) {
+            if (isObjectProperty(override, k) && isObjectProperty(out, k)) {
                 out[k] = mergeObjects(out[k], override[k]);
             } else if (Array.isArray(override[k])) {
                 out[k] = override[k].slice();
@@ -1687,14 +1692,12 @@ function computeOverallScore(categoryScores, optGradeProfile) {
     var neatnessWeight = neatnessActive ? getNeatnessWeight(gradeProfile) : 0;
     var nonNeatScale = 1 - neatnessWeight;
     for (var key in categoryScores) {
-        if (Object.prototype.hasOwnProperty.call(categoryScores, key)) {
-            var rubric = String(categoryScores[key]);
-            if (SCORE_MAP.hasOwnProperty(rubric)) {
-                var weight = key === "Neatness" ? neatnessWeight : getCategoryWeight(key, gradeProfile) * nonNeatScale;
-                weightedSum += SCORE_MAP[rubric] * weight;
-                totalWeight += weight;
-            }
-        }
+        if (!Object.prototype.hasOwnProperty.call(categoryScores, key)) continue;
+        var rubric = String(categoryScores[key]);
+        if (!SCORE_MAP.hasOwnProperty(rubric)) continue;
+        var weight = key === "Neatness" ? neatnessWeight : getCategoryWeight(key, gradeProfile) * nonNeatScale;
+        weightedSum += SCORE_MAP[rubric] * weight;
+        totalWeight += weight;
     }
     if (!totalWeight) return null;
     return Math.round(weightedSum / totalWeight);
@@ -1901,11 +1904,10 @@ function analyzeGrammarChanges(originalText, correctedText) {
         var aw = tokenizeForDiff(addedWords);
         var combined = rw.concat(aw);
         for (var i = 0; i < combined.length; i++) {
-            if (Object.prototype.hasOwnProperty.call(verbSet, combined[i])) {
-                summary.verbIssues += 1;
-                if (/^(had|have|has|would|will|did|does|do|am|is|are|was|were)$/.test(combined[i])) summary.helperVerbIssues += 1;
-                break;
-            }
+            if (!Object.prototype.hasOwnProperty.call(verbSet, combined[i])) continue;
+            summary.verbIssues += 1;
+            if (/^(had|have|has|would|will|did|does|do|am|is|are|was|were)$/.test(combined[i])) summary.helperVerbIssues += 1;
+            break;
         }
     }
     return summary;
@@ -2842,6 +2844,11 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
     var lastError = null;
     var maxRetriesPerModel = options.maxRetriesPerModel == null ? 2 : options.maxRetriesPerModel;
 
+    function parseCurrentOpenRouterResponse(res, rawText) {
+        if (requestContext) assertCurrentAnalysisContext(requestContext);
+        return parseOpenRouterResponse(res, rawText);
+    }
+
     function prepareOpenRouterRetry(e, timeoutId) {
         clearTimeout(timeoutId);
         if (requestContext) assertCurrentAnalysisContext(requestContext);
@@ -2904,8 +2911,7 @@ async function requestOpenRouterWithFallback(primaryModel, payloadBuilder, optio
                 // Headers can arrive while the body stalls; keep the timeout through the body read.
                 var rawText = await res.text();
                 clearTimeout(timeoutId);
-                if (requestContext) assertCurrentAnalysisContext(requestContext);
-                return parseOpenRouterResponse(res, rawText);
+                return parseCurrentOpenRouterResponse(res, rawText);
             } catch (e) {
                 prepareOpenRouterRetry(e, timeoutId);
                 await sleepMs(Math.min(1200 * (attempt + 1), 3000));
@@ -6516,14 +6522,7 @@ function notebookGuideExampleMatchesPriority(example, notebookGuidePriorities) {
 function normalizeNotebookGuideQuickCheckKey(text) {
     var value = cleanNotebookGuideText(text).toLowerCase();
 
-    if (
-        value.indexOf("spelling") !== -1 ||
-        value.indexOf("punctuation") !== -1 ||
-        value.indexOf("capital") !== -1 ||
-        value.indexOf("comma") !== -1 ||
-        value.indexOf("plural") !== -1 ||
-        value.indexOf("word form") !== -1
-    ) {
+    if (/spelling|punctuation|capital|comma|plural|word form/.test(value)) {
         return "conventions";
     }
 
@@ -7056,24 +7055,21 @@ function assembleNotebookGuideFromCandidates(candidates, originalText, optGenreI
         var found = false;
 
         for (var j = 0; j < sanitized.length; j += 1) {
-            if (getNotebookGuideExampleCategory(sanitized[j]) === requiredCategory) {
-                found = addExample(sanitized[j], true, false);
-                if (found) break;
-            }
+            if (getNotebookGuideExampleCategory(sanitized[j]) !== requiredCategory) continue;
+            found = addExample(sanitized[j], true, false);
+            if (found) break;
         }
 
-        if (!found) {
-            for (var p = 0; p < priorities.length; p += 1) {
-                if (normalizeNotebookGuideCategoryName(priorities[p].category) === requiredCategory) {
-                    var fallbackExample = buildFallbackExampleForPriority(
-                        priorities[p],
-                        originalText,
-                        analysisData && analysisData.correctedText || originalText
-                    );
-                    addExample(fallbackExample, true, true);
-                    break;
-                }
-            }
+        if (found) continue;
+        for (var p = 0; p < priorities.length; p += 1) {
+            if (normalizeNotebookGuideCategoryName(priorities[p].category) !== requiredCategory) continue;
+            var fallbackExample = buildFallbackExampleForPriority(
+                priorities[p],
+                originalText,
+                analysisData && analysisData.correctedText || originalText
+            );
+            addExample(fallbackExample, true, true);
+            break;
         }
     }
 
@@ -8187,6 +8183,14 @@ async function analyzeWriting() {
     stopBtn.textContent = 'Stop Analysis';
     stopBtn.disabled = false;
 
+    function preparePortfolioSync(errorMessage) {
+        try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolio) {
+            wftDebugError(errorMessage, ePortfolio);
+            setDriveSyncStatus('error', 'Could not prepare portfolio sync');
+            updateSyncPortfolioButtonState();
+        }
+    }
+
     try {
         if (!text) {
             text = String(await extractTextFromSelectedImage(true) || "").trim();
@@ -8211,11 +8215,7 @@ async function analyzeWriting() {
             latestAnalysisData = buildAnalysisResult(context, text, actualWords, writingGenreInfo, sampleStatus, lowSample);
             presentAnalysisResult(latestAnalysisData, text);
             renderLowSampleAnalysisDebug(latestAnalysisData, lowSample);
-            try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolioLowSample) {
-                wftDebugError('Could not prepare low-sample portfolio sync:', ePortfolioLowSample);
-                setDriveSyncStatus('error', 'Could not prepare portfolio sync');
-                updateSyncPortfolioButtonState();
-            }
+            preparePortfolioSync('Could not prepare low-sample portfolio sync:');
             return;
         }
 
@@ -8290,11 +8290,7 @@ async function analyzeWriting() {
         assertCurrentAnalysisContext(context);
         latestAnalysisData = buildAnalysisResult(context, text, actualWords, writingGenreInfo, sampleStatus, assessment);
         presentAnalysisResult(latestAnalysisData, text);
-        try { saveCurrentSessionToPortfolio(latestAnalysisData); } catch (ePortfolio) {
-            wftDebugError('Could not prepare portfolio sync:', ePortfolio);
-            setDriveSyncStatus('error', 'Could not prepare portfolio sync');
-            updateSyncPortfolioButtonState();
-        }
+        preparePortfolioSync('Could not prepare portfolio sync:');
 
         renderScoredAnalysisDebug(latestAnalysisData, parsed1, step1, step2, step3);
 
@@ -8554,19 +8550,17 @@ window.addEventListener('pagehide', function() {
 document.addEventListener('visibilitychange', function() {
     // ── WFT Sync V2: only fast local save on hide; Drive upload is unsafe here ──
     if (WFT_SYNC_ENGINE_V2) {
-        if (document.visibilityState === 'hidden') {
-            try { saveWftLocalSnapshotsBeforeHide(); } catch (e) {}
-        }
+        if (document.visibilityState !== 'hidden') return;
+        try { saveWftLocalSnapshotsBeforeHide(); } catch (e) {}
         return;
     }
-    if (document.visibilityState === 'hidden') {
-        try {
-            savePortfolioData(getPortfolioData());
-            if (driveAccessToken) {
-                syncAllToDrive();
-            }
-        } catch (e) {}
-    }
+    if (document.visibilityState !== 'hidden') return;
+    try {
+        savePortfolioData(getPortfolioData());
+        if (driveAccessToken) {
+            syncAllToDrive();
+        }
+    } catch (e) {}
 });
 
 
