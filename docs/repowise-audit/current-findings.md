@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T05:59:31.841354+07:00.
+Updated 2026-10-16T06:13:36.915111+07:00.
 
-Source: 44a7282c727eb6d0735cbd65247f72e45bfe37c0. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 95fec80952dc8cbf60539dde0a8f8e9f6666eaef. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,15 +10,15 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 913 |
+| code_health | 918 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"confirmed_repair_candidate": 6, "reviewed_no_change": 347, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
+Statuses: {"confirmed_repair_candidate": 6, "in_progress": 1, "reviewed_no_change": 349, "test_added_pending_full_coverage": 2, "unreviewed": 633}.
 
-All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 6, "fixed_verified": 22, "reviewed_no_change": 349, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
+All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 6, "fixed_verified": 22, "in_progress": 1, "reviewed_no_change": 351, "test_added_pending_full_coverage": 2, "unreviewed": 633}.
 
 Findings confirmed cleared: 22. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
@@ -57,8 +57,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-020: Review recovery guards and coverage gaps - reviewed_complete.
 - repair-021: Flatten emergency-backup guards - refactor_fixed_verified.
 - repair-021b: Remove obsolete single-file backup test loops - refactor_fixed_verified.
-- repair-001: Verify security signals - reviewed_complete.
 - repair-022: Restore native migration test discovery - test_integration_verified_pending_batch_coverage.
+- repair-001: Verify security signals - reviewed_complete.
+- repair-022b: Flatten native migration case flow - accepted_pending_committed_refresh.
 
 ## Additional source leads
 
@@ -98,6 +99,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / complex_method | yes | reviewed_no_change |
 | code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7111 | buildNotebookReconstructionDataFromSession / complex_method | yes | reviewed_no_change |
 | code_health:finding_2f3ed327ca58291a143e | critical | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / large_method | yes | reviewed_no_change |
+| code_health:finding_87f04aaa94b52da45bb0 | critical | code_health | tests/google-drive-migration.browser.cjs:17 | migrationRoute / complex_method | yes | reviewed_no_change |
 | code_health:finding_3dffc42c2f6cdecd5764 | critical | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / complex_method | yes | reviewed_no_change |
 | code_health:finding_b3ea0e675e7c1c2fdb28 | critical | code_health | tests/notebook-guidance-repair.browser.cjs:7 | runNotebookGuidanceCases / large_method | yes | reviewed_no_change |
 | code_health:finding_886ef320a4749424aed4 | critical | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / complex_method | yes | reviewed_no_change |
@@ -229,6 +231,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_e7d9bc21d5bd55cdff4b | high | code_health | tests/drive-lifecycle.browser.cjs:166 | replyToUpload / complex_method | yes | unreviewed |
 | code_health:finding_34d155a11ae12094772a | high | code_health | tests/drive-lifecycle.browser.cjs:214 | installDriveRoute / complex_conditional | yes | unreviewed |
 | code_health:finding_6e57e46cfd771706f50b | high | code_health | tests/feedback-compatibility.browser.cjs:13 | <anonymous@13> / complex_method | yes | unreviewed |
+| code_health:finding_d763af2881aa6ebe85e9 | high | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / nested_complexity | yes | in_progress |
 | code_health:finding_1680dfdc2c2903f2af21 | high | code_health | tests/image-preparation.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
 | code_health:finding_3a510389b4b1a431469d | high | code_health | tests/main-app-health.browser.cjs:102 | checkVisibility / nested_complexity | yes | unreviewed |
 | code_health:finding_11a556def902a383e11c | high | code_health | tests/main-app-health.browser.cjs:102 | checkVisibility / complex_method | yes | unreviewed |
@@ -538,6 +541,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_a342a0ef30b71cae9eb3 | medium | code_health | tests/drive-lifecycle.browser.cjs:244 | checkManualScenario / complex_method | yes | unreviewed |
 | code_health:finding_998220186c13aa82abd3 | medium | code_health | tests/drive-lifecycle.browser.cjs:261 | checkSplitScenario / complex_method | yes | unreviewed |
 | code_health:finding_248573c51c1521f8340e | medium | code_health | tests/drive-lifecycle.browser.cjs:302 | io_in_loop | yes | unreviewed |
+| code_health:finding_e26914b4ed0a7d2677ed | medium | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / complex_method | yes | unreviewed |
 | code_health:finding_200b7f89bb709f880329 | medium | code_health | tests/image-preparation.browser.cjs:3 | dry_violation | yes | unreviewed |
 | code_health:finding_d56e623610c171ece3bd | medium | code_health | tests/media-ownership.browser.cjs:97 | runPendingMediaScenario / complex_method | yes | unreviewed |
 | code_health:finding_f1363ca369412b5bc505 | medium | code_health | tests/media-ownership.browser.cjs:208 | assertPendingMediaScenario / complex_method | yes | unreviewed |
@@ -933,6 +937,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_61ea1e71eb770a77989a | low | code_health | tests/drive-lifecycle.browser.cjs:176 | replyToUpload / complex_conditional | yes | unreviewed |
 | code_health:finding_1be4afa8ded3013ac8e7 | low | code_health | tests/drive-lifecycle.browser.cjs:294 | dry_violation | yes | unreviewed |
 | code_health:finding_a837428ede3cbf0c9096 | low | code_health | tests/feedback-compatibility.browser.cjs:12 | dry_violation | yes | unreviewed |
+| code_health:finding_6656c8d7f5732c8fe3f8 | low | code_health | tests/google-drive-migration.browser.cjs:6 | runNativeMigrationCases / large_method | yes | unreviewed |
+| code_health:finding_2bd454722e654474e601 | low | code_health | tests/google-drive-migration.browser.cjs:17 | migrationRoute / bumpy_road | yes | reviewed_no_change |
 | code_health:finding_c12bceffea7618fdd8b8 | low | code_health | tests/image-preparation.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
 | code_health:finding_5b6315b17f8803c7e046 | low | code_health | tests/media-ownership.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_9c5c31a2ca73143c40fc | low | code_health | tests/media-ownership.browser.cjs:212 | assertPendingMediaScenario / complex_conditional | yes | unreviewed |

@@ -55,30 +55,31 @@ const base='http://127.0.0.1:8765', folderType='application/vnd.google-apps.fold
    if(scenario==='cancel'){
     await dialog.getByRole('button',{name:'Cancel sign-in'}).click();await page.waitForFunction(()=>!!window.__migrationError);
     assert.match(await page.evaluate(()=>__migrationError),/cancelled/);assert.equal(calls.filter(c=>c.method!=='GET').length,0);
-   } else {
+   } else await dialog.getByRole('button',{name:'Keep my saved progress',exact:true}).click();
+   if(scenario==='account-mismatch'){
+    await page.waitForFunction(()=>document.querySelector('dialog [role="status"]')?.textContent.includes('same Google account'));
+    assert.equal(calls.filter(c=>c.method!=='GET').length,0);assert.equal(await dialog.getByRole('button',{name:'I have never used Google sync here'}).isDisabled(),true);
+    await dialog.getByRole('button',{name:'Cancel sign-in'}).click();await page.waitForFunction(()=>!!window.__migrationError);
+   }
+   if(scenario==='corrupt-retry'){
+    await page.waitForFunction(()=>document.querySelector('dialog [role="status"]')?.textContent.includes('could not be verified'));
+    assert.equal(await dialog.getByRole('button',{name:'I have never used Google sync here'}).isDisabled(),true);
+    assert.equal(files.filter(f=>f.token==='new'&&f.name.endsWith('google-migration-v1.json')).length,0);
+    const copiedCount=files.filter(f=>f.token==='new').length;corrupt=false;
     await dialog.getByRole('button',{name:'Keep my saved progress',exact:true}).click();
-    if(scenario==='account-mismatch'){
-     await page.waitForFunction(()=>document.querySelector('dialog [role="status"]')?.textContent.includes('same Google account'));
-     assert.equal(calls.filter(c=>c.method!=='GET').length,0);assert.equal(await dialog.getByRole('button',{name:'I have never used Google sync here'}).isDisabled(),true);
-     await dialog.getByRole('button',{name:'Cancel sign-in'}).click();await page.waitForFunction(()=>!!window.__migrationError);
-    } else {
-     if(scenario==='corrupt-retry'){
-      await page.waitForFunction(()=>document.querySelector('dialog [role="status"]')?.textContent.includes('could not be verified'));
-      assert.equal(await dialog.getByRole('button',{name:'I have never used Google sync here'}).isDisabled(),true);
-      assert.equal(files.filter(f=>f.token==='new'&&f.name.endsWith('google-migration-v1.json')).length,0);
-      const copiedCount=files.filter(f=>f.token==='new').length;corrupt=false;
-      await dialog.getByRole('button',{name:'Keep my saved progress',exact:true}).click();
-      await page.waitForFunction(()=>!!window.__migrationResult);assert.equal(files.filter(f=>f.token==='new').length,copiedCount+1,'Retry reuses copies and adds only marker');
-     } else await page.waitForFunction(()=>!!window.__migrationResult);
-     assert.equal(await dialog.count(),0);const result=await page.evaluate(()=>__migrationResult),ids=result.ids;
-     assert.equal(result.user.id,'same');assert.equal(files.find(f=>f.id===ids[photo.id]).data.toString(),'synthetic-image-bytes');
-     assert.deepEqual(files.find(f=>f.id===ids[photo.id]).parents,[ids[media.id]]);
-     const copied=JSON.parse(files.find(f=>f.id===ids[portfolio.id]).data.toString());assert.equal(copied.Synthetic.sessions[0].images[0].driveFileId,ids[photo.id]);assert.equal(copied.unknown,'preserve');
-     assert.deepEqual(copied.unknownScalars,{score:0,enabled:false,empty:null},'Unknown scalar fields survive native recovery');
-     const markers=files.filter(f=>f.token==='new'&&f.name.endsWith('google-migration-v1.json'));assert.equal(markers.length,1);assert.equal(JSON.parse(markers[0].data.toString()).userId,'same');
-     const before=calls.length;await page.evaluate(async()=>{const result=await GoogleDriveMigration.ensure(__migrationConfig,'new');if(result.user.id!=='same')throw new Error('Marker retry account changed');});
-     assert.ok(calls.slice(before).every(c=>c.method==='GET'),'Completed marker retry is read only');
-    }
+    await page.waitForFunction(()=>!!window.__migrationResult);assert.equal(files.filter(f=>f.token==='new').length,copiedCount+1,'Retry reuses copies and adds only marker');
+   }
+   const completes=scenario!=='cancel'&&scenario!=='account-mismatch';
+   if(completes&&scenario!=='corrupt-retry')await page.waitForFunction(()=>!!window.__migrationResult);
+   if(completes){
+    assert.equal(await dialog.count(),0);const result=await page.evaluate(()=>__migrationResult),ids=result.ids;
+    assert.equal(result.user.id,'same');assert.equal(files.find(f=>f.id===ids[photo.id]).data.toString(),'synthetic-image-bytes');
+    assert.deepEqual(files.find(f=>f.id===ids[photo.id]).parents,[ids[media.id]]);
+    const copied=JSON.parse(files.find(f=>f.id===ids[portfolio.id]).data.toString());assert.equal(copied.Synthetic.sessions[0].images[0].driveFileId,ids[photo.id]);assert.equal(copied.unknown,'preserve');
+    assert.deepEqual(copied.unknownScalars,{score:0,enabled:false,empty:null},'Unknown scalar fields survive native recovery');
+    const markers=files.filter(f=>f.token==='new'&&f.name.endsWith('google-migration-v1.json'));assert.equal(markers.length,1);assert.equal(JSON.parse(markers[0].data.toString()).userId,'same');
+    const before=calls.length;await page.evaluate(async function verifyCompletedMarkerAccount(){const result=await GoogleDriveMigration.ensure(__migrationConfig,'new');if(result.user.id!=='same')throw new Error('Marker retry account changed');});
+    assert.ok(calls.slice(before).every(c=>c.method==='GET'),'Completed marker retry is read only');
    }
    assert.deepEqual(files.filter(f=>f.token==='old').map(f=>({id:f.id,bytes:f.data.toString('base64'),parents:[...f.parents]})),originals);
    assert.ok(calls.every(c=>c.token!=='old'||c.method==='GET'));cases.push({name:scenario,passed:true,calls,new_files:files.filter(f=>f.token==='new').map(({data,token,...f})=>f)});
