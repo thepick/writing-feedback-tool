@@ -1,10 +1,13 @@
 const fs = require('node:fs'), path = require('node:path'), cp = require('node:child_process');
 
-function runTests({ root, out, selected = [], timeout = 600000, env = process.env, supplements = [] }) {
+function runTests({ root, out, selected = [], timeout = 600000, env = process.env, supplements = [], reportSuites = require('./case-report-suites.json') }) {
     const inventory = ['test-google-drive-migration.cjs', ...fs.readdirSync(path.join(root, 'tests')).filter(name => name.endsWith('.cjs')).map(name => 'tests/' + name)].sort();
     if (selected.some(file => !inventory.includes(file))) throw Error('Unknown suite selection');
     const suites = selected.length ? inventory.filter(file => selected.includes(file)) : inventory;
     if (!suites.length) throw Error('Empty suite inventory');
+    if (!Array.isArray(supplements)) throw Error('Supplemental manifest must be an array');
+    const supplementalSuites = supplements.map(entry => typeof entry === 'string' ? { file: entry, reportRequired: true } : entry);
+    if (supplementalSuites.some(entry => !entry || typeof entry.file !== 'string' || !entry.file.trim() || typeof entry.reportRequired !== 'boolean')) throw Error('Use supplemental paths or { file, reportRequired } entries');
     fs.mkdirSync(out, { recursive: true });
     const result = { root, inventory, selected: suites, partial: selected.length > 0, started: new Date().toISOString(), syntax: [], suites: [], supplemental: [], complete: false, passed: false };
     const persist = () => fs.writeFileSync(path.join(out, 'suite-results.json'), JSON.stringify(result, null, 2));
@@ -15,7 +18,7 @@ function runTests({ root, out, selected = [], timeout = 600000, env = process.en
     }
     persist();
     if (result.syntax.some(row => row.status !== 0)) return result;
-    function run(file, label, supplemental) {
+    function run(file, label, supplemental, reportRequired) {
         const report = path.join(out, path.basename(file, '.cjs') + '.json'), childEnv = { ...env };
         if (fs.existsSync(report)) fs.unlinkSync(report);
         for (const key of Object.keys(childEnv)) if (/^WFT_.*(FILTER|EXPECT_BASELINE)$/.test(key)) delete childEnv[key];
@@ -30,7 +33,7 @@ function runTests({ root, out, selected = [], timeout = 600000, env = process.en
         const started = new Date().toISOString(), at = Date.now();
         const child = cp.spawnSync(process.execPath, [file], { cwd: root, env: childEnv, encoding: 'utf8', timeout, maxBuffer: 24 * 1024 * 1024 });
         const log = path.join(out, path.basename(file, '.cjs') + '.log'); fs.writeFileSync(log, (child.stdout || '') + (child.stderr || ''));
-        let reportError = aliases.some(key => fs.readFileSync(file, 'utf8').includes('process.env.' + key)) && !fs.existsSync(report) ? 'Expected case report missing' : null;
+        let reportError = reportRequired && !fs.existsSync(report) ? 'Expected case report missing' : null;
         if (fs.existsSync(report)) {
             try { const data = JSON.parse(fs.readFileSync(report)); if ((Array.isArray(data.cases) && (!data.cases.length || data.cases.some(row => row.passed === false))) || data.cases === 0 || data.count === 0 || data.failed > 0 || (Array.isArray(data.failures) && data.failures.length)) reportError = 'Empty or failed case report'; }
             catch (e) { reportError = 'Invalid case report: ' + e.message; }
@@ -38,8 +41,8 @@ function runTests({ root, out, selected = [], timeout = 600000, env = process.en
         const row = { suite: label, status: child.status, signal: child.signal, error: child.error?.message || reportError, started, seconds: (Date.now() - at) / 1000, log, report: fs.existsSync(report) ? report : null, nativeInstrumented: !!childEnv.WFT_COVERAGE_DIR };
         (supplemental ? result.supplemental : result.suites).push(row); persist(); console.log(JSON.stringify(row));
     }
-    for (const suite of suites) run(path.join(root, suite), suite, false);
-    for (const file of supplements) run(path.resolve(file), path.basename(file), true);
+    for (const suite of suites) run(path.join(root, suite), suite, false, reportSuites.includes(suite));
+    for (const { file, reportRequired } of supplementalSuites) run(path.resolve(file), path.basename(file), true, reportRequired);
     result.complete = result.suites.length === suites.length && result.supplemental.length === supplements.length;
     result.passed = result.complete && [...result.suites, ...result.supplemental].every(row => row.status === 0 && !row.error);
     result.finished = new Date().toISOString(); persist(); return result;
