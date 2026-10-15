@@ -1588,10 +1588,31 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
             } catch (e) {}
         }
 
+        var summary = summarizeSessions(sessions);
+
+        var studentFileId = "";
+        var cacheKey = "wft_drive_student_file_" + (studentId || sanitizeStudentIdPart(name));
+        try { studentFileId = localStorage.getItem(cacheKey) || ""; } catch (e) {}
+
+        index.students[studentId || name] = {
+            studentId: studentId || "",
+            displayName: name,
+            legacyNameKey: name,
+            sessionCount: sessions.length,
+            latestSessionAt: summary.latestSessionAt,
+            averageScore: summary.averageScore,
+            studentFileId: studentFileId,
+            studentFileEtag: "",
+            hasUnloadedDetails: true
+        };
+    }
+
+    return index;
+
+    function summarizeSessions(sessions) {
         var latestSessionAt = "";
         var totalScore = 0;
         var scorableCount = 0;
-
         for (var pj = 0; pj < sessions.length; pj++) {
             var s = sessions[pj];
             if (s.createdAt && (!latestSessionAt || Date.parse(s.createdAt) > Date.parse(latestSessionAt))) {
@@ -1604,27 +1625,8 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
                 scorableCount += 1;
             }
         }
-
-        var averageScore = scorableCount > 0 ? Math.round(totalScore / scorableCount) : null;
-
-        var studentFileId = "";
-        var cacheKey = "wft_drive_student_file_" + (studentId || sanitizeStudentIdPart(name));
-        try { studentFileId = localStorage.getItem(cacheKey) || ""; } catch (e) {}
-
-        index.students[studentId || name] = {
-            studentId: studentId || "",
-            displayName: name,
-            legacyNameKey: name,
-            sessionCount: sessions.length,
-            latestSessionAt: latestSessionAt,
-            averageScore: averageScore,
-            studentFileId: studentFileId,
-            studentFileEtag: "",
-            hasUnloadedDetails: true
-        };
+        return { latestSessionAt: latestSessionAt, averageScore: scorableCount > 0 ? Math.round(totalScore / scorableCount) : null };
     }
-
-    return index;
 }
 
 function savePortfolioIndexToDrive(index, callback) {
