@@ -147,5 +147,13 @@
   "coordinator_acceptance": {
     "reviewed": true,
     "reason": "Complete production/rootunit read and full two-file diff reviewed. Only one local grouping loop and lookup substitution; original duplicate guard remains at node traversal. New tests retain every prior byte and check unrelated duplicates, root no-write rejection, child parent-allocation timing, readonly source bytes/parents, reused IDs. Independently verified both receipts/90syntax/2suites, exact full4scenario JSON parity, both current/old source hashes and88othercode+configraw pins. Expected local work improvement, no scanner closure or latency claim."
+  },
+  "committed_refresh": {
+    "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+    "all88_health_state_registry_agree": true,
+    "scanner_clearances_for_this_refactor": 0,
+    "remaining_complexity_and_bumpy_tradeoff_reviewed": true,
+    "three_shifted_io_callsite_identities_reconciled": true,
+    "unit_fixture_metrics_individually_reviewed": 3
   }
 }

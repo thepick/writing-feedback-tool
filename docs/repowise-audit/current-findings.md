@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T06:20:47.395844+07:00.
+Updated 2026-10-16T06:31:54.742673+07:00.
 
-Source: 1b8af7acb39e3c8921ef56144e8733e10abd9a82. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 413c1cf35e704b78d05f6172ebc21268688d4c6d. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,15 +10,15 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 917 |
+| code_health | 918 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"confirmed_repair_candidate": 6, "reviewed_no_change": 351, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
+Statuses: {"confirmed_repair_candidate": 5, "reviewed_no_change": 355, "test_added_pending_full_coverage": 3, "unreviewed": 628}.
 
-All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 6, "fixed_verified": 23, "reviewed_no_change": 353, "test_added_pending_full_coverage": 2, "unreviewed": 631}.
+All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 5, "fixed_verified": 23, "reviewed_no_change": 357, "test_added_pending_full_coverage": 3, "unreviewed": 628}.
 
 Findings confirmed cleared: 23. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
@@ -59,8 +59,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-021b: Remove obsolete single-file backup test loops - refactor_fixed_verified.
 - repair-022: Restore native migration test discovery - test_integration_verified_pending_batch_coverage.
 - repair-022b: Flatten native migration case flow - refactor_fixed_verified.
+- repair-023: Index existing migration recovery copies once - refactor_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-023: Index existing migration recovery copies once - accepted_pending_committed_refresh.
+- repair-024: Exercise dialog safe-cancel fallback without a page body - test_integration_verified_pending_batch_coverage.
 
 ## Additional source leads
 
@@ -70,7 +71,7 @@ These are review leads, separate from scanner observations. They require their o
 - notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — fixed_verified. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
 - preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — fixed_verified. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
 - checklist-second-person-contraction: buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist in js/app/10-main-app.js — fixed_verified. toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.
-- migration-recovery-copy-lookup: recoverFolder in google-drive-migration.js — in_progress. For every one of N scanned source nodes, copied.filter tests all M previously copied metadata records. Source proves N*M predicate visits, with no node/copy cap. Build a native Map from oauthOriginal to matching copied records once, then use one lookup per node; keep duplicate-match rejection at the same node encounter, preserve first-match order, ignore unrelated duplicate groups exactly as before, and keep parent-before-child writes plus all readback/source guards. This is a CPU/clarity refactor lead, not evidence that the required network calls are redundant and not a measured end-to-end speedup.
+- migration-recovery-copy-lookup: recoverFolder in google-drive-migration.js — fixed_verified. For every one of N scanned source nodes, copied.filter tests all M previously copied metadata records. Source proves N*M predicate visits, with no node/copy cap. Build a native Map from oauthOriginal to matching copied records once, then use one lookup per node; keep duplicate-match rejection at the same node encounter, preserve first-match order, ignore unrelated duplicate groups exactly as before, and keep parent-before-child writes plus all readback/source guards. This is a CPU/clarity refactor lead, not evidence that the required network calls are redundant and not a measured end-to-end speedup.
 - native-coverage-terminal-breakpoint-denominator: native executable-line export in work/do-next-05/export-coverage.cjs — candidate_needs_regression. Captured possible-breakpoint locations include type:return at the final empty EOF position for dialogs(line232), storage-recovery(line361) and migration(line170). Those points are outside textual statements and appear unhit. The preload maps all locations to offsets and coveredOffsets uses end-exclusive ranges; its own source self-check explicitly treats an offset at range.endOffset as uncovered. The exporter counts every location line in the denominator. Review this terminal-boundary mapping before treating EOF as a missing test branch. This is an instrumentation lead, not a confirmed production bug or permission to discard real uncovered lines.
 
 ## Coverage evidence
@@ -111,6 +112,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_d972d4b21d11f1043309 | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / complex_method | yes | reviewed_no_change |
 | code_health:finding_c9064893d7223bb4ffd1 | high | code_health | google-drive-migration.js | coverage_gap | yes | test_added_pending_full_coverage |
 | code_health:finding_ac236ee8c53f6b06a02a | high | code_health | google-drive-migration.js | coverage_gradient | yes | test_added_pending_full_coverage |
+| code_health:finding_2f5974a3771db462a175 | high | code_health | google-drive-migration.js:83 | recoverFolder / complex_method | yes | reviewed_no_change |
 | code_health:finding_b820d2d24da772091e34 | high | code_health | js/app/00-storage-sync-patches.js | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_9b4aa07ab42ab6350d8c | high | code_health | js/app/00-storage-sync-patches.js:491 | persistApiKeyStorageFromInput / complex_method | yes | unreviewed |
 | code_health:finding_bce2bd1af6dae6674398 | high | code_health | js/app/00-storage-sync-patches.js:550 | saveSettingsToLocalStorage / complex_method | yes | unreviewed |
@@ -282,11 +284,10 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_84eb5d6cbcffb14965cd | medium | code_health | google-drive-migration.js:18 | list / io_in_loop | yes | reviewed_no_change |
 | code_health:finding_d1312245e1de5804a1b9 | medium | code_health | google-drive-migration.js:30 | upload / complex_method | yes | reviewed_no_change |
 | code_health:finding_d5fa83a509181f5f704e | medium | code_health | google-drive-migration.js:57 | recoverAppData / complex_method | yes | reviewed_no_change |
-| code_health:finding_2f5974a3771db462a175 | medium | code_health | google-drive-migration.js:83 | recoverFolder / complex_method | yes | reviewed_no_change |
-| code_health:finding_89bf1a01f14a82e136da | medium | code_health | google-drive-migration.js:103 | recoverFolder / io_in_loop | yes | reviewed_no_change |
-| code_health:finding_c72146652f87125846f3 | medium | code_health | google-drive-migration.js:111 | recoverFolder / io_in_loop | yes | reviewed_no_change |
-| code_health:finding_aec09199a40a7f63d703 | medium | code_health | google-drive-migration.js:112 | recoverFolder / io_in_loop | yes | reviewed_no_change |
-| code_health:finding_38e69186fd53b008e2cc | medium | code_health | google-drive-migration.js:126 | ensure / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_89bf1a01f14a82e136da | medium | code_health | google-drive-migration.js:109 | recoverFolder / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_c72146652f87125846f3 | medium | code_health | google-drive-migration.js:117 | recoverFolder / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_aec09199a40a7f63d703 | medium | code_health | google-drive-migration.js:118 | recoverFolder / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_38e69186fd53b008e2cc | medium | code_health | google-drive-migration.js:132 | ensure / io_in_loop | yes | reviewed_no_change |
 | code_health:finding_b4b35b3f12976f4da859 | medium | code_health | js/app/00-storage-sync-patches.js:442 | migrateLegacyApiKeyStorage / complex_method | yes | unreviewed |
 | code_health:finding_b8929aea0f5d35e99e78 | medium | code_health | js/app/00-storage-sync-patches.js:443 | copyLegacyApiKey / complex_method | yes | unreviewed |
 | code_health:finding_28e9907a3784b89751de | medium | code_health | js/app/00-storage-sync-patches.js:494 | verifyApiKeyStorage / complex_conditional | yes | unreviewed |
@@ -488,8 +489,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_c488fbf48a69c6dcaa4b | medium | code_health | scripts/check-test-runner.cjs | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_db029d1060192426b222 | medium | code_health | scripts/check-test-runner.cjs:13 | io_in_loop | yes | unreviewed |
 | code_health:finding_b2267d45e0c328b33cd3 | medium | code_health | scripts/run-tests.cjs | co_change_scatter | yes | reviewed_no_change |
-| code_health:finding_9a7c8ce0699343322ae5 | medium | code_health | test-google-drive-migration.cjs:4 | setup / complex_method | yes | unreviewed |
-| code_health:finding_ee98c466e8ec65cd1b44 | medium | code_health | test-google-drive-migration.cjs:11 | fileResponse / complex_method | yes | unreviewed |
+| code_health:finding_9a7c8ce0699343322ae5 | medium | code_health | test-google-drive-migration.cjs:4 | setup / complex_method | yes | reviewed_no_change |
+| code_health:finding_ee98c466e8ec65cd1b44 | medium | code_health | test-google-drive-migration.cjs:11 | fileResponse / complex_method | yes | reviewed_no_change |
 | code_health:finding_8c23a5e088578203ac81 | medium | code_health | tests/analysis-identity.browser.cjs | change_entropy | no | reviewed_no_change |
 | code_health:finding_e175c7fa27aa56528269 | medium | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / complex_method | yes | reviewed_no_change |
 | code_health:finding_2cebaec28f1e3464244b | medium | code_health | tests/analysis-identity.browser.cjs:182 | runInterruptedAnalysisCase / complex_method | yes | reviewed_no_change |
@@ -653,6 +654,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_330fa358c73a174eaf04 | medium | code_health | tests/student-rename.browser.cjs:57 | <anonymous@7> / large_assertion_block | yes | reviewed_no_change |
 | code_health:finding_e3971bd30d47501900db | medium | code_health | tests/student-rename.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_466fd884621dd6f44353 | medium | code_health | tests/student-selection-storage.browser.cjs:2 | dry_violation | yes | unreviewed |
+| code_health:finding_d79dad53c408f6977aaa | low | code_health | google-drive-migration.js:83 | recoverFolder / bumpy_road | yes | reviewed_no_change |
 | code_health:finding_a47a0eb3889a392c07a4 | low | code_health | js/app/00-storage-sync-patches.js | coverage_gradient | yes | unreviewed |
 | code_health:finding_50d9e7d39f28106a6a3f | low | code_health | js/app/00-storage-sync-patches.js:583 | saveSettingsToLocalStorage / complex_conditional | yes | unreviewed |
 | code_health:finding_b77d5a59154a4da066cc | low | code_health | js/app/00-storage-sync-patches.js:586 | saveSettingsToLocalStorage / complex_conditional | yes | unreviewed |
@@ -879,7 +881,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_59b9470c43c933b96fb5 | low | code_health | js/app/10-main-app.js:8493 | error_handling | yes | reviewed_no_change |
 | code_health:finding_ada488f36dc2a7d66ff8 | low | code_health | js/app/10-main-app.js:8500 | error_handling | yes | reviewed_no_change |
 | code_health:finding_9bd5f85768cebd1be3fd | low | code_health | js/app/10-main-app.js:8509 | error_handling | yes | reviewed_no_change |
-| code_health:finding_7cafeb9e1b470fe325be | low | code_health | js/app/dialogs.js | coverage_gradient | yes | confirmed_repair_candidate |
+| code_health:finding_7cafeb9e1b470fe325be | low | code_health | js/app/dialogs.js | coverage_gradient | yes | test_added_pending_full_coverage |
 | code_health:finding_44e764606a039a6b13e8 | low | code_health | js/app/dialogs.js:32 | <anonymous> / large_method | yes | reviewed_no_change |
 | code_health:finding_74656979868084cda402 | low | code_health | js/app/dialogs.js:108 | error_handling | yes | reviewed_no_change |
 | code_health:finding_b056139b0d0c461e7869 | low | code_health | js/app/dialogs.js:227 | error_handling | yes | reviewed_no_change |
@@ -908,7 +910,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_339bc8c333e9ec258402 | low | code_health | js/app/storage-recovery.js | coverage_gradient | yes | reviewed_no_change |
 | code_health:finding_609609e5993a72b3c225 | low | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / bumpy_road | yes | reviewed_no_change |
 | code_health:finding_1c20ca1bd8c2259efb2a | low | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / large_method | yes | reviewed_no_change |
-| code_health:finding_04ce1dd1854346b9cfe8 | low | code_health | test-google-drive-migration.cjs:6 | file / primitive_obsession | yes | unreviewed |
+| code_health:finding_04ce1dd1854346b9cfe8 | low | code_health | test-google-drive-migration.cjs:6 | file / primitive_obsession | yes | reviewed_no_change |
 | code_health:finding_04486662f265863bfee5 | low | code_health | tests/analysis-identity.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_0f7b96782dc7eb4598cd | low | code_health | tests/analysis-pipeline.browser.cjs:252 | dry_violation | yes | unreviewed |
 | code_health:finding_ecf09ab8445f7108ec24 | low | code_health | tests/archive-connection.browser.cjs:8 | runArchiveConnectionScenario / large_method | yes | unreviewed |
