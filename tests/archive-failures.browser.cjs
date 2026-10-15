@@ -1,6 +1,7 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path');
 const root = path.resolve(__dirname, '..');
+const archiveClock = '2026-10-14T00:00:00.000Z';
 const scenarios = [...['single', 'year'].flatMap(kind => ['library', 'generation', 'download'].map(mode => ({ kind, mode }))), ...['empty-ack', 'refused-ack'].map(mode => ({ kind: 'year', mode }))];
 
 function archiveRoute(route) {
@@ -29,6 +30,7 @@ async function runArchiveScenario({ kind, mode }) {
     const keys = ['wft_portfolio', 'wft_students', 'wft_settings', WFT_DELETIONS_STORAGE_KEY, 'wft_selectedStudent', PENDING_PORTFOLIO_SYNC_KEY];
     const bytes = () => keys.map(key => localStorage.getItem(key)), before = JSON.stringify(bytes());
     const Zip = JSZip, generate = JSZip.prototype.generateAsync, objectUrl = URL.createObjectURL;
+    const uploadBodies = [];
     let failing = true;
     if (mode === 'library') delete window.JSZip;
     if (mode === 'generation') JSZip.prototype.generateAsync = () => Promise.reject(Error('Synthetic compression refusal'));
@@ -38,6 +40,7 @@ async function runArchiveScenario({ kind, mode }) {
         if (u.origin !== 'https://www.googleapis.com') throw Error('Unexpected external request');
         if (u.pathname.includes('/upload/')) {
             uploads.push({ url: String(url), size: options.body.size });
+            uploadBodies.push({ blob: options.body, method: options.method, headers: Object.entries(options.headers), type: options.body.type });
             if (failing && mode === 'empty-ack') return new Response('{}');
             if (failing && mode === 'refused-ack') return new Response('{"error":{"message":"Synthetic upload refusal"}}', { status: 403 });
             return new Response('{"id":"synthetic-archive"}');
@@ -64,20 +67,38 @@ async function runArchiveScenario({ kind, mode }) {
     window.JSZip = Zip; Zip.prototype.generateAsync = generate; URL.createObjectURL = objectUrl; failing = false;
     await invoke();
     check('retry completes existing public flow', kind === 'single' ? /Student export complete/.test(document.getElementById('archiveStatus').textContent) && JSON.stringify(bytes()) === before : /Archive complete/.test(document.getElementById('archiveStatus').textContent) && Object.keys(getPortfolioData()).length === 0 && students.length === 0);
+    // Read immutable captured Blobs after all seven failure/retry checks finish.
+    for (let i = 0; i < uploadBodies.length; i++) {
+        const { blob, ...request } = uploadBodies[i];
+        uploads[i].request = request;
+        uploads[i].bodyBase64 = btoa(Array.from(new Uint8Array(await blob.arrayBuffer()), byte => String.fromCharCode(byte)).join(''));
+    }
     return { checks, failedStatus, alerts, uploads };
 }
 
 async function runScenario(browser, scenario, cases) {
-    const page = await browser.newPage(), errors = [], downloads = [];
+    const page = await browser.newPage({ timezoneId: 'Asia/Bangkok' }), errors = [], downloads = [];
     page.on('pageerror', e => errors.push(e.message)); page.on('download', d => downloads.push(d.suggestedFilename()));
     await page.route('**/*', archiveRoute);
     try {
+        await page.addInitScript(iso => {
+            const NativeDate = Date, instant = NativeDate.parse(iso);
+            window.Date = class extends NativeDate { constructor(...args) { super(...(args.length ? args : [instant])); } static now() { return instant; } };
+            if (new Date().toISOString() !== iso || Date.now() !== instant) throw Error('Archive clock fixture failed');
+            if (new Date(0).getTime() !== 0 || Date.parse !== NativeDate.parse || Date.UTC !== NativeDate.UTC) throw Error('Archive clock fixture failed');
+        }, archiveClock);
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
         const downloaded = page.waitForEvent('download').then(d => d.suggestedFilename(), e => { throw Error('Retry download missing: ' + e.message); });
         downloaded.catch(() => {});
         const observed = await page.evaluate(runArchiveScenario, scenario);
         await downloaded;
         assert.equal(downloads.length, 1, 'Only successful retry downloads a ZIP'); assert.deepEqual(errors, []);
+        assert.equal(observed.checks.length, 7, 'All seven ordered archive checks retained');
+        for (const upload of observed.uploads) {
+            const bytes = Buffer.from(upload.bodyBase64, 'base64');
+            assert.equal(bytes.length, upload.size, 'Complete multipart Blob captured');
+            assert.equal(bytes.toString('base64'), upload.bodyBase64, 'Canonical lossless base64');
+        }
         cases.push({ ...scenario, ...observed, downloads, passed: observed.checks.every(c => c.passed) });
     } catch (e) { cases.push({ ...scenario, passed: false, error: e.message }); }
     finally { await page.close(); }
@@ -89,6 +110,6 @@ async function runScenario(browser, scenario, cases) {
         for (const scenario of scenarios) await runScenario(browser, scenario, cases);
     } finally { await browser.close(); }
     const failures = cases.filter(c => !c.passed);
-    if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify({ root, cases, failures, boundary: 'Native export/archive/ZIP/download; synthetic Drive fetch, ZIP compression and object URL failures, confirmation responses.' }, null, 2));
+    if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify({ root, cases, failures, archiveClock, boundary: 'Native export/archive/ZIP/download; synthetic Drive fetch, ZIP compression and object URL failures, confirmation responses.' }, null, 2));
     assert.equal(cases.length, 8); assert.deepEqual(failures, [], 'Archive failure outcomes'); console.log('Archive failure outcomes: 8 passed.');
 })().catch(e => { console.error(e); process.exitCode = 1; });
