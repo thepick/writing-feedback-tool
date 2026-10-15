@@ -7988,51 +7988,10 @@ function reconcileDetailedAnalysis(parsed1, detailed, text, flowData, eligibilit
         }
     }
 
-    // Organization fallback (structure/sequencing - AI-driven, helper fills if missing)
-    if (!detailed.categories["Organization"]) {
-        var orgQuick = parsed1.quickRubric["Organization"] || { score: null, reason: getEvidenceNote("Organization") };
-        detailed.categories["Organization"] = {
-            score: eligibility["Organization"] ? orgQuick.score : null,
-            evidence: "The writing presents ideas in a sequence the reader can follow.",
-            growthTip: orgQuick.reason || "Try adding transition words to connect your ideas in a clearer order.",
-            contentOrganization: "The events stay in a clear, logical order.",
-            sentenceVariety: "",
-            rawBody: ""
-        };
-    }
-
-    // Spelling & Punctuation fallback (core category - always needs an entry)
-    if (!detailed.categories["Spelling & Punctuation"]) {
-        var spellQuick = parsed1.quickRubric["Spelling & Punctuation"] || { score: null, reason: getEvidenceNote("Spelling & Punctuation") };
-        detailed.categories["Spelling & Punctuation"] = {
-            score: eligibility["Spelling & Punctuation"] ? spellQuick.score : null,
-            evidence: "Spelling and punctuation were reviewed in this piece.",
-            growthTip: spellQuick.reason || "Check your spelling and punctuation carefully before finishing your work.",
-            contentOrganization: "",
-            sentenceVariety: "",
-            rawBody: ""
-        };
-    }
-
-    // Flow fallback (sentence rhythm - computed support applied above by applyComputedFlowToFlow)
-    if (!detailed.categories["Flow"]) {
-        var flowQuick = parsed1.quickRubric["Flow"] || { score: null, reason: getEvidenceNote("Flow") };
-        detailed.categories["Flow"] = {
-            score: eligibility["Flow"] ? flowQuick.score : null,
-            evidence: "The sentence patterns in this writing contribute to the overall rhythm.",
-            growthTip: parsed1.flowTip || "Try mixing short and longer sentences for smoother flow.",
-            contentOrganization: "",
-            sentenceVariety: "",
-            flowPattern: buildFlowPatternSummary(flowData),
-            patternNotes: buildFlowPatternNotes(flowData),
-            rawBody: ""
-        };
-    } else {
-        detailed.categories["Flow"].sentenceVariety = "";
-        detailed.categories["Flow"].flowPattern = detailed.categories["Flow"].flowPattern || buildFlowPatternSummary(flowData);
-        detailed.categories["Flow"].patternNotes = detailed.categories["Flow"].patternNotes || buildFlowPatternNotes(flowData);
-        if (!detailed.categories["Flow"].growthTip) detailed.categories["Flow"].growthTip = parsed1.flowTip;
-    }
+    detailed.categories["Flow"].sentenceVariety = "";
+    detailed.categories["Flow"].flowPattern = detailed.categories["Flow"].flowPattern || buildFlowPatternSummary(flowData);
+    detailed.categories["Flow"].patternNotes = detailed.categories["Flow"].patternNotes || buildFlowPatternNotes(flowData);
+    if (!detailed.categories["Flow"].growthTip) detailed.categories["Flow"].growthTip = parsed1.flowTip;
 }
 
 function buildAnalysisCategoryScores(parsed1, detailed, eligibility, grammarScore) {
