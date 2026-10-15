@@ -18,6 +18,7 @@
   "tests/openrouter-admission.browser.cjs",
   "tests/openrouter-failures.browser.cjs",
   "tests/optional-storage.browser.cjs",
+  "tests/pending-commit-publication.browser.cjs",
   "tests/pending-portfolio.browser.cjs",
   "tests/portfolio-html.browser.cjs",
   "tests/portfolio-index.browser.cjs",

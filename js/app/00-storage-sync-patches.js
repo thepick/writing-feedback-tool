@@ -8202,7 +8202,8 @@ function clearPendingPortfolioSync() {
     localStorage.removeItem(PENDING_PORTFOLIO_SYNC_KEY);
     pendingPortfolioSync = null;
     pendingPortfolioSyncPersistence = '';
-    updateSyncPortfolioButtonState();
+    try { updateSyncPortfolioButtonState(); }
+    catch (e) { wftDebugError('Pending writing cleared, but sync button refresh failed:', e); }
 }
 
 function updateSyncPortfolioButtonState() {
@@ -8302,8 +8303,9 @@ function commitPendingPortfolioSync(expectedPending) {
             saveStudentSession(pending.studentName, pending.sessionData);
         }
         if (getPendingPortfolioSync() !== pending) return false;
+        var signature = pending.signature || getCurrentPortfolioSessionSignature();
         clearPendingPortfolioSync();
-        lastSyncedPortfolioSessionSignature = pending.signature || getCurrentPortfolioSessionSignature();
+        lastSyncedPortfolioSessionSignature = signature;
         return true;
     } catch (e) {
         // A failed pending clear must not leave a saved copy that would be appended again on retry.
