@@ -1,0 +1,951 @@
+{
+  "repair_id": "repair-020",
+  "source_commit": "c043b71cf218d220ff8607218318068b5b584995",
+  "created_at_utc": "2026-10-15T22:13:11.814247+00:00",
+  "status": "read_only_review_complete",
+  "summary": {
+    "findings_reviewed": 15,
+    "reviewed_no_change": 11,
+    "confirmed_repair_candidates": 4,
+    "additional_measurement_leads": 1,
+    "needs_user_attention": 0,
+    "repository_files_edited": 0,
+    "application_defects_proven": 0
+  },
+  "source_pins": {
+    "manifest": "work/repowise-coordinator/batch-003-source-pins.json",
+    "files": 89,
+    "before_all_raw_match": true,
+    "after_all_raw_match": true,
+    "source_commit_unchanged": true
+  },
+  "verification": {
+    "method": "Complete three source files inspected; installed complexity walker independently verified all assigned shape metrics including bumps. Relevant callers and actual test assertions read. No application/tests/index execution.",
+    "metrics_receipt": "work/repowise-repair-020/current-metrics.json",
+    "proposal_receipt": "work/repowise-repair-020/proposal-metrics.json",
+    "proposal_in_memory_only": true,
+    "coverage_receipt": "work/repowise-repair-020/coverage-evidence.json",
+    "coverage_source_hashes_match_current": true,
+    "historical_native_driver_receipt": "work/repowise-repair-020/historical-native-driver-evidence.json",
+    "terminal_breakpoint_receipt": "work/repowise-repair-020/terminal-breakpoint-evidence.json",
+    "historical_native_driver": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-final-audit-validation/work/native-migration-lifecycle.cjs",
+    "historical_migration_report_source_hash_equals_current": true,
+    "historical_execution_is_not_current_pass": true
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_d1312245e1de5804a1b9",
+      "file": "google-drive-migration.js",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "upload",
+      "verified_metrics": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 9,
+        "max_nesting": 1,
+        "bumps": 0,
+        "start_line": 30,
+        "end_line": 39,
+        "param_count": 4
+      },
+      "evidence_anchors": [
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 30,
+          "end_line": 39,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN9 across9 nonblank lines and depth1 hold. Branches select create versus update URL/method, default MIME type, verify the returned upload location and reject missing IDs or a mismatched readback hash. These are the ordered resumable-upload integrity contract, not interchangeable formatting cases. recoverAppData and recoverFolder both rely on this existing shared helper. A one-use request wrapper or omission of verification would relocate checks or weaken recovery. Keep the compact helper; the native-suite coverage gap is separately actionable.",
+      "callers": "ensure -> recoverAppData/recoverFolder -> upload; shipped finishWftGoogleSignInWithAccessToken calls public ensure for folder recovery."
+    },
+    {
+      "record_id": "code_health:finding_d5fa83a509181f5f704e",
+      "file": "google-drive-migration.js",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "recoverAppData",
+      "verified_metrics": {
+        "ccn": 11,
+        "cognitive": 13,
+        "nloc": 19,
+        "max_nesting": 2,
+        "bumps": 1,
+        "start_line": 57,
+        "end_line": 76,
+        "param_count": 3
+      },
+      "evidence_anchors": [
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 57,
+          "end_line": 76,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN11/NLOC19/depth2 hold. The procedure distinguishes missing originals, ambiguous inventories, identical destination bytes and explicit merge permission, then rechecks destination and original bytes around verified upload. Each hash/read occurs at a different concurrency boundary. The existing list/read/upload/hash helpers already isolate common operations. Further splitting this short ordered recovery sequence would hide original-read-only and no-overwrite conditions; retain the shape. Existing VM protocol assertions cover raw preservation, merge refusal/permission, corrupt readback, duplicates and retry; they are not claimed native coverage.",
+      "callers": "ensure -> recoverAppData/recoverFolder -> upload; shipped finishWftGoogleSignInWithAccessToken calls public ensure for folder recovery."
+    },
+    {
+      "record_id": "code_health:finding_2f5974a3771db462a175",
+      "file": "google-drive-migration.js",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "recoverFolder",
+      "verified_metrics": {
+        "ccn": 13,
+        "cognitive": 18,
+        "nloc": 36,
+        "max_nesting": 2,
+        "bumps": 2,
+        "start_line": 83,
+        "end_line": 119,
+        "param_count": 3
+      },
+      "evidence_anchors": [
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 83,
+          "end_line": 119,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN13/NLOC36/depth2 hold. Local scan/recheck functions separate recursive inventory from ordered parent-ID creation, content remapping, verified upload, original-byte reread and final membership check. Duplicate-copy rejection must remain at the corresponding node encounter. Keep these visible integrity phases and all guards. The separately queued migration-recovery-copy-lookup lead from019 can remove the repeated copied.filter scan without concurrency changes; it is not duplicated or claimed to close this complexity warning.",
+      "callers": "ensure -> recoverAppData/recoverFolder -> upload; shipped finishWftGoogleSignInWithAccessToken calls public ensure for folder recovery."
+    },
+    {
+      "record_id": "code_health:finding_c9064893d7223bb4ffd1",
+      "file": "google-drive-migration.js",
+      "marker": "coverage_gap",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "restore_discovered_native_migration_coverage",
+      "owner": "module",
+      "verified_metrics": {
+        "stored": {
+          "line_coverage_pct": 24.44,
+          "branch_coverage_pct": null,
+          "uncovered_lines": 102,
+          "total_coverable_lines": 135
+        },
+        "exact_source_native_capture": {
+          "covered": 33,
+          "executable": 135,
+          "percent": 24.444444444444443,
+          "uncovered": [
+            29,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            46,
+            47,
+            48,
+            49,
+            51,
+            52,
+            53,
+            54,
+            55,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            71,
+            73,
+            74,
+            75,
+            76,
+            78,
+            79,
+            80,
+            81,
+            84,
+            85,
+            86,
+            87,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            114,
+            115,
+            116,
+            117,
+            118,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            145,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            155,
+            156,
+            157,
+            159,
+            160,
+            162,
+            164,
+            165,
+            166,
+            170
+          ],
+          "source_sha256_normalized_lf": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142",
+          "current_source_matches_capture": true
+        },
+        "capture": "work/repowise-batch-002/current.lcov.summary.json",
+        "native_suites": 58,
+        "branch_coverage_measured": false
+      },
+      "evidence_anchors": [
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 44,
+          "end_line": 54,
+          "role": "OAuth callback and required scopes"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 83,
+          "end_line": 119,
+          "role": "Folder recovery data-integrity phases"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 120,
+          "end_line": 169,
+          "role": "Native dialog, account gate, completion marker and retry"
+        },
+        {
+          "file": "test-google-drive-migration.cjs",
+          "start_line": 4,
+          "end_line": 10,
+          "role": "Fake document and OAuth boundary"
+        },
+        {
+          "file": "test-google-drive-migration.cjs",
+          "start_line": 49,
+          "end_line": 52,
+          "role": "VM source export rewrite"
+        },
+        {
+          "file": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-final-audit-validation/work/native-migration-lifecycle.cjs",
+          "start_line": 1,
+          "end_line": 101,
+          "role": "Existing owned native public-API driver inspected, not executed"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "The current exact-source capture covers33/135 native executable-breakpoint lines (24.44%);102 are unhit, including authorization, copy verification, folder creation/remap/readback and actual recovery-dialog branches. VM test-google-drive-migration.cjs rewrites private exports into a fake DOM/service and cannot supply native-browser line coverage. Historical evidence has an existing own-work native public ensure/real-dialog driver for cancel, account mismatch, nested verified copy, corrupt-upload retry and read-only completed retry. Its migration source hash exactly matches current migration bytes after LF normalization, but that historical execution is not a current75-suite pass and is absent from current discovery/capture. Reuse and rerun that driver under the existing runner/report contract before adding equivalent new logic. This is a current capture/discovery gap, not proof those behaviors have never been tested or a proven production defect. One terminal EOF breakpoint is also an independent denominator lead; it cannot explain the substantive gap.",
+      "regression_recommendation": "Port/reuse the existing four native scenarios with current WFT_TEST_ROOT and WFT_TEST_REPORT support, required case-report validation and all nonlocal requests intercepted/aborted. Keep public unmodified GoogleDriveMigration.ensure, real DOM/Blob/SHA, old-token GET-only, exact original bytes/parents, remapped nested IDs, marker only after verification, corrupt retry without duplicates, and failed-recovery refusal to start empty. Rerun against current source and recapture exact-source coverage; do not import historical percentages as current. Reuse this coverage before the queued lookup refactor. Native appData/merge or missing-scope cases can follow only if their remaining gaps warrant them.",
+      "callers": "ensure -> recoverAppData/recoverFolder -> upload; shipped finishWftGoogleSignInWithAccessToken calls public ensure for folder recovery."
+    },
+    {
+      "record_id": "code_health:finding_ac236ee8c53f6b06a02a",
+      "file": "google-drive-migration.js",
+      "marker": "coverage_gradient",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "restore_discovered_native_migration_coverage",
+      "owner": "module",
+      "verified_metrics": {
+        "stored": {
+          "line_coverage_pct": 24.44,
+          "branch_coverage_pct": null,
+          "uncovered_fraction": 0.7556,
+          "deduction": 3.0224
+        },
+        "exact_source_native_capture": {
+          "covered": 33,
+          "executable": 135,
+          "percent": 24.444444444444443,
+          "uncovered": [
+            29,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            46,
+            47,
+            48,
+            49,
+            51,
+            52,
+            53,
+            54,
+            55,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            71,
+            73,
+            74,
+            75,
+            76,
+            78,
+            79,
+            80,
+            81,
+            84,
+            85,
+            86,
+            87,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            114,
+            115,
+            116,
+            117,
+            118,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            145,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            155,
+            156,
+            157,
+            159,
+            160,
+            162,
+            164,
+            165,
+            166,
+            170
+          ],
+          "source_sha256_normalized_lf": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142",
+          "current_source_matches_capture": true
+        },
+        "capture": "work/repowise-batch-002/current.lcov.summary.json",
+        "native_suites": 58,
+        "branch_coverage_measured": false
+      },
+      "evidence_anchors": [
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 44,
+          "end_line": 54,
+          "role": "OAuth callback and required scopes"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 83,
+          "end_line": 119,
+          "role": "Folder recovery data-integrity phases"
+        },
+        {
+          "file": "google-drive-migration.js",
+          "start_line": 120,
+          "end_line": 169,
+          "role": "Native dialog, account gate, completion marker and retry"
+        },
+        {
+          "file": "test-google-drive-migration.cjs",
+          "start_line": 4,
+          "end_line": 10,
+          "role": "Fake document and OAuth boundary"
+        },
+        {
+          "file": "test-google-drive-migration.cjs",
+          "start_line": 49,
+          "end_line": 52,
+          "role": "VM source export rewrite"
+        },
+        {
+          "file": "C:/Users/Michael/Documents/Codex/2026-10-12/writing-feedback-final-audit-validation/work/native-migration-lifecycle.cjs",
+          "start_line": 1,
+          "end_line": 101,
+          "role": "Existing owned native public-API driver inspected, not executed"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "The current exact-source capture covers33/135 native executable-breakpoint lines (24.44%);102 are unhit, including authorization, copy verification, folder creation/remap/readback and actual recovery-dialog branches. VM test-google-drive-migration.cjs rewrites private exports into a fake DOM/service and cannot supply native-browser line coverage. Historical evidence has an existing own-work native public ensure/real-dialog driver for cancel, account mismatch, nested verified copy, corrupt-upload retry and read-only completed retry. Its migration source hash exactly matches current migration bytes after LF normalization, but that historical execution is not a current75-suite pass and is absent from current discovery/capture. Reuse and rerun that driver under the existing runner/report contract before adding equivalent new logic. This is a current capture/discovery gap, not proof those behaviors have never been tested or a proven production defect. One terminal EOF breakpoint is also an independent denominator lead; it cannot explain the substantive gap.",
+      "regression_recommendation": "Port/reuse the existing four native scenarios with current WFT_TEST_ROOT and WFT_TEST_REPORT support, required case-report validation and all nonlocal requests intercepted/aborted. Keep public unmodified GoogleDriveMigration.ensure, real DOM/Blob/SHA, old-token GET-only, exact original bytes/parents, remapped nested IDs, marker only after verification, corrupt retry without duplicates, and failed-recovery refusal to start empty. Rerun against current source and recapture exact-source coverage; do not import historical percentages as current. Reuse this coverage before the queued lookup refactor. Native appData/merge or missing-scope cases can follow only if their remaining gaps warrant them.",
+      "callers": "ensure -> recoverAppData/recoverFolder -> upload; shipped finishWftGoogleSignInWithAccessToken calls public ensure for folder recovery."
+    },
+    {
+      "record_id": "code_health:finding_c4ec7ba6b31459fd0ccb",
+      "file": "js/app/dialogs.js",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "wftTextInput executor",
+      "verified_metrics": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 95,
+        "max_nesting": 1,
+        "bumps": 0,
+        "start_line": 116,
+        "end_line": 229,
+        "param_count": 1
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 116,
+          "end_line": 229,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "The wftTextInput Promise executor is95 nonblank lines, CCN12 and depth1. It constructs labelled text input plus optional help/body, keeps cancellation null distinct from submitted empty text, guards IME composition/keyCode229, and submits Enter only from the input. Its idempotent close and shared style initializer already centralize lifecycle within the dialog. A new options-heavy modal factory would couple confirmation and input contracts and move DOM construction into another layer. Preserve these accessible text-only elements and keyboard guards; missing-body coverage is separately actionable.",
+      "callers": "Native rename/management/archive and destructive cache/portfolio actions call wftTextInput/wftConfirm; promise outcomes gate later mutation."
+    },
+    {
+      "record_id": "code_health:finding_44e764606a039a6b13e8",
+      "file": "js/app/dialogs.js",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_schema_or_dom_construction_retained",
+      "owner": "wftConfirm executor",
+      "verified_metrics": {
+        "ccn": 7,
+        "cognitive": 6,
+        "nloc": 66,
+        "max_nesting": 1,
+        "bumps": 0,
+        "start_line": 32,
+        "end_line": 110,
+        "param_count": 1
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 32,
+          "end_line": 110,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "The wftConfirm Promise executor is66 nonblank lines, CCN7 and depth1. Most lines explicitly construct text-only DOM, roles/ARIA names and two buttons. Its local idempotent close removes the keyboard listener/backdrop and resolves a Boolean; Escape, backdrop/cancel and confirm paths share that close. ensureWftConfirmStyles is already reused. A generic modal factory would require a lifecycle/configuration interface spanning different IDs, input/help/body rules and result types, rather than simplify a difficult algorithm. Retain the explicit bounded dialog and its current keyboard/workflow assertions.",
+      "callers": "Native rename/management/archive and destructive cache/portfolio actions call wftTextInput/wftConfirm; promise outcomes gate later mutation."
+    },
+    {
+      "record_id": "code_health:finding_bae51d347f9911061cfa",
+      "file": "js/app/dialogs.js",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_schema_or_dom_construction_retained",
+      "owner": "wftTextInput executor",
+      "verified_metrics": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 95,
+        "max_nesting": 1,
+        "bumps": 0,
+        "start_line": 116,
+        "end_line": 229,
+        "param_count": 1
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 116,
+          "end_line": 229,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "The wftTextInput Promise executor is95 nonblank lines, CCN12 and depth1. It constructs labelled text input plus optional help/body, keeps cancellation null distinct from submitted empty text, guards IME composition/keyCode229, and submits Enter only from the input. Its idempotent close and shared style initializer already centralize lifecycle within the dialog. A new options-heavy modal factory would couple confirmation and input contracts and move DOM construction into another layer. Preserve these accessible text-only elements and keyboard guards; missing-body coverage is separately actionable.",
+      "callers": "Native rename/management/archive and destructive cache/portfolio actions call wftTextInput/wftConfirm; promise outcomes gate later mutation."
+    },
+    {
+      "record_id": "code_health:finding_7cafeb9e1b470fe325be",
+      "file": "js/app/dialogs.js",
+      "marker": "coverage_gradient",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "missing_body_dialog_fallback_coverage",
+      "owner": "module",
+      "verified_metrics": {
+        "stored": {
+          "line_coverage_pct": 96.84,
+          "branch_coverage_pct": null,
+          "uncovered_fraction": 0.0316,
+          "deduction": 0.1264
+        },
+        "exact_source_native_capture": {
+          "covered": 153,
+          "executable": 158,
+          "percent": 96.83544303797468,
+          "uncovered": [
+            34,
+            35,
+            118,
+            119,
+            232
+          ],
+          "source_sha256_normalized_lf": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+          "current_source_matches_capture": true
+        },
+        "capture": "work/repowise-batch-002/current.lcov.summary.json",
+        "native_suites": 58,
+        "branch_coverage_measured": false
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 32,
+          "end_line": 36,
+          "role": "Confirmation refuses missing body"
+        },
+        {
+          "file": "js/app/dialogs.js",
+          "start_line": 116,
+          "end_line": 120,
+          "role": "Text input refuses missing body"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "start_line": 4,
+          "end_line": 17,
+          "role": "Existing native keyboard scenario and IME controls"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "start_line": 65,
+          "end_line": 91,
+          "role": "Real rename/input/confirmation workflow"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "Current exact-source capture is153/158 (96.84%). Four actual uncovered lines are the missing-document.body early resolutions: false for confirmation and null for input; these prevent awaiting unavailable UI or accepting an absent destructive confirmation. Existing native keyboard workflows cover focus, buttons, Escape, Enter and IME with a body present. Add two small native fallback cases to that existing harness: temporarily detach the real body, call the unmodified public helpers, assert immediate false/null with no dialog/listener side effects, and restore the body in finally. The fifth unhit point is a terminal return at the empty EOF line232, which needs a separate measurement check rather than a fake UI branch. This numeric gradient is real in the capture but is not five missing user-behavior lines.",
+      "regression_recommendation": "Extend the existing native dialog keyboard harness with the two real missing-body helper fallbacks and reliable DOM restoration. Retain all workflow/data-preservation/IME assertions and report failure propagation. Recheck fresh capture; do not promise100% until the EOF-point denominator is independently resolved.",
+      "callers": "Native rename/management/archive and destructive cache/portfolio actions call wftTextInput/wftConfirm; promise outcomes gate later mutation."
+    },
+    {
+      "record_id": "code_health:finding_28ab15e0abd57a32278e",
+      "file": "js/app/storage-recovery.js",
+      "marker": "nested_complexity",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "early_missing_key_continue",
+      "owner": "buildWftEmergencyBackupObject",
+      "verified_metrics": {
+        "ccn": 17,
+        "cognitive": 39,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 3,
+        "start_line": 214,
+        "end_line": 293,
+        "param_count": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 246,
+          "end_line": 264,
+          "role": "Existing null-skip, redaction and per-key error handling"
+        },
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 266,
+          "end_line": 291,
+          "role": "In-tab/recovery preservation and optional counts"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "Nesting4 is confirmed in for-key -> try -> raw-present if -> settings-only redaction if. Raw===null intentionally does nothing before the next key. Replace the raw-present wrapper with an early continue inside the existing try and unindent the same parse/validation/redaction/assignment statements. Also replace the independent catch if(!backup.readErrors) initializer with backup.readErrors = backup.readErrors || []; keep its following push. This lazily creates the array only on error and reuses the same existing array. There is no finally or required post-wrapper operation in the loop. The first change alone still has depth4 in the catch; the combined in-memory proposal reaches depth3/CCN17 without a helper, preserving missing-key versus read-error and credential-redaction behavior. Keep pending/photo/recovery snapshots and optional count phases intact. Native behavior parity still needs verification; no source edit or clearance is claimed by this review.",
+      "regression_recommendation": "Early raw===null continue plus equivalent lazy error-list initializer; unindent the unchanged parsing/redaction block. Preserve readErrors absence on successful backup and ordered keys on failures. Run storage-health.cjs and recovery-cache.browser.cjs plus syntax before/after, compare backup contents/readErrors/credential omission and pending/recovery bytes, preserve defaults and callbacks. Recompute all affected metrics after accepted source change; CCN/large/bumpy markers are not promised cleared.",
+      "callers": "downloadWftEmergencyBackup and saveWftPreMigrationBackupToDrive use backup builder; strict storage, settings/cloud/deletion ingestion and backup redaction use validator."
+    },
+    {
+      "record_id": "code_health:finding_aed41adf814ee93f00d0",
+      "file": "js/app/storage-recovery.js",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "validateWftRequiredStorage",
+      "verified_metrics": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 20,
+        "max_nesting": 1,
+        "bumps": 0,
+        "start_line": 160,
+        "end_line": 179,
+        "param_count": 2
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 160,
+          "end_line": 179,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN11/NLOC20/depth1 hold. Required root type differs for the student array versus object stores; deletion submaps must be objects with object records, deletion logs arrays, and settings.students an array when present. Own-property checks retain omitted optional legacy fields while rejecting explicit malformed ones. This compact shared trust-boundary validator is used by strict reads, backup credential redaction and cloud/settings/deletion ingestion. A generic rule table would add callbacks/configuration around different shapes; removing a check risks destructive sparse-state persistence. Keep it.",
+      "callers": "downloadWftEmergencyBackup and saveWftPreMigrationBackupToDrive use backup builder; strict storage, settings/cloud/deletion ingestion and backup redaction use validator."
+    },
+    {
+      "record_id": "code_health:finding_0b15a07e6a17aa631487",
+      "file": "js/app/storage-recovery.js",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "buildWftEmergencyBackupObject",
+      "verified_metrics": {
+        "ccn": 17,
+        "cognitive": 39,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 3,
+        "start_line": 214,
+        "end_line": 293,
+        "param_count": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 214,
+          "end_line": 293,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN17/NLOC71/depth4/bumps3 hold. The length includes a fixed feature-flag schema and14 backup key names. Distinct phases preserve raw non-settings data, validate/redact settings, disclose read failures, retain full in-tab pending photos and rollback before-images, then add optional portfolio counts. Keep those privacy/data-loss checks and explicit schemas; do not extract one-use helpers just to move the metric. The nesting record has a smaller improvement: skip raw===null early and use equivalent lazy error-array initialization in the independent catch. The first change alone still leaves depth4 in the catch; the combined static proposal keeps CCN17 and all three phases.",
+      "callers": "downloadWftEmergencyBackup and saveWftPreMigrationBackupToDrive use backup builder; strict storage, settings/cloud/deletion ingestion and backup redaction use validator."
+    },
+    {
+      "record_id": "code_health:finding_609609e5993a72b3c225",
+      "file": "js/app/storage-recovery.js",
+      "marker": "bumpy_road",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "separate_recovery_phases_retained",
+      "owner": "buildWftEmergencyBackupObject",
+      "verified_metrics": {
+        "ccn": 17,
+        "cognitive": 39,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 3,
+        "start_line": 214,
+        "end_line": 293,
+        "param_count": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 214,
+          "end_line": 293,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN17/NLOC71/depth4/bumps3 hold. The length includes a fixed feature-flag schema and14 backup key names. Distinct phases preserve raw non-settings data, validate/redact settings, disclose read failures, retain full in-tab pending photos and rollback before-images, then add optional portfolio counts. Keep those privacy/data-loss checks and explicit schemas; do not extract one-use helpers just to move the metric. The nesting record has a smaller improvement: skip raw===null early and use equivalent lazy error-array initialization in the independent catch. The first change alone still leaves depth4 in the catch; the combined static proposal keeps CCN17 and all three phases.",
+      "callers": "downloadWftEmergencyBackup and saveWftPreMigrationBackupToDrive use backup builder; strict storage, settings/cloud/deletion ingestion and backup redaction use validator."
+    },
+    {
+      "record_id": "code_health:finding_1c20ca1bd8c2259efb2a",
+      "file": "js/app/storage-recovery.js",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_schema_or_dom_construction_retained",
+      "owner": "buildWftEmergencyBackupObject",
+      "verified_metrics": {
+        "ccn": 17,
+        "cognitive": 39,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 3,
+        "start_line": 214,
+        "end_line": 293,
+        "param_count": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 214,
+          "end_line": 293,
+          "role": "Complete assigned source/observation inspected"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "CCN17/NLOC71/depth4/bumps3 hold. The length includes a fixed feature-flag schema and14 backup key names. Distinct phases preserve raw non-settings data, validate/redact settings, disclose read failures, retain full in-tab pending photos and rollback before-images, then add optional portfolio counts. Keep those privacy/data-loss checks and explicit schemas; do not extract one-use helpers just to move the metric. The nesting record has a smaller improvement: skip raw===null early and use equivalent lazy error-array initialization in the independent catch. The first change alone still leaves depth4 in the catch; the combined static proposal keeps CCN17 and all three phases.",
+      "callers": "downloadWftEmergencyBackup and saveWftPreMigrationBackupToDrive use backup builder; strict storage, settings/cloud/deletion ingestion and backup redaction use validator."
+    },
+    {
+      "record_id": "code_health:finding_339bc8c333e9ec258402",
+      "file": "js/app/storage-recovery.js",
+      "marker": "coverage_gradient",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "small_residual_compatibility_and_defensive_coverage_retained",
+      "owner": "module",
+      "verified_metrics": {
+        "stored": {
+          "line_coverage_pct": 95.31,
+          "branch_coverage_pct": null,
+          "uncovered_fraction": 0.0469,
+          "deduction": 0.1876
+        },
+        "exact_source_native_capture": {
+          "covered": 183,
+          "executable": 192,
+          "percent": 95.3125,
+          "uncovered": [
+            15,
+            90,
+            91,
+            92,
+            93,
+            95,
+            288,
+            289,
+            361
+          ],
+          "source_sha256_normalized_lf": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636",
+          "current_source_matches_capture": true
+        },
+        "capture": "work/repowise-batch-002/current.lcov.summary.json",
+        "native_suites": 58,
+        "branch_coverage_measured": false
+      },
+      "evidence_anchors": [
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 15,
+          "end_line": 15,
+          "role": "Short-ID compatibility wrapper"
+        },
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 89,
+          "end_line": 95,
+          "role": "Lamport getter fallback"
+        },
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 276,
+          "end_line": 290,
+          "role": "Optional portfolio counts and failure fallback"
+        },
+        {
+          "file": "tests/storage-health.cjs",
+          "start_line": 64,
+          "end_line": 88,
+          "role": "Direct backup count-fallback/privacy assertions"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 4,
+          "end_line": 10,
+          "role": "Native recovery/backup failure scenario inventory"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6814,
+          "end_line": 6821,
+          "role": "Normal increment helper and optional getter fallback"
+        }
+      ],
+      "scanner_finding_remains_open": true,
+      "reason": "Current exact-source capture is183/192 (95.31%). The nine unhit points are short-ID wrapper15, Lamport getter90-95, optional portfolio-count fallback288-289 and terminal EOF return361. Existing native recovery tests exercise actual backup/download/Drive-fallback, corrupt/unreadable settings redaction, in-tab recovery/photos and truthful callbacks; storage-health.cjs also directly asserts the count fallback when the facade throws. Current normal save path calls incrementDeviceLamport; the getter is a compatibility fallback if that function is absent. Adding contrived native failure chains or wrapper calls solely to remove this low gradient is not worthwhile. Preserve the getter/backup guards, record the residual native limits, and add focused getter/ID contract tests if those helpers change. The terminal EOF point is a separate measurement lead. No claim of complete branch coverage or zero uncovered risk.",
+      "regression_recommendation": "Retain this low gradient with explicit limits; do not remove defensive helpers or manufacture production overrides to raise the percentage. Revisit remaining helper contracts when they change, and resolve the EOF-point measurement separately.",
+      "callers": "downloadWftEmergencyBackup and saveWftPreMigrationBackupToDrive use backup builder; strict storage, settings/cloud/deletion ingestion and backup redaction use validator."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "native-coverage-terminal-breakpoint-denominator",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "terminal_eof_location_measurement_check",
+      "file": "work/do-next-05/export-coverage.cjs",
+      "owner": "native executable-line export",
+      "reason": "Captured possible-breakpoint locations include type:return at the final empty EOF position for dialogs(line232), storage-recovery(line361) and migration(line170). Those points are outside textual statements and appear unhit. The preload maps all locations to offsets and coveredOffsets uses end-exclusive ranges; its own source self-check explicitly treats an offset at range.endOffset as uncovered. The exporter counts every location line in the denominator. Review this terminal-boundary mapping before treating EOF as a missing test branch. This is an instrumentation lead, not a confirmed production bug or permission to discard real uncovered lines.",
+      "evidence_anchors": [
+        {
+          "file": "work/do-next-05/export-coverage.cjs",
+          "start_line": 15,
+          "end_line": 20,
+          "role": "Every native location line becomes denominator"
+        },
+        {
+          "file": "work/do-next-05/coverage-preload.cjs",
+          "start_line": 17,
+          "end_line": 23,
+          "role": "Locations mapped to offsets and covered lines"
+        },
+        {
+          "file": "work/summarize-coverage.cjs",
+          "start_line": 2,
+          "end_line": 17,
+          "role": "End-exclusive range selection and end-offset self-check"
+        }
+      ],
+      "regression_recommendation": "After the active frozen-source gate finishes, preserve captures and add a small isolated mapping regression for actual EOF return versus a real unexecuted return. Verify whether EOF should be filtered or mapped, then re-export consistently from immutable native records. No live app/source/hook change or denominator cherry-picking; retain all real unhit executable statements.",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false
+    }
+  ],
+  "repair_recommendations": [
+    {
+      "id": "backup-key-loop-shallow-guards",
+      "scope": [
+        "js/app/storage-recovery.js::buildWftEmergencyBackupObject"
+      ],
+      "assigned_records": [
+        "code_health:finding_28ab15e0abd57a32278e"
+      ],
+      "plan": "Use early null continue and equivalent lazy error-list initialization; preserve readErrors omission/order, bytes/redaction/guards and verify before/after parity. A single early continue alone does not lower overall maximum depth.",
+      "predicted_static_metrics": {
+        "ccn": 17,
+        "cognitive": 34,
+        "nloc": 70,
+        "max_nesting": 3,
+        "bumps": 3
+      }
+    },
+    {
+      "id": "restore-native-migration-driver-discovery",
+      "scope": [
+        "Native public GoogleDriveMigration.ensure driver and current runner/report integration"
+      ],
+      "assigned_records": [
+        "code_health:finding_c9064893d7223bb4ffd1",
+        "code_health:finding_ac236ee8c53f6b06a02a"
+      ],
+      "plan": "Reuse existing owned four-case native lifecycle driver; adapt root/report paths, rerun current source, preserve local-only intercepted boundaries and required reports; recapture coverage. No private production export/source rewrite."
+    },
+    {
+      "id": "dialog-missing-body-native-fallbacks",
+      "scope": [
+        "tests/storage-dialog-keyboard.browser.cjs"
+      ],
+      "assigned_records": [
+        "code_health:finding_7cafeb9e1b470fe325be"
+      ],
+      "plan": "Two actual body-absent calls with immediate false/null assertions and finally DOM restoration; preserve existing keyboard/data-loss assertions."
+    }
+  ],
+  "tests": {
+    "run_by_this_review": [],
+    "benchmarks_run": [],
+    "coordinator_gate": "Batch003 full suite/native coverage is independently running on frozen source; not claimed complete here."
+  },
+  "limits": [
+    "No source edits, tests, native fault execution, Git mutations, index/cache writes or live service/account calls.",
+    "The four repair candidates and EOF measurement lead remain unimplemented/unverified; no scanner clearance is claimed.",
+    "Coverage is exact-source line coverage from batch002, not branch coverage or proof every fallback is safe; batch003 capture is still pending.",
+    "Historical native migration driver is source-inspected reuse evidence, not a newly verified pass.",
+    "Queued migration-recovery-copy-lookup from019 remains separate and is not duplicated."
+  ],
+  "repository_files_edited": []
+}

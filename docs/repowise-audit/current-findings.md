@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T04:44:24.570990+07:00.
+Updated 2026-10-16T05:14:59.010025+07:00.
 
-Source: 2c93cbd93ed2de5c77d787866f33f0307b5ac38e. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: c043b71cf218d220ff8607218318068b5b584995. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One repair chat and one repository writer at a time. Findings are leads, not proven bugs.
 
@@ -10,17 +10,17 @@ One repair chat and one repository writer at a time. Findings are leads, not pro
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 912 |
+| code_health | 914 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
 | performance | 30 |
 
-Statuses: {"confirmed_repair_candidate": 1, "reviewed_no_change": 194, "unreviewed": 790}.
+Statuses: {"confirmed_repair_candidate": 9, "reviewed_no_change": 346, "unreviewed": 632}.
 
-All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 1, "fixed_verified": 18, "reviewed_no_change": 196, "unreviewed": 790}.
+All tracked rows, including findings absent on the latest scan: {"confirmed_repair_candidate": 9, "fixed_verified": 19, "reviewed_no_change": 348, "unreviewed": 632}.
 
-Findings confirmed cleared: 18. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
+Findings confirmed cleared: 19. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
 Behavior repairs with regression evidence: 6.
 
@@ -51,8 +51,11 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-014: Correct notebook text dictionary lookups - behavior_fixed_verified.
 - repair-015: Keep the word-target control consistent after settings load - behavior_fixed_verified.
 - repair-016: Correct first-person checklist contractions - behavior_fixed_verified.
+- repair-017: Verify print popup isolation failures - behavior_fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-017: Verify print popup isolation failures - reviewed_pending_refresh.
+- repair-018: Review test assertions and critical harness warnings - reviewed_complete.
+- repair-019: Review production loop and performance warnings - reviewed_complete.
+- repair-020: Review recovery guards and coverage gaps - reviewed_complete.
 
 ## Additional source leads
 
@@ -62,6 +65,8 @@ These are review leads, separate from scanner observations. They require their o
 - notebook-prototype-key-collision: assembleNotebookGuideFromCandidates; shared getNotebookGuideContentWords in js/app/10-main-app.js — fixed_verified. The arbitrary quote-key map seen starts as {} and checks seen[key] before an example is added. A first quote key __proto__ therefore appears previously seen through Object.prototype and is rejected on ordinary required/general passes. Separately, getNotebookGuideContentWords uses a {} stopWords table with !stopWords[word]; the lower-case English word constructor is inherited and silently excluded although it is not in the declared stop-word list. Both are source-supported dictionary membership leads, not reproduced failures in this read-only review.
 - preference-null-word-target-toggle: applyWftPreferenceForm in js/app/00-storage-sync-patches.js — fixed_verified. The defaults are overwritten by supplied null values. With useWordCountTarget:null, line6260 deliberately leaves the existing checkbox unchanged, but line6286 disables the numeric field from !settings.useWordCountTarget. If the checkbox is currently true, the UI can therefore retain an enabled target policy while disabling its editable target field. The normal change listener derives disabled state from the actual checkbox instead. Settings root validation does not reject this nullable field, and mergeWftSettings preserves it, so local saved or loaded settings can reach this path. This is source-supported, not reproduced in this read-only review.
 - checklist-second-person-contraction: buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist in js/app/10-main-app.js — fixed_verified. toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or I’re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.
+- migration-recovery-copy-lookup: recoverFolder in google-drive-migration.js — confirmed_repair_candidate. For every one of N scanned source nodes, copied.filter tests all M previously copied metadata records. Source proves N*M predicate visits, with no node/copy cap. Build a native Map from oauthOriginal to matching copied records once, then use one lookup per node; keep duplicate-match rejection at the same node encounter, preserve first-match order, ignore unrelated duplicate groups exactly as before, and keep parent-before-child writes plus all readback/source guards. This is a CPU/clarity refactor lead, not evidence that the required network calls are redundant and not a measured end-to-end speedup.
+- native-coverage-terminal-breakpoint-denominator: native executable-line export in work/do-next-05/export-coverage.cjs — candidate_needs_regression. Captured possible-breakpoint locations include type:return at the final empty EOF position for dialogs(line232), storage-recovery(line361) and migration(line170). Those points are outside textual statements and appear unhit. The preload maps all locations to offsets and coveredOffsets uses end-exclusive ranges; its own source self-check explicitly treats an offset at range.endOffset as uncovered. The exporter counts every location line in the denominator. Review this terminal-boundary mapping before treating EOF as a missing test branch. This is an instrumentation lead, not a confirmed production bug or permission to discard real uncovered lines.
 
 ## Coverage evidence
 
@@ -89,17 +94,18 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_0be1d750101405d79892 | critical | code_health | js/app/10-main-app.js:6354 | sanitizeNotebookGuideCandidate / complex_method | yes | reviewed_no_change |
 | code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / complex_method | yes | reviewed_no_change |
 | code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7111 | buildNotebookReconstructionDataFromSession / complex_method | yes | reviewed_no_change |
-| code_health:finding_2f3ed327ca58291a143e | critical | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / large_method | yes | unreviewed |
+| code_health:finding_2f3ed327ca58291a143e | critical | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / large_method | yes | reviewed_no_change |
 | code_health:finding_615d19856374d52a4a9b | critical | code_health | tests/archive-integrity.browser.cjs | change_entropy | yes | reviewed_no_change |
-| code_health:finding_3dffc42c2f6cdecd5764 | critical | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
-| code_health:finding_b3ea0e675e7c1c2fdb28 | critical | code_health | tests/notebook-guidance-repair.browser.cjs:7 | runNotebookGuidanceCases / large_method | yes | unreviewed |
-| code_health:finding_bdf61850d95084548fb6 | critical | code_health | tests/pending-portfolio.browser.cjs:8 | <anonymous@8> / complex_method | yes | unreviewed |
-| code_health:finding_b2de67a26dc3c9307c23 | critical | code_health | tests/portfolio-renderer.browser.cjs:16 | exercise / complex_method | yes | unreviewed |
-| code_health:finding_14ac99ade4516a264416 | critical | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / complex_method | yes | unreviewed |
-| code_health:finding_2cc014e33a4adfabcf8e | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / nested_complexity | yes | unreviewed |
-| code_health:finding_d972d4b21d11f1043309 | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / complex_method | yes | unreviewed |
-| code_health:finding_c9064893d7223bb4ffd1 | high | code_health | google-drive-migration.js | coverage_gap | yes | unreviewed |
-| code_health:finding_ac236ee8c53f6b06a02a | high | code_health | google-drive-migration.js | coverage_gradient | yes | unreviewed |
+| code_health:finding_3dffc42c2f6cdecd5764 | critical | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / complex_method | yes | reviewed_no_change |
+| code_health:finding_b3ea0e675e7c1c2fdb28 | critical | code_health | tests/notebook-guidance-repair.browser.cjs:7 | runNotebookGuidanceCases / large_method | yes | reviewed_no_change |
+| code_health:finding_886ef320a4749424aed4 | critical | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / complex_method | yes | reviewed_no_change |
+| code_health:finding_bdf61850d95084548fb6 | critical | code_health | tests/pending-portfolio.browser.cjs:8 | <anonymous@8> / complex_method | yes | reviewed_no_change |
+| code_health:finding_b2de67a26dc3c9307c23 | critical | code_health | tests/portfolio-renderer.browser.cjs:16 | exercise / complex_method | yes | reviewed_no_change |
+| code_health:finding_14ac99ade4516a264416 | critical | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / complex_method | yes | reviewed_no_change |
+| code_health:finding_2cc014e33a4adfabcf8e | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / nested_complexity | yes | reviewed_no_change |
+| code_health:finding_d972d4b21d11f1043309 | critical | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / complex_method | yes | reviewed_no_change |
+| code_health:finding_c9064893d7223bb4ffd1 | high | code_health | google-drive-migration.js | coverage_gap | yes | confirmed_repair_candidate |
+| code_health:finding_ac236ee8c53f6b06a02a | high | code_health | google-drive-migration.js | coverage_gradient | yes | confirmed_repair_candidate |
 | code_health:finding_b820d2d24da772091e34 | high | code_health | js/app/00-storage-sync-patches.js | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_9b4aa07ab42ab6350d8c | high | code_health | js/app/00-storage-sync-patches.js:491 | persistApiKeyStorageFromInput / complex_method | yes | unreviewed |
 | code_health:finding_bce2bd1af6dae6674398 | high | code_health | js/app/00-storage-sync-patches.js:550 | saveSettingsToLocalStorage / complex_method | yes | unreviewed |
@@ -192,11 +198,11 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_2e922e3c247099d7d561 | high | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / brain_method | yes | reviewed_no_change |
 | code_health:finding_a0bc5269056689b0f926 | high | code_health | js/app/10-main-app.js:7080 | ensureNotebookGuide / complex_method | yes | unreviewed |
 | code_health:finding_388125686d54705ffbee | high | code_health | js/app/10-main-app.js:7143 | fillNotebookSummary / complex_method | yes | unreviewed |
-| code_health:finding_46523b22d5ed554a99ea | high | code_health | js/app/10-main-app.js:7465 | buildNotebookPrintHtmlFromPortfolioSession / complex_method | yes | unreviewed |
-| code_health:finding_fa1b31a336377742bafa | high | code_health | js/app/10-main-app.js:7665 | <anonymous> / complex_method | yes | unreviewed |
-| code_health:finding_0d7c6ff5f039bc409ce8 | high | code_health | js/app/10-main-app.js:8184 | analyzeWriting / complex_method | yes | unreviewed |
+| code_health:finding_46523b22d5ed554a99ea | high | code_health | js/app/10-main-app.js:7477 | buildNotebookPrintHtmlFromPortfolioSession / complex_method | yes | unreviewed |
+| code_health:finding_fa1b31a336377742bafa | high | code_health | js/app/10-main-app.js:7677 | <anonymous> / complex_method | yes | unreviewed |
+| code_health:finding_0d7c6ff5f039bc409ce8 | high | code_health | js/app/10-main-app.js:8196 | analyzeWriting / complex_method | yes | unreviewed |
 | code_health:finding_4057876aba2cd2a0cf7b | high | code_health | js/app/99-lightbox.js | coverage_gradient | yes | unreviewed |
-| code_health:finding_0b15a07e6a17aa631487 | high | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / complex_method | yes | unreviewed |
+| code_health:finding_0b15a07e6a17aa631487 | high | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / complex_method | yes | reviewed_no_change |
 | code_health:finding_da551e170029b179c512 | high | code_health | scripts/check-test-runner.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_0f637d1b3003eea4a93c | high | code_health | scripts/run-tests.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_85a5756fff7bda0b1490 | high | code_health | tests/analysis-identity.browser.cjs | churn_risk | yes | reviewed_no_change |
@@ -228,20 +234,21 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_50998bdcd4425c8109be | high | code_health | tests/media-ownership.browser.cjs:147 | runPhotoScenario / complex_method | yes | unreviewed |
 | code_health:finding_22d1f5de4bf7e22b8cca | high | code_health | tests/media-upload-boundary.browser.cjs:12 | exerciseOwnershipBoundary / complex_method | yes | unreviewed |
 | code_health:finding_ed57c83e3c13fa85d009 | high | code_health | tests/media-upload-boundary.browser.cjs:46 | changeStoredWriting / complex_method | yes | unreviewed |
-| code_health:finding_3d6e5336abe11651954f | high | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
+| code_health:finding_3d6e5336abe11651954f | high | code_health | tests/missing-feedback.browser.cjs:7 | <anonymous@7> / large_method | yes | reviewed_no_change |
 | code_health:finding_782b98d52eb223e30e23 | high | code_health | tests/notebook-guidance-repair.browser.cjs | change_entropy | yes | reviewed_no_change |
+| code_health:finding_9283e3747b5135c2a7fc | high | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / nested_complexity | yes | reviewed_no_change |
 | code_health:finding_41bebd95e154dbeb1101 | high | code_health | tests/openrouter-admission.browser.cjs:14 | runAdmissionScenario / complex_method | yes | unreviewed |
 | code_health:finding_f832cc5b27c3d52f19ac | high | code_health | tests/openrouter-admission.browser.cjs:122 | checkDelayedOutcome / complex_method | yes | unreviewed |
 | code_health:finding_a9aec3d32ff745fb44e3 | high | code_health | tests/optional-storage.browser.cjs:131 | runLazyPortfolioScenarios / complex_method | yes | unreviewed |
 | code_health:finding_a610c7bc1c616cfe053f | high | code_health | tests/optional-storage.browser.cjs:198 | run / complex_method | yes | unreviewed |
 | code_health:finding_ae453a360bd95fa61daa | high | code_health | tests/pending-commit-publication.browser.cjs:7 | <anonymous@7> / nested_complexity | yes | unreviewed |
-| code_health:finding_7036a9b6124e67da4c4d | high | code_health | tests/pending-portfolio.browser.cjs:8 | <anonymous@8> / large_method | yes | unreviewed |
+| code_health:finding_7036a9b6124e67da4c4d | high | code_health | tests/pending-portfolio.browser.cjs:8 | <anonymous@8> / large_method | yes | reviewed_no_change |
 | code_health:finding_2ae7b251e6000adae8f6 | high | code_health | tests/portfolio-image-slots.browser.cjs:6 | <anonymous@6> / nested_complexity | yes | unreviewed |
 | code_health:finding_a1444930a28a90e830ee | high | code_health | tests/portfolio-index.browser.cjs | churn_risk | yes | reviewed_no_change |
 | code_health:finding_de2a45ef8496cb5def8b | high | code_health | tests/portfolio-index.browser.cjs:44 | verifyScoreSummaries / complex_method | yes | unreviewed |
 | code_health:finding_e2c56e95f50025c0801d | high | code_health | tests/portfolio-index.browser.cjs:104 | verifyRebuiltIdentity / complex_method | yes | unreviewed |
 | code_health:finding_85ffbca8e7a0cc8a34fc | high | code_health | tests/portfolio-index.browser.cjs:242 | verifyStorageFailure / complex_method | yes | unreviewed |
-| code_health:finding_369be36bd12db4390f78 | high | code_health | tests/portfolio-removal.cjs:1 | dry_violation | yes | unreviewed |
+| code_health:finding_369be36bd12db4390f78 | high | code_health | tests/portfolio-removal.cjs:1 | dry_violation | yes | reviewed_no_change |
 | code_health:finding_e6aa12e550a273e0c1d0 | high | code_health | tests/portfolio-replacement.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_a740bcc836201e83c5ce | high | code_health | tests/preference-integrity-scenarios.js:131 | checkSuccessfulPreferenceSaves / complex_method | yes | unreviewed |
 | code_health:finding_43881671adf95bb4b43c | high | code_health | tests/preference-integrity-scenarios.js:276 | checkCloudSettingsTransport / complex_method | yes | unreviewed |
@@ -252,9 +259,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_aa964992afa4814d7c64 | high | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / large_method | yes | unreviewed |
 | code_health:finding_78862c658763199794b0 | high | code_health | tests/record-identity.browser.cjs:135 | <anonymous@135> / complex_method | yes | unreviewed |
 | code_health:finding_41d0abbe064ca79a7dcc | high | code_health | tests/recovery-cache.browser.cjs | churn_risk | yes | reviewed_no_change |
-| code_health:finding_308c12524a7013521290 | high | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / complex_method | yes | unreviewed |
-| code_health:finding_d6d201d5eca456e8aaac | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / complex_method | yes | unreviewed |
-| code_health:finding_fefff15de578d7225bee | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / large_method | yes | unreviewed |
+| code_health:finding_308c12524a7013521290 | high | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / complex_method | yes | reviewed_no_change |
+| code_health:finding_d6d201d5eca456e8aaac | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / complex_method | yes | reviewed_no_change |
+| code_health:finding_fefff15de578d7225bee | high | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / large_method | yes | reviewed_no_change |
 | code_health:finding_aaf383178b76f56da2be | high | code_health | tests/rename-confirmation.browser.cjs:20 | setupRenameFixture / complex_method | yes | unreviewed |
 | code_health:finding_b04caf15b6931492d5ea | high | code_health | tests/rename-confirmation.browser.cjs:123 | assertRenamedData / complex_method | yes | unreviewed |
 | code_health:finding_53cd03ddef0fff61c0fa | high | code_health | tests/script-loading.browser.cjs:5 | <anonymous@5> / complex_method | yes | unreviewed |
@@ -265,14 +272,14 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_859af07b8b5b8bc2527d | high | code_health | tests/storage-public-ui.browser.cjs:5 | runStorageScenario / large_method | yes | unreviewed |
 | code_health:finding_db0cea056752bd0b5b4c | high | code_health | tests/storage-upload-ownership.browser.cjs:33 | handleServiceRequest / complex_method | yes | unreviewed |
 | code_health:finding_edf631be2ad1ae7ed2d9 | high | code_health | tests/student-rename.cjs | change_entropy | yes | reviewed_no_change |
-| code_health:finding_84eb5d6cbcffb14965cd | medium | code_health | google-drive-migration.js:18 | list / io_in_loop | yes | unreviewed |
-| code_health:finding_d1312245e1de5804a1b9 | medium | code_health | google-drive-migration.js:30 | upload / complex_method | yes | unreviewed |
-| code_health:finding_d5fa83a509181f5f704e | medium | code_health | google-drive-migration.js:57 | recoverAppData / complex_method | yes | unreviewed |
-| code_health:finding_2f5974a3771db462a175 | medium | code_health | google-drive-migration.js:83 | recoverFolder / complex_method | yes | unreviewed |
-| code_health:finding_89bf1a01f14a82e136da | medium | code_health | google-drive-migration.js:103 | recoverFolder / io_in_loop | yes | unreviewed |
-| code_health:finding_c72146652f87125846f3 | medium | code_health | google-drive-migration.js:111 | recoverFolder / io_in_loop | yes | unreviewed |
-| code_health:finding_aec09199a40a7f63d703 | medium | code_health | google-drive-migration.js:112 | recoverFolder / io_in_loop | yes | unreviewed |
-| code_health:finding_38e69186fd53b008e2cc | medium | code_health | google-drive-migration.js:126 | ensure / io_in_loop | yes | unreviewed |
+| code_health:finding_84eb5d6cbcffb14965cd | medium | code_health | google-drive-migration.js:18 | list / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_d1312245e1de5804a1b9 | medium | code_health | google-drive-migration.js:30 | upload / complex_method | yes | reviewed_no_change |
+| code_health:finding_d5fa83a509181f5f704e | medium | code_health | google-drive-migration.js:57 | recoverAppData / complex_method | yes | reviewed_no_change |
+| code_health:finding_2f5974a3771db462a175 | medium | code_health | google-drive-migration.js:83 | recoverFolder / complex_method | yes | reviewed_no_change |
+| code_health:finding_89bf1a01f14a82e136da | medium | code_health | google-drive-migration.js:103 | recoverFolder / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_c72146652f87125846f3 | medium | code_health | google-drive-migration.js:111 | recoverFolder / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_aec09199a40a7f63d703 | medium | code_health | google-drive-migration.js:112 | recoverFolder / io_in_loop | yes | reviewed_no_change |
+| code_health:finding_38e69186fd53b008e2cc | medium | code_health | google-drive-migration.js:126 | ensure / io_in_loop | yes | reviewed_no_change |
 | code_health:finding_b4b35b3f12976f4da859 | medium | code_health | js/app/00-storage-sync-patches.js:442 | migrateLegacyApiKeyStorage / complex_method | yes | unreviewed |
 | code_health:finding_b8929aea0f5d35e99e78 | medium | code_health | js/app/00-storage-sync-patches.js:443 | copyLegacyApiKey / complex_method | yes | unreviewed |
 | code_health:finding_28e9907a3784b89751de | medium | code_health | js/app/00-storage-sync-patches.js:494 | verifyApiKeyStorage / complex_conditional | yes | unreviewed |
@@ -403,7 +410,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_69e53eede398fea73a81 | medium | code_health | js/app/10-main-app.js:2534 | buildSentenceLengthQuickNote / complex_method | yes | unreviewed |
 | code_health:finding_df9b7907f423db937055 | medium | code_health | js/app/10-main-app.js:2716 | parseOpenRouterResponse / complex_method | yes | unreviewed |
 | code_health:finding_ea199b21114b3bb88a9d | medium | code_health | js/app/10-main-app.js:2788 | checkOpenRouterRetry / complex_method | yes | unreviewed |
-| code_health:finding_04d3d1b24822e961163f | medium | code_health | js/app/10-main-app.js:2821 | requestOpenRouterWithFallback / io_in_loop | yes | unreviewed |
+| code_health:finding_04d3d1b24822e961163f | medium | code_health | js/app/10-main-app.js:2821 | requestOpenRouterWithFallback / io_in_loop | yes | reviewed_no_change |
 | code_health:finding_e8cc8c120b2d5102edee | medium | code_health | js/app/10-main-app.js:2910 | updateOcrControls / complex_method | yes | unreviewed |
 | code_health:finding_1f5c8ffa1136e017d383 | medium | code_health | js/app/10-main-app.js:3120 | resetCurrentClassData / bumpy_road | yes | unreviewed |
 | code_health:finding_212f64bf7e0d299b02c0 | medium | code_health | js/app/10-main-app.js:3332 | getDroppedImageFiles / complex_method | yes | unreviewed |
@@ -445,38 +452,39 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_906c639a49387285cfa4 | medium | code_health | js/app/10-main-app.js:6848 | buildNotebookGuideFocusItemsFromExamples / complex_method | yes | unreviewed |
 | code_health:finding_954463e2c9a968745031 | medium | code_health | js/app/10-main-app.js:6923 | addExample / complex_method | yes | unreviewed |
 | code_health:finding_864bef6e21e94b0d1bbf | medium | code_health | js/app/10-main-app.js:7028 | renderNotebookGuideExamples / complex_method | yes | unreviewed |
-| code_health:finding_e890cbbd9e7f4daf0522 | medium | code_health | js/app/10-main-app.js:7427 | renderNotebookDetailedAssessmentFromSavedSession / complex_method | yes | unreviewed |
-| code_health:finding_b3313ac8bbb7938fdc52 | medium | code_health | js/app/10-main-app.js:7501 | setActiveStudentForPortfolioReassessment / complex_method | yes | unreviewed |
-| code_health:finding_1cdab62e523ba3c26976 | medium | code_health | js/app/10-main-app.js:7580 | <anonymous> / complex_conditional | yes | unreviewed |
-| code_health:finding_c27d53fe6a0a339c37c2 | medium | code_health | js/app/10-main-app.js:7583 | <anonymous> / complex_method | yes | unreviewed |
-| code_health:finding_6abe7cc396ba01536e50 | medium | code_health | js/app/10-main-app.js:7612 | reassessPortfolioSession / brain_method | yes | unreviewed |
-| code_health:finding_cb05a47a890f2d721e5f | medium | code_health | js/app/10-main-app.js:7612 | reassessPortfolioSession / complex_method | yes | unreviewed |
-| code_health:finding_0f615577a20e82dd9090 | medium | code_health | js/app/10-main-app.js:7747 | syncUiState / complex_method | yes | unreviewed |
-| code_health:finding_af12c52b65a991a95ba6 | medium | code_health | js/app/10-main-app.js:7803 | applyComputedGrammarAssessment / complex_method | yes | unreviewed |
-| code_health:finding_766147c5eccb9857e907 | medium | code_health | js/app/10-main-app.js:7803 | applyComputedGrammarAssessment / primitive_obsession | yes | unreviewed |
-| code_health:finding_b869cb483502e197316b | medium | code_health | js/app/10-main-app.js:7903 | buildAnalysisCategoryScores / complex_method | yes | unreviewed |
-| code_health:finding_c2c599be4dc619dfd33b | medium | code_health | js/app/10-main-app.js:7924 | reconcileScoredAssessment / primitive_obsession | yes | unreviewed |
-| code_health:finding_64d289cb54e8a515f0f4 | medium | code_health | js/app/10-main-app.js:7999 | renderScoredAnalysisDebug / complex_method | yes | unreviewed |
-| code_health:finding_5d743917e463897a3133 | medium | code_health | js/app/10-main-app.js:8509 | <anonymous> / complex_method | yes | unreviewed |
+| code_health:finding_37b332334d7b4a4edc50 | medium | code_health | js/app/10-main-app.js:7381 | printNotebookSummary / complex_method | yes | reviewed_no_change |
+| code_health:finding_e890cbbd9e7f4daf0522 | medium | code_health | js/app/10-main-app.js:7439 | renderNotebookDetailedAssessmentFromSavedSession / complex_method | yes | unreviewed |
+| code_health:finding_b3313ac8bbb7938fdc52 | medium | code_health | js/app/10-main-app.js:7513 | setActiveStudentForPortfolioReassessment / complex_method | yes | unreviewed |
+| code_health:finding_1cdab62e523ba3c26976 | medium | code_health | js/app/10-main-app.js:7592 | <anonymous> / complex_conditional | yes | unreviewed |
+| code_health:finding_c27d53fe6a0a339c37c2 | medium | code_health | js/app/10-main-app.js:7595 | <anonymous> / complex_method | yes | unreviewed |
+| code_health:finding_6abe7cc396ba01536e50 | medium | code_health | js/app/10-main-app.js:7624 | reassessPortfolioSession / brain_method | yes | unreviewed |
+| code_health:finding_cb05a47a890f2d721e5f | medium | code_health | js/app/10-main-app.js:7624 | reassessPortfolioSession / complex_method | yes | unreviewed |
+| code_health:finding_0f615577a20e82dd9090 | medium | code_health | js/app/10-main-app.js:7759 | syncUiState / complex_method | yes | unreviewed |
+| code_health:finding_af12c52b65a991a95ba6 | medium | code_health | js/app/10-main-app.js:7815 | applyComputedGrammarAssessment / complex_method | yes | unreviewed |
+| code_health:finding_766147c5eccb9857e907 | medium | code_health | js/app/10-main-app.js:7815 | applyComputedGrammarAssessment / primitive_obsession | yes | unreviewed |
+| code_health:finding_b869cb483502e197316b | medium | code_health | js/app/10-main-app.js:7915 | buildAnalysisCategoryScores / complex_method | yes | unreviewed |
+| code_health:finding_c2c599be4dc619dfd33b | medium | code_health | js/app/10-main-app.js:7936 | reconcileScoredAssessment / primitive_obsession | yes | unreviewed |
+| code_health:finding_64d289cb54e8a515f0f4 | medium | code_health | js/app/10-main-app.js:8011 | renderScoredAnalysisDebug / complex_method | yes | unreviewed |
+| code_health:finding_5d743917e463897a3133 | medium | code_health | js/app/10-main-app.js:8521 | <anonymous> / complex_method | yes | unreviewed |
 | code_health:finding_5d6d32a8f92f3d71f53b | medium | code_health | js/app/99-lightbox.js:2 | openImageLightbox / complex_method | yes | reviewed_no_change |
-| code_health:finding_c4ec7ba6b31459fd0ccb | medium | code_health | js/app/dialogs.js:116 | <anonymous> / complex_method | yes | unreviewed |
-| code_health:finding_bae51d347f9911061cfa | medium | code_health | js/app/dialogs.js:116 | <anonymous> / large_method | yes | unreviewed |
+| code_health:finding_c4ec7ba6b31459fd0ccb | medium | code_health | js/app/dialogs.js:116 | <anonymous> / complex_method | yes | reviewed_no_change |
+| code_health:finding_bae51d347f9911061cfa | medium | code_health | js/app/dialogs.js:116 | <anonymous> / large_method | yes | reviewed_no_change |
 | code_health:finding_ba4c6a8dce8c62086d20 | medium | code_health | js/app/photo-crop.js:10 | openCropModal / complex_method | yes | unreviewed |
 | code_health:finding_abdcd845e719ac63843b | medium | code_health | js/app/photo-crop.js:96 | getCropPos / complex_method | yes | unreviewed |
 | code_health:finding_d81f99467fdb06a8d36e | medium | code_health | js/app/photo-crop.js:129 | applyCrop / complex_method | yes | unreviewed |
 | code_health:finding_becc6cad0dd7863a6b9b | medium | code_health | js/app/portfolio-export.js:119 | appendStructuredFeedback / complex_method | yes | unreviewed |
 | code_health:finding_481a4a617b0134a3a219 | medium | code_health | js/app/portfolio-export.js:629 | addImageExport / complex_method | yes | unreviewed |
 | code_health:finding_52dd694654409f08a520 | medium | code_health | js/app/storage-recovery.js | change_entropy | yes | reviewed_no_change |
-| code_health:finding_aed41adf814ee93f00d0 | medium | code_health | js/app/storage-recovery.js:160 | validateWftRequiredStorage / complex_method | yes | unreviewed |
-| code_health:finding_28ab15e0abd57a32278e | medium | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / nested_complexity | yes | unreviewed |
+| code_health:finding_aed41adf814ee93f00d0 | medium | code_health | js/app/storage-recovery.js:160 | validateWftRequiredStorage / complex_method | yes | reviewed_no_change |
+| code_health:finding_28ab15e0abd57a32278e | medium | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / nested_complexity | yes | confirmed_repair_candidate |
 | code_health:finding_c488fbf48a69c6dcaa4b | medium | code_health | scripts/check-test-runner.cjs | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_db029d1060192426b222 | medium | code_health | scripts/check-test-runner.cjs:13 | io_in_loop | yes | unreviewed |
 | code_health:finding_b2267d45e0c328b33cd3 | medium | code_health | scripts/run-tests.cjs | co_change_scatter | yes | reviewed_no_change |
 | code_health:finding_9a7c8ce0699343322ae5 | medium | code_health | test-google-drive-migration.cjs:4 | setup / complex_method | yes | unreviewed |
 | code_health:finding_ee98c466e8ec65cd1b44 | medium | code_health | test-google-drive-migration.cjs:11 | fileResponse / complex_method | yes | unreviewed |
 | code_health:finding_8c23a5e088578203ac81 | medium | code_health | tests/analysis-identity.browser.cjs | change_entropy | no | reviewed_no_change |
-| code_health:finding_e175c7fa27aa56528269 | medium | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / complex_method | yes | unreviewed |
-| code_health:finding_2cebaec28f1e3464244b | medium | code_health | tests/analysis-identity.browser.cjs:182 | runInterruptedAnalysisCase / complex_method | yes | unreviewed |
+| code_health:finding_e175c7fa27aa56528269 | medium | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / complex_method | yes | reviewed_no_change |
+| code_health:finding_2cebaec28f1e3464244b | medium | code_health | tests/analysis-identity.browser.cjs:182 | runInterruptedAnalysisCase / complex_method | yes | reviewed_no_change |
 | code_health:finding_a56e02cc5c89d2eb6e9e | medium | code_health | tests/analysis-pipeline.browser.cjs:51 | prepareWriting / complex_method | yes | unreviewed |
 | code_health:finding_bfb4902f382649ef8306 | medium | code_health | tests/analysis-pipeline.browser.cjs:66 | prepareImages / complex_method | yes | unreviewed |
 | code_health:finding_5e09ee8dca0ad0327ab1 | medium | code_health | tests/analysis-pipeline.browser.cjs:262 | io_in_loop | yes | unreviewed |
@@ -539,11 +547,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_334957713e49cc25a47b | medium | code_health | tests/neatness-scoring.browser.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_3e06106d467f48269878 | medium | code_health | tests/neatness-scoring.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
 | code_health:finding_d0678036801b08d91445 | medium | code_health | tests/notebook-guidance-repair.browser.cjs | churn_risk | yes | reviewed_no_change |
-| code_health:finding_023e9357755094e56ba3 | medium | code_health | tests/notebook-guidance-repair.browser.cjs:252 | <anonymous@252> / complex_method | yes | unreviewed |
+| code_health:finding_023e9357755094e56ba3 | medium | code_health | tests/notebook-guidance-repair.browser.cjs:252 | <anonymous@252> / complex_method | yes | reviewed_no_change |
 | code_health:finding_243db0fbfb8a96a7c724 | medium | code_health | tests/notebook-guide.browser.cjs | change_entropy | yes | reviewed_no_change |
 | code_health:finding_86491e87c4892f377fed | medium | code_health | tests/notebook-guide.browser.cjs | prior_defect | yes | reviewed_no_change |
-| code_health:finding_e23a276513588c43ca30 | medium | code_health | tests/notebook-print-failure.browser.cjs:3 | dry_violation | yes | unreviewed |
-| code_health:finding_9283e3747b5135c2a7fc | medium | code_health | tests/notebook-print-failure.browser.cjs:4 | <anonymous@4> / nested_complexity | yes | unreviewed |
 | code_health:finding_ac3dbb7c835d1db56e3a | medium | code_health | tests/openrouter-admission.browser.cjs:14 | runAdmissionScenario / large_method | yes | unreviewed |
 | code_health:finding_67ef791c85e9c929ff70 | medium | code_health | tests/openrouter-admission.browser.cjs:66 | configureAdmissionKey / complex_method | yes | unreviewed |
 | code_health:finding_89608ebb8544f121b620 | medium | code_health | tests/openrouter-admission.browser.cjs:74 | fetchSyntheticProvider / complex_method | yes | unreviewed |
@@ -556,8 +562,8 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_1532a4324157c282bf5e | medium | code_health | tests/optional-storage.browser.cjs:76 | runAsyncPortfolioScenarios / complex_method | yes | unreviewed |
 | code_health:finding_6e1080aa83faa6dfdfaf | medium | code_health | tests/optional-storage.browser.cjs:131 | runLazyPortfolioScenarios / nested_complexity | yes | unreviewed |
 | code_health:finding_462dcc351c71e400ee3d | medium | code_health | tests/pending-commit-publication.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
-| code_health:finding_ec7738b69467039d6bb0 | medium | code_health | tests/pending-portfolio.browser.cjs:8 | <anonymous@8> / nested_complexity | yes | unreviewed |
-| code_health:finding_226c16da583bda4e7cca | medium | code_health | tests/pending-portfolio.browser.cjs:103 | <anonymous> / complex_conditional | yes | unreviewed |
+| code_health:finding_ec7738b69467039d6bb0 | medium | code_health | tests/pending-portfolio.browser.cjs:8 | <anonymous@8> / nested_complexity | yes | reviewed_no_change |
+| code_health:finding_226c16da583bda4e7cca | medium | code_health | tests/pending-portfolio.browser.cjs:103 | <anonymous> / complex_conditional | yes | reviewed_no_change |
 | code_health:finding_d9e3aa8549d422bd8ba6 | medium | code_health | tests/portfolio-image-slots.browser.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_bc14e931dfc214b31489 | medium | code_health | tests/portfolio-image-slots.browser.cjs:6 | <anonymous@6> / complex_method | yes | unreviewed |
 | code_health:finding_f6620a424e2963dccb69 | medium | code_health | tests/portfolio-index.browser.cjs | change_entropy | yes | reviewed_no_change |
@@ -569,12 +575,12 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_fd5616187b5342041dc1 | medium | code_health | tests/portfolio-removal.browser.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_6621240af0e5e4025e77 | medium | code_health | tests/portfolio-render-failures.browser.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_eb2b04694e8a4d4925c6 | medium | code_health | tests/portfolio-render-failures.browser.cjs:5 | <anonymous@5> / nested_complexity | yes | unreviewed |
-| code_health:finding_2525154954dd418e946c | medium | code_health | tests/portfolio-renderer.browser.cjs:16 | exercise / large_method | yes | unreviewed |
-| code_health:finding_9fbf241d03b2343c1d00 | medium | code_health | tests/portfolio-renderer.browser.cjs:122 | <anonymous@122> / complex_method | yes | unreviewed |
+| code_health:finding_2525154954dd418e946c | medium | code_health | tests/portfolio-renderer.browser.cjs:16 | exercise / large_method | yes | reviewed_no_change |
+| code_health:finding_9fbf241d03b2343c1d00 | medium | code_health | tests/portfolio-renderer.browser.cjs:122 | <anonymous@122> / complex_method | yes | reviewed_no_change |
 | code_health:finding_921b5f601d9bf89f7151 | medium | code_health | tests/portfolio-replacement.browser.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_68014df55b55b1e6b5c6 | medium | code_health | tests/portfolio-replacement.browser.cjs:7 | <anonymous@7> / complex_method | yes | unreviewed |
 | code_health:finding_069f504cc8d1622d62b8 | medium | code_health | tests/portfolio-replacement.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
-| code_health:finding_45452081cff3b65e3631 | medium | code_health | tests/portfolio-replacement.cjs:1 | dry_violation | yes | unreviewed |
+| code_health:finding_45452081cff3b65e3631 | medium | code_health | tests/portfolio-replacement.cjs:1 | dry_violation | yes | reviewed_no_change |
 | code_health:finding_85bb94a51527f7c5f1e2 | medium | code_health | tests/portfolio-sync.browser.cjs:125 | preparePortfolioFixtures / complex_method | yes | unreviewed |
 | code_health:finding_dd499f31fc7eb92a6266 | medium | code_health | tests/portfolio-sync.browser.cjs:170 | dry_violation | yes | unreviewed |
 | code_health:finding_e3086671fe04a7875905 | medium | code_health | tests/portfolio-sync.cjs | change_entropy | yes | reviewed_no_change |
@@ -591,10 +597,10 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_7041aa95c1ab7c98200b | medium | code_health | tests/preference-integrity.browser.cjs:10 | dry_violation | yes | unreviewed |
 | code_health:finding_922daa780754711de593 | medium | code_health | tests/record-identity.browser.cjs:8 | runStudentIdentityCases / complex_method | yes | unreviewed |
 | code_health:finding_92d6531aeae640c31cf2 | medium | code_health | tests/recovery-cache.browser.cjs | change_entropy | yes | reviewed_no_change |
-| code_health:finding_a3c658d1d9476710ffd9 | medium | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / complex_method | yes | unreviewed |
-| code_health:finding_14213736db7f2152b9ad | medium | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / primitive_obsession | yes | unreviewed |
-| code_health:finding_1d84136c5f403c3c95a2 | medium | code_health | tests/recovery-cache.browser.cjs:68 | performRecoveryAction / complex_method | yes | unreviewed |
-| code_health:finding_d8c235f3f911a0b79d0f | medium | code_health | tests/recovery-cache.browser.cjs:228 | io_in_loop | yes | unreviewed |
+| code_health:finding_a3c658d1d9476710ffd9 | medium | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / complex_method | yes | reviewed_no_change |
+| code_health:finding_14213736db7f2152b9ad | medium | code_health | tests/recovery-cache.browser.cjs:45 | checkCacheScenario / primitive_obsession | yes | reviewed_no_change |
+| code_health:finding_1d84136c5f403c3c95a2 | medium | code_health | tests/recovery-cache.browser.cjs:68 | performRecoveryAction / complex_method | yes | reviewed_no_change |
+| code_health:finding_d8c235f3f911a0b79d0f | medium | code_health | tests/recovery-cache.browser.cjs:228 | io_in_loop | yes | reviewed_no_change |
 | code_health:finding_67e0cd1b6a8c92f79e5c | medium | code_health | tests/rename-confirmation.browser.cjs:91 | exerciseRenameDialogs / complex_method | yes | unreviewed |
 | code_health:finding_ca57037d27555320805f | medium | code_health | tests/rename-confirmation.browser.cjs:143 | <anonymous@143> / nested_complexity | yes | unreviewed |
 | code_health:finding_5d1eb75cd297ec384b50 | medium | code_health | tests/rename-confirmation.browser.cjs:143 | <anonymous@143> / complex_method | yes | unreviewed |
@@ -631,9 +637,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_5ca6f0b1b222bdb367fd | medium | code_health | tests/storage-upload-ownership.browser.cjs:26 | <anonymous@26> / function_hotspot | yes | unreviewed |
 | code_health:finding_d5e98f1e37090946ce89 | medium | code_health | tests/storage-upload-ownership.browser.cjs:48 | replyToReadRequest / complex_method | yes | unreviewed |
 | code_health:finding_11407a1d7000887c6dfa | medium | code_health | tests/storage-upload-ownership.browser.cjs:90 | finishSignoutReconnect / complex_method | yes | unreviewed |
-| code_health:finding_e983ea11ce3a5dcb7e9c | medium | code_health | tests/student-read-ownership.browser.cjs:23 | <anonymous@6> / complex_conditional | yes | unreviewed |
-| code_health:finding_5fbb3828d0e444afeb09 | medium | code_health | tests/student-rename.browser.cjs:1 | dry_violation | yes | unreviewed |
-| code_health:finding_330fa358c73a174eaf04 | medium | code_health | tests/student-rename.browser.cjs:57 | <anonymous@7> / large_assertion_block | yes | unreviewed |
+| code_health:finding_e983ea11ce3a5dcb7e9c | medium | code_health | tests/student-read-ownership.browser.cjs:23 | <anonymous@6> / complex_conditional | yes | reviewed_no_change |
+| code_health:finding_5fbb3828d0e444afeb09 | medium | code_health | tests/student-rename.browser.cjs:1 | dry_violation | yes | confirmed_repair_candidate |
+| code_health:finding_330fa358c73a174eaf04 | medium | code_health | tests/student-rename.browser.cjs:57 | <anonymous@7> / large_assertion_block | yes | reviewed_no_change |
 | code_health:finding_e3971bd30d47501900db | medium | code_health | tests/student-rename.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_466fd884621dd6f44353 | medium | code_health | tests/student-selection-storage.browser.cjs:2 | dry_violation | yes | unreviewed |
 | code_health:finding_a47a0eb3889a392c07a4 | low | code_health | js/app/00-storage-sync-patches.js | coverage_gradient | yes | unreviewed |
@@ -728,7 +734,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_0ebf1243a621949a6e83 | low | code_health | js/app/00-storage-sync-patches.js:7053 | validateCurrentUpload / complex_conditional | yes | unreviewed |
 | code_health:finding_e6856bfa0d603fa582a2 | low | code_health | js/app/00-storage-sync-patches.js:7172 | error_handling | yes | reviewed_no_change |
 | code_health:finding_07c825055cecc7b49cbc | low | code_health | js/app/00-storage-sync-patches.js:7201 | getSessionCategoryKeys / complex_conditional | yes | unreviewed |
-| code_health:finding_321f99e606cfd1e7915e | low | code_health | js/app/00-storage-sync-patches.js:7316 | renderPortfolioFeedbackRows / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_321f99e606cfd1e7915e | low | code_health | js/app/00-storage-sync-patches.js:7316 | renderPortfolioFeedbackRows / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_5fcc9daff01d66f13e80 | low | code_health | js/app/00-storage-sync-patches.js:7439 | error_handling | yes | reviewed_no_change |
 | code_health:finding_7e9e3bd687e666b878c1 | low | code_health | js/app/00-storage-sync-patches.js:7560 | setupWftPortfolioCharts / primitive_obsession | yes | unreviewed |
 | code_health:finding_bd262137e5d6d346dc75 | low | code_health | js/app/00-storage-sync-patches.js:7613 | renderStudentPortfolio / large_method | yes | unreviewed |
@@ -757,9 +763,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_14c98c45fd927d16130a | low | code_health | js/app/10-main-app.js:1020 | <anonymous> / complex_conditional | yes | unreviewed |
 | code_health:finding_f61b81e17239b007f947 | low | code_health | js/app/10-main-app.js:1021 | <anonymous> / complex_conditional | yes | unreviewed |
 | code_health:finding_cf938a3cb775f4a9762b | low | code_health | js/app/10-main-app.js:1025 | <anonymous> / complex_conditional | yes | unreviewed |
-| code_health:finding_47fc675f46a03662abad | low | code_health | js/app/10-main-app.js:1344 | renderCorrected / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_632d120e20b45e7d610c | low | code_health | js/app/10-main-app.js:1345 | renderCorrected / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_a7ff4e2cacfbde3a3b06 | low | code_health | js/app/10-main-app.js:2043 | renderNoticeTable / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_47fc675f46a03662abad | low | code_health | js/app/10-main-app.js:1344 | renderCorrected / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_632d120e20b45e7d610c | low | code_health | js/app/10-main-app.js:1345 | renderCorrected / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_a7ff4e2cacfbde3a3b06 | low | code_health | js/app/10-main-app.js:2043 | renderNoticeTable / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_da2b2ef9a672b56e85c4 | low | code_health | js/app/10-main-app.js:2064 | polishFeedback / primitive_obsession | yes | unreviewed |
 | code_health:finding_c0f9bb7da8550f66432a | low | code_health | js/app/10-main-app.js:2069 | polishFeedback / complex_conditional | yes | unreviewed |
 | code_health:finding_3856a4f577518ea32781 | low | code_health | js/app/10-main-app.js:2411 | applyWordCountToIdeas / primitive_obsession | yes | unreviewed |
@@ -769,7 +775,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_817cc8a555d69214a026 | low | code_health | js/app/10-main-app.js:2698 | summarizeOpenRouterFailure / complex_conditional | yes | unreviewed |
 | code_health:finding_686cbca1ed33c485434a | low | code_health | js/app/10-main-app.js:2753 | requestOpenRouterWithFallback / large_method | yes | unreviewed |
 | code_health:finding_25cfcad7b6b9aeda0afd | low | code_health | js/app/10-main-app.js:3120 | resetCurrentClassData / large_method | yes | unreviewed |
-| code_health:finding_6a5e541f0cde455874c4 | low | code_health | js/app/10-main-app.js:3204 | updateSelectedImagePreview / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_6a5e541f0cde455874c4 | low | code_health | js/app/10-main-app.js:3204 | updateSelectedImagePreview / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_fe492c49b9e78bfdb45b | low | code_health | js/app/10-main-app.js:3334 | getDroppedImageFiles / complex_conditional | yes | unreviewed |
 | code_health:finding_73f08f5a32f57a488037 | low | code_health | js/app/10-main-app.js:3475 | error_handling | yes | reviewed_no_change |
 | code_health:finding_c4999a76f9166ab1a7d5 | low | code_health | js/app/10-main-app.js:3742 | error_handling | yes | reviewed_no_change |
@@ -777,42 +783,42 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_4324376bb7f15d887a99 | low | code_health | js/app/10-main-app.js:3827 | buildStep2Prompt / primitive_obsession | yes | unreviewed |
 | code_health:finding_3d4ce77d3c9108a187ad | low | code_health | js/app/10-main-app.js:4231 | buildEvidenceBasedTeacherComment / bumpy_road | yes | unreviewed |
 | code_health:finding_422849494d832f75eae6 | low | code_health | js/app/10-main-app.js:4543 | addNoticeRowIfNew / complex_conditional | yes | unreviewed |
-| code_health:finding_351ee22dd4a7d9655bbe | low | code_health | js/app/10-main-app.js:4667 | renderDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_f12b4d2969f91e0f4849 | low | code_health | js/app/10-main-app.js:4668 | renderDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_3de6c1ab9ae09d51df53 | low | code_health | js/app/10-main-app.js:4669 | renderDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_4db352f80d6d5c7a19eb | low | code_health | js/app/10-main-app.js:4671 | renderDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_c8ebce4520d250e6f25c | low | code_health | js/app/10-main-app.js:4672 | renderDetailedAssessment / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_351ee22dd4a7d9655bbe | low | code_health | js/app/10-main-app.js:4667 | renderDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_f12b4d2969f91e0f4849 | low | code_health | js/app/10-main-app.js:4668 | renderDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_3de6c1ab9ae09d51df53 | low | code_health | js/app/10-main-app.js:4669 | renderDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_4db352f80d6d5c7a19eb | low | code_health | js/app/10-main-app.js:4671 | renderDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_c8ebce4520d250e6f25c | low | code_health | js/app/10-main-app.js:4672 | renderDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_59891f8809ca49ea5883 | low | code_health | js/app/10-main-app.js:4794 | buildAuditValidationRows / primitive_obsession | yes | unreviewed |
-| code_health:finding_00cf7f5f7763c29eedcf | low | code_health | js/app/10-main-app.js:4830 | renderAuditRowsTable / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_db08e25c416f8a1cb0fa | low | code_health | js/app/10-main-app.js:4839 | renderAuditValidationTable / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_21a1f8b7493375e4702a | low | code_health | js/app/10-main-app.js:4840 | renderAuditValidationTable / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_d1d6ed8840d18d9a3a31 | low | code_health | js/app/10-main-app.js:4841 | renderAuditValidationTable / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_706e0058345dbe436134 | low | code_health | js/app/10-main-app.js:4851 | renderAuditEvidenceList / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_00cf7f5f7763c29eedcf | low | code_health | js/app/10-main-app.js:4830 | renderAuditRowsTable / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_db08e25c416f8a1cb0fa | low | code_health | js/app/10-main-app.js:4839 | renderAuditValidationTable / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_21a1f8b7493375e4702a | low | code_health | js/app/10-main-app.js:4840 | renderAuditValidationTable / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_d1d6ed8840d18d9a3a31 | low | code_health | js/app/10-main-app.js:4841 | renderAuditValidationTable / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_706e0058345dbe436134 | low | code_health | js/app/10-main-app.js:4851 | renderAuditEvidenceList / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_8438b285c6cd5ae740c2 | low | code_health | js/app/10-main-app.js:4866 | getTeacherAuditOrder / complex_conditional | yes | unreviewed |
-| code_health:finding_481e80ea101b4f6b1a46 | low | code_health | js/app/10-main-app.js:4891 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_188cccdbfb50c3248a5c | low | code_health | js/app/10-main-app.js:4892 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_cadc28a9f002e3a72495 | low | code_health | js/app/10-main-app.js:4893 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_bb494461e3c095cfa0de | low | code_health | js/app/10-main-app.js:4894 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_c14f5de85f3b8e281e75 | low | code_health | js/app/10-main-app.js:4895 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_f490f9c869d69bd05518 | low | code_health | js/app/10-main-app.js:4896 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_a32e86743cd8f1aa0125 | low | code_health | js/app/10-main-app.js:4897 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_933a9fb59741a0e3042b | low | code_health | js/app/10-main-app.js:4898 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_2ecd60586fbebb0b64a6 | low | code_health | js/app/10-main-app.js:4899 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_e7d8f5c49e1a40ee1cf8 | low | code_health | js/app/10-main-app.js:4900 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_86f2716705aebc009c07 | low | code_health | js/app/10-main-app.js:4901 | renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_481e80ea101b4f6b1a46 | low | code_health | js/app/10-main-app.js:4891 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_188cccdbfb50c3248a5c | low | code_health | js/app/10-main-app.js:4892 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_cadc28a9f002e3a72495 | low | code_health | js/app/10-main-app.js:4893 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_bb494461e3c095cfa0de | low | code_health | js/app/10-main-app.js:4894 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_c14f5de85f3b8e281e75 | low | code_health | js/app/10-main-app.js:4895 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_f490f9c869d69bd05518 | low | code_health | js/app/10-main-app.js:4896 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_a32e86743cd8f1aa0125 | low | code_health | js/app/10-main-app.js:4897 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_933a9fb59741a0e3042b | low | code_health | js/app/10-main-app.js:4898 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_2ecd60586fbebb0b64a6 | low | code_health | js/app/10-main-app.js:4899 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_e7d8f5c49e1a40ee1cf8 | low | code_health | js/app/10-main-app.js:4900 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_86f2716705aebc009c07 | low | code_health | js/app/10-main-app.js:4901 | renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_42034da6d555de0625e3 | low | code_health | js/app/10-main-app.js:5020 | titleCaseGeneratedWritingTitle / large_method | yes | unreviewed |
 | code_health:finding_116b62f2c6940da9dded | low | code_health | js/app/10-main-app.js:5273 | makeWritingGenreInfo / primitive_obsession | yes | unreviewed |
 | code_health:finding_860035c4a626f17c5d07 | low | code_health | js/app/10-main-app.js:5391 | detectWritingGenreInfo / large_method | yes | unreviewed |
 | code_health:finding_29f0311595e8d8ff7770 | low | code_health | js/app/10-main-app.js:5530 | updateGenreReviewBox / complex_conditional | yes | unreviewed |
 | code_health:finding_8500ae12a975ea5b7683 | low | code_health | js/app/10-main-app.js:5580 | buildEncouragingClosing / complex_conditional | yes | unreviewed |
 | code_health:finding_ab05ea1a9ee32eb3296d | low | code_health | js/app/10-main-app.js:5785 | buildNotebookActionChecklist / bumpy_road | yes | reviewed_no_change |
-| code_health:finding_f78ccd93ab136f279585 | low | code_health | js/app/10-main-app.js:6000 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_7116df66eec9c8fc4acd | low | code_health | js/app/10-main-app.js:6001 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_ed219546d0477a86fffd | low | code_health | js/app/10-main-app.js:6002 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_653129774356a3195d7d | low | code_health | js/app/10-main-app.js:6003 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_2da05b675c1b335ace65 | low | code_health | js/app/10-main-app.js:6004 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_fb792c60b32a4966f14c | low | code_health | js/app/10-main-app.js:6005 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_7a89da6c3ecbed3cd3b3 | low | code_health | js/app/10-main-app.js:6006 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_f78ccd93ab136f279585 | low | code_health | js/app/10-main-app.js:6000 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_7116df66eec9c8fc4acd | low | code_health | js/app/10-main-app.js:6001 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_ed219546d0477a86fffd | low | code_health | js/app/10-main-app.js:6002 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_653129774356a3195d7d | low | code_health | js/app/10-main-app.js:6003 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_2da05b675c1b335ace65 | low | code_health | js/app/10-main-app.js:6004 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_fb792c60b32a4966f14c | low | code_health | js/app/10-main-app.js:6005 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_7a89da6c3ecbed3cd3b3 | low | code_health | js/app/10-main-app.js:6006 | renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_c9050b12d552d2835ae6 | low | code_health | js/app/10-main-app.js:6025 | error_handling | yes | reviewed_no_change |
 | code_health:finding_504afd2a07fe51d8e8b3 | low | code_health | js/app/10-main-app.js:6029 | error_handling | yes | reviewed_no_change |
 | code_health:finding_845f971e196e18607fe6 | low | code_health | js/app/10-main-app.js:6218 | originalTextContainsNotebookQuote / complex_conditional | yes | unreviewed |
@@ -825,71 +831,72 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_0e7b44e9f3055d01febe | low | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / bumpy_road | yes | reviewed_no_change |
 | code_health:finding_19451019efc2d01c7332 | low | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / large_method | yes | reviewed_no_change |
 | code_health:finding_8533ebb93bfd8fa4850c | low | code_health | js/app/10-main-app.js:6905 | assembleNotebookGuideFromCandidates / primitive_obsession | yes | reviewed_no_change |
-| code_health:finding_5140626fb0ae2120defa | low | code_health | js/app/10-main-app.js:7023 | renderNotebookGuideFocusList / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_55e3e7b0a65983157130 | low | code_health | js/app/10-main-app.js:7034 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_e7c1a6c3daeef1e5b31f | low | code_health | js/app/10-main-app.js:7035 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_bb4e85b2531da176296e | low | code_health | js/app/10-main-app.js:7036 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_7f9d145151ea2de2578b | low | code_health | js/app/10-main-app.js:7037 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_32b689e2f4f668a925d0 | low | code_health | js/app/10-main-app.js:7038 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_84fed470e5cd1474663a | low | code_health | js/app/10-main-app.js:7039 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_b1d9c46289a2cb313ffa | low | code_health | js/app/10-main-app.js:7040 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_ee6dd3ede28b6377f740 | low | code_health | js/app/10-main-app.js:7041 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_3e50ed60460f1941461e | low | code_health | js/app/10-main-app.js:7042 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_73b86080f023ca22b853 | low | code_health | js/app/10-main-app.js:7043 | renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_1e428f32ae6e9f768e81 | low | code_health | js/app/10-main-app.js:7057 | renderNotebookQuickCheckList / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_524a0b39a71fa1f643f8 | low | code_health | js/app/10-main-app.js:7336 | error_handling | yes | confirmed_repair_candidate |
-| code_health:finding_c0289b8facadeca0647f | low | code_health | js/app/10-main-app.js:7343 | error_handling | yes | reviewed_no_change |
-| code_health:finding_0276419a105c6242f13d | low | code_health | js/app/10-main-app.js:7348 | error_handling | yes | reviewed_no_change |
-| code_health:finding_ccdce65fd75cb30112a0 | low | code_health | js/app/10-main-app.js:7449 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_5c339e38023b4cc71478 | low | code_health | js/app/10-main-app.js:7450 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_1ab5e0d4d435d307009c | low | code_health | js/app/10-main-app.js:7451 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_5d7e16fcf8dd26f060cc | low | code_health | js/app/10-main-app.js:7452 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_cacae3136160a8d497aa | low | code_health | js/app/10-main-app.js:7453 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_560f2e42892b746b439d | low | code_health | js/app/10-main-app.js:7454 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_782b6ad5a140a0fde7e2 | low | code_health | js/app/10-main-app.js:7504 | error_handling | yes | reviewed_no_change |
-| code_health:finding_8044bd2dfe671b84ae02 | low | code_health | js/app/10-main-app.js:7537 | error_handling | yes | reviewed_no_change |
-| code_health:finding_701d382f4514d56049a6 | low | code_health | js/app/10-main-app.js:7612 | reassessPortfolioSession / large_method | yes | unreviewed |
-| code_health:finding_f950a77aba91ce1f3c19 | low | code_health | js/app/10-main-app.js:7835 | reconcileDetailedAnalysis / primitive_obsession | yes | unreviewed |
-| code_health:finding_aa040416ab14e29024fa | low | code_health | js/app/10-main-app.js:7948 | buildAnalysisResult / primitive_obsession | yes | unreviewed |
-| code_health:finding_7c122b322da6ef3fb555 | low | code_health | js/app/10-main-app.js:7999 | renderScoredAnalysisDebug / large_method | yes | unreviewed |
-| code_health:finding_eb37461abdf66043fb60 | low | code_health | js/app/10-main-app.js:7999 | renderScoredAnalysisDebug / primitive_obsession | yes | unreviewed |
-| code_health:finding_a588ab315453a61edf9d | low | code_health | js/app/10-main-app.js:8184 | analyzeWriting / large_method | yes | unreviewed |
-| code_health:finding_cb75b06f17c7ca01125c | low | code_health | js/app/10-main-app.js:8315 | <anonymous> / complex_conditional | yes | unreviewed |
-| code_health:finding_e8948681e0b2a9493e98 | low | code_health | js/app/10-main-app.js:8440 | error_handling | yes | reviewed_no_change |
-| code_health:finding_87305a727729ced01817 | low | code_health | js/app/10-main-app.js:8442 | error_handling | yes | reviewed_no_change |
-| code_health:finding_bb01f5e2cea645103864 | low | code_health | js/app/10-main-app.js:8473 | error_handling | yes | reviewed_no_change |
-| code_health:finding_59b9470c43c933b96fb5 | low | code_health | js/app/10-main-app.js:8481 | error_handling | yes | reviewed_no_change |
-| code_health:finding_ada488f36dc2a7d66ff8 | low | code_health | js/app/10-main-app.js:8488 | error_handling | yes | reviewed_no_change |
-| code_health:finding_9bd5f85768cebd1be3fd | low | code_health | js/app/10-main-app.js:8497 | error_handling | yes | reviewed_no_change |
-| code_health:finding_7cafeb9e1b470fe325be | low | code_health | js/app/dialogs.js | coverage_gradient | yes | unreviewed |
-| code_health:finding_44e764606a039a6b13e8 | low | code_health | js/app/dialogs.js:32 | <anonymous> / large_method | yes | unreviewed |
+| code_health:finding_5140626fb0ae2120defa | low | code_health | js/app/10-main-app.js:7023 | renderNotebookGuideFocusList / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_55e3e7b0a65983157130 | low | code_health | js/app/10-main-app.js:7034 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_e7c1a6c3daeef1e5b31f | low | code_health | js/app/10-main-app.js:7035 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_bb4e85b2531da176296e | low | code_health | js/app/10-main-app.js:7036 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_7f9d145151ea2de2578b | low | code_health | js/app/10-main-app.js:7037 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_32b689e2f4f668a925d0 | low | code_health | js/app/10-main-app.js:7038 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_84fed470e5cd1474663a | low | code_health | js/app/10-main-app.js:7039 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_b1d9c46289a2cb313ffa | low | code_health | js/app/10-main-app.js:7040 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_ee6dd3ede28b6377f740 | low | code_health | js/app/10-main-app.js:7041 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_3e50ed60460f1941461e | low | code_health | js/app/10-main-app.js:7042 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_73b86080f023ca22b853 | low | code_health | js/app/10-main-app.js:7043 | renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_1e428f32ae6e9f768e81 | low | code_health | js/app/10-main-app.js:7057 | renderNotebookQuickCheckList / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_524a0b39a71fa1f643f8 | low | code_health | js/app/10-main-app.js:7336 | error_handling | no | fixed_verified |
+| code_health:finding_c08ab1d20e2d87bde007 | low | code_health | js/app/10-main-app.js:7349 | error_handling | yes | reviewed_no_change |
+| code_health:finding_c0289b8facadeca0647f | low | code_health | js/app/10-main-app.js:7355 | error_handling | yes | reviewed_no_change |
+| code_health:finding_0276419a105c6242f13d | low | code_health | js/app/10-main-app.js:7360 | error_handling | yes | reviewed_no_change |
+| code_health:finding_ccdce65fd75cb30112a0 | low | code_health | js/app/10-main-app.js:7461 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_5c339e38023b4cc71478 | low | code_health | js/app/10-main-app.js:7462 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_1ab5e0d4d435d307009c | low | code_health | js/app/10-main-app.js:7463 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_5d7e16fcf8dd26f060cc | low | code_health | js/app/10-main-app.js:7464 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_cacae3136160a8d497aa | low | code_health | js/app/10-main-app.js:7465 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_560f2e42892b746b439d | low | code_health | js/app/10-main-app.js:7466 | renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_782b6ad5a140a0fde7e2 | low | code_health | js/app/10-main-app.js:7516 | error_handling | yes | reviewed_no_change |
+| code_health:finding_8044bd2dfe671b84ae02 | low | code_health | js/app/10-main-app.js:7549 | error_handling | yes | reviewed_no_change |
+| code_health:finding_701d382f4514d56049a6 | low | code_health | js/app/10-main-app.js:7624 | reassessPortfolioSession / large_method | yes | unreviewed |
+| code_health:finding_f950a77aba91ce1f3c19 | low | code_health | js/app/10-main-app.js:7847 | reconcileDetailedAnalysis / primitive_obsession | yes | unreviewed |
+| code_health:finding_aa040416ab14e29024fa | low | code_health | js/app/10-main-app.js:7960 | buildAnalysisResult / primitive_obsession | yes | unreviewed |
+| code_health:finding_7c122b322da6ef3fb555 | low | code_health | js/app/10-main-app.js:8011 | renderScoredAnalysisDebug / large_method | yes | unreviewed |
+| code_health:finding_eb37461abdf66043fb60 | low | code_health | js/app/10-main-app.js:8011 | renderScoredAnalysisDebug / primitive_obsession | yes | unreviewed |
+| code_health:finding_a588ab315453a61edf9d | low | code_health | js/app/10-main-app.js:8196 | analyzeWriting / large_method | yes | unreviewed |
+| code_health:finding_cb75b06f17c7ca01125c | low | code_health | js/app/10-main-app.js:8327 | <anonymous> / complex_conditional | yes | unreviewed |
+| code_health:finding_e8948681e0b2a9493e98 | low | code_health | js/app/10-main-app.js:8452 | error_handling | yes | reviewed_no_change |
+| code_health:finding_87305a727729ced01817 | low | code_health | js/app/10-main-app.js:8454 | error_handling | yes | reviewed_no_change |
+| code_health:finding_bb01f5e2cea645103864 | low | code_health | js/app/10-main-app.js:8485 | error_handling | yes | reviewed_no_change |
+| code_health:finding_59b9470c43c933b96fb5 | low | code_health | js/app/10-main-app.js:8493 | error_handling | yes | reviewed_no_change |
+| code_health:finding_ada488f36dc2a7d66ff8 | low | code_health | js/app/10-main-app.js:8500 | error_handling | yes | reviewed_no_change |
+| code_health:finding_9bd5f85768cebd1be3fd | low | code_health | js/app/10-main-app.js:8509 | error_handling | yes | reviewed_no_change |
+| code_health:finding_7cafeb9e1b470fe325be | low | code_health | js/app/dialogs.js | coverage_gradient | yes | confirmed_repair_candidate |
+| code_health:finding_44e764606a039a6b13e8 | low | code_health | js/app/dialogs.js:32 | <anonymous> / large_method | yes | reviewed_no_change |
 | code_health:finding_74656979868084cda402 | low | code_health | js/app/dialogs.js:108 | error_handling | yes | reviewed_no_change |
 | code_health:finding_b056139b0d0c461e7869 | low | code_health | js/app/dialogs.js:227 | error_handling | yes | reviewed_no_change |
 | code_health:finding_e8fa786727ce7172a436 | low | code_health | js/app/photo-crop.js | coverage_gradient | yes | unreviewed |
 | code_health:finding_67272701e9295673aac2 | low | code_health | js/app/portfolio-export.js | coverage_gradient | yes | unreviewed |
 | code_health:finding_e0e2c68f45d9cbfb0853 | low | code_health | js/app/portfolio-export.js | churn_risk | yes | reviewed_no_change |
-| code_health:finding_0368fd46318f3d32ea01 | low | code_health | js/app/portfolio-export.js:175 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_3a42e744c595cd5ca562 | low | code_health | js/app/portfolio-export.js:176 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_e3abaf354252d387d5ee | low | code_health | js/app/portfolio-export.js:177 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_3a67d4cf25a1bfd26a1f | low | code_health | js/app/portfolio-export.js:178 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_2ff9e217d561aa315970 | low | code_health | js/app/portfolio-export.js:179 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_c4380b5a9b18fea72528 | low | code_health | js/app/portfolio-export.js:180 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_9905f1affcc958c66094 | low | code_health | js/app/portfolio-export.js:181 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_7721c54a47ebf9bb81f4 | low | code_health | js/app/portfolio-export.js:182 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_64a5a88b83ef8a22606d | low | code_health | js/app/portfolio-export.js:183 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_c38a72e4ac318ae35a94 | low | code_health | js/app/portfolio-export.js:184 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_9d555c95968b0dbe2686 | low | code_health | js/app/portfolio-export.js:185 | buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_21fce8bacad6db145f2c | low | code_health | js/app/portfolio-export.js:338 | buildStudentPortfolioPhotosHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_933c6ad35e306b1d8867 | low | code_health | js/app/portfolio-export.js:340 | buildStudentPortfolioPhotosHtml / string_concat_in_loop | yes | unreviewed |
-| code_health:finding_149f7a9b86df65316d03 | low | code_health | js/app/portfolio-export.js:527 | buildClassSummaryHtml / string_concat_in_loop | yes | unreviewed |
+| code_health:finding_0368fd46318f3d32ea01 | low | code_health | js/app/portfolio-export.js:175 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_3a42e744c595cd5ca562 | low | code_health | js/app/portfolio-export.js:176 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_e3abaf354252d387d5ee | low | code_health | js/app/portfolio-export.js:177 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_3a67d4cf25a1bfd26a1f | low | code_health | js/app/portfolio-export.js:178 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_2ff9e217d561aa315970 | low | code_health | js/app/portfolio-export.js:179 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_c4380b5a9b18fea72528 | low | code_health | js/app/portfolio-export.js:180 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_9905f1affcc958c66094 | low | code_health | js/app/portfolio-export.js:181 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_7721c54a47ebf9bb81f4 | low | code_health | js/app/portfolio-export.js:182 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_64a5a88b83ef8a22606d | low | code_health | js/app/portfolio-export.js:183 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_c38a72e4ac318ae35a94 | low | code_health | js/app/portfolio-export.js:184 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_9d555c95968b0dbe2686 | low | code_health | js/app/portfolio-export.js:185 | buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_21fce8bacad6db145f2c | low | code_health | js/app/portfolio-export.js:338 | buildStudentPortfolioPhotosHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_933c6ad35e306b1d8867 | low | code_health | js/app/portfolio-export.js:340 | buildStudentPortfolioPhotosHtml / string_concat_in_loop | yes | reviewed_no_change |
+| code_health:finding_149f7a9b86df65316d03 | low | code_health | js/app/portfolio-export.js:527 | buildClassSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
 | code_health:finding_b7040d9769dc0e552c9b | low | code_health | js/app/portfolio-export.js:615 | addAvailableImagesToStudentFolder / large_method | yes | unreviewed |
 | code_health:finding_9dec7bceb68525f6eebb | low | code_health | js/app/portfolio-export.js:699 | addStudentExportFiles / primitive_obsession | yes | unreviewed |
 | code_health:finding_a9056855bed4a463c583 | low | code_health | js/app/portfolio-export.js:900 | uploadBlobToDrivePromise / primitive_obsession | yes | unreviewed |
 | code_health:finding_1b2de011e29675ee61ed | low | code_health | js/app/portfolio-export.js:959 | clearCurrentClassAfterSuccessfulArchive / bumpy_road | yes | unreviewed |
 | code_health:finding_062f9ed0d9b06b8516cc | low | code_health | js/app/portfolio-export.js:991 | archiveCurrentSchoolYear / large_method | yes | unreviewed |
-| code_health:finding_339bc8c333e9ec258402 | low | code_health | js/app/storage-recovery.js | coverage_gradient | yes | unreviewed |
-| code_health:finding_609609e5993a72b3c225 | low | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / bumpy_road | yes | unreviewed |
-| code_health:finding_1c20ca1bd8c2259efb2a | low | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / large_method | yes | unreviewed |
+| code_health:finding_339bc8c333e9ec258402 | low | code_health | js/app/storage-recovery.js | coverage_gradient | yes | reviewed_no_change |
+| code_health:finding_609609e5993a72b3c225 | low | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / bumpy_road | yes | reviewed_no_change |
+| code_health:finding_1c20ca1bd8c2259efb2a | low | code_health | js/app/storage-recovery.js:214 | buildWftEmergencyBackupObject / large_method | yes | reviewed_no_change |
 | code_health:finding_04ce1dd1854346b9cfe8 | low | code_health | test-google-drive-migration.cjs:6 | file / primitive_obsession | yes | unreviewed |
 | code_health:finding_04486662f265863bfee5 | low | code_health | tests/analysis-identity.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_0f7b96782dc7eb4598cd | low | code_health | tests/analysis-pipeline.browser.cjs:252 | dry_violation | yes | unreviewed |
@@ -927,11 +934,12 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_ba559d6dc72385ac8e8b | low | code_health | tests/media-upload-boundary.browser.cjs:12 | exerciseOwnershipBoundary / bumpy_road | yes | unreviewed |
 | code_health:finding_40d1a80c7dd317811846 | low | code_health | tests/media-upload-boundary.browser.cjs:12 | exerciseOwnershipBoundary / large_method | yes | unreviewed |
 | code_health:finding_112b8b7c85259f7e792f | low | code_health | tests/media-upload-boundary.browser.cjs:104 | dry_violation | yes | unreviewed |
-| code_health:finding_9708f175ae4a6033ae11 | low | code_health | tests/missing-feedback.browser.cjs:7 | dry_violation | yes | unreviewed |
+| code_health:finding_9708f175ae4a6033ae11 | low | code_health | tests/missing-feedback.browser.cjs:7 | dry_violation | yes | confirmed_repair_candidate |
 | code_health:finding_7f05dea449294f08bb0f | low | code_health | tests/neatness-scoring.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
 | code_health:finding_17a77e2184d06c5924b5 | low | code_health | tests/neatness-scoring.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_a412eb95ad4f534d502e | low | code_health | tests/notebook-guidance-repair.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_898530e97870b376ca26 | low | code_health | tests/notebook-guide.browser.cjs:29 | dry_violation | yes | unreviewed |
+| code_health:finding_e23a276513588c43ca30 | low | code_health | tests/notebook-print-failure.browser.cjs:54 | dry_violation | yes | reviewed_no_change |
 | code_health:finding_4ef2ddbf4e328909aa45 | low | code_health | tests/openrouter-admission.browser.cjs:144 | dry_violation | yes | unreviewed |
 | code_health:finding_066a2edc5c549df655fa | low | code_health | tests/openrouter-failures.browser.cjs:8 | runFailureScenario / large_method | yes | unreviewed |
 | code_health:finding_6d349b0d589e2b547c8e | low | code_health | tests/openrouter-failures.browser.cjs:90 | dry_violation | yes | unreviewed |
@@ -942,20 +950,20 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_4893cf08bb5ae166eb8e | low | code_health | tests/pending-commit-publication.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
 | code_health:finding_489183df2dd8d8744d1c | low | code_health | tests/pending-commit-publication.browser.cjs:41 | <anonymous> / complex_conditional | yes | unreviewed |
 | code_health:finding_c0f177fd0c19241ff17d | low | code_health | tests/pending-commit-publication.browser.cjs:88 | dry_violation | yes | unreviewed |
-| code_health:finding_5301ae7f99d89050d43c | low | code_health | tests/pending-portfolio.browser.cjs:1 | dry_violation | yes | unreviewed |
+| code_health:finding_5301ae7f99d89050d43c | low | code_health | tests/pending-portfolio.browser.cjs:1 | dry_violation | yes | confirmed_repair_candidate |
 | code_health:finding_25e178330cbedd7e9342 | low | code_health | tests/pending-portfolio.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_9713ff13edfc8d5c00bf | low | code_health | tests/portfolio-index-load.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_d76a47a3866d90b8049c | low | code_health | tests/portfolio-index.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_11f605dd287d9c2e0c11 | low | code_health | tests/portfolio-removal.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
-| code_health:finding_72201b9397b729113a68 | low | code_health | tests/portfolio-removal.cjs:84 | test.setup.test.app.deletePortfolioSession.assert.deepEqual.assert.deepEqual.console.log.catch callback / assertion_free_test | yes | unreviewed |
-| code_health:finding_ced969c11ee33e523e58 | low | code_health | tests/portfolio-renderer.browser.cjs:128 | dry_violation | yes | unreviewed |
+| code_health:finding_72201b9397b729113a68 | low | code_health | tests/portfolio-removal.cjs:84 | test.setup.test.app.deletePortfolioSession.assert.deepEqual.assert.deepEqual.console.log.catch callback / assertion_free_test | yes | reviewed_no_change |
+| code_health:finding_ced969c11ee33e523e58 | low | code_health | tests/portfolio-renderer.browser.cjs:128 | dry_violation | yes | confirmed_repair_candidate |
 | code_health:finding_e3cf5bad6653d6e04b9c | low | code_health | tests/portfolio-replacement.cjs | prior_defect | yes | reviewed_no_change |
-| code_health:finding_fb8f8767e70a3a59a405 | low | code_health | tests/portfolio-replacement.cjs:48 | test.stored.Alice.sessions.map callback / assertion_free_test | yes | unreviewed |
-| code_health:finding_1b2896d1d7a3c6e41154 | low | code_health | tests/portfolio-replacement.cjs:72 | test.stored.Alice.sessions.map callback / assertion_free_test | yes | unreviewed |
-| code_health:finding_f845f314bee6056eb32b | low | code_health | tests/portfolio-replacement.cjs:73 | test.stored.Bob.sessions.map callback / assertion_free_test | yes | unreviewed |
-| code_health:finding_fdab77d90fdbc32562d9 | low | code_health | tests/portfolio-replacement.cjs:80 | test.stored.Alice.sessions.map callback / assertion_free_test | yes | unreviewed |
-| code_health:finding_a69c3001d92a09c58bf1 | low | code_health | tests/portfolio-replacement.cjs:100 | test.stored.Bob.sessions.map callback / assertion_free_test | yes | unreviewed |
-| code_health:finding_dba893bb0998191932a2 | low | code_health | tests/portfolio-replacement.cjs:108 | test.stored.Bob.sessions.slice.map callback / assertion_free_test | yes | unreviewed |
+| code_health:finding_fb8f8767e70a3a59a405 | low | code_health | tests/portfolio-replacement.cjs:48 | test.stored.Alice.sessions.map callback / assertion_free_test | yes | reviewed_no_change |
+| code_health:finding_1b2896d1d7a3c6e41154 | low | code_health | tests/portfolio-replacement.cjs:72 | test.stored.Alice.sessions.map callback / assertion_free_test | yes | reviewed_no_change |
+| code_health:finding_f845f314bee6056eb32b | low | code_health | tests/portfolio-replacement.cjs:73 | test.stored.Bob.sessions.map callback / assertion_free_test | yes | reviewed_no_change |
+| code_health:finding_fdab77d90fdbc32562d9 | low | code_health | tests/portfolio-replacement.cjs:80 | test.stored.Alice.sessions.map callback / assertion_free_test | yes | reviewed_no_change |
+| code_health:finding_a69c3001d92a09c58bf1 | low | code_health | tests/portfolio-replacement.cjs:100 | test.stored.Bob.sessions.map callback / assertion_free_test | yes | reviewed_no_change |
+| code_health:finding_dba893bb0998191932a2 | low | code_health | tests/portfolio-replacement.cjs:108 | test.stored.Bob.sessions.slice.map callback / assertion_free_test | yes | reviewed_no_change |
 | code_health:finding_d571f3e0e8dc34723374 | low | code_health | tests/portfolio-save.cjs:1 | dry_violation | yes | unreviewed |
 | code_health:finding_9a857800e4e4a5efaaf4 | low | code_health | tests/portfolio-sync.browser.cjs | prior_defect | yes | reviewed_no_change |
 | code_health:finding_b24caf94ce286264a74d | low | code_health | tests/portfolio-sync.browser.cjs:108 | runPortfolioSyncScenario / large_method | yes | unreviewed |
@@ -967,11 +975,11 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_1a6100f7f36b934266e6 | low | code_health | tests/record-identity.browser.cjs | prior_defect | no | reviewed_no_change |
 | code_health:finding_e1cab3eb1c1950913fb5 | low | code_health | tests/record-identity.browser.cjs:132 | dry_violation | yes | unreviewed |
 | code_health:finding_9dfe63deb01f1eb80636 | low | code_health | tests/record-identity.browser.cjs:135 | <anonymous@135> / large_method | yes | unreviewed |
-| code_health:finding_ab3e620dca9faaf23458 | low | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / primitive_obsession | yes | unreviewed |
-| code_health:finding_4cf99259c01d5a05625d | low | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / primitive_obsession | yes | unreviewed |
-| code_health:finding_35edf9740e8a2fa057b5 | low | code_health | tests/recovery-cache.browser.cjs:57 | checkCacheScenario / complex_conditional | yes | unreviewed |
-| code_health:finding_1c43466359debf8ce43c | low | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / bumpy_road | yes | unreviewed |
-| code_health:finding_8fdb4f9986350503ab5b | low | code_health | tests/recovery-cache.browser.cjs:220 | dry_violation | yes | unreviewed |
+| code_health:finding_ab3e620dca9faaf23458 | low | code_health | tests/recovery-cache.browser.cjs:10 | checkBackupCallback / primitive_obsession | yes | reviewed_no_change |
+| code_health:finding_4cf99259c01d5a05625d | low | code_health | tests/recovery-cache.browser.cjs:18 | checkBackupScenario / primitive_obsession | yes | reviewed_no_change |
+| code_health:finding_35edf9740e8a2fa057b5 | low | code_health | tests/recovery-cache.browser.cjs:57 | checkCacheScenario / complex_conditional | yes | reviewed_no_change |
+| code_health:finding_1c43466359debf8ce43c | low | code_health | tests/recovery-cache.browser.cjs:102 | runRecoveryScenario / bumpy_road | yes | reviewed_no_change |
+| code_health:finding_8fdb4f9986350503ab5b | low | code_health | tests/recovery-cache.browser.cjs:220 | dry_violation | yes | reviewed_no_change |
 | code_health:finding_17ce0cce1930c0bc5070 | low | code_health | tests/rename-confirmation.browser.cjs:20 | setupRenameFixture / large_method | yes | unreviewed |
 | code_health:finding_241aec90374475ff57a6 | low | code_health | tests/rename-confirmation.browser.cjs:140 | dry_violation | yes | unreviewed |
 | code_health:finding_bc5b71332347bd24eed1 | low | code_health | tests/script-loading.browser.cjs:5 | <anonymous@5> / large_method | yes | unreviewed |
@@ -993,9 +1001,9 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_1e16b4f451761fdb4f18 | low | code_health | tests/storage-public-ui.browser.cjs:22 | replyDriveRequest / bumpy_road | yes | unreviewed |
 | code_health:finding_7afcbd5ba99da91ccf4f | low | code_health | tests/storage-public-ui.browser.cjs:135 | dry_violation | yes | unreviewed |
 | code_health:finding_116f23f684db12591de4 | low | code_health | tests/storage-upload-ownership.browser.cjs:6 | dry_violation | yes | unreviewed |
-| code_health:finding_a3a48728c81ea506c461 | low | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / large_method | yes | unreviewed |
-| code_health:finding_29be0fb5517d3f81826a | low | code_health | tests/student-read-ownership.browser.cjs:15 | dry_violation | yes | unreviewed |
-| code_health:finding_5f6e3b7c0c1ace61a1cb | low | code_health | tests/student-rename.browser.cjs:7 | <anonymous@7> / large_method | yes | unreviewed |
+| code_health:finding_a3a48728c81ea506c461 | low | code_health | tests/student-read-ownership.browser.cjs:6 | <anonymous@6> / large_method | yes | reviewed_no_change |
+| code_health:finding_29be0fb5517d3f81826a | low | code_health | tests/student-read-ownership.browser.cjs:15 | dry_violation | yes | confirmed_repair_candidate |
+| code_health:finding_5f6e3b7c0c1ace61a1cb | low | code_health | tests/student-rename.browser.cjs:7 | <anonymous@7> / large_method | yes | reviewed_no_change |
 | security:c5c61743b4554d8505685b66 | low | security | tests/analysis-pipeline.browser.cjs:249 | eval_call | yes | reviewed_no_change |
 | security:a198a9d488291adf619fec44 | low | security | tests/archive-connection.browser.cjs:18 | hardcoded_secret | yes | reviewed_no_change |
 | security:ca8b522f9699985e30e28036 | low | security | tests/archive-connection.browser.cjs:18 | hardcoded_secret | yes | reviewed_no_change |
@@ -1046,38 +1054,38 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | dead_code:f9f6e9cbbd9b4c29526c67ba | unrated | dead_code | js/app/10-main-app.js:6054 | wrapCorrectedHtmlForNotebookPrint / unused_internal | no | fixed_verified |
 | dead_code:78e142a25a36d5a12768970a | unrated | dead_code | js/app/10-main-app.js:6321 | getNotebookDecisionFocusText / unused_internal | no | fixed_verified |
 | dead_code:40d6aafd4be5f1d995bbeb06 | unrated | dead_code | js/app/10-main-app.js:6623 | getNotebookGuideSentenceStarter / unused_internal | no | fixed_verified |
-| dead_code:5e39a7b5baa3b7f5b489d741 | unrated | dead_code | js/app/10-main-app.js:8283 | clearWritingArea / unused_internal | yes | reviewed_no_change |
+| dead_code:5e39a7b5baa3b7f5b489d741 | unrated | dead_code | js/app/10-main-app.js:8295 | clearWritingArea / unused_internal | yes | reviewed_no_change |
 | dead_code:fac391cf5eae4325c6a8fe33 | unrated | dead_code | js/app/99-lightbox.js:2 | openImageLightbox / unused_internal | yes | reviewed_no_change |
 | dead_code:23339cdb528915be789a74e4 | unrated | dead_code | js/app/storage-recovery.js:16 | generateWFTShortId / unused_internal | no | fixed_verified |
 | dead_code:5ebe6bb7152d3166eef9f0e3 | unrated | dead_code | js/app/storage-recovery.js:129 | toggleWftSafeMode / unused_internal | yes | reviewed_no_change |
 | dead_code:8fdd2d90552f9bcdd818b083 | unrated | dead_code | test-google-drive-migration.cjs | unreachable_file | yes | reviewed_no_change |
-| performance:perf3_dd259a208bc4451f767c | unrated | performance | google-drive-migration.js | google-drive-migration.js::read / io_in_loop | yes | unreviewed |
-| performance:perf3_6c4aaefa84bb482f1ec3 | unrated | performance | google-drive-migration.js | google-drive-migration.js::recoverFolder / io_in_loop | yes | unreviewed |
-| performance:perf3_6e6ddf87f62d29bfa493 | unrated | performance | google-drive-migration.js | google-drive-migration.js::list / io_in_loop | yes | unreviewed |
-| performance:perf3_8ebd9ff3c127370c15cc | unrated | performance | google-drive-migration.js | google-drive-migration.js::upload / io_in_loop | yes | unreviewed |
-| performance:perf3_49529186b645c93019e8 | unrated | performance | js/app/00-storage-sync-patches.js | js/app/00-storage-sync-patches.js::renderPortfolioFeedbackRows / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_a4d2be4d77ece65e1e3b | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderTeacherAuditView / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_52e43eaf91397530b3f3 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::requestOpenRouterWithFallback / io_in_loop | yes | unreviewed |
-| performance:perf3_a3899f23a54b2f8db3a3 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookGuideExamples / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_737e6ae4d9da581782aa | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_7c34c5498fe86c4a0f92 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_764b74f7c90d89041f6a | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderDetailedAssessment / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_d8add35aa897ceb31f08 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderAuditValidationTable / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_a3fea29a55745adcea59 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderCorrected / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_2b3d7f9c271c220a6bea | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderAuditRowsTable / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_303d764763b0a47b561e | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::updateSelectedImagePreview / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_4958b860ea5de8b32328 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderAuditEvidenceList / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_670a5f688496691f5779 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookGuideFocusList / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_a95593e6708c46f8ac7a | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNoticeTable / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_bc5512071d79fa7535c1 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookQuickCheckList / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_c6b5d160bd81092a4603 | unrated | performance | js/app/portfolio-export.js | js/app/portfolio-export.js::buildStudentSummaryHtml / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_4c17c1d0875c2be80d49 | unrated | performance | js/app/portfolio-export.js | js/app/portfolio-export.js::buildStudentPortfolioPhotosHtml / string_concat_in_loop | yes | unreviewed |
-| performance:perf3_e1174f2f7d96ea75461d | unrated | performance | js/app/portfolio-export.js | js/app/portfolio-export.js::buildClassSummaryHtml / string_concat_in_loop | yes | unreviewed |
+| performance:perf3_dd259a208bc4451f767c | unrated | performance | google-drive-migration.js | google-drive-migration.js::read / io_in_loop | yes | reviewed_no_change |
+| performance:perf3_6c4aaefa84bb482f1ec3 | unrated | performance | google-drive-migration.js | google-drive-migration.js::recoverFolder / io_in_loop | yes | reviewed_no_change |
+| performance:perf3_6e6ddf87f62d29bfa493 | unrated | performance | google-drive-migration.js | google-drive-migration.js::list / io_in_loop | yes | reviewed_no_change |
+| performance:perf3_8ebd9ff3c127370c15cc | unrated | performance | google-drive-migration.js | google-drive-migration.js::upload / io_in_loop | yes | reviewed_no_change |
+| performance:perf3_49529186b645c93019e8 | unrated | performance | js/app/00-storage-sync-patches.js | js/app/00-storage-sync-patches.js::renderPortfolioFeedbackRows / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_a4d2be4d77ece65e1e3b | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderTeacherAuditView / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_52e43eaf91397530b3f3 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::requestOpenRouterWithFallback / io_in_loop | yes | reviewed_no_change |
+| performance:perf3_a3899f23a54b2f8db3a3 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookGuideExamples / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_737e6ae4d9da581782aa | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_7c34c5498fe86c4a0f92 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookDetailedAssessmentFromSavedSession / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_764b74f7c90d89041f6a | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderDetailedAssessment / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_d8add35aa897ceb31f08 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderAuditValidationTable / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_a3fea29a55745adcea59 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderCorrected / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_2b3d7f9c271c220a6bea | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderAuditRowsTable / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_303d764763b0a47b561e | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::updateSelectedImagePreview / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_4958b860ea5de8b32328 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderAuditEvidenceList / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_670a5f688496691f5779 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookGuideFocusList / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_a95593e6708c46f8ac7a | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNoticeTable / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_bc5512071d79fa7535c1 | unrated | performance | js/app/10-main-app.js | js/app/10-main-app.js::renderNotebookQuickCheckList / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_c6b5d160bd81092a4603 | unrated | performance | js/app/portfolio-export.js | js/app/portfolio-export.js::buildStudentSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_4c17c1d0875c2be80d49 | unrated | performance | js/app/portfolio-export.js | js/app/portfolio-export.js::buildStudentPortfolioPhotosHtml / string_concat_in_loop | yes | reviewed_no_change |
+| performance:perf3_e1174f2f7d96ea75461d | unrated | performance | js/app/portfolio-export.js | js/app/portfolio-export.js::buildClassSummaryHtml / string_concat_in_loop | yes | reviewed_no_change |
 | performance:perf3_7eb9a5dfed5a434878d4 | unrated | performance | scripts/check-test-runner.cjs | scripts/check-test-runner.cjs::__module__ / io_in_loop | yes | unreviewed |
 | performance:perf3_84dba4db32722c23655b | unrated | performance | tests/analysis-pipeline.browser.cjs | tests/analysis-pipeline.browser.cjs::__module__ / io_in_loop | yes | unreviewed |
 | performance:perf3_68900cb25de5c2f8b778 | unrated | performance | tests/drive-lifecycle.browser.cjs | tests/drive-lifecycle.browser.cjs::__module__ / io_in_loop | yes | unreviewed |
 | performance:perf3_769dc30b84623e2d7139 | unrated | performance | tests/media-ownership.browser.cjs | tests/media-ownership.browser.cjs::__module__ / io_in_loop | yes | unreviewed |
-| performance:perf3_2afd767f06d0783c97ee | unrated | performance | tests/recovery-cache.browser.cjs | tests/recovery-cache.browser.cjs::__module__ / io_in_loop | yes | unreviewed |
+| performance:perf3_2afd767f06d0783c97ee | unrated | performance | tests/recovery-cache.browser.cjs | tests/recovery-cache.browser.cjs::__module__ / io_in_loop | yes | reviewed_no_change |
 | performance:perf3_39b5fabbe5976788df09 | unrated | performance | tests/split-storage.browser.cjs | tests/split-storage.browser.cjs::runScenario / io_in_loop | yes | unreviewed |
 | performance:perf3_33039e5829a7d1318880 | unrated | performance | tests/storage-dialog-keyboard.browser.cjs | tests/storage-dialog-keyboard.browser.cjs::__module__ / io_in_loop | yes | unreviewed |
 | performance:perf3_514fa14bb37103b12e44 | unrated | performance | tests/storage-public-ui.browser.cjs | tests/storage-public-ui.browser.cjs::__module__ / io_in_loop | yes | unreviewed |

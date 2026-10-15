@@ -1,0 +1,2875 @@
+{
+  "repair_id": "repair-018",
+  "source_commit": "c043b71cf218d220ff8607218318068b5b584995",
+  "created_at_utc": "2026-10-15T21:54:02.862250+00:00",
+  "status": "read_only_review_complete",
+  "summary": {
+    "findings_reviewed": 51,
+    "files_read_complete": 11,
+    "assertion_free_false_positives": 7,
+    "confirmed_repair_candidates": 5,
+    "reviewed_no_change": 46,
+    "other_valid_retained": 39,
+    "critical_observations_individually_reviewed": 9,
+    "needs_user_attention": 0,
+    "application_defects_proven": 0,
+    "repository_files_edited": 0
+  },
+  "source_pins": {
+    "manifest": "work/repowise-coordinator/batch-003-source-pins.json",
+    "files": 89,
+    "before_all_raw_match": true,
+    "after_all_raw_match": true,
+    "all_normalized_lf_match": true,
+    "source_commit_unchanged": true,
+    "before_receipt": "work/repowise-repair-018/before-pins.json",
+    "after_receipt": "work/repowise-repair-018/after-pins.json"
+  },
+  "verification": {
+    "complexity": "Installed walk_file_complexity independently rerun on11 complete current sources; reported CCN/cognitive/NLOC/nesting/arity/assertion numbers compared where present.",
+    "clones": "Native token detector replayed read-only on11assigned files+5namedpartners, all9named-partner pairs verified, no cache/index writes. Whole-repo percentages/cochange are explicitly not replayed by this subset.",
+    "failure_propagation": "Read complete scripts/run-tests.cjs, report manifest and relevant existing runner selfchecks. Direct assertions, native Boolean-case aggregate checks, terminal Promise.catch exit1 and child/report failure gate traced. No tests or selfchecks executed by this review.",
+    "supporting_sources": [
+      "scripts/run-tests.cjs",
+      "scripts/case-report-suites.json",
+      "scripts/check-test-runner.cjs",
+      "tests/support/local-app-route.js",
+      "tests/deletion-merge.browser.cjs (relevant cloned setup)",
+      "tests/portfolio-render-failures.browser.cjs (cloned cleanup/report tail)",
+      "tests/archive-integrity.browser.cjs (cloned local route)",
+      "tests/drive-lifecycle.browser.cjs (cloned scenario/report tail)",
+      "tests/storage-held-request.browser.cjs (cloned specialized route branch)",
+      "index.html shipped app script tags3760-3794",
+      "Installed RepoWise assertion-free classifier gate and DRY/clone detector implementation"
+    ],
+    "source_metric_receipt": "work/repowise-repair-018/current-metrics.json",
+    "clone_pair_receipt": "work/repowise-repair-018/clone-pairs-subset.json"
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_e175c7fa27aa56528269",
+      "file": "tests/analysis-identity.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "evaluateAnalysisIdentity",
+      "evidence_anchors": [
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 8,
+          "end_line": 215,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 206,
+        "max_nesting": 1,
+        "start_line": 8,
+        "end_line": 215,
+        "param_count": 1,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 209,
+          "end_line": 298,
+          "role": "Named assertion functions and dispatcher"
+        },
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 306,
+          "end_line": 342,
+          "role": "Native fixture call, error checks, failures aggregate and terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The serialized browser fixture already contains seven named scenario helpers (stale results, consecutive analyses, image preparation, reassessment, class reset/restart, canceled OCR retry and interrupted analysis). Shared lexical response gates, selected student, writing, image and pending-state snapshots intentionally stay in the same page.evaluate function. Its large span includes those local definitions; assertions remain in separate host functions. Moving each definition into a host helper would require separate serialization/injection and shared browser state. Keep this existing meaningful grouping rather than flattening lifecycle checks. Current independent walker: CCN9, NLOC206, nesting1; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_2cebaec28f1e3464244b",
+      "file": "tests/analysis-identity.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "runInterruptedAnalysisCase",
+      "evidence_anchors": [
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 182,
+          "end_line": 206,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 25,
+        "max_nesting": 1,
+        "start_line": 182,
+        "end_line": 206,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 209,
+          "end_line": 298,
+          "role": "Named assertion functions and dispatcher"
+        },
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 306,
+          "end_line": 342,
+          "role": "Native fixture call, error checks, failures aggregate and terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "This25-line local helper selects OCR versus typed work, waits for the held request, applies one of student/writing/image/reassessment/stop/reset changes, then releases and awaits the real operation. The shallow condition chain describes mutually exclusive race stimuli, not mixed application responsibilities. assertInterruptedAnalysis and assertUnchangedAnalysis separately check ownership, retained writing, no stale publication, busy state and call count. A table of mutation closures would add indirection around a small ordered race script. Current independent walker: CCN10, NLOC25, nesting1; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_2f3ed327ca58291a143e",
+      "file": "tests/analysis-identity.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "evaluateAnalysisIdentity",
+      "evidence_anchors": [
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 8,
+          "end_line": 215,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 206,
+        "max_nesting": 1,
+        "start_line": 8,
+        "end_line": 215,
+        "param_count": 1,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 209,
+          "end_line": 298,
+          "role": "Named assertion functions and dispatcher"
+        },
+        {
+          "file": "tests/analysis-identity.browser.cjs",
+          "start_line": 306,
+          "end_line": 342,
+          "role": "Native fixture call, error checks, failures aggregate and terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The serialized browser fixture already contains seven named scenario helpers (stale results, consecutive analyses, image preparation, reassessment, class reset/restart, canceled OCR retry and interrupted analysis). Shared lexical response gates, selected student, writing, image and pending-state snapshots intentionally stay in the same page.evaluate function. Its large span includes those local definitions; assertions remain in separate host functions. Moving each definition into a host helper would require separate serialization/injection and shared browser state. Keep this existing meaningful grouping rather than flattening lifecycle checks. Current independent walker: CCN9, NLOC206, nesting1; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_3dffc42c2f6cdecd5764",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "<anonymous@7>",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 7,
+          "end_line": 137,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 51,
+        "nloc": 131,
+        "max_nesting": 3,
+        "start_line": 7,
+        "end_line": 137,
+        "param_count": 0,
+        "assertion_count": 2,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 21,
+          "end_line": 127,
+          "role": "Named Boolean case oracles through actual analysis/save/export"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 129,
+          "end_line": 137,
+          "role": "Failed-case and page-error assertions, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The native fixture loops over seven missing-score representations, six valid-score controls, unsupported types, rubric categories and genres, then exercises actual analysis/save/notebook/export publication. Most CCN comes from Boolean test oracles and explicit score/fallback expectations. The one shared page context preserves native policy and unknown-score behavior through the whole path. Extracting an assertion helper per display would increase browser fixture plumbing without removing any of these distinct checks; preserve the cases and readable loop sections. Current independent walker: CCN38, NLOC131, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_3d6e5336abe11651954f",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "<anonymous@7>",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 7,
+          "end_line": 137,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 51,
+        "nloc": 131,
+        "max_nesting": 3,
+        "start_line": 7,
+        "end_line": 137,
+        "param_count": 0,
+        "assertion_count": 2,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 21,
+          "end_line": 127,
+          "role": "Named Boolean case oracles through actual analysis/save/export"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 129,
+          "end_line": 137,
+          "role": "Failed-case and page-error assertions, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The native fixture loops over seven missing-score representations, six valid-score controls, unsupported types, rubric categories and genres, then exercises actual analysis/save/notebook/export publication. Most CCN comes from Boolean test oracles and explicit score/fallback expectations. The one shared page context preserves native policy and unknown-score behavior through the whole path. Extracting an assertion helper per display would increase browser fixture plumbing without removing any of these distinct checks; preserve the cases and readable loop sections. Current independent walker: CCN38, NLOC131, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_9708f175ae4a6033ae11",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_route",
+      "owner": "<anonymous@7>",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 7,
+          "end_line": 20,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 252,
+          "end_line": 265,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 4,
+          "end_line": 13,
+          "role": "Existing shared asset route with explicit root boundary and external abort"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "start_line": 50,
+          "end_line": 55,
+          "role": "Existing helper self-checks local JS, missing/path-traversal/directory and external paths"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 13.24,
+          "clone_pair_count": 27,
+          "worst_clone_lines": 14,
+          "worst_clone_partner": "tests/notebook-guidance-repair.browser.cjs",
+          "worst_clone_co_change": 0,
+          "symbol_line": 7,
+          "symbol": "<anonymous@7>"
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/missing-feedback.browser.cjs",
+            "file_b": "tests/notebook-guidance-repair.browser.cjs",
+            "a_start_line": 7,
+            "a_end_line": 20,
+            "b_start_line": 252,
+            "b_end_line": 265,
+            "token_count": 8700,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 21,
+          "end_line": 127,
+          "role": "Named Boolean case oracles through actual analysis/save/export"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 129,
+          "end_line": 137,
+          "role": "Failed-case and page-error assertions, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The14-line clone with notebook-guidance includes repeated browser/local-asset setup. Both files still implement the same pure local asset routing that tests/support/local-app-route.js already provides. Reusing the existing helper removes repeated file/path/content-type/abort logic without a new abstraction; preserve all native score oracles and the notebook print-layout checks.",
+      "regression_recommendation": "In one focused follow-up, reuse the existing helper in these five flagged test files plus notebook-guidance partner. Keep specialized Google handling for student-read-ownership. No helper/production/fixture/expectation edits. Run the six affected existing native suites and89syntax checks before/after, compare case counts/oracles and keep frozen renderer source/hash exact. Recompute RepoWise afterward; residual boilerplate clones may remain."
+    },
+    {
+      "record_id": "code_health:finding_023e9357755094e56ba3",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "<anonymous@252>",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 252,
+          "end_line": 284,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 10,
+        "cognitive": 20,
+        "nloc": 33,
+        "max_nesting": 3,
+        "start_line": 252,
+        "end_line": 284,
+        "param_count": 0,
+        "assertion_count": 5,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 9,
+          "end_line": 10,
+          "role": "Case check collector"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 15,
+          "end_line": 246,
+          "role": "Named native assertion groups and save/render checks"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 265,
+          "end_line": 284,
+          "role": "Host rejects failed cases, checks layout/text, terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The host driver loads only local app assets, calls the named native fixture, writes its case report, rejects failed cases and checks two-page overflow, paragraph breaks and actual text. Its ten branches include route fallbacks, explicit baseline-evidence mode, layout predicates and optional preview output. The runner removes the baseline bypass flag before normal execution and independently validates the case report. Keep the layout assertions and try/finally browser cleanup together; no missing-oracle issue was found. Current independent walker: CCN10, NLOC33, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_b3ea0e675e7c1c2fdb28",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "runNotebookGuidanceCases",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 7,
+          "end_line": 250,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 7,
+        "cognitive": 6,
+        "nloc": 241,
+        "max_nesting": 0,
+        "start_line": 7,
+        "end_line": 250,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 9,
+          "end_line": 10,
+          "role": "Case check collector"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 15,
+          "end_line": 246,
+          "role": "Named native assertion groups and save/render checks"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 265,
+          "end_line": 284,
+          "role": "Host rejects failed cases, checks layout/text, terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The241-line serialized native fixture already groups convention, grounded-quote, paragraph, rendered-markup, checklist and guidance-decision cases in named local functions sharing check/candidate/guide data. It also executes actual parsing, DOM sanitization, save snapshots and legacy portfolio reconstruction. The file length includes those local groups and regression tables; host code separately asserts cases and two-page print layout. Another layer of one-use wrappers would move the length metric while obscuring the browser serialization boundary. Current independent walker: CCN7, NLOC241, nesting0; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_9283e3747b5135c2a7fc",
+      "file": "tests/notebook-print-failure.browser.cjs",
+      "marker": "nested_complexity",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cross_context_native_lifecycle_nesting_retained",
+      "owner": "<anonymous@4>",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 4,
+          "end_line": 62,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 29,
+        "cognitive": 82,
+        "nloc": 59,
+        "max_nesting": 6,
+        "start_line": 4,
+        "end_line": 62,
+        "param_count": 0,
+        "assertion_count": 1,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 43,
+          "end_line": 53,
+          "role": "Per-mode required checks and aggregate passed case"
+        },
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 58,
+          "end_line": 62,
+          "role": "Ten expected cases and direct assert for every case; terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The real-popup matrix is two callers by five modes: blocked, throwing opener setter, ignored setter, denied close and success. The59-line driver includes one native page.evaluate callback, window.open instrumentation callbacks, two loops and nested try/finally cleanup. CCN29/depth6 include conditional expected-value assertions and nested callback scopes; the common checks remain centralized in one checks object, with actual native Window/document/rendering and only boundary faults substituted. Both callers assert zero writes/prints on isolation failure, visible notice, correct cleanup outcome and exact parent state, plus real successful printing. A runner helper and another serialized fixture helper would mainly relocate this short matrix and introduce shared closure plumbing. Retain these shape warnings; do not remove any failure modes to lower them. Current independent walker: CCN29, NLOC59, nesting6; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_886ef320a4749424aed4",
+      "file": "tests/notebook-print-failure.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "<anonymous@4>",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 4,
+          "end_line": 62,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 29,
+        "cognitive": 82,
+        "nloc": 59,
+        "max_nesting": 6,
+        "start_line": 4,
+        "end_line": 62,
+        "param_count": 0,
+        "assertion_count": 1,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 43,
+          "end_line": 53,
+          "role": "Per-mode required checks and aggregate passed case"
+        },
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 58,
+          "end_line": 62,
+          "role": "Ten expected cases and direct assert for every case; terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The real-popup matrix is two callers by five modes: blocked, throwing opener setter, ignored setter, denied close and success. The59-line driver includes one native page.evaluate callback, window.open instrumentation callbacks, two loops and nested try/finally cleanup. CCN29/depth6 include conditional expected-value assertions and nested callback scopes; the common checks remain centralized in one checks object, with actual native Window/document/rendering and only boundary faults substituted. Both callers assert zero writes/prints on isolation failure, visible notice, correct cleanup outcome and exact parent state, plus real successful printing. A runner helper and another serialized fixture helper would mainly relocate this short matrix and introduce shared closure plumbing. Retain these shape warnings; do not remove any failure modes to lower them. Current independent walker: CCN29, NLOC59, nesting6; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_e23a276513588c43ca30",
+      "file": "tests/notebook-print-failure.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_test_cleanup_report_tail_retained",
+      "owner": "<anonymous@4>",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 54,
+          "end_line": 59,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/portfolio-render-failures.browser.cjs",
+          "start_line": 44,
+          "end_line": 49,
+          "role": "Read-only token replay found named partner clone"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 9.68,
+          "clone_pair_count": 1,
+          "worst_clone_lines": 6,
+          "worst_clone_partner": "tests/portfolio-render-failures.browser.cjs",
+          "worst_clone_co_change": 0,
+          "symbol_line": 4,
+          "symbol": "<anonymous@4>"
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/notebook-print-failure.browser.cjs",
+            "file_b": "tests/portfolio-render-failures.browser.cjs",
+            "a_start_line": 54,
+            "a_end_line": 59,
+            "b_start_line": 44,
+            "b_end_line": 49,
+            "token_count": 1500,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 43,
+          "end_line": 53,
+          "role": "Per-mode required checks and aggregate passed case"
+        },
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "start_line": 58,
+          "end_line": 62,
+          "role": "Ten expected cases and direct assert for every case; terminal exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The6-line token clone is the page/browser cleanup, optional case-report write and terminal asserting tail also used by portfolio-render-failures. The output schemas, case counts and failure stories differ; sharing the entire tail would require a generic test runner adapter around already clear native tests. Keep this small idiomatic independent cleanup/report sequence, not an application duplicate."
+    },
+    {
+      "record_id": "code_health:finding_ec7738b69467039d6bb0",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "nested_complexity",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cross_context_native_lifecycle_nesting_retained",
+      "owner": "<anonymous@8>",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 8,
+          "end_line": 163,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 91,
+        "nloc": 156,
+        "max_nesting": 4,
+        "start_line": 8,
+        "end_line": 163,
+        "param_count": 0,
+        "assertion_count": 48,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 60,
+          "end_line": 86,
+          "role": "Native sync results directly asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 119,
+          "end_line": 156,
+          "role": "Reload durability outcomes asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 157,
+          "end_line": 163,
+          "role": "Page-error check and terminal rejection exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Two explicit loop sections cover actual photo-upload retry after two quota outcomes and five persisted-draft/reload modes. Fault setters are restored in finally before native sync/reload assertions. The156-line driver includes serialized fixture setup, result collection and direct host assertions; depth4 is the browser/try/loop envelope, and CCN38 includes assertions and fault-selection predicates. Keeping the first workflow stateful through actual sync and the second through reload protects the difference between in-tab photos, stripped markers and durable Drive photos. A generic scenario framework would hide these boundaries; preserve the two existing named-by-mode sections. Current independent walker: CCN38, NLOC156, nesting4; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_bdf61850d95084548fb6",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "<anonymous@8>",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 8,
+          "end_line": 163,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 91,
+        "nloc": 156,
+        "max_nesting": 4,
+        "start_line": 8,
+        "end_line": 163,
+        "param_count": 0,
+        "assertion_count": 48,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 60,
+          "end_line": 86,
+          "role": "Native sync results directly asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 119,
+          "end_line": 156,
+          "role": "Reload durability outcomes asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 157,
+          "end_line": 163,
+          "role": "Page-error check and terminal rejection exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Two explicit loop sections cover actual photo-upload retry after two quota outcomes and five persisted-draft/reload modes. Fault setters are restored in finally before native sync/reload assertions. The156-line driver includes serialized fixture setup, result collection and direct host assertions; depth4 is the browser/try/loop envelope, and CCN38 includes assertions and fault-selection predicates. Keeping the first workflow stateful through actual sync and the second through reload protects the difference between in-tab photos, stripped markers and durable Drive photos. A generic scenario framework would hide these boundaries; preserve the two existing named-by-mode sections. Current independent walker: CCN38, NLOC156, nesting4; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_7036a9b6124e67da4c4d",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "<anonymous@8>",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 8,
+          "end_line": 163,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 91,
+        "nloc": 156,
+        "max_nesting": 4,
+        "start_line": 8,
+        "end_line": 163,
+        "param_count": 0,
+        "assertion_count": 48,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 60,
+          "end_line": 86,
+          "role": "Native sync results directly asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 119,
+          "end_line": 156,
+          "role": "Reload durability outcomes asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 157,
+          "end_line": 163,
+          "role": "Page-error check and terminal rejection exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Two explicit loop sections cover actual photo-upload retry after two quota outcomes and five persisted-draft/reload modes. Fault setters are restored in finally before native sync/reload assertions. The156-line driver includes serialized fixture setup, result collection and direct host assertions; depth4 is the browser/try/loop envelope, and CCN38 includes assertions and fault-selection predicates. Keeping the first workflow stateful through actual sync and the second through reload protects the difference between in-tab photos, stripped markers and durable Drive photos. A generic scenario framework would hide these boundaries; preserve the two existing named-by-mode sections. Current independent walker: CCN38, NLOC156, nesting4; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_5301ae7f99d89050d43c",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_route",
+      "owner": "module",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 1,
+          "end_line": 22,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/deletion-merge.browser.cjs",
+          "start_line": 1,
+          "end_line": 21,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 4,
+          "end_line": 13,
+          "role": "Existing shared asset route with explicit root boundary and external abort"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "start_line": 50,
+          "end_line": 55,
+          "role": "Existing helper self-checks local JS, missing/path-traversal/directory and external paths"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 13.58,
+          "clone_pair_count": 24,
+          "worst_clone_lines": 22,
+          "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/deletion-merge.browser.cjs",
+            "file_b": "tests/pending-portfolio.browser.cjs",
+            "a_start_line": 1,
+            "a_end_line": 21,
+            "b_start_line": 1,
+            "b_end_line": 22,
+            "token_count": 10700,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 60,
+          "end_line": 86,
+          "role": "Native sync results directly asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 119,
+          "end_line": 156,
+          "role": "Reload durability outcomes asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 157,
+          "end_line": 163,
+          "role": "Page-error check and terminal rejection exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The22-line clone with deletion-merge contains imports/browser setup and the inline local asset route. The existing local-app-route helper can replace this repeated asset handler while leaving both quota/sync and reload workflows exact. This is a concrete reuse opportunity, not a request to share transaction-specific fixtures or assertions.",
+      "regression_recommendation": "In one focused follow-up, reuse the existing helper in these five flagged test files plus notebook-guidance partner. Keep specialized Google handling for student-read-ownership. No helper/production/fixture/expectation edits. Run the six affected existing native suites and89syntax checks before/after, compare case counts/oracles and keep frozen renderer source/hash exact. Recompute RepoWise afterward; residual boilerplate clones may remain."
+    },
+    {
+      "record_id": "code_health:finding_226c16da583bda4e7cca",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "complex_conditional",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_fault_or_retry_predicate_retained",
+      "owner": "<anonymous>",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 103,
+          "end_line": 103,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "operator_count_source_checked": 4,
+        "details": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 102,
+          "symbol_index": 1
+        }
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 60,
+          "end_line": 86,
+          "role": "Native sync results directly asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 119,
+          "end_line": 156,
+          "role": "Reload durability outcomes asserted"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 157,
+          "end_line": 163,
+          "role": "Page-error check and terminal rejection exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The four operators select exactly the injected pending-root quota write: correct key, increment/write index, fail-both mode or first non-full write. Preserving short-circuit increment timing matters to the fallback/retry contract. It is one compact fault hook restored in finally, not application validation. Extracting another predicate would hide the intentional write counter sequencing."
+    },
+    {
+      "record_id": "code_health:finding_369be36bd12db4390f78",
+      "file": "tests/portfolio-removal.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "small_independent_vm_fixture_clone_retained",
+      "owner": "module",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 1,
+          "end_line": 15,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 1,
+          "end_line": 16,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 27,
+          "end_line": 33,
+          "role": "Read-only token replay found named partner clone"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 26.51,
+          "clone_pair_count": 7,
+          "worst_clone_lines": 16,
+          "worst_clone_partner": "tests/portfolio-replacement.cjs",
+          "worst_clone_co_change": 3
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/portfolio-removal.cjs",
+            "file_b": "tests/portfolio-replacement.cjs",
+            "a_start_line": 1,
+            "a_end_line": 15,
+            "b_start_line": 1,
+            "b_end_line": 16,
+            "token_count": 3650,
+            "co_change_count": 0
+          },
+          {
+            "file_a": "tests/portfolio-removal.cjs",
+            "file_b": "tests/portfolio-replacement.cjs",
+            "a_start_line": 23,
+            "a_end_line": 29,
+            "b_start_line": 27,
+            "b_end_line": 33,
+            "token_count": 800,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 42,
+          "end_line": 82,
+          "role": "Direct mutation/order/preservation assertions"
+        },
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 84,
+          "end_line": 84,
+          "role": "Terminal rejection logs failure and sets exit code1"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The16-line active clone is real: Node imports, a small assertion-guarded source-slice reader and adjacent source selection. Further shared stubs differ intentionally between deletion and replacement (events, pending/signatures, rollback and missing-original policy). There is no existing shared VM slice helper here; introducing a new support file to remove this small stable extraction boilerplate would add a cross-test dependency and only save a few lines. Keep these independent fixtures; do not remove their required-read limitation comments or native failure coverage."
+    },
+    {
+      "record_id": "code_health:finding_72201b9397b729113a68",
+      "file": "tests/portfolio-removal.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.setup.test.app.deletePortfolioSession.assert.deepEqual.assert.deepEqual.console.log.catch callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 84,
+          "end_line": 84,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 84,
+        "end_line": 84,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 42,
+          "end_line": 82,
+          "role": "Direct mutation/order/preservation assertions"
+        },
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 84,
+          "end_line": 84,
+          "role": "Terminal rejection logs failure and sets exit code1"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line84 is the terminal Promise.catch callback for the fully asserting async test, not a test entry. It intentionally logs the rejected AssertionError and sets process.exitCode=1. Earlier direct assertions cover storage/markers/order/quota/cancellation/render failure; a rejection reaches this callback and is preserved as a failing child in scripts/run-tests.cjs. An assert inside the failure reporter would not improve coverage. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_b2de67a26dc3c9307c23",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "exercise",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 16,
+          "end_line": 120,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 43,
+        "nloc": 104,
+        "max_nesting": 2,
+        "start_line": 16,
+        "end_line": 120,
+        "param_count": 2,
+        "assertion_count": 1,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 162,
+          "role": "Reference parity plus explicit behavior/security/storage assertions"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 164,
+          "end_line": 169,
+          "role": "Report after asserted successes and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The browser-side fixture serves29 renderer parity scenarios with explicit inputs for missing controls, scores, dates, unsafe markup, charts, image/Drive and async adapters. One ordered observation schema is used unchanged for both frozen reference and current renderer. Its38 branches largely select scenario data or deliberate boundary faults; generated callbacks would need injection into the native page and could diverge between reference and candidate. Preserve the explicit shared fixture and immutable reference hash; a one-use wrapper would not simplify the scenario policy. Current independent walker: CCN38, NLOC104, nesting2; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_9fbf241d03b2343c1d00",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "<anonymous@122>",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 122,
+          "end_line": 169,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 28,
+        "cognitive": 87,
+        "nloc": 48,
+        "max_nesting": 5,
+        "start_line": 122,
+        "end_line": 169,
+        "param_count": 0,
+        "assertion_count": 39,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 162,
+          "role": "Reference parity plus explicit behavior/security/storage assertions"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 164,
+          "end_line": 169,
+          "role": "Report after asserted successes and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The host loop runs every named scenario twice in separate fresh contexts, injects the pinned historical renderer only for the reference, then compares the complete observation objects and explicit invariants. Its28 branches include per-scenario expected stats, chart ownership, media failure recovery, adapters and dialogs. The shared native exercise function is already separate; keeping differential comparisons alongside their extra oracle prevents an accidental parity-only test from accepting a bug shared with the reference. Preserve context cleanup and direct expectations. Current independent walker: CCN28, NLOC48, nesting5; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_2525154954dd418e946c",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "exercise",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 16,
+          "end_line": 120,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 43,
+        "nloc": 104,
+        "max_nesting": 2,
+        "start_line": 16,
+        "end_line": 120,
+        "param_count": 2,
+        "assertion_count": 1,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 162,
+          "role": "Reference parity plus explicit behavior/security/storage assertions"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 164,
+          "end_line": 169,
+          "role": "Report after asserted successes and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The browser-side fixture serves29 renderer parity scenarios with explicit inputs for missing controls, scores, dates, unsafe markup, charts, image/Drive and async adapters. One ordered observation schema is used unchanged for both frozen reference and current renderer. Its38 branches largely select scenario data or deliberate boundary faults; generated callbacks would need injection into the native page and could diverge between reference and candidate. Preserve the explicit shared fixture and immutable reference hash; a one-use wrapper would not simplify the scenario policy. Current independent walker: CCN38, NLOC104, nesting2; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_ced969c11ee33e523e58",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_route",
+      "owner": "<anonymous@122>",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 128,
+          "end_line": 136,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/archive-integrity.browser.cjs",
+          "start_line": 276,
+          "end_line": 285,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 4,
+          "end_line": 13,
+          "role": "Existing shared asset route with explicit root boundary and external abort"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "start_line": 50,
+          "end_line": 55,
+          "role": "Existing helper self-checks local JS, missing/path-traversal/directory and external paths"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 14.37,
+          "clone_pair_count": 22,
+          "worst_clone_lines": 10,
+          "worst_clone_partner": "tests/archive-integrity.browser.cjs",
+          "worst_clone_co_change": 0,
+          "symbol_line": 122,
+          "symbol": "<anonymous@122>"
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/archive-integrity.browser.cjs",
+            "file_b": "tests/portfolio-renderer.browser.cjs",
+            "a_start_line": 276,
+            "a_end_line": 285,
+            "b_start_line": 128,
+            "b_end_line": 136,
+            "token_count": 4600,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 162,
+          "role": "Reference parity plus explicit behavior/security/storage assertions"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 164,
+          "end_line": 169,
+          "role": "Report after asserted successes and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The10-line clone with archive-integrity contains local asset routing/browser setup. Renderer has a pure local-only route that can use the existing local-app-route helper; leave the external archive file and its specialized JSZip route untouched. Preserve separate baseline/candidate contexts and the pinned renderer fixture.",
+      "regression_recommendation": "In one focused follow-up, reuse the existing helper in these five flagged test files plus notebook-guidance partner. Keep specialized Google handling for student-read-ownership. No helper/production/fixture/expectation edits. Run the six affected existing native suites and89syntax checks before/after, compare case counts/oracles and keep frozen renderer source/hash exact. Recompute RepoWise afterward; residual boilerplate clones may remain."
+    },
+    {
+      "record_id": "code_health:finding_45452081cff3b65e3631",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "small_independent_vm_fixture_clone_retained",
+      "owner": "module",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 1,
+          "end_line": 16,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 1,
+          "end_line": 15,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/portfolio-removal.cjs",
+          "start_line": 23,
+          "end_line": 29,
+          "role": "Read-only token replay found named partner clone"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 20.72,
+          "clone_pair_count": 7,
+          "worst_clone_lines": 16,
+          "worst_clone_partner": "tests/portfolio-removal.cjs",
+          "worst_clone_co_change": 3
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/portfolio-removal.cjs",
+            "file_b": "tests/portfolio-replacement.cjs",
+            "a_start_line": 1,
+            "a_end_line": 15,
+            "b_start_line": 1,
+            "b_end_line": 16,
+            "token_count": 3650,
+            "co_change_count": 0
+          },
+          {
+            "file_a": "tests/portfolio-removal.cjs",
+            "file_b": "tests/portfolio-replacement.cjs",
+            "a_start_line": 23,
+            "a_end_line": 29,
+            "b_start_line": 27,
+            "b_end_line": 33,
+            "token_count": 800,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The16-line active clone is real: Node imports, a small assertion-guarded source-slice reader and adjacent source selection. Further shared stubs differ intentionally between deletion and replacement (events, pending/signatures, rollback and missing-original policy). There is no existing shared VM slice helper here; introducing a new support file to remove this small stable extraction boilerplate would add a cross-test dependency and only save a few lines. Keep these independent fixtures; do not remove their required-read limitation comments or native failure coverage."
+    },
+    {
+      "record_id": "code_health:finding_fb8f8767e70a3a59a405",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.stored.Alice.sessions.map callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 48,
+          "end_line": 48,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 48,
+        "end_line": 48,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line48 is the session=>session.id projection passed directly into assert.deepEqual, not a separately registered test. The enclosing module assertions compare exact replacement/move/retention identities; a wrong mapped result throws AssertionError and exits the Node child nonzero. The installed walker labels this callback is_test_case=True because its receiver chain begins with the local variable test. Adding an assertion inside a pure mapper would be redundant and alter its purpose. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_1b2896d1d7a3c6e41154",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.stored.Alice.sessions.map callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 72,
+          "end_line": 72,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 72,
+        "end_line": 72,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line72 is the session=>session.id projection passed directly into assert.deepEqual, not a separately registered test. The enclosing module assertions compare exact replacement/move/retention identities; a wrong mapped result throws AssertionError and exits the Node child nonzero. The installed walker labels this callback is_test_case=True because its receiver chain begins with the local variable test. Adding an assertion inside a pure mapper would be redundant and alter its purpose. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_f845f314bee6056eb32b",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.stored.Bob.sessions.map callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 73,
+          "end_line": 73,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 73,
+        "end_line": 73,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line73 is the session=>session.id projection passed directly into assert.deepEqual, not a separately registered test. The enclosing module assertions compare exact replacement/move/retention identities; a wrong mapped result throws AssertionError and exits the Node child nonzero. The installed walker labels this callback is_test_case=True because its receiver chain begins with the local variable test. Adding an assertion inside a pure mapper would be redundant and alter its purpose. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_fdab77d90fdbc32562d9",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.stored.Alice.sessions.map callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 80,
+          "end_line": 80,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 80,
+        "end_line": 80,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line80 is the session=>session.id projection passed directly into assert.deepEqual, not a separately registered test. The enclosing module assertions compare exact replacement/move/retention identities; a wrong mapped result throws AssertionError and exits the Node child nonzero. The installed walker labels this callback is_test_case=True because its receiver chain begins with the local variable test. Adding an assertion inside a pure mapper would be redundant and alter its purpose. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_a69c3001d92a09c58bf1",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.stored.Bob.sessions.map callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 100,
+          "end_line": 100,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 100,
+        "end_line": 100,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line100 is the session=>session.id projection passed directly into assert.deepEqual, not a separately registered test. The enclosing module assertions compare exact replacement/move/retention identities; a wrong mapped result throws AssertionError and exits the Node child nonzero. The installed walker labels this callback is_test_case=True because its receiver chain begins with the local variable test. Adding an assertion inside a pure mapper would be redundant and alter its purpose. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_dba893bb0998191932a2",
+      "file": "tests/portfolio-replacement.cjs",
+      "marker": "assertion_free_test",
+      "finding_held": false,
+      "proposed_status": "reviewed_no_change",
+      "classification": "misclassified_callback_has_asserting_owner",
+      "owner": "test.stored.Bob.sessions.slice.map callback",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 108,
+          "end_line": 108,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 49,
+          "end_line": 83,
+          "role": "Passed-case and report failure checks; stale/missing report rejection"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 99,
+          "end_line": 113,
+          "role": "Child status/error aggregation and nonzero final CLI exit"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 33,
+          "end_line": 38,
+          "role": "Remove ambient filter/baseline bypass flags before each child"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 1,
+        "cognitive": 0,
+        "nloc": 1,
+        "max_nesting": 0,
+        "start_line": 108,
+        "end_line": 108,
+        "param_count": 0,
+        "assertion_count": 0,
+        "is_test_case": true
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 47,
+          "end_line": 123,
+          "role": "Direct assertions execute at module load; uncaught AssertionError makes child fail"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "Line108 is the session=>session.id projection passed directly into assert.deepEqual, not a separately registered test. The enclosing module assertions compare exact replacement/move/retention identities; a wrong mapped result throws AssertionError and exits the Node child nonzero. The installed walker labels this callback is_test_case=True because its receiver chain begins with the local variable test. Adding an assertion inside a pure mapper would be redundant and alter its purpose. The assertion-free test claim does not hold."
+    },
+    {
+      "record_id": "code_health:finding_a3c658d1d9476710ffd9",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "checkBackupCallback",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 16,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 10,
+        "cognitive": 10,
+        "nloc": 7,
+        "max_nesting": 2,
+        "start_line": 10,
+        "end_line": 16,
+        "param_count": 5,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "This seven-line oracle verifies exactly one callback and distinguishes Drive acknowledgement, fallback-local with reported error, local-only and explicit download failure. It is shared by checkBackupScenario; nested conditional expressions specify mutually exclusive outcome tuples, not a production retry algorithm. Retain the small centralized callback oracle rather than replacing it with another lookup/callback abstraction. Current independent walker: CCN10, NLOC7, nesting2; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_14ac99ade4516a264416",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "checkBackupScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 18,
+          "end_line": 43,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 27,
+        "cognitive": 34,
+        "nloc": 26,
+        "max_nesting": 3,
+        "start_line": 18,
+        "end_line": 43,
+        "param_count": 6,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "This26-line host oracle checks actual downloaded/uploaded backup bytes, redaction, retained OAuth draft/pending photos, corrupt/unreadable recovery roots, truthful callbacks and visible fallback/error notices across13 backup modes. Its27 CCN includes Boolean assertion predicates and optional JSON paths, while depth3 only groups settings-corruption/recovery assertions. The existing checkBackupCallback already extracts the repeated callback contract. Splitting the remaining short oracle would fragment related backup completeness and privacy checks; retain it. Current independent walker: CCN27, NLOC26, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_308c12524a7013521290",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "checkCacheScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 45,
+          "end_line": 66,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 23,
+        "cognitive": 28,
+        "nloc": 21,
+        "max_nesting": 3,
+        "start_line": 45,
+        "end_line": 66,
+        "param_count": 7,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The24-branch cache oracle distinguishes cancellation, successful clear, committed IDB partial outcomes, concurrent writing and failed rollback before a controlled retry. It checks exact recoverable bytes, pending writing, truthful alerts and no cloud writes. The relevant state must be checked both before and after retry; check receives all oracles and runRecoveryScenario collects their Boolean results. Another scenario table would duplicate state-specific expected outcomes rather than simplify this compact procedure. Current independent walker: CCN23, NLOC21, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_1d84136c5f403c3c95a2",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "performRecoveryAction",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 68,
+          "end_line": 94,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 10,
+        "cognitive": 18,
+        "nloc": 27,
+        "max_nesting": 3,
+        "start_line": 68,
+        "end_line": 94,
+        "param_count": 3,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "This27-line shared action function uses actual settings buttons/dialogs for cache clear, safe mode and backup. It synchronizes concurrent mutation with clearStarted/releaseClear and starts download observation before clicking. The10 branches are supported user actions and deliberate fault modes; keeping these ordered event boundaries explicit is safer than generic action closures. All callers use runRecoveryScenario and the common check/report path. Current independent walker: CCN10, NLOC27, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_d6d201d5eca456e8aaac",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "runRecoveryScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 102,
+          "end_line": 222,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 24,
+        "cognitive": 32,
+        "nloc": 121,
+        "max_nesting": 3,
+        "start_line": 102,
+        "end_line": 222,
+        "param_count": 3,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The121-line scenario runner already delegates actions, completion waiting and backup/cache oracles. Its bulk is a serialized native fixture with one named installScenarioFaults block, storage/IDB original-method restoration, route interception and a fixed result schema. Three nesting regions correspond to separate native setup, observation and result dispatch. The runner preserves real recovery APIs while replacing only storage/IDB/network failure boundaries. Further one-use extraction would require browser injection or repeated shared state; retain this meaningful split and its guards. Current independent walker: CCN24, NLOC121, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_1c43466359debf8ce43c",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "bumpy_road",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "separate_native_fixture_phases_retained",
+      "owner": "runRecoveryScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 102,
+          "end_line": 222,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 24,
+        "cognitive": 32,
+        "nloc": 121,
+        "max_nesting": 3,
+        "start_line": 102,
+        "end_line": 222,
+        "param_count": 3,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The121-line scenario runner already delegates actions, completion waiting and backup/cache oracles. Its bulk is a serialized native fixture with one named installScenarioFaults block, storage/IDB original-method restoration, route interception and a fixed result schema. Three nesting regions correspond to separate native setup, observation and result dispatch. The runner preserves real recovery APIs while replacing only storage/IDB/network failure boundaries. Further one-use extraction would require browser injection or repeated shared state; retain this meaningful split and its guards. Current independent walker: CCN24, NLOC121, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim. The three same-level regions are setup, observation and final domain dispatch; required restoration and callbacks stay in their phases."
+    },
+    {
+      "record_id": "code_health:finding_fefff15de578d7225bee",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "runRecoveryScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 102,
+          "end_line": 222,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 24,
+        "cognitive": 32,
+        "nloc": 121,
+        "max_nesting": 3,
+        "start_line": 102,
+        "end_line": 222,
+        "param_count": 3,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The121-line scenario runner already delegates actions, completion waiting and backup/cache oracles. Its bulk is a serialized native fixture with one named installScenarioFaults block, storage/IDB original-method restoration, route interception and a fixed result schema. Three nesting regions correspond to separate native setup, observation and result dispatch. The runner preserves real recovery APIs while replacing only storage/IDB/network failure boundaries. Further one-use extraction would require browser injection or repeated shared state; retain this meaningful split and its guards. Current independent walker: CCN24, NLOC121, nesting3; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_ab3e620dca9faaf23458",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "primitive_obsession",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "small_internal_assertion_helper_arity_retained",
+      "owner": "checkBackupCallback",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 16,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 10,
+        "cognitive": 10,
+        "nloc": 7,
+        "max_nesting": 2,
+        "start_line": 10,
+        "end_line": 16,
+        "param_count": 5,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The reported 5-argument signature is accurate; it passes page/observed/check and arrays/flags, not a domain model encoded in primitive strings. There is one explicit internal caller in this fixture. An options bag would add property plumbing without consolidating state or widening reuse. This seven-line oracle verifies exactly one callback and distinguishes Drive acknowledgement, fallback-local with reported error, local-only and explicit download failure. It is shared by checkBackupScenario; nested conditional expressions specify mutually exclusive outcome tuples, not a production retry algorithm. Retain the small centralized callback oracle rather than replacing it with another lookup/callback abstraction."
+    },
+    {
+      "record_id": "code_health:finding_4cf99259c01d5a05625d",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "primitive_obsession",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "small_internal_assertion_helper_arity_retained",
+      "owner": "checkBackupScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 18,
+          "end_line": 43,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 27,
+        "cognitive": 34,
+        "nloc": 26,
+        "max_nesting": 3,
+        "start_line": 18,
+        "end_line": 43,
+        "param_count": 6,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The reported 6-argument signature is accurate; it passes page/observed/check and arrays/flags, not a domain model encoded in primitive strings. There is one explicit internal caller in this fixture. An options bag would add property plumbing without consolidating state or widening reuse. This26-line host oracle checks actual downloaded/uploaded backup bytes, redaction, retained OAuth draft/pending photos, corrupt/unreadable recovery roots, truthful callbacks and visible fallback/error notices across13 backup modes. Its27 CCN includes Boolean assertion predicates and optional JSON paths, while depth3 only groups settings-corruption/recovery assertions. The existing checkBackupCallback already extracts the repeated callback contract. Splitting the remaining short oracle would fragment related backup completeness and privacy checks; retain it."
+    },
+    {
+      "record_id": "code_health:finding_14213736db7f2152b9ad",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "primitive_obsession",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "small_internal_assertion_helper_arity_retained",
+      "owner": "checkCacheScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 45,
+          "end_line": 66,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 23,
+        "cognitive": 28,
+        "nloc": 21,
+        "max_nesting": 3,
+        "start_line": 45,
+        "end_line": 66,
+        "param_count": 7,
+        "assertion_count": 0,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The reported 7-argument signature is accurate; it passes page/observed/check and arrays/flags, not a domain model encoded in primitive strings. There is one explicit internal caller in this fixture. An options bag would add property plumbing without consolidating state or widening reuse. The24-branch cache oracle distinguishes cancellation, successful clear, committed IDB partial outcomes, concurrent writing and failed rollback before a controlled retry. It checks exact recoverable bytes, pending writing, truthful alerts and no cloud writes. The relevant state must be checked both before and after retry; check receives all oracles and runRecoveryScenario collects their Boolean results. Another scenario table would duplicate state-specific expected outcomes rather than simplify this compact procedure."
+    },
+    {
+      "record_id": "code_health:finding_8fdb4f9986350503ab5b",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_scenario_report_tail_retained",
+      "owner": "runRecoveryScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 220,
+          "end_line": 235,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "start_line": 294,
+          "end_line": 308,
+          "role": "Read-only token replay found named partner clone"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 10.04,
+          "clone_pair_count": 7,
+          "worst_clone_lines": 16,
+          "worst_clone_partner": "tests/drive-lifecycle.browser.cjs",
+          "worst_clone_co_change": 0,
+          "symbol_line": 102,
+          "symbol": "runRecoveryScenario"
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/drive-lifecycle.browser.cjs",
+            "file_b": "tests/recovery-cache.browser.cjs",
+            "a_start_line": 294,
+            "a_end_line": 308,
+            "b_start_line": 220,
+            "b_end_line": 235,
+            "token_count": 8900,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The16-line token clone with drive-lifecycle is the scenario loop/browser cleanup/report summary and aggregate failure assertion. Both tests already have their own meaningful scenario runner and domain-specific assertions. A shared generic runner/report framework would introduce callback/configuration coupling for a small idiomatic tail. Retain this clone; local asset branch reuse is independently possible but is not claimed to remove this observed worst region."
+    },
+    {
+      "record_id": "code_health:finding_35edf9740e8a2fa057b5",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "complex_conditional",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_fault_or_retry_predicate_retained",
+      "owner": "checkCacheScenario",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 57,
+          "end_line": 57,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "operator_count_source_checked": 3,
+        "details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 45
+        }
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The three conjunctions admit retry only after a noncanceled failed cache clear that is neither corrupt storage nor an active recovery state. Those excluded states require separate recovery behavior; a single compact explicit guard keeps that contract next to the retry. Combining the flags into a policy helper would add one-use indirection."
+    },
+    {
+      "record_id": "code_health:finding_d8c235f3f911a0b79d0f",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "io_in_loop",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "required_isolated_native_test_io",
+      "owner": "<anonymous@224>",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 228,
+          "end_line": 228,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 18,
+          "end_line": 43,
+          "role": "Actual backup download read/oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 102,
+          "end_line": 118,
+          "role": "Fresh page and local asset reads"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Sequential36-scenario dispatcher and failure aggregate"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 3,
+        "cognitive": 4,
+        "nloc": 13,
+        "max_nesting": 2,
+        "start_line": 224,
+        "end_line": 236,
+        "param_count": 0,
+        "assertion_count": 1,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The sequential loop starts a fresh native page for each of36 recovery/cache/safe-mode scenarios. runRecoveryScenario serves repository assets and backup scenarios read actual downloaded JSON to assert redaction, writing and recovery contents. Filesystem I/O is therefore reached per iteration, as reported; it is inherent to isolated native tests and backup-byte verification, not an application request loop. Hoisting or batching the I/O would conflate pages/downloads or weaken the real file assertion. No measured production performance defect is claimed."
+    },
+    {
+      "record_id": "code_health:finding_2cc014e33a4adfabcf8e",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "nested_complexity",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cross_context_native_lifecycle_nesting_retained",
+      "owner": "<anonymous@6>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 6,
+          "end_line": 84,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 33,
+        "cognitive": 122,
+        "nloc": 79,
+        "max_nesting": 7,
+        "start_line": 6,
+        "end_line": 84,
+        "param_count": 0,
+        "assertion_count": 17,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 62,
+          "end_line": 79,
+          "role": "Native owner/result/cache/request assertions, failed-case recording"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 80,
+          "end_line": 84,
+          "role": "Aggregate failure report and assertion, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The79-line fixture runs3 operations(load,merge,lazy) by4 boundaries(unchanged,listing,download,missing), switching synthetic account identity during a held route before completion. Depth7 includes two matrix loops, route and page.evaluate callbacks, try/catch recording and scenario-specific host assertions. CCN33 includes expected-result Boolean predicates. The12 cases need fresh pages and account-specific request/cache/storage observations. A generic runner or flattened assertion predicate would relocate the same cross-context lifecycle checks; retain the explicit small matrix and terminal aggregate assertion. Current independent walker: CCN33, NLOC79, nesting7; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_d972d4b21d11f1043309",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "complex_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "verified_shape_retained",
+      "owner": "<anonymous@6>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 6,
+          "end_line": 84,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 33,
+        "cognitive": 122,
+        "nloc": 79,
+        "max_nesting": 7,
+        "start_line": 6,
+        "end_line": 84,
+        "param_count": 0,
+        "assertion_count": 17,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 62,
+          "end_line": 79,
+          "role": "Native owner/result/cache/request assertions, failed-case recording"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 80,
+          "end_line": 84,
+          "role": "Aggregate failure report and assertion, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The79-line fixture runs3 operations(load,merge,lazy) by4 boundaries(unchanged,listing,download,missing), switching synthetic account identity during a held route before completion. Depth7 includes two matrix loops, route and page.evaluate callbacks, try/catch recording and scenario-specific host assertions. CCN33 includes expected-result Boolean predicates. The12 cases need fresh pages and account-specific request/cache/storage observations. A generic runner or flattened assertion predicate would relocate the same cross-context lifecycle checks; retain the explicit small matrix and terminal aggregate assertion. Current independent walker: CCN33, NLOC79, nesting7; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_a3a48728c81ea506c461",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "<anonymous@6>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 6,
+          "end_line": 84,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 33,
+        "cognitive": 122,
+        "nloc": 79,
+        "max_nesting": 7,
+        "start_line": 6,
+        "end_line": 84,
+        "param_count": 0,
+        "assertion_count": 17,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 62,
+          "end_line": 79,
+          "role": "Native owner/result/cache/request assertions, failed-case recording"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 80,
+          "end_line": 84,
+          "role": "Aggregate failure report and assertion, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The79-line fixture runs3 operations(load,merge,lazy) by4 boundaries(unchanged,listing,download,missing), switching synthetic account identity during a held route before completion. Depth7 includes two matrix loops, route and page.evaluate callbacks, try/catch recording and scenario-specific host assertions. CCN33 includes expected-result Boolean predicates. The12 cases need fresh pages and account-specific request/cache/storage observations. A generic runner or flattened assertion predicate would relocate the same cross-context lifecycle checks; retain the explicit small matrix and terminal aggregate assertion. Current independent walker: CCN33, NLOC79, nesting7; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_29be0fb5517d3f81826a",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_route",
+      "owner": "<anonymous@6>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 15,
+          "end_line": 23,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/storage-held-request.browser.cjs",
+          "start_line": 22,
+          "end_line": 30,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 4,
+          "end_line": 13,
+          "role": "Existing shared asset route with explicit root boundary and external abort"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "start_line": 50,
+          "end_line": 55,
+          "role": "Existing helper self-checks local JS, missing/path-traversal/directory and external paths"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 20.48,
+          "clone_pair_count": 4,
+          "worst_clone_lines": 9,
+          "worst_clone_partner": "tests/storage-held-request.browser.cjs",
+          "worst_clone_co_change": 0,
+          "symbol_line": 6,
+          "symbol": "<anonymous@6>"
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/storage-held-request.browser.cjs",
+            "file_b": "tests/student-read-ownership.browser.cjs",
+            "a_start_line": 22,
+            "a_end_line": 30,
+            "b_start_line": 15,
+            "b_end_line": 23,
+            "token_count": 7750,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 62,
+          "end_line": 79,
+          "role": "Native owner/result/cache/request assertions, failed-case recording"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 80,
+          "end_line": 84,
+          "role": "Aggregate failure report and assertion, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The9-line clone with storage-held-request includes the local branch of an otherwise specialized Google API mock. Delegate ONLY the local-origin branch to the existing local-app-route helper; retain the account-switch timing, request captures, mocked Google responses and external abort logic verbatim. Sharing the whole request handler would hide the ownership failure boundary.",
+      "regression_recommendation": "In one focused follow-up, reuse the existing helper in these five flagged test files plus notebook-guidance partner. Keep specialized Google handling for student-read-ownership. No helper/production/fixture/expectation edits. Run the six affected existing native suites and89syntax checks before/after, compare case counts/oracles and keep frozen renderer source/hash exact. Recompute RepoWise afterward; residual boilerplate clones may remain."
+    },
+    {
+      "record_id": "code_health:finding_e983ea11ce3a5dcb7e9c",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "complex_conditional",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_fault_or_retry_predicate_retained",
+      "owner": "<anonymous@6>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 23,
+          "end_line": 23,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "operator_count_source_checked": 4,
+        "details": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 6
+        }
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 62,
+          "end_line": 79,
+          "role": "Native owner/result/cache/request assertions, failed-case recording"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 80,
+          "end_line": 84,
+          "role": "Aggregate failure report and assertion, terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The four operators allow exactly one synthetic account switch, either at the named student-file listing or at media download. The grouping is explicit and parenthesized. This is the critical race boundary that the surrounding native test observes; a table/helper would obscure when the account changes. Keep the one condition and its one-time guard."
+    },
+    {
+      "record_id": "code_health:finding_5f6e3b7c0c1ace61a1cb",
+      "file": "tests/student-rename.browser.cjs",
+      "marker": "large_method",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "cohesive_serialized_fixture_length_retained",
+      "owner": "<anonymous@7>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 7,
+          "end_line": 75,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 6,
+        "cognitive": 12,
+        "nloc": 69,
+        "max_nesting": 2,
+        "start_line": 7,
+        "end_line": 75,
+        "param_count": 0,
+        "assertion_count": 16,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "Sixteen direct state assertions on failed rename and retry"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 74,
+          "end_line": 75,
+          "role": "Browser cleanup and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The69-line native integration test deliberately performs a quota-failed rename then a successful retry in the same page. It restores Storage.setItem in finally, observes both states and checks writing, roster, selection, tombstones, sync counters and visibility. This single transaction/retry story needs the common before-image and direct host assertions. Splitting by individual field would repeat the destructive operation or weaken the linked rollback/retry proof; preserve this bounded fixture. Current independent walker: CCN6, NLOC69, nesting2; detector numbers match. The warning remains open; no behavior or scanner-clearance claim."
+    },
+    {
+      "record_id": "code_health:finding_5fbb3828d0e444afeb09",
+      "file": "tests/student-rename.browser.cjs",
+      "marker": "dry_violation",
+      "finding_held": true,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_route",
+      "owner": "module",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 1,
+          "end_line": 24,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/deletion-merge.browser.cjs",
+          "start_line": 1,
+          "end_line": 24,
+          "role": "Read-only token replay found named partner clone"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 4,
+          "end_line": 13,
+          "role": "Existing shared asset route with explicit root boundary and external abort"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "start_line": 50,
+          "end_line": 55,
+          "role": "Existing helper self-checks local JS, missing/path-traversal/directory and external paths"
+        }
+      ],
+      "verified_metrics": {
+        "stored_full_scan": {
+          "cross_file_duplication_pct": 40.54,
+          "clone_pair_count": 25,
+          "worst_clone_lines": 24,
+          "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "named_partner_clone_bounds_replayed_read_only": [
+          {
+            "file_a": "tests/deletion-merge.browser.cjs",
+            "file_b": "tests/student-rename.browser.cjs",
+            "a_start_line": 1,
+            "a_end_line": 24,
+            "b_start_line": 1,
+            "b_end_line": 24,
+            "token_count": 14350,
+            "co_change_count": 0
+          }
+        ],
+        "scope_limit": "Subset clone replay verifies actual source-token clones; full-repository percentage/cochange/severity are stored current-source facts, not independently replayed here."
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "Sixteen direct state assertions on failed rename and retry"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 74,
+          "end_line": 75,
+          "role": "Browser cleanup and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The24-line clone with deletion-merge is largely imports, browser startup and inline local asset handling. Replace only this pure local route with the already tested local-app-route helper. Keep the quota-failed rename/successful retry fixture and sixteen direct assertions local to this test.",
+      "regression_recommendation": "In one focused follow-up, reuse the existing helper in these five flagged test files plus notebook-guidance partner. Keep specialized Google handling for student-read-ownership. No helper/production/fixture/expectation edits. Run the six affected existing native suites and89syntax checks before/after, compare case counts/oracles and keep frozen renderer source/hash exact. Recompute RepoWise afterward; residual boilerplate clones may remain."
+    },
+    {
+      "record_id": "code_health:finding_330fa358c73a174eaf04",
+      "file": "tests/student-rename.browser.cjs",
+      "marker": "large_assertion_block",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "single_transaction_retry_contract_assertions_retained",
+      "owner": "<anonymous@7>",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "Current assigned observation/source"
+        }
+      ],
+      "verified_metrics": {
+        "ccn": 6,
+        "cognitive": 12,
+        "nloc": 69,
+        "max_nesting": 2,
+        "start_line": 7,
+        "end_line": 75,
+        "param_count": 0,
+        "assertion_count": 16,
+        "is_test_case": false
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "Sixteen direct state assertions on failed rename and retry"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 74,
+          "end_line": 75,
+          "role": "Browser cleanup and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "All16 assertions are present and needed: they compare the failed rename before-image and the subsequent retry across portfolio bytes, roster, stored/UI selection, no tombstone, two blocked writes, sync counters/visibility, visible failure and final successful rename. These are linked effects of one transaction/retry story, not16 unrelated behaviors requiring16 fixtures. Splitting or deleting assertions would duplicate setup or hide a partial data-loss success. Keep the cohesive block and nonzero failure path."
+    },
+    {
+      "record_id": "performance:perf3_2afd767f06d0783c97ee",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "io_in_loop",
+      "finding_held": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "required_isolated_native_test_io",
+      "owner": "tests/recovery-cache.browser.cjs::__module__",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Current assigned observation/source"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 18,
+          "end_line": 43,
+          "role": "Actual backup download read/oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 102,
+          "end_line": 118,
+          "role": "Fresh page and local asset reads"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Sequential36-scenario dispatcher and failure aggregate"
+        }
+      ],
+      "verified_metrics": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/recovery-cache.browser.cjs::runRecoveryScenario"
+        ],
+        "shared_path_suffix": [
+          "tests/recovery-cache.browser.cjs::__module__",
+          "tests/recovery-cache.browser.cjs::runRecoveryScenario"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 10,
+          "end_line": 65,
+          "role": "Shared backup/cache check oracles"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 200,
+          "end_line": 220,
+          "role": "Native result checks and per-scenario all-assertions pass"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 236,
+          "role": "Scenario aggregate asserted and terminal failure exit"
+        }
+      ],
+      "required_or_optional": "Required test oracle, native fixture boundary or cleanup; no application behavior changed.",
+      "reason": "The sequential loop starts a fresh native page for each of36 recovery/cache/safe-mode scenarios. runRecoveryScenario serves repository assets and backup scenarios read actual downloaded JSON to assert redaction, writing and recovery contents. Filesystem I/O is therefore reached per iteration, as reported; it is inherent to isolated native tests and backup-byte verification, not an application request loop. Hoisting or batching the I/O would conflate pages/downloads or weaken the real file assertion. No measured production performance defect is claimed."
+    }
+  ],
+  "additional_leads": [],
+  "repair_recommendations": [
+    {
+      "id": "reuse-existing-test-local-route",
+      "assigned_records": [
+        "code_health:finding_9708f175ae4a6033ae11",
+        "code_health:finding_5301ae7f99d89050d43c",
+        "code_health:finding_ced969c11ee33e523e58",
+        "code_health:finding_29be0fb5517d3f81826a",
+        "code_health:finding_5fbb3828d0e444afeb09"
+      ],
+      "scope": [
+        "tests/missing-feedback.browser.cjs",
+        "tests/notebook-guidance-repair.browser.cjs",
+        "tests/pending-portfolio.browser.cjs",
+        "tests/portfolio-renderer.browser.cjs",
+        "tests/student-read-ownership.browser.cjs",
+        "tests/student-rename.browser.cjs"
+      ],
+      "reuse": "tests/support/local-app-route.js unchanged",
+      "plan": "Replace pure local asset route callbacks; for student-read-ownership delegate only local-origin branch and retain synthetic Google request/account boundary verbatim. Keep native page.evaluate functions, assertions, case order/count and frozen renderer fixture/hash unchanged.",
+      "validation": "Run these6 existing native suites plus89syntax before/after and compare per-case results. No production/helper/fixture changes, no new dependencies. Recompute findings; do not promise every file-wide clone aggregate will disappear."
+    }
+  ],
+  "tests": {
+    "run_by_this_review": [],
+    "coordinator_gate": "Batch003 gate runs independently on frozen source; this report does not claim its status."
+  },
+  "limits": [
+    "Read-only source/metrics review; no native tests executed, no actual failure injection or external services used by this chat.",
+    "Valid shape warnings remain open and individually retained; proposed route reuse is not yet implemented or scanner-verified.",
+    "No claim that assertion-free markers are globally incorrect; these7 specific callbacks have verified asserting owners/failure reporters.",
+    "No new behavior defect or user-attention item found."
+  ],
+  "repository_files_edited": []
+}
