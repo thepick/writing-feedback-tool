@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T09:48:04.080381+07:00",
+  "updated_at": "2026-10-16T09:57:33.957171+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active_confirmed_bug_stabilization",
-  "active_repair": "repair-063",
+  "active_repair": null,
   "index_provenance": {
     "last_sync_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
     "repository_metadata_head": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
@@ -1635,7 +1635,7 @@
     {
       "id": "repair-063",
       "title": "Recover valid later notebook examples after an unusable first candidate",
-      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
       "source_commit": "2043847c29760b6e122320a54c319a701ab41c4e",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review030-fallback-first-unusable-example",
@@ -1647,7 +1647,30 @@
       "report": "reviews/repair-063-later-notebook-example.json",
       "focused_checks": 114,
       "baseline_expected_grammar_failures": 2,
-      "intermediate_expected_spelling_failures": 4
+      "intermediate_expected_spelling_failures": 4,
+      "commit": "0a812b326d5e4e40139d5a0bba0b69cf6efafbb0",
+      "independent_reviews": [
+        "reviews/repair-063-safety-review.json",
+        "reviews/repair-063-regression-review.json"
+      ]
+    },
+    {
+      "id": "repair-064",
+      "title": "Make Grammar calculation explanation agree with the captured grade result",
+      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "source_commit": "0a812b326d5e4e40139d5a0bba0b69cf6efafbb0",
+      "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "lead_id": "review034-grammar-band-debug-label",
+      "scope": [
+        "js/app/10-main-app.js",
+        "tests/detailed-parser.browser.cjs"
+      ],
+      "behavior_fix_verified": true,
+      "report": "reviews/repair-064-grammar-calculation-label.json",
+      "focused_parser_checks": 393,
+      "pipeline_scenarios": 74,
+      "baseline_expected_display_failures": 4,
+      "potential_scanner_clearance": "renderScoredAnalysisDebug complex_method12->6,actualdetectorreturnsnone;awaitpersistedscanreconciliation."
     }
   ],
   "findings": [
@@ -140297,7 +140320,7 @@
       "classification": "legacy_diagnostic_band_mapping_mismatches_current_scorer",
       "proposed_status": "candidate_needs_regression",
       "source_supported": true,
-      "reproduced": false,
+      "reproduced": true,
       "needs_user_attention": false,
       "evidence_anchors": [
         "js/app/10-main-app.js:8025-8031 fixed1-7 label mapping",
@@ -140314,12 +140337,14 @@
         "tests/detailed-parser.browser.cjs:158-161 unchanged writing deterministically gets Grammar10; current label branch would use legacy default"
       ],
       "regression_recommendation": "Exercise actual scored analysis and assert rendered band/score consistency against the captured grade profile and strictness at each density boundary, especially scores8/9/10, across grades4/5/12. Change UI settings after a completed result and ensure its explanation remains tied to the assessment snapshot. Keep actual scoring unchanged and separate this semantic correction from structural parity cleanup.",
-      "status": "candidate_needs_regression",
+      "status": "fixed_focused_awaiting_publication",
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-034-parsing-reconciliation-shapes.json",
-      "related_repair": "repair-034",
+      "related_repair": "repair-064",
       "followup_report": "reviews/bug-focus-genre-calculation-relevance.json",
-      "shipped_relevance": "Credible opt-in diagnostic display bug visible to normal users; not an incorrect-grade claim."
+      "shipped_relevance": "Credible opt-in diagnostic display bug visible to normal users; not an incorrect-grade claim.",
+      "assigned_chat": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "fix_report": "reviews/repair-064-grammar-calculation-label.json"
     },
     {
       "id": "review044-roster-portfolio-panel",
@@ -184704,10 +184729,10 @@
   },
   "required_work_summary": {
     "confirmed_unresolved_bugs": 0,
-    "unconfirmed_application_leads": 1,
+    "unconfirmed_application_leads": 0,
     "test_oracle_leads": 4,
     "optional_historical_maintenance_edits": 96,
-    "note": "Potential leads still require investigation; static warnings and pending coordinate revalidation are not diagnosed bugs.",
-    "confirmed_fixes_awaiting_publication": 5
+    "note": "All9 current application leads examined:6focused fixes await full validation/publication;3no current shipped bug established.4test-oracle leads and96historical maintenance edits remain optional.",
+    "confirmed_fixes_awaiting_publication": 6
   }
 }

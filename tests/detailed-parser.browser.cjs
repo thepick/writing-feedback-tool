@@ -169,6 +169,47 @@ function runDetailedParserCases() {
         const gated={categories:{}};
         applyEligibilityToDetailed(gated,{Organization:false,Flow:false});
         check('eligibility still unscored',gated.categories.Organization.score===null && gated.categories.Flow.score===null);
+        async function checkGrammarCalculation() {
+            const details = document.getElementById('teacherReviewDetails'), calc = document.getElementById('grammarCalc');
+            const grade = document.getElementById('gradeLevelSelect'), strictness = document.getElementById('grammarStrictness'), writing = document.getElementById('studentWriting');
+            const before = [grade.value, strictness.value, writing.value, details.open], nativeRender = renderScoredAnalysisDebug;
+            const rows = () => Object.fromEntries([...calc.querySelectorAll('tr')].map(row => [row.cells[0].textContent, row.cells[1].textContent]));
+            const audit = latestAnalysisData.grammarAudit;
+            check('native zero-error Grammar audit',audit.totalErrors===0 && audit.correctedWordCount>0 && audit.errorDensity===0 && audit.grammarScore===10 && latestAnalysisData.categoryScores.Grammar===10,audit);
+            if (!details.open) details.querySelector('summary').click();
+            check('normal Show debug exposes calculation with flags off',details.open && calc.getClientRects().length>0 && getComputedStyle(calc).visibility==='visible' && WFT_DEBUG===false && WFT_SYNC_DEBUG===false);
+            const zero = rows();
+            check('visible zero-density band matches recorded ten',zero['Grammar band']==='0.00 per 100 words = 10/10' && zero['Final Grammar rubric score']==='10/10',zero);
+            let debugArgs;
+            renderScoredAnalysisDebug = (...args) => { debugArgs=args; return nativeRender(...args); };
+            try {
+                const sentence = 'We walk to the park and play games every afternoon.';
+                const text = Array(10).fill(sentence).join(' '), corrected = Array.from({length:10},(_,i)=>i<4?sentence.replace('walk','walked'):sentence).join(' ');
+                for (const [level, strict, expected] of [[4,3,10],[5,3,9],[5,5,8]]) {
+                    grade.value=String(level); grade.dispatchEvent(new Event('change',{bubbles:true}));
+                    strictness.value=String(strict); strictness.dispatchEvent(new Event('input',{bubbles:true}));
+                    writing.value=text; writing.dispatchEvent(new Event('input',{bubbles:true}));
+                    let request=0;
+                    callOpenRouter=async()=>++request===1?'# Corrected Story\n'+corrected:request===2?quick:sections[1];
+                    await analyzeWriting();
+                    const data=latestAnalysisData, measured=data.grammarAudit, actual=rows();
+                    check('native density boundary grade '+level+' strictness '+strict,request===3 && measured.totalErrors===4 && measured.correctedWordCount===100 && measured.errorDensity===4 && measured.grammarScore===expected && data.categoryScores.Grammar===expected && data.assessmentPolicy.gradeProfile.grade===level && data.assessmentPolicy.grammarStrictness===strict,{audit:measured,grade:data.assessmentPolicy.gradeProfile.grade,strictness:data.assessmentPolicy.grammarStrictness});
+                    check('recorded density boundary display grade '+level+' strictness '+strict,actual['Grammar band']==='4.00 per 100 words = '+expected+'/10' && actual['Final Grammar rubric score']===expected+'/10',actual);
+                }
+                const recorded=latestAnalysisData, html=calc.innerHTML, snapshot=JSON.stringify([recorded.grammarAudit,recorded.categoryScores,recorded.overall,recorded.assessmentPolicy,getPendingPortfolioSync()]);
+                grade.value='4'; grade.dispatchEvent(new Event('change',{bubbles:true}));
+                strictness.value='1'; strictness.dispatchEvent(new Event('input',{bubbles:true}));
+                nativeRender(...debugArgs);
+                check('completed calculation retains captured policy after live controls change',getSelectedGradeLevel()===4 && getGrammarStrictness()===1 && latestAnalysisData===recorded && recorded.assessmentPolicy.gradeProfile.grade===5 && recorded.assessmentPolicy.grammarStrictness===5 && calc.innerHTML===html && JSON.stringify([recorded.grammarAudit,recorded.categoryScores,recorded.overall,recorded.assessmentPolicy,getPendingPortfolioSync()])===snapshot,rows());
+            } finally {
+                renderScoredAnalysisDebug=nativeRender;
+                grade.value=before[0]; grade.dispatchEvent(new Event('change',{bubbles:true}));
+                strictness.value=before[1]; strictness.dispatchEvent(new Event('input',{bubbles:true}));
+                writing.value=before[2]; writing.dispatchEvent(new Event('input',{bubbles:true}));
+                if (details.open!==before[3]) details.querySelector('summary').click();
+            }
+        }
+        await checkGrammarCalculation();
         return {cases, calls, scope:'Full shipped native Edge scripts and actual parse/adjust/publication/pending/save/render paths; only synthetic model responses and external requests intercepted.'};
     }
     return checkAnalysisPipeline();

@@ -4929,7 +4929,7 @@ function formatGrammarCalc(calc) {
             '<tr><td>Corrected story word count</td><td>' + calc.wordCount + '</td></tr>' +
             '<tr><td>Error density formula</td><td>(total errors / word count) x 100</td></tr>' +
             '<tr><td>Error density</td><td class="' + densityClass + '">' + calc.errorDensity.toFixed(2) + '</td></tr>' +
-            '<tr><td>Grammar band</td><td>' + calc.bandText + '</td></tr>' +
+            '<tr><td>Grammar band</td><td>' + calc.errorDensity.toFixed(2) + ' per 100 words = ' + calc.grammarScore + '/' + RUBRIC_MAX + '</td></tr>' +
             '<tr><td>Final Grammar rubric score</td><td><strong>' + calc.grammarScore + '/' + RUBRIC_MAX + '</strong></td></tr>' +
             '<tr><td>Overall score conversion check</td><td>10 = 100, 9 = 90, 8 = 80, 7 = 70, 6 = 60, 5 = 50, 4 = 40, then average only scored categories</td></tr>' +
             '<tr><td>Target word count</td><td>' + calc.targetWords + '</td></tr>' +
@@ -8101,13 +8101,6 @@ function renderScoredAnalysisDebug(data, parsed1, step1, step2, step3) {
     var detailed = data.detailed;
     var eligibility = data.categoryEligibility;
     var categoryScores = data.categoryScores;
-    var bandText = "18.1 or higher = 1";
-    if (grammarScore === 7) bandText = "0 - 2 = 7";
-    else if (grammarScore === 6) bandText = "2.1 - 4 = 6";
-    else if (grammarScore === 5) bandText = "4.1 - 6 = 5";
-    else if (grammarScore === 4) bandText = "6.1 - 9 = 4";
-    else if (grammarScore === 3) bandText = "9.1 - 13 = 3";
-    else if (grammarScore === 2) bandText = "13.1 - 18 = 2";
 
     document.getElementById("step1Raw").textContent = step1 + "\n\n--- Step 2 (Quick Rubric) ---\n" + step2;
     document.getElementById("step3Raw").textContent = step3;
@@ -8118,7 +8111,6 @@ function renderScoredAnalysisDebug(data, parsed1, step1, step2, step3) {
         totalErrors: totalErrors,
         wordCount: correctedWordCount,
         errorDensity: errorDensity,
-        bandText: bandText,
         grammarScore: grammarScore,
         targetWords: targetWords,
         actualWords: actualWords,

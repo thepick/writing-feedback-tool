@@ -1,0 +1,68 @@
+{
+  "repair_id": "repair-064",
+  "lead": "review034-grammar-band-debug-label",
+  "status": "confirmed_display_fix_focused_native_verified_awaiting_review",
+  "source_commit_assignment": "0a812b326d5e4e40139d5a0bba0b69cf6efafbb0",
+  "generated_at": "2026-10-16T09:56:26.0844237+07:00",
+  "reproduced": "Actual native zero-correction analyzeWriting recorded0errors/90words/density0/Grammar10. Opening ordinary Show debug summary with WFT_DEBUG=false/WFT_SYNC_DEBUG=false exposed Grammar band18.1 or higher =1 beside final10/10. Three real4-errors/100words boundary analyses also showed the stale label beside recorded10/9/8.",
+  "change": "Shared formatGrammarCalc now displays recorded errorDensity.toFixed(2) per100words = recorded grammarScore/RUBRIC_MAX. Removed unused7line legacy1-7 bandText mapping and its property from modern renderScoredAnalysisDebug. No duplicated tables, policy recomputation or scoring/calibration changes.",
+  "callers": "All formatter callers read: modern renderScoredAnalysisDebug and frozen tests/fixtures/analysis-pipeline-baseline.js:354. Both pass numeric recorded density/score; fixture still supplies its unused legacy bandText. Shared formatter corrects both output paths without changing frozen bytes/reference hash or removing grammarCalc parity.",
+  "native_evidence": {
+    "suite": "tests/detailed-parser.browser.cjs",
+    "before": {
+      "total": 393,
+      "passed": 389,
+      "failed": 4,
+      "page_errors": 0,
+      "production_unmodified": true,
+      "band": "18.1 or higher = 1",
+      "final": "10/10",
+      "failure": "Expected4display assertions; native audit, policy and original cases passed."
+    },
+    "after": {
+      "total": 393,
+      "passed": 393,
+      "failed": 0,
+      "page_errors": 0,
+      "band": "0.00 per 100 words = 10/10",
+      "final": "10/10",
+      "original383_cases_unchanged": true
+    },
+    "controls": "Only3additional native analyses at density4: Grade4/strict3=>10, Grade5/strict3=>9 (grade boundary); Grade5/strict5=>8 (strictness boundary). Actual corrected markup/counts/scorer/pending paths; provider responses synthetic. Re-render using actual captured arguments after live grade4/strict1 change retains recorded Grade5/strict5 score8, unchanged HTML/audit/category/overall/policy/pending bytes. Wrapper and controls restored.",
+    "parity": {
+      "suite": "tests/analysis-pipeline.browser.cjs",
+      "scenarios": 74,
+      "passed": 74,
+      "grammarCalc_in_full_comparison": true,
+      "frozen_fixture_sha256": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+      "fixture_and_oracle_untouched": true
+    },
+    "syntax": {
+      "checks": 91,
+      "failed": 0,
+      "both_touched_files_included": true
+    }
+  },
+  "receipts": {
+    "before": "work/repowise-repair-064/before/suite-results.json",
+    "before_cases": "work/repowise-repair-064/before/detailed-parser.browser.json",
+    "after": "work/repowise-repair-064/after/suite-results.json",
+    "after_cases": "work/repowise-repair-064/after/detailed-parser.browser.json",
+    "pipeline": "work/repowise-repair-064/after/analysis-pipeline.browser.json"
+  },
+  "sha256_raw": [
+    {
+      "file": "js/app/10-main-app.js",
+      "before": "5023474be1c9c62d6a59591b2a5e4422485718790b5c10986edf868700e88f28",
+      "after": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f"
+    },
+    {
+      "file": "tests/detailed-parser.browser.cjs",
+      "before": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+      "after": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e"
+    }
+  ],
+  "scope": "All91source+manifest matched before pins; only2allowed files changed. Exact production delta verified as formatter row+unused mapping/property removal; scoring/tables/weights and every other production byte unchanged. Existing detailed-parser cases/pending/export/report code preserved around added10checks. No Git/tracker/docs/config/index/deps/hooks/chats/agents/deploy changes.",
+  "limits": "Only2focused suites; coordinator owns full gate, independent review, commit/publication. No live provider/service calls. This corrects an optional diagnostic explanation; no incorrect numeric grade alleged or repaired. Stop after064 and await coordinator full freeze.",
+  "parent_note": "Display convenience fields populated from the literal observed native row by coordinator; originals were null. Source/test receipt hashes unchanged."
+}

@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T09:48:04.080381+07:00.
+Updated 2026-10-16T09:57:33.957171+07:00.
 
 Source: c0724763bc46926c4dab8f555fbbdb4e7616c6c3. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -18,7 +18,7 @@ One source editor and two parallel read-only reviewers. Test and commit each fix
 
 **Current focus:** Reproduce and fix user-facing bugs. The maintenance queue is optional; scanner counts below are not bug counts.
 
-Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 1. Test-oracle leads: 4.
+Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 0. Test-oracle leads: 4.
 
 
 Statuses: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 102, "needs_revalidation": 126, "reviewed_no_change": 728, "unreviewed": 25}.
@@ -27,7 +27,7 @@ All tracked rows, including findings absent on the latest scan: {"candidate_need
 
 Findings confirmed cleared: 30. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Behavior repairs with regression evidence: 14.
+Behavior repairs with regression evidence: 15.
 
 Supporting refactoring plans: 120; grouped refactoring opportunities: 34.
 
@@ -107,7 +107,8 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-060: Require literal own evidence tokens in teacher feedback - reviewed_focused_verified_awaiting_full_gate_publication.
 - repair-061: Recognize ordinary Dear Diary writing as a reflection - reviewed_focused_verified_awaiting_full_gate_publication.
 - repair-062: Prevent overlapping image preparations from silently dropping a selection - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-063: Recover valid later notebook examples after an unusable first candidate - coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate.
+- repair-063: Recover valid later notebook examples after an unusable first candidate - reviewed_focused_verified_awaiting_full_gate_publication.
+- repair-064: Make Grammar calculation explanation agree with the captured grade result - coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate.
 
 ## Additional source leads
 
@@ -126,7 +127,7 @@ These are review leads, separate from scanner observations. They require their o
 - review030-diary-letter-precedence: detectWritingGenreInfo in js/app/10-main-app.js — fixed_focused_awaiting_publication. For ordinary multi-line Dear Diary, followed by reflection prose, hasLetterFeatures can count the salutation as both hasGreeting and directRecipient and meet its two-feature threshold. detectWritingGenreInfo returns Letter/Email before reaching its explicit dear-diary Journal/Reflection rule. The overlap is directly visible in source; intended diary precedence and actual native behavior still need a test. Do not silently alter genre calibration during structural cleanup.
 - review032-preview-drop-index-range: bindPreviewReorderHandlers/drop callback in js/app/10-main-app.js — fixed_verified. Five new invalid/stale-index cases fail against the old actual drop handlers, including two expected native TypeErrors. Four added bounds checks reject them before queue/geometry/OCR mutation; all51 crop cases pass on the fix. In-range stale identity remains a separate scope. Full batch005 gate/publication pending.
 - review032-overlapping-image-preparation: handleSelectedImages in js/app/10-main-app.js — fixed_focused_awaiting_publication. Each acquisition captures the entire current image queue before awaiting optimization. Two overlapping camera/upload additions for unchanged owner/text can start from the same context; when one commits its prepared image, the second context becomes stale because images/primaryImage changed, so the second addition silently returns at3312. Camera/upload controls are relabeled but not disabled during preparation, and independent async change handlers are not serialized. This may lose an intended same-owner page addition. Intent and actual native behavior require a held-optimization regression; do not weaken stale-owner protection merely to append everything.
-- review034-grammar-band-debug-label: renderScoredAnalysisDebug in js/app/10-main-app.js — candidate_needs_regression. The Grammar band text is hardcoded for a legacy1-7 scale while grammarDensityBand returns4-10 from the selected grade table and strictness. Scores8/9/10 hit the default label18.1-or-higher=1; lower scores map to legacy intervals unrelated to current profile thresholds. formatGrammarCalc renders that label beside the actual final Grammar score. This is a source-supported misleading calculation display, not a reproduced grading-score change. Frozen old/new parity includes the same stale text and cannot establish its correctness.
+- review034-grammar-band-debug-label: renderScoredAnalysisDebug in js/app/10-main-app.js — fixed_focused_awaiting_publication. The Grammar band text is hardcoded for a legacy1-7 scale while grammarDensityBand returns4-10 from the selected grade table and strictness. Scores8/9/10 hit the default label18.1-or-higher=1; lower scores map to legacy intervals unrelated to current profile thresholds. formatGrammarCalc renders that label beside the actual final Grammar score. This is a source-supported misleading calculation display, not a reproduced grading-score change. Frozen old/new parity includes the same stale text and cannot establish its correctness.
 - review044-roster-portfolio-panel: openStudentPortfolio in js/app/00-storage-sync-patches.js — fixed_verified. Actual roster buttons reproduced hidden/wrong portfolio navigation. The integrated fix preselects the requested student and switches to the portfolio tab; eight new desktop/mobile/optional-control/storage-failure scenarios pass within58 checks. Existing26 checks are preserved. Full batch005 gate/publication pending.
 - review044-async-portfolio-stale-owner: renderStudentPortfolio in js/app/00-storage-sync-patches.js — reviewed_no_change. With the optional async path enabled, the completion for captured student A puts A data in _asyncStudentData then recursively renders using the current selector value. If the selector changed to B while A was loading, B can label/action A sessions; a late rejection can also overwrite the current view. There is no selector/generation check before either write. The flag is false by default, so this lead concerns the opt-in path; source supported and not reproduced.
 - 047-L1: checkRedirectRecovery in tests/auth-integrity.browser.cjs — candidate_needs_regression. For full/retry/drive-backed,297 checks exactly one intercepted navigation and298 skips the rest of the state oracle. The production redirect guard relies on full recoverability of pending work before leaving the tab. Current assertions do not directly prove those allowed cases stored the draft and complete/recoverable pending content.
