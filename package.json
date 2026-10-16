@@ -1,0 +1,10 @@
+{
+  "name": "writing-feedback-tool",
+  "private": true,
+  "description": "A browser-only writing analysis tool for teachers. It provides rubric scoring, corrected writing, structured feedback, student tracking, and optional Google Drive syncing.",
+  "license": "MIT",
+  "devDependencies": {
+    "jszip": "^3.10.2",
+    "playwright": "^1.64.1"
+  }
+}
