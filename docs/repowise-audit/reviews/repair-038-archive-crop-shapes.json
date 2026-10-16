@@ -1,0 +1,1413 @@
+{
+  "repair_id": "repair-038",
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "inspected_git_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "source_hashes_normalized_lf": {
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+    "js/app/99-lightbox.js": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "source_verification": {
+    "assignment_three_hashes_match": true,
+    "all_six_inspected_production_files_match_immutable7527_blobs": true,
+    "historical003_sources_for_three_gradients_match_current_normalized_hashes": true,
+    "immutable_test_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+  },
+  "metrics_verification": {
+    "method": "Installed unchanged RepoWise pure walk_file_complexity on normalized source,Python -B;no app tests/CLI/health/index/cache operation.",
+    "function_shape_records": 10,
+    "all_assignment_numeric_metrics_function_spans_and_deepest_blocks_reproduced": true,
+    "coverage_method": "Aggregate DA hits across all58 per-test LCOV records for each module;exact covered/executable/uncovered line sets rechecked against historical003 summary and current source. Rounded observation percent,fraction and deduction arithmetic verified.",
+    "not_independently_verified": [
+      "scanner severity/impact/status/identity",
+      "branch coverage:observation null;line execution does not establish branch outcome coverage",
+      "fresh004 gate results or coverage import"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_4057876aba2cd2a0cf7b",
+      "file": "js/app/99-lightbox.js",
+      "marker": "coverage_gradient",
+      "symbol": null,
+      "proposed_status": "candidate_needs_regression",
+      "classification": "real_lightbox_open_path_test_gap_T1",
+      "reason": "Historical003 covers10/26 lines(38.46%):15 uncovered interior lines are the whole lightbox open/caption/scroll-lock/backdrop setup;one additional line35 is the known empty EOF artifact. Existing tests load globals/render previews and trigger Escape close,but never open the lightbox. Add native click/lifecycle/safe-caption assertions;this establishes a test gap,not a broken UI.",
+      "evidence_anchors": [
+        "js/app/99-lightbox.js:3",
+        "js/app/99-lightbox.js:6",
+        "js/app/99-lightbox.js:7",
+        "js/app/99-lightbox.js:9",
+        "js/app/99-lightbox.js:10",
+        "js/app/99-lightbox.js:12",
+        "js/app/99-lightbox.js:15",
+        "js/app/99-lightbox.js:16",
+        "js/app/99-lightbox.js:18",
+        "js/app/99-lightbox.js:19",
+        "js/app/99-lightbox.js:21",
+        "js/app/99-lightbox.js:35"
+      ],
+      "verified_observation_details": {
+        "line_coverage_pct": 38.46,
+        "branch_coverage_pct": null,
+        "uncovered_fraction": 0.6154,
+        "deduction": 2.4616
+      },
+      "callers": [
+        "10-main-app.js:3205 safe selected-image preview click;00-storage-sync-patches.js:7284 safe data image and7289 sanitized Drive-ID image click(after hydration)",
+        "index.html:3788-3791 real lightbox/caption/close DOM;3794 loads script;99-lightbox.js:18 backdrop and31-33 Escape close handlers"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/script-loading.browser.cjs:41-46 only verifies lightbox global exists;59-74 opens crop and presses Escape,which can execute lightbox close without opening it",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/portfolio-html.browser.cjs:59-114,146-153 renders/hydrates safe preview images but never clicks them",
+        "Scope limit:full test reference search finds no lightbox lifecycle/caption/backdrop open assertion in current7527 tests."
+      ],
+      "regression_recommendation": "T1:add native lifecycle checks through actual selected-preview and hydrated portfolio-image clicks:open class,matching safe src/alt,caption via textContent,body scroll lock;image/child click stays open,backdrop/close button/Escape close and clear src/overflow;reopen another image. Include missing src/image/modal/caption as small optional-DOM checks. Keep existing caller URL validation and literal hostile caption assertion;no production rewrite or fabricated coverage.",
+      "coverage_details": {
+        "source_hash_normalized_lf": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+        "historical_lcov": "work/repowise-batch-003/current.lcov",
+        "historical_summary_created": "2026-10-15T22:13:08.232Z",
+        "lcov_records_aggregated": 58,
+        "executable_line_count": 26,
+        "covered_line_count": 10,
+        "line_coverage_pct": 38.46,
+        "uncovered_lines": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          15,
+          16,
+          18,
+          19,
+          20,
+          21,
+          35
+        ],
+        "uncovered_ranges": [
+          [
+            3,
+            7
+          ],
+          [
+            9,
+            12
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            18,
+            21
+          ],
+          [
+            35,
+            35
+          ]
+        ],
+        "final_split_line": 35,
+        "final_line_empty": true,
+        "uncovered_final_empty_line": true,
+        "uncovered_interior_lines": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          15,
+          16,
+          18,
+          19,
+          20,
+          21
+        ],
+        "unchanged_current_source_hash_matches_historical003": true,
+        "interpretation_groups": [
+          {
+            "lines": [
+              3,
+              4,
+              5,
+              6,
+              7,
+              9,
+              10,
+              11,
+              12,
+              15,
+              16,
+              18,
+              19,
+              20,
+              21
+            ],
+            "interpretation": "Real unexecuted open-path interior in003;native click/caption/scroll/backdrop behavior lacks assertions.",
+            "handling": "T1 native lifecycle test candidate;preserve missing-DOM/src guards and upstream URL policy."
+          }
+        ],
+        "known_eof_artifact": {
+          "line": 35,
+          "type": "final empty native return point",
+          "existing_owner": "repair-026/native-coverage-terminal-breakpoint-denominator",
+          "evidence": "outputs/repowise-repairs/repair-026-eof-coverage.json records the exact column0/type:return locations for all three unchanged modules.",
+          "new_lead": false
+        },
+        "branch_coverage_measured": false,
+        "capture_or_import_performed_here": false,
+        "current_full004_results_not_read_or_claimed": true
+      }
+    },
+    {
+      "record_id": "code_health:finding_ba4c6a8dce8c62086d20",
+      "file": "js/app/photo-crop.js",
+      "marker": "complex_method",
+      "symbol": "openCropModal",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_owned_crop_session_open_boundary",
+      "reason": "27NLOC/CCN9 validates selected image and required DOM,captures an immutable ownership snapshot,sets modal focus/title and delegates async canvas loading. Optional node/title/multi-image guards correspond to distinct UI states;the existing owner/load helper already isolates reusable behavior. No worthwhile extra opener wrapper or selector cache.",
+      "evidence_anchors": [
+        "js/app/photo-crop.js:10",
+        "js/app/photo-crop.js:11",
+        "js/app/photo-crop.js:16",
+        "js/app/photo-crop.js:20",
+        "js/app/photo-crop.js:21",
+        "js/app/photo-crop.js:23",
+        "js/app/photo-crop.js:24",
+        "js/app/photo-crop.js:26",
+        "js/app/photo-crop.js:29",
+        "js/app/photo-crop.js:30",
+        "js/app/photo-crop.js:32",
+        "js/app/photo-crop.js:34",
+        "js/app/photo-crop.js:37"
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 27,
+        "dispatch_share": 0.0,
+        "symbol_line": 10,
+        "deepest_block": {
+          "start": 34,
+          "end": 36
+        }
+      },
+      "callers": [
+        "10-main-app.js:3435-3439 delegated preview Crop click;photo-crop.js:37 loadCropCanvas captures session/request;1-7 current-owner predicate covers student/reassessment/photo/queue identities"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/script-loading.browser.cjs:59-74 actual preview Crop click,ready load,Escape close and retained portfolio bytes",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-ownership.browser.cjs:7-13,141-175,178-205 controlled native image completion:open/reopen/reset/cancel/student/photo/queue changes and current secondary crop",
+        "Scope limit:missing optional modal/title/overlay nodes are defensive branches,not separately demonstrated by these assertions."
+      ],
+      "regression_recommendation": "Retain selected-photo and four DOM guards,captured queue/student/reassessment/byte snapshot,title/focus and shared load helper. Existing native owner/reopen/real-button tests are appropriate. Optional missing-DOM cases are small boundary checks only if changed;do not cache DOM across later async loads.",
+      "verified_metrics": {
+        "name": "openCropModal",
+        "start_line": 10,
+        "end_line": 38,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 9,
+        "nloc": 27,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          34,
+          36
+        ],
+        "file": "js/app/photo-crop.js",
+        "complex_conditions": [
+          {
+            "line": 20,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 21,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "code_health:finding_abdcd845e719ac63843b",
+      "file": "js/app/photo-crop.js",
+      "marker": "complex_method",
+      "symbol": "getCropPos",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_touch_mouse_coordinate_projection",
+      "reason": "19NLOC/CCN9 selects touch/changed-touch/mouse coordinates,converts displayed rectangle scale to canvas pixels,rounds and clamps. Each fallback serves input/device/zero-size behavior;one existing helper already centralizes it. The material problem is missing native pointer tests(T2),not excess responsibility.",
+      "evidence_anchors": [
+        "js/app/photo-crop.js:96",
+        "js/app/photo-crop.js:97",
+        "js/app/photo-crop.js:99",
+        "js/app/photo-crop.js:101",
+        "js/app/photo-crop.js:104",
+        "js/app/photo-crop.js:105",
+        "js/app/photo-crop.js:106",
+        "js/app/photo-crop.js:107",
+        "js/app/photo-crop.js:108",
+        "js/app/photo-crop.js:109",
+        "js/app/photo-crop.js:111",
+        "js/app/photo-crop.js:112",
+        "js/app/photo-crop.js:221",
+        "js/app/photo-crop.js:228"
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 96,
+        "deepest_block": {
+          "start": 99,
+          "end": 103
+        }
+      },
+      "callers": [
+        "photo-crop.js:221 onDown and228 onMove;237-242 mouse/touch DOM listeners;not called by onUp,which only ends drag"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-ownership.browser.cjs:62,99-100,162 assign _cropRect directly;178-205 verify dimensions/ownership rather than pointer coordinates",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-transparency.browser.cjs:28-30 also assigns _cropRect directly before applying",
+        "Scope limit:no getCropPos/touch/mouse crop-drag assertion found by full test reference search;historical003 records zero covered interior lines97-113."
+      ],
+      "regression_recommendation": "Retain one19NLOC coordinate helper:touches first,changedTouches fallback,mouse fallback,CSS-to-canvas scale,round then clamp and zero-size fallback. Coverage candidate T2 adds real pointer wiring/geometry tests;no point-wrapper or options object needed.",
+      "verified_metrics": {
+        "name": "getCropPos",
+        "start_line": 96,
+        "end_line": 114,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 19,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          99,
+          103
+        ],
+        "file": "js/app/photo-crop.js",
+        "complex_conditions": [
+          {
+            "line": 99,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 101,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "code_health:finding_d81f99467fdb06a8d36e",
+      "file": "js/app/photo-crop.js",
+      "marker": "complex_method",
+      "symbol": "applyCrop",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_owned_raster_crop_transaction",
+      "reason": "53NLOC/CCN9 includes canvas drawing and synchronous metadata/OCR/UI publication inside an async source-image callback. It checks owner/readiness before work and owner/request again after decode,captures dimensions,clips both drag directions,paints white JPEG background and invalidates stale Drive refs via existing helper. Another canvas/result wrapper mostly moves this cohesive transaction.",
+      "evidence_anchors": [
+        "js/app/photo-crop.js:129",
+        "js/app/photo-crop.js:131",
+        "js/app/photo-crop.js:132",
+        "js/app/photo-crop.js:134",
+        "js/app/photo-crop.js:135",
+        "js/app/photo-crop.js:139",
+        "js/app/photo-crop.js:143",
+        "js/app/photo-crop.js:148",
+        "js/app/photo-crop.js:150",
+        "js/app/photo-crop.js:153",
+        "js/app/photo-crop.js:159",
+        "js/app/photo-crop.js:160",
+        "js/app/photo-crop.js:167",
+        "js/app/photo-crop.js:170",
+        "js/app/photo-crop.js:172",
+        "js/app/photo-crop.js:174",
+        "js/app/photo-crop.js:178",
+        "js/app/photo-crop.js:180"
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 53,
+        "dispatch_share": 0.0,
+        "symbol_line": 129,
+        "deepest_block": {
+          "start": 131,
+          "end": 131
+        }
+      },
+      "callers": [
+        "photo-crop.js:248 live Apply button;129-132 current session/ready gates;152 source image callback rechecks session/request;117-127 existing setWftPhotoBytes owns image revision/Drive invalidation"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-ownership.browser.cjs:7-13,99-100,141-175,178-205 stale completions preserve all state,current/reversed/scaled crop dimensions and reset OCR/original bytes",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-transparency.browser.cjs:14-46 real opaque/transparent raster pipeline checks JPEG,white background,preserved ink/dimensions and exact original reset",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/media-ownership.browser.cjs:155-190 actual crop/reset,save,reload and export byte observation;Scope limit:these tests bypass physical crop drag and do not cover the clipped-small-region guard144-145."
+      ],
+      "regression_recommendation": "Retain current session/ready checks,pre-clipped and clipped minimum sizes,captured dimensions/request,post-decode owner check,white raster background,original preservation,revision invalidation and OCR/UI publication. T2 should exercise scaled native drag and clipped-small guard144-145,not replace existing stale callback/pixel tests.",
+      "verified_metrics": {
+        "name": "applyCrop",
+        "start_line": 129,
+        "end_line": 181,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 53,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          131,
+          131
+        ],
+        "file": "js/app/photo-crop.js",
+        "complex_conditions": [
+          {
+            "line": 135,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 143,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "code_health:finding_e8fa786727ce7172a436",
+      "file": "js/app/photo-crop.js",
+      "marker": "coverage_gradient",
+      "symbol": null,
+      "proposed_status": "candidate_needs_regression",
+      "classification": "real_native_crop_drag_and_clipped_guard_test_gap_T2",
+      "reason": "Historical003 covers180/211 lines(85.31%):30 interior lines remain,including all getCropPos geometry,active down/move/up logic,the clipped-too-small error and backdrop handler. One line259 is the known EOF artifact. Strong ownership/raster tests inject _cropRect directly,so they do not test mouse/touch drawing or listener scaling. Add native interaction assertions while retaining defensive optional DOM handling.",
+      "evidence_anchors": [
+        "js/app/photo-crop.js:97",
+        "js/app/photo-crop.js:99",
+        "js/app/photo-crop.js:101",
+        "js/app/photo-crop.js:106",
+        "js/app/photo-crop.js:108",
+        "js/app/photo-crop.js:111",
+        "js/app/photo-crop.js:144",
+        "js/app/photo-crop.js:145",
+        "js/app/photo-crop.js:220",
+        "js/app/photo-crop.js:221",
+        "js/app/photo-crop.js:227",
+        "js/app/photo-crop.js:228",
+        "js/app/photo-crop.js:234",
+        "js/app/photo-crop.js:237",
+        "js/app/photo-crop.js:240",
+        "js/app/photo-crop.js:252",
+        "js/app/photo-crop.js:259"
+      ],
+      "verified_observation_details": {
+        "line_coverage_pct": 85.31,
+        "branch_coverage_pct": null,
+        "uncovered_fraction": 0.1469,
+        "deduction": 0.5876
+      },
+      "callers": [
+        "10-main-app.js:3439 real preview Crop click;photo-crop.js:237-242 native mouse/touch drag listeners;248-256 Apply/Reset/Cancel/backdrop/Escape wiring"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-ownership.browser.cjs:62,99-100,141-205 direct rectangle injection thoroughly checks crop ownership/dimensions but bypasses native coordinate/listener path",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/crop-transparency.browser.cjs:28-46 direct full-canvas rectangle checks raster output and exact reset",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/script-loading.browser.cjs:59-74 actual Crop button and Escape only;does not draw a region"
+      ],
+      "regression_recommendation": "T2:add native mouse and touch drag through actual Crop UI;check preventDefault,translated/scaled/rounded/clamped canvas coordinates,reverse drag,document move/up termination and no move after release,then actual output pixels/dimensions. Supplement small direct changedTouches/zero-CSS-size helper cases if contract retained;test backdrop vs child click and clipped-small region144-145. Keep owner/ready/stale callbacks/transparency/reset tests;do not count assigned _cropRect as drawing coverage.",
+      "coverage_details": {
+        "source_hash_normalized_lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+        "historical_lcov": "work/repowise-batch-003/current.lcov",
+        "historical_summary_created": "2026-10-15T22:13:08.232Z",
+        "lcov_records_aggregated": 58,
+        "executable_line_count": 211,
+        "covered_line_count": 180,
+        "line_coverage_pct": 85.31,
+        "uncovered_lines": [
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          144,
+          145,
+          220,
+          221,
+          222,
+          223,
+          224,
+          227,
+          228,
+          229,
+          230,
+          234,
+          252,
+          253,
+          259
+        ],
+        "uncovered_ranges": [
+          [
+            97,
+            102
+          ],
+          [
+            104,
+            113
+          ],
+          [
+            144,
+            145
+          ],
+          [
+            220,
+            224
+          ],
+          [
+            227,
+            230
+          ],
+          [
+            234,
+            234
+          ],
+          [
+            252,
+            253
+          ],
+          [
+            259,
+            259
+          ]
+        ],
+        "final_split_line": 259,
+        "final_line_empty": true,
+        "uncovered_final_empty_line": true,
+        "uncovered_interior_lines": [
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          144,
+          145,
+          220,
+          221,
+          222,
+          223,
+          224,
+          227,
+          228,
+          229,
+          230,
+          234,
+          252,
+          253
+        ],
+        "unchanged_current_source_hash_matches_historical003": true,
+        "interpretation_groups": [
+          {
+            "lines": [
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110,
+              111,
+              112,
+              113
+            ],
+            "interpretation": "Complete coordinate helper interior unexecuted in003.",
+            "handling": "T2 mouse/touch scale/round/clamp/reverse/changedTouches/zero-size boundary tests."
+          },
+          {
+            "lines": [
+              220,
+              221,
+              222,
+              223,
+              224,
+              227,
+              228,
+              229,
+              230,
+              234
+            ],
+            "interpretation": "Active native drag down/move/up unexecuted;existing tests directly inject rectangle.",
+            "handling": "T2 real listener sequence plus actual resulting crop pixels/dimensions."
+          },
+          {
+            "lines": [
+              144,
+              145
+            ],
+            "interpretation": "Second minimum-size guard after canvas clipping is not the same as initial3px region fixture.",
+            "handling": "T2 draw nominally large region clipped to less than5px at edge;assert no mutation/new apply load and truthful status."
+          },
+          {
+            "lines": [
+              252,
+              253
+            ],
+            "interpretation": "Backdrop event handler interior unexecuted;Escape and direct close coverage do not prove target===this behavior.",
+            "handling": "T2 backdrop closes,child click leaves open;retain guard."
+          }
+        ],
+        "known_eof_artifact": {
+          "line": 259,
+          "type": "final empty native return point",
+          "existing_owner": "repair-026/native-coverage-terminal-breakpoint-denominator",
+          "evidence": "outputs/repowise-repairs/repair-026-eof-coverage.json records the exact column0/type:return locations for all three unchanged modules.",
+          "new_lead": false
+        },
+        "branch_coverage_measured": false,
+        "capture_or_import_performed_here": false,
+        "current_full004_results_not_read_or_claimed": true
+      }
+    },
+    {
+      "record_id": "code_health:finding_becc6cad0dd7863a6b9b",
+      "file": "js/app/portfolio-export.js",
+      "marker": "complex_method",
+      "symbol": "appendStructuredFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_ordered_feedback_compatibility_projection",
+      "reason": "14NLOC/CCN13 explicitly emits summary then legacy feedback with shared Strength/Next step/Growth goal labels and different Encouragement/Comment fields. Both representations can coexist;deduplication or a generic field table would change output/read order for a tiny function. Legacy branch tests are a real coverage gap(T3),not a reason to remove compatibility.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:114",
+        "js/app/portfolio-export.js:119",
+        "js/app/portfolio-export.js:120",
+        "js/app/portfolio-export.js:121",
+        "js/app/portfolio-export.js:122",
+        "js/app/portfolio-export.js:123",
+        "js/app/portfolio-export.js:124",
+        "js/app/portfolio-export.js:127",
+        "js/app/portfolio-export.js:128",
+        "js/app/portfolio-export.js:129",
+        "js/app/portfolio-export.js:130",
+        "js/app/portfolio-export.js:131",
+        "js/app/portfolio-export.js:135",
+        "js/app/portfolio-export.js:184",
+        "js/app/portfolio-export.js:289"
+      ],
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 20,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 119,
+        "deepest_block": {
+          "start": 120,
+          "end": 125
+        }
+      },
+      "callers": [
+        "portfolio-export.js:135 buildSessionExportFeedbackText invokes once;184 summary HTML escapes result;289-290 rich portfolio renders result through renderSimpleMarkdown"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/portfolio-html.browser.cjs:15-27 fixture supplies feedbackSummary.strength with hostile markup;133-143,146-153 check generated/live HTML safety and formatting",
+        "Scope limit:these are not exact ordered feedback-label assertions. Historical003 has no coverage of legacy session.feedback fields128-131;feedback-compatibility.browser.cjs:30-39 tests other renderers/saved summaries,not this legacy export text contract."
+      ],
+      "regression_recommendation": "Retain this14NLOC compatibility projection:summary then legacy feedback,three common labels plus distinct Encouragement/Comment terminal fields. A generic mapping/callback helper would save at most three repeated pushes while changing live property read order and obscuring distinct fields. T3 should assert exact ordered text for both objects together,empty/nonobject values and escaped generated HTML.",
+      "verified_metrics": {
+        "name": "appendStructuredFeedback",
+        "start_line": 119,
+        "end_line": 133,
+        "ccn": 13,
+        "max_nesting": 2,
+        "cognitive": 20,
+        "nloc": 14,
+        "bumps": 2,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          120,
+          125
+        ],
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": [
+          {
+            "line": 120,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 127,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "code_health:finding_481a4a617b0134a3a219",
+      "file": "js/app/portfolio-export.js",
+      "marker": "complex_method",
+      "symbol": "addImageExport",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "redundant_per_image_capture_scope_R1",
+      "reason": "38NLOC/CCN12 contains an extra IIFE solely to capture image,fileName,stem and its manifest entry. addImageExport is already invoked separately per image,so its invocation scope can own those bindings and one explicit entry reference. Delete redundant capture wrapper/aliases,keeping deferred tasks,each image entry,all IO/connection checks and exact filename/MIME behavior.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:629",
+        "js/app/portfolio-export.js:630",
+        "js/app/portfolio-export.js:632",
+        "js/app/portfolio-export.js:635",
+        "js/app/portfolio-export.js:637",
+        "js/app/portfolio-export.js:646",
+        "js/app/portfolio-export.js:647",
+        "js/app/portfolio-export.js:648",
+        "js/app/portfolio-export.js:649",
+        "js/app/portfolio-export.js:652",
+        "js/app/portfolio-export.js:654",
+        "js/app/portfolio-export.js:657",
+        "js/app/portfolio-export.js:659",
+        "js/app/portfolio-export.js:661",
+        "js/app/portfolio-export.js:662",
+        "js/app/portfolio-export.js:666",
+        "js/app/portfolio-export.js:676"
+      ],
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 38,
+        "dispatch_share": 0.0,
+        "symbol_line": 629,
+        "deepest_block": {
+          "start": 632,
+          "end": 632
+        }
+      },
+      "callers": [
+        "portfolio-export.js:676 addSessionImages invokes once per image;615 addAvailableImagesToStudentFolder owns manifest/tasks/usedNames;690 runs queued tasks with concurrency3"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:48-78 actual ZIP photo bytes,names,manifest flags,original/local/Drive/legacy sources and case-insensitive collision stability",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:113-137 single/year available/unavailable/unchecked/decode/download/ZIP-write failure matrix and retained class",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-connection.browser.cjs:8-73,76-85 token switch at photos and other async stages prevents stale upload and preserves initial Authorization"
+      ],
+      "regression_recommendation": "R1:remove the IIFE647-666;each addImageExport invocation already owns image,fileName and stem bindings. Name the newly created manifest entry before pushing it,and close the task over that invocation entry;derive a task-local exportName after Blob MIME resolution. Keep task as a function,source preference,safe decoder,connection checks before/after IO,unique-name order,manifest mutation and errors unchanged. Verify delayed/concurrent multiple images with different MIME,missing metadata,duplicates and actual ZIP bytes/manifest paths;no generic exporter class.",
+      "verified_metrics": {
+        "name": "addImageExport",
+        "start_line": 629,
+        "end_line": 668,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 38,
+        "bumps": 0,
+        "param_count": 4,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          632,
+          632
+        ],
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": [
+          {
+            "line": 646,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "code_health:finding_1b2de011e29675ee61ed",
+      "file": "js/app/portfolio-export.js",
+      "marker": "bumpy_road",
+      "symbol": "clearCurrentClassAfterSuccessfulArchive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_distinct_commit_ui_schedule_failure_stages",
+      "reason": "Three bumps separate durable class-clear commit,UI refresh and sync scheduling. Uncommitted save failure must propagate;committed publication failure must not claim data retained,and UI/scheduling failure cannot undo persisted clear. Merging catches would erase these different consequences. Current-work fingerprint comparison prevents clearing new edits.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:959",
+        "js/app/portfolio-export.js:960",
+        "js/app/portfolio-export.js:961",
+        "js/app/portfolio-export.js:962",
+        "js/app/portfolio-export.js:964",
+        "js/app/portfolio-export.js:965",
+        "js/app/portfolio-export.js:966",
+        "js/app/portfolio-export.js:967",
+        "js/app/portfolio-export.js:969",
+        "js/app/portfolio-export.js:972",
+        "js/app/portfolio-export.js:977",
+        "js/app/portfolio-export.js:981",
+        "js/app/portfolio-export.js:985",
+        "js/app/portfolio-export.js:988",
+        "js/app/portfolio-export.js:1044"
+      ],
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 8,
+        "max_nesting": 3,
+        "symbol_line": 959,
+        "deepest_block": {
+          "start": 965,
+          "end": 970
+        }
+      },
+      "callers": [
+        "portfolio-export.js:1044 archiveCurrentSchoolYear supplies captured class-state fingerprint after successful upload/download and current connection checks1040/1043;959 optional expectedState supports direct native helper callers"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:140-179 changed class/work across photos/compression/upload/download retains current class and truthful snapshot status;198-218 post-upload required read/write/corruption preserves bytes",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:237-252 postcommit rendering/scheduling/focus failures still truthfully report committed clear and retain dirty streams",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/deletion-durability.browser.cjs:14-24,110-138 direct archiveClear required-storage failure preserves portfolio/markers/settings/roster/selection and sync publication"
+      ],
+      "regression_recommendation": "Retain three distinct exception boundaries:uncommitted required save must throw;committed publication failure restores runtime view and reports retry;UI and scheduling failures cannot reverse a durable clear. Keep current-work comparison outside commit and native before-image/recovery behavior. Existing required-storage/snapshot/postcommit regressions protect this.",
+      "verified_metrics": {
+        "name": "clearCurrentClassAfterSuccessfulArchive",
+        "start_line": 959,
+        "end_line": 989,
+        "ccn": 8,
+        "max_nesting": 3,
+        "cognitive": 16,
+        "nloc": 29,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          965,
+          970
+        ],
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": [
+          {
+            "line": 960,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      }
+    },
+    {
+      "record_id": "code_health:finding_b7040d9769dc0e552c9b",
+      "file": "js/app/portfolio-export.js",
+      "marker": "large_method",
+      "symbol": "addAvailableImagesToStudentFolder",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_student_photo_export_coordinator_with_R1_overlap",
+      "reason": "74NLOC/CCN6 includes two focused nested helpers plus manifest fields and deferred per-image tasks. Outer function owns include-images/metadata-only status,concurrency/progress and all-or-nothing failure. R1 removes one redundant inner capture scope;further splitting would mostly move code or hide when failed available photos must reject the whole archive.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:615",
+        "js/app/portfolio-export.js:616",
+        "js/app/portfolio-export.js:617",
+        "js/app/portfolio-export.js:620",
+        "js/app/portfolio-export.js:621",
+        "js/app/portfolio-export.js:624",
+        "js/app/portfolio-export.js:629",
+        "js/app/portfolio-export.js:670",
+        "js/app/portfolio-export.js:674",
+        "js/app/portfolio-export.js:680",
+        "js/app/portfolio-export.js:684",
+        "js/app/portfolio-export.js:685",
+        "js/app/portfolio-export.js:690",
+        "js/app/portfolio-export.js:693",
+        "js/app/portfolio-export.js:694",
+        "js/app/portfolio-export.js:695",
+        "js/app/portfolio-export.js:708",
+        "js/app/portfolio-export.js:821"
+      ],
+      "verified_observation_details": {
+        "nloc": 74,
+        "ccn": 6,
+        "dispatch_share": 0.0,
+        "symbol_line": 615,
+        "deepest_block": {
+          "start": 624,
+          "end": 627
+        }
+      },
+      "callers": [
+        "portfolio-export.js:708 addStudentExportFiles in year ZIP;821 createSingleStudentArchiveZip only when requested;731-794 and797-836 reject whole ZIP on requested available-photo failure"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:48-102 real ZIP image/student folder paths,actual bytes,special names and deterministic extraction-safe uniqueness",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:113-137,221-234 requested photo sources/failure/retry gate whole export;metadata-only manifest remains truthful",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/portfolio-html.browser.cjs:43-56,117-130,146-153 rejects requested unsafe image sources before fetching and retains safe HTML placeholders"
+      ],
+      "regression_recommendation": "Retain one student-photo export transaction,existing addImageExport/addSessionImages helpers,truthful excluded/metadata-only files,concurrency3,manifest after tasks and throw on any requested available-photo failure. R1 removes only redundant nested capture scope;do not weaken whole-archive failure semantics or create single-use phase wrappers.",
+      "verified_metrics": {
+        "name": "addAvailableImagesToStudentFolder",
+        "start_line": 615,
+        "end_line": 697,
+        "ccn": 6,
+        "max_nesting": 1,
+        "cognitive": 5,
+        "nloc": 74,
+        "bumps": 0,
+        "param_count": 4,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          624,
+          627
+        ],
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": []
+      }
+    },
+    {
+      "record_id": "code_health:finding_062f9ed0d9b06b8516cc",
+      "file": "js/app/portfolio-export.js",
+      "marker": "large_method",
+      "symbol": "archiveCurrentSchoolYear",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_archive_snapshot_upload_download_commit_orchestration",
+      "reason": "68NLOC/CCN5 is one public archive flow with substantial prompt/status text. It takes the snapshot after confirmation,keeps one token pair across async work,requires a valid ZIP,uploads/downloads,then clears only unchanged current work. Saved/downloaded flags distinguish recoverable partial completion. New stage wrappers would obscure this important order without deleting duplicated work.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:991",
+        "js/app/portfolio-export.js:993",
+        "js/app/portfolio-export.js:1002",
+        "js/app/portfolio-export.js:1009",
+        "js/app/portfolio-export.js:1019",
+        "js/app/portfolio-export.js:1020",
+        "js/app/portfolio-export.js:1022",
+        "js/app/portfolio-export.js:1024",
+        "js/app/portfolio-export.js:1025",
+        "js/app/portfolio-export.js:1029",
+        "js/app/portfolio-export.js:1030",
+        "js/app/portfolio-export.js:1034",
+        "js/app/portfolio-export.js:1040",
+        "js/app/portfolio-export.js:1041",
+        "js/app/portfolio-export.js:1043",
+        "js/app/portfolio-export.js:1044",
+        "js/app/portfolio-export.js:1054",
+        "js/app/portfolio-export.js:1055",
+        "js/app/portfolio-export.js:1059"
+      ],
+      "verified_observation_details": {
+        "nloc": 68,
+        "ccn": 5,
+        "dispatch_share": 0.0,
+        "symbol_line": 991,
+        "deepest_block": {
+          "start": 1002,
+          "end": 1002
+        }
+      },
+      "callers": [
+        "index.html:3356 live archive button;portfolio-export.js:1024 class snapshot taken after input/confirmation;1025/1029/1040/1043 connection guards;1044 guarded atomic clear",
+        "00-storage-sync-patches.js:3830-3838 capture/assert archive token pair; refreshed token requires a new attempt rather than guessing same account"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:140-179 full snapshot change matrix;191-218 strict required storage before/after upload;237-269 committed UI failures and actual input/confirmation dialog rereads",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-connection.browser.cjs:8-73,76-85 real archive/folder/fetch/upload boundaries with intended Authorization,actual multipart ZIP,token refresh/signout/switch and truthful retained status",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-failures.browser.cjs:5,35-69 library/generation/download/empty/refused upload acknowledgement failure plus retry retains protected bytes and runtime,then completes public flow",
+        "Scope limit:historical003 misses whitespace year1005-1006 and invalid small year ZIP1031;these are not covered by missing-library or upload-ack failure assertions."
+      ],
+      "regression_recommendation": "Retain prompt/confirm before snapshot,captured connection through every async phase,strict ZIP size,upload then download then current-work checked atomic clear,and separate saved/downloaded flags for truthful failures. T3 adds small malformed-result/year/signed-out cases;existing native class/token/storage/failure/retry matrix remains essential. Extracting phase wrappers would mostly move ordering and status text.",
+      "verified_metrics": {
+        "name": "archiveCurrentSchoolYear",
+        "start_line": 991,
+        "end_line": 1062,
+        "ccn": 5,
+        "max_nesting": 1,
+        "cognitive": 4,
+        "nloc": 68,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1002,
+          1002
+        ],
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": []
+      }
+    },
+    {
+      "record_id": "code_health:finding_9dec7bceb68525f6eebb",
+      "file": "js/app/portfolio-export.js",
+      "marker": "primitive_obsession",
+      "symbol": "addStudentExportFiles",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_concrete_zip_adapter_parameters",
+      "reason": "Five parameters describe a folder,student name,student data,school-year label and existing export options. Scanner typed/primitive counts0 do not establish a primitive-domain design defect in this11NLOC file adapter. Sole year-export caller supplies them in order;an options object would add churn without simplifying content or async photo ownership.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:699",
+        "js/app/portfolio-export.js:700",
+        "js/app/portfolio-export.js:701",
+        "js/app/portfolio-export.js:702",
+        "js/app/portfolio-export.js:704",
+        "js/app/portfolio-export.js:705",
+        "js/app/portfolio-export.js:706",
+        "js/app/portfolio-export.js:707",
+        "js/app/portfolio-export.js:708",
+        "js/app/portfolio-export.js:770"
+      ],
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 699
+      },
+      "callers": [
+        "portfolio-export.js:770 per-student chain in createSchoolYearArchiveZip;699-708 writes HTML/summary/raw JSON/CSV/corrected text and returns photo completion promise"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:48-102 real per-student ZIP files retain individual essay identities and original labels;actual byte/manifest checks",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/portfolio-html.browser.cjs:117-143 generated named HTML/JSON/manifests preserve scores/photos/formatting and reject executable imported markup"
+      ],
+      "regression_recommendation": "Keep explicit five-argument ZIP adapter and return the image-completion promise. Folder,student identity/data,school-year label and export options are concrete context;bundling them into an options object would touch sole parent call without removing risk. Existing real ZIP/document assertions are appropriate.",
+      "verified_metrics": {
+        "name": "addStudentExportFiles",
+        "start_line": 699,
+        "end_line": 709,
+        "ccn": 3,
+        "max_nesting": 0,
+        "cognitive": 2,
+        "nloc": 11,
+        "bumps": 0,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": null,
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": []
+      }
+    },
+    {
+      "record_id": "code_health:finding_a9056855bed4a463c583",
+      "file": "js/app/portfolio-export.js",
+      "marker": "primitive_obsession",
+      "symbol": "uploadBlobToDrivePromise",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_owned_multipart_transport_parameters",
+      "reason": "Five parameters are the existing upload contract:filename,Blob,MIME,parent folder and captured connection. Multipart construction is26NLOC/CCN1 at this scope and forwards ownership to shared wftDriveFetch. Bundling arguments would not improve the actual upload/ack boundary;retain connection and returned-ID checks.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:900",
+        "js/app/portfolio-export.js:901",
+        "js/app/portfolio-export.js:902",
+        "js/app/portfolio-export.js:904",
+        "js/app/portfolio-export.js:907",
+        "js/app/portfolio-export.js:914",
+        "js/app/portfolio-export.js:918",
+        "js/app/portfolio-export.js:919",
+        "js/app/portfolio-export.js:921",
+        "js/app/portfolio-export.js:922",
+        "js/app/portfolio-export.js:924",
+        "js/app/portfolio-export.js:936"
+      ],
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 900
+      },
+      "callers": [
+        "portfolio-export.js:936 saveArchiveZipToDrive after captured-connection folder resolution935;914 wftDriveFetch gets the same connection;921-922 requires returned file ID"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-failures.browser.cjs:38-69 real final upload sees empty/refused acknowledgements and bounded retry;70-100 complete multipart body and canonical lossless bytes captured",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-connection.browser.cjs:55-85 intended token Authorization,actual multipart ZIP essay and late upload-response/download switch retains current class"
+      ],
+      "regression_recommendation": "Keep five-argument transport adapter,file metadata/parent/MIME,multipart framing,same archiveConnection into wftDriveFetch and required acknowledgement ID. File/blob/folder/connection are distinct existing API values,not a missing primitive domain object. Existing complete multipart/empty-ack/late-owner tests are appropriate.",
+      "verified_metrics": {
+        "name": "uploadBlobToDrivePromise",
+        "start_line": 900,
+        "end_line": 926,
+        "ccn": 1,
+        "max_nesting": 0,
+        "cognitive": 0,
+        "nloc": 26,
+        "bumps": 0,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": null,
+        "file": "js/app/portfolio-export.js",
+        "complex_conditions": []
+      }
+    },
+    {
+      "record_id": "code_health:finding_67272701e9295673aac2",
+      "file": "js/app/portfolio-export.js",
+      "marker": "coverage_gradient",
+      "symbol": null,
+      "proposed_status": "candidate_needs_regression",
+      "classification": "real_export_compatibility_validation_test_gaps_T3",
+      "reason": "Historical003 covers571/597 lines(95.64%):25 interior lines include legacy feedback,optional corrected-output compatibility,empty/stale selection,missing folder acknowledgement,signed-out/blank year/small ZIP guards and defensive catches. Final empty line1093 is only one known artifact. Existing tests strongly cover normal safe HTML,actual ZIP bytes,current-work/token ownership and failure retry;they do not establish these specific missing contracts. Prioritize focused compatibility/rejection cases rather than blanket coverage-driven refactoring.",
+      "evidence_anchors": [
+        "js/app/portfolio-export.js:51",
+        "js/app/portfolio-export.js:128",
+        "js/app/portfolio-export.js:129",
+        "js/app/portfolio-export.js:130",
+        "js/app/portfolio-export.js:131",
+        "js/app/portfolio-export.js:198",
+        "js/app/portfolio-export.js:296",
+        "js/app/portfolio-export.js:297",
+        "js/app/portfolio-export.js:299",
+        "js/app/portfolio-export.js:301",
+        "js/app/portfolio-export.js:602",
+        "js/app/portfolio-export.js:718",
+        "js/app/portfolio-export.js:813",
+        "js/app/portfolio-export.js:814",
+        "js/app/portfolio-export.js:833",
+        "js/app/portfolio-export.js:882",
+        "js/app/portfolio-export.js:930",
+        "js/app/portfolio-export.js:1005",
+        "js/app/portfolio-export.js:1031",
+        "js/app/portfolio-export.js:1071",
+        "js/app/portfolio-export.js:1079",
+        "js/app/portfolio-export.js:1093"
+      ],
+      "verified_observation_details": {
+        "line_coverage_pct": 95.64,
+        "branch_coverage_pct": null,
+        "uncovered_fraction": 0.0436,
+        "deduction": 0.1744
+      },
+      "callers": [
+        "index.html:3356 archive and3383 selected-student export;3764 loads exporter;00-storage-sync-patches.js:3830-3838 archive current-token guard;portfolio-export.js:731/797 actual year/single ZIP generators"
+      ],
+      "test_assertion_references": [
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-integrity.browser.cjs:48-137 actual ZIP/media/collision/content/failure cases;140-269 snapshot/storage/retry/postcommit/dialog boundaries",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/archive-connection.browser.cjs:76-85 intended Authorization/no stale upload/actual ZIP bytes;tests/archive-failures.browser.cjs:35-100 failure/retry and complete multipart bytes",
+        "7527d83d2aaaa725d98ef3d6dca41816ede18394:tests/portfolio-html.browser.cjs:15-27,133-153 malicious HTML/image sources are safe with normal getPortfolioCorrectedHtml present",
+        "Scope limit:normal app HTML security does not cover exporter fallback296-301 when getPortfolioCorrectedHtml is unavailable,or legacy feedback128-131."
+      ],
+      "regression_recommendation": "T3:prioritize exact legacy/both-source feedback labels128-131 and safe corrected-output fallbacks296-301 with normal helper explicitly unavailable,plus empty student198. Add signed-out save930,missing folder acknowledgement882,trim-empty year1005-1006,small year/single ZIP1031/1079,stale/no student813-814/1071-1073 and January-vs-July year718;assert zero unsafe request/download/clear and exact retained bytes on rejection. Catch-only DOM/task/constructor fallbacks51/602/833 are lower priority defensive paths,not reasons to add production wrappers. Re-evaluate after fresh004 capture;known EOF exclusion1093 belongs to026.",
+      "coverage_details": {
+        "source_hash_normalized_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+        "historical_lcov": "work/repowise-batch-003/current.lcov",
+        "historical_summary_created": "2026-10-15T22:13:08.232Z",
+        "lcov_records_aggregated": 58,
+        "executable_line_count": 597,
+        "covered_line_count": 571,
+        "line_coverage_pct": 95.64,
+        "uncovered_lines": [
+          51,
+          128,
+          129,
+          130,
+          131,
+          198,
+          296,
+          297,
+          298,
+          299,
+          301,
+          602,
+          718,
+          813,
+          814,
+          833,
+          882,
+          930,
+          1005,
+          1006,
+          1031,
+          1071,
+          1072,
+          1073,
+          1079,
+          1093
+        ],
+        "uncovered_ranges": [
+          [
+            51,
+            51
+          ],
+          [
+            128,
+            131
+          ],
+          [
+            198,
+            198
+          ],
+          [
+            296,
+            299
+          ],
+          [
+            301,
+            301
+          ],
+          [
+            602,
+            602
+          ],
+          [
+            718,
+            718
+          ],
+          [
+            813,
+            814
+          ],
+          [
+            833,
+            833
+          ],
+          [
+            882,
+            882
+          ],
+          [
+            930,
+            930
+          ],
+          [
+            1005,
+            1006
+          ],
+          [
+            1031,
+            1031
+          ],
+          [
+            1071,
+            1073
+          ],
+          [
+            1079,
+            1079
+          ],
+          [
+            1093,
+            1093
+          ]
+        ],
+        "final_split_line": 1093,
+        "final_line_empty": true,
+        "uncovered_final_empty_line": true,
+        "uncovered_interior_lines": [
+          51,
+          128,
+          129,
+          130,
+          131,
+          198,
+          296,
+          297,
+          298,
+          299,
+          301,
+          602,
+          718,
+          813,
+          814,
+          833,
+          882,
+          930,
+          1005,
+          1006,
+          1031,
+          1071,
+          1072,
+          1073,
+          1079
+        ],
+        "unchanged_current_source_hash_matches_historical003": true,
+        "interpretation_groups": [
+          {
+            "lines": [
+              128,
+              129,
+              130,
+              131
+            ],
+            "interpretation": "Legacy feedback object projection missing from003 execution and cited exact-text assertions.",
+            "handling": "T3 exact ordered labels for legacy alone,both sources,empty/nonobject plus safe exported HTML."
+          },
+          {
+            "lines": [
+              198,
+              296,
+              297,
+              298,
+              299,
+              301
+            ],
+            "interpretation": "Empty student and corrected display fallback when optional main helper absent. Full app tests use normal helper,so do not prove this fallback sanitization.",
+            "handling": "T3 empty portfolio and explicit missing-helper compatibility cases;retain escaping/sanitizing/rendering policy."
+          },
+          {
+            "lines": [
+              813,
+              814,
+              882,
+              930,
+              1005,
+              1006,
+              1031,
+              1071,
+              1072,
+              1073,
+              1079
+            ],
+            "interpretation": "Missing student/folder acknowledgement,initial signed-out,blank year and too-small ZIP rejection paths. Other upload-ack/storage failures differ.",
+            "handling": "T3 focused actual helper/public flow cases assert zero unsafe outgoing request/download/clear and retained protected bytes."
+          },
+          {
+            "lines": [
+              718
+            ],
+            "interpretation": "January-June school-year calculation not executed under003 clock.",
+            "handling": "T3 fixed January vs July date boundary,without changing production Date behavior."
+          },
+          {
+            "lines": [
+              51,
+              602,
+              833
+            ],
+            "interpretation": "Defensive DOM text fallback,initial synchronous task-runner catch and single ZIP constructor/setup catch.",
+            "handling": "Retain as lower-priority exception boundaries;test only meaningful supported failure contracts,not incidental lines or synthetic score wrappers."
+          }
+        ],
+        "known_eof_artifact": {
+          "line": 1093,
+          "type": "final empty native return point",
+          "existing_owner": "repair-026/native-coverage-terminal-breakpoint-denominator",
+          "evidence": "outputs/repowise-repairs/repair-026-eof-coverage.json records the exact column0/type:return locations for all three unchanged modules.",
+          "new_lead": false
+        },
+        "branch_coverage_measured": false,
+        "capture_or_import_performed_here": false,
+        "current_full004_results_not_read_or_claimed": true
+      }
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "records": 13,
+    "function_shape_records": 10,
+    "coverage_gradient_records": 3,
+    "status_counts": {
+      "candidate_needs_regression": 3,
+      "reviewed_no_change": 9,
+      "confirmed_repair_candidate": 1
+    },
+    "new_repair_opportunities": [
+      {
+        "id": "repair038-R1",
+        "primary_record": "code_health:finding_481a4a617b0134a3a219",
+        "scope": "Remove redundant per-image IIFE;existing addImageExport invocation already supplies independent closure bindings. Preserve task entry/local MIME filename and all safety checks.",
+        "cost": "Delete unnecessary capture layer/aliases;small manifest-entry binding change,then existing real multi-image concurrency/ZIP/name/MIME/owner regressions."
+      }
+    ],
+    "regression_opportunities": [
+      {
+        "id": "repair038-T1",
+        "primary_record": "code_health:finding_4057876aba2cd2a0cf7b",
+        "scope": "Native lightbox open/caption/scroll/backdrop/close/reopen from safe selected and hydrated portfolio image clicks."
+      },
+      {
+        "id": "repair038-T2",
+        "primary_record": "code_health:finding_e8fa786727ce7172a436",
+        "scope": "Native mouse/touch crop drag coordinates/listeners and real clipped output;clipped-small guard/backdrop behavior."
+      },
+      {
+        "id": "repair038-T3",
+        "primary_record": "code_health:finding_67272701e9295673aac2",
+        "scope": "Legacy export feedback and safe missing-helper corrected output;empty/stale selection,signed-out/folder acknowledgement/year/ZIP validation and school-year boundary."
+      }
+    ],
+    "retained_tradeoffs": "Current crop student/photo/queue/request ownership and original/OCR/Drive revision updates;safe URL/HTML/caption boundaries;archive per-photo all-or-nothing completion;captured old/new connection and current-work fingerprint;durable class clear separated from UI/sync publication.",
+    "known_eof_artifacts_not_duplicated": [
+      {
+        "file": "js/app/portfolio-export.js",
+        "line": 1093,
+        "remaining_real_uncovered_interior_lines": 25
+      },
+      {
+        "file": "js/app/photo-crop.js",
+        "line": 259,
+        "remaining_real_uncovered_interior_lines": 30
+      },
+      {
+        "file": "js/app/99-lightbox.js",
+        "line": 35,
+        "remaining_real_uncovered_interior_lines": 15
+      }
+    ],
+    "new_behavioral_leads": 0,
+    "fresh_coverage_or_import_claimed": false,
+    "scanner_clearances_claimed": 0
+  },
+  "limits": [
+    "Read-only review and pure installed walker plus historical coverage arithmetic only;no app tests,live services,source/test/Git/index/tracker/docs/runtime/cache/dependency changes. Only own scratch/report written.",
+    "Complete10 target functions/nested bodies,entire crop/lightbox modules,export uncovered interior and relevant callers/guards read. High-fanout export/sync helpers were traced through representative native archive/single-export/crop/preview paths,not every unrelated caller body.",
+    "Assertions were read from immutable7527 Git blobs and describe intended behavior,not new test pass results. Some fixtures intentionally intercept external requests/download dispatch or inject rectangle state;those limits are recorded instead of counting them as native drag or lightbox lifecycle evidence.",
+    "Coverage003 is historical,source-identical only for these three assigned modules. Fresh004 capture is in progress elsewhere;no fresh rates,corrected denominator import or scanner closure is asserted. One EOF artifact per module is already covered by accepted026 and is not a new lead.",
+    "R1 is a source-confirmed structural candidate needing byte/facts recheck and delayed multi-image regression before adoption. T1/T2/T3 identify missing assertions,not reproduced product defects or a requirement to refactor well-justified guards.",
+    "Optional missing-DOM/legacy fallback/error catches may be retained even if low priority for new tests;percentage alone is not an instruction to remove safety or manufacture coverage. No new behavioral lead or duplicated earlier repair is raised."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "all13_individual_reasons_read": true,
+    "independent_numeric_function_records_matched": 10,
+    "limits": "Three coverage candidates describe real untested interior boundaries in exact-unchanged historical003 modules;026 terminal EOF artifact handled separately. Re-evaluate counts after004freshcapture. Native lightbox lifecycle, crop mouse/touch geometry and export compatibility/rejection tests are meaningful; do not chase defensive catches blindly. No app tests/fresh coverage import by this review. Single redundant per-image wrapper candidate needs closure/task/entry parity."
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "created_at_utc": "2026-10-16T00:35:15.716091+00:00",
+  "validation": "reviews/batch-004-validation.json",
+  "ingestion": {
+    "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+    "health_metrics": 88,
+    "coverage_files": 8,
+    "lcov_context_entries": 472,
+    "test_to_file_records": 379,
+    "totals": {
+      "covered": 10201,
+      "executable": 11077,
+      "percent": 92.09172158526677
+    },
+    "all_counts_percent_source_hashes_match": true,
+    "strict_mapping_complete": true
+  },
+  "records": [
+    {
+      "id": "code_health:finding_ac236ee8c53f6b06a02a",
+      "file": "google-drive-migration.js",
+      "marker": "coverage_gradient",
+      "status": "reviewed_no_change",
+      "present": true,
+      "coverage": {
+        "covered": 122,
+        "executable": 139,
+        "percent": 87.76978417266187,
+        "uncovered": [
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          71,
+          73,
+          74,
+          75,
+          76
+        ]
+      },
+      "detector_result_count": 1
+    },
+    {
+      "id": "code_health:finding_4057876aba2cd2a0cf7b",
+      "file": "js/app/99-lightbox.js",
+      "marker": "coverage_gradient",
+      "status": "candidate_needs_regression",
+      "present": true,
+      "coverage": {
+        "covered": 10,
+        "executable": 25,
+        "percent": 40,
+        "uncovered": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          15,
+          16,
+          18,
+          19,
+          20,
+          21
+        ]
+      },
+      "detector_result_count": 1
+    },
+    {
+      "id": "code_health:finding_e8fa786727ce7172a436",
+      "file": "js/app/photo-crop.js",
+      "marker": "coverage_gradient",
+      "status": "candidate_needs_regression",
+      "present": true,
+      "coverage": {
+        "covered": 180,
+        "executable": 210,
+        "percent": 85.71428571428571,
+        "uncovered": [
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          144,
+          145,
+          220,
+          221,
+          222,
+          223,
+          224,
+          227,
+          228,
+          229,
+          230,
+          234,
+          252,
+          253
+        ]
+      },
+      "detector_result_count": 1
+    },
+    {
+      "id": "code_health:finding_67272701e9295673aac2",
+      "file": "js/app/portfolio-export.js",
+      "marker": "coverage_gradient",
+      "status": "candidate_needs_regression",
+      "present": true,
+      "coverage": {
+        "covered": 571,
+        "executable": 596,
+        "percent": 95.80536912751678,
+        "uncovered": [
+          51,
+          128,
+          129,
+          130,
+          131,
+          198,
+          296,
+          297,
+          298,
+          299,
+          301,
+          602,
+          718,
+          813,
+          814,
+          833,
+          882,
+          930,
+          1005,
+          1006,
+          1031,
+          1071,
+          1072,
+          1073,
+          1079
+        ]
+      },
+      "detector_result_count": 1
+    },
+    {
+      "id": "code_health:finding_339bc8c333e9ec258402",
+      "file": "js/app/storage-recovery.js",
+      "marker": "coverage_gradient",
+      "status": "reviewed_no_change",
+      "present": true,
+      "coverage": {
+        "covered": 183,
+        "executable": 191,
+        "percent": 95.81151832460733,
+        "uncovered": [
+          15,
+          90,
+          91,
+          92,
+          93,
+          95,
+          287,
+          288
+        ]
+      },
+      "detector_result_count": 1
+    },
+    {
+      "id": "code_health:finding_c9064893d7223bb4ffd1",
+      "file": "google-drive-migration.js",
+      "marker": "coverage_gap",
+      "status": "fixed_verified",
+      "present": false,
+      "coverage": {
+        "covered": 122,
+        "executable": 139,
+        "percent": 87.76978417266187,
+        "uncovered": [
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          71,
+          73,
+          74,
+          75,
+          76
+        ]
+      },
+      "detector_result_count": 0
+    },
+    {
+      "id": "code_health:finding_7cafeb9e1b470fe325be",
+      "file": "js/app/dialogs.js",
+      "marker": "coverage_gradient",
+      "status": "fixed_verified",
+      "present": false,
+      "coverage": {
+        "covered": 157,
+        "executable": 157,
+        "percent": 100,
+        "uncovered": []
+      },
+      "detector_result_count": 0
+    }
+  ],
+  "limits": [
+    "Native executable-line coverage, not branch coverage or live service validation.",
+    "A retained coverage gradient is not a proven behavior defect."
+  ]
+}

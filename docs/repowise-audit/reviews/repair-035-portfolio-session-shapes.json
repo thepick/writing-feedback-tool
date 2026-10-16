@@ -1,0 +1,1505 @@
+{
+  "repair_id": "repair-035",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "source_verification": {
+    "assignment_normalized_hash_matches": true,
+    "all_five_inspected_production_files_match_indexed_blobs": true,
+    "immutable_test_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+    "production_edits": false
+  },
+  "metrics_verification": {
+    "method": "Installed unchanged RepoWise pure walk_file_complexity(path,javascript,normalized bytes),Python -B;no CLI/health/index operation.",
+    "complete_assigned_functions": 19,
+    "all_assignment_ccn_cognitive_nloc_nesting_bumps_params_dispatch_deepest_blocks_and_condition_counts_reproduced": true,
+    "not_independently_verified": [
+      "scanner severity/impact/status/identity"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_39ca4412539ee0ed0e83",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "makePortfolioLocalStorageSafe",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_metadata_sanitizer_boundary",
+      "reason": "23NLOC/CCN10 copies a null-prototype root while retaining _meta and other legacy values,delegating each session to the existing sanitizer. Safe-mode bypass intentionally keeps full data. The actual reusable media stripping already lives below this loop;another mapper would just relocate three clear shape cases.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1425",
+        "js/app/00-storage-sync-patches.js:1426",
+        "js/app/00-storage-sync-patches.js:1429",
+        "js/app/00-storage-sync-patches.js:1434",
+        "js/app/00-storage-sync-patches.js:1436",
+        "js/app/00-storage-sync-patches.js:1439",
+        "js/app/00-storage-sync-patches.js:1442",
+        "js/app/00-storage-sync-patches.js:6475"
+      ],
+      "verified_metrics": {
+        "name": "makePortfolioLocalStorageSafe",
+        "start_line": 1424,
+        "end_line": 1446,
+        "ccn": 10,
+        "max_nesting": 3,
+        "cognitive": 12,
+        "nloc": 23,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1436,
+          1443
+        ],
+        "complex_conditions": [
+          {
+            "line": 1426,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1436,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 1424,
+        "deepest_block": {
+          "start": 1436,
+          "end": 1443
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:6475 savePortfolioData calls after required shape validation and before local persistence;1396-1422 existing session/image sanitizers own metadata stripping"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:113-115 actual sanitizer retains own __proto__ student,Drive ref and clears inline bytes",
+        "Scope limit:no cited exhaustive safe-mode/null/root-metadata sanitizer matrix;other media persistence tests exercise surrounding save path."
+      ],
+      "regression_recommendation": "Retain null-prototype root,live key iteration,_meta passthrough,safe-mode bypass and existing session sanitizer. Direct absent/safe-mode/unknown-key/malformed-value and metadata tests only if changed;do not replace with Object.assign over untrusted keys."
+    },
+    {
+      "record_id": "code_health:finding_8689bb25c6ac23adebbc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "clearWftPortfolioIndexDirty",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_current_snapshot_acknowledgement",
+      "reason": "18NLOC/CCN9 protects acknowledgement of an async index upload. Revision,dirtyAt and primary fingerprint cover different same-time/in-flight changes. Dirty is restored before any required read can fail and cleared only after required settings write;these are safety gates,not redundant validation.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1560",
+        "js/app/00-storage-sync-patches.js:1562",
+        "js/app/00-storage-sync-patches.js:1563",
+        "js/app/00-storage-sync-patches.js:1564",
+        "js/app/00-storage-sync-patches.js:1566",
+        "js/app/00-storage-sync-patches.js:1567",
+        "js/app/00-storage-sync-patches.js:1568",
+        "js/app/00-storage-sync-patches.js:1574",
+        "js/app/00-storage-sync-patches.js:1575",
+        "js/app/00-storage-sync-patches.js:1658"
+      ],
+      "verified_metrics": {
+        "name": "clearWftPortfolioIndexDirty",
+        "start_line": 1559,
+        "end_line": 1577,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 18,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1560,
+          1560
+        ],
+        "complex_conditions": [
+          {
+            "line": 1560,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1563,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1566,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 1559,
+        "deepest_block": {
+          "start": 1560,
+          "end": 1560
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1658 savePortfolioIndexToDrive.finish;captured upload snapshot must match current revision,dirty hint and primary fingerprint before acknowledgement"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:129-170 held edit/remove/clear/reset/cloud-merge/same-ms-hint,offline/auth/IO/empty-result cases retain dirty primary and retry latest data",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:196-218 stale index/current connection/recovery block acknowledgement;240-262 required read/write/ack failure preserves primary and bounded retry"
+      ],
+      "regression_recommendation": "Retain dirty=true before required recovery/read/compare/write,all three snapshot comparisons,needsSyncAfterCurrent on mismatch and false only after successful settings write. Existing held-edit/same-ms/required-write/connection/recovery native matrix is appropriate."
+    },
+    {
+      "record_id": "code_health:finding_46dab514cb3065e4b42f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "summarizeSessions",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_live_summary_policy_with_existing_helper",
+      "reason": "18NLOC/CCN11 is already a focused helper with live session iteration,parsed date chronology,own current score precedence and finite legacy-number conversion. Sharing its apparent score duplication with the unused split builder would retain dead production work and change that builder date semantics;the live getter behavior is explicitly asserted.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1608",
+        "js/app/00-storage-sync-patches.js:1618",
+        "js/app/00-storage-sync-patches.js:1629",
+        "js/app/00-storage-sync-patches.js:1633",
+        "js/app/00-storage-sync-patches.js:1635",
+        "js/app/00-storage-sync-patches.js:1638",
+        "js/app/00-storage-sync-patches.js:1639",
+        "js/app/00-storage-sync-patches.js:1640",
+        "js/app/00-storage-sync-patches.js:1645",
+        "js/app/00-storage-sync-patches.js:2810"
+      ],
+      "verified_metrics": {
+        "name": "summarizeSessions",
+        "start_line": 1629,
+        "end_line": 1646,
+        "ccn": 11,
+        "max_nesting": 2,
+        "cognitive": 14,
+        "nloc": 18,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1633,
+          1644
+        ],
+        "complex_conditions": [
+          {
+            "line": 1635,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1639,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1640,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 14,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 1629,
+        "deepest_block": {
+          "start": 1633,
+          "end": 1644
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1608 buildPortfolioIndexFromPortfolio uses live legacy-array or student.sessions source;1618 captures final live session count"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:44-63 actual/zero/legacy/string/current-null precedence,invalid/mixed nullable averages and source immutability",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:64-81 actual main builder live getter reads,appended session,chronological legacy date,own special keys,thrown getter identity and unchanged storage",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.cjs:44-47 main index uses chronological legacy dates"
+      ],
+      "regression_recommendation": "Retain the small main-index helper and live iteration/getter order,parsed dates,own overall precedence,finite/string filtering and nullable rounding. Do not share blindly with lexicographic split summary;retirement of that unused builder is P2. Existing live getter and score matrix protects intentional behavior."
+    },
+    {
+      "record_id": "code_health:finding_91f79ffa71c58cd99db3",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "updateStudentRecordOnRename",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_stable_identity_rename_adapter",
+      "reason": "30NLOC/CCN11 keeps both name aliases mapped to one stable ID and updates the first ID/name-matching record,or creates a record with both aliases. Optional identity mode and own special-name safety are separate from persistence,which belongs to the current-state rename transaction. A generic upsert helper would be single-use and hide alias rules.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2396",
+        "js/app/00-storage-sync-patches.js:2397",
+        "js/app/00-storage-sync-patches.js:2399",
+        "js/app/00-storage-sync-patches.js:2400",
+        "js/app/00-storage-sync-patches.js:2401",
+        "js/app/00-storage-sync-patches.js:2406",
+        "js/app/00-storage-sync-patches.js:2410",
+        "js/app/00-storage-sync-patches.js:2413",
+        "js/app/00-storage-sync-patches.js:2416",
+        "js/app/00-storage-sync-patches.js:2418",
+        "js/app/00-storage-sync-patches.js:2420"
+      ],
+      "verified_metrics": {
+        "name": "updateStudentRecordOnRename",
+        "start_line": 2395,
+        "end_line": 2425,
+        "ccn": 11,
+        "max_nesting": 3,
+        "cognitive": 15,
+        "nloc": 30,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2406,
+          2414
+        ],
+        "complex_conditions": [
+          {
+            "line": 2406,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 15,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 2395,
+        "deepest_block": {
+          "start": 2406,
+          "end": 2414
+        }
+      },
+      "callers": [
+        "10-main-app.js:404 rename after confirmed dialog and current-state reread,within atomic student-change assembly;2396 flag disables optional ID-map mutation"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:128-136 actual ensure/rename helpers preserve own constructor/__proto__ ID mapping",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:53-59 native helper ID/alias own-name checks",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/rename-confirmation.browser.cjs:112-140 cancelled/invalid/write-failed rename preserves state;successful current-state reread retains new essays,photos,others,settings and flag-dependent mappings"
+      ],
+      "regression_recommendation": "Retain feature flag,own-key map clone,stable ID reuse,old/new aliases,first matching record update and new-record fallback. Existing confirmed-dialog current-reread/failure/own-name tests are appropriate;add absent-record/ID-missing/duplicate-alias cases only if changing these branches."
+    },
+    {
+      "record_id": "code_health:finding_f6e9e73c6aeca2e2f8a4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "mergeStudentPortfolioFiles",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_asymmetric_split_file_merge_policy",
+      "reason": "14NLOC/CCN16 mostly counts fallbacks in one returned file. Local ID,remote display name,older creation,ordered aliases and local-first owner context have different precedence;both missing and single-file inputs need different deletion handling. A spread merge or option-heavy builder would obscure these real rules.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2645",
+        "js/app/00-storage-sync-patches.js:2646",
+        "js/app/00-storage-sync-patches.js:2647",
+        "js/app/00-storage-sync-patches.js:2650",
+        "js/app/00-storage-sync-patches.js:2651",
+        "js/app/00-storage-sync-patches.js:2652",
+        "js/app/00-storage-sync-patches.js:2653",
+        "js/app/00-storage-sync-patches.js:2655",
+        "js/app/00-storage-sync-patches.js:2791"
+      ],
+      "verified_metrics": {
+        "name": "mergeStudentPortfolioFiles",
+        "start_line": 2644,
+        "end_line": 2657,
+        "ccn": 16,
+        "max_nesting": 1,
+        "cognitive": 15,
+        "nloc": 14,
+        "bumps": 0,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2645,
+          2645
+        ],
+        "complex_conditions": [
+          {
+            "line": 2645,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 2644,
+        "deepest_block": {
+          "start": 2645,
+          "end": 2645
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2791 syncStudentFileWithMerge after required deletion preflight/read;2779-2794 handles load/save errors and callbacks"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:43-47 actual split helper picks newer local text,preserves own IDs and ordered aliases",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 actual split-file/main filters and merge obey newer/equal/older/invalid/owner/Lamport policy",
+        "Scope limit:inspected assertions do not exhaust every both-null/single-file/metadata precedence combination."
+      ],
+      "regression_recommendation": "Keep asymmetric metadata precedence(local ID,remote display name,local-first deletion context),ordered aliases,older creation and one-sided tombstone filtering. Add direct null/one-sided/metadata tie matrix before any rewrite;no generic object overlay."
+    },
+    {
+      "record_id": "code_health:finding_e8fe607851364edb4a90",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "mergeStudentSessions",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_split_identity_deletion_and_order_boundary",
+      "reason": "26NLOC/CCN13 normalizes missing IDs before tombstone matching,uses explicit owner context,deduplicates in a null-prototype map and delegates newer/photo selection. Main portfolio merge is superficially similar but uses different legacy keys,tie input order,deletion stage and date sort. Reuse would require behavioral choices beyond a minimal structural repair.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2660",
+        "js/app/00-storage-sync-patches.js:2661",
+        "js/app/00-storage-sync-patches.js:2664",
+        "js/app/00-storage-sync-patches.js:2666",
+        "js/app/00-storage-sync-patches.js:2670",
+        "js/app/00-storage-sync-patches.js:2673",
+        "js/app/00-storage-sync-patches.js:2674",
+        "js/app/00-storage-sync-patches.js:2676",
+        "js/app/00-storage-sync-patches.js:2680",
+        "js/app/00-storage-sync-patches.js:2682",
+        "js/app/00-storage-sync-patches.js:2683",
+        "js/app/00-storage-sync-patches.js:5564",
+        "js/app/00-storage-sync-patches.js:5576"
+      ],
+      "verified_metrics": {
+        "name": "mergeStudentSessions",
+        "start_line": 2659,
+        "end_line": 2687,
+        "ccn": 13,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 26,
+        "bumps": 1,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2662,
+          2677
+        ],
+        "complex_conditions": [
+          {
+            "line": 2674,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 16,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 2659,
+        "deepest_block": {
+          "start": 2662,
+          "end": 2677
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2655 mergeStudentPortfolioFiles passes session arrays,deletions and local-first student ID/name context;2674 calls owner-aware tombstone predicate;2676 calls shared newer-session/photo policy"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:82-96 actual split merge preserves special session IDs and newer tombstone removes only matching entry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 split helper uses actual deletion predicate across time,Lamport,owner and modern/legacy log shapes",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:43-47 newer local text,own-key identities and alias preservation;174-189 main merge/upload media ownership is related shared-comparator evidence,not full split-sync transport proof"
+      ],
+      "regression_recommendation": "Retain null-prototype identity map,ID assignment before filtering,explicit session-owner context,first-on-tie local precedence via comparator and existing lexicographic createdAt sort. Never reuse main merger without preserving its different key/deletion/order rules. Existing deletion/identity/image tests are relevant;missing-ID/tie/order cases needed if touched."
+    },
+    {
+      "record_id": "code_health:finding_bec451339b56de3055de",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "getWftDeletionRecords",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_modern_legacy_tombstone_projection",
+      "reason": "22NLOC/CCN16 counts optional legacy fields and Lamport copy while projecting old map entries alongside modern records. The legacy key plus ID/name evidence is consumed by owner matching;merging or deduplicating representations prematurely could discard a valid deletion route. One centralized adapter already exists.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2690",
+        "js/app/00-storage-sync-patches.js:2691",
+        "js/app/00-storage-sync-patches.js:2692",
+        "js/app/00-storage-sync-patches.js:2696",
+        "js/app/00-storage-sync-patches.js:2698",
+        "js/app/00-storage-sync-patches.js:2699",
+        "js/app/00-storage-sync-patches.js:2701",
+        "js/app/00-storage-sync-patches.js:2702",
+        "js/app/00-storage-sync-patches.js:2706",
+        "js/app/00-storage-sync-patches.js:2707",
+        "js/app/00-storage-sync-patches.js:2714",
+        "js/app/00-storage-sync-patches.js:2757",
+        "js/app/00-storage-sync-patches.js:2759"
+      ],
+      "verified_metrics": {
+        "name": "getWftDeletionRecords",
+        "start_line": 2689,
+        "end_line": 2710,
+        "ccn": 16,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 22,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2693,
+          2708
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 16,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 2689,
+        "deepest_block": {
+          "start": 2693,
+          "end": 2708
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2714 isStudentSessionDeleted consumes modern and synthesized legacy records;2753-2760 enforces record type,session identity,student owner and chronology"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 records-only,legacy-only,both,key-only and wrong-owner/session/type cases through actual deletion policy",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-46 actual merged deletion collections preserve chronology,clock,metadata and source immutability"
+      ],
+      "regression_recommendation": "Keep modern record slice plus synthesized legacy records with legacyKey and owner fields;duplicate representations may carry different owner evidence and are not redundant writes. Preserve legacy updatedAt fallback and numeric Lamport copy. Existing owner/shape/date matrix should remain."
+    },
+    {
+      "record_id": "code_health:finding_3e59867d333d8fc36c2e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "deletionIsNewer",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "redundant_boolean_return_branches_P1",
+      "reason": "12NLOC/CCN12 contains two if-true/else-false return pairs around boolean comparisons. Returning the comparisons directly removes genuine redundant branches without adding a helper or weakening strict chronology. Keep Lamport validity/-1 sentinel,the zero deleted-time guard and outer owner matching unchanged.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2736",
+        "js/app/00-storage-sync-patches.js:2737",
+        "js/app/00-storage-sync-patches.js:2739",
+        "js/app/00-storage-sync-patches.js:2742",
+        "js/app/00-storage-sync-patches.js:2743",
+        "js/app/00-storage-sync-patches.js:2745",
+        "js/app/00-storage-sync-patches.js:2746",
+        "js/app/00-storage-sync-patches.js:2747",
+        "js/app/00-storage-sync-patches.js:2748",
+        "js/app/00-storage-sync-patches.js:2759",
+        "js/app/00-storage-sync-patches.js:2760"
+      ],
+      "verified_metrics": {
+        "name": "deletionIsNewer",
+        "start_line": 2736,
+        "end_line": 2749,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 13,
+        "nloc": 12,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2738,
+          2744
+        ],
+        "complex_conditions": [
+          {
+            "line": 2739,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 2745,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 2747,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 13,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 2736,
+        "deepest_block": {
+          "start": 2738,
+          "end": 2744
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2760 isStudentSessionDeleted calls only after type/session/student-owner matching;2715 computes parsed session time and2739 chooses missing-clock sentinel"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 newer/equal/older/missing/invalid timestamps and Lamport clocks,wrong owner/session/type and modern/legacy forms through actual predicate",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-37 archive-remove Lamport5 deletes session4 but equal5 survives"
+      ],
+      "regression_recommendation": "P1:replace2742-2743 with return d.lamportClock > sessLam;replace2747-2748 with return !sessionUpdateMs || deletedMs > sessionUpdateMs. Keep flag/type/NaN checks,-1 sentinel,parsed timestamp fallback,zero guard and outer owner/type/session checks exactly. Existing strict-newer/equality/invalid/missing/Lamport/archive matrix should protect parity;run before adoption,not in this review."
+    },
+    {
+      "record_id": "code_health:finding_327ffe7802bf5064d920",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "rebuildIndexFromStudentFiles",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "test_only_global_retirement_candidate_P2",
+      "reason": "23NLOC/CCN18 standalone split index builder has no production call found;three test files directly exercise it. Candidate is deleting unused work after global/public-API and full caller verification,not extracting its score loop merely to lower CCN. Main index upload uses buildPortfolioIndexFromPortfolio. Current global availability and deliberate direct assertions mean retirement is conditional rather than a proven safe deletion.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1579",
+        "js/app/00-storage-sync-patches.js:1608",
+        "js/app/00-storage-sync-patches.js:2799",
+        "js/app/00-storage-sync-patches.js:2802",
+        "js/app/00-storage-sync-patches.js:2806",
+        "js/app/00-storage-sync-patches.js:2808",
+        "js/app/00-storage-sync-patches.js:2810",
+        "js/app/00-storage-sync-patches.js:2815",
+        "js/app/00-storage-sync-patches.js:2820"
+      ],
+      "verified_metrics": {
+        "name": "rebuildIndexFromStudentFiles",
+        "start_line": 2799,
+        "end_line": 2821,
+        "ccn": 18,
+        "max_nesting": 3,
+        "cognitive": 29,
+        "nloc": 23,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2808,
+          2814
+        ],
+        "complex_conditions": [
+          {
+            "line": 2806,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2810,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2812,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2813,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2816,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 29,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 2799,
+        "deepest_block": {
+          "start": 2808,
+          "end": 2814
+        }
+      },
+      "callers": [
+        "No production call or dynamic name reference found by full repository reference search;sole production occurrence is definition2799. index.html loads the patch bundle,so the global is available,which does not itself prove a public API contract.",
+        "Frozen tests call it directly:portfolio-index.browser.cjs:59,record-identity.browser.cjs:63,record-identity.cjs:125-126. Historical audit text concerns a deleted unshipped copy,not evidence that this current global is unused externally."
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:44-63 actual split score builder matches all nine current/legacy/null/invalid score scenarios",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:124-126 split builder own __proto__ student assertion;tests/record-identity.browser.cjs:60-67 own-key split index/deletion-record checks",
+        "Scope limit:live legacy chronological/date/getter checks64-81 in portfolio-index.browser target only the main builder. No cited end-to-end application route calls this split builder."
+      ],
+      "regression_recommendation": "P2:review retirement of this standalone global after complete static/dynamic/HTML/public-API search. Current source has no production caller;only three test files invoke it. Remove only if no external/global API obligation;retarget or retire ONLY helper-specific split score/own-key assertions while preserving active main builder/native index upload coverage. If retention is intentional,document that rationale and keep the function rather than introducing a threshold-only summary wrapper. Different split lexicographic vs main parsed-date semantics must be resolved explicitly before sharing."
+    },
+    {
+      "record_id": "code_health:finding_a5802959d4da1cf79531",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "normalizeDeletionsData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_legacy_deletion_schema_boundary",
+      "reason": "14NLOC/CCN14 fills an existing schema,clones unknown own metadata/upgrades version,normalizes three containers and copies record array before optional compaction. skipCompaction prevents recursive normalize/compact calls. A generic per-field coercion table would enlarge this short explicit boundary;expiry duplicate work is already029/P3.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4515",
+        "js/app/00-storage-sync-patches.js:4562",
+        "js/app/00-storage-sync-patches.js:4564",
+        "js/app/00-storage-sync-patches.js:4565",
+        "js/app/00-storage-sync-patches.js:4566",
+        "js/app/00-storage-sync-patches.js:4567",
+        "js/app/00-storage-sync-patches.js:4568",
+        "js/app/00-storage-sync-patches.js:4569",
+        "js/app/00-storage-sync-patches.js:4570",
+        "js/app/00-storage-sync-patches.js:4571",
+        "js/app/00-storage-sync-patches.js:4572",
+        "js/app/00-storage-sync-patches.js:4576"
+      ],
+      "verified_metrics": {
+        "name": "normalizeDeletionsData",
+        "start_line": 4561,
+        "end_line": 4577,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 18,
+        "nloc": 14,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4564,
+          4573
+        ],
+        "complex_conditions": [
+          {
+            "line": 4564,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4569,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 4570,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 4571,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 18,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 4561,
+        "deepest_block": {
+          "start": 4564,
+          "end": 4573
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:4515 compactDeletions calls with skipCompaction=true to avoid recursion;4583 required read;4594 required save;4455 fingerprint;2690/4651/4814 deletion policy;storage-recovery.js:185 staged deletion preparation;portfolio-export.js:723 export filtering"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-52 collection chronology,metadata,source immutability and repeated-merge history stability",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 actual normalize/filter predicate policy;185-202 compaction flag,boundary,invalid/missing date,metadata and idempotence",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31 malformed required deletion storage fails without outgoing writes or state loss"
+      ],
+      "regression_recommendation": "Keep default/schema/unknown metadata clone,three map fallbacks,records slice and skipCompaction recursion boundary. Three similar map assignments do not justify a generic schema normalizer.029/P3 expiry-filter reuse is already tracked;not a new opportunity here."
+    },
+    {
+      "record_id": "code_health:finding_4bf6ae89b4dd80f1f147",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "isStudentDeletedByTombstone",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_student_restore_precedence",
+      "reason": "21NLOC/CCN12 makes blank/missing deletion,missing restore,invalid-time asymmetry and equal/newer restore explicit. Own-key lookup is required for user-controlled names. Final strict greater comparison intentionally lets an equal-time teacher restore survive;deleting these guards would change re-add/import safety.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4650",
+        "js/app/00-storage-sync-patches.js:4651",
+        "js/app/00-storage-sync-patches.js:4653",
+        "js/app/00-storage-sync-patches.js:4654",
+        "js/app/00-storage-sync-patches.js:4656",
+        "js/app/00-storage-sync-patches.js:4657",
+        "js/app/00-storage-sync-patches.js:4659",
+        "js/app/00-storage-sync-patches.js:4660",
+        "js/app/00-storage-sync-patches.js:4662",
+        "js/app/00-storage-sync-patches.js:4663",
+        "js/app/00-storage-sync-patches.js:4667"
+      ],
+      "verified_metrics": {
+        "name": "isStudentDeletedByTombstone",
+        "start_line": 4641,
+        "end_line": 4668,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 21,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4650,
+          4650
+        ],
+        "complex_conditions": [
+          {
+            "line": 4662,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4663,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 4641,
+        "deepest_block": {
+          "start": 4650,
+          "end": 4650
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:4805 roster filter;4822 portfolio filter;5217 merged roster;7827 pending owner/student deletion check"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 student delete/restore older/equal/newer timestamps and own-key handling",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:29-37 latest delete/restore histories and clock metadata;tests/portfolio-sync.cjs:99-107 real helper sync filters deleted essay/student while newer restore survives"
+      ],
+      "regression_recommendation": "Retain own-key delete/restore lookup and explicit invalid-time asymmetry;equal restore wins. Existing exact older/equal/newer/invalid/own-key matrix is appropriate;never replace this with truthiness of deletion entry alone."
+    },
+    {
+      "record_id": "code_health:finding_b1942152e23eceee7be9",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "restoreStudentDeletion",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_staged_restore_evidence_boundary",
+      "reason": "22NLOC/CCN9 removes an existing student deletion and records fresh restoration evidence,then saves only for unstaged callers. Required storage atomicity belongs to callers with a supplied deletion draft. This differs from session deletion enough that a shared writer adds policy parameters;the small guarded delete is not a worthwhile malformed-data behavior change.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4671",
+        "js/app/00-storage-sync-patches.js:4672",
+        "js/app/00-storage-sync-patches.js:4676",
+        "js/app/00-storage-sync-patches.js:4678",
+        "js/app/00-storage-sync-patches.js:4682",
+        "js/app/00-storage-sync-patches.js:4683",
+        "js/app/00-storage-sync-patches.js:4686",
+        "js/app/00-storage-sync-patches.js:4690",
+        "js/app/00-storage-sync-patches.js:4692",
+        "js/app/00-storage-sync-patches.js:4693",
+        "js/app/00-storage-sync-patches.js:4696",
+        "js/app/00-storage-sync-patches.js:4700"
+      ],
+      "verified_metrics": {
+        "name": "restoreStudentDeletion",
+        "start_line": 4670,
+        "end_line": 4697,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 22,
+        "bumps": 0,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4676,
+          4676
+        ],
+        "complex_conditions": [
+          {
+            "line": 4686,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 4670,
+        "deepest_block": {
+          "start": 4676,
+          "end": 4676
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:4700 clearStudentDeletion used by add/import/restore paths;staged deletions belong to caller atomic commit,unstaged call saves itself"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-durability.browser.cjs:14-24,80,110-138 restore/destructive action storage-failure matrix preserves primary,markers,settings,roster,selection,counters and retryability",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 restored student tie/newer/older policy",
+        "Scope limit:durability checks concern actual restore journey;not every malformed direct helper argument is asserted."
+      ],
+      "regression_recommendation": "Retain staged-versus-self-save contract,deleted-entry removal,new restore evidence and reason default. A shared tombstone writer would blur student restore versus session delete semantics. Existing failure-safe native restore/tie tests are appropriate;guarded delete is too small to justify a behavior-changing cleanup of malformed falsy entries."
+    },
+    {
+      "record_id": "code_health:finding_2152c2f19d3ffe71e9c4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "recordSessionDeletion",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_dual_identity_deletion_history",
+      "reason": "30NLOC/CCN13 captures optional own student ID without making ID lookup authoritative,writes independent name/ID lookup copies and appends modern history. Those copies serve legacy and stable-ID consumers and must not be collapsed. Supplied deletion drafts deliberately defer persistence until the portfolio transaction commits.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4704",
+        "js/app/00-storage-sync-patches.js:4706",
+        "js/app/00-storage-sync-patches.js:4708",
+        "js/app/00-storage-sync-patches.js:4712",
+        "js/app/00-storage-sync-patches.js:4714",
+        "js/app/00-storage-sync-patches.js:4717",
+        "js/app/00-storage-sync-patches.js:4720",
+        "js/app/00-storage-sync-patches.js:4726",
+        "js/app/00-storage-sync-patches.js:4727",
+        "js/app/00-storage-sync-patches.js:4728",
+        "js/app/00-storage-sync-patches.js:4730",
+        "js/app/00-storage-sync-patches.js:4731",
+        "js/app/00-storage-sync-patches.js:4732",
+        "js/app/00-storage-sync-patches.js:6853",
+        "js/app/00-storage-sync-patches.js:6854"
+      ],
+      "verified_metrics": {
+        "name": "recordSessionDeletion",
+        "start_line": 4703,
+        "end_line": 4733,
+        "ccn": 13,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 30,
+        "bumps": 1,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4712,
+          4715
+        ],
+        "complex_conditions": [
+          {
+            "line": 4706,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4714,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 16,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 4703,
+        "deepest_block": {
+          "start": 4712,
+          "end": 4715
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:6853 removeStudentSession;8336 replacement path;10-main-app.js:3154 class clear/reset records staged deletions"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:60-67 missing own ID mapping yields empty studentId rather than inherited constructor",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-removal.cjs:39-69 exact removed entry is marked only after successful durable save;failure/no-match leaves storage and events unchanged",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-durability.browser.cjs:14-24,110-138 failed destructive commits preserve all before images and suppress marker/sync publication"
+      ],
+      "regression_recommendation": "Preserve soft optional own-ID lookup,name-key and optional ID-key cloned records,append-only modern history,device/time and staged save boundary. No dedup that drops legacy lookup routes or moves persistence before portfolio commit. Existing real deletion/durability/own-name tests are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_57bf7e0e594ad2aeb062",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "applyDeletionsToPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_owner_aware_portfolio_filter",
+      "reason": "28NLOC/CCN15 applies student deletion before per-session deletion,clones retained records and preserves null-prototype keys. The owner fallback reads ORIGINAL portfolio studentId because normalized records omit that metadata;replacing it with the clone or settings-only lookup would delete the wrong owner sessions. Existing predicate already centralizes chronology.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4813",
+        "js/app/00-storage-sync-patches.js:4814",
+        "js/app/00-storage-sync-patches.js:4815",
+        "js/app/00-storage-sync-patches.js:4820",
+        "js/app/00-storage-sync-patches.js:4822",
+        "js/app/00-storage-sync-patches.js:4826",
+        "js/app/00-storage-sync-patches.js:4827",
+        "js/app/00-storage-sync-patches.js:4833",
+        "js/app/00-storage-sync-patches.js:4835",
+        "js/app/00-storage-sync-patches.js:4836",
+        "js/app/00-storage-sync-patches.js:4841",
+        "js/app/00-storage-sync-patches.js:4845"
+      ],
+      "verified_metrics": {
+        "name": "applyDeletionsToPortfolio",
+        "start_line": 4812,
+        "end_line": 4846,
+        "ccn": 15,
+        "max_nesting": 3,
+        "cognitive": 22,
+        "nloc": 28,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4831,
+          4839
+        ],
+        "complex_conditions": [
+          {
+            "line": 4835,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 4836,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 22,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 4812,
+        "deepest_block": {
+          "start": 4831,
+          "end": 4839
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5615 initial local sync snapshot;5658 pre-upload;5674 cloud;5676 duplicate/local merge;5677 final merged result;portfolio-export.js:726 archive export"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 actual portfolio/file/merge filters agree on chronology,strict clocks,wrong owners,source studentId precedence and own names",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.cjs:99-107 student/essay tombstones and newer restore survive native-helper sync merge",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:1-32 own student/session keys preserve all essays across native main merge"
+      ],
+      "regression_recommendation": "Retain strict normalization,null-prototype result,student tombstone first,original source studentId fallback before settings map,session-level time/clock/owner policy and derived-stat boundary. Existing wrong-owner/source-ID/own-name filtering and native required-write tests protect this;no one-use filtering wrapper needed."
+    },
+    {
+      "record_id": "code_health:finding_671540889fa536be2e31",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "mergeWftStudents",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_prefixed_roster_identity_union",
+      "reason": "26NLOC/CCN9 builds one name roster with cloud-first/local-last casing priority,invalid-entry skips,tombstone filtering and locale order. Dictionary keys are always id:/name: prefixed,so a bare __proto__ name cannot trigger its special setter;the explicit own-key enumeration remains useful. No demonstrated duplicate policy or missing shared abstraction.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5177",
+        "js/app/00-storage-sync-patches.js:5182",
+        "js/app/00-storage-sync-patches.js:5183",
+        "js/app/00-storage-sync-patches.js:5186",
+        "js/app/00-storage-sync-patches.js:5187",
+        "js/app/00-storage-sync-patches.js:5193",
+        "js/app/00-storage-sync-patches.js:5195",
+        "js/app/00-storage-sync-patches.js:5204",
+        "js/app/00-storage-sync-patches.js:5205",
+        "js/app/00-storage-sync-patches.js:5206",
+        "js/app/00-storage-sync-patches.js:5211",
+        "js/app/00-storage-sync-patches.js:5215",
+        "js/app/00-storage-sync-patches.js:5217",
+        "js/app/00-storage-sync-patches.js:5222"
+      ],
+      "verified_metrics": {
+        "name": "mergeWftStudents",
+        "start_line": 5192,
+        "end_line": 5224,
+        "ccn": 9,
+        "max_nesting": 3,
+        "cognitive": 12,
+        "nloc": 26,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5215,
+          5219
+        ],
+        "complex_conditions": [
+          {
+            "line": 5206,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 12,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 5192,
+        "deepest_block": {
+          "start": 5215,
+          "end": 5219
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5257 mergeWftSettings;6301 applyLoadedSettings before settings/roster commit;5177-5189 normalizeStudentKey prefixes id:/name: before dictionary use"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.cjs:76-107 controller helper union keeps cloud/local roster names and applies latest restore/deletion",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/rename-confirmation.browser.cjs:112-140 ID/alias and current-state roster changes preserved through native commit",
+        "Scope limit:roster union assertions and prefixed-key source inspection support retention;no exhaustive object-ID-vs-name collision matrix cited."
+      ],
+      "regression_recommendation": "Preserve prefixed identity normalization,cloud-first/local-last casing priority,invalid skip,own-key filter,deletion policy and locale sorting. Do not change roster to records or remove own-key check;Object.create(null) alone would be consistency churn because all produced keys have id:/name: prefixes."
+    },
+    {
+      "record_id": "code_health:finding_ad0ca082ca47da651418",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "mergeSessionImageRefs",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_ordered_image_reference_merge",
+      "reason": "35NLOC/CCN11 owns one newer-primary merge with legacy images/photos aliases,cloning,null-prototype image identities and existing nested per-image policy. Primary-first order plus only-existing-container assignments preserve representation and metadata. The heavy conflict rules are already isolated in addImage;another collection helper would only move loops.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5462",
+        "js/app/00-storage-sync-patches.js:5463",
+        "js/app/00-storage-sync-patches.js:5464",
+        "js/app/00-storage-sync-patches.js:5465",
+        "js/app/00-storage-sync-patches.js:5469",
+        "js/app/00-storage-sync-patches.js:5498",
+        "js/app/00-storage-sync-patches.js:5499",
+        "js/app/00-storage-sync-patches.js:5501",
+        "js/app/00-storage-sync-patches.js:5502",
+        "js/app/00-storage-sync-patches.js:5511",
+        "js/app/00-storage-sync-patches.js:5512"
+      ],
+      "verified_metrics": {
+        "name": "mergeSessionImageRefs",
+        "start_line": 5461,
+        "end_line": 5505,
+        "ccn": 11,
+        "max_nesting": 1,
+        "cognitive": 10,
+        "nloc": 35,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5464,
+          5464
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 35,
+        "dispatch_share": 0.0,
+        "symbol_line": 5461,
+        "deepest_block": {
+          "start": 5464,
+          "end": 5464
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5511-5512 chooseNewerSession passes newer primary or first-on-tie primary;2676 split merge and5564 main merge intentionally supply different input orders"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:43-61 same revision fills refs without replacing metadata;crop/reset,changed bytes and differing Drive IDs block stale fill;distinct image order and prototype safety",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:174-189 native main merges/uploads keep newer text,bytes,Drive ref,filename,MIME and special image keys"
+      ],
+      "regression_recommendation": "Keep clone/newer-primary order,legacy images/photos aliases,null-prototype image identity,existing nested helper and only-existing-container assignment. Existing shared comparator/native upload assertions cover high-risk rules;no generic merge abstraction."
+    },
+    {
+      "record_id": "code_health:finding_02c704b94cb1a85a55ef",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "addImage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_image_revision_and_fill_only_guards",
+      "reason": "22NLOC/CCN22 is dense because each revision,Drive reference,inline-byte and own-field check protects a different stale-media case. Key precedence and fill-only refs preserve newer crop/reset identity and metadata. The existing nested helper is the reuse boundary;collapsing guards or spreading older image objects is unsafe,not a complexity repair.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5472",
+        "js/app/00-storage-sync-patches.js:5474",
+        "js/app/00-storage-sync-patches.js:5476",
+        "js/app/00-storage-sync-patches.js:5477",
+        "js/app/00-storage-sync-patches.js:5480",
+        "js/app/00-storage-sync-patches.js:5481",
+        "js/app/00-storage-sync-patches.js:5485",
+        "js/app/00-storage-sync-patches.js:5486",
+        "js/app/00-storage-sync-patches.js:5487",
+        "js/app/00-storage-sync-patches.js:5489",
+        "js/app/00-storage-sync-patches.js:5492",
+        "js/app/00-storage-sync-patches.js:5494"
+      ],
+      "verified_metrics": {
+        "name": "addImage",
+        "start_line": 5469,
+        "end_line": 5496,
+        "ccn": 22,
+        "max_nesting": 3,
+        "cognitive": 28,
+        "nloc": 22,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5490,
+          5493
+        ],
+        "complex_conditions": [
+          {
+            "line": 5485,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5486,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5487,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5492,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 22,
+        "cognitive": 28,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 5469,
+        "deepest_block": {
+          "start": 5490,
+          "end": 5493
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5498 primary image loop then5499 secondary loop in mergeSessionImageRefs;newer-session selection5511-5512 happens before this fill-only merge"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:43-61 actual nested helper via mergeSessionImageRefs covers fill-only,same/different revision,old bytes,differing ID,distinct ordering and untrusted __proto__ field",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:174-189 native current media merge/upload and own special image IDs"
+      ],
+      "regression_recommendation": "Retain key fallback order,stable-string fallback,first image clone,three independent revision/Drive-ID/inline-byte rejection gates and own truthy missing-ref fill. Keep newer metadata and pending flag behavior. Current direct and native media conflict tests are appropriate;combining gates is only score movement and risks stale crop/reset bytes."
+    },
+    {
+      "record_id": "code_health:finding_cbe86c69e41718143128",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "mergeWftPortfolios",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_main_portfolio_union_boundary",
+      "reason": "47NLOC/CCN15 has one normalized cloud/local union with null-prototype maps,cloud clone,legacy getSessionKey identity,newer-session selection and parsed presentation sort. A shared split-session helper would change tie order,ID assignment,deletion stage and sorting. Existing comparison/photo helper already shares the truly common policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5522",
+        "js/app/00-storage-sync-patches.js:5523",
+        "js/app/00-storage-sync-patches.js:5526",
+        "js/app/00-storage-sync-patches.js:5531",
+        "js/app/00-storage-sync-patches.js:5532",
+        "js/app/00-storage-sync-patches.js:5538",
+        "js/app/00-storage-sync-patches.js:5540",
+        "js/app/00-storage-sync-patches.js:5546",
+        "js/app/00-storage-sync-patches.js:5553",
+        "js/app/00-storage-sync-patches.js:5554",
+        "js/app/00-storage-sync-patches.js:5558",
+        "js/app/00-storage-sync-patches.js:5564",
+        "js/app/00-storage-sync-patches.js:5570",
+        "js/app/00-storage-sync-patches.js:5575",
+        "js/app/00-storage-sync-patches.js:5576",
+        "js/app/00-storage-sync-patches.js:5584"
+      ],
+      "verified_metrics": {
+        "name": "mergeWftPortfolios",
+        "start_line": 5520,
+        "end_line": 5585,
+        "ccn": 15,
+        "max_nesting": 3,
+        "cognitive": 28,
+        "nloc": 47,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5552,
+          5555
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 28,
+        "nloc": 47,
+        "dispatch_share": 0.0,
+        "symbol_line": 5520,
+        "deepest_block": {
+          "start": 5552,
+          "end": 5555
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5147 duplicate portfolio download merge;5676 current portfolio sync merge;normalization5522-5523 precedes main key/chronology policy"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.cjs:76-107 helper sync union preserves local/cloud-only sessions,newer conflict in both directions and distinct photos",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:1-32 special student/session keys remain own entries;174-189 actual merged stored/uploaded media matches newer session",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-sync.browser.cjs:16-28,32-55 native held local/new/remote edits and failed required local write retain primary and avoid stale upload"
+      ],
+      "regression_recommendation": "Preserve strict normalization/null-prototype maps,cloud base clone,getSessionKey legacy identities,cloud-first tie behavior,local newer selection and parsed presentation sort. Split merger instead assigns IDs,filters deletions,uses local-first ties and lexicographic sort,so sharing it is not a safe simplification. Existing held-edit,identity,newer-photo and tombstone native checks are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_c1810fefa912af17bacb",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "removeStudentSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_exact_removal_and_atomic_commit",
+      "reason": "17NLOC/CCN9 rejects stale/missing selectors,removes one actual matched entry,stages that entry identity and commits portfolio+markers together. Selected-student rendering is deliberately after persistence and best effort,so display failure does not falsely report data loss. Short-circuit/DOM checks reflect real boundaries;no extra wrapper helps.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6845",
+        "js/app/00-storage-sync-patches.js:6847",
+        "js/app/00-storage-sync-patches.js:6849",
+        "js/app/00-storage-sync-patches.js:6850",
+        "js/app/00-storage-sync-patches.js:6851",
+        "js/app/00-storage-sync-patches.js:6852",
+        "js/app/00-storage-sync-patches.js:6853",
+        "js/app/00-storage-sync-patches.js:6854",
+        "js/app/00-storage-sync-patches.js:6856",
+        "js/app/00-storage-sync-patches.js:6857",
+        "js/app/00-storage-sync-patches.js:6858",
+        "js/app/00-storage-sync-patches.js:6859",
+        "js/app/00-storage-sync-patches.js:6870"
+      ],
+      "verified_metrics": {
+        "name": "removeStudentSession",
+        "start_line": 6844,
+        "end_line": 6860,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 11,
+        "nloc": 17,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6855,
+          6858
+        ],
+        "complex_conditions": [
+          {
+            "line": 6845,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6847,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6857,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 6844,
+        "deepest_block": {
+          "start": 6855,
+          "end": 6858
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:6870 deletePortfolioSession awaits confirmation then handles false/error;6849 exact/legacy selector helper;6854 saveWftStudentChange owns atomic portfolio/deletion persistence"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-removal.cjs:39-69 actual helper selects stable ID before date/index legacy fallback,removes exactly one,marks actual removed identity,save failure/no-match has no side effects",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-removal.cjs:70-82 missing/cancelled UI removal leaves events empty;successful save with rendering failure remains a successful removal",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-durability.browser.cjs:14-24,110-138 native destructive action required-storage failure protects primary/deletion markers and sync state"
+      ],
+      "regression_recommendation": "Preserve exact selector,one splice,actual removed identity,staged tombstone plus atomic student-change save,best-effort selected-student render and true after durable success. Existing exact/legacy/no-match/save-failure/cancel/render-failure tests should stay;no helper needed for this17NLOC boundary."
+    },
+    {
+      "record_id": "code_health:finding_d1472251b3841d77f04e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "mergeStudentSessions",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_parameter_domain_inference",
+      "reason": "Five arguments carry two session arrays,a deletion document and student ID/name ownership context from one split-file caller. The two name/ID forms support legacy and stable-owner verification,not unrelated primitive fields. Scanner reports typed/primitive counts0;parameter count alone does not establish a missing domain object. An options object would churn a single clear adapter.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2655",
+        "js/app/00-storage-sync-patches.js:2659",
+        "js/app/00-storage-sync-patches.js:2661",
+        "js/app/00-storage-sync-patches.js:2673",
+        "js/app/00-storage-sync-patches.js:2674"
+      ],
+      "verified_metrics": {
+        "name": "mergeStudentSessions",
+        "start_line": 2659,
+        "end_line": 2687,
+        "ccn": 13,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 26,
+        "bumps": 1,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2662,
+          2677
+        ],
+        "complex_conditions": [
+          {
+            "line": 2674,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 2659
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2655 mergeStudentPortfolioFiles passes session arrays,deletions and local-first student ID/name context;2674 calls owner-aware tombstone predicate;2676 calls shared newer-session/photo policy"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.cjs:82-96 actual split merge preserves special session IDs and newer tombstone removes only matching entry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:124-178 split helper uses actual deletion predicate across time,Lamport,owner and modern/legacy log shapes",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/record-identity.browser.cjs:43-47 newer local text,own-key identities and alias preservation;174-189 main merge/upload media ownership is related shared-comparator evidence,not full split-sync transport proof"
+      ],
+      "regression_recommendation": "Retain null-prototype identity map,ID assignment before filtering,explicit session-owner context,first-on-tie local precedence via comparator and existing lexicographic createdAt sort. Never reuse main merger without preserving its different key/deletion/order rules. Existing deletion/identity/image tests are relevant;missing-ID/tie/order cases needed if touched."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "records": 20,
+    "status_counts": {
+      "reviewed_no_change": 18,
+      "confirmed_repair_candidate": 1,
+      "candidate_needs_regression": 1
+    },
+    "new_repair_opportunities": [
+      {
+        "id": "repair035-P1",
+        "primary_record": "code_health:finding_3e59867d333d8fc36c2e",
+        "scope": "Return two existing boolean comparisons directly in deletionIsNewer;keep all timestamp/Lamport/type/owner safety.",
+        "cost": "Two branch-pair replacements,remove redundant true/false returns;existing predicate matrix protects intended strict-newer parity."
+      },
+      {
+        "id": "repair035-P2",
+        "primary_record": "code_health:finding_327ffe7802bf5064d920",
+        "scope": "Conditional retirement of standalone split index global with no source caller found;only three test files use it. Verify static/dynamic/global API obligations before deletion.",
+        "cost": "Delete23NLOC plus only obsolete helper-specific assertions if truly unused;retain active main/native index score,own-key,transport and acknowledgement coverage. No automatic test deletion or blanket unused-global claim."
+      }
+    ],
+    "existing_opportunities_not_duplicated": [
+      "repair029/P1 reserved root metadata policy",
+      "repair029/P2 settings copy loops",
+      "repair029/P3 deletion expiry filter reuse",
+      "repair029 invalid dateIso display lead",
+      "repair027 upload/manual candidates and rejected/new-pending lead",
+      "repair031 sync UI candidates",
+      "repair033 form overlay/unreachable legacy restore/redundant URL conjunct"
+    ],
+    "retained_tradeoffs": "Strict snapshot acknowledgement;stable aliases and null-prototype/own-key identity;asymmetric split/main merge order and date semantics;modern/legacy tombstone ownership and exact restore ties;staged atomic deletion commits;newer crop/reset and fill-only media references.",
+    "new_behavioral_leads": 0,
+    "scanner_clearances_claimed": 0
+  },
+  "limits": [
+    "Read-only source/assertion review and pure installed metrics replay only. No app tests,source/test/Git/index/tracker/docs/runtime/dependency/cache mutations or live service operations;only own scratch/report written.",
+    "Complete19 assigned functions/nested helpers plus relevant callers/guards inspected. High-fanout deletion/merge helpers traced through current sync,rename,removal,restore,index and archive paths;not every unrelated caller body inspected.",
+    "All cited test assertions read from immutable413c1cf. No test pass or coverage claim. Surrounding native journeys are distinguished from direct helper assertions;explicit argument/metadata/date/optional-shape gaps remain.",
+    "P1 is a source-confirmed simplification requiring coordinator source/facts recheck and strict predicate regressions. P2 is conditional on caller/global API retirement review and retaining meaningful active coverage.",
+    "Split index latest-date selection2810 is lexicographic while main summary1635 parses dates. This is a source-supported semantic difference,not a reproduced application defect;no production caller of the split builder was found. No new behavior lead is raised while retirement is the proposed decision.",
+    "No safety/IO/owner guard weakening,score-only wrapper,duplicate existing lead,scanner closure or production behavior repair is claimed."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "individual_reasons_read": 20,
+    "independent_numeric_records_matched": 20,
+    "limits": "Keep live versus split merge semantics, own-key identity and staged deletion acknowledgements. Direct boolean return candidate needs exact timestamp/Lamport parity. Standalone split-index retirement remains conditional: globals/direct assertions are not proof of a safe deletion. No app tests or graph recomputation by this read-only review."
+  }
+}

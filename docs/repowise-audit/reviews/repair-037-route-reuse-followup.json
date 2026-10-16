@@ -1,0 +1,4356 @@
+{
+  "repair_id": "repair-037",
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "inspected_git_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "before_source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "source_hashes_normalized_lf": {
+    "google-drive-migration.js": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/99-lightbox.js": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+    "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+    "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "scripts/check-test-runner.cjs": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/run-tests.cjs": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "test-google-drive-migration.cjs": "75fb9ffae666f4b0cf7d32d757a06c922e19be5f27517b556afb5407478cd26d",
+    "tests/analysis-identity.browser.cjs": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+    "tests/analysis-pipeline.browser.cjs": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+    "tests/analysis-policy.browser.cjs": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2",
+    "tests/archive-connection.browser.cjs": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+    "tests/archive-failures.browser.cjs": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9",
+    "tests/archive-integrity.browser.cjs": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+    "tests/auth-integrity.browser.cjs": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+    "tests/class-deletion.browser.cjs": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae",
+    "tests/class-deletion.cjs": "602de41f7472e6014dded1c05de286758a500f71f82738e7542c6f36d582dcd1",
+    "tests/correction-performance.browser.cjs": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+    "tests/corrupt-portfolio.browser.cjs": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+    "tests/crop-ownership.browser.cjs": "b5a6f6354c1c34bbe2a9c785a983e1b7c101ecfece212ae45bf627e157ac5181",
+    "tests/crop-transparency.browser.cjs": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1",
+    "tests/csv-formula.browser.cjs": "d7ceebdd3292fa9d7eee4231b85c910508bd56d732820752d8bb9aa8081f2c78",
+    "tests/deletion-durability.browser.cjs": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+    "tests/deletion-merge.browser.cjs": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2",
+    "tests/deletion-merge.cjs": "3a9f0f43dce516c89c9e184d3d9894236bd0e956cd2854446876f8c9b05ed9c0",
+    "tests/deletion-recovery.browser.cjs": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+    "tests/detailed-parser.browser.cjs": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+    "tests/drive-folder-selection.cjs": "54560c40fc82fc3825d5cabf1edbadcd29952ac6f1077d3750249b4454b22c36",
+    "tests/drive-lifecycle.browser.cjs": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+    "tests/feedback-compatibility.browser.cjs": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+    "tests/fixtures/analysis-pipeline-baseline.js": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+    "tests/fixtures/portfolio-renderer-baseline.js": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+    "tests/google-drive-migration.browser.cjs": "de149de4b50963a56613239ca403f9c966f51c44f316f1444349a93d64338e27",
+    "tests/image-preparation.browser.cjs": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81",
+    "tests/main-app-health.browser.cjs": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f",
+    "tests/media-ownership.browser.cjs": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+    "tests/media-upload-boundary.browser.cjs": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+    "tests/missing-feedback.browser.cjs": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+    "tests/neatness-boundaries.browser.cjs": "70b0721d739989dddde3fe060b3dbf143e9533bda4f510998ac9866a48be029f",
+    "tests/neatness-scoring.browser.cjs": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e",
+    "tests/neatness-scoring.cjs": "f5168fb6aa93639e504684ebb0513fdd3cfa57918d1adb916cd5b9352594ebdc",
+    "tests/notebook-guidance-repair.browser.cjs": "e118756b4b61c4ef2b3d740cb398192f231cbfc24db3d09caa08c09358d96c03",
+    "tests/notebook-guide.browser.cjs": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/notebook-print-failure.browser.cjs": "be324437f3240b221d4de279e4a0349e4eb479eed471819df23bd8161d41498b",
+    "tests/openrouter-admission.browser.cjs": "3480997ff22d1a0ec51e998c685dcee50f244b810fc1cb2814f78c0c8469f4ea",
+    "tests/openrouter-failures.browser.cjs": "04f0704a6b880cc3476fe1eac90ec55374cd341ce0fbf3ff3bef7d917da905dc",
+    "tests/openrouter-request.cjs": "8dd5022a8a8147cc141f9e86c8c89cb27a097fe8f2f604f2de03ae4985c257ad",
+    "tests/optional-storage.browser.cjs": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe",
+    "tests/pending-commit-publication.browser.cjs": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+    "tests/pending-portfolio.browser.cjs": "7add5506a291a11058d0060501ff7ad2dc04efbf1e35f568c970ac2240de5db0",
+    "tests/pending-portfolio.cjs": "f68d82dd9e7dcf4e75cf508403ae105df0b58a647f3247f2095d6787c6530e23",
+    "tests/portfolio-html.browser.cjs": "2589050e344520270160db5a89f99a71f438785a71be20f808689e2032697c5f",
+    "tests/portfolio-image-slots.browser.cjs": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+    "tests/portfolio-index-load.cjs": "a06818401a47a398b3c844d070c0ba3193f2739869095e47ad2fe25acfb0470c",
+    "tests/portfolio-index.browser.cjs": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+    "tests/portfolio-removal.browser.cjs": "35acb1c28a4da150070905bc9ba5b68ec4c04376ff17c0f6aab7499a80196dd8",
+    "tests/portfolio-removal.cjs": "f6b36ee12d418b5cfb7d047c1f7bdc749799289973608e59eeadb3049be52da1",
+    "tests/portfolio-render-failures.browser.cjs": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+    "tests/portfolio-renderer.browser.cjs": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323",
+    "tests/portfolio-replacement.browser.cjs": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33",
+    "tests/portfolio-replacement.cjs": "83e2ba84e046c2741740159204d255f1432b1c5fef5645f5f466d2a9b2f722f5",
+    "tests/portfolio-save.cjs": "9099f36f39157506192976e6da44a5038e519d36f13fac62101598f4e95c05a7",
+    "tests/portfolio-sync.browser.cjs": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0",
+    "tests/portfolio-sync.cjs": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4",
+    "tests/preference-integrity-scenarios.js": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+    "tests/preference-integrity.browser.cjs": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+    "tests/record-identity.browser.cjs": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+    "tests/record-identity.cjs": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d",
+    "tests/recovery-cache.browser.cjs": "c22d93ed48c8233ead94fcc5d978a27ee37b57891ab5d1c380612057c266bd0e",
+    "tests/rename-confirmation.browser.cjs": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+    "tests/script-loading.browser.cjs": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+    "tests/session-retention.browser.cjs": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+    "tests/session-retention.cjs": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+    "tests/settings-deletions-sync.browser.cjs": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+    "tests/settings-deletions-sync.cjs": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+    "tests/split-storage.browser.cjs": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+    "tests/storage-dialog-keyboard.browser.cjs": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+    "tests/storage-health.cjs": "eaf6c8c760e788cc0342afc3ca8d29874a5da77b4ec9162d38371d41d132c7bf",
+    "tests/storage-held-request.browser.cjs": "2fcb3300e5d9b35f4daa3bad6a8ce521e3d073d1262eef3d8cf4e576d14bbdd7",
+    "tests/storage-integrity.browser.cjs": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+    "tests/storage-public-ui.browser.cjs": "7405caf2e75f7b56008750ffd5021aea84dd94eb0005fb7ddae47e03473af3ee",
+    "tests/storage-upload-ownership.browser.cjs": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97",
+    "tests/student-read-ownership.browser.cjs": "59136717cd99e5736cccd64b2785c1a97b4239ba96ccd63020662fb465c4e2b7",
+    "tests/student-rename.browser.cjs": "13633cf13a3b3d59202a7cee3b8b9bb7ad05bf1a426db42f899dc3d01eabcc08",
+    "tests/student-rename.cjs": "555f18cffcd227057c6dfda7ebfd432e73c6cb9b24f6a429952dbc8d9964812b",
+    "tests/student-selection-storage.browser.cjs": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b",
+    "tests/support/local-app-route.js": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f"
+  },
+  "method": {
+    "assignment_records": 33,
+    "route_repair_report": "outputs/repowise-repairs/repair-025-local-routes.json",
+    "exact_eight_file_patch_matches_report": true,
+    "shape_api": "installed walk_file plus pure five shape detectors; Python -B",
+    "clone_api": "installed detect_clones on all 90 pinned JS/CJS sources, immutable Git bytes via source_reader, cache_dir=None, default limits and 50-token/6-line windows",
+    "clone_diagnostics": {
+      "before": {
+        "files_considered": 90,
+        "files_tokenized": 89,
+        "skipped_unreadable": 0,
+        "skipped_minified": 1,
+        "skipped_token_cap": 0,
+        "total_windows": 280582,
+        "window_budget_hit": false,
+        "degenerate_buckets": 0,
+        "timed_out": false
+      },
+      "after": {
+        "files_considered": 90,
+        "files_tokenized": 89,
+        "skipped_unreadable": 0,
+        "skipped_minified": 1,
+        "skipped_token_cap": 0,
+        "total_windows": 280226,
+        "window_budget_hit": false,
+        "degenerate_buckets": 0,
+        "timed_out": false
+      }
+    },
+    "co_change_limit": "No git-history metadata reanalysis: zero co-change supplied by empty metadata map, matching all assigned stored zero weights. Source clone geometry/percentages and detector outcomes are independently reproduced.",
+    "named_function_bodies_unchanged": [
+      "runNotebookGuidanceCases: before7-250 -> after8-251",
+      "exercise: before16-120 -> after17-121"
+    ],
+    "rename_sixteen_assertions_identical": true,
+    "compact_static_receipt": "work/repowise-review-037/receipts.json",
+    "current_raw_90_file_pins_match": true
+  },
+  "detector_rules": {
+    "complex_method": "judged_ccn >=9; dispatch_share>=.6 uses raw CCN-round(share*(CCN-1))+heaviest arm",
+    "large_method": "NLOC>=60 AND raw CCN>=3",
+    "nested_complexity": "judged nesting >=4 (implementation, despite docstring saying exceeds4)",
+    "complex_conditional": "at least3 boolean operators",
+    "large_assertion_block": "at least15 uninterrupted assertions in test file",
+    "dry_violation": "cross-file union percentage >=8 AND maximum side length of worst cross-file clone>=6; clone generator independently requires both sides>=6; worst ranked by co-change then max side size"
+  },
+  "driver_comparisons": [
+    {
+      "file": "tests/missing-feedback.browser.cjs",
+      "role": "self-invoked native browser suite driver",
+      "before": {
+        "name": "<anonymous@7>",
+        "start_line": 7,
+        "end_line": 137,
+        "ccn": 38,
+        "cognitive": 51,
+        "nloc": 131,
+        "max_nesting": 3,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          9,
+          136
+        ],
+        "judged_ccn": 38,
+        "judged_nesting": 3
+      },
+      "after": {
+        "name": "<anonymous@8>",
+        "start_line": 8,
+        "end_line": 133,
+        "ccn": 34,
+        "cognitive": 42,
+        "nloc": 126,
+        "max_nesting": 2,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          26,
+          60
+        ],
+        "judged_ccn": 34,
+        "judged_nesting": 2
+      }
+    },
+    {
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "role": "self-invoked native browser suite driver",
+      "before": {
+        "name": "<anonymous@252>",
+        "start_line": 252,
+        "end_line": 284,
+        "ccn": 10,
+        "cognitive": 20,
+        "nloc": 33,
+        "max_nesting": 3,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.02,
+        "deepest_block": [
+          254,
+          283
+        ],
+        "judged_ccn": 10,
+        "judged_nesting": 3
+      },
+      "after": {
+        "name": "<anonymous@253>",
+        "start_line": 253,
+        "end_line": 280,
+        "ccn": 6,
+        "cognitive": 11,
+        "nloc": 28,
+        "max_nesting": 3,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.03,
+        "deepest_block": [
+          266,
+          277
+        ],
+        "judged_ccn": 6,
+        "judged_nesting": 3
+      }
+    },
+    {
+      "file": "tests/pending-portfolio.browser.cjs",
+      "role": "self-invoked native browser suite driver",
+      "before": {
+        "name": "<anonymous@8>",
+        "start_line": 8,
+        "end_line": 163,
+        "ccn": 38,
+        "cognitive": 91,
+        "nloc": 156,
+        "max_nesting": 4,
+        "dispatch_share": 0.08,
+        "dispatch_arm": 0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          23,
+          87
+        ],
+        "judged_ccn": 38,
+        "judged_nesting": 4
+      },
+      "after": {
+        "name": "<anonymous@9>",
+        "start_line": 9,
+        "end_line": 158,
+        "ccn": 33,
+        "cognitive": 82,
+        "nloc": 150,
+        "max_nesting": 4,
+        "dispatch_share": 0.09,
+        "dispatch_arm": 0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          18,
+          82
+        ],
+        "judged_ccn": 33,
+        "judged_nesting": 4
+      }
+    },
+    {
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "role": "self-invoked native browser suite driver",
+      "before": {
+        "name": "<anonymous@122>",
+        "start_line": 122,
+        "end_line": 169,
+        "ccn": 28,
+        "cognitive": 87,
+        "nloc": 48,
+        "max_nesting": 5,
+        "dispatch_share": 0.7,
+        "dispatch_arm": 1,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          127,
+          140
+        ],
+        "judged_ccn": 10,
+        "judged_nesting": 3
+      },
+      "after": {
+        "name": "<anonymous@123>",
+        "start_line": 123,
+        "end_line": 165,
+        "ccn": 24,
+        "cognitive": 70,
+        "nloc": 43,
+        "max_nesting": 4,
+        "dispatch_share": 0.83,
+        "dispatch_arm": 1,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          128,
+          136
+        ],
+        "judged_ccn": 6,
+        "judged_nesting": 2
+      }
+    },
+    {
+      "file": "tests/student-read-ownership.browser.cjs",
+      "role": "self-invoked native browser suite driver",
+      "before": {
+        "name": "<anonymous@6>",
+        "start_line": 6,
+        "end_line": 84,
+        "ccn": 33,
+        "cognitive": 122,
+        "nloc": 79,
+        "max_nesting": 7,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          67,
+          74
+        ],
+        "judged_ccn": 33,
+        "judged_nesting": 7
+      },
+      "after": {
+        "name": "<anonymous@7>",
+        "start_line": 7,
+        "end_line": 82,
+        "ccn": 30,
+        "cognitive": 106,
+        "nloc": 76,
+        "max_nesting": 7,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          65,
+          72
+        ],
+        "judged_ccn": 30,
+        "judged_nesting": 7
+      }
+    },
+    {
+      "file": "tests/student-rename.browser.cjs",
+      "role": "self-invoked native browser suite driver",
+      "before": {
+        "name": "<anonymous@7>",
+        "start_line": 7,
+        "end_line": 75,
+        "ccn": 6,
+        "cognitive": 12,
+        "nloc": 69,
+        "max_nesting": 2,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          9,
+          74
+        ],
+        "judged_ccn": 6,
+        "judged_nesting": 2
+      },
+      "after": {
+        "name": "<anonymous@8>",
+        "start_line": 8,
+        "end_line": 70,
+        "ccn": 1,
+        "cognitive": 3,
+        "nloc": 63,
+        "max_nesting": 2,
+        "dispatch_share": 0.0,
+        "dispatch_arm": 0,
+        "terminal_share": 0.02,
+        "deepest_block": [
+          10,
+          69
+        ],
+        "judged_ccn": 1,
+        "judged_nesting": 2
+      }
+    }
+  ],
+  "identity_mappings": [
+    {
+      "previous_record_id": "code_health:finding_3dffc42c2f6cdecd5764",
+      "current_record_id": "code_health:finding_0e04d44928be307a2dff",
+      "marker": "complex_method",
+      "file": "tests/missing-feedback.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_3d6e5336abe11651954f",
+      "current_record_id": "code_health:finding_ae1683e31d98a0cc4f64",
+      "marker": "large_method",
+      "file": "tests/missing-feedback.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_ec7738b69467039d6bb0",
+      "current_record_id": "code_health:finding_ac2f00f6badb24558346",
+      "marker": "nested_complexity",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_bdf61850d95084548fb6",
+      "current_record_id": "code_health:finding_bb9b40c2fcd0648cddd5",
+      "marker": "complex_method",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_7036a9b6124e67da4c4d",
+      "current_record_id": "code_health:finding_825a8df2b6f3b1292908",
+      "marker": "large_method",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_2cc014e33a4adfabcf8e",
+      "current_record_id": "code_health:finding_41f1cd991e9fe02654c1",
+      "marker": "nested_complexity",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_d972d4b21d11f1043309",
+      "current_record_id": "code_health:finding_4cba18a2b2bd563368d5",
+      "marker": "complex_method",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    },
+    {
+      "previous_record_id": "code_health:finding_a3a48728c81ea506c461",
+      "current_record_id": "code_health:finding_b72cc0db13499dbf8852",
+      "marker": "large_method",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "recommendation": "Preserve previous campaign identity and add current ID as alias; unchanged top-level native suite role, import shift and local route extraction only."
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_0e04d44928be307a2dff",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@8>",
+      "proposed_status": "continuing",
+      "classification": "retained_named_score_invariants",
+      "reason": "The missing-score matrix still compares unknown, valid zero, typed-invalid and scored values across display, feedback, saved records and actual analysis publication. Each check already has a failure name. Splitting the browser-evaluated matrix only to lower outer CCN would add serialization/fixture plumbing without removing decisions.",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 8,
+          "end_line": 133,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "ccn": 34,
+          "cognitive": 42,
+          "nloc": 126,
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          8,
+          133
+        ],
+        "function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 133,
+          "ccn": 34,
+          "cognitive": 42,
+          "nloc": 126,
+          "max_nesting": 2,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            26,
+            60
+          ],
+          "judged_ccn": 34,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 34,
+        "cognitive": 42,
+        "nloc": 126,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 26,
+          "end": 60
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 26,
+          "end_line": 60,
+          "role": "unknown-score matrix",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 61,
+          "end_line": 99,
+          "role": "zero/valid, evidence and category/genre distinctions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 114,
+          "end_line": 123,
+          "role": "actual analysis/save/export path",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 130,
+          "end_line": 131,
+          "role": "no uncaught errors or failed named checks",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_ae1683e31d98a0cc4f64",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@8>",
+      "proposed_status": "continuing",
+      "classification": "retained_coherent_native_suite",
+      "reason": "126 NLOC includes the browser-evaluated score contract plus its native launch/report boundary. Retain that single ownership scope and the explicit final no-errors/no-failures oracle; useful asset-route duplication was removed, while all score and persistence checks remain visible.",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 8,
+          "end_line": 133,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "nloc": 126,
+          "ccn": 34,
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          8,
+          133
+        ],
+        "function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 133,
+          "ccn": 34,
+          "cognitive": 42,
+          "nloc": 126,
+          "max_nesting": 2,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            26,
+            60
+          ],
+          "judged_ccn": 34,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 126,
+        "ccn": 34,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 26,
+          "end": 60
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 26,
+          "end_line": 60,
+          "role": "unknown-score matrix",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 61,
+          "end_line": 99,
+          "role": "zero/valid, evidence and category/genre distinctions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 114,
+          "end_line": 123,
+          "role": "actual analysis/save/export path",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 130,
+          "end_line": 131,
+          "role": "no uncaught errors or failed named checks",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_9708f175ae4a6033ae11",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "continuing",
+      "classification": "retained_residual_harness_duplication",
+      "reason": "The original asset responder is gone. The new worst region is imports, root resolution and browser/page startup shared with pending-portfolio. Percentage rises slightly despite fewer clone pairs because the denominator shrank and the new helper import matches peers. Sharing assertions or introducing a general browser harness solely for this boilerplate has higher cost than retaining it.",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 1,
+          "end_line": 14,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "cross_file_duplication_pct": 13.64,
+          "clone_pair_count": 18,
+          "worst_clone_lines": 15,
+          "worst_clone_partner": "tests/pending-portfolio.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          1,
+          14
+        ],
+        "before": {
+          "all_duplication_pct": 13.24,
+          "cross_file_covered_lines": 18,
+          "cross_pair_count": 27,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 7,
+              "line_end": 20,
+              "details": {
+                "cross_file_duplication_pct": 13.24,
+                "clone_pair_count": 27,
+                "worst_clone_lines": 14,
+                "worst_clone_partner": "tests/notebook-guidance-repair.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "13% of file duplicated in other files; worst clone shares 14 lines with tests/notebook-guidance-repair.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 13.64,
+          "cross_file_covered_lines": 18,
+          "cross_pair_count": 18,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 1,
+              "line_end": 14,
+              "details": {
+                "cross_file_duplication_pct": 13.64,
+                "clone_pair_count": 18,
+                "worst_clone_lines": 15,
+                "worst_clone_partner": "tests/pending-portfolio.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "14% of file duplicated in other files; worst clone shares 15 lines with tests/pending-portfolio.browser.cjs",
+              "deduction": null
+            }
+          ]
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 13.64,
+        "clone_pair_count": 18,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/pending-portfolio.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 26,
+          "end_line": 60,
+          "role": "unknown-score matrix",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 61,
+          "end_line": 99,
+          "role": "zero/valid, evidence and category/genre distinctions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 114,
+          "end_line": 123,
+          "role": "actual analysis/save/export path",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 130,
+          "end_line": 131,
+          "role": "no uncaught errors or failed named checks",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_b3ea0e675e7c1c2fdb28",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runNotebookGuidanceCases",
+      "proposed_status": "continuing",
+      "classification": "retained_already_grouped_browser_cases",
+      "reason": "runNotebookGuidanceCases is byte-identical apart from moving one line. Its 241 NLOC includes named convention, grounding, paragraph, rendering, action and priority groups, while its own CCN is only 7 and nesting 0. Preserve these readable groups and the shared browser realm for save/print integration.",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 8,
+          "end_line": 251,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "nloc": 241,
+          "ccn": 7,
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          8,
+          251
+        ],
+        "function": {
+          "name": "runNotebookGuidanceCases",
+          "start_line": 8,
+          "end_line": 251,
+          "ccn": 7,
+          "cognitive": 6,
+          "nloc": 241,
+          "max_nesting": 0,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": null,
+          "judged_ccn": 7,
+          "judged_nesting": 0
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 241,
+        "ccn": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 8
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 16,
+          "end_line": 75,
+          "role": "named convention and source-grounding groups",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 97,
+          "end_line": 130,
+          "role": "paragraph cases",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 149,
+          "end_line": 235,
+          "role": "render/actions/priority groups",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 243,
+          "end_line": 249,
+          "role": "actual summary/save/print",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 261,
+          "end_line": 275,
+          "role": "evaluate caller and native result/print assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_ac2f00f6badb24558346",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@9>",
+      "proposed_status": "continuing",
+      "classification": "retained_scenario_and_failure_boundaries",
+      "reason": "Depth 4 comes from the quota/retry scenario matrix and assertions inside its branch, with restoration in finally. Those layers show which storage write fails and which photo bytes must survive. Extracting another wrapper would hide the fault/expected-outcome relationship rather than simplify it.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 9,
+          "end_line": 158,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "max_nesting": 4,
+          "ccn": 33,
+          "cognitive": 82,
+          "dispatch_share": 0.09,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          9,
+          158
+        ],
+        "function": {
+          "name": "<anonymous@9>",
+          "start_line": 9,
+          "end_line": 158,
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "max_nesting": 4,
+          "dispatch_share": 0.09,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            18,
+            82
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 4
+        }
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 33,
+        "cognitive": 82,
+        "dispatch_share": 0.09,
+        "terminal_share": 0.01,
+        "symbol_line": 9,
+        "deepest_block": {
+          "start": 18,
+          "end": 82
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_bb9b40c2fcd0648cddd5",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@9>",
+      "proposed_status": "continuing",
+      "classification": "retained_explicit_durability_matrix",
+      "reason": "The remaining 33 decisions distinguish first-write fallback, both-write failure, retry, fully durable and Drive-backed cases. These are different data-loss outcomes with different expected warnings and reload state; retain the explicit cases rather than flattening them into a generic success check.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 9,
+          "end_line": 158,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "dispatch_share": 0.09,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          9,
+          158
+        ],
+        "function": {
+          "name": "<anonymous@9>",
+          "start_line": 9,
+          "end_line": 158,
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "max_nesting": 4,
+          "dispatch_share": 0.09,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            18,
+            82
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 4
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 33,
+        "cognitive": 82,
+        "nloc": 150,
+        "dispatch_share": 0.09,
+        "terminal_share": 0.01,
+        "symbol_line": 9,
+        "deepest_block": {
+          "start": 18,
+          "end": 82
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_825a8df2b6f3b1292908",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@9>",
+      "proposed_status": "continuing",
+      "classification": "retained_end_to_end_pending_suite",
+      "reason": "150 NLOC spans two necessary sequences: retained photo bytes reach real pre-commit upload, and persisted drafts survive reload with truthful warnings. Both use actual app state and restore synthetic Storage hooks. The one extracted asset responder already removes the independent repeated work.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 9,
+          "end_line": 158,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "nloc": 150,
+          "ccn": 33,
+          "dispatch_share": 0.09,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          9,
+          158
+        ],
+        "function": {
+          "name": "<anonymous@9>",
+          "start_line": 9,
+          "end_line": 158,
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "max_nesting": 4,
+          "dispatch_share": 0.09,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            18,
+            82
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 4
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 150,
+        "ccn": 33,
+        "dispatch_share": 0.09,
+        "terminal_share": 0.01,
+        "symbol_line": 9,
+        "deepest_block": {
+          "start": 18,
+          "end": 82
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_5301ae7f99d89050d43c",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "continuing",
+      "classification": "retained_residual_harness_duplication",
+      "reason": "The 17-line worst region with rename now covers imports through route registration/startup, rather than the deleted responder. The optional octet-stream argument is visible at its call site. A larger shared suite harness would couple unrelated durability and rename assertions; retain this residual setup.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 1,
+          "end_line": 17,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "cross_file_duplication_pct": 10.83,
+          "clone_pair_count": 15,
+          "worst_clone_lines": 17,
+          "worst_clone_partner": "tests/student-rename.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          1,
+          17
+        ],
+        "before": {
+          "all_duplication_pct": 13.58,
+          "cross_file_covered_lines": 22,
+          "cross_pair_count": 24,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 1,
+              "line_end": 22,
+              "details": {
+                "cross_file_duplication_pct": 13.58,
+                "clone_pair_count": 24,
+                "worst_clone_lines": 22,
+                "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "14% of file duplicated in other files; worst clone shares 22 lines with tests/deletion-merge.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 10.83,
+          "cross_file_covered_lines": 17,
+          "cross_pair_count": 15,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 1,
+              "line_end": 17,
+              "details": {
+                "cross_file_duplication_pct": 10.83,
+                "clone_pair_count": 15,
+                "worst_clone_lines": 17,
+                "worst_clone_partner": "tests/student-rename.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "11% of file duplicated in other files; worst clone shares 17 lines with tests/student-rename.browser.cjs",
+              "deduction": null
+            }
+          ]
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.83,
+        "clone_pair_count": 15,
+        "worst_clone_lines": 17,
+        "worst_clone_partner": "tests/student-rename.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_226c16da583bda4e7cca",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "proposed_status": "continuing",
+      "classification": "retained_fault_injection_guard",
+      "reason": "The four-operator condition deliberately increments writes only for the pending key, then fails every matching write for fail-both or the first write for non-full modes. Short-circuit ordering is part of the synthetic quota contract. Named wrappers or boolean reordering would obscure or alter that count.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 98,
+          "end_line": 98,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          98,
+          98
+        ],
+        "source_symbol_start": 97
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 97,
+        "symbol_index": 1
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_b2de67a26dc3c9307c23",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "exercise",
+      "proposed_status": "continuing",
+      "classification": "retained_browser_realm_fixture_matrix",
+      "reason": "exercise is unchanged apart from one line of position. Its decisions build 29 distinct renderer fixtures, capture chart/media/dialog effects and run the real renderer in the page realm. Callers compare every observation against a frozen baseline; moving fixture arms into helpers would add page injection plumbing without removing repetition.",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 17,
+          "end_line": 121,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "ccn": 38,
+          "cognitive": 43,
+          "nloc": 104,
+          "dispatch_share": 0.22
+        },
+        "detector_span": [
+          17,
+          121
+        ],
+        "function": {
+          "name": "exercise",
+          "start_line": 17,
+          "end_line": 121,
+          "ccn": 38,
+          "cognitive": 43,
+          "nloc": 104,
+          "max_nesting": 2,
+          "dispatch_share": 0.22,
+          "dispatch_arm": 2,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            33,
+            33
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 38,
+        "cognitive": 43,
+        "nloc": 104,
+        "dispatch_share": 0.22,
+        "symbol_line": 17,
+        "deepest_block": {
+          "start": 33,
+          "end": 33
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 17,
+          "end_line": 121,
+          "role": "browser-realm fixture and observation boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 134,
+          "end_line": 141,
+          "role": "exercise caller and parity/storage/injection assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 159,
+          "role": "scenario-specific chart, media and adapter assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_2525154954dd418e946c",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "large_method",
+      "symbol": "exercise",
+      "proposed_status": "continuing",
+      "classification": "retained_coherent_parity_observation",
+      "reason": "104 NLOC keeps fixture setup, actual render, deferred chart work and normalized observation together inside page.evaluate. This is the parity boundary consumed by the driver, not a new route-reuse regression. Preserve explicit unsafe-markup, storage, adapter and chart observations.",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 17,
+          "end_line": 121,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "nloc": 104,
+          "ccn": 38,
+          "dispatch_share": 0.22
+        },
+        "detector_span": [
+          17,
+          121
+        ],
+        "function": {
+          "name": "exercise",
+          "start_line": 17,
+          "end_line": 121,
+          "ccn": 38,
+          "cognitive": 43,
+          "nloc": 104,
+          "max_nesting": 2,
+          "dispatch_share": 0.22,
+          "dispatch_arm": 2,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            33,
+            33
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 104,
+        "ccn": 38,
+        "dispatch_share": 0.22,
+        "symbol_line": 17,
+        "deepest_block": {
+          "start": 33,
+          "end": 33
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 17,
+          "end_line": 121,
+          "role": "browser-realm fixture and observation boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 134,
+          "end_line": 141,
+          "role": "exercise caller and parity/storage/injection assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 159,
+          "role": "scenario-specific chart, media and adapter assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_ced969c11ee33e523e58",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "continuing",
+      "classification": "retained_small_import_and_fixture_clone",
+      "reason": "Both remaining clone pairs are in import/reference-fixture startup; the worst eight lines match analysis-pipeline, not the old route callback. Each suite pins a different immutable baseline and scenario inventory. A shared baseline abstraction for these few lines would blur those independent oracles.",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 1,
+          "end_line": 8,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "cross_file_duplication_pct": 9.82,
+          "clone_pair_count": 2,
+          "worst_clone_lines": 8,
+          "worst_clone_partner": "tests/analysis-pipeline.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          1,
+          8
+        ],
+        "before": {
+          "all_duplication_pct": 14.37,
+          "cross_file_covered_lines": 24,
+          "cross_pair_count": 22,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 128,
+              "line_end": 136,
+              "details": {
+                "cross_file_duplication_pct": 14.37,
+                "clone_pair_count": 22,
+                "worst_clone_lines": 10,
+                "worst_clone_partner": "tests/archive-integrity.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "14% of file duplicated in other files; worst clone shares 10 lines with tests/archive-integrity.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 9.82,
+          "cross_file_covered_lines": 16,
+          "cross_pair_count": 2,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 1,
+              "line_end": 8,
+              "details": {
+                "cross_file_duplication_pct": 9.82,
+                "clone_pair_count": 2,
+                "worst_clone_lines": 8,
+                "worst_clone_partner": "tests/analysis-pipeline.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "10% of file duplicated in other files; worst clone shares 8 lines with tests/analysis-pipeline.browser.cjs",
+              "deduction": null
+            }
+          ]
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 9.82,
+        "clone_pair_count": 2,
+        "worst_clone_lines": 8,
+        "worst_clone_partner": "tests/analysis-pipeline.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 17,
+          "end_line": 121,
+          "role": "browser-realm fixture and observation boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 134,
+          "end_line": 141,
+          "role": "exercise caller and parity/storage/injection assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 159,
+          "role": "scenario-specific chart, media and adapter assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_41f1cd991e9fe02654c1",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "continuing",
+      "classification": "retained_account_change_case_matrix",
+      "reason": "Depth 7 is reached in the lazy/missing result branch nested under mode/boundary loops, native page lifetime and outcome handling. Every layer names a real ownership boundary. Retain the account-change assertions together; a one-case wrapper would mostly relocate this same decision tree.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 82,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "max_nesting": 7,
+          "ccn": 30,
+          "cognitive": 106,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          7,
+          82
+        ],
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 82,
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            65,
+            72
+          ],
+          "judged_ccn": 30,
+          "judged_nesting": 7
+        }
+      },
+      "verified_observation_details": {
+        "max_nesting": 7,
+        "ccn": 30,
+        "cognitive": 106,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 65,
+          "end": 72
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_4cba18a2b2bd563368d5",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "continuing",
+      "classification": "retained_explicit_service_mock_and_oracles",
+      "reason": "30 decisions remain because load, merge and lazy calls have distinct missing-file and changed-account behavior. The Google-shaped responder and final assertions show no request can use account B and no stale write/cache is admitted. Retain that evidence instead of abstracting it behind a generic mock.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 82,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          7,
+          82
+        ],
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 82,
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            65,
+            72
+          ],
+          "judged_ccn": 30,
+          "judged_nesting": 7
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 30,
+        "cognitive": 106,
+        "nloc": 76,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 65,
+          "end": 72
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_b72cc0db13499dbf8852",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "continuing",
+      "classification": "retained_compact_native_owner_suite",
+      "reason": "76 NLOC covers twelve mode/boundary combinations with a fresh page, synthetic API responder, one completion oracle and per-case failure evidence. Route reuse removed only local file serving; splitting the remaining code offers little shared work and would separate faults from their assertions.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 82,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "nloc": 76,
+          "ccn": 30,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          7,
+          82
+        ],
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 82,
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            65,
+            72
+          ],
+          "judged_ccn": 30,
+          "judged_nesting": 7
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 76,
+        "ccn": 30,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 65,
+          "end": 72
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_e983ea11ce3a5dcb7e9c",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "continuing",
+      "classification": "retained_once_only_owner_switch_guard",
+      "reason": "The condition switches owner once, precisely while listing the student file or downloading its media. The changed guard and two distinct boundary predicates are the race being tested. Preserve their order and the visible listing/download tests; simplifying to a generic scenario flag would weaken the evidence.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 21,
+          "end_line": 21,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          21,
+          21
+        ],
+        "source_symbol_start": 7
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 7
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_5fbb3828d0e444afeb09",
+      "file": "tests/student-rename.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "continuing",
+      "classification": "retained_scaffold_with_optional_dead_import_cleanup",
+      "reason": "The worst residual region is imports and native suite startup shared with pending-portfolio; the quota-failure/retry assertions are unrelated. fs is now unused in rename (its former use was only the extracted responder), so removing that single import is a reasonable optional cleanup. It is not evidence that this aggregate would disappear and does not justify a general harness rewrite.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 1,
+          "end_line": 16,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "cross_file_duplication_pct": 36.23,
+          "clone_pair_count": 16,
+          "worst_clone_lines": 17,
+          "worst_clone_partner": "tests/pending-portfolio.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          1,
+          16
+        ],
+        "before": {
+          "all_duplication_pct": 40.54,
+          "cross_file_covered_lines": 30,
+          "cross_pair_count": 25,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "medium",
+              "function_name": null,
+              "line_start": 1,
+              "line_end": 24,
+              "details": {
+                "cross_file_duplication_pct": 40.54,
+                "clone_pair_count": 25,
+                "worst_clone_lines": 24,
+                "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "41% of file duplicated in other files; worst clone shares 24 lines with tests/deletion-merge.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 36.23,
+          "cross_file_covered_lines": 25,
+          "cross_pair_count": 16,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "medium",
+              "function_name": null,
+              "line_start": 1,
+              "line_end": 16,
+              "details": {
+                "cross_file_duplication_pct": 36.23,
+                "clone_pair_count": 16,
+                "worst_clone_lines": 17,
+                "worst_clone_partner": "tests/pending-portfolio.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "36% of file duplicated in other files; worst clone shares 17 lines with tests/pending-portfolio.browser.cjs",
+              "deduction": null
+            }
+          ]
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 36.23,
+        "clone_pair_count": 16,
+        "worst_clone_lines": 17,
+        "worst_clone_partner": "tests/pending-portfolio.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 34,
+          "end_line": 38,
+          "role": "synthetic quota failure with finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 47,
+          "end_line": 50,
+          "role": "actual successful retry and observation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 52,
+          "end_line": 67,
+          "role": "same sixteen state and browser-error assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_330fa358c73a174eaf04",
+      "file": "tests/student-rename.browser.cjs",
+      "marker": "large_assertion_block",
+      "symbol": "<anonymous@8>",
+      "proposed_status": "continuing",
+      "classification": "retained_complete_rename_transaction_oracle",
+      "reason": "All sixteen consecutive assertions are byte-identical and still inspect one failed rename followed by its successful retry: original bytes, roster, selection, tombstones, counters, sync visibility and writing retention. Keeping the complete oracle visible is clearer than splitting assertions merely to evade the 15-assertion detector.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 52,
+          "end_line": 67,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "function": "<anonymous@8>",
+          "assertion_count": 16
+        },
+        "detector_span": [
+          52,
+          67
+        ],
+        "before_block": [
+          57,
+          72,
+          16
+        ],
+        "after_block": [
+          52,
+          67,
+          16
+        ],
+        "assertion_sequence_unchanged": true
+      },
+      "verified_observation_details": {
+        "function": "<anonymous@8>",
+        "assertion_count": 16,
+        "symbol_line": 8
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 34,
+          "end_line": 38,
+          "role": "synthetic quota failure with finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 47,
+          "end_line": 50,
+          "role": "actual successful retry and observation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 52,
+          "end_line": 67,
+          "role": "same sixteen state and browser-error assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_64ff2d358644bea8f3f2",
+      "file": "tests/support/local-app-route.js",
+      "marker": "complex_method",
+      "symbol": "localAppRoute",
+      "proposed_status": "continuing",
+      "classification": "retained_shared_path_and_mime_guards",
+      "reason": "The useful optional fallback MIME adds one ternary point (CCN 8 to 9), crossing the detector threshold. The nine-line helper must retain external-origin abort, decoded root resolution, traversal/absolute-path rejection, existence/regular-file checks and JavaScript/HTML precedence. Removing guards or replacing them with opaque helpers would be a regression.",
+      "evidence_anchors": [
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 5,
+          "end_line": 13,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 9,
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          5,
+          13
+        ],
+        "function": {
+          "name": "localAppRoute",
+          "start_line": 5,
+          "end_line": 13,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 9,
+          "max_nesting": 1,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7,
+            7
+          ],
+          "judged_ccn": 9,
+          "judged_nesting": 1
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 7,
+          "end": 7
+        }
+      },
+      "callers": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 14,
+          "end_line": 14,
+          "role": "local asset callback",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 259,
+          "end_line": 259,
+          "role": "local asset callback",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 15,
+          "end_line": 15,
+          "role": "local asset callback",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 131,
+          "end_line": 131,
+          "role": "local asset callback",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 17,
+          "end_line": 17,
+          "role": "local asset callback",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 14,
+          "end_line": 14,
+          "role": "local asset callback",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/support/local-app-route.js",
+          "start_line": 5,
+          "end_line": 13,
+          "role": "complete local-only path/MIME contract",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "start_line": 53,
+          "end_line": 59,
+          "role": "external/path/MIME assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_3dffc42c2f6cdecd5764",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_0e04d44928be307a2dff; old anonymous start 7 becomes 8. The missing-score matrix still compares unknown, valid zero, typed-invalid and scored values across display, feedback, saved records and actual analysis publication. Each check already has a failure name. Splitting the browser-evaluated matrix only to lower outer CCN would add serialization/fixture plumbing without removing decisions.",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 7,
+          "end_line": 137,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 8,
+          "end_line": 133,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "ccn": 38,
+          "cognitive": 51,
+          "nloc": 131,
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          7,
+          137
+        ],
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 137,
+          "ccn": 38,
+          "cognitive": 51,
+          "nloc": 131,
+          "max_nesting": 3,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            9,
+            136
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 3
+        },
+        "current_function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 133,
+          "ccn": 34,
+          "cognitive": 42,
+          "nloc": 126,
+          "max_nesting": 2,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            26,
+            60
+          ],
+          "judged_ccn": 34,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 38,
+        "cognitive": 51,
+        "nloc": 131,
+        "dispatch_share": 0.0,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 136
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 26,
+          "end_line": 60,
+          "role": "unknown-score matrix",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 61,
+          "end_line": 99,
+          "role": "zero/valid, evidence and category/genre distinctions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 114,
+          "end_line": 123,
+          "role": "actual analysis/save/export path",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 130,
+          "end_line": 131,
+          "role": "no uncaught errors or failed named checks",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_3d6e5336abe11651954f",
+      "file": "tests/missing-feedback.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_ae1683e31d98a0cc4f64; old anonymous start 7 becomes 8. 126 NLOC includes the browser-evaluated score contract plus its native launch/report boundary. Retain that single ownership scope and the explicit final no-errors/no-failures oracle; useful asset-route duplication was removed, while all score and persistence checks remain visible.",
+      "evidence_anchors": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 7,
+          "end_line": 137,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 8,
+          "end_line": 133,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "nloc": 131,
+          "ccn": 38,
+          "dispatch_share": 0.0
+        },
+        "detector_span": [
+          7,
+          137
+        ],
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 137,
+          "ccn": 38,
+          "cognitive": 51,
+          "nloc": 131,
+          "max_nesting": 3,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            9,
+            136
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 3
+        },
+        "current_function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 133,
+          "ccn": 34,
+          "cognitive": 42,
+          "nloc": 126,
+          "max_nesting": 2,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            26,
+            60
+          ],
+          "judged_ccn": 34,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 131,
+        "ccn": 38,
+        "dispatch_share": 0.0,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 136
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 26,
+          "end_line": 60,
+          "role": "unknown-score matrix",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 61,
+          "end_line": 99,
+          "role": "zero/valid, evidence and category/genre distinctions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 114,
+          "end_line": 123,
+          "role": "actual analysis/save/export path",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "start_line": 130,
+          "end_line": 131,
+          "role": "no uncaught errors or failed named checks",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_023e9357755094e56ba3",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@252>",
+      "proposed_status": "verified_absent_needs_parent",
+      "classification": "verified_driver_below_complexity_threshold",
+      "reason": "The same notebook driver moves 252 to 253 and falls CCN 10 to 6 after replacing its local responder. ComplexMethodDetector requires judged CCN >=9; share remains 0, so 6 is below the gate. runNotebookGuidanceCases is separate and remains large.",
+      "evidence_anchors": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 252,
+          "end_line": 284,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 20,
+          "nloc": 33,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02
+        },
+        "detector_span": [
+          252,
+          284
+        ],
+        "function": {
+          "name": "<anonymous@252>",
+          "start_line": 252,
+          "end_line": 284,
+          "ccn": 10,
+          "cognitive": 20,
+          "nloc": 33,
+          "max_nesting": 3,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.02,
+          "deepest_block": [
+            254,
+            283
+          ],
+          "judged_ccn": 10,
+          "judged_nesting": 3
+        },
+        "current_function": {
+          "name": "<anonymous@253>",
+          "start_line": 253,
+          "end_line": 280,
+          "ccn": 6,
+          "cognitive": 11,
+          "nloc": 28,
+          "max_nesting": 3,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.03,
+          "deepest_block": [
+            266,
+            277
+          ],
+          "judged_ccn": 6,
+          "judged_nesting": 3
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 20,
+        "nloc": 33,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 252,
+        "deepest_block": {
+          "start": 254,
+          "end": 283
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 16,
+          "end_line": 75,
+          "role": "named convention and source-grounding groups",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 97,
+          "end_line": 130,
+          "role": "paragraph cases",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 149,
+          "end_line": 235,
+          "role": "render/actions/priority groups",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 243,
+          "end_line": 249,
+          "role": "actual summary/save/print",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "start_line": 261,
+          "end_line": 275,
+          "role": "evaluate caller and native result/print assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_ec7738b69467039d6bb0",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@8>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_ac2f00f6badb24558346; old anonymous start 8 becomes 9. Depth 4 comes from the quota/retry scenario matrix and assertions inside its branch, with restoration in finally. Those layers show which storage write fails and which photo bytes must survive. Extracting another wrapper would hide the fault/expected-outcome relationship rather than simplify it.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 8,
+          "end_line": 163,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 9,
+          "end_line": 158,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "max_nesting": 4,
+          "ccn": 38,
+          "cognitive": 91,
+          "dispatch_share": 0.08,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          8,
+          163
+        ],
+        "function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 163,
+          "ccn": 38,
+          "cognitive": 91,
+          "nloc": 156,
+          "max_nesting": 4,
+          "dispatch_share": 0.08,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            23,
+            87
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 4
+        },
+        "current_function": {
+          "name": "<anonymous@9>",
+          "start_line": 9,
+          "end_line": 158,
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "max_nesting": 4,
+          "dispatch_share": 0.09,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            18,
+            82
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 4
+        }
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 38,
+        "cognitive": 91,
+        "dispatch_share": 0.08,
+        "terminal_share": 0.01,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 23,
+          "end": 87
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_bdf61850d95084548fb6",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@8>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_bb9b40c2fcd0648cddd5; old anonymous start 8 becomes 9. The remaining 33 decisions distinguish first-write fallback, both-write failure, retry, fully durable and Drive-backed cases. These are different data-loss outcomes with different expected warnings and reload state; retain the explicit cases rather than flattening them into a generic success check.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 8,
+          "end_line": 163,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 9,
+          "end_line": 158,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "ccn": 38,
+          "cognitive": 91,
+          "nloc": 156,
+          "dispatch_share": 0.08,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          8,
+          163
+        ],
+        "function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 163,
+          "ccn": 38,
+          "cognitive": 91,
+          "nloc": 156,
+          "max_nesting": 4,
+          "dispatch_share": 0.08,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            23,
+            87
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 4
+        },
+        "current_function": {
+          "name": "<anonymous@9>",
+          "start_line": 9,
+          "end_line": 158,
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "max_nesting": 4,
+          "dispatch_share": 0.09,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            18,
+            82
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 4
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 38,
+        "cognitive": 91,
+        "nloc": 156,
+        "dispatch_share": 0.08,
+        "terminal_share": 0.01,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 23,
+          "end": 87
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_7036a9b6124e67da4c4d",
+      "file": "tests/pending-portfolio.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@8>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_825a8df2b6f3b1292908; old anonymous start 8 becomes 9. 150 NLOC spans two necessary sequences: retained photo bytes reach real pre-commit upload, and persisted drafts survive reload with truthful warnings. Both use actual app state and restore synthetic Storage hooks. The one extracted asset responder already removes the independent repeated work.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 8,
+          "end_line": 163,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 9,
+          "end_line": 158,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "nloc": 156,
+          "ccn": 38,
+          "dispatch_share": 0.08,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          8,
+          163
+        ],
+        "function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 163,
+          "ccn": 38,
+          "cognitive": 91,
+          "nloc": 156,
+          "max_nesting": 4,
+          "dispatch_share": 0.08,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            23,
+            87
+          ],
+          "judged_ccn": 38,
+          "judged_nesting": 4
+        },
+        "current_function": {
+          "name": "<anonymous@9>",
+          "start_line": 9,
+          "end_line": 158,
+          "ccn": 33,
+          "cognitive": 82,
+          "nloc": 150,
+          "max_nesting": 4,
+          "dispatch_share": 0.09,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            18,
+            82
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 4
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 156,
+        "ccn": 38,
+        "dispatch_share": 0.08,
+        "terminal_share": 0.01,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 23,
+          "end": 87
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 41,
+          "end_line": 46,
+          "role": "quota hook and finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 54,
+          "end_line": 80,
+          "role": "retained photo and actual upload byte oracles",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 97,
+          "end_line": 102,
+          "role": "counted failure condition",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/pending-portfolio.browser.cjs",
+          "start_line": 113,
+          "end_line": 151,
+          "role": "durability/reload outcome assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_9fbf241d03b2343c1d00",
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@122>",
+      "proposed_status": "verified_absent_needs_parent",
+      "classification": "verified_dispatch_adjusted_driver_absence",
+      "reason": "The renderer driver moves 122 to 123. Raw CCN falls 28 to 24, dispatch share rises .70 to .83 and heaviest arm remains 1. judged_ccn changes from 28-round(.70*27)+1=10 to 24-round(.83*23)+1=6, below the >=9 complex-method gate. This is not a disappearance of the unchanged exercise function.",
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 122,
+          "end_line": 169,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "ccn": 28,
+          "cognitive": 87,
+          "nloc": 48,
+          "dispatch_share": 0.7,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          122,
+          169
+        ],
+        "function": {
+          "name": "<anonymous@122>",
+          "start_line": 122,
+          "end_line": 169,
+          "ccn": 28,
+          "cognitive": 87,
+          "nloc": 48,
+          "max_nesting": 5,
+          "dispatch_share": 0.7,
+          "dispatch_arm": 1,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            127,
+            140
+          ],
+          "judged_ccn": 10,
+          "judged_nesting": 3
+        },
+        "current_function": {
+          "name": "<anonymous@123>",
+          "start_line": 123,
+          "end_line": 165,
+          "ccn": 24,
+          "cognitive": 70,
+          "nloc": 43,
+          "max_nesting": 4,
+          "dispatch_share": 0.83,
+          "dispatch_arm": 1,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            128,
+            136
+          ],
+          "judged_ccn": 6,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 28,
+        "cognitive": 87,
+        "nloc": 48,
+        "dispatch_share": 0.7,
+        "terminal_share": 0.01,
+        "symbol_line": 122,
+        "deepest_block": {
+          "start": 127,
+          "end": 140
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 17,
+          "end_line": 121,
+          "role": "browser-realm fixture and observation boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 134,
+          "end_line": 141,
+          "role": "exercise caller and parity/storage/injection assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "start_line": 142,
+          "end_line": 159,
+          "role": "scenario-specific chart, media and adapter assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_2cc014e33a4adfabcf8e",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@6>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_41f1cd991e9fe02654c1; old anonymous start 6 becomes 7. Depth 7 is reached in the lazy/missing result branch nested under mode/boundary loops, native page lifetime and outcome handling. Every layer names a real ownership boundary. Retain the account-change assertions together; a one-case wrapper would mostly relocate this same decision tree.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 6,
+          "end_line": 84,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 82,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "max_nesting": 7,
+          "ccn": 33,
+          "cognitive": 122,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          6,
+          84
+        ],
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 84,
+          "ccn": 33,
+          "cognitive": 122,
+          "nloc": 79,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            67,
+            74
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 7
+        },
+        "current_function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 82,
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            65,
+            72
+          ],
+          "judged_ccn": 30,
+          "judged_nesting": 7
+        }
+      },
+      "verified_observation_details": {
+        "max_nesting": 7,
+        "ccn": 33,
+        "cognitive": 122,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 67,
+          "end": 74
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_d972d4b21d11f1043309",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@6>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_4cba18a2b2bd563368d5; old anonymous start 6 becomes 7. 30 decisions remain because load, merge and lazy calls have distinct missing-file and changed-account behavior. The Google-shaped responder and final assertions show no request can use account B and no stale write/cache is admitted. Retain that evidence instead of abstracting it behind a generic mock.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 6,
+          "end_line": 84,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 82,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "ccn": 33,
+          "cognitive": 122,
+          "nloc": 79,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          6,
+          84
+        ],
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 84,
+          "ccn": 33,
+          "cognitive": 122,
+          "nloc": 79,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            67,
+            74
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 7
+        },
+        "current_function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 82,
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            65,
+            72
+          ],
+          "judged_ccn": 30,
+          "judged_nesting": 7
+        }
+      },
+      "verified_observation_details": {
+        "ccn": 33,
+        "cognitive": 122,
+        "nloc": 79,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 67,
+          "end": 74
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_a3a48728c81ea506c461",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@6>",
+      "proposed_status": "continuing",
+      "classification": "continuing_identity_alias",
+      "reason": "Same suite role continues as code_health:finding_b72cc0db13499dbf8852; old anonymous start 6 becomes 7. 76 NLOC covers twelve mode/boundary combinations with a fresh page, synthetic API responder, one completion oracle and per-case failure evidence. Route reuse removed only local file serving; splitting the remaining code offers little shared work and would separate faults from their assertions.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 6,
+          "end_line": 84,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 7,
+          "end_line": 82,
+          "role": "continuing suite role",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "nloc": 79,
+          "ccn": 33,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          6,
+          84
+        ],
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 84,
+          "ccn": 33,
+          "cognitive": 122,
+          "nloc": 79,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            67,
+            74
+          ],
+          "judged_ccn": 33,
+          "judged_nesting": 7
+        },
+        "current_function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 82,
+          "ccn": 30,
+          "cognitive": 106,
+          "nloc": 76,
+          "max_nesting": 7,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            65,
+            72
+          ],
+          "judged_ccn": 30,
+          "judged_nesting": 7
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 79,
+        "ccn": 33,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 67,
+          "end": 74
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_29be0fb5517d3f81826a",
+      "file": "tests/student-read-ownership.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "verified_absent_needs_parent",
+      "classification": "verified_dry_coverage_below_threshold",
+      "reason": "Ownership still has one six-line cross-file clone with optional-storage, rather than zero duplication. Its covered union falls 17 to 6 lines and percentage 20.48% to 7.41%, below the 8% gate; three local-responder clone pairs are removed. Preserve the ownership tests and leave campaign closure to the parent.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 15,
+          "end_line": 23,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "cross_file_duplication_pct": 20.48,
+          "clone_pair_count": 4,
+          "worst_clone_lines": 9,
+          "worst_clone_partner": "tests/storage-held-request.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          15,
+          23
+        ],
+        "before": {
+          "all_duplication_pct": 20.48,
+          "cross_file_covered_lines": 17,
+          "cross_pair_count": 4,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 15,
+              "line_end": 23,
+              "details": {
+                "cross_file_duplication_pct": 20.48,
+                "clone_pair_count": 4,
+                "worst_clone_lines": 9,
+                "worst_clone_partner": "tests/storage-held-request.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "20% of file duplicated in other files; worst clone shares 9 lines with tests/storage-held-request.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 7.41,
+          "cross_file_covered_lines": 6,
+          "cross_pair_count": 1,
+          "findings": []
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 20.48,
+        "clone_pair_count": 4,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/storage-held-request.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 6,
+        "symbol": "<anonymous@6>"
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 14,
+          "end_line": 33,
+          "role": "local branch and synthetic Google response boundary",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 45,
+          "end_line": 56,
+          "role": "actual load/merge/lazy completion",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 57,
+          "end_line": 72,
+          "role": "ownership/cache/no-new-account-request assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-read-ownership.browser.cjs",
+          "start_line": 81,
+          "end_line": 81,
+          "role": "failed-case aggregate oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_5f6e3b7c0c1ace61a1cb",
+      "file": "tests/student-rename.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "verified_absent_needs_parent",
+      "classification": "verified_flat_driver_below_large_method_gate",
+      "reason": "The same rename driver moves 7 to 8; NLOC falls 69 to 63 and CCN 6 to 1. LargeMethodDetector requires both NLOC >=60 and raw CCN >=3, so the current body does not qualify. The separate sixteen-assertion finding continues unchanged.",
+      "evidence_anchors": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 7,
+          "end_line": 75,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "nloc": 69,
+          "ccn": 6,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        },
+        "detector_span": [
+          7,
+          75
+        ],
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 75,
+          "ccn": 6,
+          "cognitive": 12,
+          "nloc": 69,
+          "max_nesting": 2,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            9,
+            74
+          ],
+          "judged_ccn": 6,
+          "judged_nesting": 2
+        },
+        "current_function": {
+          "name": "<anonymous@8>",
+          "start_line": 8,
+          "end_line": 70,
+          "ccn": 1,
+          "cognitive": 3,
+          "nloc": 63,
+          "max_nesting": 2,
+          "dispatch_share": 0.0,
+          "dispatch_arm": 0,
+          "terminal_share": 0.02,
+          "deepest_block": [
+            10,
+            69
+          ],
+          "judged_ccn": 1,
+          "judged_nesting": 2
+        }
+      },
+      "verified_observation_details": {
+        "nloc": 69,
+        "ccn": 6,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 74
+        }
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 34,
+          "end_line": 38,
+          "role": "synthetic quota failure with finally restoration",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 47,
+          "end_line": 50,
+          "role": "actual successful retry and observation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/student-rename.browser.cjs",
+          "start_line": 52,
+          "end_line": 67,
+          "role": "same sixteen state and browser-error assertions",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    },
+    {
+      "record_id": "code_health:finding_8fdb4f9986350503ab5b",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "admission_candidate",
+      "classification": "retained_global_dry_with_local_reuse_candidate",
+      "reason": "Recovery-cache is byte-identical. One ownership clone vanishes (7 to 6 pairs), but overlapping coverage stays 23 lines/10.04% and the same 16-line report/driver clone remains worst. Retain the explicit report oracle. A separate small reuse candidate is the still-duplicated local asset branch at 109-112: call existing localAppRoute while leaving its Google responder intact; that would remove real repeated file-serving logic, not necessarily this worst aggregate.",
+      "evidence_anchors": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 220,
+          "end_line": 235,
+          "role": "exact indexed target",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "after",
+        "detector_details": {
+          "cross_file_duplication_pct": 10.04,
+          "clone_pair_count": 6,
+          "worst_clone_lines": 16,
+          "worst_clone_partner": "tests/drive-lifecycle.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          220,
+          235
+        ],
+        "before": {
+          "all_duplication_pct": 10.04,
+          "cross_file_covered_lines": 23,
+          "cross_pair_count": 7,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 220,
+              "line_end": 235,
+              "details": {
+                "cross_file_duplication_pct": 10.04,
+                "clone_pair_count": 7,
+                "worst_clone_lines": 16,
+                "worst_clone_partner": "tests/drive-lifecycle.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "10% of file duplicated in other files; worst clone shares 16 lines with tests/drive-lifecycle.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 10.04,
+          "cross_file_covered_lines": 23,
+          "cross_pair_count": 6,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 220,
+              "line_end": 235,
+              "details": {
+                "cross_file_duplication_pct": 10.04,
+                "clone_pair_count": 6,
+                "worst_clone_lines": 16,
+                "worst_clone_partner": "tests/drive-lifecycle.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "10% of file duplicated in other files; worst clone shares 16 lines with tests/drive-lifecycle.browser.cjs",
+              "deduction": null
+            }
+          ]
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.04,
+        "clone_pair_count": 6,
+        "worst_clone_lines": 16,
+        "worst_clone_partner": "tests/drive-lifecycle.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 102,
+        "symbol": "runRecoveryScenario"
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 102,
+          "end_line": 119,
+          "role": "specialized service route and remaining local asset branch",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 191,
+          "end_line": 219,
+          "role": "scenario action and byte-preservation checks",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/recovery-cache.browser.cjs",
+          "start_line": 224,
+          "end_line": 235,
+          "role": "scenario caller and complete failed-assertion oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "If the local branch reuse is later admitted, preserve the Google responder and compare native recovery/cache requests, downloads, MIME and all byte/rollback assertions; run helper selfchecks and the native recovery-cache suite. Do not expect report-tail duplication to disappear."
+    },
+    {
+      "record_id": "code_health:finding_1be4afa8ded3013ac8e7",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "verified_absent_needs_parent",
+      "classification": "verified_global_partner_coverage_drop",
+      "reason": "Drive-lifecycle is byte-identical. Removing ownership asset serving deletes its clone drive 146-151 / old ownership 13-18; no other drive-side covered range is lost. Cross-file union falls 28 to 22 lines over the same 291 nonblank lines: 9.62% to 7.56%, below 8%. Six clone pairs including the 16-line recovery-cache partner remain; this is a global coverage change, not a drive source repair.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "start_line": 294,
+          "end_line": 308,
+          "role": "exact indexed target",
+          "commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+        }
+      ],
+      "verified_metrics": {
+        "observed_at": "before",
+        "detector_details": {
+          "cross_file_duplication_pct": 9.62,
+          "clone_pair_count": 7,
+          "worst_clone_lines": 16,
+          "worst_clone_partner": "tests/recovery-cache.browser.cjs",
+          "worst_clone_co_change": 0
+        },
+        "detector_span": [
+          294,
+          308
+        ],
+        "before": {
+          "all_duplication_pct": 9.62,
+          "cross_file_covered_lines": 28,
+          "cross_pair_count": 7,
+          "findings": [
+            {
+              "biomarker_type": "dry_violation",
+              "severity": "low",
+              "function_name": null,
+              "line_start": 294,
+              "line_end": 308,
+              "details": {
+                "cross_file_duplication_pct": 9.62,
+                "clone_pair_count": 7,
+                "worst_clone_lines": 16,
+                "worst_clone_partner": "tests/recovery-cache.browser.cjs",
+                "worst_clone_co_change": 0
+              },
+              "reason": "10% of file duplicated in other files; worst clone shares 16 lines with tests/recovery-cache.browser.cjs",
+              "deduction": null
+            }
+          ]
+        },
+        "after": {
+          "all_duplication_pct": 7.56,
+          "cross_file_covered_lines": 22,
+          "cross_pair_count": 6,
+          "findings": []
+        }
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 9.62,
+        "clone_pair_count": 7,
+        "worst_clone_lines": 16,
+        "worst_clone_partner": "tests/recovery-cache.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 137,
+        "symbol": "runDriveScenario"
+      },
+      "callers": [
+        {
+          "file": "scripts/run-tests.cjs",
+          "start_line": 79,
+          "end_line": 100,
+          "role": "suite inventory, subprocess entry and report validation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "start_line": 145,
+          "end_line": 151,
+          "role": "unchanged removed-partner region",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "start_line": 231,
+          "end_line": 235,
+          "role": "route/setup invocation",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "start_line": 273,
+          "end_line": 308,
+          "role": "scenario dispatch, retained-state check, case report and failure oracle",
+          "commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394"
+        }
+      ],
+      "regression_recommendation": "No additional test suggested solely for a retained shape. Parent owns the pending full batch gate; no app tests were run for this review."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "records": 33,
+    "continuing": 27,
+    "verified_absent_needs_parent": 5,
+    "admission_candidate": 1,
+    "new_anonymous_id_mappings": 8,
+    "primary_dry": "Four remain (missing/pending/renderer/rename), ownership below8%; worst partners moved. Do not treat the five aggregates as all fixed.",
+    "global_dry": "Drive unchanged, loses ownership clone, 28/291->22/291 covered lines,9.62%->7.56%; recovery unchanged,7->6pairs but23covered lines/10.04% and same worst partner.",
+    "candidate_scope": "Optional dead fs import cleanup in rename; separate future recovery local-route reuse candidate. Neither is a claimed aggregate clearance.",
+    "scanner_closures_claimed": false
+  },
+  "limits": [
+    "Read-only static review: no source/test/Git/index/tracker/docs/runtime/cache/dependency modifications; only own scratch and this report written.",
+    "No application tests, test pass claims, live-service calls, index refresh or scanner closures. The parent owns final reconciliation and full batch validation.",
+    "Default clone scan skips one minified source; both scans report no timeout, degenerate bucket, unreadable file, token cap or global-window limit. All 90 current raw source pins matched.",
+    "Earlier repair-025 native test receipts were read as historical context only, not rerun or adopted as an independent pass claim.",
+    "Historical and current IDs must be reconciled by unchanged source role; absence of a previous anonymous ID is not a repair by itself."
+  ],
+  "source_hashes_before_normalized_lf": {
+    "scripts/check-test-runner.cjs": "e9b0625c172393e1947513f3f4ad0d9c3b114b97e7505119d2a5550b9adfd54e",
+    "tests/drive-lifecycle.browser.cjs": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+    "tests/missing-feedback.browser.cjs": "42ef342368cddd5a733066316aefd82cec9c5ce693e54b9ffa0b0a904dce99aa",
+    "tests/notebook-guidance-repair.browser.cjs": "3898a1ec100c062d3c9e66bf4a1de858d19e49aa075e36fff1f7ea91a97aad11",
+    "tests/pending-portfolio.browser.cjs": "899744d8026c94e47e9286d489727a07d1f121f3442f85b39b82e4f56d2a4d69",
+    "tests/portfolio-renderer.browser.cjs": "d7aaa80468c5a3a1af2133030d660d16e9728bafde5172c98d4e11334edfe469",
+    "tests/recovery-cache.browser.cjs": "c22d93ed48c8233ead94fcc5d978a27ee37b57891ab5d1c380612057c266bd0e",
+    "tests/student-read-ownership.browser.cjs": "02c190a01a9824715c8c13b12ab4d8b6604f81ea270a74a40fbf8c041feae0f5",
+    "tests/student-rename.browser.cjs": "2f93fcdd32ccceb5d925f3cc9532d7cb555f7ad3a1a8055a328398b138a458aa",
+    "tests/support/local-app-route.js": "7657a3597c09ebfbd426140208ec9a679e0ac8ccb4d13b4f7976a945a9346250"
+  },
+  "global_clone_receipts": {
+    "tests/drive-lifecycle.browser.cjs": {
+      "before_cross_pairs": 7,
+      "after_cross_pairs": 6,
+      "before_covered_union": 28,
+      "after_covered_union": 22,
+      "before_pct": 9.62,
+      "after_pct": 7.56,
+      "removed_local_responder_pairs": [
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/student-read-ownership.browser.cjs",
+          "a_start_line": 146,
+          "a_end_line": 151,
+          "b_start_line": 13,
+          "b_end_line": 18,
+          "token_count": 1500,
+          "co_change_count": 0
+        }
+      ],
+      "remaining_partner_regions": [
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/recovery-cache.browser.cjs",
+          "a_lines": [
+            294,
+            308
+          ],
+          "b_lines": [
+            220,
+            235
+          ]
+        },
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/split-storage.browser.cjs",
+          "a_lines": [
+            294,
+            301
+          ],
+          "b_lines": [
+            201,
+            208
+          ]
+        },
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/storage-dialog-keyboard.browser.cjs",
+          "a_lines": [
+            296,
+            305
+          ],
+          "b_lines": [
+            161,
+            170
+          ]
+        },
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/storage-held-request.browser.cjs",
+          "a_lines": [
+            11,
+            17
+          ],
+          "b_lines": [
+            37,
+            44
+          ]
+        },
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/storage-public-ui.browser.cjs",
+          "a_lines": [
+            296,
+            304
+          ],
+          "b_lines": [
+            136,
+            144
+          ]
+        },
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/storage-upload-ownership.browser.cjs",
+          "a_lines": [
+            11,
+            17
+          ],
+          "b_lines": [
+            6,
+            13
+          ]
+        }
+      ]
+    },
+    "tests/recovery-cache.browser.cjs": {
+      "before_cross_pairs": 7,
+      "after_cross_pairs": 6,
+      "before_covered_union": 23,
+      "after_covered_union": 23,
+      "before_pct": 10.04,
+      "after_pct": 10.04,
+      "removed_local_responder_pairs": [
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/student-read-ownership.browser.cjs",
+          "a_start_line": 108,
+          "a_end_line": 113,
+          "b_start_line": 15,
+          "b_end_line": 20,
+          "token_count": 3500,
+          "co_change_count": 0
+        }
+      ],
+      "remaining_partner_regions": [
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/recovery-cache.browser.cjs",
+          "a_lines": [
+            294,
+            308
+          ],
+          "b_lines": [
+            220,
+            235
+          ]
+        },
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/split-storage.browser.cjs",
+          "a_lines": [
+            220,
+            227
+          ],
+          "b_lines": [
+            201,
+            208
+          ]
+        },
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/split-storage.browser.cjs",
+          "a_lines": [
+            230,
+            236
+          ],
+          "b_lines": [
+            209,
+            215
+          ]
+        },
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/storage-dialog-keyboard.browser.cjs",
+          "a_lines": [
+            222,
+            231
+          ],
+          "b_lines": [
+            161,
+            170
+          ]
+        },
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/storage-held-request.browser.cjs",
+          "a_lines": [
+            108,
+            113
+          ],
+          "b_lines": [
+            22,
+            27
+          ]
+        },
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/storage-public-ui.browser.cjs",
+          "a_lines": [
+            222,
+            230
+          ],
+          "b_lines": [
+            136,
+            144
+          ]
+        }
+      ]
+    },
+    "tests/student-read-ownership.browser.cjs": {
+      "before_cross_pairs": 4,
+      "after_cross_pairs": 1,
+      "before_covered_union": 17,
+      "after_covered_union": 6,
+      "before_pct": 20.48,
+      "after_pct": 7.41,
+      "removed_local_responder_pairs": [
+        {
+          "file_a": "tests/drive-lifecycle.browser.cjs",
+          "file_b": "tests/student-read-ownership.browser.cjs",
+          "a_start_line": 146,
+          "a_end_line": 151,
+          "b_start_line": 13,
+          "b_end_line": 18,
+          "token_count": 1500,
+          "co_change_count": 0
+        },
+        {
+          "file_a": "tests/recovery-cache.browser.cjs",
+          "file_b": "tests/student-read-ownership.browser.cjs",
+          "a_start_line": 108,
+          "a_end_line": 113,
+          "b_start_line": 15,
+          "b_end_line": 20,
+          "token_count": 3500,
+          "co_change_count": 0
+        },
+        {
+          "file_a": "tests/storage-held-request.browser.cjs",
+          "file_b": "tests/student-read-ownership.browser.cjs",
+          "a_start_line": 22,
+          "a_end_line": 30,
+          "b_start_line": 15,
+          "b_end_line": 23,
+          "token_count": 7750,
+          "co_change_count": 0
+        }
+      ],
+      "remaining_partner_regions": [
+        {
+          "file_a": "tests/optional-storage.browser.cjs",
+          "file_b": "tests/student-read-ownership.browser.cjs",
+          "a_lines": [
+            223,
+            228
+          ],
+          "b_lines": [
+            32,
+            37
+          ]
+        }
+      ]
+    }
+  },
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "all33_individual_reasons_read": true,
+    "all6_current_driver_metrics_independently_replayed": true,
+    "all_inspected_source_hashes_verified": true,
+    "eight_continuing_ids_reconciled": true,
+    "five_absences_verified_with_specific_rules": [
+      "code_health:finding_023e9357755094e56ba3",
+      "code_health:finding_9fbf241d03b2343c1d00",
+      "code_health:finding_29be0fb5517d3f81826a",
+      "code_health:finding_5f6e3b7c0c1ace61a1cb",
+      "code_health:finding_1be4afa8ded3013ac8e7"
+    ],
+    "global_clone_geometry_reviewed": "All90pinned source files before/after, no timeout/window/token/degenerate limit hit; empty co-change matches stored zero weights. Ownership and unchanged Drive percentages independently supported by actual deleted responder regions. Four primary DRY flags remain; no zero-duplication claim.",
+    "test_limit": "Existing025paired6native/90syntax/self-check receipts accepted; full004gate stillrunning."
+  }
+}
