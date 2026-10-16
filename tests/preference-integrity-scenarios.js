@@ -156,6 +156,106 @@
             check(Object.hasOwn(saved, '__proto__') && saved.__proto__.keep && saved.constructor === 'ordinary' && saved.studentIdMap.__proto__ === 'own-id', 'own data retained');
         });
     };
+    const checkFormOverlayContracts = async function checkFormOverlayContracts() {
+        function prepare() {
+            const saved = { ...base(), apiKey: 'synthetic-overlay-credential' };
+            localStorage.setItem('wft_settings', JSON.stringify(saved)); localStorage.setItem('wft_students', '["Live"]'); students = ['Live'];
+            el('modelSelect').selectedIndex = 1; el('targetWordCount').value = '333'; el('useWordCountTarget').checked = false;
+            el('grammarStrictness').value = '5'; el('assessScriptQuality').checked = true;
+            el('gradeLevelSelect').value = '12'; el('classGradeLevelSelect').value = '6'; wftStudentGradeLevelOverride = true;
+            return { saved, model: el('modelSelect').value };
+        }
+        async function record(name, fn) {
+            let observed;
+            await run('form overlay/' + name, () => { observed = fn(); });
+            cases[cases.length - 1].observed = observed;
+        }
+        for (const caller of ['writer', 'snapshot']) {
+            for (const missing of ['modelSelect', 'targetWordCount', 'useWordCountTarget', 'assessScriptQuality', 'getGrammarStrictness', 'getSelectedGradeLevel', 'getClassGradeLevel']) await record(caller + '/missing/' + missing, () => {
+                const { saved, model } = prepare(), before = localStorage.getItem('wft_settings'), lookup = document.getElementById, optional = globalThis[missing];
+                const expected = { ...saved, model, targetWordCount: '333', useWordCountTarget: false, grammarStrictness: 5, assessScriptQuality: true,
+                    gradeLevel: 12, classGradeLevel: 6, studentGradeLevelOverride: true, students: ['Live'] };
+                const field = { modelSelect: 'model', targetWordCount: 'targetWordCount', useWordCountTarget: 'useWordCountTarget', assessScriptQuality: 'assessScriptQuality', getGrammarStrictness: 'grammarStrictness', getSelectedGradeLevel: 'gradeLevel', getClassGradeLevel: 'classGradeLevel' }[missing];
+                expected[field] = saved[field]; delete expected.apiKey;
+                let result;
+                try {
+                    document.getElementById = function(id) { return id === missing ? null : lookup.call(this, id); };
+                    if (missing.startsWith('get')) globalThis[missing] = undefined;
+                    result = caller === 'writer' ? saveSettingsToLocalStorage() : getLocalSettingsSnapshot();
+                } finally { document.getElementById = lookup; if (missing.startsWith('get')) globalThis[missing] = optional; }
+                equal(result, expected, 'only the missing field retains its saved value');
+                if (caller === 'writer') equal(JSON.parse(localStorage.getItem('wft_settings')), { ...expected, apiKey: saved.apiKey }, 'disk keeps device credential');
+                else equal(localStorage.getItem('wft_settings'), before, 'snapshot writes nothing');
+                check(wftSyncState.localSettingsCounter === (caller === 'writer' ? 1 : 0) && schedules === (caller === 'writer' ? 1 : 0), 'publication matches caller');
+                return { result, counter: wftSyncState.localSettingsCounter, schedules };
+            });
+            for (const override of [true, false, 1, 'true']) await record(caller + '/blank-and-flags/' + JSON.stringify(override), () => {
+                const { saved } = prepare(); saved.targetWordCount = '444'; localStorage.setItem('wft_settings', JSON.stringify(saved));
+                const before = localStorage.getItem('wft_settings');
+                el('modelSelect').value = ''; el('targetWordCount').value = '';
+                el('useWordCountTarget').checked = override === true; el('assessScriptQuality').checked = override !== true; wftStudentGradeLevelOverride = override;
+                const result = caller === 'writer' ? saveSettingsToLocalStorage() : getLocalSettingsSnapshot();
+                const expected = { ...saved, model: '', targetWordCount: '200', useWordCountTarget: override === true, grammarStrictness: 5,
+                    assessScriptQuality: override !== true, gradeLevel: 12, classGradeLevel: 6, studentGradeLevelOverride: override === true, students: ['Live'] };
+                delete expected.apiKey; equal(result, expected, 'blank defaults, checked values and strict override flag');
+                if (caller === 'writer') equal(JSON.parse(localStorage.getItem('wft_settings')), { ...expected, apiKey: saved.apiKey }, 'credential retained only on disk');
+                else equal(localStorage.getItem('wft_settings'), before, 'blank snapshot writes nothing');
+                return result;
+            });
+            for (const stage of ['lookup', 'strictness']) for (const hasRoster of [false, true]) await record(caller + '/exception/' + stage + '/roster-' + hasRoster, () => {
+                const { saved, model } = prepare();
+                if (hasRoster) saved.students = ['Stored']; else delete saved.students;
+                localStorage.setItem('wft_settings', JSON.stringify(saved));
+                const before = localStorage.getItem('wft_settings'), lookup = document.getElementById, grammar = getGrammarStrictness;
+                const sentinel = { reason: 'Synthetic overlay ' + stage }, reads = [];
+                let injected = false, writes = 0, result, caught;
+                Storage.prototype.setItem = function(key, value) { writes++; return set.call(this, key, value); };
+                try {
+                    document.getElementById = function(id) {
+                        if (!injected) reads.push(id);
+                        if (stage === 'lookup' && id === 'useWordCountTarget' && !injected) { injected = true; throw sentinel; }
+                        return lookup.call(this, id);
+                    };
+                    getGrammarStrictness = () => { if (stage === 'strictness' && !injected) { injected = true; throw sentinel; } return grammar(); };
+                    try { result = caller === 'writer' ? saveSettingsToLocalStorage() : getLocalSettingsSnapshot(); } catch (error) { caught = error; }
+                } finally { document.getElementById = lookup; getGrammarStrictness = grammar; Storage.prototype.setItem = set; }
+                check(injected, 'named fault was reached');
+                equal(reads, stage === 'lookup' ? ['modelSelect', 'targetWordCount', 'useWordCountTarget'] : ['modelSelect', 'targetWordCount', 'useWordCountTarget', 'assessScriptQuality'], 'all four lookups precede any assignment');
+                equal(localStorage.getItem('wft_settings'), before, 'original durable settings retained');
+                check(writes === 0 && wftSyncState.localSettingsCounter === 0 && !wftSyncState.pendingSettingsPush && schedules === 0, 'no writes or dirty publication');
+                if (caller === 'writer') {
+                    check(caught === sentinel && result === undefined, 'writer rethrows the same sentinel');
+                    equal({ model: el('modelSelect').value, target: el('targetWordCount').value, use: el('useWordCountTarget').checked, grammar: el('grammarStrictness').value,
+                        assess: el('assessScriptQuality').checked, grade: el('gradeLevelSelect').value, classGrade: el('classGradeLevelSelect').value, override: wftStudentGradeLevelOverride },
+                    { model: saved.model, target: '200', use: true, grammar: '3', assess: false, grade: '5', classGrade: '5', override: false }, 'saved form restored');
+                } else {
+                    check(caught === undefined, 'snapshot contains only the optional overlay failure');
+                    const expected = { ...saved };
+                    if (stage === 'strictness') { expected.model = model; expected.targetWordCount = '333'; expected.useWordCountTarget = false; }
+                    if (!hasRoster) expected.students = ['Live'];
+                    delete expected.apiKey; equal(result, expected, 'exact partial overlay, roster fallback and credential redaction');
+                }
+                return { reads, writes, rethrown: caught === sentinel, result: result || null, settingsUnchanged: localStorage.getItem('wft_settings') === before };
+            });
+        }
+        for (const stage of ['preflight', 'settings-read']) await record('snapshot/required-' + stage, () => {
+            prepare();
+            const before = localStorage.getItem('wft_settings'), preflight = preflightWftRequiredStorage, read = readWftRequiredStorage, lookup = document.getElementById;
+            const sentinel = { reason: 'Synthetic required ' + stage };
+            let settingsReads = 0, lookups = 0, writes = 0, caught;
+            try {
+                document.getElementById = function(id) { lookups++; return lookup.call(this, id); };
+                Storage.prototype.setItem = function(key, value) { writes++; return set.call(this, key, value); };
+                if (stage === 'preflight') preflightWftRequiredStorage = () => { throw sentinel; };
+                else readWftRequiredStorage = function(key) { if (key === 'wft_settings' && ++settingsReads === 2) throw sentinel; return read(key); };
+                try { getLocalSettingsSnapshot(); } catch (error) { caught = error; }
+            } finally { preflightWftRequiredStorage = preflight; readWftRequiredStorage = read; document.getElementById = lookup; Storage.prototype.setItem = set; }
+            check(caught === sentinel, 'required failure escapes the soft overlay catch unchanged');
+            check(lookups === 0 && writes === 0 && schedules === 0 && wftSyncState.localSettingsCounter === 0, 'required failure precedes overlay and publication');
+            equal(localStorage.getItem('wft_settings'), before, 'required failure keeps saved bytes');
+            return { settingsReads, lookups, writes, sameError: caught === sentinel };
+        });
+    };
     const checkMetadataMerges = async function checkMetadataMerges() {
         for (const preferLocal of [false, true]) for (const source of ['local', 'cloud', 'both', 'empty']) await run(`metadata merge/${preferLocal}/${source}`, () => checkMetadataMerge(preferLocal, source));
         function checkMetadataMerge(preferLocal, source) {
@@ -587,6 +687,7 @@
         await checkRequiredPreferenceSaves();
         await checkReassessmentLoads();
         await checkSuccessfulPreferenceSaves();
+        await checkFormOverlayContracts();
         await checkMetadataMerges();
         await checkSettingsApply();
         await checkNullableWordTarget();

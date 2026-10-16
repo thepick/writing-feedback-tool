@@ -547,6 +547,21 @@ function refreshApiKeyRuntimeValue() {
     }
 }
 
+function updateSettingsFromForm(settings) {
+    var modelSelect = document.getElementById('modelSelect');
+    var targetWordCountEl = document.getElementById('targetWordCount');
+    var useWordCountTargetEl = document.getElementById('useWordCountTarget');
+    var assessScriptQualityEl = document.getElementById('assessScriptQuality');
+    if (modelSelect) settings.model = modelSelect.value || '';
+    if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
+    if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
+    if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
+    if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
+    if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
+    if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
+    settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+}
+
 function saveSettingsToLocalStorage(settingsOverride) {
     var existing = readWftRequiredStorage('wft_settings');
     var settings = Object.assign(Object.create(null), cloneWftJson(existing));
@@ -555,24 +570,10 @@ function saveSettingsToLocalStorage(settingsOverride) {
             if (key !== 'apiKey') settings[key] = cloneWftJson(settingsOverride[key]);
         });
     }
-    function updateSettingsFromForm() {
-        var modelSelect = document.getElementById('modelSelect');
-        var targetWordCountEl = document.getElementById('targetWordCount');
-        var useWordCountTargetEl = document.getElementById('useWordCountTarget');
-        var assessScriptQualityEl = document.getElementById('assessScriptQuality');
-        if (modelSelect) settings.model = modelSelect.value || '';
-        if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
-        if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
-        if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
-        if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
-    }
     try {
         if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
         preflightWftRequiredStorage();
-        updateSettingsFromForm();
+        updateSettingsFromForm(settings);
         if (typeof students !== 'undefined' && Array.isArray(students)) settings.students = applyDeletionsToStudents(students, getDeletionsData());
         validateWftRequiredStorage('wft_settings', settings);
         localStorage.setItem('wft_settings', JSON.stringify(settings));
@@ -4465,19 +4466,7 @@ function getLocalSettingsSnapshot() {
     var settings = readWftRequiredStorage('wft_settings');
 
     try {
-        var modelSelect = document.getElementById('modelSelect');
-        var targetWordCountEl = document.getElementById('targetWordCount');
-        var useWordCountTargetEl = document.getElementById('useWordCountTarget');
-        var assessScriptQualityEl = document.getElementById('assessScriptQuality');
-
-        if (modelSelect) settings.model = modelSelect.value || '';
-        if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
-        if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
-        if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
-        if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+        updateSettingsFromForm(settings);
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
         }
