@@ -172,9 +172,10 @@ Because this is a browser-based tool:
 
 ## Local regression tests
 
-With the existing Node, Playwright/Edge and JSZip installation available, run:
+Install the test dependencies once (Playwright and JSZip; the browser suites drive the installed Microsoft Edge), then run:
 
 ```powershell
+npm install
 node scripts/check-test-runner.cjs
 node scripts/run-tests.cjs --out ./test-results
 node scripts/run-tests.cjs --out ./test-results-focused --suite tests/openrouter-failures.browser.cjs
