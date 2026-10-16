@@ -1,0 +1,31 @@
+{
+  "batch": "batch-007",
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/188",
+  "merge_commit": "d52fdcb059def5f7f4f1d41679de8947131bb6d1",
+  "verified_at": "2026-10-16T05:18:42.970320+00:00",
+  "pages_build": "built",
+  "pages_build_commit": "d52fdcb059def5f7f4f1d41679de8947131bb6d1",
+  "tested_source_commit": "c814963f9f277920b876eef8f707f9572912ac95",
+  "all_committed_source_blobs_identical": true,
+  "all_normalized_lf_pins_match": true,
+  "source_pin_count": 91,
+  "configuration_pin_count": 1,
+  "configuration_checkout_newline_only_changes": [],
+  "raw_source_pins_match": 91,
+  "checkout_newline_only_changes": [],
+  "files": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "http_status": 200,
+      "bytes": 397675,
+      "git_sha256": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "live_sha256": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static deployment and exact source equivalence; no real accounts, writing, Google, Drive or model calls.",
+  "repoWise_ingestion_verified": true,
+  "dashboard_score": 4.5,
+  "health_cli_precise": 4.56
+}

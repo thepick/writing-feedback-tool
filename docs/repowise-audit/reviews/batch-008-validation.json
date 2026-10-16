@@ -1,0 +1,26 @@
+{
+  "batch": "batch-008",
+  "repair_id": "repair-067-mobile-header",
+  "created_at_utc": "2026-10-16T05:21:23.345367+00:00",
+  "tested_isolated_candidate": "b0aa0fe36be872b1cb38a118f7a433cc33b8ddef",
+  "integrated_candidate": "0805617807ebd5f4189334d05b5daac81c832a90",
+  "html_sha256_normalized_lf": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+  "scope": "Only header CSS changed; unchanged scripts/markup/handlers. No dependency change.",
+  "geometry_states_passed": 143,
+  "real_control_interaction_sequences_passed": 11,
+  "native_auth_cases_before_and_after_passed": 111,
+  "native_startup_cases_before_and_after_passed": 2,
+  "independent_reviews": [
+    "reviews/repair-067-safety-review.json",
+    "reviews/repair-067-regression-review.json"
+  ],
+  "focused_evidence": "reviews/repair-067-mobile-header.json",
+  "all91_javascript_test_sources_and_manifest_match_full77_suite_tested007": true,
+  "full_suite_rerun_for_CSS_only_change": false,
+  "native_coverage_reused_from": "batch-007",
+  "coverage_reuse_reason": "All8instrumented JavaScript sources exactly unchanged; CSS-specific responsive/tap checks are separate.",
+  "limits": [
+    "Headless Edge emulation, no physical Android/iOS/Safari or all font/zoom settings.",
+    "No live Google/Drive/AI calls or real student data."
+  ]
+}
