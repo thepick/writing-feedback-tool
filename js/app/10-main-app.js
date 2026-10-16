@@ -8603,7 +8603,7 @@ updateMeter = function() {
     } else {
         badgeText = "Above target";
     }
-    if (words === target) badgeText = "On target";
+    if (targetEnabled && words === target) badgeText = "On target";
 
     updateStatusBar(words, target, targetEnabled, fillWidth, fillBackground, badgeText);
     updateAnalyzeBtnState();

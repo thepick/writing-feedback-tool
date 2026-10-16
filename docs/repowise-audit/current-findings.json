@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T09:12:51.555096+07:00",
+  "updated_at": "2026-10-16T09:23:26.574863+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active_confirmed_bug_stabilization",
-  "active_repair": null,
+  "active_repair": "repair-059",
   "index_provenance": {
     "last_sync_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
     "repository_metadata_head": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
@@ -59,7 +59,7 @@
     "verified_fixed": 30,
     "unresolved_present": 270,
     "unresolved_absent": 1,
-    "unresolved_behavioral_leads": 13
+    "unresolved_behavioral_leads": 10
   },
   "repairs": [
     {
@@ -1540,6 +1540,27 @@
       "thread_id": "01a140bb-d411-7a52-9f82-de537714d5e0",
       "status": "reviewed_complete",
       "outcome": "Ten initial test-only signals verified. Changed test files require a current context/hash review before retaining their outcomes."
+    },
+    {
+      "id": "repair-059",
+      "title": "Keep the target-off status when writing matches a disabled target",
+      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
+      "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+      "lead_id": "review050-disabled-target-status-badge",
+      "assignment": "work/repowise-coordinator/repair-059-assignment.json",
+      "scope": [
+        "js/app/10-main-app.js",
+        "tests/main-app-health.browser.cjs"
+      ],
+      "report": "reviews/repair-059-disabled-target-badge.json",
+      "behavior_fix_verified": true,
+      "focused_checks": 101,
+      "baseline_expected_failures": 2,
+      "independent_reviews": [
+        "reviews/repair-059-safety-review.json",
+        "reviews/repair-059-regression-review.json"
+      ]
     }
   ],
   "findings": [
@@ -139945,7 +139966,7 @@
     },
     {
       "id": "review027-manual-save-rejection-status",
-      "status": "candidate_needs_regression",
+      "status": "reviewed_no_change",
       "classification": "completion_failure_status_asymmetry",
       "evidence_anchors": [
         "js/app/00-storage-sync-patches.js:7937",
@@ -139965,7 +139986,10 @@
       "function": "finishManualSaveToDrive",
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-027-upload-shapes.json",
-      "related_repair": "repair-027"
+      "related_repair": "repair-027",
+      "reviewed_at_source": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+      "outcome_reason": "No demonstrated false success, lost writing or disabled retry: rejection retains pending work and offers an accurate Retry. Ordinary sync failures resolve false. Unexpected rejection remains defensive shipped behavior.",
+      "followup_report": "reviews/bug-focus-save-portfolio-relevance.json"
     },
     {
       "lead_id": "review028-reassessment-confirmation-freshness",
@@ -140097,7 +140121,9 @@
       "needs_user_attention": false,
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-030-feedback-shapes.json",
-      "related_repair": "repair-030"
+      "related_repair": "repair-030",
+      "followup_report": "reviews/bug-focus-genre-calculation-relevance.json",
+      "shipped_relevance": "Credible normal-user automatic genre defect; reproduce before source changes."
     },
     {
       "lead_id": "review032-preview-drop-index-range",
@@ -140194,7 +140220,9 @@
       "status": "candidate_needs_regression",
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-034-parsing-reconciliation-shapes.json",
-      "related_repair": "repair-034"
+      "related_repair": "repair-034",
+      "followup_report": "reviews/bug-focus-genre-calculation-relevance.json",
+      "shipped_relevance": "Credible opt-in diagnostic display bug visible to normal users; not an incorrect-grade claim."
     },
     {
       "id": "review044-roster-portfolio-panel",
@@ -140307,10 +140335,13 @@
         }
       ],
       "regression_recommendation": "Enable the existing optional flag, hold actual asynchronous loads, change the real selector A to B, release both orders including late failure, and assert only the selected owner data/actions/error render. Check preserved adapter cleanup and storage purity. Existing immediate async parity does not establish this oracle.",
-      "status": "candidate_needs_regression",
+      "status": "reviewed_no_change",
       "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
       "report": "reviews/repair-044-portfolio-rendering.json",
-      "related_repair": "repair-044"
+      "related_repair": "repair-044",
+      "reviewed_at_source": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+      "outcome_reason": "Flag is disabled in shipped defaults; actual loader is a microtask around local synchronous reading. Harden before enabling a truly delayed loader, but no supported shipped exposure established.",
+      "followup_report": "reviews/bug-focus-save-portfolio-relevance.json"
     },
     {
       "id": "047-L1",
@@ -140432,10 +140463,13 @@
       ],
       "smallest_change": "First add an expected-output DOM test for a plain titled correction. Then choose a narrowly scoped title/body rendering fix or proven reuse of existing correction-markup rendering; preserve escaping, punctuation and line-break semantics.",
       "tests_needed": "Explicit Title:, inferred title, title unchanged/body changed, title changed, model-marked input and no-title controls. This is not a reproduced production bug or an approved one-line renderer replacement.",
-      "status": "candidate_needs_regression",
+      "status": "reviewed_no_change",
       "source_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
       "report": "reviews/repair-049-rendering-audit-genre.json",
-      "related_repair": "repair-049"
+      "related_repair": "repair-049",
+      "reviewed_at_source": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+      "outcome_reason": "Direct plain-title renderer fallback concern remains plausible, but no affected current user-facing producer established. parseStep1 unconditionally calls buildMinimalCorrectionMarkup; changed highlightable tokens are marked and renderCorrected immediately routes markup to renderCorrectionMarkdown. Ordinary scored and pending paths use that correctedStory. Portfolio legacy plain text uses buildStoryHtmlWithTitle directly, not this fallback. Reopen if a supported producer bypassing normalization is found.",
+      "followup_report": "reviews/bug-focus-plain-title-relevance.json"
     },
     {
       "id": "049-L3",
@@ -140477,7 +140511,7 @@
       "classification": "possible_disabled_target_display_override",
       "proposed_status": "candidate_needs_regression",
       "source_supported": true,
-      "reproduced": false,
+      "reproduced": true,
       "needs_user_attention": false,
       "reason": "getTargetWordCountValue retains a positive configured target even when its checkbox is off. The wrapper first chooses Target off, but the unconditional words===target override at8606 then assigns On target. updateStatusBar publishes that badge to visible #statusBarStatus. Thus an off target with exactly the stored word count appears able to display an enabled-target success message. Original updateMeter returns early for target-off, so its own meter text does not prevent the wrapper override. Source supported only; no application run here.",
       "evidence_anchors": [
@@ -140511,10 +140545,12 @@
         }
       ],
       "regression_recommendation": "Using real inputs/events, configure a positive target, switch target off and enter exactly that many words; assert statusBarStatus remains Target off and fill stays0%. Add enabled/exact -> On target and disabled/nonexact controls. If confirmed, gate only the exact-target override with targetEnabled; preserve thresholds, text and normal enabled behavior. No reproduction or fix claimed.",
-      "status": "candidate_needs_regression",
+      "status": "fixed_focused_awaiting_publication",
       "source_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
       "report": "reviews/repair-050-notebook-policies.json",
-      "related_repair": "repair-050"
+      "related_repair": "repair-059",
+      "assigned_chat": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "fix_report": "reviews/repair-059-disabled-target-badge.json"
     },
     {
       "id": "054-L1",
@@ -140621,7 +140657,7 @@
       "js/app/storage-recovery.js": true,
       "js/app/00-storage-sync-patches.js": true,
       "js/app/portfolio-export.js": true,
-      "js/app/10-main-app.js": true,
+      "js/app/10-main-app.js": false,
       "js/app/photo-crop.js": true,
       "js/app/99-lightbox.js": true
     }
@@ -184568,9 +184604,10 @@
   },
   "required_work_summary": {
     "confirmed_unresolved_bugs": 0,
-    "unconfirmed_application_leads": 9,
+    "unconfirmed_application_leads": 5,
     "test_oracle_leads": 4,
     "optional_historical_maintenance_edits": 96,
-    "note": "Potential leads still require investigation; static warnings and pending coordinate revalidation are not diagnosed bugs."
+    "note": "Potential leads still require investigation; static warnings and pending coordinate revalidation are not diagnosed bugs.",
+    "confirmed_fixes_awaiting_publication": 1
   }
 }

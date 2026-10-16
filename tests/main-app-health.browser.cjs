@@ -121,7 +121,35 @@ function exerciseMainAppHealth() {
             if (descriptor) Object.defineProperty(document, 'visibilityState', descriptor); else delete document.visibilityState;
         }
     }
-    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility();
+    function checkWordCountMeter() {
+        const writing = document.getElementById('studentWriting'), target = document.getElementById('targetWordCount'), toggle = document.getElementById('useWordCountTarget');
+        const before = [writing.value, target.value, toggle.checked];
+        const input = words => { writing.value = Array(words).fill('word').join(' '); writing.dispatchEvent(new Event('input', { bubbles: true })); };
+        const change = enabled => { toggle.checked = enabled; toggle.dispatchEvent(new Event('change', { bubbles: true })); };
+        function expectMeter(name, words, enabled, badge) {
+            const observed = { badge: document.getElementById('statusBarStatus').textContent, words: document.getElementById('statusBarWordCount').textContent,
+                fill: document.getElementById('statusBarMeterFill').style.width, originalFill: document.getElementById('studentPanelMeterFill').style.width,
+                target: target.value, checked: toggle.checked, disabled: target.disabled };
+            const fill = enabled ? Math.min(words, 100) + '%' : '0%';
+            checks.push({ name: 'word-count meter: ' + name, passed: equal(observed, { badge, words: words + ' words', fill, originalFill: fill, target: '100', checked: enabled, disabled: !enabled }), observed });
+        }
+        try {
+            change(true); target.value = '100'; target.dispatchEvent(new Event('input', { bubbles: true }));
+            change(false);
+            for (const words of [99, 100, 101, 0]) {
+                input(words); expectMeter('disabled writing input ' + words, words, false, words ? 'Target off' : 'Start typing...');
+            }
+            change(true);
+            for (const [words, badge] of [[0, 'Start typing...'], [74, 'Need more detail'], [75, 'Getting close'], [94, 'Getting close'], [95, 'Near target'], [99, 'Near target'], [100, 'On target'], [105, 'Near target'], [106, 'Above target'], [151, 'Above target']]) {
+                input(words); expectMeter('enabled writing input ' + words, words, true, badge);
+            }
+            input(100); change(false); expectMeter('disabled checkbox change at exact count', 100, false, 'Target off');
+            change(true); expectMeter('enabled checkbox change at exact count', 100, true, 'On target');
+        } finally {
+            [writing.value, target.value] = before; change(before[2]); writing.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility(); checkWordCountMeter();
     return checks;
 }
 

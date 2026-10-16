@@ -1,0 +1,164 @@
+{
+  "review": "bug-focus-save-portfolio-relevance",
+  "source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "published_reference": "c072476",
+  "scope_application_blobs_equal_published": [
+    "js/app/00-storage-sync-patches.js",
+    "js/app/10-main-app.js",
+    "index.html"
+  ],
+  "source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "git_blob_raw_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "normalized_lf_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+    },
+    "js/app/10-main-app.js": {
+      "git_blob_raw_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+      "normalized_lf_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+    },
+    "index.html": {
+      "git_blob_raw_sha256": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+      "normalized_lf_sha256": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+    },
+    "tests/media-ownership.browser.cjs": {
+      "git_blob_raw_sha256": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "normalized_lf_sha256": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8"
+    },
+    "tests/portfolio-renderer.browser.cjs": {
+      "git_blob_raw_sha256": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323",
+      "normalized_lf_sha256": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323"
+    },
+    "tests/optional-storage.browser.cjs": {
+      "git_blob_raw_sha256": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe",
+      "normalized_lf_sha256": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe"
+    }
+  },
+  "tracker_sha256_at_read": "be66e7b48f35a2cc6f921890ae4a7e8be67cd8ce954bed84d7ac2e4252b3b291",
+  "scope": "Small source/caller/default/HTML/test relevance check. No runtime or metric/inventory replay. Current writer059 changes excluded by immutable source.",
+  "leads": [
+    {
+      "lead_id": "review027-manual-save-rejection-status",
+      "tracker_status": "candidate_needs_regression",
+      "accepted_report_reference": "reviews/repair-027-upload-shapes.json",
+      "decision": "Do not promote to confirmed-bug work; no demonstrably wrong shipped behavior established.",
+      "shipped_exposure": "manualSaveToDrive is wired to the visible bottom Sync to Portfolio button (main8466-8469;HTML3539), OAuth completion and restored pending sync. V2 is enabled at00:1061. The catch branch is therefore defensive shipped code, but ordinary Drive failures are normally converted to resolved false by syncWftNow.",
+      "reason": "The rejection branch clears the busy lock, retains a token-change guard and enables Retry when current pending writing or a pending push exists. It neither deletes the new pending essay nor marks it synced. Saved locally - Drive sync failed accurately describes the locally committed earlier essay and failed flush. Different wording from a resolved result is not itself a defect; suppressing an actual failure in favor of a new-writing status might hide useful error information.",
+      "ordinary_failure_path": "flushWftCloudSyncNow4938-4945 returns syncWftNow. Active-run rejection becomes false at5814-5817; normal stream errors become false at5871-5875. A false result with newer pending takes7939-7942. Unexpected exceptions in later logging/status/finalization could still reject, so catch is not claimed unreachable.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7907-7982",
+          "note": "Commit and full completion/rejection/legacy contracts",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7789-7812",
+          "note": "Failure helper reads current pending and enables Retry",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "4938-4945;5806-5817;5836-5902",
+          "note": "Real flush and boolean failure handling",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "8466-8469;8506-8517",
+          "note": "Native button and restored-sync entry",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "index.html",
+          "lines": "3539",
+          "note": "Shipped bottom button",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        }
+      ],
+      "existing_test_evidence": [
+        {
+          "file": "tests/media-ownership.browser.cjs",
+          "lines": "124-145",
+          "note": "Existing held flush case stages Bob pending, then resolves true, not reject",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "tests/media-ownership.browser.cjs",
+          "lines": "253-263",
+          "note": "Retained pending and no false-synced oracle; does not require identical labels for rejection",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        }
+      ],
+      "smallest_meaningful_native_check_if_reopened": "Extend pending-new-during-flush in tests/media-ownership.browser.cjs with a rejected held flush control. Use the actual button/manual entry and native commit; stage a new persisted Bob pending result while held, reject, then assert exact pending memory/storage and portfolio bytes, no synced claim, unlocked enabled Retry, and retry committing the current essay once. An expected-label-only failure would not prove a bug. Use the real sync engine with one held failing transport first if alleging ordinary network exposure.",
+      "reproduction_priority": "Not recommended for current confirmed-bugs-only campaign absent an observed false success, disabled retry or lost writing. No source fix justified by this relevance review.",
+      "source_supported": true,
+      "reproduced": false
+    },
+    {
+      "lead_id": "review044-async-portfolio-stale-owner",
+      "tracker_status": "candidate_needs_regression",
+      "accepted_report_reference": "reviews/repair-044-portfolio-rendering.json",
+      "decision": "Defer disabled experimental-path hardening; not an active shipped confirmed bug.",
+      "shipped_exposure": "WFT_ASYNC_PORTFOLIO_ACCESS_V1 is false both at1137 and final default enablement2913, explicitly disabled until Phase2 testing. No shipped HTML toggle or production assignment enabling it was found in the targeted flag search. The real selector onchange calls renderStudentPortfolio directly; flag-off skips the promise branch.",
+      "reason": "The enabled promise callbacks really lack a selection/generation guard: a held A result could be rendered with the current B selector and B action owner, or a late A error could replace B content. However the actual current loader is a Promise microtask around synchronous local-storage reading, not a pending network/IDB fetch. Ordinary later input tasks run after those microtasks settle. The previously suggested held-loader test would require deliberate flag enablement and an overridden/future truly asynchronous loader, so it does not establish a production-user defect.",
+      "existing_test_evidence": [
+        {
+          "file": "tests/optional-storage.browser.cjs",
+          "lines": "104-128",
+          "note": "Actual flag-on dropdown: two changes in one programmatic task end on Bob with Bob-only text and unchanged primary; safe-mode/unavailable-data checks included",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "lines": "79-95;138-158",
+          "note": "Immediate async/adapter success and error, state cleanup and storage purity; no held owner race, and baseline parity shares the same callback policy",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        }
+      ],
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "1137;2900-2915",
+          "note": "Disabled default and explicit Phase2 policy",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "1980-2006",
+          "note": "Actual local microtask reader",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "2030-2052",
+          "note": "Explicit adapter, only test callers found in targeted search",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7615-7646;7678-7688",
+          "note": "Flag boundary, unguarded success/error and selector-derived card owner",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        },
+        {
+          "file": "index.html",
+          "lines": "3378-3380",
+          "note": "Real dropdown callback",
+          "commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e"
+        }
+      ],
+      "smallest_meaningful_native_check_if_feature_enabled": "In tests/portfolio-renderer.browser.cjs or optional-storage.browser.cjs, explicitly enable the flag and hold separately identified A/B loads. Change the actual selector A to B; release B then A, and test late A rejection separately. Assert selected B plus B-only cards/action owner/session IDs, no stale error, cleared adapter fields and unchanged storage. Add explicit contract assertions rather than old/new parity alone. Label the held loader as an experimental/future-adapter test, not a reproduction of shipped defaults.",
+      "reproduction_priority": "Only before enabling/replacing the Phase2 loader, or after evidence a supported shipped path enables it. No production change warranted now.",
+      "source_supported": true,
+      "reproduced": false
+    }
+  ],
+  "conclusion": "Neither lead currently earns a bug fix in the confirmed-bugs-only campaign. Manual rejection can truthfully offer retry; the stale async owner concern is gated off and its realistic delayed-loader premise is not present in the current native reader. Keep references for future evidence without changing tracker status here.",
+  "limits": [
+    "No application/test/browser execution and no reproduced bug/pass claim.",
+    "Only this report written; no source/tracker/Git/index/config/chat changes.",
+    "Scoped immutable application blobs were compared with published c072476; no whole-repository freeze or current059 writer-byte claim.",
+    "No claim that all unexpected errors are impossible or that enabling a future genuinely asynchronous loader is safe."
+  ]
+}
