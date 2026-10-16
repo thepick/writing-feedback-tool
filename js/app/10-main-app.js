@@ -7622,7 +7622,17 @@ function restorePortfolioSessionImagesForReassessment(session) {
 }
 
 async function reassessPortfolioSession(studentName, sessionId) {
-    var session = findPortfolioSession(studentName, sessionId);
+    var portfolioSnapshot, session;
+    try {
+        if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        portfolioSnapshot = readWftStudentChangeStorage("wft_portfolio");
+        var portfolio = normalizePortfolioShape(portfolioSnapshot === null ? {} : JSON.parse(portfolioSnapshot));
+        var sessions = portfolio[studentName] ? portfolio[studentName].sessions : [];
+        session = sessions[findPortfolioSessionIndex(sessions, sessionId)];
+    } catch (e) {
+        alert("Saved writing could not be checked. Your current work was kept. Please try again when browser storage is working.");
+        return;
+    }
     if (!session) {
         alert("Could not find that saved portfolio entry.");
         return;
@@ -7634,10 +7644,40 @@ async function reassessPortfolioSession(studentName, sessionId) {
         return;
     }
 
+    // This snapshot must not normalize the owner or clear an existing reassessment source.
+    var readCurrentWork = function() {
+        var pendingBytes = localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY);
+        if (pendingBytes !== null) {
+            var storedPending = JSON.parse(pendingBytes);
+            if (!storedPending || typeof storedPending.studentName !== "string" || !storedPending.studentName.trim()
+                    || !storedPending.sessionData || typeof storedPending.sessionData !== "object" || Array.isArray(storedPending.sessionData)) throw new Error("Unreadable pending result");
+        }
+        return JSON.stringify({
+            student: selectedStudent, selection: (document.getElementById("studentSelect") || {}).value,
+            writing: (document.getElementById("studentWriting") || {}).value,
+            images: selectedImages, primaryImage: selectedImageDataUrl, source: activePortfolioReassessmentSource,
+            analysis: latestAnalysisData, correctedHtml: correctedHtmlForDiff,
+            genre: currentWritingGenreInfo, genreOverride: manualGenreOverrideValue,
+            grade: (document.getElementById("gradeLevelSelect") || {}).value, gradeOverride: wftStudentGradeLevelOverride,
+            neatness: (document.getElementById("assessScriptQuality") || {}).checked,
+            settings: localStorage.getItem("wft_settings"), storedSelection: localStorage.getItem("wft_selectedStudent"),
+            storedDeletions: readWftStudentChangeStorage(WFT_DELETIONS_STORAGE_KEY),
+            pending: pendingPortfolioSync, storedPending: pendingBytes
+        });
+    };
+    var pending, workSnapshot;
+    try {
+        pending = getPendingPortfolioSync();
+        workSnapshot = readCurrentWork();
+    } catch (e) {
+        alert("Current work could not be checked. Your writing was kept. Please try again when browser storage is working.");
+        return;
+    }
+
     var message = "Reassess this saved writing?\n\n"
         + "This will load the original writing back into the analysis tool. You will press Analyze Writing manually when you are ready.\n\n"
         + "The saved portfolio entry will not be changed unless you sync the new results to the portfolio.";
-    if (getPendingPortfolioSync && getPendingPortfolioSync()) {
+    if (pending) {
         message += "\n\nNote: there is already an unsynced portfolio result. Reassessing will replace the current pending result.";
     }
     if (!(await wftConfirm(message, {
@@ -7645,6 +7685,20 @@ async function reassessPortfolioSession(studentName, sessionId) {
         confirmText: "Load for Reassessment",
         danger: false
     }))) return;
+
+    var unchanged;
+    try {
+        if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+        // Raw bytes avoid generated legacy IDs; unrelated portfolio writes also require a retry.
+        unchanged = readWftStudentChangeStorage("wft_portfolio") === portfolioSnapshot && readCurrentWork() === workSnapshot;
+    } catch (e) {
+        alert("Saved writing or current work could not be checked. Your current work was kept. Please try again when browser storage is working.");
+        return;
+    }
+    if (!unchanged) {
+        alert("The saved writing or current work changed while the reassessment dialog was open. Your current work was kept. Please review it and try again.");
+        return;
+    }
 
     try { setGradeLevelForPortfolioReassessment(session); }
     catch (e) {

@@ -1,0 +1,347 @@
+{
+  "repair_id": "repair-039",
+  "lead_id": "review028-reassessment-confirmation-freshness",
+  "status": "integrated_locally_waiting_for_coordinator_review",
+  "published_or_committed_by_this_worker": false,
+  "generated_at": "2026-10-16T00:51:49.311Z",
+  "timezone": "Asia/Bangkok",
+  "authorized_branch": "codex/repowise-batch-005-20261016",
+  "baseline_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "summary": "Integrated only the exact approved reassessment function, new native suite and one case-report manifest entry. The same official 16-case/79-check suite failed 27 contract assertions on unchanged main with zero operational/page errors, then passed all 79 checks after integration. Six selected native suites plus all91 syntax checks and runner self-check passed.",
+  "changed_files": [
+    "js/app/10-main-app.js",
+    "tests/portfolio-reassessment.browser.cjs",
+    "scripts/case-report-suites.json"
+  ],
+  "application_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+  "official_test_sha256": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+  "manifest_sha256": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+  "exact_diffs": {
+    "app": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\application.diff",
+      "sha256": "0f3702163a9b9c158be8bf321b07003b72f593e004db43cdec9b8ee477ae560d",
+      "bytes": 5261
+    },
+    "test": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\official-native-suite.diff",
+      "sha256": "8aaa175063a40ade5a237f90714f7164914d9bb8a6484fbcf383d150c25d814c",
+      "bytes": 26694
+    },
+    "manifest": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\manifest.diff",
+      "sha256": "9a813451abfb2e52a57a331877fc8bcc4f4cd30033ba7997a9252c328c03cfb4",
+      "bytes": 909
+    }
+  },
+  "official_conversion": {
+    "source": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\driver.browser.cjs",
+      "sha256": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24",
+      "bytes": 28055
+    },
+    "result": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\portfolio-reassessment.browser.cjs",
+      "sha256": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "bytes": 25859
+    },
+    "records": "Compact named pass/fail assertions only; no screenshot writes, absolute scratch paths, snapshot dumps, frozen-pin/Git coupling or optional case filter.",
+    "preserved_contracts": "All16 cases /79 assertions and premises, complete acceptance-state retention, deletion-policy exclusion, unchanged legacy success, acknowledged pre-existing pending success and explicit stored-pending-null ordinary success.",
+    "fault_boundary": "Read failures are one-shot boundary failures in the official test, restored after first read; this keeps the baseline negative control free of unrelated cascading errors while testing the same post-consent refusal. Identical official test bytes used before and after."
+  },
+  "negative_control": {
+    "main_sha256": "be45df002484901aacc24ec3d5cdd64a1d4079872652c1b3ec7c3f861c18c5a8",
+    "main_unchanged_during_run": true,
+    "test_sha256": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+    "exit": 1,
+    "cases": 16,
+    "passing_cases": 7,
+    "failing_cases": 9,
+    "assertions": 79,
+    "passing_assertions": 52,
+    "expected_contract_failures": 27,
+    "operational_errors": 0,
+    "page_errors": 0,
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\before\\receipt.json",
+      "sha256": "da6c4a50ff8f9e1580573daf02270a1ef3e231b5d9646e0d870191db8126d0e0",
+      "bytes": 537
+    },
+    "report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\before\\cases.json",
+      "sha256": "f1392b37998648357908a9d254f771d9a62774c9e9e98966cf3da14c6bb42140",
+      "bytes": 14115
+    },
+    "stdout": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\before\\stdout.txt",
+      "sha256": "fa1812ef718632578249495cf84c155d17ebc1deba9bbc26befb5448102b4a29",
+      "bytes": 3600
+    },
+    "stderr": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\before\\stderr.txt",
+      "sha256": "058321664a0e5cc46792212083387d211869ea136530897e58365d3713396528",
+      "bytes": 569
+    },
+    "cases_summary": [
+      {
+        "name": "ordinary-confirm",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "ordinary-cancel",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "source-delete-confirm",
+        "passed": false,
+        "failed_checks": 7
+      },
+      {
+        "name": "source-delete-cancel",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "late-analysis-confirm",
+        "passed": false,
+        "failed_checks": 6
+      },
+      {
+        "name": "late-analysis-cancel",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "grade-save-failure",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "ordinary-no-dates-confirm",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "legacy-timestamp-confirm",
+        "passed": true,
+        "failed_checks": 0
+      },
+      {
+        "name": "pending-read-failure-confirm",
+        "passed": false,
+        "failed_checks": 2
+      },
+      {
+        "name": "portfolio-read-failure-confirm",
+        "passed": false,
+        "failed_checks": 2
+      },
+      {
+        "name": "pending-parse-failure-confirm",
+        "passed": false,
+        "failed_checks": 2
+      },
+      {
+        "name": "storage-only-pending-confirm",
+        "passed": false,
+        "failed_checks": 2
+      },
+      {
+        "name": "original-photo-change-confirm",
+        "passed": false,
+        "failed_checks": 2
+      },
+      {
+        "name": "source-save-confirm",
+        "passed": false,
+        "failed_checks": 2
+      },
+      {
+        "name": "deletion-only-confirm",
+        "passed": false,
+        "failed_checks": 2
+      }
+    ]
+  },
+  "after": {
+    "focused_cases": 16,
+    "focused_assertions": 79,
+    "failed_assertions": 0,
+    "operational_errors": 0,
+    "page_errors": 0,
+    "focused_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\portfolio-reassessment.browser.json",
+      "sha256": "3262c767330bcb7461b5b55f29c79054fc6e6becbc28c958d64d8cbf7312afb3",
+      "bytes": 13113
+    },
+    "selected_runner": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\suite-results.json",
+      "sha256": "66f18fc7d7671a24e1e72b4be630c6b0890ab39ada95f61b704a093b803868b9",
+      "bytes": 16559
+    },
+    "suites": [
+      {
+        "suite": "tests/analysis-identity.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "passed_cases": 23,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\analysis-identity.browser.log",
+          "sha256": "11c34c16e0b6614a78b96d5d3737038e0e805ceaab319eb2bab284b9c2842368",
+          "bytes": 549
+        },
+        "case_report": null
+      },
+      {
+        "suite": "tests/crop-ownership.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "passed_cases": 38,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\crop-ownership.browser.log",
+          "sha256": "2730f1dab24abd676276f79c77e38388938ea8e91bb68cde4dac0d5f2b728646",
+          "bytes": 827
+        },
+        "case_report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\crop-ownership.browser.json",
+          "sha256": "64599bd0828c9dea2201a8720f12731425f46576d3ef3f8d9c605de7018551e7",
+          "bytes": 2660
+        }
+      },
+      {
+        "suite": "tests/openrouter-admission.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "passed_cases": 47,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\openrouter-admission.browser.log",
+          "sha256": "c642fb6dd6e68606a4eba488835c5fb803b070f18b7cfec232f69229c28a1326",
+          "bytes": 1098
+        },
+        "case_report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\openrouter-admission.browser.json",
+          "sha256": "1e7dd6b70cdc1389a7416331f2fddc62f0eb019462bd6321a83b209f67e08200",
+          "bytes": 70873
+        }
+      },
+      {
+        "suite": "tests/portfolio-html.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "passed_cases": 26,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\portfolio-html.browser.log",
+          "sha256": "3f910821b30361f8ad123d337f9d5404638623544b6a51a2f4b2934c56db55b2",
+          "bytes": 6602
+        },
+        "case_report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\portfolio-html.browser.json",
+          "sha256": "47a12e3b1699e546b1304730d1d4f59aeba044b2f8db301503fd99c80425e3f8",
+          "bytes": 6601
+        }
+      },
+      {
+        "suite": "tests/portfolio-reassessment.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "passed_cases": 16,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\portfolio-reassessment.browser.log",
+          "sha256": "a633c9ffdae3fcaf7236e60efdb96594ba7ad072bb0311aa8676a149861b7065",
+          "bytes": 1599
+        },
+        "case_report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\portfolio-reassessment.browser.json",
+          "sha256": "3262c767330bcb7461b5b55f29c79054fc6e6becbc28c958d64d8cbf7312afb3",
+          "bytes": 13113
+        }
+      },
+      {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "passed_cases": 105,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\preference-integrity.browser.log",
+          "sha256": "a6fbf0c58beccaa7c57f5a77492757e81f7e7ab835664ed9e42a635ebdd8bd15",
+          "bytes": 48
+        },
+        "case_report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after\\preference-integrity.browser.json",
+          "sha256": "50eb551357b922702a8fd4ed4bd7c93f529579aa2a612fb8a86ccd747da0700a",
+          "bytes": 10917
+        }
+      }
+    ],
+    "syntax_passed": 91,
+    "runner_selfcheck_exit": 0,
+    "runner_selfcheck": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\runner-selfcheck.receipt.json",
+      "sha256": "cc603fbb49e9b03c836d98e91543da3ee5fa4a98103078d912283407cc6d0225",
+      "bytes": 218
+    },
+    "runner_selfcheck_stdout": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\runner-selfcheck.stdout.txt",
+      "sha256": "7ca9095d3c57769b451e5d9d9229bddbc2a25db12c19d9ca74457b6b5b4d3558",
+      "bytes": 13211
+    },
+    "runner_selfcheck_stderr": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\runner-selfcheck.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "scope_integrity": {
+    "before_pins": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-039-before-source-pins.json",
+      "sha256": "870b8a84e1bcb28eca1d79adf03a4a8ab3c818c7ddc6abcaa2d8333716ff7659",
+      "bytes": 20263
+    },
+    "before_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\before-integrity.json",
+      "sha256": "a14bee954ae4a0d8e69af84bd385be97556bfe42daec660994c555e86d6cb698",
+      "bytes": 10686
+    },
+    "after_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\integration\\after-integrity.json",
+      "sha256": "1817608f52f93cd8be5f63e315a40f83745c041488a29aeff3dc5cc633e78fa2",
+      "bytes": 10693
+    },
+    "main_matches_reviewed_5be2": true,
+    "application_outside_reassessment_function_raw_identical": true,
+    "other_89_original_sources_raw_identical": true,
+    "html_unchanged": true,
+    "three_coverage_tools_unchanged": true,
+    "manifest_before_entries": 44,
+    "manifest_after_entries": 45,
+    "exact_one_new_entry": "tests/portfolio-reassessment.browser.cjs",
+    "all039_version_one_and_two_evidence_immutable": true,
+    "coordinator_owned_docs_changes_not_modified_by_worker": true
+  },
+  "proposed_inventory": {
+    "normal_suites": 77,
+    "javascript_syntax_files": 91,
+    "native_browser_suites": 60,
+    "case_report_manifest_entries": 45,
+    "whole_inventory_execution": false
+  },
+  "limits_and_boundary": [
+    "No commit/push/merge, Git index write, tracker/docs edit, dependency change, coverage import, health/index refresh, publication or next repair.",
+    "This was a selected six-suite run with all91 syntax checks, not a full77-suite modified-source gate. No repeated full baseline; coordinator full004 on exact baseline remains baseline evidence.",
+    "Recovery refusal remains source-inspected; no dedicated recovery injection or live Drive/AI/OAuth tests. Every service origin is blocked by the fixture.",
+    "Conservative snapshot policy requires retry on any portfolio, deletion-log or stored-setting byte change, including unrelated updates. No global lock or general cross-tab transaction.",
+    "Coordinator owns official test review, focused commit and any later full gate/publication. Stop here pending that review."
+  ],
+  "coordinator_acceptance": {
+    "all_referenced_artifact_hashes_verified": 28,
+    "other89_original_raw_sources_match": true,
+    "exact_reviewed_main_test_and_one_manifest_entry_verified": true,
+    "entire262line_official_native_suite_read": true,
+    "one_shot_failure_conversion_reviewed": true,
+    "negative_control27failed_checks_not27bugs": true,
+    "six_selected_suites91syntax_and_selfcheck_matched": true,
+    "selected_run_partial_true_is_expected_not_a_full_gate": true,
+    "status": "accepted_local_fix_pending_full005gate_and_publication"
+  }
+}

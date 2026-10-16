@@ -1,0 +1,296 @@
+{
+ "repair_id": "repair-039",
+ "lead_id": "review028-reassessment-confirmation-freshness",
+ "status": "isolated_preview_ready_for_review",
+ "published": false,
+ "generated_at": "2026-10-16T00:31:52.454Z",
+ "timezone": "Asia/Bangkok",
+ "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+ "summary": "Preview only: strict source/current-work gate refuses stale reassessment before grade, preferences, owner, writing or pending mutation. Original source remains frozen. Unmodified preview reproduces seven intended failures; repaired preview passes 15 native cases / 73 assertions, 105 preference cases and 23 identity cases.",
+ "preview_path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-repo",
+ "changed_preview_files": [
+  "js/app/10-main-app.js"
+ ],
+ "main_before_sha256": "be45df002484901aacc24ec3d5cdd64a1d4079872652c1b3ec7c3f861c18c5a8",
+ "main_preview_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+ "source_copy": {
+  "receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-copy-receipt.json",
+   "sha256": "9772224b43cb61ae4fb6885935d53323457e24604f774ce0e33db6473d46d69f",
+   "bytes": 11562
+  },
+  "copied_files": 98,
+  "contents": "90 pinned JS/CJS, frozen case-report JSON, index.html and six referenced local PNG icons; raw copies only. No .git/.repowise/runtime/dependencies.",
+  "pin_manifest": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-source-pins.json",
+   "sha256": "925223fec9071b976c14d2948c49ad5197ac8baae489d3f3e77b9d41d54a5059",
+   "bytes": 20263
+  }
+ },
+ "integrity": {
+  "receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-final-integrity.json",
+   "sha256": "dd9002f9f9509be76d8aa296b22d3f8bb977e581271a172b2904d5b437c77ef5",
+   "bytes": 21809
+  },
+  "original_90_sources_config_html_assets_match": true,
+  "three_coverage_tools_match": true,
+  "preview_89_other_sources_config_html_assets_match": true,
+  "outside_reassessment_function_identical": true,
+  "crlf_preserved": true,
+  "tools_pin_manifest": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-coverage-tool-pins.json",
+   "sha256": "66b5022e2ce48772ccc39d37343398dae06d402de365cfa9262db9606ff32dfa",
+   "bytes": 328
+  }
+ },
+ "stage_one_preservation": {
+  "compact_review_bytes": 14369,
+  "full_report": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\stage-one-full-report.json",
+   "sha256": "f5cb3f7ee8e5bda8047ee355871dad575e12e0614d3ac5d126a0af7748d28c74",
+   "bytes": 394714
+  },
+  "script_sha256": "606415c95683d628a9fce5d7988798302b65bf2978f13efd6729fe54c09e2f76",
+  "raw_results_sha256": "5be26af1baa8df8400de252dd03e2d34db9c815a05b54c8e17ab897e489fa4da",
+  "stdout_stderr_receipt_unchanged": true
+ },
+ "baseline_preview": {
+  "expected_exit": 1,
+  "cases": 7,
+  "passing_controls": 5,
+  "expected_contract_failures": 7,
+  "passed_assertions": 28,
+  "harness_errors": 0,
+  "receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\receipt.json",
+   "sha256": "9ddca5d7e308d0136b6fc26d1a153e44505d63fbc5cd5aa8bd511f0e1c71a381",
+   "bytes": 343
+  },
+  "driver": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\driver.browser.cjs",
+   "sha256": "af89612fc3dffba34c6b52ec999985b1081fe0f24b6f60b79ce4e626dc6fb3d7",
+   "bytes": 18302
+  },
+  "raw_snapshots": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\native-results.json",
+   "sha256": "c109310a9fb8898c6d3fbdbd1b9e882981f032ce7fc509bbe10997b2d71a864c",
+   "bytes": 379261
+  },
+  "failing_labels": [
+   {
+    "case": "source-delete-confirm",
+    "label": "Deleted source must not replace current writing after held confirmation"
+   },
+   {
+    "case": "source-delete-confirm",
+    "label": "Deleted source must not publish a stale reassessment owner"
+   },
+   {
+    "case": "source-delete-confirm",
+    "label": "Deleted source must preserve current pending writing/photo result"
+   },
+   {
+    "case": "source-delete-confirm",
+    "label": "Deleted source must preserve current grade and photo"
+   },
+   {
+    "case": "late-analysis-confirm",
+    "label": "Newly completed pending result must remain durable after an older confirmation"
+   },
+   {
+    "case": "late-analysis-confirm",
+    "label": "Newly completed result must retain its runtime owner and report"
+   },
+   {
+    "case": "late-analysis-confirm",
+    "label": "Newly completed result must keep its writing/owner until teacher reviews the changed context"
+   }
+  ]
+ },
+ "repaired_preview": {
+  "exit": 0,
+  "cases": [
+   {
+    "name": "ordinary-confirm",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "ordinary-cancel",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "source-delete-confirm",
+    "pass": true,
+    "assertions": 11
+   },
+   {
+    "name": "source-delete-cancel",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "late-analysis-confirm",
+    "pass": true,
+    "assertions": 10
+   },
+   {
+    "name": "late-analysis-cancel",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "grade-save-failure",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "ordinary-no-dates-confirm",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "legacy-timestamp-confirm",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "pending-read-failure-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "portfolio-read-failure-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "pending-parse-failure-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "storage-only-pending-confirm",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "original-photo-change-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "source-save-confirm",
+    "pass": true,
+    "assertions": 5
+   }
+  ],
+  "expected_contract_failures": 0,
+  "browser_errors": 0,
+  "harness_errors": 0,
+  "receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\focused.receipt.json",
+   "sha256": "f23670c07a359aa67c86377e7b14314d7decc9b589fb31bd7fd23b7b3170c76f",
+   "bytes": 579
+  },
+  "driver": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\driver.browser.cjs",
+   "sha256": "55a17c46b1be925fce2fd04883b5889f527e4b1c8c9f3a65b0934fdebbe0c8e3",
+   "bytes": 25279
+  },
+  "raw_snapshots": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\native-results.json",
+   "sha256": "d807986975b1d03440a979f7babd6d7a3642f56e0833f90dcb3ab81b849c41bf",
+   "bytes": 485484
+  },
+  "screenshot_and_receipt_hashes": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\artifact-hashes.json",
+   "sha256": "d553e0e5fcbf5ed0ce250e37a734887af28a3f9bc3b6d98e3653976f5620cf0b",
+   "bytes": 3686
+  }
+ },
+ "existing_suites": [
+  {
+   "suite": "tests/preference-integrity.browser.cjs",
+   "exit": 0,
+   "passed": 105,
+   "receipt": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.receipt.json",
+    "sha256": "c6808ab14e0f4300402957b035baabd0627d671072e8e430a4927ee5347a62c1",
+    "bytes": 497
+   },
+   "stdout": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.stdout.txt",
+    "sha256": "e164677354f4565a1e6f885b0ce1e14f3cf616348b41c03ad162bec8dbda282b",
+    "bytes": 49
+   },
+   "stderr": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+   }
+  },
+  {
+   "suite": "tests/analysis-identity.browser.cjs",
+   "exit": 0,
+   "passed": 23,
+   "receipt": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.receipt.json",
+    "sha256": "046d1431df15d143649c5383630d40ab00e4d2e803f13c09c1a56b9c5ccc6531",
+    "bytes": 494
+   },
+   "stdout": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.stdout.txt",
+    "sha256": "122b9deb9f85252c7d0ff00ce880645b8aad98c8e9292142c896b7b0bf5cce3a",
+    "bytes": 573
+   },
+   "stderr": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+   }
+  }
+ ],
+ "exact_diff": {
+  "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-main-app.diff",
+  "sha256": "64b03557e2f502040b0622903d8640fa8dbafb700be54b88d3d09df6769a055b",
+  "bytes": 5183
+ },
+ "behavior_and_review_requirements": [
+  "Source binding: a recovery-aware strict raw portfolio read is validated/normalized once and supplies the selected session. The same raw bytes must still match after confirmation. No comparison of generated legacy IDs or stripped persistent identity fields.",
+  "Current-work snapshot is read-only at confirmation acceptance: DOM/runtime owner, writing, complete image queue including originalDataUrl/OCR properties, primary image, reassessment source, latest report/corrected data, genre, grade/override/neatness, stored settings/selection, actual runtime pending and persisted pending bytes. The existing opening pending hydration is retained for warning compatibility.",
+  "Pending bytes must parse and contain a named student plus object sessionData. Source/pending read, parse or unresolved recovery failures return before load mutations. The later image and missing-source replacement guards are untouched.",
+  "Reviewer041 projection checks every captured writing/owner/settings/grade/neatness/photo/source/runtime+stored-pending/report field on both original rejection paths, with portfolio/deletions compared against state immediately before acceptance; refusal status/focus/alerts may change.",
+  "Unchanged no-date stable-ID source has no pending result, holds the real modal across 20ms and loads normally with saved bytes unchanged. An id-less createdAt selector compatibility control also passes; it enters the public function directly because shipped rendering assigns generated IDs.",
+  "Same-ID source edit uses real savePortfolioLocalOnly persistence on the existing stored session, with an explicit one-session/no-duplicate premise. This is a controlled competing-save seam, not an additional claim of native user navigation.",
+  "Storage-only pending case updates persisted same-ID/signature payload in a second app tab through real pending persistence while the first tab caches the older runtime result. A premise asserts other stored inputs and cached runtime remain unchanged.",
+  "The original two risk cases retain genuine public reassessment/confirmation plus cross-tab delete and already-started analysis paths. Added photo mutation and read/parse failures are explicit synthetic boundary injections. All external origins are aborted; no live accounts or student data."
+ ],
+ "tradeoffs_and_limits": [
+  "Conservative policy: any portfolio byte change, including an unrelated student save or equivalent serialization, requires a fresh action; stored settings changes also require retry. No automatic source refresh or global modal lock.",
+  "Freshness is a synchronous confirmation boundary, not a general cross-tab transaction. Existing post-load image/replacement guards still govern later changes. New recovery-failure branch is source-inspected; no dedicated recovery injection case was added.",
+  "No full gate, coverage import, health/index refresh, tracker/docs changes, Git mutation, deployment or integration. No real Drive/AI/OAuth testing. No duplicate existing-suite baseline run; their baseline is coordinator full004gate on exact frozen source.",
+  "A first preview used the impure context helper and failed one existing preference test; it was rejected. A read-only intermediate passed before strict raw-source/pending improvements. Final receipts all match the single final preview main hash; earlier attempt logs remain scratch evidence."
+ ],
+ "proposed_integration": {
+  "now": "None. Original repository/source freeze unchanged; await coordinator and two reviewers.",
+  "application": "Only reassessPortfolioSession in js/app/10-main-app.js.",
+  "tests": "After integration authorization, adapt the standalone native driver into proposed tests/portfolio-reassessment.browser.cjs with normal repository report format; preserve these controls and strengthened oracles.",
+  "manifest": "No manifest change in this preview. If the coordinator adopts the new official case-report suite, add exactly that suite to scripts/case-report-suites.json after the freeze ends; do not register this scratch driver.",
+  "dependencies_or_shared_helpers": "None."
+ },
+ "reviewer_inputs": [
+  {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-040-reassessment-safety-review.json",
+   "sha256": "3c4453395aed47c3c7b7d209d33a1638faf24778f33d3838daaaa67efcc51055",
+   "bytes": 30150
+  },
+  {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-041-reassessment-regression-review.json",
+   "sha256": "27e515f513b9a00e375e749ec6bf6e947cbf3733e267cefa77fb95acb1e98988",
+   "bytes": 30753
+  }
+ ]
+}

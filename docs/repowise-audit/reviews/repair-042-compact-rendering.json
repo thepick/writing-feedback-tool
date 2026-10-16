@@ -1,0 +1,109 @@
+{
+  "repair_id": "repair-042",
+  "title": "Review compact score,token,notice andmeter presentation",
+  "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "coordinator_reviewed": true,
+  "created_at_utc": "2026-10-16T00:43:25.912506+00:00",
+  "file": "js/app/10-main-app.js",
+  "source_sha256_lf": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+  "findings": [
+    {
+      "record_id": "code_health:finding_145a0781f727e8563613",
+      "symbol": "updateScoreDisplay",
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_score_presentation_branches_retained",
+      "reason": "17CCN/26NLOC/depth2 is accurate. The complete function keeps three display states:absent analysis,unscored sample andnumeric percentage,using captured assessment policy/grade and optional DOM guards. The grade note occurs on either early-return or ordinary path; moving it changes update order without reducing user complexity. Existing analysis-policy checks captured grade/weight/report persistence and pipeline captures complete result UI. Keep direct branches,not a display-state framework.",
+      "verified_details": {
+        "ccn": 17,
+        "cognitive": 18,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 1111,
+        "deepest_block": {
+          "start": 1122,
+          "end": 1129
+        }
+      },
+      "function_sha256_lf": "85209452a45305767593817f5f6b5f6500d7211184049dd44819c84ddeaadcaf"
+    },
+    {
+      "record_id": "code_health:finding_a6967871bb410dcb0e40",
+      "symbol": "tokenNeedsLeadingSpace",
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_punctuation_precedence_retained",
+      "reason": "15CCN/12NLOC/depth1 is accurate. Ordered exits distinguish newline,closing punctuation,quotes adjacent to punctuation/words,apostrophe fragments and opening brackets before prior quote. Two corrected-output renderers share this helper. Combining conditions or adding cached flags moves the same grammar policy into a denser expression; no duplicated implementation or observed defect. Keep explicit precedence and correction-performance/native pipeline behavior; no tokenization/calibration change.",
+      "verified_details": {
+        "ccn": 15,
+        "cognitive": 14,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 1310,
+        "deepest_block": {
+          "start": 1311,
+          "end": 1311
+        }
+      },
+      "function_sha256_lf": "e1ab0a680df8f7ae59d812c9d9c0359d534a6caeecc8aef3829e4478e0e1ed6b"
+    },
+    {
+      "record_id": "code_health:finding_aab0b3084854dc5c7686",
+      "symbol": "normalizeNoticeRows",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "redundant_truthy_default_guards",
+      "reason": "19CCN/12NLOC:area is assigned a truthy earlier alias or final literal Overall. Thus if(area||comment) is always true and area||Overall repeats the established default. Remove only those two redundant guards;preserve row/area alias evaluation order,comment aliases,level fallback andempty-comment text. Callers cover detailed notice aliases andportfolio rendering. Add small old/new parity vectors fornull/empty/sparse/alias/level/falsey fields andgetter order;run detailed-parser/feedback-compatibility beforeafter. No generic normalizer/table required.",
+      "verified_details": {
+        "ccn": 19,
+        "cognitive": 20,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 2049,
+        "deepest_block": {
+          "start": 2052,
+          "end": 2058
+        }
+      },
+      "function_sha256_lf": "a27f101d4347ac9fa020e352a4b239223ea67360480e8d74fbd52dad0fd007a2"
+    },
+    {
+      "record_id": "code_health:finding_d0f1ba0563e806953c38",
+      "symbol": "updateMeter",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "unused_meter_badge_assignments_and_redundant_cap",
+      "reason": "23CCN/59NLOC/depth3:badgeText is declared locally andassigned seven times but never read;only status is rendered. Remove that declaration/assignments. Math.min(max(0,min(150,r*100)),100) can use max(0,min(100,r*100)) for fillWidth withoutchanging number/NaN results. Keep status thresholds/order,target-off return,optional DOM guards,colors,wordcount values andhidden legacy cards. Focused native target-off/0/75%/95%/exact/105%/above vectors must preserve allvisible values;do not rewrite rubric/target calibration justtoalterCCN.",
+      "verified_details": {
+        "ccn": 23,
+        "cognitive": 27,
+        "nloc": 59,
+        "dispatch_share": 0.18,
+        "symbol_line": 4943,
+        "deepest_block": {
+          "start": 4966,
+          "end": 4974
+        }
+      },
+      "function_sha256_lf": "902df9455d5ca708bd540cb18432e59e58cabe48abc20cd79106c99b55d751d9"
+    }
+  ],
+  "callers_checked": [
+    "presentAnalysisResult",
+    "refreshScoreWeightingDescription",
+    "renderCorrected",
+    "portfolio feedback notice rendering",
+    "student writing input/model change/startup meter refresh",
+    "buildMinimalCorrectionMarkup",
+    "null-analysis display reset at10-main-app.js:7769"
+  ],
+  "test_references": [
+    "tests/analysis-policy.browser.cjs:144",
+    "tests/analysis-pipeline.browser.cjs:184",
+    "tests/correction-performance.browser.cjs:92",
+    "tests/detailed-parser.browser.cjs:28",
+    "tests/feedback-compatibility.browser.cjs:31"
+  ],
+  "tests_executed": false,
+  "source_edits": [],
+  "limits": [
+    "Read-only review;current-source complexity replay and complete4function/caller read. No repair,scanner closure or new test-pass claim.",
+    "Source safety candidates require focused before/after checks before implementation."
+  ]
+}

@@ -1,0 +1,358 @@
+{
+  "repair_id": "repair-041-preview-review",
+  "reviewed_repair": "repair-039",
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "inspected_git_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "reviewed_at_utc": "2026-10-16T00:38:13.495160+00:00",
+  "decision": "No correctness blocker found in exact isolated preview. Earlier required controls are satisfied; suitable for parent adoption review with documented retry tradeoffs. Reconcile current raw newline pin drift before integration; final integrated validation remains parent-owned.",
+  "blockers": [],
+  "artifact_sha256": {
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-copy-receipt.json": "9772224b43cb61ae4fb6885935d53323457e24604f774ce0e33db6473d46d69f",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-source-pins.json": "925223fec9071b976c14d2948c49ad5197ac8baae489d3f3e77b9d41d54a5059",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-final-integrity.json": "dd9002f9f9509be76d8aa296b22d3f8bb977e581271a172b2904d5b437c77ef5",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-coverage-tool-pins.json": "66b5022e2ce48772ccc39d37343398dae06d402de365cfa9262db9606ff32dfa",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\stage-one-full-report.json": "f5cb3f7ee8e5bda8047ee355871dad575e12e0614d3ac5d126a0af7748d28c74",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\receipt.json": "9ddca5d7e308d0136b6fc26d1a153e44505d63fbc5cd5aa8bd511f0e1c71a381",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\driver.browser.cjs": "af89612fc3dffba34c6b52ec999985b1081fe0f24b6f60b79ce4e626dc6fb3d7",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\native-results.json": "c109310a9fb8898c6d3fbdbd1b9e882981f032ce7fc509bbe10997b2d71a864c",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\focused.receipt.json": "f23670c07a359aa67c86377e7b14314d7decc9b589fb31bd7fd23b7b3170c76f",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\driver.browser.cjs": "55a17c46b1be925fce2fd04883b5889f527e4b1c8c9f3a65b0934fdebbe0c8e3",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\native-results.json": "d807986975b1d03440a979f7babd6d7a3642f56e0833f90dcb3ab81b849c41bf",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\artifact-hashes.json": "d553e0e5fcbf5ed0ce250e37a734887af28a3f9bc3b6d98e3653976f5620cf0b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.receipt.json": "c6808ab14e0f4300402957b035baabd0627d671072e8e430a4927ee5347a62c1",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.stdout.txt": "e164677354f4565a1e6f885b0ce1e14f3cf616348b41c03ad162bec8dbda282b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.receipt.json": "046d1431df15d143649c5383630d40ab00e4d2e803f13c09c1a56b9c5ccc6531",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.stdout.txt": "122b9deb9f85252c7d0ff00ce880645b8aad98c8e9292142c896b7b0bf5cce3a",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-main-app.diff": "64b03557e2f502040b0622903d8640fa8dbafb700be54b88d3d09df6769a055b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-040-reassessment-safety-review.json": "3c4453395aed47c3c7b7d209d33a1638faf24778f33d3838daaaa67efcc51055",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-041-reassessment-regression-review.json": "27e515f513b9a00e375e749ec6bf6e947cbf3733e267cefa77fb95acb1e98988",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\stage-one-regression.browser.cjs": "606415c95683d628a9fce5d7988798302b65bf2978f13efd6729fe54c09e2f76",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\native-results.json": "5be26af1baa8df8400de252dd03e2d34db9c815a05b54c8e17ab897e489fa4da",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-039-reassessment-preview.json": "cff52b67da232ab06021236ac3a47b02f78a6e945a516bea3a7588f188b4999c"
+  },
+  "source_hashes": {
+    "original_main_raw": "be45df002484901aacc24ec3d5cdd64a1d4079872652c1b3ec7c3f861c18c5a8",
+    "preview_main_raw": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+    "preview_main_normalized_lf": "049da7dccd47bf69dfd4a525e8c0339e976babb00ff083b179c1e392fb93a696",
+    "original_inspected_normalized_lf": {
+      "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+      "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+      "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+      "tests/preference-integrity.browser.cjs": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "tests/preference-integrity-scenarios.js": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+      "tests/analysis-identity.browser.cjs": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+      "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+    }
+  },
+  "checkout_provenance": {
+    "HEAD_advance": "At inspection HEAD was 00c9454e6c89f258cb3afc938201a10feda16087; Git diff from7527 changes only audit/docs files. Earlier bfc83eb was an intermediate documentation checkpoint observed during this review.",
+    "current_raw_pin_exceptions": [
+      {
+        "file": "tests/google-drive-migration.browser.cjs",
+        "frozen_raw_sha256": "de149de4b50963a56613239ca403f9c966f51c44f316f1444349a93d64338e27",
+        "current_raw_sha256": "ea4d4e895fda29c4e72a821851a47e3db33e46b7c1e48c91648e6f11e14c5006",
+        "normalized_lf_equal": true,
+        "change": "LF to CRLF"
+      },
+      {
+        "file": "tests/missing-feedback.browser.cjs",
+        "frozen_raw_sha256": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+        "current_raw_sha256": "7163cf74d254a52f084655130819040f93e88eb91fadcdc8469d9d97f9e39791",
+        "normalized_lf_equal": true,
+        "change": "LF to CRLF"
+      },
+      {
+        "file": "tests/portfolio-renderer.browser.cjs",
+        "frozen_raw_sha256": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323",
+        "current_raw_sha256": "c39981a23e34191d0bdfb067b82fdb22ac20a8bf09327f7163d01fe85ea85d10",
+        "normalized_lf_equal": true,
+        "change": "LF to CRLF"
+      },
+      {
+        "file": "tests/storage-dialog-keyboard.browser.cjs",
+        "frozen_raw_sha256": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+        "current_raw_sha256": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b",
+        "normalized_lf_equal": true,
+        "change": "LF to CRLF"
+      },
+      {
+        "file": "tests/support/local-app-route.js",
+        "frozen_raw_sha256": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+        "current_raw_sha256": "c2a198f3d2cd2be8716d02d6ce74e8863ba2a166f369378631f2f247948b7037",
+        "normalized_lf_equal": true,
+        "change": "LF to CRLF"
+      }
+    ],
+    "interpretation": "Five original test/helper files now have CRLF rather than frozen LF; their normalized source equals unchanged preview copies. This reviewer cannot reaffirm all98 original raw pins at current time. Original main remains byte-identical and isolated preview matches its exact recorded hashes. No evidence about who changed line endings is inferred. Parent must reconcile raw pin provenance before integration.",
+    "preview_changed_files": [
+      "js/app/10-main-app.js"
+    ],
+    "other97_preview_inputs_raw_match_copy": true,
+    "coverage_tools3_unchanged": true,
+    "outside_target_function_byte_identical": true,
+    "existing_load_and_restore_tail_byte_identical": true,
+    "exact_diff_verified_by_in_memory_application": true,
+    "preview_main_CRLF_preserved": true
+  },
+  "prior_041_requirements": [
+    {
+      "id": "review041-rejection-state-oracle-gap",
+      "status": "satisfied",
+      "reason": "Both original risk cases and three added changed-state cases now compare all owner/select/writing/grade/override/neatness/photo/source/runtime+disk-pending/latest/corrected-output fields against immediately pre-acceptance state. Independent raw snapshot comparisons match. Refusal alert/status remains allowed.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 237,
+          "end_line": 243
+        },
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 209,
+          "end_line": 211
+        }
+      ]
+    },
+    {
+      "id": "review041-legacy-no-date-positive-gap",
+      "status": "satisfied",
+      "reason": "Stable-ID source omits createdAt/date/timestamp and has no pending result. Actual rendered Reassess and modal,20ms wait, successful Alice/text/source/grade/photo load, no refusal, saved bytes unchanged. Raw source binding avoids generated-ID comparison.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 112,
+          "end_line": 126
+        },
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 185,
+          "end_line": 185
+        },
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 217,
+          "end_line": 224
+        },
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7625,
+          "end_line": 7631
+        }
+      ]
+    },
+    {
+      "id": "review041-same-id-change-scope-gap",
+      "status": "satisfied_for_controlled_competing_save",
+      "reason": "Real savePortfolioLocalOnly edits same-ID source writing/grade/photo revision; premise verifies exactly one entry with the same ID, then old consent is rejected. This is a controlled persistence seam rather than a claimed native GUI editing path.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 154,
+          "end_line": 158
+        },
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 176,
+          "end_line": 179
+        },
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 237,
+          "end_line": 243
+        }
+      ]
+    },
+    {
+      "id": "acknowledged-pending-control",
+      "status": "retained",
+      "reason": "Ordinary success still warns about and intentionally replaces pre-existing durable pending Bob work, loading Alice normally. Raw receipt shows disk pending also clears. Cancel/grade-failure snapshots remain exact.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 213,
+          "end_line": 224
+        },
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7676,
+          "end_line": 7686
+        },
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7702,
+          "end_line": 7725
+        }
+      ]
+    }
+  ],
+  "source_assessment": [
+    {
+      "reason": "Strict raw portfolio read supplies the chosen normalized session; acceptance checks source bytes, recovery state and current work before grade/source/owner/text/pending load mutations. Read/parse failures fail closed.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7624,
+          "end_line": 7645
+        },
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7688,
+          "end_line": 7705
+        },
+        {
+          "file": "js/app/storage-recovery.js",
+          "start_line": 144,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "reason": "Acceptance snapshot avoids impure captureCurrentWritingContext/getActivePortfolioStudentName; it does not normalize owner or clear source. Full selectedImages captures originalDataUrl/OCR changes; runtime pending and stored bytes are separate, with stored-shape/JSON validation. Existing opening hydration preserves the warning contract.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7647,
+          "end_line": 7674
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8102,
+          "end_line": 8129
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8250,
+          "end_line": 8254
+        }
+      ]
+    },
+    {
+      "reason": "Guard precedes intended Bob-to-Alice transition. Actual cancellation returns early, grade-failure behavior and later image/commit protections are untouched. Storage-only same-ID/signature pending update and original-photo-only mutation are now exercised as explicit added boundaries.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7682,
+          "end_line": 7757
+        },
+        {
+          "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+          "start_line": 147,
+          "end_line": 184
+        }
+      ]
+    }
+  ],
+  "recorded_evidence": {
+    "reviewer_executed_app_tests": false,
+    "baseline_preview": {
+      "cases": 7,
+      "passed_check_blocks": 28,
+      "failed_check_blocks": 7,
+      "passing_controls": 5,
+      "exit": 1,
+      "harness_errors": 0
+    },
+    "final_preview": {
+      "cases": 15,
+      "passed_check_blocks": 73,
+      "failed_check_blocks": 0,
+      "exit": 0,
+      "page_errors": 0,
+      "harness_errors": 0,
+      "main_hash": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5"
+    },
+    "existing_suites": [
+      {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "recorded_passed": 105,
+        "exit": 0,
+        "final_main_hash_verified": true
+      },
+      {
+        "suite": "tests/analysis-identity.browser.cjs",
+        "recorded_passed": 23,
+        "exit": 0,
+        "final_main_hash_verified": true
+      }
+    ],
+    "counting": "73 is recorded check/assertion blocks, several containing multiple assert comparisons; receipts reviewed, not tests executed by reviewer."
+  },
+  "path_validity": {
+    "original_risks": "Genuine native public buttons/modal/shared-context second-tab Remove Entry remain. Public Analyze starts before modal, only its first AI completion is held, and three real pipeline steps publish latest/durable Bob pending behind that modal. No forced click, fake storage event, replacement confirmation or target stub bypasses either original failure.",
+    "baseline_equivalence": "Immutable stage-one hash preserved; complete inspected baseline-driver diff changes root/pin allowances and output paths only, retaining original7 cases and assertions.",
+    "added_cases": "Read/parse failures/photo mutation/same-ID save are explicit boundary injections. Storage-only pending uses a second real page and real persistence. Legacy timestamp case calls the public function directly because rendering generates IDs; it proves lookup compatibility, not native legacy-button reachability.",
+    "false_green": "None found: assertion catches record failed blocks, operational catches record harnessError, final aggregate requires both zero. Baseline exits1 for seven intended failures; final receipts bind to final main hash.",
+    "anchors": [
+      {
+        "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+        "start_line": 120,
+        "end_line": 152
+      },
+      {
+        "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+        "start_line": 154,
+        "end_line": 202
+      },
+      {
+        "file": "work/repowise-repair-039/preview-accepted/driver.browser.cjs",
+        "start_line": 245,
+        "end_line": 261
+      }
+    ]
+  },
+  "tradeoffs": [
+    {
+      "id": "portfolio-byte-conservatism",
+      "blocking": false,
+      "reason": "Any portfolio byte change, including an unrelated student save or equivalent serialization, forces retry. Broader than earlier targeted-entry suggestion, but explicit, small and fail-closed; parent should retain the documented extra-retry policy if adopting.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7691,
+          "end_line": 7699
+        }
+      ]
+    },
+    {
+      "id": "snapshot-cost",
+      "blocking": false,
+      "reason": "Full image queue/latest-report JSON snapshots duplicate large strings and may reject harmless metadata changes. No performance benefit is claimed; a general revision framework is unnecessary for this localized correctness fix.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7648,
+          "end_line": 7665
+        }
+      ]
+    },
+    {
+      "id": "cross-tab-boundary",
+      "blocking": false,
+      "reason": "Synchronous check is not a transaction or lock; another tab can write after the final read. Existing later image/publication/replacement guards still apply. No general concurrency guarantee claimed.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-repo/js/app/10-main-app.js",
+          "start_line": 7688,
+          "end_line": 7725
+        }
+      ]
+    }
+  ],
+  "nonblocking_followups": [
+    {
+      "id": "ordinary-success-disk-oracle",
+      "reason": "When converting scratch suite, an explicit disk-pending-null assertion is useful. Current raw success snapshots and unchanged clearPendingPortfolioSync already establish it."
+    },
+    {
+      "id": "recovery-coverage",
+      "reason": "Recovery guards are source-inspected, not directly injected in15 cases; do not claim exercised recovery coverage. Add a small control only if broader coverage is claimed."
+    }
+  ],
+  "limits": [
+    "Read-only source/driver/receipt review; no app tests/browser execution/live AI/Drive/OAuth. Only this output file written; no app/Git/index/tracker/docs/runtime/cache/package edits or agent messages.",
+    "No integration/publication/scanner closure or final integrated-pass claim. Parent owns adoption, normal-suite conversion/registration and final validation.",
+    "Original full gate was reported passed by parent; not rerun or treated as preview integration validation here. Current raw newline drift is separately disclosed."
+  ]
+}

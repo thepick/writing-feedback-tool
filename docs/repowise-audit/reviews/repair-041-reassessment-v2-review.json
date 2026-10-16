@@ -1,0 +1,230 @@
+{
+  "repair_id": "repair-041-v2-review",
+  "reviewed_repair": "repair-039",
+  "scope": "Version2 delta only; does not repeat complete version1 source review.",
+  "historical_source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "original_checkout_inspected": false,
+  "coordinator_context": "Parent states004 publication/source-equivalence and five EOL exceptions are reconciled. No new Git/index inspection performed here.",
+  "reviewed_at_utc": "2026-10-16T00:45:33.443367+00:00",
+  "decision": "The one-field deletion snapshot closes the demonstrated deletion-only-arrival blocker for the confirmation interval. No additional blocker found in this delta. Suitable for coordinator adoption with prior conservative-retry/transaction limits and final integration validation.",
+  "blockers": [],
+  "previous_review_amendment": "My earlier f41 no-blocker conclusion missed the deletion-log-only arrival later identified by reviewer040. That f41 preview is insufficient for this case. This report assesses exact5be2 version2 and its f41-negative/version2-positive evidence.",
+  "artifact_sha256": {
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-1\\repair-039-reassessment-preview.json": "cff52b67da232ab06021236ac3a47b02f78a6e945a516bea3a7588f188b4999c",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\copy-and-v1-preservation.json": "72005f79456f2007e9176b3cb7c87e847a699c149d8a123e82bdc94caf4e369d",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\v1-to-v2.diff": "2d11c80a99e82416cf680c13562451c16a82c091576857304f71c6b3450f66e2",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\historical-base-to-v2.diff": "e37fbc42067a69dca58b4eb1cd5bd4b643f407ff65b53c09adc0c1f6a5b99ce2",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\integrity.json": "74ee76c50f34496ac41088c4b6a2306129242c796cfa917f6943eb983b420d25",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\source-delta-receipt.json": "701b7926e2f78611c867a14a677eaf1c377cedd788ac4b467ce43915708e507b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\deletion-before\\receipt.json": "e2752dc57360781ab63cea6a69581af0994039251b0478dad4fb053887ac5517",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\deletion-before\\driver.browser.cjs": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\deletion-before\\native-results.json": "d7bd39ab1c48e93e394e9cb12b0f0dcf84373bab6bb43e916b76e2369109a9f5",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\focused.receipt.json": "2992c279e091adc760ea84cce9620c8726dd5a1ce2ce22b5fafcb833653d4da4",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\driver.browser.cjs": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\native-results.json": "d2a40f7f4eae8f520389cceb4627310ae958862be71eebe9eb4fc9f42a3e0ba8",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\artifact-hashes.json": "2d178ffdc99c971696ab6cd066e0a8e0ae4a727153cf4848e481d63ee5e69d7f",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\preference-integrity.receipt.json": "147a9c968057938c98dbec15b9ad2c16a88a31fddb87589b914cb7b7554177e0",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\preference-integrity.stdout.txt": "e164677354f4565a1e6f885b0ce1e14f3cf616348b41c03ad162bec8dbda282b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\preference-integrity.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\analysis-identity.receipt.json": "1d127ed058e81501fb5f242ffe92bdbbd2eeeb60264c3605be7ca8759355f39a",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\analysis-identity.stdout.txt": "122b9deb9f85252c7d0ff00ce880645b8aad98c8e9292142c896b7b0bf5cce3a",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\analysis-identity.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-040-reassessment-preview-review.json": "dc9d097725823b80f48807dc463a19555d2f43f19d42dff08b9a1c647aa33c47",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-041-reassessment-preview-review.json": "ff605c3480b05b53ba9242abef1209157f209d11d4372017a50bd8fabb9422a4",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-039-reassessment-preview.json": "6b20e556bf205aa420beef01ad8091c0c30bf4220b7e6ea107174ef6fe903ac2",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-repo\\js\\app\\10-main-app.js": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-v2-repo\\js\\app\\10-main-app.js": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-copy-receipt.json": "9772224b43cb61ae4fb6885935d53323457e24604f774ce0e33db6473d46d69f",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-source-pins.json": "925223fec9071b976c14d2948c49ad5197ac8baae489d3f3e77b9d41d54a5059",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-final-integrity.json": "dd9002f9f9509be76d8aa296b22d3f8bb977e581271a172b2904d5b437c77ef5",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-coverage-tool-pins.json": "66b5022e2ce48772ccc39d37343398dae06d402de365cfa9262db9606ff32dfa",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\stage-one-full-report.json": "f5cb3f7ee8e5bda8047ee355871dad575e12e0614d3ac5d126a0af7748d28c74",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\receipt.json": "9ddca5d7e308d0136b6fc26d1a153e44505d63fbc5cd5aa8bd511f0e1c71a381",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\driver.browser.cjs": "af89612fc3dffba34c6b52ec999985b1081fe0f24b6f60b79ce4e626dc6fb3d7",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-before\\native-results.json": "c109310a9fb8898c6d3fbdbd1b9e882981f032ce7fc509bbe10997b2d71a864c",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\focused.receipt.json": "f23670c07a359aa67c86377e7b14314d7decc9b589fb31bd7fd23b7b3170c76f",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\driver.browser.cjs": "55a17c46b1be925fce2fd04883b5889f527e4b1c8c9f3a65b0934fdebbe0c8e3",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\native-results.json": "d807986975b1d03440a979f7babd6d7a3642f56e0833f90dcb3ab81b849c41bf",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted\\artifact-hashes.json": "d553e0e5fcbf5ed0ce250e37a734887af28a3f9bc3b6d98e3653976f5620cf0b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.receipt.json": "c6808ab14e0f4300402957b035baabd0627d671072e8e430a4927ee5347a62c1",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.stdout.txt": "e164677354f4565a1e6f885b0ce1e14f3cf616348b41c03ad162bec8dbda282b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\preference-integrity.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.receipt.json": "046d1431df15d143649c5383630d40ab00e4d2e803f13c09c1a56b9c5ccc6531",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.stdout.txt": "122b9deb9f85252c7d0ff00ce880645b8aad98c8e9292142c896b7b0bf5cce3a",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-reviewed\\analysis-identity.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-main-app.diff": "64b03557e2f502040b0622903d8640fa8dbafb700be54b88d3d09df6769a055b",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-040-reassessment-safety-review.json": "3c4453395aed47c3c7b7d209d33a1638faf24778f33d3838daaaa67efcc51055",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-041-reassessment-regression-review.json": "27e515f513b9a00e375e749ec6bf6e947cbf3733e267cefa77fb95acb1e98988"
+  },
+  "source_hashes_normalized_lf": {
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-v2-repo\\js\\app\\10-main-app.js": "4f28f69d7cc04a91a2bd7a88c66cd85909e46afc0a37558d5dfd5e0f00a2aac1",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-v2-repo\\js\\app\\00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-v2-repo\\js\\app\\storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+  },
+  "delta_verified": {
+    "v1_raw_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+    "v2_raw_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+    "exact_added_bytes": "            storedDeletions: readWftStudentChangeStorage(WFT_DELETIONS_STORAGE_KEY),",
+    "removing_that_one_CRLF_line_restores_v1_exactly": true,
+    "only_changed_of98_source_config_html_asset_files": [
+      "js/app/10-main-app.js"
+    ],
+    "v1_source_and_artifacts_preserved": true,
+    "test_driver_old_and_new_sha256": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24",
+    "v1_referenced_artifact_hashes_reverified": 21
+  },
+  "findings": [
+    {
+      "id": "review041-v2-deletion-boundary",
+      "classification": "blocker_addressed",
+      "reason": "The recovery-aware raw deletion-log bytes are now part of the existing readCurrentWork snapshot both before await and after true consent. A changed deletion log therefore fails the same equality gate before grade/current-work/pending mutations; a read failure follows the existing fail-closed catch. Global recovery is already refused before that read. No target/global/helper/commit/image code is otherwise changed.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/10-main-app.js",
+          "start_line": 7661,
+          "end_line": 7665
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/10-main-app.js",
+          "start_line": 7689,
+          "end_line": 7701
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/storage-recovery.js",
+          "start_line": 144,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "review041-v2-policy-premise",
+      "classification": "source_and_receipt_supported",
+      "reason": "The driver stages a real recordSessionDeletion for Alice/saved-alice and persists it through real saveDeletionsLocalOnly, then invokes actual applyDeletionsToPortfolio. Receipts show the source still physically stored but excluded by that policy, with a matching named-owner session tombstone newer than its saved createdAt. Actual deletion matching checks owner/session identity and timestamp; this is not a synthetic boolean substituted for policy.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/version-2/accepted/driver.browser.cjs",
+          "start_line": 161,
+          "end_line": 170
+        },
+        {
+          "file": "work/repowise-repair-039/version-2/accepted/driver.browser.cjs",
+          "start_line": 189,
+          "end_line": 194
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/00-storage-sync-patches.js",
+          "start_line": 4703,
+          "end_line": 4732
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/00-storage-sync-patches.js",
+          "start_line": 4812,
+          "end_line": 4845
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/00-storage-sync-patches.js",
+          "start_line": 2712,
+          "end_line": 2762
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/00-storage-sync-patches.js",
+          "start_line": 4881,
+          "end_line": 4891
+        }
+      ]
+    },
+    {
+      "id": "review041-v2-isolation-premise",
+      "classification": "independently_verified",
+      "reason": "For both f41 and5be2 runs, every existing guarded runtime/DOM field (including genre/corrected data) and portfolio/settings/selection/roster/stored-pending byte string matches the modal-open snapshot; only deletion-log bytes differ. Real writer source only persists the deletion key after validation. The f41 run accepting the action provides an additional control that old guarded fields did not themselves cause rejection.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/version-2/accepted/driver.browser.cjs",
+          "start_line": 195,
+          "end_line": 199
+        },
+        {
+          "file": "work/repowise-repair-039/version-2/accepted/driver.browser.cjs",
+          "start_line": 60,
+          "end_line": 72
+        },
+        {
+          "file": "work/repowise-repair-039/preview-v2-repo/js/app/00-storage-sync-patches.js",
+          "start_line": 4881,
+          "end_line": 4891
+        }
+      ]
+    },
+    {
+      "id": "review041-v2-current-work-oracle",
+      "classification": "independently_verified",
+      "reason": "On f41 the new case records exactly two intended failures: absent retry notice and failed complete-preservation projection; Bob becomes Alice and both pending copies clear. Version2 keeps every captured current-work field and storage byte string including the newer deletion log, with a review/retry notice. The expanded projection includes correctedHtml/genre state, and ordinary success now explicitly requires stored pending null.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/version-2/accepted/driver.browser.cjs",
+          "start_line": 234,
+          "end_line": 249
+        },
+        {
+          "file": "work/repowise-repair-039/version-2/accepted/driver.browser.cjs",
+          "start_line": 263,
+          "end_line": 268
+        }
+      ]
+    }
+  ],
+  "recorded_validation": {
+    "reviewer_executed_tests": false,
+    "same_immutable_driver_both_runs": true,
+    "f41_deletion_only": {
+      "cases": 1,
+      "passed_check_blocks": 4,
+      "failed_check_blocks": 2,
+      "exit": 1,
+      "harness_errors": 0,
+      "page_errors": 0
+    },
+    "version2": {
+      "cases": 16,
+      "passed_check_blocks": 79,
+      "failed_check_blocks": 0,
+      "exit": 0,
+      "harness_errors": 0,
+      "page_errors": 0
+    },
+    "all_prior15_case_names_and_check_labels_retained": true,
+    "prior15_checks": 73,
+    "new_case_checks": 6,
+    "related_suites": [
+      {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "recorded_passed": 105,
+        "recorded_exit": 0,
+        "final_main_and_script_hashes_verified": true
+      },
+      {
+        "suite": "tests/analysis-identity.browser.cjs",
+        "recorded_passed": 23,
+        "recorded_exit": 0,
+        "final_main_and_script_hashes_verified": true
+      }
+    ],
+    "counting": "Counts are recorded check/assertion blocks; grouped blocks contain multiple comparisons."
+  },
+  "nonblocking_tradeoffs": [
+    {
+      "id": "deletion-byte-conservatism",
+      "reason": "Any deletion-log byte change, including unrelated tombstones/serialization, now requires retry. This extends the already documented conservative portfolio/settings retry behavior and is safe for preservation; it may reject otherwise harmless concurrent updates."
+    },
+    {
+      "id": "confirmation-interval-only",
+      "reason": "This compares arrival during confirmation, not a cross-tab transaction or migration/filtering of already-retained deleted source entries. No before-open source-policy cleanup guarantee is inferred."
+    }
+  ],
+  "evidence_limits": [
+    "New case uses a clearly labeled controlled real sync-writer seam, not a claimed complete cloud/user journey. Actual modal, DOM/storage/runtime and actual deletion policy are used; no live Drive/AI/OAuth.",
+    "No fresh tests run, source/test/Git/index/tracker edits, integration or scanner closure by reviewer. Only this compact output written.",
+    "Unchanged15-case source semantics were not re-reviewed in full; exact one-line application delta, retained old case/check labels and new final-hash receipts were checked. Existing recovery branches remain source-inspected rather than dedicated injected coverage.",
+    "Parent owns039 integration, native-suite registration, final validation and publication decisions."
+  ]
+}
