@@ -4,7 +4,7 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T07:53:25.852246+07:00",
+  "updated_at": "2026-10-16T08:06:27.722303+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active",
   "active_repair": null,
@@ -34,11 +34,11 @@
       "performance": 30
     },
     "by_status": {
-      "reviewed_no_change": 548,
-      "in_progress": 49,
-      "confirmed_repair_candidate": 52,
-      "candidate_needs_regression": 7,
-      "unreviewed": 329
+      "reviewed_no_change": 588,
+      "confirmed_repair_candidate": 59,
+      "candidate_needs_regression": 9,
+      "unreviewed": 264,
+      "in_progress": 65
     },
     "by_severity": {
       "medium": 364,
@@ -48,17 +48,17 @@
       "unrated": 44
     },
     "all_rows_by_status": {
-      "reviewed_no_change": 550,
-      "in_progress": 49,
-      "confirmed_repair_candidate": 52,
-      "candidate_needs_regression": 7,
-      "unreviewed": 329,
+      "reviewed_no_change": 590,
+      "confirmed_repair_candidate": 59,
+      "candidate_needs_regression": 9,
+      "unreviewed": 264,
+      "in_progress": 65,
       "fixed_verified": 30
     },
     "verified_fixed": 30,
-    "unresolved_present": 437,
+    "unresolved_present": 397,
     "unresolved_absent": 0,
-    "unresolved_behavioral_leads": 8
+    "unresolved_behavioral_leads": 10
   },
   "repairs": [
     {
@@ -1028,7 +1028,7 @@
       "thread_id": "01a1420c-2425-7972-ab4f-ff1790ae0871",
       "lead_id": "review028-reassessment-confirmation-freshness",
       "repository_edits_authorized": true,
-      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
       "approved_main_sha256_raw": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
       "preview_report": "reviews/repair-039-reassessment-preview.json",
       "independent_preview_reviews": [
@@ -1076,6 +1076,53 @@
       "report": "reviews/repair-042-compact-rendering.json",
       "retained": 2,
       "confirmed_repair_candidates": 2
+    },
+    {
+      "id": "repair-045",
+      "title": "Validate photo reorder indices before changing the queue",
+      "status": "behavior_fixed_locally_pending_full_batch_gate",
+      "thread_id": "01a1420c-2425-7972-ab4f-ff1790ae0871",
+      "lead_id": "review032-preview-drop-index-range",
+      "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+      "scope": "js/app/10-main-app.js:bindPreviewReorderHandlers drop listener only",
+      "report": "reviews/repair-045-photo-reorder.json",
+      "publication_status": "pending_batch005",
+      "outcome": "Four parsed bounds guards reject five observed controlled invalid/stale drop cases before queue/OCR mutation;51crop/52media/16reassessment79checks+91syntax pass. All38originalcrop cases/8validcontrols preserved. No human reachability/scanner closure/publication claim."
+    },
+    {
+      "id": "repair-043",
+      "title": "Review remaining storage callbacks",
+      "status": "read_only_review_complete",
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "report": "reviews/repair-043-storage-callbacks.json",
+      "outcomes": {
+        "records": 29,
+        "status_counts": {
+          "reviewed_no_change": 25,
+          "confirmed_repair_candidate": 2,
+          "candidate_needs_regression": 2
+        },
+        "unique_candidate_interventions": 2,
+        "overlapping_upload_length_marker": 1,
+        "scanner_closures": 0,
+        "behavioral_bug_claims": 0,
+        "application_tests_run": 0
+      }
+    },
+    {
+      "id": "repair-044",
+      "title": "Portfolio rendering and feedback static review",
+      "status": "read_only_review_complete",
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "report": "reviews/repair-044-portfolio-rendering.json",
+      "outcomes": {
+        "records": 20,
+        "confirmed_minimal_candidates": 5,
+        "reviewed_no_change": 15,
+        "additional_unreproduced_behavior_leads": 2,
+        "candidate_scope": "Five local opportunities: normalized sessions access; redundant fresh base-key copy/checks; first-match image/session lookups; unused status-bar arguments; redundant inner Neatness check. No candidate requires a new framework or wrapper. Most leave the original detector flag present.",
+        "adoption": "Parent must review each reason and decide adoption; no scanner status/closure changes made."
+      }
     }
   ],
   "findings": [
@@ -3213,9 +3260,30 @@
       "scanner_id": "e5e5e1621aa74c2eaebb8609d8ca281c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_coherent_orchestrator",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The 74-line renderer already delegates stats, cards, charts and feedback. Its visible guards distinguish missing DOM, no selection, empty portfolio and optional async loading; extracting a wrapper only to reduce the brain score would move these decisions. Retain this shape. The optional async ownership lead is reported separately.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 14,
+          "nloc": 74,
+          "max_nesting": 1,
+          "dependents_count": 11,
+          "centrality_floor": 4,
+          "dispatch_share": 0.0,
+          "symbol_line": 7613,
+          "deepest_block": {
+            "start": 7616,
+            "end": 7616
+          }
+        },
+        "regression_recommendation": "No shape-only rewrite. If the separate async lead is pursued, use an explicit selected-owner oracle, not parity alone.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "1269be2346a546d3e9b82e5dfb7623634a5ec789ce8effb74753ee56df4eebd2",
       "observation": {
         "id": "e5e5e1621aa74c2eaebb8609d8ca281c",
@@ -3596,9 +3664,29 @@
       "scanner_id": "6f2a38eb5aa444b68e0f6b30d9046393",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The four-level callback joins separate decode, resize, encoder-null and original-byte fallback paths. The outer catch and the encoder callback catch cover different stages; flattening them or wrapping the entire callback would change error/fallback delivery rather than remove duplicate policy.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "max_nesting": 4,
+          "ccn": 8,
+          "cognitive": 20,
+          "dispatch_share": 0.0,
+          "symbol_line": 1476,
+          "symbol_index": 9,
+          "deepest_block": {
+            "start": 1505,
+            "end": 1508
+          }
+        },
+        "regression_recommendation": "If compression changes, exercise decode failure, oversized dimensions, null toBlob, encoding failure and original-data fallback; existing photo-compressed assertions check MIME/nonempty bytes and dimensions, not every fallback.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "13de45bd2e643de3e161e81b0ea98b950afe6fa84e3e18edc6f86f1d4f0a21c1",
       "observation": {
         "id": "6f2a38eb5aa444b68e0f6b30d9046393",
@@ -3943,9 +4031,29 @@
       "scanner_id": "29c82621e18e4ecfbe6f063dd377791d",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "duplicate_existing_resolution_policy",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The first-own-ID-map loop repeats the resolution policy in saveStudentPortfolioAsync and resolveStudentPortfolioKey. Extend the existing resolver to accept the already-read portfolio, then return portfolio[resolvedKey] or empty sessions. Keep direct-name priority, flag gating, first alias order and required settings errors. This removes a second policy implementation without another portfolio read.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "max_nesting": 4,
+          "ccn": 7,
+          "cognitive": 12,
+          "dispatch_share": 0.0,
+          "symbol_line": 1989,
+          "symbol_index": 24,
+          "deepest_block": {
+            "start": 1997,
+            "end": 2001
+          }
+        },
+        "regression_recommendation": "Retain native special-name/ID and protected-read assertions; add direct-name-versus-ID collision, duplicate map aliases, unknown ID and flag-off cases. Verify the resolver receives the existing snapshot.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "d4696aca759a92b82f87a75ce127eda727106d3c3d45caf7e7e21a0e8a159376",
       "observation": {
         "id": "29c82621e18e4ecfbe6f063dd377791d",
@@ -4026,9 +4134,29 @@
       "scanner_id": "6ce514ccd054462798977d5d2dd95251",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "duplicate_existing_resolution_policy",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The write callback must keep its strict read and write in one microtask, but its nested ID-map search is the same policy already implemented by resolveStudentPortfolioKey. Reuse that resolver with this snapshot; do not replace the whole callback with loadPortfolioAsync().then(), which would reintroduce lost concurrent student saves.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "max_nesting": 4,
+          "ccn": 6,
+          "cognitive": 11,
+          "dispatch_share": 0.0,
+          "symbol_line": 2009,
+          "symbol_index": 25,
+          "deepest_block": {
+            "start": 2018,
+            "end": 2021
+          }
+        },
+        "regression_recommendation": "R1: retain concurrent Alice/Bob saves, special own keys and failed settings/portfolio reads; add duplicate aliases and direct-name precedence. Confirm a single synchronous read-modify-write section remains.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "24729ce28e921fc853cbeeb8cfc90d104e2afc5112df5fa9fdd60c5d08ecbebe",
       "observation": {
         "id": "6ce514ccd054462798977d5d2dd95251",
@@ -5095,9 +5223,28 @@
       "scanner_id": "20ab3ddf42814ea485e81ef486c77961",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "minimal_redundancy_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "nextStudent iterates Object.keys of its captured strict normalized portfolio; normalizePortfolioData creates an own sessions array for each retained key. The second portfolio/student/sessions ternary at 7128 repeats that guaranteed contract. Use portfolio[studentName].sessions directly; retain serial traversal, final fresh read, callback errors and early returns. This removes redundant work but does not claim to clear the depth finding.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "max_nesting": 4,
+          "ccn": 7,
+          "cognitive": 14,
+          "dispatch_share": 0.0,
+          "symbol_line": 7120,
+          "deepest_block": {
+            "start": 7121,
+            "end": 7126
+          }
+        },
+        "regression_recommendation": "When adopting, preserve zero/multiple-student traversal and corrupt/recovery final-read failure behavior; existing held-upload tests cover ownership. No new abstraction.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "212420856afdfd79ca142e32b7c982f61f8b307b78fa7b7882dc8701f5ae1dcd",
       "observation": {
         "id": "20ab3ddf42814ea485e81ef486c77961",
@@ -5176,9 +5323,28 @@
       "scanner_id": "fb220e3469204b8ba6233c96b61c78dc",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_failure_isolation",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "Depth 4 comes from the small registry loop, optional destroy method and per-instance try/catch. Catching each failing chart separately lets later charts be destroyed, and deletion after the catch always clears the registry. Moving the catch outside the loop changes cleanup behavior; a helper would only hide nesting.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "max_nesting": 4,
+          "ccn": 6,
+          "cognitive": 12,
+          "dispatch_share": 0.0,
+          "symbol_line": 7434,
+          "deepest_block": {
+            "start": 7436,
+            "end": 7442
+          }
+        },
+        "regression_recommendation": "Retain; renderer assertion 150 requires throwing destroy to leave an empty registry.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "ac21ae0e6f5d3474ffc7f9a643fd6a9b851bfe9e5fb0b59cd501c8230d47b7d1",
       "observation": {
         "id": "fb220e3469204b8ba6233c96b61c78dc",
@@ -7285,9 +7451,29 @@
       "scanner_id": "79f93aff077b449bb7390fb876f6bed7",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The 14-line discovery callback handles absent files, canonical fallback, missing ID, optional cache/duplicate notifications and optional downloader availability. These are compatibility and advisory-cache boundaries, not repeated work. Its parent separately validates accepted index format and persists only accepted data.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 11,
+          "cognitive": 16,
+          "nloc": 14,
+          "dispatch_share": 0.0,
+          "symbol_line": 1719,
+          "symbol_index": 16,
+          "deepest_block": {
+            "start": 1726,
+            "end": 1726
+          }
+        },
+        "regression_recommendation": "Retain missing/invalid/error/canonical index cases; no helper justified for this one discovery stage.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "d85cb360d15881c332de57cee2f68aacc3671d3578a53607ced828f8dd737f8f",
       "observation": {
         "id": "79f93aff077b449bb7390fb876f6bed7",
@@ -9264,9 +9450,29 @@
       "scanner_id": "857ae114a26d49e7aab72e9ff303afee",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "This migration continuation coordinates three storage representations: local image references, pending image references and the IndexedDB cursor. Current-auth checks before and after asynchronous IDB open and transaction abort are essential. A generic remapping wrapper would obscure which stores are optional and which operation owns publication.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 16,
+          "nloc": 41,
+          "dispatch_share": 0.0,
+          "symbol_line": 3210,
+          "symbol_index": 127,
+          "deepest_block": {
+            "start": 3221,
+            "end": 3240
+          }
+        },
+        "regression_recommendation": "Retain held migration, held IDB-open, sign-out, newer account and away/back ownership scenarios; test local and pending remap results if this callback changes.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "c6af16fea71fab2ef15a9da83c89c8815ff0454aee5719e28dc65e1683fac7d3",
       "observation": {
         "id": "857ae114a26d49e7aab72e9ff303afee",
@@ -10071,9 +10277,29 @@
       "scanner_id": "8888f0ba815f4d4583d97f09074f5295",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "This nine-line provider callback first rejects obsolete auth operations, then distinguishes missing response, provider error and successful token completion. The error-description fallback adds decisions but has a concrete user-visible purpose; moving it into a new helper would merely relocate this small boundary.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 9,
+          "dispatch_share": 0.0,
+          "symbol_line": 3541,
+          "symbol_index": 142,
+          "deepest_block": {
+            "start": 3543,
+            "end": 3547
+          }
+        },
+        "regression_recommendation": "Keep held popup response ownership scenarios; if touched, explicitly cover undefined response and error/error_description provider payloads. Existing cited assertions primarily cover late success.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "f79befa95d9af0043b043add40100972aacb67abaa7fdd31eabb02ed6a30affb",
       "observation": {
         "id": "8888f0ba815f4d4583d97f09074f5295",
@@ -10853,9 +11079,29 @@
       "scanner_id": "6d7235bb1df5486ca5c4f79c129d0cd8",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The summary loop accumulates first IDs for three distinct sync filenames plus newest time. The repeated field assignments represent the summary schema, not independent implementations of one mutable rule. The parent supplies an archive connection and checks it before returning or falling back, so a failed listing cannot silently authorize stale-account selection.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 14,
+          "cognitive": 17,
+          "nloc": 37,
+          "dispatch_share": 0.46,
+          "symbol_line": 4021,
+          "symbol_index": 155,
+          "deepest_block": {
+            "start": 4038,
+            "end": 4056
+          }
+        },
+        "regression_recommendation": "Keep summary ordering, filename precedence, empty/error result and connection-change assertions. The folder-selection unit stubs summary IO; archive-connection covers the actual summary connection boundary.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "c3895cccba6c45188935e40fdec00f13fc17708b86f5e6cb263a15912c13c9bc",
       "observation": {
         "id": "6d7235bb1df5486ca5c4f79c129d0cd8",
@@ -10936,9 +11182,29 @@
       "scanner_id": "1b3bd39fff8447b585b9921db87227a5",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The selection callback owns scoring, stable timestamp tie-breaks, winner cache publication and an explanatory reason. isNewerTiedSummary already names the nontrivial shared tie rule. Replacing score additions with a dispatch table or extracting one-use cache setters would not reduce the selection policy.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 17,
+          "cognitive": 21,
+          "nloc": 35,
+          "dispatch_share": 0.0,
+          "symbol_line": 4083,
+          "symbol_index": 160,
+          "deepest_block": {
+            "start": 4090,
+            "end": 4101
+          }
+        },
+        "regression_recommendation": "Retain no/single folder, weighted settings/portfolio/deletions, stable ties, fallback modifiedTime, listing failure and stale connection cases.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "884a30cb0e5903b352cf5fe2449ddcf932310da335f0c8dab82887e57950542e",
       "observation": {
         "id": "1b3bd39fff8447b585b9921db87227a5",
@@ -11019,9 +11285,29 @@
       "scanner_id": "db604801297d4284bb7126387cb4d548",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The catch must settle an obsolete owned request without changing cache or status, clear cache on a current 404, and update legacy UI only for an unowned request. These distinctions explain its compact CCN9; removing ownership or merging its status branches would let late replies affect a new run.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 11,
+          "dispatch_share": 0.0,
+          "symbol_line": 4194,
+          "symbol_index": 168,
+          "deepest_block": {
+            "start": 4196,
+            "end": 4196
+          }
+        },
+        "regression_recommendation": "Keep actual held late-success/late-error, sign-out/reconnect and direct legacy callback cases; explicitly retain current 404 versus permission failure behavior.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "d652891735a75ae2c26b032b49cfba93d92be2149e4a9ee05cae988153b91ec9",
       "observation": {
         "id": "db604801297d4284bb7126387cb4d548",
@@ -11242,9 +11528,29 @@
       "scanner_id": "ce572446e5434692a428d9148cb91e00",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The bounded retry callback intentionally treats 404 as cache invalidation with 250ms retry, transient failures as exponential retry, and other failures as immediate rejection. Each attempt rechecks the captured connection. The compound stop condition describes this single policy directly; another predicate or wrapper would hide it.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 17,
+          "dispatch_share": 0.0,
+          "symbol_line": 4342,
+          "symbol_index": 182,
+          "deepest_block": {
+            "start": 4344,
+            "end": 4347
+          }
+        },
+        "regression_recommendation": "Keep three-attempt bounds, late callbacks, reconnection and actual multipart retries; add exact 404/250ms versus transient 500/1000ms timing if changing this policy.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "1b3245657c1ecb0ff985e8c95be4bf10d72846e6e1dda08d6995150fad6e8838",
       "observation": {
         "id": "ce572446e5434692a428d9148cb91e00",
@@ -12489,9 +12795,29 @@
       "scanner_id": "00126625589c416cbe9258f45e486990",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The seven-line callback requires matching ID, filename, nontrashed state and expected parent, then invalidates advisory cache on mismatch. Its decisions count defensive metadata defaults as well as validation. These independent cache trust checks should remain visible together.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 7,
+          "dispatch_share": 0.0,
+          "symbol_line": 4968,
+          "symbol_index": 197,
+          "deepest_block": {
+            "start": 4969,
+            "end": 4969
+          }
+        },
+        "regression_recommendation": "Recommended direct metadata matrix: wrong ID/name/parent, trashed, missing parents, non-OK response and malformed response. Cited lifecycle assertions cover related students-folder validation, not a direct complete test of this exact cached-file helper.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "5f200e057f6b07aa041dc77d2107366492dae583454d4aa8949e9a9050a21524",
       "observation": {
         "id": "00126625589c416cbe9258f45e486990",
@@ -12572,9 +12898,29 @@
       "scanner_id": "dc887c2284fd468fa23a6f3bb8f76c0b",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "This parser is the common IO trust boundary for five caller-selected contracts: settings, deletions, student, index and full portfolio. Required data rethrows parse/shape errors while optional data returns null. A generic validator registry would add dispatch machinery and risk conflating optional index compatibility with required writing.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 17,
+          "cognitive": 25,
+          "nloc": 20,
+          "dispatch_share": 0.0,
+          "symbol_line": 5035,
+          "symbol_index": 204,
+          "deepest_block": {
+            "start": 5042,
+            "end": 5047
+          }
+        },
+        "regression_recommendation": "Retain required malformed/invalid-shape failures and optional index missing/invalid behavior; no structural repair needed.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "4b753041308727c330a1b01bb6859e0823fb85de1f4d449d47c330e1df3befde",
       "observation": {
         "id": "dc887c2284fd468fa23a6f3bb8f76c0b",
@@ -12655,9 +13001,28 @@
       "scanner_id": "17db9a9b4a8d46008fc26279682ebc68",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "candidate_needs_regression",
+      "classification": "duplicate_verification_dispatch_policy",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The useful duplication is the same filename-to-fingerprint choice at 5072-5074 and 5100-5102. Select the existing fingerprint function once per upload and use it for intended and downloaded values (preserving each ||{} fallback). This makes timeout verification and intended hashing share one policy. Do not alter preflight, credential stripping, schema validation, canonical lookup or accepted-hash comparison.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 61,
+          "dispatch_share": 0.44,
+          "symbol_line": 5058,
+          "deepest_block": {
+            "start": 5060,
+            "end": 5063
+          }
+        },
+        "regression_recommendation": "R2 requires focused settings/deletions/portfolio/index equality and mismatch cases through SAVE_FILE_TIMEOUT recovery, plus non-timeout rejection and missing canonical file. Existing inspected tests prove native multipart sanitation/index upload and ordinary timeout retry ownership, not this entire recovery matrix.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "2c61548d8bb3cdbad7050db48338524169217ed3d1aa0caa116c62cda2a7b667",
       "observation": {
         "id": "17db9a9b4a8d46008fc26279682ebc68",
@@ -12738,9 +13103,29 @@
       "scanner_id": "06836fbaf8f14ab293fb2b5dfd6ce35c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "candidate_needs_regression",
+      "classification": "same_shared_policy_candidate_as_upload_parent",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The downloaded-value callback repeats the intended-value fingerprint dispatch, so it participates in R2. Retain its exact equality gate and original timeout error on mismatch; canonical existence alone is not evidence of a successful save. Other nested branches preserve ID-versus-file-list compatibility and need no independent extraction.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "symbol_line": 5099,
+          "symbol_index": 209,
+          "deepest_block": {
+            "start": 5105,
+            "end": 5108
+          }
+        },
+        "regression_recommendation": "R2: add actual timeout recovery equality/mismatch and invalid-required-cloud-payload assertions for all filename contracts; preserve rejection error and cache publication timing.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "98b954e43f44d4b46be04ad6ae088114a21afa1de638647d98c3efc6ced264d1",
       "observation": {
         "id": "06836fbaf8f14ab293fb2b5dfd6ce35c",
@@ -13100,9 +13485,29 @@
       "scanner_id": "4e3f3a728ad54c50861cef63ab2e139f",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "This settings merge continuation rebases a newer local settings counter after download, reapplies student deletions, conditionally saves local state, uploads only when needed, then acknowledges the captured counter. Settings prefer-local rules and UI application differ from portfolio sync, so a generic stream callback would discard meaningful sequencing.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "symbol_line": 5322,
+          "symbol_index": 222,
+          "deepest_block": {
+            "start": 5330,
+            "end": 5337
+          }
+        },
+        "regression_recommendation": "Retain create/update counter races and failed-pull/push storage rollback assertions; no one-use helper suggested.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "f957e4c7ea9167f6b5a20e3f277161bb6b9256da2e0f255ee53f3e0b986ed0e0",
       "observation": {
         "id": "4e3f3a728ad54c50861cef63ab2e139f",
@@ -13183,9 +13588,29 @@
       "scanner_id": "0bb3d6d88c534848abd785b9660245e3",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The deletion continuation must merge all tombstones, reread and remerge after a newer deletion counter, persist only changed state, and acknowledge only the captured counter after any push. This differs from the settings UI/roster path and from portfolio stale-snapshot retry; merging the three implementations is not a safe simplification.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 26,
+          "dispatch_share": 0.0,
+          "symbol_line": 5409,
+          "symbol_index": 226,
+          "deepest_block": {
+            "start": 5414,
+            "end": 5420
+          }
+        },
+        "regression_recommendation": "Retain deletion create/update races and failed local persistence; assert newly added tombstones survive late downloads and uploads.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "6cd34e996c647766bebca4cb8e6a0790f1435e236b035111d474e731b9f6749b",
       "observation": {
         "id": "0bb3d6d88c534848abd785b9660245e3",
@@ -13984,9 +14409,29 @@
       "scanner_id": "9e786ac3532b453b88f04a004611bc5e",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The terminal index continuation is a completion barrier: current-run ownership, required storage, recovery and dirty-index failure are checked before lastPollAt or optional broadcast. The small best-effort broadcast catch must not fail otherwise completed sync. Moving these guards into a success wrapper would make completion order less explicit.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 10,
+          "cognitive": 13,
+          "nloc": 14,
+          "dispatch_share": 0.0,
+          "symbol_line": 5855,
+          "symbol_index": 243,
+          "deepest_block": {
+            "start": 5863,
+            "end": 5867
+          }
+        },
+        "regression_recommendation": "Retain index failure leaves timestamp/dirty state unchanged, retry clears dirty state, and actual same-origin broadcast validity assertions.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "8aff7bd64cc33a8858ad1c60965e692af20d911995235badc2f0b85d87b882c6",
       "observation": {
         "id": "9e786ac3532b453b88f04a004611bc5e",
@@ -14645,9 +15090,29 @@
       "scanner_id": "7bb50ba154634f4caa98e78703a2ca88",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "Session normalization deliberately clones sessions and each image, fills legacy display/default fields, removes OCR text, and derives pending state from Drive references. The CCN counts independent compatibility defaults inside a small map callback. Reusing heavy-field stripping here would change retained metadata and image bytes. Legacy generated-ID/date volatility was already examined in039/040; no duplicate lead.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 17,
+          "dispatch_share": 0.0,
+          "symbol_line": 6366,
+          "symbol_index": 273,
+          "deepest_block": {
+            "start": 6375,
+            "end": 6379
+          }
+        },
+        "regression_recommendation": "Keep clone isolation, special own names, existing IDs/dates and Drive reference/pending behavior. If changed, add missing-ID/date normalization assertions without changing acknowledged legacy semantics.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "b8baff53968f4605d3c890009c03848fd537c7730491b0bea943e5d787644f0a",
       "observation": {
         "id": "7bb50ba154634f4caa98e78703a2ca88",
@@ -14728,9 +15193,29 @@
       "scanner_id": "a366cbac501d484981a4b6966e3ef0c4",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The session stripping callback implements two different storage fallback policies: keep a fixed image metadata projection, then remove oversized HTML entirely while truncating oversized markup and original text with distinct flags. A generic field table would need action/flag options for only three fields and would obscure the intentional difference.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 30,
+          "dispatch_share": 0.0,
+          "symbol_line": 6414,
+          "symbol_index": 277,
+          "deepest_block": {
+            "start": 6415,
+            "end": 6415
+          }
+        },
+        "regression_recommendation": "Keep image identity/revision assertions; add 50000/50001 boundaries and flag results for all three text fields if this fallback changes. Existing cited assertions do not prove every text-size boundary.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "709dec131f0541f7460433b0acc5eb5fee6e7a5f7edfc47ae9449d2aa66720cc",
       "observation": {
         "id": "a366cbac501d484981a4b6966e3ef0c4",
@@ -14811,9 +15296,25 @@
       "scanner_id": "5082da63930446eabc98d85eebab7a5c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "This 13-line callback constructs an allowlisted lightweight image record with defaults and a truthful byte-removal flag. makeImageMetadataLocalStorageSafe retains other own metadata and has a different contract; getSessionImagePayloads also uses different MIME/pending defaults. Reusing either would change persisted records rather than delete equivalent work.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "symbol_line": 6420,
+          "symbol_index": 278
+        },
+        "regression_recommendation": "Keep imageId/imageRevision, Drive reference and removal/pending flags; test null image entries and absent metadata if this projection changes.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "7bd4e492ace3db3365dc997db18f10e67efce122a89f19563d8b173c44355d24",
       "observation": {
         "id": "5082da63930446eabc98d85eebab7a5c",
@@ -15038,9 +15539,28 @@
       "scanner_id": "65cd3c92e93e444c86ac0411fe2d91ff",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_compatibility_fallbacks",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "This 11-line object builder has CCN 11 because of explicit legacy detailed/genre defaults and four sanitized summary fields. The next-time normalization and generated encouraging closing differ from the detailed saved model. A shared fallback wrapper would obscure precedence for little reuse.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 11,
+          "dispatch_share": 0.0,
+          "symbol_line": 6739,
+          "deepest_block": {
+            "start": 6740,
+            "end": 6740
+          }
+        },
+        "regression_recommendation": "Retain genre precedence and missing-field behavior; existing summary/detail fixture assertions apply.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "a0d2797b962b59e226ae63150d9a85935f2d62c4dab4d4547d58cfaf7a5c8d33",
       "observation": {
         "id": "65cd3c92e93e444c86ac0411fe2d91ff",
@@ -15121,9 +15641,28 @@
       "scanner_id": "bd2430a1c21f4ec2aff34ddd99455e6b",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "minimal_redundancy_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "getBasePortfolioCategoryKeys returns a fresh six-item array without Neatness. Remove the extra slice allocation at 6755 and the always-true categoryScores object and absent-Neatness checks at 6769; keep categoryScores.Neatness != null so zero remains assessed. Preserve later custom-category deduplication and all saved-feedback fallbacks. This is a local cleanup, not a reason to split the whole builder.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 19,
+          "cognitive": 18,
+          "nloc": 51,
+          "dispatch_share": 0.0,
+          "symbol_line": 6751,
+          "deepest_block": {
+            "start": 6752,
+            "end": 6752
+          }
+        },
+        "regression_recommendation": "Compare saved category order and fields for missing/zero Neatness, extra categories, genre defaults and unknown scores. Parent may combine with the similarly redundant Neatness guard at 7202.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "233c66e5ec6bb22b98071cf2045c2fbf123926810a80f1dddb8ee7d8b00fef25",
       "observation": {
         "id": "bd2430a1c21f4ec2aff34ddd99455e6b",
@@ -15204,9 +15743,29 @@
       "scanner_id": "8706988194be452ea682d0ec6529a19a",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_sanitized_compatibility_adapter",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The 26-line per-category callback reconciles source score with assessment fallback, omits genuinely absent categories, optionally invokes the feedback builder with an isolated failure fallback, and sanitizes saved text. Its notice-row branches preserve different legacy forms; feedback/source arrays are capped at eight, while normalized legacy patternNotes are not capped here. Do not flatten these distinctions or claim all rows are bounded.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 20,
+          "cognitive": 22,
+          "nloc": 26,
+          "dispatch_share": 0.0,
+          "symbol_line": 6776,
+          "symbol_index": 290,
+          "deepest_block": {
+            "start": 6784,
+            "end": 6790
+          }
+        },
+        "regression_recommendation": "Retain; if editing this callback later, cover throwing/missing builder, numeric zero versus null, row aliases and exact sanitization/fallback precedence.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "7622821c31bfbf697aaa06f6816a49af6b41f783be187b387253ee0617481241",
       "observation": {
         "id": "8706988194be452ea682d0ec6529a19a",
@@ -15717,9 +16276,28 @@
       "scanner_id": "66238755876445d6ae34b19ed7881e1f",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "minimal_first_match_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "Both sessions.filter(...)[0] and imageId-filter(...)[0] allocate and traverse the entire collection while needing only the first match. Native find is already used by this codebase; use it for these two lookups. Keep ID-first/index fallback, source-image fingerprint and the precise storage-trim exception. This improves lookup work without a score-only helper.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 20,
+          "dispatch_share": 0.0,
+          "symbol_line": 6998,
+          "deepest_block": {
+            "start": 6999,
+            "end": 6999
+          }
+        },
+        "regression_recommendation": "Preserve first-match behavior, absent/deleted/reordered media, changed reference/bytes, trimmed stored data and held pending owner cases. Treat strict normalized session input as the contract; do not silently broaden malformed sparse input support.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "0bc8a1cfaa4e4ae059ad63408b2abb59371e8e0c92b25d5caa0c3359f8380173",
       "observation": {
         "id": "66238755876445d6ae34b19ed7881e1f",
@@ -16087,9 +16665,29 @@
       "scanner_id": "96f1fd3e3c9a413e9a407fef8a8af89d",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_upload_commit_boundary",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "CCN 17 reflects distinct upload-error, credential/queue/image freshness, missing result ID, current portfolio lookup and local-save failure boundaries. The successful ack updates only the still-current image and then persists/schedules sync before advancing. Consolidating these guards into a boolean or callback wrapper would hide ownership and error flow.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 17,
+          "cognitive": 28,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "symbol_line": 7068,
+          "symbol_index": 302,
+          "deepest_block": {
+            "start": 7088,
+            "end": 7091
+          }
+        },
+        "regression_recommendation": "Retain; held native upload scenarios assert stale owners and replaced/deleted photos are not acknowledged, and durable failures reach the caller.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "8fd8fdb2fcea6224354c38b25cc4ac6696c5cf03fe80217ea13e88cfe212b2fc",
       "observation": {
         "id": "96f1fd3e3c9a413e9a407fef8a8af89d",
@@ -16170,9 +16768,28 @@
       "scanner_id": "c6d8019fc48448a98e072095f4e4aa76",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_ui_guards_separate_behavior_lead",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The short function coordinates selected-student persistence, crop ownership, optional DOM elements and desktop-only scrolling. Those guards are meaningful. No structural extraction is warranted. Its admin-tab destination is separately suspicious against the actual portfolio panel layout and roster caller; see the unconfirmed behavior lead.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 18,
+          "dispatch_share": 0.0,
+          "symbol_line": 7168,
+          "deepest_block": {
+            "start": 7172,
+            "end": 7172
+          }
+        },
+        "regression_recommendation": "Retain guard visibility. Add a real roster-name click visibility regression only for the separate navigation lead.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "b6ae77eff046bbd94f499ddb4b18c29362d6e08026f8f2e7ba2f5c62455f376d",
       "observation": {
         "id": "c6d8019fc48448a98e072095f4e4aa76",
@@ -16253,9 +16870,28 @@
       "scanner_id": "5bf733c2c6fe4665a2bf91043f5daefe",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_explicit_small_presentation",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The 15-line goal renderer has four intentional labels, field-specific fallback chains, safe bold rendering and a next-time-only grammar normalization. The high boolean CCN comes largely from those fallbacks. A table/loop rewrite would add indirection and must still retain the special normalization; no useful repair follows from this score alone.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 17,
+          "cognitive": 16,
+          "nloc": 15,
+          "dispatch_share": 0.0,
+          "symbol_line": 7338,
+          "deepest_block": {
+            "start": 7339,
+            "end": 7339
+          }
+        },
+        "regression_recommendation": "Retain fallback-only, empty-goal, bold and hostile-markup expectations.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "dc94f6580bfa284567a27cc1f8e501e840add2072caa21dd1f6545d9a4c2db9a",
       "observation": {
         "id": "5bf733c2c6fe4665a2bf91043f5daefe",
@@ -16336,9 +16972,28 @@
       "scanner_id": "c71dea2e1ee44550babaeed18224379b",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_distinct_modal_contract",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The detailed modal preserves the older-entry message, ordered categories, first existing category expanded, no-category message and optional grow goal. It displays overall zero by != null. Shared shell/category/goal helpers already exist; extracting another wrapper for subtitle or branching would not simplify the behavior.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 24,
+          "dispatch_share": 0.0,
+          "symbol_line": 7392,
+          "deepest_block": {
+            "start": 7405,
+            "end": 7411
+          }
+        },
+        "regression_recommendation": "Retain actual category-to-detailed navigation, empty/legacy data, order, first-open category, zero overall and safe rendering.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "b885c6b67cfcc2b2f4c34c01318b6d426c71aa60d55013272299874281d2581b",
       "observation": {
         "id": "c71dea2e1ee44550babaeed18224379b",
@@ -16419,9 +17074,28 @@
       "scanner_id": "c6299d7b9c08429fbd9bef017d249f98",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_distinct_modal_contract",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The category modal has its own missing-category message, one expanded category and a safe data-attribute link to the detailed modal. These differ from the full-detail loop and older-entry branch. Existing shell rendering already shares the useful common work; do not fuse the two contracts for a CCN threshold.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 14,
+          "dispatch_share": 0.0,
+          "symbol_line": 7417,
+          "deepest_block": {
+            "start": 7421,
+            "end": 7421
+          }
+        },
+        "regression_recommendation": "Retain missing category, hostile title/attributes, zero/unknown scores and real View Detailed action coverage.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "df4dc9d61587458c462e55d435dde2911b0d2cd9bd74f40ef80056e78825f6bb",
       "observation": {
         "id": "c6299d7b9c08429fbd9bef017d249f98",
@@ -16502,9 +17176,28 @@
       "scanner_id": "1b150e84e9d045889348d59cfb18e2c7",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_coherent_orchestrator",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The complex-method signal covers the same renderer as the brain/large records. Its CCN 14 is distributed across boundary checks and dataset defaults, not a deep decision tree (depth 1). Existing helper calls keep the main flow readable. The optional held-load owner risk needs a targeted behavioral fix rather than a structural wrapper.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 14,
+          "cognitive": 13,
+          "nloc": 74,
+          "dispatch_share": 0.0,
+          "symbol_line": 7613,
+          "deepest_block": {
+            "start": 7616,
+            "end": 7616
+          }
+        },
+        "regression_recommendation": "No additional shape repair; assess the separate async-owner lead with a controlled ordering test.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "1269be2346a546d3e9b82e5dfb7623634a5ec789ce8effb74753ee56df4eebd2",
       "observation": {
         "id": "1b150e84e9d045889348d59cfb18e2c7",
@@ -17421,9 +18114,29 @@
       "scanner_id": "d154da9196bd4c52adcfdf9e481e3fc7",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_diagnostic_shape_existing_lead",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The twelve-line rejection callback defensively records name/message/stack, clears busy state, and refuses stale-token UI writes. Those fallbacks are useful for thrown values. Its separate missing newer-pending UI guard was already recorded as review027-manual-save-rejection-status; do not create another lead or regard retaining the shape as clearing that behavior risk.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 12,
+          "dispatch_share": 0.0,
+          "symbol_line": 7949,
+          "symbol_index": 342,
+          "deepest_block": {
+            "start": 7952,
+            "end": 7952
+          }
+        },
+        "regression_recommendation": "Reuse review027-manual-save-rejection-status regression: reject an old flush after newer pending writing arrives under the same token; newer pending status must survive. Existing ownership tests are related, not proof of that exact catch case.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "19421efb19d52c6b4f7ec951ae5ff8ca9ed3d8ed9d58a37be312188cc460dd65",
       "observation": {
         "id": "d154da9196bd4c52adcfdf9e481e3fc7",
@@ -19957,9 +20670,28 @@
       "scanner_id": "a2f636053fd940a4b40c321fdb5223c0",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_upload_commit_boundary",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "Four bumps describe the same upload-completion callback as the complex-method row: errors return immediately, ownership loss skips acknowledgment, commit failures propagate, and success continues the queue. Keeping these distinct transitions visible is safer than relocating blocks to clear the bumpy-road marker.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "bumps": 4,
+          "ccn": 17,
+          "max_nesting": 3,
+          "symbol_line": 7068,
+          "symbol_index": 302,
+          "deepest_block": {
+            "start": 7088,
+            "end": 7091
+          }
+        },
+        "regression_recommendation": "Same held upload and failure assertions as the corresponding complex row; no second repair should be counted.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "8fd8fdb2fcea6224354c38b25cc4ac6696c5cf03fe80217ea13e88cfe212b2fc",
       "observation": {
         "id": "a2f636053fd940a4b40c321fdb5223c0",
@@ -20590,9 +21322,27 @@
       "scanner_id": "9e0366ea93ef494a84cf4e7d9ee8e959",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "overlapping_marker_same_upload_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The nloc61 marker describes the same upload function already reviewed under the complexity record. R2 removes one genuinely duplicated dispatch policy; the remaining preflight/sanitization, save, canonical resolution, timeout verification and return normalization are one coherent IO transaction. Do not split it solely to meet length thresholds.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "nloc": 61,
+          "ccn": 10,
+          "dispatch_share": 0.44,
+          "symbol_line": 5058,
+          "deepest_block": {
+            "start": 5060,
+            "end": 5063
+          }
+        },
+        "regression_recommendation": "Apply only the shared R2 proposal/regressions; no additional length-driven helper.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "2c61548d8bb3cdbad7050db48338524169217ed3d1aa0caa116c62cda2a7b667",
       "observation": {
         "id": "9e0366ea93ef494a84cf4e7d9ee8e959",
@@ -20672,9 +21422,27 @@
       "scanner_id": "fef511808b8647a59990344f81be3652",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The nloc72 parent includes a local acknowledgement closure and debug decision logging around the settings lookup/create/merge/rebase/push transaction. Splitting these phases would require threading captured hash/counter/pending values and would not remove repeated work. The complex child is independently retained above.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "nloc": 72,
+          "ccn": 5,
+          "dispatch_share": 0.0,
+          "symbol_line": 5273,
+          "deepest_block": {
+            "start": 5275,
+            "end": 5275
+          }
+        },
+        "regression_recommendation": "Preserve actual orchestrator follow-up and failed persistence assertions; no independent size repair.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "4159c70cb76ccd258d1dfdcb77e400c670f7e4002e6b837c3eed97db8a89b1d3",
       "observation": {
         "id": "fef511808b8647a59990344f81be3652",
@@ -20754,9 +21522,27 @@
       "scanner_id": "bf35eca19d7948d2bdb55db52d3e2bb3",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The nloc66 deletion parent adds first-cloud creation even when persisted tombstones exist without a dirty flag. Its own counter acknowledgement and merge phases are not interchangeable with settings or portfolio behavior. Size alone does not justify a generalized synchronization engine.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "nloc": 66,
+          "ccn": 3,
+          "dispatch_share": 0.0,
+          "symbol_line": 5363,
+          "deepest_block": {
+            "start": 5365,
+            "end": 5365
+          }
+        },
+        "regression_recommendation": "Preserve nonpending-but-nonempty tombstone creation, counter races and failure rollback; keep the child callback in its owning transaction.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "594c8b862de7c35ae7acb9b29c4d1b40a2efe41dc6546de84310fde4071624be",
       "observation": {
         "id": "bf35eca19d7948d2bdb55db52d3e2bb3",
@@ -20836,9 +21622,27 @@
       "scanner_id": "719254107b454fa285c9bc445f92ae6f",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The nloc77 portfolio parent intentionally abandons a stale local snapshot and queues follow-up instead of rebasing as settings/deletions do. Required reads, deletion filtering before and after union, local-save-before-push, and captured-counter acknowledgement are separate correctness obligations. A shared stream helper would need extensive policy parameters.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "nloc": 77,
+          "ccn": 4,
+          "dispatch_share": 0.0,
+          "symbol_line": 5610,
+          "deepest_block": {
+            "start": 5612,
+            "end": 5612
+          }
+        },
+        "regression_recommendation": "Retain real union/timestamp/deletion/restore/failed-write and delayed-save follow-up assertions; no size-only extraction.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "bb98806fc7c27e6d6bda464815f290c460bc738ab13799a5aaf2f238dfee8163",
       "observation": {
         "id": "719254107b454fa285c9bc445f92ae6f",
@@ -21476,9 +22280,27 @@
       "scanner_id": "a17bd7e9ebde4ba29fb741f82e038d14",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_coherent_orchestrator",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The renderer is 74 NLOC, above the detector threshold of 60, but its code is one ordered render transaction with existing helpers for expensive subparts. Splitting HTML assembly merely to reach 59 lines does not remove work or improve ownership. This is a third valid signal on the same function, not a third repair.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "nloc": 74,
+          "ccn": 14,
+          "dispatch_share": 0.0,
+          "symbol_line": 7613,
+          "deepest_block": {
+            "start": 7616,
+            "end": 7616
+          }
+        },
+        "regression_recommendation": "Retain; preserve stats count, session order, chart lifecycle, storage purity and actions if a separately justified change is later made.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "1269be2346a546d3e9b82e5dfb7623634a5ec789ce8effb74753ee56df4eebd2",
       "observation": {
         "id": "a17bd7e9ebde4ba29fb741f82e038d14",
@@ -22891,9 +23713,23 @@
       "scanner_id": "a4b73c51a1b549a5aa69395d9bf7642f",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_meaningful_parameter_boundary",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The five untyped parameters are two canvas IDs and three related but distinct chart inputs. There is one clear caller, and an object wrapper would add property names without reducing state or validation. Retain zero-versus-unknown filtering, empty-axis defaults, missing Chart/canvas fallbacks and deferred lookup of current canvases.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "symbol_line": 7560
+        },
+        "regression_recommendation": "Retain renderer checks 144 and 146-150 for unknown axes, library/canvas absence, deferred rerenders and throwing chart cleanup.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "af50199f50be9df7d4b0ee2c86fab1e3e85a66543fc41fbf4952e3cd55a11975",
       "observation": {
         "id": "a4b73c51a1b549a5aa69395d9bf7642f",
@@ -22967,9 +23803,23 @@
       "scanner_id": "daaf48b949484c269d10357e0a762bb7",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "minimal_unused_parameter_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "target and targetEnabled are never read by updateStatusBar. Historical updateMeter computes fill/badge using them before the sole call. Remove only these two unused formal and forwarded arguments, leaving words/fillWidth/fillBackground/badgeText and the caller calculations intact. This removes real dead interface state, not an object wrapper.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "symbol_line": 8026
+        },
+        "regression_recommendation": "No direct status-bar assertion found in inspected tests. If adopted, check word text, width, color and badge for target off, zero, below/exact/above target and missing DOM nodes; preserve upstream target calculations.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "cf019ef0f02ef091c513a471e24cc90587d7e101ec7d92d76067ae6febe9ea35",
       "observation": {
         "id": "daaf48b949484c269d10357e0a762bb7",
@@ -23958,9 +24808,24 @@
       "scanner_id": "c7fb49eabff54bbaa0e51d78c7ee7549",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The four boolean operators at2860 prove a usable cache container/data/sessions array and an optional matching student identity. The optional missing studentId supports legacy cache entries; removing that clause or trusting only sessions would change compatibility or show another student. The parent falls back to strict local/cloud reads on a miss.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 2859,
+          "symbol_index": 116
+        },
+        "regression_recommendation": "Retain valid/wrong-ID/invalid-session caches, single immediate callback and real background refresh; explicitly preserve legacy missing-ID compatibility if touched.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "f5920a8fc3290e903289ed627dd57eee5176277a3b88315cfc70c33d3c75fb22",
       "observation": {
         "id": "c7fb49eabff54bbaa0e51d78c7ee7549",
@@ -24036,9 +24901,24 @@
       "scanner_id": "7cb2d2d717ce4e24b13c32de538bcc7b",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The four-operator condition checks the students container only for the recognized index format. Unsupported-format data is returned for the caller to reject as an unusable index, while malformed recognized indices throw. Both behaviors are needed by loadPortfolioIndexFromDrive; wrapping this one expression would merely move validation.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 5035,
+          "symbol_index": 204
+        },
+        "regression_recommendation": "Retain wrong-format fallback versus recognized-format null/array/missing students rejection; no generic shape predicate.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "ef2843a5e3570a4899fdc7b71e6fdd95b05067d040a9f501e86437a31b958ffc",
       "observation": {
         "id": "7cb2d2d717ce4e24b13c32de538bcc7b",
@@ -24244,9 +25124,24 @@
       "scanner_id": "dcdb199588224949abc0d859089f0d6c",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The three-operator guard skips remote deletion-file creation only when there is no pending push and all three deletion collections are empty. Each collection is independent; an OR or dirty-only test would drop existing tombstones or create unnecessary empty files. The condition states the intended skip case directly.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 5385,
+          "symbol_index": 224
+        },
+        "regression_recommendation": "Add each individual nonempty deletedStudents/restoredStudents/deletedSessions collection with pending false, plus all-empty and pending-true cases if changing this guard; existing race assertions cover pending streams.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "01c86c52f24304cde95a5257855ff68e0d93676abfc0fe29e9a34ddb89497562",
       "observation": {
         "id": "dcdb199588224949abc0d859089f0d6c",
@@ -24458,9 +25353,24 @@
       "scanner_id": "e3117edd898f4395add12d1406ffda31",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_policy_difference_related_to_existing_029",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The five-name root metadata filter is a literal compatibility policy, not an unreadable boolean accident.029 already proposes sharing six-name filters elsewhere; this function omits _meta, so blindly applying that helper would change behavior. Keep this exact policy unless a separate metadata contract decision and regression justifies convergence.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 6357,
+          "symbol_index": 272
+        },
+        "regression_recommendation": "If consolidating with029, test every reserved name and _meta independently and decide which contract owns _meta. Do not introduce a second duplicate metadata lead.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "c92f8ca021c6c8a374e8339dc4381f55133fbc80a1c27aef615ecd2e2a2b0569",
       "observation": {
         "id": "e3117edd898f4395add12d1406ffda31",
@@ -24536,9 +25446,24 @@
       "scanner_id": "100b41929ebf4464ae10f2959724cd82",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "valid_coherent_structure",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The three-operator validation rejects absent/scalar/array students and missing/nonarray sessions before persistence or cloud merge. Every clause excludes a distinct invalid shape; a one-use isValidStudent wrapper would hide the trust boundary and only move the detector result.",
+        "report": "reviews/repair-043-storage-callbacks.json",
+        "metrics": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 6389,
+          "symbol_index": 274
+        },
+        "regression_recommendation": "Retain required-read/invalid-cloud/split-file rejection and empty-valid-portfolio assertions; no weakening of required shapes or empty-on-error fallback.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "724b8f104283e5a2c36a126b287da3a09ff8c874cb1b37f7579fa99fdae4dced",
       "observation": {
         "id": "100b41929ebf4464ae10f2959724cd82",
@@ -24614,9 +25539,23 @@
       "scanner_id": "f867f05cde2d4a94aa4e130a85d3c0ca",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "retain_exact_empty_value_contract",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The three-operator conditional chooses fallback only for null, undefined or empty string and only when fallbackHtml exists. false and zero must not be treated as requests for fallback. The sanitizer is then applied at the assignment boundary. Replacing this with a truthiness check or a one-use predicate would obscure or change that contract.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 6681
+        },
+        "regression_recommendation": "Retain direct target, unsafe HTML removal, explicit null fallback and missing-target checks. Add false/zero distinctions only if changing this condition.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "7e28939b865b33df44948b66c277cfa4eb9578c5cd433d79220a7f86d5c91d58",
       "observation": {
         "id": "f867f05cde2d4a94aa4e130a85d3c0ca",
@@ -24957,9 +25896,23 @@
       "scanner_id": "d9a92068153e4c68a8cc62ca418b46e8",
       "scanner_status": "open",
       "present": true,
-      "status": "in_progress",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "minimal_redundant_inner_guard_candidate",
+      "review": {
+        "coordinator_reviewed": true,
+        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "reason": "The outer condition intentionally includes score zero and the two legacy assessment flags; retain all three boolean operators. The fresh base category list excludes Neatness, so the nested keys.indexOf check at 7202 is redundant: push once when the outer condition holds. Keep Object.keys(scores) deduplication so custom/existing categories stay unique. This will not clear the assigned outer-condition flag.",
+        "report": "reviews/repair-044-portfolio-rendering.json",
+        "metrics": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 7198
+        },
+        "regression_recommendation": "Compare exact category ordering for no Neatness, numeric zero, each legacy flag, extra categories and scored Neatness. Do not replace the outer condition with a helper just to hide its metric.",
+        "scanner_finding_remains_open": true,
+        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+      },
       "evidence_fingerprint": "8e9ecb289134dc8dd81694876f0b8ac708b30b908347ebba7524723890f9bcb6",
       "observation": {
         "id": "d9a92068153e4c68a8cc62ca418b46e8",
@@ -78379,7 +79332,7 @@
       "scanner_id": "596edbe37ed14269aee9eb35141a0a2f",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "af1124d7ee6ad2462086d8e9401c67ac58270c8d0d4f6cf8724424e132068650",
@@ -78443,7 +79396,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_73792a574b42e8236c19"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_e673407f389e26d90ad5",
@@ -78458,7 +79413,7 @@
       "scanner_id": "d55507e675614d218264592866c9bbfa",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "fb8f616145c30370bd8e63a632eb0ccfd79d4e3adb18462d4565c4201a7cac84",
@@ -78522,7 +79477,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_e673407f389e26d90ad5"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_d70b311c8cef34ed959d",
@@ -78537,7 +79494,7 @@
       "scanner_id": "3185a2a1e58a4053826885f00f786817",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "16d38f22c6ae0994d515f1b0cb32d0eadefb7e81d3afb7b880e5c732d74d54b4",
@@ -78601,7 +79558,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d70b311c8cef34ed959d"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_9ed9ee996a2e3ba97e2e",
@@ -78616,7 +79575,7 @@
       "scanner_id": "4bcf837b970e4d00ac1045da659b8e3b",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "083e2c614467360e0dabaafc29135846da100403b112aea1aad4b133886db73c",
@@ -78680,7 +79639,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_9ed9ee996a2e3ba97e2e"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_bf74a4880d990f5c83c7",
@@ -78695,7 +79656,7 @@
       "scanner_id": "292e68fefa2b4c33ad8da3a12e909ba3",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "b88848e000684eda31699dbcd0f94d4281242f896caae28ef748a1d5afd3dedd",
@@ -78759,7 +79720,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_bf74a4880d990f5c83c7"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_a4fcf0b1e3303769475c",
@@ -78774,7 +79737,7 @@
       "scanner_id": "dfceb38f12fb45b58441cd16a0f5d968",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "45b485e9c8d796f55fc6c67a35e269774df3881fd647f043fae22508071d3713",
@@ -78834,7 +79797,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a4fcf0b1e3303769475c"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_97506bb4c786936411e9",
@@ -78849,7 +79814,7 @@
       "scanner_id": "7a7ef37fc55840e2a2c907c4e74183d1",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "af1124d7ee6ad2462086d8e9401c67ac58270c8d0d4f6cf8724424e132068650",
@@ -78913,7 +79878,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_97506bb4c786936411e9"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_fa1e3f3fce82ffa1cfd4",
@@ -78928,7 +79895,7 @@
       "scanner_id": "3676ace855514e2890c0b8345a84aa5b",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "a6879568ade6f8c8c510883f7aaf7ff88c77f7594c589570a04a213ae6d1a986",
@@ -78992,7 +79959,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_fa1e3f3fce82ffa1cfd4"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_0870c25d4075e0357488",
@@ -79007,7 +79976,7 @@
       "scanner_id": "a10c73cd82c742a28e51ff06ae125c48",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "3c2f1791230bc1c9b844bb2acc1fa0add62b3b26688504de76d06f1632324b0c",
@@ -79071,7 +80040,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_0870c25d4075e0357488"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_a0776e0bdddefccee43d",
@@ -79086,7 +80057,7 @@
       "scanner_id": "47766749bdd34294b5a1161f19868ace",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "171bdaebf12e14829baaa28641d4feaadc407d4e93d5e179b32fa398caa1920a",
@@ -79150,7 +80121,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a0776e0bdddefccee43d"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_5306a999694aea8b140a",
@@ -79165,7 +80138,7 @@
       "scanner_id": "cd2042a7891e486882fe661849be4537",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "94ba93322f3b466120f4a458a6350ded7735a32008e23fba3565c2263fb805ac",
@@ -79225,7 +80198,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_5306a999694aea8b140a"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_4fac48e803a52200e11a",
@@ -82409,7 +83384,7 @@
       "scanner_id": "1d7d53cbb92c4afa80fee2c435b77066",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "f4daf8addd1b18d62510e04640fb29503dd0e9d6cbc4c4abcf7c5aa093edbe74",
@@ -82473,7 +83448,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_0031d0f63452bdba310b"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_e98a1eb74db943150fcb",
@@ -82488,7 +83465,7 @@
       "scanner_id": "a0d76f93f1904f6cba05d530ece24831",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "6ef5a94000e1b7d851e6202a531398126d9d6c2b808535b93b3dbdfadaf88c88",
@@ -82552,7 +83529,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_e98a1eb74db943150fcb"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_500c4166d1ca157a5541",
@@ -82567,7 +83546,7 @@
       "scanner_id": "3685798292f44ed2925eee32bfa58517",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "48877588c753f7f47b532f3f3b815dc1b503b6da7296f35095428aea94b476aa",
@@ -82631,7 +83610,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_500c4166d1ca157a5541"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_96910a3a1fb70bb0a175",
@@ -82646,7 +83627,7 @@
       "scanner_id": "0c1582712e7540ef984337d687b21cfe",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "9a8bb8cf6033d2d689054d12498daa5b90b37b8b9494043704e24173661bffd1",
@@ -82710,7 +83691,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_96910a3a1fb70bb0a175"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_e7d9bc21d5bd55cdff4b",
@@ -82725,7 +83708,7 @@
       "scanner_id": "69fbf2d7f184492eb4a8b91280cf20c3",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "edaaa2e9030d5f9f51a405a8e6e2e7db83f8efe3a306be2664025b8f91123cd0",
@@ -82789,7 +83772,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_e7d9bc21d5bd55cdff4b"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_0f425b4b82357b6157a1",
@@ -82804,7 +83789,7 @@
       "scanner_id": "284fcafa855a414c89f56452fb69dcd9",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "462f6d8fadedcfe30609fae5c9d291e1972e37e693ca097b9b5aae12ee6ce9b1",
@@ -82868,7 +83853,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_0f425b4b82357b6157a1"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_a342a0ef30b71cae9eb3",
@@ -82883,7 +83870,7 @@
       "scanner_id": "b92d3102a3344fa4933380756a805023",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "d5b14e61c8cd18f97f98993b89c8bb2c87923f6855a1e805b3dcbf7ef5620939",
@@ -82947,7 +83934,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a342a0ef30b71cae9eb3"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_998220186c13aa82abd3",
@@ -82962,7 +83951,7 @@
       "scanner_id": "39560af0b728454aad804caed0c1f3d8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "5ed0a7b97de461d433d8d19ad8588a8467e94f983aab2ec17bacc76ea9ff5b8f",
@@ -83026,7 +84015,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_998220186c13aa82abd3"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_a50e80e97edcd6e6becf",
@@ -83041,7 +84032,7 @@
       "scanner_id": "7f7e88e8fb294fe2bd0b5e4aff7fc437",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "031f5a96cb0c469cc1cd679061fedab5c4d06704db7557d3961a99f81189eaaf",
@@ -83105,7 +84096,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a50e80e97edcd6e6becf"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_b5d688594926455874d4",
@@ -83120,7 +84113,7 @@
       "scanner_id": "9b5fd1bf47884998997672521b171a32",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "48877588c753f7f47b532f3f3b815dc1b503b6da7296f35095428aea94b476aa",
@@ -83183,7 +84176,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_b5d688594926455874d4"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_21a0bbf20192af2be592",
@@ -83198,7 +84193,7 @@
       "scanner_id": "1bc47389c61445b289025cb4168f0bac",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "f4daf8addd1b18d62510e04640fb29503dd0e9d6cbc4c4abcf7c5aa093edbe74",
@@ -83257,7 +84252,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_21a0bbf20192af2be592"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_5be9ea529bf82cdfbbf3",
@@ -83272,7 +84269,7 @@
       "scanner_id": "5800cd958d704e45aa2cb336b175f234",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "040832899a57d5460296c9408abf5c211cb1e9902805a2215a1c19184ea9c4c6",
@@ -83331,7 +84328,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_5be9ea529bf82cdfbbf3"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_34d155a11ae12094772a",
@@ -83346,7 +84345,7 @@
       "scanner_id": "bb53419d51584a6ea3007cbd37f8f1f8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "04f67e410335166c68012513b3b1d2b41694f88c62b4f092f7af30dacdf7a600",
@@ -83405,7 +84404,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_34d155a11ae12094772a"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_61ea1e71eb770a77989a",
@@ -83420,7 +84421,7 @@
       "scanner_id": "d26f96e0f3034740929fb4f296c07a1a",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "0d1e5a930c8736086b6f8d854bf0aa2ab558a42e61781b97333468a6cfc73a4a",
@@ -83479,7 +84480,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_61ea1e71eb770a77989a"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_248573c51c1521f8340e",
@@ -83494,7 +84497,7 @@
       "scanner_id": "f63bc9e939924c6993766c3476b1d051",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "701d958af9494e8eb772e7473d903c8eab5ec31e5746e0549349ea976af18a4b",
@@ -83562,7 +84565,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_248573c51c1521f8340e"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_6e57e46cfd771706f50b",
@@ -84428,7 +85433,7 @@
       "scanner_id": "c9623a3a6e7b43d183c25d0626adac2f",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "32f7d1b3d070be3194f6bed9013e404ebf9d96298eff59ca129b35dfc9b9759e",
@@ -84492,7 +85497,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_6b4d070b6bd4a357369e"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_d56e623610c171ece3bd",
@@ -84507,7 +85514,7 @@
       "scanner_id": "201b0ee4f2254e39a71201a92ff5674b",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "1544696aed25b13b5ce5ddccd0d58b858b6463b3e7bccd682a0657c799886a46",
@@ -84571,7 +85578,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d56e623610c171ece3bd"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_50998bdcd4425c8109be",
@@ -84586,7 +85595,7 @@
       "scanner_id": "95e648b4197245a384c4e8113822f5f8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "7f65210712cfdd604ed1bf1524c027df776d984da936147c3288b606fdc6c655",
@@ -84650,7 +85659,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_50998bdcd4425c8109be"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_f1363ca369412b5bc505",
@@ -84665,7 +85676,7 @@
       "scanner_id": "ada6edcebf894660aaa6241b6e2adce9",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "6c66144daca5b9d6b7d43a8264371d200cddeb2123b33b59567bf6a7f2bf50e0",
@@ -84729,7 +85740,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_f1363ca369412b5bc505"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_5434c3357e16481b0da7",
@@ -84744,7 +85757,7 @@
       "scanner_id": "364042e8b5d448749ff492aed5dc3d3f",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "40ec578ac10b46e41f29e7f48993768eaa77f938bd3481062268c0946562dd94",
@@ -84812,7 +85825,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_5434c3357e16481b0da7"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_b1b9f4fbf4ed7111bf83",
@@ -84827,7 +85842,7 @@
       "scanner_id": "6bd535b4514e41cea2396ce64508f7e8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "7cb351ece49a971335bfd7f5c575c10f54f315b0f052bd5840be0ed6edeae4df",
@@ -84890,7 +85905,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_b1b9f4fbf4ed7111bf83"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_8b0f5d04e40a276ec8b4",
@@ -84905,7 +85922,7 @@
       "scanner_id": "b77cebcb2ffd4595ac35da22c94dfdf0",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "7a70623b2d3b951d46700c86376466f9c5b6bdb0286fbda9a82b18f12087be97",
@@ -84967,7 +85984,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_8b0f5d04e40a276ec8b4"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_9c5c31a2ca73143c40fc",
@@ -84982,7 +86001,7 @@
       "scanner_id": "e593f84618234e32a4778aac5a73eab1",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "f1d34586400d82cf22f365a9098afe2bf78f04f8f4038bbef6b129428710e243",
@@ -85041,7 +86060,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_9c5c31a2ca73143c40fc"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_5b6315b17f8803c7e046",
@@ -85143,7 +86164,7 @@
       "scanner_id": "271b40d5a4b34e5c80d6936aa1924adb",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "6555e6bbf1bff82e600a9e5cb44a2020efce58dd3adf7c468e528bdbc9d79f0e",
@@ -85211,7 +86232,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_90441d787da9c922c417"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_bb483c9c40cb5b8453ab",
@@ -88820,7 +89843,7 @@
       "scanner_id": "649e61ad53e74b649d1952b243408c55",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "2bed44ea05ad09f4bf3ed8068e17a6b8ff4f625cfa67a138ea04b40767183130",
@@ -88884,7 +89907,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_6e1080aa83faa6dfdfaf"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_cd72665a4e7d4b713d24",
@@ -88899,7 +89924,7 @@
       "scanner_id": "a82c41a04e1043a09b9e8d93527591f8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "ccced8544f618209b1a230b3fe3b9c323f1446646972356281bdb3f29956495b",
@@ -88963,7 +89988,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_cd72665a4e7d4b713d24"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_1532a4324157c282bf5e",
@@ -88978,7 +90005,7 @@
       "scanner_id": "c82581e3412a442397fd6b56710934d5",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "72382737fde44ef1d4a9284304f0fdeda653d256452be71dbc9b77b8fa13d50f",
@@ -89042,7 +90069,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_1532a4324157c282bf5e"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_a9aec3d32ff745fb44e3",
@@ -89057,7 +90086,7 @@
       "scanner_id": "51f3e68c2fd44ace8bf38e52449ca695",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "2bed44ea05ad09f4bf3ed8068e17a6b8ff4f625cfa67a138ea04b40767183130",
@@ -89121,7 +90150,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a9aec3d32ff745fb44e3"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_a610c7bc1c616cfe053f",
@@ -89136,7 +90167,7 @@
       "scanner_id": "bf3374b8d3c844c1961a8f297599c5f0",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "bf8e73d4fc8f34f8315477c7a3467da6574b7b67ca110dbc3b88ea1c4b10aff9",
@@ -89200,7 +90231,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a610c7bc1c616cfe053f"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_d3a20ba993962aa7d807",
@@ -89215,7 +90248,7 @@
       "scanner_id": "31ebd4f47c7944c9b9eac0921120b80c",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "ccced8544f618209b1a230b3fe3b9c323f1446646972356281bdb3f29956495b",
@@ -89278,7 +90311,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d3a20ba993962aa7d807"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_cdb8be83656852c7ab1c",
@@ -89293,7 +90328,7 @@
       "scanner_id": "0d93590005a14b2b8686b2c6a8c078c9",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "2bed44ea05ad09f4bf3ed8068e17a6b8ff4f625cfa67a138ea04b40767183130",
@@ -89356,7 +90391,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_cdb8be83656852c7ab1c"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_213d9f8b3e19418bec05",
@@ -89371,7 +90408,7 @@
       "scanner_id": "ce7123df06e543af8eb670f95a6d8db5",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "ccced8544f618209b1a230b3fe3b9c323f1446646972356281bdb3f29956495b",
@@ -89434,7 +90471,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_213d9f8b3e19418bec05"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_1e0a39c50c6ccb76ba44",
@@ -89449,7 +90488,7 @@
       "scanner_id": "4e517595d5054141898c8f2a789f76e8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "2bed44ea05ad09f4bf3ed8068e17a6b8ff4f625cfa67a138ea04b40767183130",
@@ -89512,7 +90551,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_1e0a39c50c6ccb76ba44"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_96c00aeeb88b86b3a25d",
@@ -89527,7 +90568,7 @@
       "scanner_id": "fcea58597d434075a7bafc1229399085",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "bf8e73d4fc8f34f8315477c7a3467da6574b7b67ca110dbc3b88ea1c4b10aff9",
@@ -89586,7 +90627,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_96c00aeeb88b86b3a25d"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "code_health:finding_ae453a360bd95fa61daa",
@@ -95159,7 +96202,7 @@
       "scanner_id": "b4c1b8709965441f8b6b9ba2342101a0",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "273d567117397a91c5ab79119dc4e251b5b7c43e8e8b888c2ebfa3aa7546120f",
@@ -95223,7 +96266,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d0e737c875554facd17c"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_a740bcc836201e83c5ce",
@@ -95238,7 +96283,7 @@
       "scanner_id": "843fd57c71234810b1fa679e18e52296",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "f4e8571d7268a223b393fefe1767e4c5a8b23756b7a847791460a6bb6d984e88",
@@ -95302,7 +96347,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a740bcc836201e83c5ce"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_0936878f9d4d502c6b66",
@@ -95317,7 +96364,7 @@
       "scanner_id": "a8a3d9a7f2c84dd8bb133ea08a15492b",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "e9285c3d3b327894cccc8e0190ecc1f4fb83d2734215edb84c35a008d2e170cf",
@@ -95381,7 +96428,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_0936878f9d4d502c6b66"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_cd2035047a3147bd9357",
@@ -95396,7 +96445,7 @@
       "scanner_id": "c9be526be42d4b69b086989f547ee266",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "b38e2e8ea60e68bf45947ae5d45eb2434fbb077257bf6f2d1d8f8edbd6e5d1aa",
@@ -95460,7 +96509,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_cd2035047a3147bd9357"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_2444ef38d170f9e459d0",
@@ -95475,7 +96526,7 @@
       "scanner_id": "766566ca48474918a4e95fad0b017717",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "73a97d789963848eb7136e61ca5dddd86d468b71977042f2a1e19a68499c8d5d",
@@ -95540,7 +96591,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_2444ef38d170f9e459d0"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_069477ffb241b2be8345",
@@ -95644,7 +96697,7 @@
       "scanner_id": "d43873d4eaaf4d66bc86cc76e222e0ea",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "c5dbcc2b65ecb73b7799aa90b613634eed20065e11e8cfab78a9b8b278b82e0f",
@@ -95708,7 +96761,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_43881671adf95bb4b43c"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_a0a176f446cbb821d487",
@@ -95723,7 +96778,7 @@
       "scanner_id": "2ccfde03818e483c94d8b9bcf46bc9a4",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "2726bc7ea95b1909026c8dbc58793cc19b88da267dd9054c792b69f0704e4e93",
@@ -95788,7 +96843,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_a0a176f446cbb821d487"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_d71333b5f8e26e1a7718",
@@ -95803,7 +96860,7 @@
       "scanner_id": "19e4b6a87b3f4d1ea16e8b713d46617c",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "258459672242a5b5fafa4cc411a307932789ff9f6356812df93006cec5eee886",
@@ -95867,7 +96924,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d71333b5f8e26e1a7718"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_d5756f8057e6210e77d4",
@@ -95882,7 +96941,7 @@
       "scanner_id": "630ec3f1634c4bd6ac06a33f61b39244",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "ba2f9acda3bb2005435a4d521d6acab0d28e8dc6ab2f520e84cfdd48f3f61e0b",
@@ -95946,7 +97005,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d5756f8057e6210e77d4"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_50f759c7ce8caf72ba0f",
@@ -95961,7 +97022,7 @@
       "scanner_id": "52199edc03724bafa16f85d0872657f3",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "0a42f29ee243d574afb1345d704ccd5dc6532ea5fc489c6052f385ba4851ca4c",
@@ -96025,7 +97086,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_50f759c7ce8caf72ba0f"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_532b474a093fc3ebb820",
@@ -96040,7 +97103,7 @@
       "scanner_id": "16765d6b979641b8bc3fcca48eabed50",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "4027011ffba235bbf845ca9d9a941d2c2210e76a4924f73eab8c36e308d7a574",
@@ -96104,7 +97167,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_532b474a093fc3ebb820"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_7d7006df9ec6314480bd",
@@ -96119,7 +97184,7 @@
       "scanner_id": "814ee34df33c46e4a59e538c5bd8b915",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "258459672242a5b5fafa4cc411a307932789ff9f6356812df93006cec5eee886",
@@ -96182,7 +97247,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_7d7006df9ec6314480bd"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_d85646f671cd92e5433a",
@@ -96197,7 +97264,7 @@
       "scanner_id": "d52e4ad4f9cb45a897815cad2a9317e2",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "ba2f9acda3bb2005435a4d521d6acab0d28e8dc6ab2f520e84cfdd48f3f61e0b",
@@ -96260,7 +97327,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_d85646f671cd92e5433a"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_f2a785c9259d4530ddc5",
@@ -96275,7 +97344,7 @@
       "scanner_id": "61937dde915e42f4855ed309094efe10",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "8a2f6b5a454c4d14fa68367df026b4544c715eb9d4fd723d87c5a146a615b0fa",
@@ -96335,7 +97404,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_f2a785c9259d4530ddc5"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_c70d17d30550958c4d95",
@@ -96350,7 +97421,7 @@
       "scanner_id": "ecd621d5cfb74f56b14f4388987a9f65",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "f2de359b8d94dd83ad5120d99a5e3ccb178c49de9c34782ba1c5492c5d155204",
@@ -96410,7 +97481,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_c70d17d30550958c4d95"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_541a0914ff6d42267451",
@@ -96425,7 +97498,7 @@
       "scanner_id": "dd2607126f444ad9a51ce41a7ec2d8f4",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "95c6fafaaf8a7c54a7b4b17536e07108b1171a6536d57266705153a2f750556a",
@@ -96485,7 +97558,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_541a0914ff6d42267451"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_7abfbf4a2f826653796d",
@@ -96500,7 +97575,7 @@
       "scanner_id": "f354b251176848c1809119ea7c3c0d74",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "fccd43a86cf086bc51cabd7972dac53eb002e0f23d5b536d1281162c103afeb3",
@@ -96560,7 +97635,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_7abfbf4a2f826653796d"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_f91d9ed74c28e5ef0ee7",
@@ -96575,7 +97652,7 @@
       "scanner_id": "4b946f2d1db64e1c904409b713ebab97",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "236fec8b3690edf35687525bf2ef58e9ed8f9c47921372aa64f05050ec138648",
@@ -96635,7 +97712,9 @@
       ],
       "identity_aliases": [
         "code_health:finding_f91d9ed74c28e5ef0ee7"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "code_health:finding_7041aa95c1ab7c98200b",
@@ -115037,7 +116116,7 @@
       "scanner_id": "7d8c5c4c017f475797adfbca1ac8880c",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": null,
@@ -115135,7 +116214,9 @@
       ],
       "identity_aliases": [
         "performance:perf3_68900cb25de5c2f8b778"
-      ]
+      ],
+      "assigned_agent": "/root/review_028_analysis",
+      "related_repair": "repair-048"
     },
     {
       "id": "performance:perf3_769dc30b84623e2d7139",
@@ -115150,7 +116231,7 @@
       "scanner_id": "6d8cfd0d21204a9f8b35a3c280979291",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "in_progress",
       "classification": null,
       "review": null,
       "evidence_fingerprint": null,
@@ -115248,7 +116329,9 @@
       ],
       "identity_aliases": [
         "performance:perf3_769dc30b84623e2d7139"
-      ]
+      ],
+      "assigned_agent": "/root/review_027_upload",
+      "related_repair": "repair-047"
     },
     {
       "id": "performance:perf3_84dba4db32722c23655b",
@@ -118916,24 +119999,31 @@
   },
   "active_reviews": [
     {
-      "id": "repair-043",
-      "title": "Review remaining storage and transport callbacks",
+      "id": "repair-047",
+      "title": "Review authentication and photo ownership harnesses",
       "agent": "/root/review_027_upload",
-      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
-      "file": "js/app/00-storage-sync-patches.js",
-      "assignment": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-043-assignment.json",
-      "records": 29,
-      "scope": "immutable_file_with_unrelated039main_writer"
+      "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+      "files": [
+        "tests/auth-integrity.browser.cjs",
+        "tests/optional-storage.browser.cjs",
+        "tests/media-ownership.browser.cjs"
+      ],
+      "assignment": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-047-assignment.json",
+      "records": 31,
+      "scope": "immutable_test_files_during_unrelated_source_repairs"
     },
     {
-      "id": "repair-044",
-      "title": "Review remaining portfolio rendering and feedback",
+      "id": "repair-048",
+      "title": "Review preference and Drive lifecycle harnesses",
       "agent": "/root/review_028_analysis",
-      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
-      "file": "js/app/00-storage-sync-patches.js",
-      "assignment": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-044-assignment.json",
-      "records": 20,
-      "scope": "immutable_file_with_unrelated039main_writer"
+      "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+      "files": [
+        "tests/preference-integrity-scenarios.js",
+        "tests/drive-lifecycle.browser.cjs"
+      ],
+      "assignment": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-048-assignment.json",
+      "records": 34,
+      "scope": "immutable_test_files_during_unrelated_source_repairs"
     }
   ],
   "behavioral_leads": [
@@ -119383,7 +120473,7 @@
       "classification": "missing_drop_index_range_validation",
       "proposed_status": "candidate_needs_regression",
       "source_supported": true,
-      "reproduced": false,
+      "reproduced": true,
       "needs_user_attention": false,
       "reason": "Drop validates NaN/equal indices but not source/target bounds. An out-of-range custom MIME/text index or a stale drag index after the queue changes can make items.splice(fromIndex,1)[0] undefined; the callback inserts that value, replaces selectedImages, then dereferences every item.extractedText. This can corrupt the queue and throw instead of rejecting the drop. The nearby Move helper validates bounds, so the two native reorder paths have different admission rules. Source-supported; not run or reproduced.",
       "evidence_anchors": [
@@ -119400,10 +120490,15 @@
       ],
       "regression_recommendation": "Dispatch actual delegated drop events with negative/too-large indices and a drag begun before queue removal/replacement; assert no exception, exact photos/order/cache bytes retained, no undefined entries and terminal drag cleanup. Preserve valid desktop/mobile before/after drops and MIME/text fallback. Keep bounds repair separate from cleanup deduplication.",
       "id": "review032-preview-drop-index-range",
-      "status": "candidate_needs_regression",
+      "status": "fixed_locally_pending_validation",
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-032-ui-lifecycle-shapes.json",
-      "related_repair": "repair-032"
+      "related_repair": "repair-045",
+      "assigned_repair": "repair-045",
+      "reproduction_status": "controlled_native_event_old_fail_new_pass",
+      "local_fix_report": "reviews/repair-045-photo-reorder.json",
+      "publication_status": "pending_batch005",
+      "reproduction_limit": "Controlled native event boundary; human drag reachability unproven. In-range stale identity unchanged."
     },
     {
       "lead_id": "review032-overlapping-image-preparation",
@@ -119461,6 +120556,113 @@
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-034-parsing-reconciliation-shapes.json",
       "related_repair": "repair-034"
+    },
+    {
+      "id": "review044-roster-portfolio-panel",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "openStudentPortfolio",
+      "reason": "The real roster name button calls openStudentPortfolio(name), which selects and renders the portfolio but calls switchTab('admin'). Historical switchTab explicitly hides portfolioPanel and activates adminPanel for that value; portfolioContent is inside portfolioPanel. This appears to leave the rendered portfolio hidden after a name click. This is source-supported, not reproduced.",
+      "classification": "possible_navigation_destination_error",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7168-7185",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "27-59",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "65-89",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "index.html",
+          "lines": "3374-3386",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "key": "crop",
+          "file": "tests/crop-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "74: openStudentPortfolio(Bob/Alice) calls; 179-204: crop ownership assertions. No portfolio-panel visibility assertion."
+        }
+      ],
+      "regression_recommendation": "Use the actual roster name button for a saved student and assert portfolioPanel and portfolio tab active, selected student/cards correct and crop invalidated. Assess switching to the portfolio tab while preserving dropdown population and avoiding redundant rendering. No runtime behavior claimed.",
+      "status": "candidate_needs_regression",
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "report": "reviews/repair-044-portfolio-rendering.json",
+      "related_repair": "repair-044"
+    },
+    {
+      "id": "review044-async-portfolio-stale-owner",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "renderStudentPortfolio",
+      "reason": "With the optional async path enabled, the completion for captured student A puts A data in _asyncStudentData then recursively renders using the current selector value. If the selector changed to B while A was loading, B can label/action A sessions; a late rejection can also overwrite the current view. There is no selector/generation check before either write. The flag is false by default, so this lead concerns the opt-in path; source supported and not reproduced.",
+      "classification": "possible_async_owner_mismatch",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "1137",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "1988-2006",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "2030-2052",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "2913",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7613-7643",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7654-7691",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "index.html",
+          "lines": "3378",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Enable the existing optional flag, hold actual asynchronous loads, change the real selector A to B, release both orders including late failure, and assert only the selected owner data/actions/error render. Check preserved adapter cleanup and storage purity. Existing immediate async parity does not establish this oracle.",
+      "status": "candidate_needs_regression",
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "report": "reviews/repair-044-portfolio-rendering.json",
+      "related_repair": "repair-044"
     }
   ],
   "coverage_evidence": {

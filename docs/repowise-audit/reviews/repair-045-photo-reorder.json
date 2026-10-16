@@ -1,0 +1,400 @@
+{
+  "repair_id": "repair-045",
+  "lead_id": "review032-preview-drop-index-range",
+  "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "status": "reproduced_and_locally_repaired_pending_root_review",
+  "published_or_committed_by_worker": false,
+  "generated_at": "2026-10-16T01:03:37.646Z",
+  "timezone": "Asia/Bangkok",
+  "summary": "Actual full-app delegated drop handler reproduced five invalid/stale parsed-index failures before the app change: silent queue/OCR mutation or undefined insertion with native browser exceptions. Extending the existing early rejection condition with source/target bounds fixes all five. All38 old crop cases and eight valid/no-op drop controls remain passing.",
+  "changed_files": [
+    "js/app/10-main-app.js",
+    "tests/crop-ownership.browser.cjs"
+  ],
+  "application_before_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+  "application_after_sha256": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+  "extended_test_sha256": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+  "exact_diffs": {
+    "application": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\application.diff",
+      "sha256": "ba6d760fc48089066068e9a7981e6ea1140373f6fbbbc3fafaa34270e26a7145"
+    },
+    "test": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\crop-regression.diff",
+      "sha256": "88b488cca202c66b3c677c44d7bc7a10bf10b39cd217e2eaf0175f66682a63a9"
+    }
+  },
+  "negative_control": {
+    "test_main_unchanged": true,
+    "same_extended_test_before_after": true,
+    "exit": 1,
+    "total_cases": 51,
+    "original_cases_passed": 38,
+    "valid_or_noop_new_controls_passed": 8,
+    "failing_boundary_cases": [
+      {
+        "name": "drop-source-negative",
+        "failed_contract": "Rejected/stale/no-op drop keeps all photo/OCR/owner/writing/pending bytes",
+        "before_order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "after_order": [
+          "c",
+          "a",
+          "b"
+        ],
+        "exact_state_kept": false,
+        "same_ocr_promise_refs": false,
+        "defined_queue": true,
+        "native_errors": 0,
+        "terminal_drag_index": -1
+      },
+      {
+        "name": "drop-source-past-end",
+        "failed_contract": "Drop must not throw",
+        "before_order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "after_order": [
+          null,
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": false,
+        "same_ocr_promise_refs": false,
+        "defined_queue": false,
+        "native_errors": 1,
+        "terminal_drag_index": 0
+      },
+      {
+        "name": "drop-target-negative",
+        "failed_contract": "Rejected/stale/no-op drop keeps all photo/OCR/owner/writing/pending bytes",
+        "before_order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "after_order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": false,
+        "same_ocr_promise_refs": false,
+        "defined_queue": true,
+        "native_errors": 0,
+        "terminal_drag_index": -1
+      },
+      {
+        "name": "drop-target-past-end",
+        "failed_contract": "Rejected/stale/no-op drop keeps all photo/OCR/owner/writing/pending bytes",
+        "before_order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "after_order": [
+          "b",
+          "c",
+          "a"
+        ],
+        "exact_state_kept": false,
+        "same_ocr_promise_refs": false,
+        "defined_queue": true,
+        "native_errors": 0,
+        "terminal_drag_index": -1
+      },
+      {
+        "name": "drop-stale-after-remove",
+        "failed_contract": "Drop must not throw",
+        "before_order": [
+          "b",
+          "c"
+        ],
+        "after_order": [
+          null,
+          "b",
+          "c"
+        ],
+        "exact_state_kept": false,
+        "same_ocr_promise_refs": false,
+        "defined_queue": false,
+        "native_errors": 1,
+        "terminal_drag_index": 2
+      }
+    ],
+    "native_browser_exceptions": 2,
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\negative\\receipt.json",
+      "sha256": "7acf06154c8fca06bd8bdcc525ae39d2de32b5d80ee5731dfedbd70e2d16c2ef"
+    },
+    "case_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\negative\\cases.json",
+      "sha256": "41ab43eeab2d0f5559d7084f494552ca96fffb0c475743992d94bbc082af7c7f"
+    },
+    "stdout": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\negative\\stdout.txt",
+      "sha256": "cc9dcfac074525c52299ef9fceb687a13c0d002969ec8726f32b2542b3e4834e"
+    },
+    "stderr": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\negative\\stderr.txt",
+      "sha256": "7e6e0f1c07ce8a1fdf22afd83017662b72f504e7eeacc36701544c2a2adc9023"
+    }
+  },
+  "after": {
+    "selected_runner": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\suite-results.json",
+      "sha256": "5c3dc759b26d5ec227e4950f0ff9108c8cf3e5ddda3da199732791ce0164fde7"
+    },
+    "syntax_passed": 91,
+    "crop_cases_passed": 51,
+    "crop_original_cases_passed": 38,
+    "new_drop_cases_passed": 13,
+    "media_ownership_cases_passed": 52,
+    "reassessment_cases_passed": 16,
+    "reassessment_checks_passed": 79,
+    "new_drop_page_errors": 0,
+    "new_drop_undefined_queue_entries": 0,
+    "all_terminal_drag_cleanup_passed": true,
+    "new_cases": [
+      {
+        "name": "drop-source-negative",
+        "passed": true,
+        "order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": true
+      },
+      {
+        "name": "drop-source-past-end",
+        "passed": true,
+        "order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": true
+      },
+      {
+        "name": "drop-target-negative",
+        "passed": true,
+        "order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": true
+      },
+      {
+        "name": "drop-target-past-end",
+        "passed": true,
+        "order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": true
+      },
+      {
+        "name": "drop-stale-after-remove",
+        "passed": true,
+        "order": [
+          "b",
+          "c"
+        ],
+        "exact_state_kept": true
+      },
+      {
+        "name": "drop-desktop-later-after",
+        "passed": true,
+        "order": [
+          "b",
+          "c",
+          "a"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-desktop-earlier-before",
+        "passed": true,
+        "order": [
+          "c",
+          "a",
+          "b"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-mobile-later-before",
+        "passed": true,
+        "order": [
+          "b",
+          "a",
+          "c"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-mobile-earlier-after",
+        "passed": true,
+        "order": [
+          "a",
+          "c",
+          "b"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-text-prefix",
+        "passed": true,
+        "order": [
+          "c",
+          "a",
+          "b"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-fraction-target-prefix",
+        "passed": true,
+        "order": [
+          "b",
+          "c",
+          "a"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-drag-index-fallback",
+        "passed": true,
+        "order": [
+          "c",
+          "a",
+          "b"
+        ],
+        "exact_state_kept": false
+      },
+      {
+        "name": "drop-same-index",
+        "passed": true,
+        "order": [
+          "a",
+          "b",
+          "c"
+        ],
+        "exact_state_kept": true
+      }
+    ],
+    "cases": [
+      {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\crop-ownership.browser.json",
+        "sha256": "55baa9328444e84389e514705aec3c640801d7a53e741959c803a002e24fad17"
+      },
+      {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\media-ownership.browser.json",
+        "sha256": "561fbd2887acfb1a61fa97b2e8afa39c64462363e14a1bcdf9c41a11cef83d50"
+      },
+      {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\portfolio-reassessment.browser.json",
+        "sha256": "3262c767330bcb7461b5b55f29c79054fc6e6becbc28c958d64d8cbf7312afb3"
+      }
+    ],
+    "logs": [
+      {
+        "suite": "tests/crop-ownership.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\crop-ownership.browser.log",
+          "sha256": "32b0d366db2df650d85656f42ad0c8412d3d152bb241c2b63b5148af8f62a108"
+        }
+      },
+      {
+        "suite": "tests/media-ownership.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\media-ownership.browser.log",
+          "sha256": "27ace7f78bf4974f2e96654983006fbde3c3983332fc901a73a8340cf8c6da1a"
+        }
+      },
+      {
+        "suite": "tests/portfolio-reassessment.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after\\portfolio-reassessment.browser.log",
+          "sha256": "a633c9ffdae3fcaf7236e60efdb96594ba7ad072bb0311aa8676a149861b7065"
+        }
+      }
+    ]
+  },
+  "behavioral_scope": [
+    "Drop tests use the complete shipped page and actual bound dragstart/drop listeners with native DataTransfer/DragEvent objects. Invalid targets alter a real card dataset explicitly as a controlled boundary seam; malformed source MIME payloads are also controlled. No replacement drop callback or extracted-function runtime.",
+    "Stale case starts through the real dragstart listener at index2, removes index0 through the shipped Remove button handler, then drops the retained transfer onto the new queue. The transfer source2 is now equal to queue length2. This is an honest controlled event/queue-change sequence, not a claimed human journey.",
+    "Invalid/stale/no-op drops compare complete photo objects including owner, bytes/original bytes, IDs/revisions/references, OCR text/cache-promise flags and exact promise/object references; current writing, DOM/runtime owner, primary image/OCR, reassessment source, runtime pending and persisted portfolio/settings/deletions/selection/pending bytes stay exact. Cleanup is asserted separately.",
+    "Valid controls cover earlier/later insertion, before/after positioning in desktop and mobile layouts, text/plain fallback, existing prefix/fraction parseInt behavior, previewDragIndex fallback and same-index no-op. Existing valid reorder OCR invalidation and primary-photo synchronization are preserved.",
+    "Application change is only two parsed range-check lines in the existing rejection condition before rect/splice/mutation. Existing parseInt, fallback, equality, cleanup, insertion/clamping, sync and status code are byte-identical."
+  ],
+  "native_mouse_attempt": {
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\native-drag-attempt.json",
+      "sha256": "848c6b3aaecff17ef2e15f3cbc38953d7df781906763aaf28038e88da8931f75"
+    },
+    "script": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\native-drag-attempt.cjs",
+      "sha256": "00a3a88297cb12a5a0c865f7578b909a47bad4833cf5a140388954bee510e61e"
+    },
+    "dragstart_reached": false,
+    "trusted_drop_reproduced": false,
+    "limit": "A separate mouse-driven headless Edge attempt did not reach dragstart. Genuine human stale-drag reachability remains unproven; reproduced failures are attributed only to the controlled native event seam."
+  },
+  "scope_pins": {
+    "before_manifest": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-045-before-source-pins.json",
+      "sha256": "29162f5703a5adb209045f3b72afc74ddf8b338f44e34718c99e96f273bdd0db"
+    },
+    "before_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\before-integrity.json",
+      "sha256": "68d1d12a28790337073b74b748092d1faaae0ea5adb83b34b68180802f236ebe"
+    },
+    "after_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-045\\after-integrity.json",
+      "sha256": "cee47de4e9ed732bd364f592374fadd2285d1395cfccaf28f71234ad65beb57c"
+    },
+    "preexisting_js_cjs_files": 91,
+    "other89_raw_source_pins_unchanged": true,
+    "storage_sync_00_script_unchanged": true,
+    "reassessment039_function_and_all_other_app_bytes_unchanged": true,
+    "configuration_unchanged": true,
+    "html_unchanged": true,
+    "three_coverage_tools_unchanged": true,
+    "old38_cases_and_assertions_byte_identical": true,
+    "inventory_unchanged": "77 normal suites /91 syntax files /60 native suites /45 case-report entries"
+  },
+  "limits_and_boundary": [
+    "No Git/index writes, commits, tracker/docs edits, dependency changes, coverage import, health/index refresh, full gate or publication; stop for root review/commit.",
+    "The selected after run is crop ownership51 +media ownership52 +reassessment16/79 and all91 syntax. Prior039six-suite baseline is reused for unchanged paths; no repeated full baseline.",
+    "This repairs parsed bounds only. Stale drags whose index remains in range and broader drag identity/owner semantics are unchanged, as assigned.",
+    "No live accounts, student data, Drive/AI/OAuth requests. External origins are blocked. No claim that programmatic payloads represent a real-human drag journey.",
+    "Preparatory test insertion checks stopped before repo mutation; original38-case controls ran during authoring. Final before/after comparison uses the same extended test bytes and the confirmed five-failure negative control."
+  ],
+  "coordinator_acceptance": {
+    "referenced_hashes_verified": 18,
+    "other89_raw_sources_and_configuration_unchanged": true,
+    "undo_exact_two_added_bound_lines_restores_entire_previous_main_raw_hash": true,
+    "old_crop_source_lines_all_preserved_with_insertions_only": true,
+    "original38_case_reports_identical_before_after": true,
+    "entire13case_driver_and_state_oracles_read": true,
+    "selected3suites91syntax_pass_matched_receipts": true,
+    "scope_limit": "Controlled native event boundary; human drag reachability unproven. In-range stale identity unchanged.",
+    "status": "accepted_local_fix_pending_full005gate_and_publication"
+  }
+}

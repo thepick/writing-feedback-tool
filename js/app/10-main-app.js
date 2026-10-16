@@ -3539,7 +3539,9 @@ function bindPreviewReorderHandlers() {
         if (isNaN(fromIndex) && previewDragIndex >= 0) {
             fromIndex = previewDragIndex;
         }
-        if (isNaN(fromIndex) || isNaN(toIndex) || fromIndex === toIndex) {
+        if (isNaN(fromIndex) || isNaN(toIndex) || fromIndex === toIndex
+                || fromIndex < 0 || fromIndex >= selectedImages.length
+                || toIndex < 0 || toIndex >= selectedImages.length) {
             clearPreviewDragClasses();
             list.classList.remove("is-dragging");
             previewDragIndex = -1;
