@@ -137,6 +137,51 @@ function runNotebookGuidanceCases() {
     check('sanitized guide deduplicates quotes', guide.examples.length === 1 && guide.examples[0]?.nextTimeExample === revision, guide);
     const missingCandidates = {...data, notebookGuide:null, detailed:{categories:data.detailed.categories, notebookGuideCandidates:[]}};
     check('missing model guide uses grounded paragraph fallback', ensureNotebookGuide(missingCandidates, original).examples[0]?.nextTimeExample === revision);
+    function checkLaterFallbackExample() {
+        const first = 'Finally we carried the picnic basket along the winding path beside the river while our friends followed us through the quiet woods and past the old wooden bridge near the wide meadow where the bright flowers grew beside the tall trees.';
+        const later = 'Next we ate lunch.', next = 'Next, we ate lunch.', source = first + ' ' + later;
+        const dataFor = text => ({categoryScores:{Grammar:4}, detailed:{categories:{Grammar:{score:4, growthTip:'Add commas after openers.'}}, notebookGuideCandidates:[]},
+            correctedStory:text, sampleStatus:{status:'scorable'}, writingGenre:makeWritingGenreInfo('Narrative / Story', 'Story', 'story', 'high', 'manual')});
+        const firstFactory = makeNotebookGuideExample('Grammar', 'Adding Commas After Openers', 'Grammar', first, buildSimpleOpenerCommaModel(first), 'The comma after the opener helps the sentence read more clearly.');
+        const recovered = ensureNotebookGuide(dataFor(source), source), example = recovered.examples.find(ex => ex.page1Connection === 'Grammar');
+        check('later fallback survives unusable first opener', example?.originalQuote === later && example.nextTimeExample === next && isValidNotebookGuideExample(example) && originalTextContainsNotebookQuote(source, example.originalQuote) && example.originalQuote.length <= 180 && example.nextTimeExample.length <= 220,
+            {firstLength:first.length, firstFactory, guide:recovered});
+        const panel = document.getElementById('notebookPage2Content'), previous = panel.innerHTML;
+        try {
+            setWftSanitizedInnerHtml(panel, renderNotebookGuideHtml(recovered, getNotebookPrintGuideRenderOptions()));
+            const card = panel.querySelector('.guide-example');
+            check('later fallback renders exact quote and revision', card?.querySelector('.example-quote')?.textContent === '"' + later + '"' && card.querySelector('.example-after')?.textContent === '"' + next + '"' && !panel.querySelector('.guide-no-examples'), panel.textContent);
+        } finally { panel.innerHTML = previous; }
+        const alone = ensureNotebookGuide(dataFor(later), later);
+        check('later opener alone is usable', alone.examples.some(ex => ex.originalQuote === later && ex.nextTimeExample === next && originalTextContainsNotebookQuote(later, ex.originalQuote)), alone.examples);
+        const longOnly = ensureNotebookGuide(dataFor(first), first);
+        check('long opener alone does not invent a truncated quote', first.length === 235 && longOnly.examples.length === 0 && (!firstFactory || !originalTextContainsNotebookQuote(first, firstFactory.originalQuote)), longOnly.examples);
+        const runOn = 'We played in the park and we chased the ball but we became tired so we went home and we ate lunch.';
+        const runOnAlone = buildFallbackExampleForPriority({category:'Grammar'}, runOn, runOn);
+        const ordered = ensureNotebookGuide(dataFor(runOn + ' ' + later), runOn + ' ' + later);
+        check('global opener pass precedes earlier usable run-on', isRunOnNotebookGuideCandidate(runOn) && runOnAlone?.skill === 'Breaking Long Sentences' && ordered.examples.find(ex => ex.page1Connection === 'Grammar')?.originalQuote === later, ordered.examples);
+        const conventionGuide = (text, corrected = text) => ensureNotebookGuide({categoryScores:{'Spelling & Punctuation':4},
+            detailed:{categories:{'Spelling & Punctuation':{score:4, growthTip:'Check capitals and punctuation.'}}, notebookGuideCandidates:[]},
+            correctedStory:corrected, sampleStatus:{status:'scorable'}, writingGenre:makeWritingGenreInfo('Narrative / Story', 'Story', 'story', 'high', 'manual')}, text);
+        const longI = first.replace(/^Finally we/, 'i'), laterI = 'i ate lunch.', revisedI = 'I ate lunch.';
+        for (const [name, text, corrected, quote, revised] of [
+            ['lowercase i marker pass', longI + ' ' + laterI, longI + ' ' + laterI, laterI, revisedI],
+            ['corrected punctuation pass', source, buildSimpleOpenerCommaModel(first) + ' ' + buildSimpleOpenerCommaModel(later), later, next]
+        ]) {
+            const conventions = conventionGuide(text, corrected), ex = conventions.examples.find(item => item.page1Connection === 'Spelling & Punctuation');
+            check('later convention survives unusable first result ' + name, ex?.originalQuote === quote && ex.nextTimeExample === revised && isValidNotebookGuideExample(ex) && originalTextContainsNotebookQuote(text, ex.originalQuote) && ex.originalQuote.length <= 180 && ex.nextTimeExample.length <= 220, conventions);
+            const beforeHtml = panel.innerHTML;
+            try {
+                setWftSanitizedInnerHtml(panel, renderNotebookGuideHtml(conventions, getNotebookPrintGuideRenderOptions()));
+                const card = panel.querySelector('.guide-example');
+                check('later convention renders grounded example ' + name, card?.querySelector('.example-quote')?.textContent === '"' + quote + '"' && card.querySelector('.example-after')?.textContent === '"' + revised + '"' && !panel.querySelector('.guide-no-examples'), panel.textContent);
+            } finally { panel.innerHTML = beforeHtml; }
+        }
+        const laterConvention = conventionGuide(laterI), longConvention = conventionGuide(longI);
+        check('later lowercase i alone is usable', laterConvention.examples.some(ex => ex.originalQuote === laterI && ex.nextTimeExample === revisedI), laterConvention.examples);
+        check('long lowercase i alone invents no quote', longI.length > 180 && longConvention.examples.length === 0, longConvention.examples);
+    }
+    checkLaterFallbackExample();
     const manyOriginal = 'I saw a dog. The dog was nice. I play with the dog yesterday. We ate lunch at home.';
     const many = [
         {area:'Flow', skill:'Vary openings', page1Connection:'Flow', originalQuote:'I saw a dog.', nextTimeExample:'At the park, I saw a dog.', whyThisWorks:'The opening varies.'},

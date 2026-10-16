@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T09:39:15.295840+07:00",
+  "updated_at": "2026-10-16T09:48:04.080381+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active_confirmed_bug_stabilization",
-  "active_repair": "repair-062",
+  "active_repair": "repair-063",
   "index_provenance": {
     "last_sync_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
     "repository_metadata_head": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
@@ -1610,7 +1610,7 @@
     {
       "id": "repair-062",
       "title": "Prevent overlapping image preparations from silently dropping a selection",
-      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
       "source_commit": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review032-overlapping-image-preparation",
@@ -1624,7 +1624,30 @@
       "focused_ownership_cases": 23,
       "baseline_race_failures": 2,
       "baseline_busy_contract_failures": 12,
-      "behavior_change": "Explicit single-flight/retry policy; no queue/owner equality relaxation."
+      "behavior_change": "Explicit single-flight/retry policy; no queue/owner equality relaxation.",
+      "commit": "2043847c29760b6e122320a54c319a701ab41c4e",
+      "independent_reviews": [
+        "reviews/repair-062-safety-review.json",
+        "reviews/repair-062-regression-review.json"
+      ],
+      "validation_limit": "Separate File names share PNG content; tests prove acquisition count/order/retry, not distinct-pixel fidelity or physical camera behavior. Busy has no new cancellation/timeout."
+    },
+    {
+      "id": "repair-063",
+      "title": "Recover valid later notebook examples after an unusable first candidate",
+      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "source_commit": "2043847c29760b6e122320a54c319a701ab41c4e",
+      "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "lead_id": "review030-fallback-first-unusable-example",
+      "scope": [
+        "js/app/10-main-app.js",
+        "tests/notebook-guidance-repair.browser.cjs"
+      ],
+      "behavior_fix_verified": true,
+      "report": "reviews/repair-063-later-notebook-example.json",
+      "focused_checks": 114,
+      "baseline_expected_grammar_failures": 2,
+      "intermediate_expected_spelling_failures": 4
     }
   ],
   "findings": [
@@ -140131,7 +140154,7 @@
     {
       "lead_id": "review030-fallback-first-unusable-example",
       "kind": "source_supported_behavioral_candidate",
-      "status": "candidate_needs_regression",
+      "status": "fixed_focused_awaiting_publication",
       "file": "js/app/10-main-app.js",
       "symbol": "buildFallbackExampleForPriority",
       "reason": "Search branches immediately return the first factory result. The factory may return null or an example whose truncated originalQuote contains an added ellipsis; the caller later rejects that quote as not present in the source. The search then never reaches a later sentence that might yield a valid grounded example. Concrete source-based scenario to test: an over-180-character first sentence eligible for an opener-comma Grammar fallback followed by a short eligible sentence. This is not reproduced and should not be merged with the behavior-preserving branch-coalescence repair.",
@@ -140152,13 +140175,15 @@
       "proposed_status": "candidate_needs_regression",
       "classification": "source_supported_behavioral_candidate",
       "source_supported": true,
-      "reproduced": false,
+      "reproduced": true,
       "needs_user_attention": false,
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-030-feedback-shapes.json",
-      "related_repair": "repair-030",
+      "related_repair": "repair-063",
       "followup_report": "reviews/bug-focus-fallback-relevance.json",
-      "shipped_relevance": "Credible shipped feedback-quality lead; recommend one focused native reproduction before any fix. Not yet a confirmed bug."
+      "shipped_relevance": "Credible shipped feedback-quality lead; recommend one focused native reproduction before any fix. Not yet a confirmed bug.",
+      "assigned_chat": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "fix_report": "reviews/repair-063-later-notebook-example.json"
     },
     {
       "lead_id": "review030-diary-letter-precedence",
@@ -184679,10 +184704,10 @@
   },
   "required_work_summary": {
     "confirmed_unresolved_bugs": 0,
-    "unconfirmed_application_leads": 2,
+    "unconfirmed_application_leads": 1,
     "test_oracle_leads": 4,
     "optional_historical_maintenance_edits": 96,
     "note": "Potential leads still require investigation; static warnings and pending coordinate revalidation are not diagnosed bugs.",
-    "confirmed_fixes_awaiting_publication": 4
+    "confirmed_fixes_awaiting_publication": 5
   }
 }

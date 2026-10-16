@@ -6713,6 +6713,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
     var originalQuote;
     var correctedMatch;
     var modelSentence;
+    var example;
     var i;
 
     if (!sentences.length) return null;
@@ -6742,7 +6743,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             originalQuote = sentences[i];
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             if (correctedMatch && hasLikelyMissingCommaAfterOpener(originalQuote, correctedMatch)) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Adding Commas After Openers",
                     "Grammar",
@@ -6750,10 +6751,11 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "The comma after the opener helps the sentence read more clearly."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
             modelSentence = buildSimpleOpenerCommaModel(originalQuote);
             if (modelSentence) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Adding Commas After Openers",
                     "Grammar",
@@ -6761,6 +6763,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     modelSentence,
                     "The comma after the opener helps the sentence read more clearly."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
 
@@ -6768,7 +6771,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             originalQuote = sentences[i];
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             if (correctedMatch && isRunOnNotebookGuideCandidate(originalQuote)) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Breaking Long Sentences",
                     "Grammar",
@@ -6776,11 +6779,12 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "Breaking the long idea into clearer sentence parts makes it easier to follow."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
             if (isRunOnNotebookGuideCandidate(originalQuote)) {
                 modelSentence = buildSimpleRunOnSentenceBreakModel(originalQuote);
                 if (modelSentence) {
-                    return makeNotebookGuideExample(
+                    example = makeNotebookGuideExample(
                         "Grammar",
                         "Breaking Long Sentences",
                         "Grammar",
@@ -6788,10 +6792,11 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                         modelSentence,
                         "Breaking the long idea into clearer sentence parts makes it easier to follow."
                     );
+                    if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
                 }
             }
             if (correctedMatch) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Making Sentences Clearer",
                     "Grammar",
@@ -6799,6 +6804,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "This version fixes the grammar in the sentence while keeping your idea."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
         return null;
@@ -6811,7 +6817,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             modelSentence = correctedMatch || buildSimpleConventionModel(originalQuote);
             if (modelSentence) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Spelling and Word Forms",
                     inferConventionSkill(originalQuote, modelSentence),
                     "Spelling & Punctuation",
@@ -6819,6 +6825,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     modelSentence,
                     "Fixing spelling, word forms, and punctuation makes the sentence clearer and more polished."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
 
@@ -6826,7 +6833,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             originalQuote = sentences[i];
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             if (correctedMatch && looksLikeConventionRevision(originalQuote, correctedMatch)) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Spelling and Word Forms",
                     inferConventionSkill(originalQuote, correctedMatch),
                     "Spelling & Punctuation",
@@ -6834,6 +6841,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "Fixing spelling, word forms, and punctuation makes the sentence clearer and more polished."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
         return null;

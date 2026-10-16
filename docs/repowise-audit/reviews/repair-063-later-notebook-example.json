@@ -1,0 +1,82 @@
+{
+  "repair_id": "repair-063",
+  "lead": "review030-fallback-first-unusable-example",
+  "status": "extended_function_wide_fix_focused_native_verified_awaiting_review",
+  "source_commit_assignment": "2043847c29760b6e122320a54c319a701ab41c4e",
+  "generated_at": "2026-10-16T09:46:55.9864184+07:00",
+  "problem": "Ordered fallback search returned its first factory result even when null or truncated to a quote with added ellipsis. Exact-source insertion correctly rejected that result; later valid sentences were never reached. Confirmed natively for Grammar and both Spelling & Punctuation passes.",
+  "change": "Within buildFallbackExampleForPriority, store all7factory results and return only non-null results whose quote passes existing originalTextContainsNotebookQuote; otherwise continue current pass.1local variable,7assignments/guards. Factory already validates concreteness/text connection; no safety gate relaxed.",
+  "preserved": "Global opener-before-run-on; corrected/mechanical preference; marker-before-general-convention search;180/220/130limits; exact-source insertion; Organization paragraph policy; Flow no mechanical fallback; all convention inference/plural/possessive/no-guessing rules. All other production bytes unchanged.",
+  "validation_stages": {
+    "grammar_before": {
+      "dir": "before",
+      "total": 108,
+      "passed": 106,
+      "failed": 2,
+      "source": "original assignment pins"
+    },
+    "grammar_after": {
+      "dir": "after",
+      "total": 108,
+      "passed": 108,
+      "failed": 0,
+      "source": "Grammar-only intermediate"
+    },
+    "spelling_before": {
+      "dir": "spelling-before",
+      "total": 114,
+      "passed": 110,
+      "failed": 4,
+      "source": "Grammar-only intermediate unchanged"
+    },
+    "extended_after": {
+      "dir": "extended-after",
+      "total": 114,
+      "passed": 114,
+      "failed": 0,
+      "source": "final7return fix"
+    }
+  },
+  "native_proof": "Real ensureNotebookGuide -> factory/search/insertion -> sanitized notebookPage2Content .guide-example DOM; no mocks. Grammar235char first opener gave an ellipsis quote and no example; later Next we ate lunch. now renders Next, we ate lunch. Spelling marker pass uses over180char lowercase-i first sentence+later i ate lunch., unchanged corrected text and native capitalization model; now yields I ate lunch. Separate no-marker supplied-opener-comma correction reaches second convention pass and recovers exact Next quote. Both failed generation+DOM before their2returns were changed.",
+  "controls_and_print": "Later-only usable; long-only no invented/truncated quote for Grammar and lowercase i; earlier usable run-on still loses to later opener. Original103cases unchanged; Grammar intermediate108 checks retained/passing after extension. Final existing2page/paragraph print assertions passed. Native page-error assertion passed in all stages;91syntax checks succeeded each run.",
+  "receipts": {
+    "root": "work/repowise-repair-063",
+    "stage_dirs": [
+      "before",
+      "after",
+      "spelling-before",
+      "extended-after"
+    ],
+    "files_in_each_stage": [
+      "suite-results.json",
+      "notebook-guidance-repair.browser.json",
+      "notebook-guidance-repair.browser.log"
+    ],
+    "intermediate_pins": "work/repowise-repair-063/grammar-intermediate-pins.json",
+    "intermediate_report": "work/repowise-repair-063/grammar-only-report.json"
+  },
+  "sha256_raw": [
+    {
+      "file": "js/app/10-main-app.js",
+      "before": "ee594987cbc59b7612388970e1bfcd6bb8e53a9fcd93646f889b9cffc7306590",
+      "after": "5023474be1c9c62d6a59591b2a5e4422485718790b5c10986edf868700e88f28"
+    },
+    {
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "before": "12b8520784cb26c20846e01535aadaaa3b7ea40fb3af54dbfe6b85197d822835",
+      "after": "19b7c9bcffa37ffea2d26115dbadf99c34111f73d97d5b884589932424c6442b"
+    }
+  ],
+  "grammar_intermediate_hashes": [
+    {
+      "file": "js/app/10-main-app.js",
+      "sha256_raw": "8150c33ca424980ba99cc3ea383b245c771f4ec8a44a6ec03a9f90cd4f9d04e0"
+    },
+    {
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "sha256_raw": "f5e0f4e9f3fbfbe91f3772ad8937ffbbaf680c50f5e9e4fe7527efd16bf4ef71"
+    }
+  ],
+  "scope": "All91source+manifest matched original before pins; intermediate92file pins saved before extending tests. Only2allowed files changed. Factory, insertion, helpers and original test/report/print fixture preserved. No Git/tracker/docs/config/index/deps/hooks/chats/agents/deploy changes.",
+  "limits": "Focused native suite only; full gate, independent review, commit/publication remain coordinator-owned. No live services or scoring changes. Grammar baseline preceded its fix; additional Spelling baseline intentionally retained the5Grammar guards and failed only4new checks. Stop after extended063;064 remains unreleased."
+}
