@@ -1,0 +1,733 @@
+{
+  "verdict": "Admissible bounded adoption of the exact102 local-shape dispositions in the coordinator dry-run. Independently replayed007 set and fresh008 dry-run are identical in every proof field; no scanner closure or semantic reapproval. Reviewer performed no adoption.",
+  "source_commit": "d52fdcb059def5f7f4f1d41679de8947131bb6d1",
+  "before_source_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+  "inspected_head_at_replay": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "head_at_finish": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "p11": {
+    "id": "code_health:finding_4db26584b9741348c94f",
+    "symbol": "mergeWftSettings",
+    "anchor": "js/app/00-storage-sync-patches.js:5226-5252",
+    "before": {
+      "severity": "high",
+      "status": "confirmed_repair_candidate",
+      "details": {
+        "ccn": 16,
+        "cognitive": 27,
+        "nloc": 34,
+        "dispatch_share": 0.0,
+        "symbol_line": 5226,
+        "deepest_block": {
+          "start": 5233,
+          "end": 5237
+        }
+      }
+    },
+    "after": {
+      "id": "code_health:finding_4db26584b9741348c94f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "mergeWftSettings",
+      "marker": "complex_method",
+      "severity": "medium",
+      "status": "needs_revalidation",
+      "scanner_status": "open",
+      "line_start": 5226,
+      "line_end": 5252,
+      "reason": "mergeWftSettings has cyclomatic complexity 13",
+      "present": true,
+      "details": {
+        "ccn": 13,
+        "cognitive": 14,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 5226,
+        "deepest_block": {
+          "start": 5234,
+          "end": 5238
+        }
+      }
+    },
+    "persisted_store_verification": {
+      "public_id": "finding_4db26584b9741348c94f",
+      "severity": "medium",
+      "status": "open",
+      "details": {
+        "ccn": 13,
+        "cognitive": 14,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 5226,
+        "deepest_block": {
+          "start": 5234,
+          "end": 5238
+        }
+      }
+    },
+    "result": "High\u2192Medium, CCN16\u219213/cognitive27\u219214/NLOC34\u219223. Remains scanner-open and tracker-needs_revalidation; whole-function edit correctly excludes automatic carry-forward.",
+    "fresh008_state_rechecked": true
+  },
+  "stronger_test_warnings": {
+    "new_tracker_ids": [
+      {
+        "id": "code_health:finding_1819fcaacbc20045d845",
+        "file": "tests/auth-integrity.browser.cjs",
+        "symbol": "checkRedirectRecovery",
+        "marker": "large_method",
+        "severity": "low",
+        "status": "unreviewed",
+        "scanner_status": "open",
+        "line_start": 257,
+        "line_end": 346,
+        "reason": "checkRedirectRecovery is 88 lines long",
+        "present": true,
+        "details": {
+          "nloc": 88,
+          "ccn": 26,
+          "dispatch_share": 0.0,
+          "symbol_line": 257,
+          "deepest_block": {
+            "start": 259,
+            "end": 345
+          }
+        }
+      },
+      {
+        "id": "code_health:finding_f58d1527b613e3036be8",
+        "file": "tests/media-ownership.browser.cjs",
+        "symbol": null,
+        "marker": "churn_risk",
+        "severity": "high",
+        "status": "unreviewed",
+        "scanner_status": "open",
+        "line_start": null,
+        "line_end": null,
+        "reason": "90-day churn rewrote 2.8x the file's size (875 lines over 313 NLOC, top 4.4% among repository files eligible for churn ranking)",
+        "present": true,
+        "details": {
+          "relative_churn": 2.8,
+          "churn_percentile": 95.6,
+          "lines_added_90d": 596,
+          "lines_deleted_90d": 279,
+          "commit_count_90d": 5,
+          "nloc": 313
+        }
+      }
+    ],
+    "changed_local_shape_warnings": [
+      {
+        "id": "code_health:finding_97506bb4c786936411e9",
+        "file": "tests/auth-integrity.browser.cjs",
+        "symbol": "checkRedirectRecovery",
+        "marker": "complex_method",
+        "severity": "critical",
+        "status": "needs_revalidation",
+        "scanner_status": "open",
+        "line_start": 257,
+        "line_end": 346,
+        "reason": "checkRedirectRecovery has cyclomatic complexity 26",
+        "present": true,
+        "details": {
+          "ccn": 26,
+          "cognitive": 53,
+          "nloc": 88,
+          "dispatch_share": 0.0,
+          "symbol_line": 257,
+          "deepest_block": {
+            "start": 259,
+            "end": 345
+          }
+        },
+        "old": {
+          "id": "code_health:finding_97506bb4c786936411e9",
+          "file": "tests/auth-integrity.browser.cjs",
+          "symbol": "checkRedirectRecovery",
+          "marker": "complex_method",
+          "severity": "high",
+          "status": "candidate_needs_regression",
+          "scanner_status": "open",
+          "line_start": 257,
+          "line_end": 313,
+          "reason": "checkRedirectRecovery has cyclomatic complexity 22",
+          "present": true,
+          "details": {
+            "ccn": 22,
+            "cognitive": 44,
+            "nloc": 56,
+            "dispatch_share": 0.0,
+            "symbol_line": 257,
+            "deepest_block": {
+              "start": 259,
+              "end": 312
+            }
+          }
+        }
+      },
+      {
+        "id": "code_health:finding_ae453a360bd95fa61daa",
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "symbol": "<anonymous@7>",
+        "marker": "nested_complexity",
+        "severity": "high",
+        "status": "needs_revalidation",
+        "scanner_status": "open",
+        "line_start": 7,
+        "line_end": 103,
+        "reason": "<anonymous@7> nests 6 levels deep",
+        "present": true,
+        "details": {
+          "max_nesting": 6,
+          "ccn": 18,
+          "cognitive": 68,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "symbol_line": 7,
+          "deepest_block": {
+            "start": 44,
+            "end": 48
+          }
+        },
+        "old": {
+          "id": "code_health:finding_ae453a360bd95fa61daa",
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "symbol": "<anonymous@7>",
+          "marker": "nested_complexity",
+          "severity": "high",
+          "status": "reviewed_no_change",
+          "scanner_status": "open",
+          "line_start": 7,
+          "line_end": 95,
+          "reason": "<anonymous@7> nests 5 levels deep",
+          "present": true,
+          "details": {
+            "max_nesting": 5,
+            "ccn": 14,
+            "cognitive": 55,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01,
+            "symbol_line": 7,
+            "deepest_block": {
+              "start": 17,
+              "end": 89
+            }
+          }
+        }
+      },
+      {
+        "id": "code_health:finding_462dcc351c71e400ee3d",
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "symbol": "<anonymous@7>",
+        "marker": "complex_method",
+        "severity": "high",
+        "status": "needs_revalidation",
+        "scanner_status": "open",
+        "line_start": 7,
+        "line_end": 103,
+        "reason": "<anonymous@7> has cyclomatic complexity 18",
+        "present": true,
+        "details": {
+          "ccn": 18,
+          "cognitive": 68,
+          "nloc": 97,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "symbol_line": 7,
+          "deepest_block": {
+            "start": 44,
+            "end": 48
+          }
+        },
+        "old": {
+          "id": "code_health:finding_462dcc351c71e400ee3d",
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "symbol": "<anonymous@7>",
+          "marker": "complex_method",
+          "severity": "medium",
+          "status": "reviewed_no_change",
+          "scanner_status": "open",
+          "line_start": 7,
+          "line_end": 95,
+          "reason": "<anonymous@7> has cyclomatic complexity 14",
+          "present": true,
+          "details": {
+            "ccn": 14,
+            "cognitive": 55,
+            "nloc": 89,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01,
+            "symbol_line": 7,
+            "deepest_block": {
+              "start": 17,
+              "end": 89
+            }
+          }
+        }
+      },
+      {
+        "id": "code_health:finding_4893cf08bb5ae166eb8e",
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "symbol": "<anonymous@7>",
+        "marker": "large_method",
+        "severity": "medium",
+        "status": "needs_revalidation",
+        "scanner_status": "open",
+        "line_start": 7,
+        "line_end": 103,
+        "reason": "<anonymous@7> is 97 lines long",
+        "present": true,
+        "details": {
+          "nloc": 97,
+          "ccn": 18,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "symbol_line": 7,
+          "deepest_block": {
+            "start": 44,
+            "end": 48
+          }
+        },
+        "old": {
+          "id": "code_health:finding_4893cf08bb5ae166eb8e",
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "symbol": "<anonymous@7>",
+          "marker": "large_method",
+          "severity": "low",
+          "status": "reviewed_no_change",
+          "scanner_status": "open",
+          "line_start": 7,
+          "line_end": 95,
+          "reason": "<anonymous@7> is 89 lines long",
+          "present": true,
+          "details": {
+            "nloc": 89,
+            "ccn": 14,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01,
+            "symbol_line": 7,
+            "deepest_block": {
+              "start": 17,
+              "end": 89
+            }
+          }
+        }
+      },
+      {
+        "id": "code_health:finding_0936878f9d4d502c6b66",
+        "file": "tests/preference-integrity-scenarios.js",
+        "symbol": "checkMetadataMerge",
+        "marker": "complex_method",
+        "severity": "medium",
+        "status": "needs_revalidation",
+        "scanner_status": "open",
+        "line_start": 161,
+        "line_end": 181,
+        "reason": "checkMetadataMerge has cyclomatic complexity 11",
+        "present": true,
+        "details": {
+          "ccn": 11,
+          "cognitive": 14,
+          "nloc": 21,
+          "dispatch_share": 0.0,
+          "symbol_line": 161,
+          "deepest_block": {
+            "start": 175,
+            "end": 180
+          }
+        },
+        "old": {
+          "id": "code_health:finding_0936878f9d4d502c6b66",
+          "file": "tests/preference-integrity-scenarios.js",
+          "symbol": "checkMetadataMerge",
+          "marker": "complex_method",
+          "severity": "medium",
+          "status": "reviewed_no_change",
+          "scanner_status": "open",
+          "line_start": 161,
+          "line_end": 173,
+          "reason": "checkMetadataMerge has cyclomatic complexity 10",
+          "present": true,
+          "details": {
+            "ccn": 10,
+            "cognitive": 13,
+            "nloc": 13,
+            "dispatch_share": 0.0,
+            "symbol_line": 161,
+            "deepest_block": {
+              "start": 167,
+              "end": 172
+            }
+          }
+        }
+      },
+      {
+        "id": "code_health:finding_78862c658763199794b0",
+        "file": "tests/record-identity.browser.cjs",
+        "symbol": "<anonymous@135>",
+        "marker": "complex_method",
+        "severity": "high",
+        "status": "needs_revalidation",
+        "scanner_status": "open",
+        "line_start": 135,
+        "line_end": 196,
+        "reason": "<anonymous@135> has cyclomatic complexity 24",
+        "present": true,
+        "details": {
+          "ccn": 24,
+          "cognitive": 56,
+          "nloc": 60,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "symbol_line": 135,
+          "deepest_block": {
+            "start": 137,
+            "end": 192
+          }
+        },
+        "old": {
+          "id": "code_health:finding_78862c658763199794b0",
+          "file": "tests/record-identity.browser.cjs",
+          "symbol": "<anonymous@135>",
+          "marker": "complex_method",
+          "severity": "high",
+          "status": "confirmed_repair_candidate",
+          "scanner_status": "open",
+          "line_start": 135,
+          "line_end": 196,
+          "reason": "<anonymous@135> has cyclomatic complexity 23",
+          "present": true,
+          "details": {
+            "ccn": 23,
+            "cognitive": 53,
+            "nloc": 60,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01,
+            "symbol_line": 135,
+            "deepest_block": {
+              "start": 137,
+              "end": 192
+            }
+          }
+        }
+      }
+    ],
+    "interpretation": "Auth recovery CCN22\u219226 (High\u2192Critical), NLOC56\u219288 creates a Low large-method row. Pending publication CCN14\u219218, depth5\u21926, NLOC89\u219297; metadata merge CCN10\u219211 and record checker CCN23\u219224 also remain warnings. Media adds High churn. These reflect stronger explicit oracles/history, not newly confirmed application bugs or closures. Churn/entropy/DRY facts are read as stored, not independently recomputed."
+  },
+  "bounded_shape_revalidation": {
+    "method": "Independent read-only replay of the unchanged helper pure comparison definitions and exact Git/walker unique-whole-function binding against007, followed by exact102-proof-field comparison with coordinator fresh008 dry-run and independent recheck of all102 fresh relative facts. Reviewer never called helper main or adopted statuses. Its transient initial HEAD mismatch is resolved.",
+    "helper_sha256_raw": "47bfc9596ce791158b5465d2eb9421a8556f8fd34304c42a6dd56815b41b9b84",
+    "unchanged_since_prior_review": true,
+    "counts": {
+      "before": 1043,
+      "after": 1045,
+      "admissible": 102,
+      "by_file": {
+        "js/app/00-storage-sync-patches.js": 81,
+        "tests/auth-integrity.browser.cjs": 4,
+        "tests/media-ownership.browser.cjs": 1,
+        "tests/preference-integrity-scenarios.js": 16
+      },
+      "by_status": {
+        "reviewed_no_change": 91,
+        "confirmed_repair_candidate": 9,
+        "candidate_needs_regression": 2
+      },
+      "excluded": 9
+    },
+    "exact_admissible_ids_by_file": {
+      "js/app/00-storage-sync-patches.js": [
+        "code_health:finding_c07b722b69fa2e172071",
+        "code_health:finding_2d208e4c30ee82fb58d1",
+        "code_health:finding_add44f6ffde542978602",
+        "code_health:finding_cecbe8636e3d91233515",
+        "code_health:finding_2869a3657f251ae42502",
+        "code_health:finding_2ff46a2378726dc81a97",
+        "code_health:finding_2f138c7deab593679403",
+        "code_health:finding_ad0ca082ca47da651418",
+        "code_health:finding_02c704b94cb1a85a55ef",
+        "code_health:finding_cbe86c69e41718143128",
+        "code_health:finding_c3f2f127bb0b956fafd1",
+        "code_health:finding_ead34325951527c35fd0",
+        "code_health:finding_1a34a0bbf46ddefab5e7",
+        "code_health:finding_ab0a8010627d9e203fec",
+        "code_health:finding_193eef374799108f654b",
+        "code_health:finding_ab36eacc023d669202f4",
+        "code_health:finding_d8efee12893b85aa3963",
+        "code_health:finding_659258563fb64c05b01b",
+        "code_health:finding_9fbb8c985399646392b7",
+        "code_health:finding_aa72763e7f980e196e85",
+        "code_health:finding_316c9c90c39eb353ff7e",
+        "code_health:finding_70c2709f24f09b856658",
+        "code_health:finding_d2e17a6f2a3c946cdf22",
+        "code_health:finding_5b685ceb1955a261c1eb",
+        "code_health:finding_92d392954c103b46d657",
+        "code_health:finding_c1810fefa912af17bacb",
+        "code_health:finding_c10259400e5c0857bbc5",
+        "code_health:finding_b355d7e617534febc944",
+        "code_health:finding_208c5411ec68f45b4ab0",
+        "code_health:finding_db81152159f3182b6759",
+        "code_health:finding_73bec908e177949698d7",
+        "code_health:finding_c7032b60a83d25295aed",
+        "code_health:finding_1eb81af14115d6558a96",
+        "code_health:finding_c99e888f784b0bc76750",
+        "code_health:finding_08148a5fbe3130655bba",
+        "code_health:finding_e877852414106a9c7183",
+        "code_health:finding_d4954938b0245dea0b84",
+        "code_health:finding_3a1b9b63082ed59d733c",
+        "code_health:finding_b2a0b905ca7c2f210685",
+        "code_health:finding_6ab7dd261477cb43f4e7",
+        "code_health:finding_d6815d339003e60e0a6b",
+        "code_health:finding_7e5e160a165282d1b84f",
+        "code_health:finding_6c622b0a80727a851775",
+        "code_health:finding_419468d595b912adfb7d",
+        "code_health:finding_4f159d3281c1bca6dd40",
+        "code_health:finding_96179f2cb386a54e873f",
+        "code_health:finding_d523b84a45d044f4c0f5",
+        "code_health:finding_8a315c9bf2d55c9f63de",
+        "code_health:finding_b772cb0e474a867c6a0b",
+        "code_health:finding_44a8d8bf9c9caf35a45e",
+        "code_health:finding_20894b7df80971e6e886",
+        "code_health:finding_b9ce9226d15ad39d7611",
+        "code_health:finding_a785a09dfafbeb9573d0",
+        "code_health:finding_011d338cf5eaa80b7fbe",
+        "code_health:finding_dffec2060f1195e595db",
+        "code_health:finding_c7eaf07e563a1b77b630",
+        "code_health:finding_83aadb338a812a5c1310",
+        "code_health:finding_450dd0c9bb941a47e1a7",
+        "code_health:finding_38c0855f7dc3861622c9",
+        "code_health:finding_302dbc0b60d9c7879a9d",
+        "code_health:finding_0dd0b44ef3cf9a917f4b",
+        "code_health:finding_bd262137e5d6d346dc75",
+        "code_health:finding_4cc8d496bdb9e7a9baaf",
+        "code_health:finding_c41bba6fd11258d23e87",
+        "code_health:finding_dda7cb8583c1ac2b8c1b",
+        "code_health:finding_8c1e5a2b0423614dea4b",
+        "code_health:finding_8db10553c83e85be9dd7",
+        "code_health:finding_7e9e3bd687e666b878c1",
+        "code_health:finding_0956f3c90bb76c36955b",
+        "code_health:finding_9ae6fddb1587d38c6426",
+        "code_health:finding_72bb568aecd724a691c3",
+        "code_health:finding_750d0054ac70a8565c25",
+        "code_health:finding_eba7f088a4fab7fddea3",
+        "code_health:finding_9594f4eb52ffbcf09db0",
+        "code_health:finding_a1105537f3efefcc76dc",
+        "code_health:finding_0ebf1243a621949a6e83",
+        "code_health:finding_07c825055cecc7b49cbc",
+        "code_health:finding_a2f159e8a65910389542",
+        "code_health:finding_ce0ef519180cad77d766",
+        "code_health:finding_f761b8085338ef63b4df",
+        "code_health:finding_f61621b5ff2044276dae"
+      ],
+      "tests/auth-integrity.browser.cjs": [
+        "code_health:finding_fa1e3f3fce82ffa1cfd4",
+        "code_health:finding_0870c25d4075e0357488",
+        "code_health:finding_a0776e0bdddefccee43d",
+        "code_health:finding_5306a999694aea8b140a"
+      ],
+      "tests/media-ownership.browser.cjs": [
+        "code_health:finding_5434c3357e16481b0da7"
+      ],
+      "tests/preference-integrity-scenarios.js": [
+        "code_health:finding_cd2035047a3147bd9357",
+        "code_health:finding_2444ef38d170f9e459d0",
+        "code_health:finding_069477ffb241b2be8345",
+        "code_health:finding_43881671adf95bb4b43c",
+        "code_health:finding_a0a176f446cbb821d487",
+        "code_health:finding_d71333b5f8e26e1a7718",
+        "code_health:finding_d5756f8057e6210e77d4",
+        "code_health:finding_50f759c7ce8caf72ba0f",
+        "code_health:finding_532b474a093fc3ebb820",
+        "code_health:finding_7d7006df9ec6314480bd",
+        "code_health:finding_d85646f671cd92e5433a",
+        "code_health:finding_f2a785c9259d4530ddc5",
+        "code_health:finding_c70d17d30550958c4d95",
+        "code_health:finding_541a0914ff6d42267451",
+        "code_health:finding_7abfbf4a2f826653796d",
+        "code_health:finding_f91d9ed74c28e5ef0ee7"
+      ]
+    },
+    "excluded_changed_function_records": [
+      {
+        "id": "code_health:finding_4db26584b9741348c94f",
+        "file": "js/app/00-storage-sync-patches.js",
+        "symbol": "mergeWftSettings",
+        "marker": "complex_method",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_73792a574b42e8236c19",
+        "file": "tests/auth-integrity.browser.cjs",
+        "symbol": "checkRedirectRecovery",
+        "marker": "nested_complexity",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_97506bb4c786936411e9",
+        "file": "tests/auth-integrity.browser.cjs",
+        "symbol": "checkRedirectRecovery",
+        "marker": "complex_method",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_ae453a360bd95fa61daa",
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "symbol": "<anonymous@7>",
+        "marker": "nested_complexity",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_462dcc351c71e400ee3d",
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "symbol": "<anonymous@7>",
+        "marker": "complex_method",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_4893cf08bb5ae166eb8e",
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "symbol": "<anonymous@7>",
+        "marker": "large_method",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_0936878f9d4d502c6b66",
+        "file": "tests/preference-integrity-scenarios.js",
+        "symbol": "checkMetadataMerge",
+        "marker": "complex_method",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_78862c658763199794b0",
+        "file": "tests/record-identity.browser.cjs",
+        "symbol": "<anonymous@135>",
+        "marker": "complex_method",
+        "cause": "whole_function_changed"
+      },
+      {
+        "id": "code_health:finding_9dfe63deb01f1eb80636",
+        "file": "tests/record-identity.browser.cjs",
+        "symbol": "<anonymous@135>",
+        "marker": "large_method",
+        "cause": "whole_function_changed"
+      }
+    ],
+    "context_review": "Read complete bounded before/d52 diff: only mergeWftSettings production body changed; its downstream unchanged00 functions shift11 lines. Reuse accepted066 semantic/parity review, not a new behavior proof. Sixteen preference records shift8 lines outside changed checkMetadataMerge; media dispatcher shifts4 without body edits. Four auth records retain token/signout/ownership checks and quota callback. The callback at281-284 still captures the same storage mode and original setItem; the new pre-navigation draft wrapper is outside it and already reviewed065. No lexical relocation or changed captured meaning found for these bounded local-shape rationales.",
+    "disposition_limit": "Restoring91 reviewed_no_change,9 confirmed_repair_candidate and2 candidate_needs_regression statuses only preserves historical structural review. It does not re-admit optional source cleanup, confirm bugs, approve semantics or close warnings. Changed functions, new rows, DRY/history/security/I/O/coverage are excluded.",
+    "full_function_proof_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-batch-007-postrefresh\\replay-receipt.json",
+    "receipt_sha256_raw": "405f6f53ba91907402a07394661ad32ae803d5554aca4f9cc42810fab5a91806",
+    "fresh008_comparison": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-007-unchanged-shape-revalidation.json",
+      "sha256_raw": "205ac8b8c227baab704c82bffaa11758bc084a719d02d9e08bfca40015a7b510",
+      "before": "69a996eb4463d9734030b8439b0d1851776cd86b",
+      "after": "ed5783675bd334b165798eabaaeb01288afb339a",
+      "records": 102,
+      "exact_ids_and_every_proof_field_equal": true,
+      "fresh008_row_relative_facts_independently_rechecked": 102,
+      "fresh89_metric_commits": [
+        [
+          "ed5783675bd334b165798eabaaeb01288afb339a",
+          89
+        ]
+      ],
+      "d52_to_current_changed_files": [
+        "docs/repowise-audit/current-findings.json",
+        "docs/repowise-audit/current-findings.md",
+        "docs/repowise-audit/reviews/batch-007-ingestion-verification.json",
+        "docs/repowise-audit/reviews/batch-007-publication.json",
+        "docs/repowise-audit/reviews/batch-008-validation.json",
+        "index.html"
+      ],
+      "javascript_git_bytes_unchanged": true,
+      "current_tracker_raw": "c1e4e8dc2a290943602196795609717aeaa469850506672e24d97d438dba47c1"
+    }
+  },
+  "provenance": {
+    "snapshot_hashes": {
+      "before_raw": "d3b5dfbdcea1e60970b03cbef82d51c8c3bef85ea72c45cca9c71684736e5f1a",
+      "current_raw": "ba81cfdc9d8dd9b6ed0ad21750d5aee4b35c8f308c02d342c2cd849acf520aba",
+      "helper_raw": "47bfc9596ce791158b5465d2eb9421a8556f8fd34304c42a6dd56815b41b9b84"
+    },
+    "inspected_source_pins": {
+      "js/app/00-storage-sync-patches.js": {
+        "git_raw": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+        "git_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+        "checkout_raw": "0ddb92e188919afaf02e47d245d1b44095700a0b7b62ec9ab03b8c00c8d04c8b",
+        "checkout_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+        "checkout_matches_this_commit_lf": true,
+        "checkout_unchanged_at_end": true
+      },
+      "tests/auth-integrity.browser.cjs": {
+        "git_raw": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79",
+        "git_lf": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79",
+        "checkout_raw": "15b95507de994eb87fbb115f1fb814d1a1282fbc6e2429609c3027de7ec9a926",
+        "checkout_lf": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79",
+        "checkout_matches_this_commit_lf": true,
+        "checkout_unchanged_at_end": true
+      },
+      "tests/media-ownership.browser.cjs": {
+        "git_raw": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+        "git_lf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+        "checkout_raw": "0bcc083f387069e9807446d0eb66a79d806affbcb5795180e61080b4d142f023",
+        "checkout_lf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+        "checkout_matches_this_commit_lf": true,
+        "checkout_unchanged_at_end": true
+      },
+      "tests/pending-commit-publication.browser.cjs": {
+        "git_raw": "7a887eaffe5b6f67d8f7cf479c0b7d5642463a95af1be93cb3468b86da36f19b",
+        "git_lf": "7a887eaffe5b6f67d8f7cf479c0b7d5642463a95af1be93cb3468b86da36f19b",
+        "checkout_raw": "de2c8e5bb0f19a47ef3e951dcbef6ee7573d54116898becffc92d76c84e661aa",
+        "checkout_lf": "7a887eaffe5b6f67d8f7cf479c0b7d5642463a95af1be93cb3468b86da36f19b",
+        "checkout_matches_this_commit_lf": true,
+        "checkout_unchanged_at_end": true
+      },
+      "tests/preference-integrity-scenarios.js": {
+        "git_raw": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+        "git_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+        "checkout_raw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+        "checkout_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+        "checkout_matches_this_commit_lf": true,
+        "checkout_unchanged_at_end": true
+      },
+      "tests/record-identity.browser.cjs": {
+        "git_raw": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+        "git_lf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+        "checkout_raw": "a6bbfbac9af692cce558da903ae48d9d0a61de460795f29e617591e64031834c",
+        "checkout_lf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+        "checkout_matches_this_commit_lf": true,
+        "checkout_unchanged_at_end": true
+      }
+    },
+    "ingestion_receipt": {
+      "path": "outputs/repowise-repairs/batch-007-ingestion-verification.json",
+      "sha256_raw": "7bbe423c09b50726fb783c1d5d05a9d757c8790c3cd215ecfd10fe8323f47501",
+      "recorded_head": "d52fdcb059def5f7f4f1d41679de8947131bb6d1",
+      "recorded_health_metric_count": 89,
+      "recorded_source_hashes_coverage_match": true
+    },
+    "prior_reviews": [
+      {
+        "path": "outputs/repowise-repairs/unchanged-shape-helper-review.json",
+        "sha256_raw": "44bcf922ee72f40bd05c7341524872180aaec53ce6a26d32f5ebce54deace68e"
+      },
+      {
+        "path": "outputs/repowise-repairs/repair-065-regression-review.json",
+        "sha256_raw": "7862b029384a361de7a563e9b5b265910aff6061deb3a6940afe76f5fe7e70a5"
+      },
+      {
+        "path": "outputs/repowise-repairs/repair-066-regression-review.json",
+        "sha256_raw": "440d177111e91d83c18f445633165a23fb48ae7bded857efa3016cdc5777a5d3"
+      }
+    ],
+    "tracker_unchanged_during_replay": true,
+    "tracker_still_matches_reviewed_snapshot_at_finish": false,
+    "fresh_tracker_matches_current_head": true,
+    "fresh_tracker_stable_during_final_comparison": true
+  },
+  "blockers": [],
+  "limits": [
+    "007 replay began before authorized CSS008 refresh completed; its first DB transaction observed mixed89 metric commit provenance. Final read-only comparison now verifies all89 health metrics ated578, fresh tracker/HEAD/dry-run agreement and102 fresh row relative facts. HTML changed for067 CSS; no raw HTML or live HTML equality claim. Git JavaScript/test blobs did not change.",
+    "Existing helper restrictions remain: source/scan/tool/config pins and checkout state require coordinator proof; whole-function equality alone does not cover callers/globals/captures/dependencies/UI changes. A dry-run is not automatically bound to later adoption inputs. Re-evaluate any future changed context.",
+    "P11 adjacent three-operator guard remains scanner-open. Its stable trackerIDf68f0f8e1f2e30f76ee5 maps fresh scanner publicID01daee73be2353943222; already reviewed_no_change, so it is not one of102 revalidation candidates.",
+    "No app execution, tests, browser, scans, index/Git/tracker edits or scanner closure claims. Only own scratch and this review output were written.",
+    "Earlier direct-helper HEAD mismatch was transient and is resolved by the completed008 refresh. Coordinator must keep this inspected fresh tracker/source/dry-run set stable through adoption or compare recomputed proofs again. Current102-set approval does not authorize future context changes."
+  ],
+  "fresh_source_commit": "ed5783675bd334b165798eabaaeb01288afb339a"
+}

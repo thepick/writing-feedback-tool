@@ -1,0 +1,89 @@
+{
+  "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "created_at_utc": "2026-10-16T05:27:08.164614+00:00",
+  "scope": "Direct review of10changed/new local shape records after007validation and008CSS-only publication; no semantic auto-approval or scannerclosure.",
+  "records": [
+    {
+      "id": "code_health:finding_4db26584b9741348c94f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "symbol": "mergeWftSettings",
+      "marker": "complex_method",
+      "severity": "medium",
+      "reason": "P11 shared merge loops have verified own-key/winner/order/roster/credential parity and105native+14VM focused checks, plus full77suite gate. PersistedCCN16\u219213/NLOC34\u219223 improves High\u2192Medium; remaining branches preserve required policy. Keep warning open; no further metric-only extraction."
+    },
+    {
+      "id": "code_health:finding_73792a574b42e8236c19",
+      "file": "tests/auth-integrity.browser.cjs",
+      "symbol": "checkRedirectRecovery",
+      "marker": "nested_complexity",
+      "severity": "medium",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_97506bb4c786936411e9",
+      "file": "tests/auth-integrity.browser.cjs",
+      "symbol": "checkRedirectRecovery",
+      "marker": "complex_method",
+      "severity": "critical",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_1819fcaacbc20045d845",
+      "file": "tests/auth-integrity.browser.cjs",
+      "symbol": "checkRedirectRecovery",
+      "marker": "large_method",
+      "severity": "low",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_ae453a360bd95fa61daa",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "symbol": "<anonymous@7>",
+      "marker": "nested_complexity",
+      "severity": "high",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_462dcc351c71e400ee3d",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "symbol": "<anonymous@7>",
+      "marker": "complex_method",
+      "severity": "high",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_4893cf08bb5ae166eb8e",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "symbol": "<anonymous@7>",
+      "marker": "large_method",
+      "severity": "medium",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_0936878f9d4d502c6b66",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkMetadataMerge",
+      "marker": "complex_method",
+      "severity": "medium",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_78862c658763199794b0",
+      "file": "tests/record-identity.browser.cjs",
+      "symbol": "<anonymous@135>",
+      "marker": "complex_method",
+      "severity": "high",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    },
+    {
+      "id": "code_health:finding_9dfe63deb01f1eb80636",
+      "file": "tests/record-identity.browser.cjs",
+      "symbol": "<anonymous@135>",
+      "marker": "large_method",
+      "severity": "low",
+      "reason": "Retain explicit safety/parity assertions in existing native scenario. Reviewed065/066 additions prove durable OAuth recovery, cleared-pending publication, no pending resurrection or settings merge order; focused before/after and full77suite gate pass. The changed test body has been reviewed directly, not carried from historical shape equivalence. Extra helper extraction solely to hide test shape has no demonstrated benefit; scanner warning remains open."
+    }
+  ],
+  "scanner_clearances_claimed": 0,
+  "prior102proofs": "reviews/batch-007-unchanged-shape-revalidation.json"
+}

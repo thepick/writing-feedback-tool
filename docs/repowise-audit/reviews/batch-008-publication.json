@@ -1,0 +1,47 @@
+{
+  "batch": "batch-008",
+  "repair_id": "repair-067-mobile-header",
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/189",
+  "merge_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "verified_at_utc": "2026-10-16T05:24:04.220132+00:00",
+  "pages_build_status": "built",
+  "pages_build_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "all91_javascript_test_sources_and_manifest_match_tested007": true,
+  "html_application_bytes_match_reviewed_and_responsive_tested_candidate": true,
+  "files": [
+    {
+      "file": "index.html",
+      "served_bytes": 209071,
+      "http_status": 200,
+      "git_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+      "live_raw_sha256": "fe7d69ad3cd36dbae15c3692c16277da0f131e2758af25bf305a3657123fab3d",
+      "raw_exact_git_bytes": false,
+      "hosting_injected_cloudflare_analytics_scripts_excluded_for_comparison": 1,
+      "application_bytes_exact_after_explicit_hosting_beacon_exclusion": true
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "served_bytes": 397675,
+      "http_status": 200,
+      "git_sha256": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "live_raw_sha256": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "raw_exact_git_bytes": true,
+      "hosting_injected_cloudflare_analytics_scripts_excluded_for_comparison": 0,
+      "application_bytes_exact_after_explicit_hosting_beacon_exclusion": true
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "served_bytes": 426978,
+      "http_status": 200,
+      "git_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "live_raw_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "raw_exact_git_bytes": true,
+      "hosting_injected_cloudflare_analytics_scripts_excluded_for_comparison": 0,
+      "application_bytes_exact_after_explicit_hosting_beacon_exclusion": true
+    }
+  ],
+  "limits": [
+    "Hosting adds one Cloudflare analytics script to HTML; raw response differs. Removing only that exact extra script line gives byte-identical repository HTML. Both checked app scripts match raw Git bytes.",
+    "Focused browser evidence is from equivalent isolated candidate. No physical phone/live account checks."
+  ]
+}
