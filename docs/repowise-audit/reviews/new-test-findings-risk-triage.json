@@ -1,0 +1,1600 @@
+{
+  "review_id": "new-test-findings-risk-triage",
+  "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "tracker_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "tracker_git_bytes_sha256": "a47a07ef82067756aea82e24baa3b2f3b9be0eea314e131f1565b90c28a8eec6",
+  "created_at_utc": "2026-10-16T05:36:47.255390+00:00",
+  "scope": "Only canonical status=unreviewed, tests/ files, excluding coverage markers. Immutable Git test bytes; no changing record-identity checkout inspection. Read complete targeted functions, real enclosing browser closures and assertion aggregation; prior accepted behavior reviews reused for production semantics.",
+  "file_pins": {
+    "tests/crop-ownership.browser.cjs": {
+      "git_blob": "445f4f1c791694685ae390a0f376ce2e41e0d32a",
+      "sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "checkout_sha256_raw_at_review": "ecfd9eb55e0771b5121a3f8ee56cde87c3e621a6d2f74b1bd98d57d4d9774507",
+      "checkout_sha256_lf_at_review": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/detailed-parser.browser.cjs": {
+      "git_blob": "67272d727a821f5bb8802074fe2679fece906b7b",
+      "sha256_lf": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e",
+      "checkout_sha256_raw_at_review": "b7de0be62626934e364baeccf67265d579bf3bd939dc0cbfb5d650b9dd060617",
+      "checkout_sha256_lf_at_review": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/image-preparation.browser.cjs": {
+      "git_blob": "130d4c5cf2e067f491d6d70da03778911a128707",
+      "sha256_lf": "84f56fb39a7237262e81f641d74a3e2ab33c8d97d0bcf99eacc9dcd9d6c20969",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "84f56fb39a7237262e81f641d74a3e2ab33c8d97d0bcf99eacc9dcd9d6c20969",
+      "checkout_sha256_raw_at_review": "b8f94b3da2b5f85e58f31347d6464bcac21376cfa3d4395dc891b8d896266b63",
+      "checkout_sha256_lf_at_review": "84f56fb39a7237262e81f641d74a3e2ab33c8d97d0bcf99eacc9dcd9d6c20969",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/main-app-health.browser.cjs": {
+      "git_blob": "6ecc49622bd91a74de02902d33beae5113cdb82b",
+      "sha256_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "checkout_sha256_raw_at_review": "5017cfc1cceaf2ef5696c4667e7659d1b547fe402b0617809ab03ac5463bcfe0",
+      "checkout_sha256_lf_at_review": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/media-ownership.browser.cjs": {
+      "git_blob": "a20593954a76df4e6d1f19d4fafe3debc2b30934",
+      "sha256_lf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+      "checkout_sha256_raw_at_review": "0bcc083f387069e9807446d0eb66a79d806affbcb5795180e61080b4d142f023",
+      "checkout_sha256_lf_at_review": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "git_blob": "d6988220a92112df6f952ed6408f48e0c8b08d79",
+      "sha256_lf": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+      "checkout_sha256_raw_at_review": "19b7c9bcffa37ffea2d26115dbadf99c34111f73d97d5b884589932424c6442b",
+      "checkout_sha256_lf_at_review": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/portfolio-html.browser.cjs": {
+      "git_blob": "c379dc43a6d443f4e13b4ad3c9e3dcfb6e2e74d0",
+      "sha256_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+      "checkout_sha256_raw_at_review": "b2ee367a9c2c01a8b9831d55c3e798461187b7aceb01b0cd9e79a7d81cd4050c",
+      "checkout_sha256_lf_at_review": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+      "checkout_lf_matches_immutable_at_read": true
+    },
+    "tests/portfolio-reassessment.browser.cjs": {
+      "git_blob": "2df685beb45b187cc90a0d7c9369663e67569ed3",
+      "sha256_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "matches_tracker_commit": true,
+      "git_bytes_sha256_raw": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "checkout_sha256_raw_at_review": "734117b34ead8d9ffedc261ceab125122280d1faec10adb59c17604be434157b",
+      "checkout_sha256_lf_at_review": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "checkout_lf_matches_immutable_at_read": true
+    }
+  },
+  "additional_inspected_scope_pins": {
+    "tests/support/local-app-route.js": {
+      "git_blob": "215d2950f3a012a2b0f65654332233eca72b105c",
+      "sha256_lf": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+      "inspected_scope": "complete helper"
+    },
+    "tests/corrupt-portfolio.browser.cjs": {
+      "git_blob": "ce60455494f738822444f812e119893fba3c9d00",
+      "sha256_lf": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "inspected_scope": "local serving function7-12 only"
+    }
+  },
+  "prior_evidence_pins_sha256_raw": {
+    "batch-005-safety-review.json": "26a7a22d99222ad9d3c6de8156d92834d4c5601e039acd6f77762d5c8c181487",
+    "batch-006-validation.json": "9ba6e232fc3007b6b3087388b442abbb2b67a2af6d1bc8bdafc91aa7d8f37812",
+    "batch-007-postrefresh-review.json": "2e27f87957e76cd3e92dd574103dd757495c57dc27136e92f0a240ef6d1e1431",
+    "batch-007-validation.json": "61783ebe5b624e92954057fdf97a1950d0ad2ca3b733f457c26c5724076412a1",
+    "remaining-operation-queue.json": "2e08aa2a1d02f06ad6a6ee0675c1c710554e88097bbeaa69ca5add1e1ec07bfd",
+    "repair-040-reassessment-v2-review.json": "3efc451cefd2b713b77cd49468016f191f2a732219a2d09b1b2ec7f9f7ebc84a",
+    "repair-046-roster-navigation.json": "92ad4ac8bcdd3eec73bf526db21669dcd00234bc4e718f863647462e0d044902",
+    "repair-060-regression-review.json": "95e33c58469aefb852c387929aca2c3c94e8771ec213329b49d616e4614de653",
+    "repair-060-safety-review.json": "32f4492b8b481f7bd081c00fd582794c7ec7c1912bb7d0716b28162fe073bf99",
+    "repair-061-regression-review.json": "9b369e1f81635e26985aaa649b577964fac4055f4ed8c73cabccf2b87f981034",
+    "repair-061-safety-review.json": "64c19d75e70b80467e3d5342bb4e535b0e404e4e574e176934620859121e3185",
+    "repair-062-regression-review.json": "d0d630ec8807d02cf75ef777a2c76a03b46bbe179eca7f3b05f35cd3a022e9ac",
+    "repair-062-safety-review.json": "a0b99c434b44cb850c15122899f83435d493ed4646d3d2422b88bce89ff670a8",
+    "repair-063-regression-review.json": "fa6ad7ae74349d031d2de6af46e23cdad993dec3cf17100b37e11e7529e04561",
+    "repair-063-safety-review.json": "6635d033b7e571489764503767a0594479e039b6942cf853b24f65351012db2f",
+    "repair-064-regression-review.json": "d125301d0cf507f64e12e8e457c2bc3f8ea523ceb32668c0f7ffd64c2d2dd17f",
+    "repair-064-safety-review.json": "c60c6429bb98487cab9c388ed0bc7a868d8e84f987bd6170fc61825baf5b19f6",
+    "repair-065-regression-review.json": "7862b029384a361de7a563e9b5b265910aff6061deb3a6940afe76f5fe7e70a5",
+    "repair-065-safety-review.json": "6983b153b6e8c0a399c0f5e494831dfe151244e82b3da1405723a4b27e1eac55"
+  },
+  "function_metric_method": "Installed RepoWise pure walk_file_complexity on immutable GitLF bytes; matched stored symbol_line and real function name, preserved stored anonymous IDs. All stored overlapping walker values/deepest blocks/complex condition checked, including terminal_share. Function hashes include complete line span with final newline. No detector/index mutation.",
+  "findings": [
+    {
+      "record_id": "code_health:finding_497a3e9c6bfe87f7c58e",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": "<anonymous@282>",
+      "marker": "nested_complexity",
+      "line_start": 282,
+      "line_end": 325,
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 8,
+        "cognitive": 25,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.12,
+        "symbol_line": 282,
+        "deepest_block": {
+          "start": 293,
+          "end": 299
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@282>",
+          "start_line": 282,
+          "end_line": 325,
+          "ccn": 8,
+          "cognitive": 25,
+          "nloc": 44,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            293,
+            299
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.12
+        }
+      },
+      "function_sha256_lf": "42630637e52504fd7de0120667479c44fd509419d16a340c9faf6648da6dd793",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "crop-runner",
+      "reason": "Depth4 is the browser/fresh-page/scenario try-catch-finally lifecycle, not a hidden policy. Crop and drop families use different fixture and oracle shapes; independent page cleanup, page-error rejection and final failure aggregation are useful. A generic runner would add callback plumbing without improving the ownership contract.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:282-325"
+      ],
+      "prior_report_references": [
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_3251f9ac3bc3f1b15073",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": "evaluateCropScenario",
+      "marker": "complex_method",
+      "line_start": 23,
+      "line_end": 176,
+      "verified_observation_details": {
+        "ccn": 20,
+        "cognitive": 22,
+        "nloc": 151,
+        "dispatch_share": 0.0,
+        "symbol_line": 23,
+        "deepest_block": {
+          "start": 151,
+          "end": 151
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "evaluateCropScenario",
+          "start_line": 23,
+          "end_line": 176,
+          "ccn": 20,
+          "cognitive": 22,
+          "nloc": 151,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            151,
+            151
+          ],
+          "complex_conditions": [
+            {
+              "line": 144,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 168,
+              "operator_count": 2,
+              "enclosing_construct": "if"
+            }
+          ],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "e8dd2da7107b6a7f51e50e68df66575187881be125b64437880a6a39254e8f32",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "crop-scenario",
+      "reason": "CCN20 selects controlled ownership changes around held native image decoding. Existing named local helpers already separate student, queue, writing, crop and class changes. Keeping the setup and before/release/after boundary together makes stale-owner preservation auditable.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:23-176",
+        "tests/crop-ownership.browser.cjs:289-302"
+      ],
+      "prior_report_references": [
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_7d00cba948ac805a2fb4",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": "assertCropScenario",
+      "marker": "complex_method",
+      "line_start": 178,
+      "line_end": 205,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 16,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 178,
+        "deepest_block": {
+          "start": 191,
+          "end": 204
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "assertCropScenario",
+          "start_line": 178,
+          "end_line": 205,
+          "ccn": 9,
+          "cognitive": 16,
+          "nloc": 28,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            191,
+            204
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "f7ef9e29afa196b8a8e51154146250cc6587065354a5086f6ebdc5fa234c4b2e",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "crop-oracle",
+      "reason": "The9 paths distinguish intentionally different results: apply-before-load no-op, secondary crop, current valid crop, reset recovery and exact stale-state equality. Merging these assertions would obscure which media object may change. Both browser and callback errors are required empty.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:178-205",
+        "tests/crop-ownership.browser.cjs:295-302"
+      ],
+      "prior_report_references": [
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_bc168823d8b8c1bda66c",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": "evaluateReorderDrop",
+      "marker": "complex_method",
+      "line_start": 222,
+      "line_end": 263,
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 22,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 222,
+        "deepest_block": {
+          "start": 240,
+          "end": 243
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "evaluateReorderDrop",
+          "start_line": 222,
+          "end_line": 263,
+          "ccn": 18,
+          "cognitive": 22,
+          "nloc": 42,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            240,
+            243
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "8adb540f7a35739f4e1bb3741a622080edd77bccb241316bfb4c2ee1430b5551",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "drop-scenario",
+      "reason": "CCN18 constructs literal bad-index/parse-prefix/stale-index and desktop-X/mobile-Y cases before dispatching the real DragEvent. The independent oracle checks literal expected order and untouched owner/text/source/pending/raw storage. Replacing variant conditions with a framework would relocate fixture complexity.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:206-279",
+        "tests/crop-ownership.browser.cjs:304-320"
+      ],
+      "prior_report_references": [
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_99d9a3ebb52218fcabc6",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": "evaluateReorderDrop",
+      "marker": "bumpy_road",
+      "line_start": 222,
+      "line_end": 263,
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 18,
+        "max_nesting": 2,
+        "symbol_line": 222,
+        "deepest_block": {
+          "start": 240,
+          "end": 243
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "evaluateReorderDrop",
+          "start_line": 222,
+          "end_line": 263,
+          "ccn": 18,
+          "cognitive": 22,
+          "nloc": 42,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            240,
+            243
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "8adb540f7a35739f4e1bb3741a622080edd77bccb241316bfb4c2ee1430b5551",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "drop-scenario",
+      "reason": "The3 bumps are separated fixture payload mutation, viewport direction and reference/state capture phases of the same real drop. They do not repeat a production decision algorithm. Retain the visible order of those phases and the downstream identity/no-op checks.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:206-279",
+        "tests/crop-ownership.browser.cjs:304-320"
+      ],
+      "prior_report_references": [
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_1fc065ce84d5a0964ae5",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": "evaluateCropScenario",
+      "marker": "large_method",
+      "line_start": 23,
+      "line_end": 176,
+      "verified_observation_details": {
+        "nloc": 151,
+        "ccn": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 23,
+        "deepest_block": {
+          "start": 151,
+          "end": 151
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "evaluateCropScenario",
+          "start_line": 23,
+          "end_line": 176,
+          "ccn": 20,
+          "cognitive": 22,
+          "nloc": 151,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            151,
+            151
+          ],
+          "complex_conditions": [
+            {
+              "line": 144,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 168,
+              "operator_count": 2,
+              "enclosing_construct": "if"
+            }
+          ],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "e8dd2da7107b6a7f51e50e68df66575187881be125b64437880a6a39254e8f32",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "crop-scenario",
+      "reason": "151 nonblank lines contain native canvases/Image delegation, snapshots and six already bounded setup helpers. Passing browser-only state through more exported helpers would increase closure/serialization dependencies; there is no identified dead work or weaker oracle to remove.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:23-176",
+        "tests/crop-ownership.browser.cjs:289-302"
+      ],
+      "prior_report_references": [
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_c4b9d1280f5f8806538e",
+      "file": "tests/crop-ownership.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "line_start": 13,
+      "line_end": 24,
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 8.52,
+        "clone_pair_count": 18,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/corrupt-portfolio.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "metric_replay": "nonfunction metadata not rebuilt",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "optional_existing_helper_policy_reuse",
+      "evidence_group": "crop-route",
+      "reason": "A real small shared-policy opportunity exists independently of the aggregate clone score: localCropRoute duplicates the existing plain local asset policy. Delegate only that helper/call sites to tests/support/local-app-route, retaining text/html fallback, JS MIME, root index, empty404 and external abort. The existing helper also checks containment and isFile. Keep fs for evidence output and all matrices unchanged. Optional future bounded admission, not a product bug or automatic18-pair cleanup.",
+      "evidence_anchors": [
+        "tests/crop-ownership.browser.cjs:15-21",
+        "tests/crop-ownership.browser.cjs:290",
+        "tests/crop-ownership.browser.cjs:307",
+        "tests/corrupt-portfolio.browser.cjs:7-12",
+        "tests/support/local-app-route.js:5-12"
+      ],
+      "prior_report_references": [
+        "remaining-operation-queue.json#bounded_route_families/R-C"
+      ],
+      "regression_recommendation": "Future bounded local-route contract checks: root/index, JS and other asset MIME, empty404, external abort, traversal/directory rejection; run unchanged crop/drop matrix. No test changes to ownership expectations.",
+      "verification_limits": "Aggregate8.52%/18pairs/12line/0cochange copied exactly from immutable tracker, not recomputed from the current corpus. Inspected actual local route and named partner; their policy duplication is independently visible. No current clone/line-fingerprint equivalence claim."
+    },
+    {
+      "record_id": "code_health:finding_b4dbf5c38542dee01117",
+      "file": "tests/detailed-parser.browser.cjs",
+      "symbol": "checkGrammarCalculation",
+      "marker": "complex_method",
+      "line_start": 172,
+      "line_end": 211,
+      "verified_observation_details": {
+        "ccn": 30,
+        "cognitive": 35,
+        "nloc": 40,
+        "dispatch_share": 0.0,
+        "symbol_line": 172,
+        "deepest_block": {
+          "start": 188,
+          "end": 198
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkGrammarCalculation",
+          "start_line": 172,
+          "end_line": 211,
+          "ccn": 30,
+          "cognitive": 35,
+          "nloc": 40,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            188,
+            198
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "869ecb18e009f1f0fa6c28dcf25710787f6ed62f5e4586c131d13103cc3055b2",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "grammar-calculation",
+      "reason": "CCN30 is largely conjunctions in independent literal audit/display/policy assertions. Native analyses assert0-errors=>10 and density4 at three grade/strictness settings=>10/9/8; recorded result is rerendered after live settings change and exact HTML/audit/scores/pending are preserved. Splitting predicates only to lower CCN could weaken those joint premises; no admission.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:172-212",
+        "tests/detailed-parser.browser.cjs:218-238"
+      ],
+      "prior_report_references": [
+        "repair-064-regression-review.json",
+        "repair-064-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_dc51e1fb00f1a85234c3",
+      "file": "tests/detailed-parser.browser.cjs",
+      "symbol": "checkAnalysisPipeline",
+      "marker": "large_method",
+      "line_start": 123,
+      "line_end": 214,
+      "verified_observation_details": {
+        "nloc": 92,
+        "ccn": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 123,
+        "deepest_block": {
+          "start": 127,
+          "end": 157
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkAnalysisPipeline",
+          "start_line": 123,
+          "end_line": 214,
+          "ccn": 12,
+          "cognitive": 12,
+          "nloc": 92,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            127,
+            157
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "3be0e0393da8d71bdf85ce491329333d795bc2875a6d0ab38621be1abc191704",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "analysis-pipeline",
+      "reason": "92 lines bind the parser inheritance matrix to actual analyzeWriting, pending, commit, stored session, summary and safe HTML, then run the nested calculation regression. Shared helpers already separate preparation and persistence checks. Keep the complete real publication chain and explicit missing-category/eligibility controls.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:5-19",
+        "tests/detailed-parser.browser.cjs:116-216",
+        "tests/detailed-parser.browser.cjs:230-238"
+      ],
+      "prior_report_references": [
+        "repair-064-regression-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_d4d64fb9c9c0bde5f3cd",
+      "file": "tests/image-preparation.browser.cjs",
+      "symbol": "<anonymous@7>",
+      "marker": "nested_complexity",
+      "line_start": 7,
+      "line_end": 160,
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 49,
+        "cognitive": 74,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 118,
+          "end": 122
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 160,
+          "ccn": 49,
+          "cognitive": 74,
+          "nloc": 148,
+          "max_nesting": 5,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            118,
+            122
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.01
+        }
+      },
+      "function_sha256_lf": "d58f8582873e8a0e67f0faef8c33b2730360b4f9ba7cde15705da4b17d644ba9",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "image-preparation",
+      "reason": "Depth5 crosses browser/page.evaluate and the two-input/three-entry held native optimization matrix with try/finally restoration. Gates delegate to the real optimizer before holding; timeout rejects; allSettled is cleanup only. Busy rejection, first completion, retry, stale writing/source and atomic error recovery are distinct contracts worth keeping visible.",
+      "evidence_anchors": [
+        "tests/image-preparation.browser.cjs:7-160"
+      ],
+      "prior_report_references": [
+        "repair-062-regression-review.json",
+        "repair-062-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_187baaab1e2d4cce5c76",
+      "file": "tests/main-app-health.browser.cjs",
+      "symbol": "checkDiaryGenre",
+      "marker": "nested_complexity",
+      "line_start": 194,
+      "line_end": 236,
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 7,
+        "cognitive": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 194,
+        "deepest_block": {
+          "start": 210,
+          "end": 218
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkDiaryGenre",
+          "start_line": 194,
+          "end_line": 236,
+          "ccn": 7,
+          "cognitive": 17,
+          "nloc": 43,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            210,
+            218
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "e9577cc785efb0ff8ef056468fa1ee696e3134de20e434a1696b762a007a6268",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "diary",
+      "reason": "Nested LF/CRLF x comma fixture loops exercise raw detector inputs plus real textarea/select UI paths. textarea normalization is correctly captured rather than falsely asserting CR bytes survive. Genuine letters, Diary Club, reflection and manual override controls guard precedence; finally restores UI state.",
+      "evidence_anchors": [
+        "tests/main-app-health.browser.cjs:194-239",
+        "tests/main-app-health.browser.cjs:241-262"
+      ],
+      "prior_report_references": [
+        "repair-061-regression-review.json",
+        "repair-061-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_a5f739ff7b13bd2bccf0",
+      "file": "tests/main-app-health.browser.cjs",
+      "symbol": "checkEvidenceTokens",
+      "marker": "complex_method",
+      "line_start": 152,
+      "line_end": 193,
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 15,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 152,
+        "deepest_block": {
+          "start": 169,
+          "end": 190
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkEvidenceTokens",
+          "start_line": 152,
+          "end_line": 193,
+          "ccn": 12,
+          "cognitive": 15,
+          "nloc": 42,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            169,
+            190
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "7075e7a58fc72f70e3268af71cd6a59c5571d71446696456637f93a0047ecd71",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "evidence",
+      "reason": "CCN12 arises from explicit neutral/stop/short/literal/unsupported controls and parsed feedback/audit/DOM construction checks. Expected teacher comments are literals; target builders are real. Score/rows/pending preservation and DOM restoration remain. Saved-feedback assertion is construction only, not durable persistence proof.",
+      "evidence_anchors": [
+        "tests/main-app-health.browser.cjs:152-193",
+        "tests/main-app-health.browser.cjs:237-262"
+      ],
+      "prior_report_references": [
+        "repair-060-regression-review.json",
+        "repair-060-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_9fb4c1ea2a9ca9ea5ac3",
+      "file": "tests/main-app-health.browser.cjs",
+      "symbol": "expectGenre",
+      "marker": "complex_method",
+      "line_start": 199,
+      "line_end": 207,
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 199,
+        "deepest_block": {
+          "start": 203,
+          "end": 203
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "expectGenre",
+          "start_line": 199,
+          "end_line": 207,
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 9,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            203,
+            203
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "910e41282ed7e001824e27a86b1956dde2a21baf0227831060a9603202e1efa9",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "diary",
+      "reason": "expectGenre conjoins independent expected genre/reference/source with current UI state, visibility, summary, prompt and exact entered writing. Those assertions expose classifier/UI disagreement. Extracting each boolean would reduce the metric while making the common expected tuple harder to inspect.",
+      "evidence_anchors": [
+        "tests/main-app-health.browser.cjs:194-239",
+        "tests/main-app-health.browser.cjs:241-262"
+      ],
+      "prior_report_references": [
+        "repair-061-regression-review.json",
+        "repair-061-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_a92539ef8099a6e377ad",
+      "file": "tests/main-app-health.browser.cjs",
+      "symbol": "expectGenre",
+      "marker": "primitive_obsession",
+      "line_start": 199,
+      "line_end": 207,
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 199
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "expectGenre",
+          "start_line": 199,
+          "end_line": 207,
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 9,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            203,
+            203
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "910e41282ed7e001824e27a86b1956dde2a21baf0227831060a9603202e1efa9",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "diary",
+      "reason": "The five primitive arguments are a small local expectation tuple: case label, genre, safe reference, source and exact entered text. All calls are adjacent in one matrix with fixed literals; introducing an options/class wrapper would add indirection without reducing policy duplication or argument ambiguity.",
+      "evidence_anchors": [
+        "tests/main-app-health.browser.cjs:194-239",
+        "tests/main-app-health.browser.cjs:241-262"
+      ],
+      "prior_report_references": [
+        "repair-061-regression-review.json",
+        "repair-061-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_f58d1527b613e3036be8",
+      "file": "tests/media-ownership.browser.cjs",
+      "symbol": null,
+      "marker": "churn_risk",
+      "line_start": null,
+      "line_end": null,
+      "verified_observation_details": {
+        "relative_churn": 2.8,
+        "churn_percentile": 95.6,
+        "lines_added_90d": 596,
+        "lines_deleted_90d": 279,
+        "commit_count_90d": 5,
+        "nloc": 313
+      },
+      "metric_replay": "nonfunction metadata not rebuilt",
+      "proposed_status": "reviewed_no_change",
+      "classification": "history_warning_retain",
+      "evidence_group": "media-history",
+      "reason": "Retain the history warning as a review/coordination signal. This file intentionally changed for separate real saved/pending/photo ownership contracts and065 closed a cleared-pending oracle gap. The52 fixed scenarios, actual helpers, held upload seams and failing final aggregation justify the growth; churn alone gives no safe deletion or current defect.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:6-195",
+        "tests/media-ownership.browser.cjs:196-317"
+      ],
+      "prior_report_references": [
+        "repair-065-regression-review.json",
+        "repair-065-safety-review.json",
+        "batch-007-postrefresh-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning.",
+      "verified_history": {
+        "five_git_commits_numstat": [
+          {
+            "commit": "d52fdcb059def5f7f4f1d41679de8947131bb6d1",
+            "added": 4,
+            "deleted": 0
+          },
+          {
+            "commit": "c5ea3e6aa0f4e4b300d439c043f768522ed706f7",
+            "added": 35,
+            "deleted": 25
+          },
+          {
+            "commit": "a6bd30f2ab4de5997c265b36a9b19da18af6c570",
+            "added": 35,
+            "deleted": 31
+          },
+          {
+            "commit": "9c5dca4d8ee10ef18ba2f5bcf9a3aab831557897",
+            "added": 245,
+            "deleted": 223
+          },
+          {
+            "commit": "c541e940b029ff77508f77a919497cb3b8114caa",
+            "added": 277,
+            "deleted": 0
+          }
+        ],
+        "added": 596,
+        "deleted": 279,
+        "nonblank_lines": 313,
+        "relative_churn_rounded": 2.8,
+        "percentile_95_6_not_rebuilt": true
+      }
+    },
+    {
+      "record_id": "code_health:finding_a001373d7f0bddeeaba0",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "symbol": "checkLaterFallbackExample",
+      "marker": "complex_method",
+      "line_start": 140,
+      "line_end": 183,
+      "verified_observation_details": {
+        "ccn": 25,
+        "cognitive": 27,
+        "nloc": 44,
+        "dispatch_share": 0.0,
+        "symbol_line": 140,
+        "deepest_block": {
+          "start": 174,
+          "end": 178
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkLaterFallbackExample",
+          "start_line": 140,
+          "end_line": 183,
+          "ccn": 25,
+          "cognitive": 27,
+          "nloc": 44,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            174,
+            178
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "dca0d4e38e3b1120af60b7501f1567e1fcc20be73660197ecd040116f112b60f",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "later-fallback",
+      "reason": "CCN25 is explicit grounded-quote/length/validity/DOM conjunctions across Grammar and both Spelling passes. Real ensure/factory/search/insertion/rendering is exercised; long-only rejects invented truncation, later-only is usable, and global opener priority beats an earlier run-on. No factory stub or result-dependent assertion skip; retain.",
+      "evidence_anchors": [
+        "tests/notebook-guidance-repair.browser.cjs:140-184",
+        "tests/notebook-guidance-repair.browser.cjs:298-325"
+      ],
+      "prior_report_references": [
+        "repair-063-regression-review.json",
+        "repair-063-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_56be0b4f9090fab49615",
+      "file": "tests/portfolio-html.browser.cjs",
+      "symbol": "setupRosterNavigation",
+      "marker": "complex_method",
+      "line_start": 155,
+      "line_end": 203,
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 49,
+        "dispatch_share": 0.0,
+        "symbol_line": 155,
+        "deepest_block": {
+          "start": 188,
+          "end": 188
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "setupRosterNavigation",
+          "start_line": 155,
+          "end_line": 203,
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 49,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            188,
+            188
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "b21dd9df38dd18cc76fbb2b03b8f2720fd4d4cf32ed46c503f3d908416305f89",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "roster-setup",
+      "reason": "CCN11 seeds exact current writing/photo/source/pending/report and wraps render/close/scroll by delegating to real functions. Missing DOM, stale options and storage failure are controlled fixtures rather than alternate application policies. Snapshot and reference checks must remain alongside these seams.",
+      "evidence_anchors": [
+        "tests/portfolio-html.browser.cjs:155-203",
+        "tests/portfolio-html.browser.cjs:217"
+      ],
+      "prior_report_references": [
+        "repair-046-roster-navigation.json",
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_9ab410fbc41005bb5256",
+      "file": "tests/portfolio-html.browser.cjs",
+      "symbol": "checkRosterNavigation",
+      "marker": "complex_method",
+      "line_start": 205,
+      "line_end": 242,
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 28,
+        "nloc": 38,
+        "dispatch_share": 0.0,
+        "symbol_line": 205,
+        "deepest_block": {
+          "start": 216,
+          "end": 239
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkRosterNavigation",
+          "start_line": 205,
+          "end_line": 242,
+          "ccn": 12,
+          "cognitive": 28,
+          "nloc": 38,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            216,
+            239
+          ],
+          "complex_conditions": [
+            {
+              "line": 233,
+              "operator_count": 2,
+              "enclosing_construct": "ternary"
+            }
+          ],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "e7746f7b28445b829c0cad19c29fb7f7231016fbdf4487523e5acbf308d307f4",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "roster-check",
+      "reason": "CCN12 reflects eight distinct optional DOM/responsive/write-failure cases. Real rendered roster-name clicks must expose Portfolio with one target render while preserving current work and reference identity. Literal expected scroll/storage behavior plus operational/page-error rejection prevent a wrong-tab false green; do not flatten the matrix.",
+      "evidence_anchors": [
+        "tests/portfolio-html.browser.cjs:205-242",
+        "tests/portfolio-html.browser.cjs:248-251",
+        "tests/portfolio-html.browser.cjs:291-298"
+      ],
+      "prior_report_references": [
+        "repair-046-roster-navigation.json",
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_f053d8396d67490241fb",
+      "file": "tests/portfolio-reassessment.browser.cjs",
+      "symbol": "<anonymous@70>",
+      "marker": "nested_complexity",
+      "line_start": 70,
+      "line_end": 262,
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 56,
+        "cognitive": 175,
+        "dispatch_share": 0.25,
+        "terminal_share": 0.01,
+        "symbol_line": 70,
+        "deepest_block": {
+          "start": 87,
+          "end": 93
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@70>",
+          "start_line": 70,
+          "end_line": 262,
+          "ccn": 56,
+          "cognitive": 175,
+          "nloc": 192,
+          "max_nesting": 5,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.25,
+          "deepest_block": [
+            87,
+            93
+          ],
+          "complex_conditions": [
+            {
+              "line": 87,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 182,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 200,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 208,
+              "operator_count": 4,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 211,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 212,
+              "operator_count": 2,
+              "enclosing_construct": "if"
+            }
+          ],
+          "terminal_share": 0.01
+        }
+      },
+      "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "reassessment",
+      "reason": "Depth5 is fresh-context native confirmation cases plus per-case held-source mutation/assertion loops and failure recording. Contexts isolate storage, the second tab remains live where needed, and browserfinally closes. Extraction of async case phases would add cross-phase mutable state and obscure consent timing.",
+      "evidence_anchors": [
+        "tests/portfolio-reassessment.browser.cjs:8-68",
+        "tests/portfolio-reassessment.browser.cjs:70-262"
+      ],
+      "prior_report_references": [
+        "repair-040-reassessment-v2-review.json",
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_48a882cb94eb3a511587",
+      "file": "tests/portfolio-reassessment.browser.cjs",
+      "symbol": "seed",
+      "marker": "complex_method",
+      "line_start": 8,
+      "line_end": 63,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 56,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 49,
+          "end": 62
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "seed",
+          "start_line": 8,
+          "end_line": 63,
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 56,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            49,
+            62
+          ],
+          "complex_conditions": [],
+          "terminal_share": 0.0
+        }
+      },
+      "function_sha256_lf": "bc4dba79aa2e1ec69adc42e397659353c04722e5579cf29e3c8cc6ada7b4a812",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "reassessment-seed",
+      "reason": "seed CCN9 intentionally has normal existing-pending work versus late-analysis work. It creates real canvas bytes, persistent settings/roster/portfolio/pending and a complete snapshot; only synthetic model response timing is held. Sharing a generic seed risks losing distinct acknowledged-existing-pending versus newly-arrived-pending premises.",
+      "evidence_anchors": [
+        "tests/portfolio-reassessment.browser.cjs:8-63",
+        "tests/portfolio-reassessment.browser.cjs:86",
+        "tests/portfolio-reassessment.browser.cjs:94-125"
+      ],
+      "prior_report_references": [
+        "repair-040-reassessment-v2-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_a554608bfccad8663d8b",
+      "file": "tests/portfolio-reassessment.browser.cjs",
+      "symbol": "<anonymous@70>",
+      "marker": "complex_method",
+      "line_start": 70,
+      "line_end": 262,
+      "verified_observation_details": {
+        "ccn": 56,
+        "cognitive": 175,
+        "nloc": 192,
+        "dispatch_share": 0.25,
+        "terminal_share": 0.01,
+        "symbol_line": 70,
+        "deepest_block": {
+          "start": 87,
+          "end": 93
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@70>",
+          "start_line": 70,
+          "end_line": 262,
+          "ccn": 56,
+          "cognitive": 175,
+          "nloc": 192,
+          "max_nesting": 5,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.25,
+          "deepest_block": [
+            87,
+            93
+          ],
+          "complex_conditions": [
+            {
+              "line": 87,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 182,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 200,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 208,
+              "operator_count": 4,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 211,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 212,
+              "operator_count": 2,
+              "enclosing_construct": "if"
+            }
+          ],
+          "terminal_share": 0.01
+        }
+      },
+      "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "reassessment",
+      "reason": "CCN56 maps sixteen fixed consent outcomes and negative premises, not one sprawling production algorithm. Exact raw pending/deletion/source/current-work changes and read/save faults must be distinguished from cancellation/ordinary success. Prior039/040 negative controls validated this need; all operational errors and failed checks feed fixed16case/79check final requirements.",
+      "evidence_anchors": [
+        "tests/portfolio-reassessment.browser.cjs:8-68",
+        "tests/portfolio-reassessment.browser.cjs:70-262"
+      ],
+      "prior_report_references": [
+        "repair-040-reassessment-v2-review.json",
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_cfd1ad9b6d28ad62a61b",
+      "file": "tests/portfolio-reassessment.browser.cjs",
+      "symbol": "<anonymous@70>",
+      "marker": "large_method",
+      "line_start": 70,
+      "line_end": 262,
+      "verified_observation_details": {
+        "nloc": 192,
+        "ccn": 56,
+        "dispatch_share": 0.25,
+        "terminal_share": 0.01,
+        "symbol_line": 70,
+        "deepest_block": {
+          "start": 87,
+          "end": 93
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@70>",
+          "start_line": 70,
+          "end_line": 262,
+          "ccn": 56,
+          "cognitive": 175,
+          "nloc": 192,
+          "max_nesting": 5,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.25,
+          "deepest_block": [
+            87,
+            93
+          ],
+          "complex_conditions": [
+            {
+              "line": 87,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 182,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 200,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 208,
+              "operator_count": 4,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 211,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 212,
+              "operator_count": 2,
+              "enclosing_construct": "if"
+            }
+          ],
+          "terminal_share": 0.01
+        }
+      },
+      "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "reassessment",
+      "reason": "192 nonblank lines keep dialog-open snapshot, controlled competing writer, accepted/cancelled UI action and preservation oracle in time order. Seed and public navigation already have helpers. Splitting this into more callbacks would hide which state changed while consent was held; no meaningful smallest deletion found.",
+      "evidence_anchors": [
+        "tests/portfolio-reassessment.browser.cjs:8-68",
+        "tests/portfolio-reassessment.browser.cjs:70-262"
+      ],
+      "prior_report_references": [
+        "repair-040-reassessment-v2-review.json",
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    },
+    {
+      "record_id": "code_health:finding_791c108409dace585495",
+      "file": "tests/portfolio-reassessment.browser.cjs",
+      "symbol": "<anonymous@70>",
+      "marker": "complex_conditional",
+      "line_start": 208,
+      "line_end": 208,
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.25,
+        "symbol_line": 70
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@70>",
+          "start_line": 70,
+          "end_line": 262,
+          "ccn": 56,
+          "cognitive": 175,
+          "nloc": 192,
+          "max_nesting": 5,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.25,
+          "deepest_block": [
+            87,
+            93
+          ],
+          "complex_conditions": [
+            {
+              "line": 87,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 182,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 200,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 208,
+              "operator_count": 4,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 211,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 212,
+              "operator_count": 2,
+              "enclosing_construct": "if"
+            }
+          ],
+          "terminal_share": 0.01
+        }
+      },
+      "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "evidence_group": "reassessment",
+      "reason": "The4 || operators at208 enumerate cancellation and four failure outcomes sharing exact before/after preservation; grade-save failure has its own notice, while failed evidence reads require retry. This is a coherent oracle family. A Set/helper would merely move membership logic, with no new contract benefit.",
+      "evidence_anchors": [
+        "tests/portfolio-reassessment.browser.cjs:8-68",
+        "tests/portfolio-reassessment.browser.cjs:70-262"
+      ],
+      "prior_report_references": [
+        "repair-040-reassessment-v2-review.json",
+        "batch-005-safety-review.json"
+      ],
+      "regression_recommendation": "Preserve current matrix, literal expectations, fault premises, cleanup and failing aggregation; no additional test or code change admitted from this warning."
+    }
+  ],
+  "future_bounded_admissions": [
+    {
+      "record_ids": [
+        "code_health:finding_c4b9d1280f5f8806538e"
+      ],
+      "operation": "Reuse existing localAppRoute only in crop harness",
+      "priority": "low_optional_after_production_and_meaningful_oracle_work",
+      "shared_policy_family": "remaining-operation-queue R-C plain media routes; new crop leaf, do not merge its assertion matrix with other files",
+      "benefit": "One existing contained-file/MIME/external-abort/404 policy replaces an extra local implementation. Benefit is policy centralization rather than complexity score.",
+      "bounded_scope": [
+        "tests/crop-ownership.browser.cjs require/helper/two route bindings only"
+      ],
+      "prerequisites": [
+        "Coordinator chooses/authorizes separate edit; preparation does not authorize mutation.",
+        "Preserve exact asset response and failure policies; review helper-path semantics and keep fs evidence output.",
+        "Unchanged ownership matrix and bounded route-contract evidence needed before adoption."
+      ]
+    }
+  ],
+  "additional_unconfirmed_behavior_leads": [],
+  "summary": {
+    "assigned_rows": 23,
+    "files": 8,
+    "function_records_replayed": 21,
+    "unique_function_bodies": 15,
+    "retain_warning_rows": 22,
+    "optional_existing_helper_candidate_rows": 1,
+    "bugs_claimed": 0,
+    "new_oracle_gap_admissions": 0,
+    "scanner_closure_claimed": false
+  },
+  "completeness_assertion": {
+    "filter": "status == unreviewed AND file starts tests/ AND marker does not start coverage",
+    "expected_ids": [
+      "code_health:finding_187baaab1e2d4cce5c76",
+      "code_health:finding_1fc065ce84d5a0964ae5",
+      "code_health:finding_3251f9ac3bc3f1b15073",
+      "code_health:finding_48a882cb94eb3a511587",
+      "code_health:finding_497a3e9c6bfe87f7c58e",
+      "code_health:finding_56be0b4f9090fab49615",
+      "code_health:finding_791c108409dace585495",
+      "code_health:finding_7d00cba948ac805a2fb4",
+      "code_health:finding_99d9a3ebb52218fcabc6",
+      "code_health:finding_9ab410fbc41005bb5256",
+      "code_health:finding_9fb4c1ea2a9ca9ea5ac3",
+      "code_health:finding_a001373d7f0bddeeaba0",
+      "code_health:finding_a554608bfccad8663d8b",
+      "code_health:finding_a5f739ff7b13bd2bccf0",
+      "code_health:finding_a92539ef8099a6e377ad",
+      "code_health:finding_b4dbf5c38542dee01117",
+      "code_health:finding_bc168823d8b8c1bda66c",
+      "code_health:finding_c4b9d1280f5f8806538e",
+      "code_health:finding_cfd1ad9b6d28ad62a61b",
+      "code_health:finding_d4d64fb9c9c0bde5f3cd",
+      "code_health:finding_dc51e1fb00f1a85234c3",
+      "code_health:finding_f053d8396d67490241fb",
+      "code_health:finding_f58d1527b613e3036be8"
+    ],
+    "reported_ids": [
+      "code_health:finding_187baaab1e2d4cce5c76",
+      "code_health:finding_1fc065ce84d5a0964ae5",
+      "code_health:finding_3251f9ac3bc3f1b15073",
+      "code_health:finding_48a882cb94eb3a511587",
+      "code_health:finding_497a3e9c6bfe87f7c58e",
+      "code_health:finding_56be0b4f9090fab49615",
+      "code_health:finding_791c108409dace585495",
+      "code_health:finding_7d00cba948ac805a2fb4",
+      "code_health:finding_99d9a3ebb52218fcabc6",
+      "code_health:finding_9ab410fbc41005bb5256",
+      "code_health:finding_9fb4c1ea2a9ca9ea5ac3",
+      "code_health:finding_a001373d7f0bddeeaba0",
+      "code_health:finding_a554608bfccad8663d8b",
+      "code_health:finding_a5f739ff7b13bd2bccf0",
+      "code_health:finding_a92539ef8099a6e377ad",
+      "code_health:finding_b4dbf5c38542dee01117",
+      "code_health:finding_bc168823d8b8c1bda66c",
+      "code_health:finding_c4b9d1280f5f8806538e",
+      "code_health:finding_cfd1ad9b6d28ad62a61b",
+      "code_health:finding_d4d64fb9c9c0bde5f3cd",
+      "code_health:finding_dc51e1fb00f1a85234c3",
+      "code_health:finding_f053d8396d67490241fb",
+      "code_health:finding_f58d1527b613e3036be8"
+    ],
+    "exact_set_match": true,
+    "unique_ids": true,
+    "every_assigned_id_once": true
+  },
+  "limits": [
+    "No app/tests/browser execution or source/test/config/Git/index/tracker edits. Only own scratch and this report written. No fresh pass or scanner-clearance claim.",
+    "Accepted006/007 reports record77suites/60native exact-source captures; reused as existing evidence only, not a new proof or branch-coverage guarantee. No coverage rows triaged.",
+    "Current clone corpus/pair totals and repository-relative churn percentile were not rebuilt; their exact tracker fields remain labeled metadata. Local churn raw counts/size/ratio independently checked.",
+    "Deliberate EXPECT_BASELINE modes suppress test failures for negative controls; accepted regression reviews verify normal runner mode, and this task inspected final assertion wiring rather than executing it.",
+    "No blanket dismissal because files are tests: route duplication considered separately; meaningful native contracts retained with individual reasons. No assertion that all current application files are frozen; writer068 changes excluded."
+  ]
+}

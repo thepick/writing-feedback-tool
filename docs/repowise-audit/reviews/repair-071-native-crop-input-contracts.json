@@ -1,0 +1,530 @@
+{
+  "repair_id": "repair-071",
+  "operation": "T02",
+  "generated_at": "2026-10-16T06:07:36.106Z",
+  "timezone": "Asia/Bangkok",
+  "base_commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "status": "test_source_frozen_ready_for_independent_review",
+  "scope": {
+    "onlyChangedSource": "tests/crop-transparency.browser.cjs",
+    "productionChanged": false,
+    "prior068_069_070Changed": false,
+    "newCases": 2,
+    "summary": "Two adjacent actual mouse/touch event-to-pixel contracts added to the existing native PNG/transparency suite; no gesture framework or device matrix."
+  },
+  "pins": {
+    "tests/crop-transparency.browser.cjs": {
+      "beforeRaw": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+      "beforeLf": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1",
+      "afterRaw": "23c93f2d069fef6ed3eb873760b1381cd62fca5caf1222ae990c96c3bae723f3",
+      "afterLf": "1dc14ce79d9de3cd3b35b2dc7cfbb8075f431f9671c555a1c9009b8e47ca690c",
+      "originalMatchesBaseLf": true
+    },
+    "js/app/photo-crop.js": {
+      "raw": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+      "lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/support/local-app-route.js": {
+      "raw": "c2a198f3d2cd2be8716d02d6ce74e8863ba2a166f369378631f2f247948b7037",
+      "lf": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/crop-ownership.browser.cjs": {
+      "raw": "ecfd9eb55e0771b5121a3f8ee56cde87c3e621a6d2f74b1bd98d57d4d9774507",
+      "lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/script-loading.browser.cjs": {
+      "raw": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "lf": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/record-identity.cjs": {
+      "raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/session-retention.cjs": {
+      "raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/archive-failures.browser.cjs": {
+      "raw": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "lf": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "unchangedFromImmutableBaseLf": true
+    }
+  },
+  "validation": {
+    "baseline": {
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-baseline\\crop-transparency.log",
+      "count": 4,
+      "passed": 4,
+      "failed": 0,
+      "provenance": "Original test executed once on current composedc9b3e8f app before test edits. Console report parsed directly; original suite did not support report-file output."
+    },
+    "final": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\crop-transparency.json",
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\crop-transparency.log",
+      "count": 6,
+      "passed": 6,
+      "failed": 0,
+      "originalFourCompleteObservationsIdentical": true,
+      "newCases": [
+        {
+          "name": "native scaled mouse selects intended pixels and retains other work",
+          "passed": true,
+          "released": {
+            "rect": {
+              "x": 10,
+              "y": 10,
+              "w": 100,
+              "h": 60
+            },
+            "stopped": true
+          },
+          "observed": {
+            "dimensions": [
+              100,
+              60
+            ],
+            "pixels": [
+              [
+                255,
+                255,
+                255,
+                255
+              ],
+              [
+                0,
+                0,
+                0,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ],
+              [
+                254,
+                0,
+                0,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ]
+            ],
+            "originalAcquired": true,
+            "originalKept": true,
+            "jpeg": true,
+            "id": "gesture-target",
+            "revisionAdvanced": true,
+            "driveCleared": true,
+            "ocrCleared": true,
+            "pendingUpload": true,
+            "primaryUpdated": true,
+            "preserved": {
+              "state": true,
+              "queue": true,
+              "target": true,
+              "other": true,
+              "pending": true,
+              "source": true
+            },
+            "events": [
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropApplyBtn"
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": "cropApplyBtn"
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": "cropApplyBtn"
+              }
+            ]
+          }
+        },
+        {
+          "name": "native scaled touch-reverse selects intended pixels and retains other work",
+          "passed": true,
+          "released": {
+            "rect": {
+              "x": 110,
+              "y": 70,
+              "w": -100,
+              "h": -60
+            },
+            "stopped": true
+          },
+          "observed": {
+            "dimensions": [
+              100,
+              60
+            ],
+            "pixels": [
+              [
+                255,
+                255,
+                255,
+                255
+              ],
+              [
+                0,
+                0,
+                0,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ],
+              [
+                254,
+                0,
+                0,
+                255
+              ],
+              [
+                255,
+                255,
+                255,
+                255
+              ]
+            ],
+            "originalAcquired": true,
+            "originalKept": true,
+            "jpeg": true,
+            "id": "gesture-target",
+            "revisionAdvanced": true,
+            "driveCleared": true,
+            "ocrCleared": true,
+            "pendingUpload": true,
+            "primaryUpdated": true,
+            "preserved": {
+              "state": true,
+              "queue": true,
+              "target": true,
+              "other": true,
+              "pending": true,
+              "source": true
+            },
+            "events": [
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": ""
+              },
+              {
+                "type": "touchstart",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "touchmove",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "touchend",
+                "trusted": true,
+                "target": "cropOverlay"
+              },
+              {
+                "type": "touchstart",
+                "trusted": true,
+                "target": "cropModalTitle"
+              },
+              {
+                "type": "touchmove",
+                "trusted": true,
+                "target": "cropModalTitle"
+              },
+              {
+                "type": "touchend",
+                "trusted": true,
+                "target": "cropModalTitle"
+              },
+              {
+                "type": "mousemove",
+                "trusted": true,
+                "target": "cropApplyBtn"
+              },
+              {
+                "type": "mousedown",
+                "trusted": true,
+                "target": "cropApplyBtn"
+              },
+              {
+                "type": "mouseup",
+                "trusted": true,
+                "target": "cropApplyBtn"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "cropOwnership": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\crop-ownership.json",
+      "count": 51,
+      "passed": 51,
+      "failed": 0
+    },
+    "scriptLoading": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\script-loading.json",
+      "count": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    "syntax": {
+      "count": 1,
+      "failed": 0,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\syntax.log"
+    },
+    "diffCheck": "Passed for the only changed source file",
+    "diffNumstat": "92\t2\ttests/crop-transparency.browser.cjs"
+  },
+  "input_contract": {
+    "raster": [
+      200,
+      100
+    ],
+    "renderedSize": [
+      100,
+      50
+    ],
+    "fixtureOrigin": "Canvas and overlay aligned together to whole CSS pixels; no app coordinate function called by expectations.",
+    "expectedSourceRegion": {
+      "x": 10,
+      "y": 10,
+      "width": 100,
+      "height": 60
+    },
+    "mouse": "Playwright native mouse move/down/move/up, then a later document move.",
+    "touch": "Native Chromium Input.dispatchTouchEvent trusted touchstart/move/end in reverse direction, then a separate contact on the modal title and document touchmove/end. No synthetic DOM event dispatch or rectangle assignment.",
+    "expectedOutputDimensions": [
+      100,
+      60
+    ],
+    "samples": [
+      [
+        4,
+        4
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        70,
+        20
+      ],
+      [
+        90,
+        50
+      ],
+      [
+        50,
+        50
+      ]
+    ],
+    "expectedRgb": [
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        0,
+        0
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "jpegTolerance": "Absolute channel difference <15; alpha must equal255."
+  },
+  "protected_contract": "Real handleSelectedImages acquires two PNGs. The intended photo retains exact original PNG bytes, stable identity and imageId; only its raster/revision/Drive/OCR state changes. Unrelated photo bytes/metadata/OCR promise, queue object, owner/current writing, protected storage, pending object and reassessment source remain unchanged. Real visible Crop and Apply Crop buttons enter/apply both cases.",
+  "attempt_history": {
+    "initialFailedRun": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\attempt-1.json",
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\attempt-1.log",
+      "cases": 6,
+      "passed": 5,
+      "failed": 1,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    rect: {\n      h: 60,\n      w: 100,\n      x: 10,\n+     y: 8\n-     y: 10\n    },\n    stopped: true\n  }\n"
+    },
+    "diagnostic": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\diagnostic.json",
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair071-fixed\\diagnostic.log",
+      "script": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\work\\repair071-mouse-diagnostic.cjs",
+      "observation": "Overlay top273.90625 CSSpx; requested mouse y278.90625 was delivered as integral clientY278. At fixed2xsource scale the app correctly selected source y8 instead of the fixture expected y10. Native touch retained fractional positions and passed. Diagnostic source was compiled in memory; production unchanged."
+    },
+    "correction": "Aligned test canvas/overlay origins to whole pixels, retaining literal expected100x60 source region and all independent pixel expectations. Final six cases passed.",
+    "productionBug": false
+  },
+  "claims": {
+    "productionBug": false,
+    "scannerClosure": false,
+    "newCoverageMeasurement": false
+  },
+  "limits": [
+    "Native browser-dispatched touch proves trusted browser listener behavior, not physical touchscreen hardware. One fixed viewport and2:1display scale only.",
+    "Native decoded JPEG samples cover asymmetric ink/red/background and reject shifted selections; this is not exhaustive per-pixel or all-image-format validation.",
+    "No full repository gate, native coverage export, RepoWise refresh, Git/index/tracker/audit metadata mutation, deployment, production/CSS/dependency/frozen fixture changes by this writer. Coordinator owns review/integration.",
+    "All external requests blocked by existing localAppRoute; synthetic PNGs, writing, owner and pending only."
+  ]
+}

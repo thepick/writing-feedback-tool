@@ -1,0 +1,530 @@
+{
+  "repair_id": "repair-068",
+  "operation": "P04",
+  "generated_at": "2026-10-16T05:34:32.693Z",
+  "timezone": "Asia/Bangkok",
+  "base_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "status": "source_frozen_ready_for_independent_review",
+  "findings": [
+    "code_health:finding_9599830c23cff6c9eeab"
+  ],
+  "benefit": "One exact portfolio-root metadata classification policy shared by five existing consumers; no production defect, metric improvement or scanner closure alleged.",
+  "reserved_exact_case_sensitive_names": [
+    "_meta",
+    "updatedAt",
+    "__syncMeta",
+    "syncMeta",
+    "lastSyncedAt",
+    "lastSyncStatus"
+  ],
+  "changes": {
+    "helper": "isWftPortfolioStudentKey",
+    "production": "One positive six-comparison predicate, four existing Object.keys filters, one strict-validator skip. All other production text unchanged after LF normalization.",
+    "vm_loaders": {
+      "tests/record-identity.cjs": 3,
+      "tests/session-retention.cjs": 1,
+      "tests/portfolio-sync.cjs": 1
+    },
+    "native_contract_file": "tests/record-identity.browser.cjs",
+    "added_native_cases": 4,
+    "diff_numstat": "9\t5\tjs/app/00-storage-sync-patches.js\n1\t1\ttests/portfolio-sync.cjs\n108\t0\ttests/record-identity.browser.cjs\n3\t3\ttests/record-identity.cjs\n1\t1\ttests/session-retention.cjs"
+  },
+  "hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "beforeRaw": "0ddb92e188919afaf02e47d245d1b44095700a0b7b62ec9ab03b8c00c8d04c8b",
+      "beforeLf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "afterRaw": "8767b5a0b4354a851e5555a52d92e246b5a7f90fd3fa088f76abf3eabb057547",
+      "afterLf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184",
+      "immutableBaseLfVerified": true
+    },
+    "tests/record-identity.cjs": {
+      "beforeRaw": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d",
+      "beforeLf": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d",
+      "afterRaw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "afterLf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "immutableBaseLfVerified": true
+    },
+    "tests/session-retention.cjs": {
+      "beforeRaw": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+      "beforeLf": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+      "afterRaw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "afterLf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "immutableBaseLfVerified": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "beforeRaw": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4",
+      "beforeLf": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4",
+      "afterRaw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "afterLf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "immutableBaseLfVerified": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "beforeRaw": "a6bbfbac9af692cce558da903ae48d9d0a61de460795f29e617591e64031834c",
+      "beforeLf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+      "afterRaw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "afterLf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "immutableBaseLfVerified": true
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "testedRaw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "testedLf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "testedRaw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+      "testedLf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/portfolio-index.browser.cjs": {
+      "testedRaw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+      "testedLf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/session-retention.browser.cjs": {
+      "testedRaw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de",
+      "testedLf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/storage-integrity.browser.cjs": {
+      "testedRaw": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+      "testedLf": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+      "unchangedFromImmutableBaseLf": true
+    }
+  },
+  "before_validation": "All eight requested current suites ran on the unmodified checkout before source edits. Four new contracts were subsequently run against preserved original production bytes via a single in-memory local route substitution; the original production script has the verified base hash. That contract run serves the original policy despite candidate bytes being on disk; it is not claimed to be a pre-edit checkout run.",
+  "validation": {
+    "focusedSuitesBefore": 8,
+    "focusedSuitesAfter": 8,
+    "failedSuites": 0,
+    "structuredCasesBefore": 1255,
+    "structuredCasesAfter": 1259,
+    "structuredCasesFailed": 0,
+    "structuredSuites": [
+      {
+        "suite": "record-identity.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\record-identity.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\record-identity.json",
+        "before": {
+          "cases": 34,
+          "passed": 34,
+          "failed": 0
+        },
+        "after": {
+          "cases": 34,
+          "passed": 34,
+          "failed": 0
+        }
+      },
+      {
+        "suite": "session-retention.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\session-retention.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\session-retention.json",
+        "before": {
+          "cases": 4,
+          "passed": 4,
+          "failed": 0
+        },
+        "after": {
+          "cases": 4,
+          "passed": 4,
+          "failed": 0
+        }
+      },
+      {
+        "suite": "record-identity.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\record-identity.browser.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\record-identity.browser.json",
+        "before": {
+          "cases": 50,
+          "passed": 50,
+          "failed": 0
+        },
+        "after": {
+          "cases": 54,
+          "passed": 54,
+          "failed": 0
+        }
+      },
+      {
+        "suite": "preference-integrity.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\preference-integrity.browser.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\preference-integrity.browser.json",
+        "before": {
+          "cases": 105,
+          "passed": 105,
+          "failed": 0
+        },
+        "after": {
+          "cases": 105,
+          "passed": 105,
+          "failed": 0
+        }
+      },
+      {
+        "suite": "portfolio-index.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\portfolio-index.browser.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\portfolio-index.browser.json",
+        "before": {
+          "cases": 189,
+          "passed": 189,
+          "failed": 0
+        },
+        "after": {
+          "cases": 189,
+          "passed": 189,
+          "failed": 0
+        }
+      },
+      {
+        "suite": "session-retention.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\session-retention.browser.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\session-retention.browser.json",
+        "before": {
+          "cases": 89,
+          "passed": 89,
+          "failed": 0
+        },
+        "after": {
+          "cases": 89,
+          "passed": 89,
+          "failed": 0
+        }
+      },
+      {
+        "suite": "storage-integrity.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\storage-integrity.browser.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\storage-integrity.browser.json",
+        "before": {
+          "cases": 784,
+          "passed": 784,
+          "failed": 0
+        },
+        "after": {
+          "cases": 784,
+          "passed": 784,
+          "failed": 0
+        }
+      }
+    ],
+    "portfolio_sync_unstructured": [
+      {
+        "phase": "baseline",
+        "exitCode": 0,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\portfolio-sync.log",
+        "structuredCaseCount": null
+      },
+      {
+        "phase": "fixed",
+        "exitCode": 0,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\portfolio-sync.log",
+        "structuredCaseCount": null
+      }
+    ],
+    "new_contract_original_policy": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\new-contract-original-policy.json",
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-baseline\\new-contract-original-policy.log",
+      "route_wrapper": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\work\\repair068-original-policy.cjs",
+      "count": 54,
+      "passed": 54,
+      "failed": 0,
+      "original_production_sha256_raw": "0ddb92e188919afaf02e47d245d1b44095700a0b7b62ec9ab03b8c00c8d04c8b"
+    },
+    "new_contracts_before_and_after": [
+      {
+        "name": "portfolio-root-policy/schema-index-health-roster",
+        "originalPassed": true,
+        "candidatePassed": true,
+        "candidateObserved": {
+          "normalizedKeys": [
+            "__proto__",
+            "constructor",
+            "Alice",
+            "_Meta",
+            "lastSyncStatusExtra",
+            "_meta"
+          ],
+          "nullPrototypes": [
+            true,
+            true
+          ],
+          "normalized": [
+            [
+              "__proto__",
+              [
+                [
+                  "saved-__proto__",
+                  "Synthetic __proto__"
+                ]
+              ]
+            ],
+            [
+              "constructor",
+              [
+                [
+                  "saved-constructor",
+                  "Synthetic constructor"
+                ]
+              ]
+            ],
+            [
+              "Alice",
+              [
+                [
+                  "saved-Alice",
+                  "Synthetic Alice"
+                ]
+              ]
+            ],
+            [
+              "_Meta",
+              [
+                [
+                  "saved-_Meta",
+                  "Synthetic _Meta"
+                ]
+              ]
+            ],
+            [
+              "lastSyncStatusExtra",
+              [
+                [
+                  "saved-lastSyncStatusExtra",
+                  "Synthetic lastSyncStatusExtra"
+                ]
+              ]
+            ],
+            [
+              "_meta",
+              [
+                [
+                  "saved-_meta",
+                  "Synthetic _meta"
+                ]
+              ]
+            ]
+          ],
+          "metadataSame": true,
+          "index": [
+            [
+              "__proto__",
+              "",
+              1,
+              80,
+              "2026-10-01T00:00:00Z"
+            ],
+            [
+              "constructor",
+              "",
+              1,
+              80,
+              "2026-10-01T00:00:00Z"
+            ],
+            [
+              "Alice",
+              "",
+              1,
+              80,
+              "2026-10-01T00:00:00Z"
+            ],
+            [
+              "_Meta",
+              "",
+              1,
+              80,
+              "2026-10-01T00:00:00Z"
+            ],
+            [
+              "lastSyncStatusExtra",
+              "",
+              1,
+              80,
+              "2026-10-01T00:00:00Z"
+            ]
+          ],
+          "health": "Storage mode: legacy name keyedSafe mode: offlocalStorage est. size: 6.0 KBIndexedDB: availablePortfolio index: cleanCached students: 5, sessions: 5Last Drive sync: neverActive source of truth: legacy name keyed",
+          "legacyKeys": [
+            "_meta",
+            "__proto__",
+            "constructor",
+            "Alice",
+            "_Meta",
+            "lastSyncStatusExtra"
+          ],
+          "rosterKeys": [
+            "__proto__",
+            "constructor",
+            "Alice",
+            "_Meta",
+            "lastSyncStatusExtra"
+          ],
+          "rosterNames": [
+            "__proto__",
+            "constructor",
+            "Alice",
+            "_Meta",
+            "lastSyncStatusExtra"
+          ],
+          "ids": [
+            "stu_proto_20261016",
+            "stu_constructor_20261016",
+            "stu_alice_20261016",
+            "stu_meta_20261016",
+            "stu_lastsyncstatusextra_20261016"
+          ],
+          "unchanged": true
+        }
+      },
+      {
+        "name": "portfolio-root-policy/strict-validation-before-writes",
+        "originalPassed": true,
+        "candidatePassed": true,
+        "candidateObserved": {
+          "accepted": 6,
+          "rejected": [
+            {
+              "name": "_Meta",
+              "session": false,
+              "type": "TypeError",
+              "message": "Invalid portfolio student: _Meta"
+            },
+            {
+              "name": "_Meta",
+              "session": true,
+              "type": "TypeError",
+              "message": "Invalid portfolio session for: _Meta"
+            },
+            {
+              "name": "UpdatedAt",
+              "session": false,
+              "type": "TypeError",
+              "message": "Invalid portfolio student: UpdatedAt"
+            },
+            {
+              "name": "UpdatedAt",
+              "session": true,
+              "type": "TypeError",
+              "message": "Invalid portfolio session for: UpdatedAt"
+            },
+            {
+              "name": "lastSyncStatusExtra",
+              "session": false,
+              "type": "TypeError",
+              "message": "Invalid portfolio student: lastSyncStatusExtra"
+            },
+            {
+              "name": "lastSyncStatusExtra",
+              "session": true,
+              "type": "TypeError",
+              "message": "Invalid portfolio session for: lastSyncStatusExtra"
+            },
+            {
+              "root": true,
+              "type": "TypeError",
+              "message": "Portfolio data is unreadable. Download Emergency Backup before repairing browser storage."
+            },
+            {
+              "root": true,
+              "type": "TypeError",
+              "message": "Portfolio data is unreadable. Download Emergency Backup before repairing browser storage."
+            },
+            {
+              "root": true,
+              "type": "TypeError",
+              "message": "Portfolio data is unreadable. Download Emergency Backup before repairing browser storage."
+            },
+            {
+              "root": true,
+              "type": "TypeError",
+              "message": "Portfolio data is unreadable. Download Emergency Backup before repairing browser storage."
+            },
+            {
+              "root": true,
+              "type": "TypeError",
+              "message": "Portfolio data is unreadable. Download Emergency Backup before repairing browser storage."
+            }
+          ],
+          "writes": 0,
+          "unchanged": true
+        }
+      },
+      {
+        "name": "portfolio-root-policy/ignored-getters-and-error-order",
+        "originalPassed": true,
+        "candidatePassed": true,
+        "candidateObserved": {
+          "traces": {
+            "schema": [
+              "Alice",
+              "_meta",
+              "_meta"
+            ],
+            "index": [
+              "Alice"
+            ],
+            "validator": [
+              "Alice"
+            ],
+            "health": [
+              "Alice"
+            ],
+            "roster": []
+          },
+          "errorOrder": [
+            "Alice",
+            "sessions",
+            "sessions",
+            "Bob"
+          ],
+          "sameError": true
+        }
+      },
+      {
+        "name": "portfolio-root-policy/legacy-safe-mode-skip-identities",
+        "originalPassed": true,
+        "candidatePassed": true,
+        "candidateObserved": {
+          "normalized": {
+            "Legacy": {
+              "sessions": []
+            }
+          },
+          "indexKeys": [
+            "Legacy"
+          ],
+          "count": 0,
+          "identity": true,
+          "allocations": 0,
+          "unchanged": true
+        }
+      }
+    ],
+    "syntax": {
+      "count": 5,
+      "failed": 0,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\syntax.log"
+    },
+    "diffCheck": "Passed on the five authorized source/test paths"
+  },
+  "preserved_contracts": [
+    "Exact own-key order/null-prototype outputs; six reserved names excluded even when student/session-shaped. Own __proto__/constructor, Alice, _Meta and lastSyncStatusExtra stay eligible.",
+    "Schema keeps existing _meta attachment identity and two truthy getter reads after student traversal. Index, health, roster and validator do not read reserved payload getters; strict validator skips all six including _meta.",
+    "Strict root null/array/scalar rejection and near-match/case-variant TypeErrors occur before any storage write. Ordinary root/session getter order and thrown sentinel identity preserved.",
+    "Health/roster synthetic portfolio-provider seam supplies the mixed-root object to actual native consumer functions; settings writes and real student-ID generation remain native.",
+    "Legacy arrays, invalid-student skipping, safe-mode identity and skipStudentIds remain. Existing native failed-ID, storage rollback, index cache/live reads, chronological retention and validation cases all retained.",
+    "normalizePortfolioData deliberately retains its separate five-name policy and _meta eligibility; its function is unchanged and tested explicitly."
+  ],
+  "callers_and_extraction_review": [
+    "Schema consumers: stripPortfolioHeavyFields and savePortfolioData preserve localOnly/safe-mode bypasses.",
+    "Index consumers: savePortfolioIndexToDrive snapshot validation, rebuildPortfolioIndex pre/post ID enrichment, syncWftPortfolioIndexIfNeeded.",
+    "Health consumers: openSettingsDrawer, clearLocalPortfolioCache, toggleWftSafeMode in storage-recovery.js.",
+    "Roster consumer: guarded optional startup initialization; independent roster/portfolio catches and persistence remain.",
+    "Validator consumers: recovery upload, normalization/strict snapshot, required Drive JSON/student-file reads/uploads, local merge save and savePortfolioData.",
+    "Five explicit VM extraction sites load the real new production predicate. portfolio-replacement.cjs incidental span now contains the harmless predicate declaration but excludes the schema normalizer; portfolio-save.cjs existing stubs acquire no new dependency. No extra loader edit needed."
+  ],
+  "limits": [
+    "No full repository gate, manifest/native coverage export, RepoWise index refresh, Git mutation, publishing, deployment or audit metadata write performed by this writer. Coordinator owns those operations.",
+    "Focused portfolio-sync.cjs emits only an unstructured success transcript; no invented per-case or assertion count is included for it.",
+    "External browser routes are blocked, synthetic writing only. No live accounts, Google Drive or AI service exercised.",
+    "No P03, root index.html/CSS, scripts, dependencies, manifest or frozen fixture changes."
+  ]
+}

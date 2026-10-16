@@ -1,0 +1,294 @@
+{
+  "review_id": "repair-070-safety-review",
+  "decision": "accepted_no_blocker",
+  "blocking_findings": [],
+  "base_commit": "1391fd0b7f1d091b7cb1676b6b4d7353cb897eaa",
+  "inspected_git_head_at_end": "1391fd0b7f1d091b7cb1676b6b4d7353cb897eaa",
+  "completed_utc": "2026-10-16T05:57:24.911045+00:00",
+  "pins_sha256": {
+    "tests/archive-failures.browser.cjs": {
+      "raw": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "lf": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "baseline_git_blob": "d822fbfe46be8a6aced6ef4643178a339100ef8b",
+      "baseline_lf": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9",
+      "unchanged_from_baseline_lf": false,
+      "unchanged_at_review_end": true
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "baseline_git_blob": "92b0112c2dde1f348e535caa1c98b89dc48ab7a5",
+      "baseline_lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "baseline_git_blob": "fa822ac74b08552c316de5049f13f6af73788bc3",
+      "baseline_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "baseline_git_blob": "b37f52b9efad9ce0cc93d0bbc575d7e5bc76663a",
+      "baseline_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "baseline_git_blob": "26ea30755abd441468625d072aaadb574e0515e4",
+      "baseline_lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/archive-connection.browser.cjs": {
+      "raw": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "baseline_git_blob": "52e6cd53100ce4bcebfad9a9c0a062e2b8f6b26b",
+      "baseline_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/archive-integrity.browser.cjs": {
+      "raw": "11f7807415cea27c165ad2584c37e7d58e81a0649acc9b0927ff243dc808029b",
+      "lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+      "baseline_git_blob": "b15b6e41a5e94c4d9d9658e92838ab974d22cbfc",
+      "baseline_lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "baseline_git_blob": "578fc1e12b08ab6427722586a10155ec86af9518",
+      "baseline_lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "baseline_git_blob": "1150406b3c4d4ee72f27b75f1da45c8f6ec34bfa",
+      "baseline_lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/record-identity.cjs": {
+      "raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "baseline_git_blob": "ab88bb1a75ea7cb8e45388708af76c7189a2ddbd",
+      "baseline_lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/session-retention.cjs": {
+      "raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "baseline_git_blob": "45e51a974b1edbb3047551d444ac9739bdbc6b6f",
+      "baseline_lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "baseline_git_blob": "1e60130d70908d73d1d886c55f048cadc411e75e",
+      "baseline_lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "unchanged_from_baseline_lf": true,
+      "unchanged_at_review_end": true
+    }
+  },
+  "public_caller_pin": {
+    "file": "index.html",
+    "raw": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+    "lf": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+    "anchors": [
+      "index.html:3358",
+      "index.html:3385"
+    ],
+    "unchanged_from_baseline_lf": true
+  },
+  "scope": "Only archive-failures test changes in application/test diff; parent audit documents may advance. Production00/main/export/recovery and accepted068/069 source/test pins independently match baseline LF and supplied raw hashes. Full changed test and relevant unchanged public handlers/generators/Drive guards reviewed.",
+  "assessment": [
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:6-7",
+        "tests/archive-failures.browser.cjs:17-114",
+        "tests/archive-failures.browser.cjs:117-186"
+      ],
+      "reason": "Four fixed scenarios append to the existing eight, without altering their order or removing seven named failure/retry checks. New native Node assertions execute before passed:true; thrown ZIP/parser/assert errors become failed rows. All12scenarios and failure aggregation are required. The eight complete supplied original records, including body captures and download names, equal baseline exactly."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:26-52",
+        "tests/archive-failures.browser.cjs:84-89",
+        "tests/archive-failures.browser.cjs:138-153"
+      ],
+      "reason": "Failure checkpoint is taken before restoring fault/reconnecting or retrying. Fixture contains nonempty current text, native PNG media, pending text/photo, saved essay, analysis/context/reassessment, runtime selection/roster/counters. Raw six protected keys and JSON runtime snapshots compare exactly; all nine explicit object references retain identity. Delegating wrappers count real download/clear calls; browser download event count independently stays zero at checkpoint. Receipt positive premises were inspected, so retention is not vacuous empty state."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:65-81",
+        "js/app/00-storage-sync-patches.js:3835-3904",
+        "js/app/00-storage-sync-patches.js:4214-4284",
+        "js/app/portfolio-export.js:851-938"
+      ],
+      "reason": "Folder case uses real public year handler, root validation, subfolder search/create and wftDriveFetch with only terminal fetch responses synthetic. Actual Archives search gives no files; HTTP200{} reaches missing-folder-ID guard881-882. Three failure requests are GET root, GET Archives, POST exact folder metadata. No upload/download/clear occurs. Retry receives folder ID and follows real upload chain. No folder guard or service helper replaced."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:60-64",
+        "tests/archive-failures.browser.cjs:103-106",
+        "js/app/portfolio-export.js:731-835",
+        "js/app/portfolio-export.js:991-1088"
+      ],
+      "reason": "Tiny failures resolve generateAsync once with nonempty30-byte Blob, exercising fulfilled-result size guards below1000year/500single before outgoing requests/download/clear. Original generator is restored before retry. Signed-out state clears both tokens/sign-in/expiry before ordinary year handler; captured empty connection is stable, generation runs, then real saveArchiveZipToDrive token guard rejects. It is not a nonexistent early public-handler sign-in guard. Retried connection is restored only after failure capture."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:81-89",
+        "tests/archive-failures.browser.cjs:121-137",
+        "tests/archive-failures.browser.cjs:155-174",
+        "js/app/portfolio-export.js:838-849",
+        "js/app/portfolio-export.js:900-925",
+        "js/app/portfolio-export.js:959-1088"
+      ],
+      "reason": "Tests call the actual functions wired to public HTML buttons; synthetic text/confirmation responses bypass interaction only. Download and class-clear wrappers delegate original functions. Every retry creates one native browser download; year retries make one actual multipart request and one guarded clear, single retry neither uploads nor clears. Worker test opens real download path with installed JSZip and checks protected saved writing. Reviewer independently parsed three captured8806-byte multipart bodies with standard-library ZIP reader using actual request-header boundary: each carries a valid8488-byte ZIP, correct parent/mime and exact protected saved essay. Blob.type lowercases its boundary parameter; actual request header/body casing agrees."
+    }
+  ],
+  "supplied_evidence": {
+    "method": "Read-only source and JSON/base64/log inspection; standard-library ZIP artifact parsing only, no app/test/browser run.",
+    "baseline_scenarios": 8,
+    "baseline_ordered_checks": 56,
+    "candidate_scenarios": 12,
+    "candidate_ordered_checks": 84,
+    "original_eight_full_records_identical": true,
+    "additional_native_connection_checks": 76,
+    "additional_native_integrity_checks": 366,
+    "reported_failures": 0,
+    "new_case_summaries": [
+      {
+        "kind": "year",
+        "mode": "folder-create-empty-ack",
+        "nonempty_work_premises_verified": true,
+        "exact_storage_runtime_and9references_retained": true,
+        "failure_requests": 3,
+        "failure_upload_download_clear": [
+          0,
+          0,
+          0
+        ],
+        "retry_download": {
+          "bytes": 8488,
+          "protectedEntry": "Synthetic year/Complete Portfolio.json"
+        },
+        "reviewer_parsed_multipart_zips": [
+          {
+            "multipart_bytes": 8806,
+            "zip_bytes": 8488,
+            "zip_sha256": "d9461ab5d7371d338c3ea4900db3840c96a93a25dfabcc40128b2970aac88b43",
+            "protected_entry": "Synthetic year/Complete Portfolio.json",
+            "parent": [
+              "synthetic-year"
+            ],
+            "mime": "application/zip"
+          }
+        ]
+      },
+      {
+        "kind": "year",
+        "mode": "tiny-resolved",
+        "nonempty_work_premises_verified": true,
+        "exact_storage_runtime_and9references_retained": true,
+        "failure_requests": 0,
+        "failure_upload_download_clear": [
+          0,
+          0,
+          0
+        ],
+        "retry_download": {
+          "bytes": 8488,
+          "protectedEntry": "Synthetic year/Complete Portfolio.json"
+        },
+        "reviewer_parsed_multipart_zips": [
+          {
+            "multipart_bytes": 8806,
+            "zip_bytes": 8488,
+            "zip_sha256": "d9461ab5d7371d338c3ea4900db3840c96a93a25dfabcc40128b2970aac88b43",
+            "protected_entry": "Synthetic year/Complete Portfolio.json",
+            "parent": [
+              "synthetic-year"
+            ],
+            "mime": "application/zip"
+          }
+        ]
+      },
+      {
+        "kind": "single",
+        "mode": "tiny-resolved",
+        "nonempty_work_premises_verified": true,
+        "exact_storage_runtime_and9references_retained": true,
+        "failure_requests": 0,
+        "failure_upload_download_clear": [
+          0,
+          0,
+          0
+        ],
+        "retry_download": {
+          "bytes": 2078,
+          "protectedEntry": "Synthetic - Portfolio.html"
+        },
+        "reviewer_parsed_multipart_zips": []
+      },
+      {
+        "kind": "year",
+        "mode": "signed-out",
+        "nonempty_work_premises_verified": true,
+        "exact_storage_runtime_and9references_retained": true,
+        "failure_requests": 0,
+        "failure_upload_download_clear": [
+          0,
+          0,
+          0
+        ],
+        "retry_download": {
+          "bytes": 8488,
+          "protectedEntry": "Synthetic year/Complete Portfolio.json"
+        },
+        "reviewer_parsed_multipart_zips": [
+          {
+            "multipart_bytes": 8806,
+            "zip_bytes": 8488,
+            "zip_sha256": "d9461ab5d7371d338c3ea4900db3840c96a93a25dfabcc40128b2970aac88b43",
+            "protected_entry": "Synthetic year/Complete Portfolio.json",
+            "parent": [
+              "synthetic-year"
+            ],
+            "mime": "application/zip"
+          }
+        ]
+      }
+    ],
+    "references_sha256_raw": {
+      "outputs/repair070-baseline/archive-failures.json": "2829ea6d7c849653b1772754a02769d540a4175c439931ac2b02439aac758f14",
+      "outputs/repair070-fixed/archive-failures.json": "3548bf0ab02e2f2b7e2a9eddcd89e16b6f6ee92bea99f8c66f24ea1b61900a7d",
+      "outputs/repair070-fixed/archive-connection.json": "cb03ede88a8ba2888010809061e213ceb32ac6982388cae6c012a6fe5bdee951",
+      "outputs/repair070-fixed/archive-integrity.json": "41b801d64166ca93577a2d1311181fe2de1815c83b2fb3ff65b6b51bbb1681c7",
+      "outputs/repair-070-archive-refusal-contracts.json": "79b256c9a34030d3f0a6bcfb2a7a1b9c43da56ceae50dc6b8c607e9e01932f9e",
+      "outputs/repair070-fixed/syntax.log": "c32daf3689b00307321f70a8fb04763e78d2fa58475b510783449a9a50d6b540"
+    },
+    "syntax": "Supplied log reports one changed test syntax check; no reviewer rerun."
+  },
+  "limits": [
+    "No production defect, fix, scanner closure or coverage import claimed. This adds contract tests for existing refusals. No test/app/browser execution or source/test/Git/index/tracker change by reviewer; only own scratch/report written.",
+    "Exact pins rechecked unchanged at end. Focused receipts are not a full repository gate, live Drive/OAuth, deployment or independent execution attestation.",
+    "Public functions are invoked directly; dialogs are synthetic answers, not physical button/dialog interaction. Network is intercepted and browser external origins blocked; credentials/students are synthetic.",
+    "includeImages is false: new tests prove local selected/pending PNG retention at failure and saved-essay ZIP contents; they do not prove archive inclusion of current/pending photos or new image-export fidelity.",
+    "Downloaded ZIP paths are decoded by the worker test before page closure; reviewer inspected supplied decode outcomes, not transient downloaded files. Captured year multipart ZIP bytes were independently parsed here. No mutation/fault-sensitivity test was run."
+  ]
+}

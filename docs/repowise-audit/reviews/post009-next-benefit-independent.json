@@ -1,0 +1,97 @@
+{
+  "review": "post009-next-benefit-independent",
+  "decision": "Two bounded planning opportunities: timeout acknowledgement contracts first; one small high-score performance guard second. Neither is a confirmed defect or necessary to complete the current batch. No other production cleanup is admitted by this scoped review.",
+  "advisory_only": true,
+  "inspected_git_commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "scope": "Read remaining queue and storage/coverage admissions, current tracker, complete upload verification and Grammar-reason functions, media ownership guards and relevant immutable test assertions. Did not inspect moving071 crop candidate or conduct a whole-repository audit.",
+  "source_pins": {
+    "js/app/00-storage-sync-patches.js": {
+      "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "git_normalized_lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "checkout_matches_git_lf": true
+    },
+    "js/app/10-main-app.js": {
+      "raw_sha256": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "git_normalized_lf_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "checkout_matches_git_lf": true
+    }
+  },
+  "next_operations": [
+    {
+      "priority": 1,
+      "queue_id": "P10",
+      "operation": "Test timeout recovery acknowledgement before considering the optional fingerprint-policy refactor",
+      "disposition": "worthwhile bounded test-only preparation; defer production edit",
+      "record_ids": [
+        "code_health:finding_ca33c20e174a2bfda950",
+        "code_health:finding_7cf232b061699f0ff1c4"
+      ],
+      "function_pin": {
+        "file": "js/app/00-storage-sync-patches.js",
+        "function": "uploadWftJsonFilePromise",
+        "span": [5051, 5119],
+        "sha256_normalized_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb"
+      },
+      "benefit": "After SAVE_FILE_TIMEOUT, the real helper can acknowledge a write only after finding canonical cloud data with the intended fingerprint. A wrong equality/filename decision could falsely acknowledge different settings, deletions, writing or index data. Existing inspected tests protect ordinary multipart/credential sanitation and generic timeout/retry ownership, but do not contain an independent equality/mismatch recovery matrix for all four filename contracts. This is a substantive acknowledgement oracle, independent of line coverage.",
+      "source_anchors": ["00-storage-sync-patches.js:5066-5068 intended fingerprint", "00-storage-sync-patches.js:5080-5106 timeout-only canonical download, typed admission, equality and cache publication"],
+      "current_evidence": ["tests/portfolio-index.browser.cjs:324-340 exercises actual ordinary upload/index acknowledgement", "tests/preference-integrity-scenarios.js:651-676 exercises actual outgoing settings sanitation and ordinary network retry", "tests/drive-lifecycle.browser.cjs manual completion/timeout/retry checks preserve dirty state and actual retry, without the four-contract equality oracle"],
+      "smallest_next_step": "One compact table in an existing native Drive lifecycle/transport suite. Keep uploadWftJsonFilePromise and typed cloud parsing real; inject the timeout at the existing save boundary and control canonical cloud responses. Cover equal and meaningfully different data for settings/deletions/portfolio/index, plus representative non-timeout, missing canonical and invalid required cloud payload controls. No generic new harness and no automatic source refactor.",
+      "substantive_oracles": "Literal expected canonical ID only on matching recovery; exact original timeout object on mismatch/missing canonical; non-timeout error propagates without recovery lookup; invalid required payload remains rejected; no false cache/clean acknowledgement, changed saved bytes or leaked credential. Confirm the timeout branch was actually reached. Retain independent payload comparisons rather than using the same fingerprint function to manufacture expected success.",
+      "stop_rule": "If the existing correct implementation satisfies these controls, stop at test strengthening. Sharing the two filename selectors is optional and currently has no demonstrated divergence or wrong-result benefit.",
+      "confirmed_bug": false
+    },
+    {
+      "priority": 2,
+      "queue_id": "P31",
+      "operation": "Skip one unused high-score Grammar diff analysis",
+      "disposition": "worthwhile minimal performance candidate after focused parity/call-count checks",
+      "record_ids": ["code_health:finding_d101f599d7efdce35b73"],
+      "function_pin": {
+        "file": "js/app/10-main-app.js",
+        "function": "buildGrammarReasonFromData",
+        "span": [1887, 1912],
+        "sha256_normalized_lf": "0643fe6e71d4c59402520f245ad4ac485a58ca43fc608aa6c5b9f351fd0bed46"
+      },
+      "benefit": "Normalized scores above8 always return the existing empty replacement, yet first execute analyzeGrammarChanges. That calls getDiffOperations and allocates/fills the full quadratic LCS matrix; the source explicitly documents its quadratic-space limit. The shipped polishFeedback caller invokes this path for any numeric quick Grammar score. A guard removes an actually unused computation/allocation, rather than moving branches to improve CCN. No measured latency or memory saving is claimed.",
+      "source_anchors": ["10-main-app.js:1888-1890 normalization/null guard and unconditional summary", "10-main-app.js:1891-1912 only <=6 and <=8 output bands", "10-main-app.js:1810-1885 diff operations/Grammar summary", "10-main-app.js:1167-1186 full LCS allocation and nested loops", "10-main-app.js:2080-2084 actual polishFeedback call"],
+      "smallest_source_scope": "After the existing null-score return, return the same empty string when n>8, before analyzeGrammarChanges. Preserve all other thresholds, strings, normalization and callers. Do not merge the adjacent evidence builder or alter scoring/calibration/fixtures.",
+      "existing_tests": ["tests/feedback-compatibility.browser.cjs:55 already asserts score6 verb wording and score9 empty output", "tests/correction-performance.browser.cjs:61-70 compares actual diff/reason/evidence/notes outputs; :72-87 covers long text and deterministic normalization-work counts"],
+      "needed_validation": "In an existing native suite, compare exact original/candidate output for null/undefined/zero/negative/numeric-string/6/7/8/8.5/9/10 and representative Grammar-summary branches. With the real analyzer delegated by a counting wrapper, verify high normalized scores call it zero times while supported low/mid bands retain their existing call/output behavior. Keep primitive writing inputs and the complete existing parity suite. Do not claim an optimization from a clock threshold alone.",
+      "prior_source_reuse": "Rechecked the exact cause described in accepted repair036 finding_d101f599d7efdce35b73 against current c9 source and real caller/test assertions. Current tracker says needs_revalidation; that is not a bug classification or permission to close the finding.",
+      "confirmed_bug": false
+    }
+  ],
+  "bounded_deferrals_and_exclusions": [
+    "P14 was examined because of ownership risk, but no divergent guard found. uploadSessionImagesToDrive6950-7081 retains distinct start, pre-upload and post-response token/identity/content/owner checks. Existing media-upload-boundary tests hold compression/folder work and assert zero stale outgoing requests, preserved pending work and happy/unrelated-writing controls. Sharing two small predicates would add regression cost and can obscure the phase-specific content guard; defer without new evidence. Function LF hash038c21fd477f6fc89270f078bd5db0c82c45f50128717b563c81638ed8bb21f1.",
+    "P01/P09/P16 and optional crop-route adapter remain under their existing bounded deferrals; no new evidence was established and none is reopened. Other dead assignments, one-use guard removals, UI toggles, alias rewrites and test-route reuse are not promoted merely because the historical queue lists them.",
+    "068/P04,069/P03 and070/T03 refusal controls are already accepted; P11 was handled earlier.071/T02 input tests were active at planning capture and are not reviewed or counted as passing here. Do not duplicate these operations because the old queue still says unimplemented.",
+    "T01 lightbox and remaining legacy/export compatibility branches retain the prior low-risk/optional rationale. The lightbox uses vetted sources/textContent and does not persist writing; no new production defect or higher-priority gap is established by its low percentage alone. Old behavior leads already repaired059-064, explicitly deferred optional paths or unreproduced renderer concerns are not reclassified from queue labels."
+  ],
+  "tracker_and_coverage_provenance": {
+    "tracker_source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+    "tracker_sha256_raw": "97e2607a9baf7ffe54832fb4d078e1139d9b58e75dfaa6b233dbe25845454470",
+    "captured_counts": {"rows_including_history":1045,"present_rows":1005,"reviewed_no_change":622,"needs_revalidation":319,"confirmed_repair_candidate":47,"candidate_needs_regression":15,"unreviewed":2},
+    "interpretation": "Counts describe scanner/tracker records and review states, not confirmed bugs or authorized edits. The two unreviewed production rows are coverage-gradient records. The old queue's96 candidate leaf operations and125 candidate rows were a00c historical plan, not96 currently justified repairs.",
+    "coverage": "Latest inspected ingestion receipt is batch008 ated578, reusing batch007 native capture because its eight app scripts were unchanged then. Current storage LF27c0062d differs from captured49ba1cda after068/069; do not apply its old91% storage coverage to current source. Main/export/crop source hashes remain the prior values, but new009 tests have no new coverage capture in this review. No fresh percentage, branch coverage, uncovered-branch assertion or overall score forecast is made. Absence of an explicit timeout matrix is not proof the branch never executes indirectly."
+  },
+  "test_source_pins_normalized_lf": {
+    "tests/drive-lifecycle.browser.cjs":"8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+    "tests/portfolio-index.browser.cjs":"184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+    "tests/media-upload-boundary.browser.cjs":"de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+    "tests/correction-performance.browser.cjs":"aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+    "tests/feedback-compatibility.browser.cjs":"0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa"
+  },
+  "input_report_hashes_raw": {
+    "remaining-operation-queue.json":"2e08aa2a1d02f06ad6a6ee0675c1c710554e88097bbeaa69ca5add1e1ec07bfd",
+    "next-storage-risk-benefit-admission.json":"2271a398411e199417c3d1feec58ca175ce435ab9cb164c06da7b6ab8748d046",
+    "next-coverage-risk-benefit-admission.json":"d344fad5db353d124d5651a86b7e679c778e1660d696ebb3c7e1c023e4c73317",
+    "batch-008-storage-policy-admission.json":"612c0cda03fbd7fa2dbf3441981a863da5fa780ce38276a926c91df100ac6cb5",
+    "repair-036-scoring-evidence-shapes.json":"f52d79c14136f7560b9e4c049574921c6e99e8139e15f815695aa8deb0303469",
+    "batch-008-ingestion-verification.json":"ccf13c163ff89969c1ed46e959f5c25c82913f336f2e0d74ab4ed851dfd0f7d7"
+  },
+  "limits": [
+    "Advisory only, not source/test authorization. Finish the current bounded batch and its combined gate/review before starting optional follow-up work. A safe stopping point remains valid if no further work is requested.",
+    "No app/test/browser/dependency execution, fresh detector/benchmark, Git/source/index/tracker mutation, new proof helper or071 candidate inspection. Only this output written. References to source/tests bind immutablec9; the five inspected test LF bodies matched it at read time.",
+    "This is a scoped prioritization review of supplied candidates and relevant source/callers/oracles, not a fresh whole-repository audit, exhaustive coverage gap search or proof that other defects do not exist. Any new behavioral lead needs native reproduction before confirmed-bug status."
+  ]
+}

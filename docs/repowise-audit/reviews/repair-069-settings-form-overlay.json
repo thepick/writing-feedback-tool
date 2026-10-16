@@ -1,0 +1,858 @@
+{
+  "repair_id": "repair-069",
+  "operation": "P03",
+  "generated_at": "2026-10-16T05:44:51.476Z",
+  "timezone": "Asia/Bangkok",
+  "base_commit": "2f1dcba5c848bad3ee2944503b22c16c0c367e65",
+  "status": "source_frozen_ready_for_independent_review",
+  "finding": "code_health:finding_2d394d4a42f8699016a8",
+  "benefit": "One existing form overlay shared by required local settings writer and outgoing/archive snapshot reader to prevent policy drift. No runtime defect or scanner closure alleged.",
+  "scope": {
+    "filesChanged": [
+      "js/app/00-storage-sync-patches.js",
+      "tests/preference-integrity-scenarios.js"
+    ],
+    "helper": "updateSettingsFromForm(settings)",
+    "bodyStatementsPreserved": 12,
+    "lookups": 4,
+    "fieldAssignments": 8,
+    "callSites": [
+      "saveSettingsToLocalStorage inside its existing required try",
+      "getLocalSettingsSnapshot inside its existing optional overlay try"
+    ],
+    "diff_numstat": "17\t28\tjs/app/00-storage-sync-patches.js\n101\t0\ttests/preference-integrity-scenarios.js"
+  },
+  "hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "beforeRaw": "8767b5a0b4354a851e5555a52d92e246b5a7f90fd3fa088f76abf3eabb057547",
+      "beforeLf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184",
+      "afterRaw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "afterLf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "originalMatchesImmutableBaseLf": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "beforeRaw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+      "beforeLf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+      "afterRaw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "afterLf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "originalMatchesImmutableBaseLf": true
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "testedOrInspectedRaw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "testedOrInspectedLf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/settings-deletions-sync.cjs": {
+      "testedOrInspectedRaw": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "testedOrInspectedLf": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/settings-deletions-sync.browser.cjs": {
+      "testedOrInspectedRaw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "testedOrInspectedLf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/10-main-app.js": {
+      "testedOrInspectedRaw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "testedOrInspectedLf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/portfolio-export.js": {
+      "testedOrInspectedRaw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "testedOrInspectedLf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/storage-recovery.js": {
+      "testedOrInspectedRaw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "testedOrInspectedLf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "unchangedFromImmutableBaseLf": true
+    }
+  },
+  "validation": {
+    "reused_105_case_baseline": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair068-fixed\\preference-integrity.browser.json",
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair-068-portfolio-root-policy.json",
+      "provenance": "repair068 after-run source and unchanged scenario hashes exactly match the repair069 original source/scenario pins. All105 prior case names/assertions retained; no redundant unchanged baseline run."
+    },
+    "original_contract_run": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-original-contract\\preference-integrity.json",
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-original-contract\\preference-integrity.log",
+      "source": "Unmodified original production checkout, before helper refactor; new scenario test bytes already added.",
+      "count": 137,
+      "passed": 137,
+      "failed": 0
+    },
+    "candidate_contract_run": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-fixed\\preference-integrity.json",
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-fixed\\preference-integrity.browser.log",
+      "count": 137,
+      "passed": 137,
+      "failed": 0
+    },
+    "new_cases": {
+      "count": 32,
+      "all_original_and_candidate_pass": true,
+      "complete_contract_observations_exact": true,
+      "categories": {
+        "missing_individual_control_or_function_both_callers": 14,
+        "blank_defaults_checked_strict_override_both_callers": 8,
+        "early_or_late_exception_with_or_without_roster_both_callers": 8,
+        "snapshot_required_preflight_and_explicit_settings_read": 2
+      },
+      "cases": [
+        {
+          "name": "form overlay/writer/missing/modelSelect",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "google/gemini-3.1-flash-lite-preview",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/missing/targetWordCount",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "200",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/missing/useWordCountTarget",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": true,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/missing/assessScriptQuality",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": false,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/missing/getGrammarStrictness",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 3,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/missing/getSelectedGradeLevel",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 5,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/missing/getClassGradeLevel",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 5,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 1,
+            "schedules": 1
+          }
+        },
+        {
+          "name": "form overlay/writer/blank-and-flags/true",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": true,
+            "grammarStrictness": 5,
+            "assessScriptQuality": false,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": true,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/writer/blank-and-flags/false",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": false,
+            "grammarStrictness": 5,
+            "assessScriptQuality": true,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": false,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/writer/blank-and-flags/1",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": false,
+            "grammarStrictness": 5,
+            "assessScriptQuality": true,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": false,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/writer/blank-and-flags/\"true\"",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": false,
+            "grammarStrictness": 5,
+            "assessScriptQuality": true,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": false,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/writer/exception/lookup/roster-false",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget"
+            ],
+            "writes": 0,
+            "rethrown": true,
+            "result": null,
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/writer/exception/lookup/roster-true",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget"
+            ],
+            "writes": 0,
+            "rethrown": true,
+            "result": null,
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/writer/exception/strictness/roster-false",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget",
+              "assessScriptQuality"
+            ],
+            "writes": 0,
+            "rethrown": true,
+            "result": null,
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/writer/exception/strictness/roster-true",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget",
+              "assessScriptQuality"
+            ],
+            "writes": 0,
+            "rethrown": true,
+            "result": null,
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/modelSelect",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "google/gemini-3.1-flash-lite-preview",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/targetWordCount",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "200",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/useWordCountTarget",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": true,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/assessScriptQuality",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": false,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/getGrammarStrictness",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 3,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/getSelectedGradeLevel",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 5,
+              "classGradeLevel": 6,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/missing/getClassGradeLevel",
+          "pass": true,
+          "observed": {
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 5,
+              "assessScriptQuality": true,
+              "gradeLevel": 12,
+              "classGradeLevel": 5,
+              "studentGradeLevelOverride": true,
+              "students": [
+                "Live"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "counter": 0,
+            "schedules": 0
+          }
+        },
+        {
+          "name": "form overlay/snapshot/blank-and-flags/true",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": true,
+            "grammarStrictness": 5,
+            "assessScriptQuality": false,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": true,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/snapshot/blank-and-flags/false",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": false,
+            "grammarStrictness": 5,
+            "assessScriptQuality": true,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": false,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/snapshot/blank-and-flags/1",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": false,
+            "grammarStrictness": 5,
+            "assessScriptQuality": true,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": false,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/snapshot/blank-and-flags/\"true\"",
+          "pass": true,
+          "observed": {
+            "model": "",
+            "targetWordCount": "200",
+            "useWordCountTarget": false,
+            "grammarStrictness": 5,
+            "assessScriptQuality": true,
+            "gradeLevel": 12,
+            "classGradeLevel": 6,
+            "studentGradeLevelOverride": false,
+            "students": [
+              "Live"
+            ],
+            "unknown": {
+              "keep": true
+            }
+          }
+        },
+        {
+          "name": "form overlay/snapshot/exception/lookup/roster-false",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget"
+            ],
+            "writes": 0,
+            "rethrown": false,
+            "result": {
+              "model": "google/gemini-3.1-flash-lite-preview",
+              "targetWordCount": "200",
+              "useWordCountTarget": true,
+              "grammarStrictness": 3,
+              "assessScriptQuality": false,
+              "gradeLevel": 5,
+              "classGradeLevel": 5,
+              "studentGradeLevelOverride": false,
+              "unknown": {
+                "keep": true
+              },
+              "students": [
+                "Live"
+              ]
+            },
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/snapshot/exception/lookup/roster-true",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget"
+            ],
+            "writes": 0,
+            "rethrown": false,
+            "result": {
+              "model": "google/gemini-3.1-flash-lite-preview",
+              "targetWordCount": "200",
+              "useWordCountTarget": true,
+              "grammarStrictness": 3,
+              "assessScriptQuality": false,
+              "gradeLevel": 5,
+              "classGradeLevel": 5,
+              "studentGradeLevelOverride": false,
+              "students": [
+                "Stored"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/snapshot/exception/strictness/roster-false",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget",
+              "assessScriptQuality"
+            ],
+            "writes": 0,
+            "rethrown": false,
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 3,
+              "assessScriptQuality": false,
+              "gradeLevel": 5,
+              "classGradeLevel": 5,
+              "studentGradeLevelOverride": false,
+              "unknown": {
+                "keep": true
+              },
+              "students": [
+                "Live"
+              ]
+            },
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/snapshot/exception/strictness/roster-true",
+          "pass": true,
+          "observed": {
+            "reads": [
+              "modelSelect",
+              "targetWordCount",
+              "useWordCountTarget",
+              "assessScriptQuality"
+            ],
+            "writes": 0,
+            "rethrown": false,
+            "result": {
+              "model": "openai/gpt-5.4-nano",
+              "targetWordCount": "333",
+              "useWordCountTarget": false,
+              "grammarStrictness": 3,
+              "assessScriptQuality": false,
+              "gradeLevel": 5,
+              "classGradeLevel": 5,
+              "studentGradeLevelOverride": false,
+              "students": [
+                "Stored"
+              ],
+              "unknown": {
+                "keep": true
+              }
+            },
+            "settingsUnchanged": true
+          }
+        },
+        {
+          "name": "form overlay/snapshot/required-preflight",
+          "pass": true,
+          "observed": {
+            "settingsReads": 0,
+            "lookups": 0,
+            "writes": 0,
+            "sameError": true
+          }
+        },
+        {
+          "name": "form overlay/snapshot/required-settings-read",
+          "pass": true,
+          "observed": {
+            "settingsReads": 2,
+            "lookups": 0,
+            "writes": 0,
+            "sameError": true
+          }
+        }
+      ]
+    },
+    "after_sync_suites": [
+      {
+        "suite": "settings-deletions-sync.cjs",
+        "count": 14,
+        "summary": "Settings/deletions sync: 14 passed, 0 failed.",
+        "passed": 14,
+        "failed": 0,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-fixed\\settings-deletions-sync.log"
+      },
+      {
+        "suite": "settings-deletions-sync.browser.cjs",
+        "count": 8,
+        "summary": "Browser settings/deletions sync: 8 passed, 0 failed.",
+        "passed": 8,
+        "failed": 0,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-fixed\\settings-deletions-sync.browser.log"
+      }
+    ],
+    "after_total": {
+      "suites": 3,
+      "cases": 159,
+      "passed": 159,
+      "failed": 0
+    },
+    "syntax": {
+      "files": [
+        "js/app/00-storage-sync-patches.js",
+        "tests/preference-integrity-scenarios.js"
+      ],
+      "count": 2,
+      "failed": 0,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair069-fixed\\syntax.log"
+    },
+    "diffCheck": "Passed on the two authorized source paths; complete production reconstruction and original test retention assertions passed."
+  },
+  "preserved_contracts": [
+    "Exact helper body including lookup/assignment order, typeof optional function checks, blank model/target defaults, checked booleans and strict override===true.",
+    "Writer still clones/merges its own settings and override, retains required preflight/validation/storage, restores saved form and rethrows the identical sentinel, then marks/schedules only after success.",
+    "Snapshot retains required preflight and explicit settings read outside its soft overlay try; early failure keeps all saved fields, later strictness failure keeps only model/target/use assignments. Its existing roster fallback preserves a stored roster or supplies runtime roster when absent.",
+    "No snapshot storage write; API key omitted from snapshots and writer return while the local durable credential remains. Existing credential migration/recovery tests unchanged.",
+    "No roster helper, catch consolidation, field table, options framework, credential-policy change, VM-loader edit or repair068 source/test change."
+  ],
+  "caller_review": [
+    "Writer direct callers: preference save wrapper, getOrCreateStudentId, ensureStudentRecordsForRoster, page-hide snapshots, required grade handler and reassessment neatness helper.",
+    "Snapshot callers: initial/newer settings sync, saveSettingsToDrive, captureWftArchiveClassState.",
+    "No explicit VM extractor of writer/snapshot discovered; record-identity.cjs stubs writer and settings-deletions-sync.cjs stubs snapshot. Full native app loads the promoted helper. No frozen fixture/dependency update needed."
+  ],
+  "errors": [],
+  "limits": [
+    "No full repository gate, native coverage export, RepoWise refresh, Git mutation, tracker/audit metadata write, publication or deployment by this writer; coordinator owns combined batch verification.",
+    "Synthetic preferences/credentials/rosters only; browser external routes blocked. No live Google Drive, model or account calls.",
+    "Existing before baseline reused only with explicit byte-pin provenance. After source refactor, focused preference and both settings/deletion suites ran; unrelated suites were not rerun."
+  ]
+}

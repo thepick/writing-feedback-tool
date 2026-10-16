@@ -1,0 +1,461 @@
+{
+  "repair_id": "repair-070",
+  "operation": "T03",
+  "generated_at": "2026-10-16T05:53:58.401Z",
+  "timezone": "Asia/Bangkok",
+  "base_commit": "1391fd0b7f1d091b7cb1676b6b4d7353cb897eaa",
+  "status": "test_source_frozen_ready_for_independent_review",
+  "scope": {
+    "onlyChangedTest": "tests/archive-failures.browser.cjs",
+    "productionChanged": false,
+    "dependencyOrHelperFilesAdded": false,
+    "summary": "Four bounded public-handler rejection cases appended to the existing real JSZip/fetch/download/retention/retry harness; no generic scenario framework."
+  },
+  "pins": {
+    "tests/archive-failures.browser.cjs": {
+      "beforeRaw": "748e335a4c8757d49ab2ac6d17f03f392a49b374cab79409c83bebdc464e045b",
+      "beforeLf": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9",
+      "afterRaw": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "afterLf": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "beforeMatchesBaseLf": true
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/archive-connection.browser.cjs": {
+      "raw": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/archive-integrity.browser.cjs": {
+      "raw": "11f7807415cea27c165ad2584c37e7d58e81a0649acc9b0927ff243dc808029b",
+      "lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/record-identity.cjs": {
+      "raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/session-retention.cjs": {
+      "raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "unchangedFromImmutableBaseLf": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "unchangedFromImmutableBaseLf": true
+    }
+  },
+  "validation": {
+    "baseline": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-baseline\\archive-failures.json",
+      "count": 8,
+      "orderedChecks": 56,
+      "failed": 0,
+      "source": "Actual composed1391fd0 production after accepted068/069, original eight-case archive test before edits; executed once."
+    },
+    "fixed": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-failures.json",
+      "count": 12,
+      "orderedChecks": 84,
+      "failed": 0,
+      "completeOriginalEightObservationsIdentical": true,
+      "sevenOrderedCheckNames": [
+        "failed archive preserves exact protected keys",
+        "failed archive preserves runtime writing and selection",
+        "failed archive never claims clear or export completion",
+        "failure status is truthful",
+        "failure reports boundary cause",
+        "uploads only reach required boundary",
+        "retry completes existing public flow"
+      ]
+    },
+    "newCases": [
+      {
+        "kind": "year",
+        "mode": "folder-create-empty-ack",
+        "failureStatus": "Archive failed. Current class was not cleared.",
+        "failureFeedback": "The archive could not be completed. The current class was not cleared. Could not create Drive folder: Archives",
+        "protectedKeys": [
+          "wft_portfolio",
+          "wft_students",
+          "wft_settings",
+          "wft_deletions",
+          "wft_selectedStudent",
+          "wft_pending_portfolio_sync_v1"
+        ],
+        "protectedBytesBeforeSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "protectedBytesAfterSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "runtimeBeforeSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "runtimeAfterSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "sameReferences": {
+          "students": true,
+          "images": true,
+          "photo": true,
+          "pending": true,
+          "session": true,
+          "pendingImages": true,
+          "analysis": true,
+          "context": true,
+          "reassessment": true
+        },
+        "failureRequests": [
+          {
+            "phase": "failure",
+            "url": "https://www.googleapis.com/drive/v3/files/synthetic-root?fields=id,name,mimeType,trashed",
+            "method": "GET",
+            "query": "",
+            "folder": null
+          },
+          {
+            "phase": "failure",
+            "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Archives'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-root'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+            "method": "GET",
+            "query": "name='Archives' and mimeType='application/vnd.google-apps.folder' and 'synthetic-root' in parents and trashed=false",
+            "folder": null
+          },
+          {
+            "phase": "failure",
+            "url": "https://www.googleapis.com/drive/v3/files",
+            "method": "POST",
+            "query": "",
+            "folder": {
+              "name": "Archives",
+              "mimeType": "application/vnd.google-apps.folder",
+              "parents": [
+                "synthetic-root"
+              ]
+            }
+          }
+        ],
+        "failureUploads": 0,
+        "failureDownloadCalls": 0,
+        "failureClassClearCalls": 0,
+        "tinyResolvedCalls": 0,
+        "healthyRetry": {
+          "downloadCalls": 1,
+          "clearCalls": 1,
+          "uploads": 1,
+          "requests": [
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files/synthetic-root?fields=id,name,mimeType,trashed",
+              "method": "GET",
+              "query": "",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Archives'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-root'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+              "method": "GET",
+              "query": "name='Archives' and mimeType='application/vnd.google-apps.folder' and 'synthetic-root' in parents and trashed=false",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files",
+              "method": "POST",
+              "query": "",
+              "folder": {
+                "name": "Archives",
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [
+                  "synthetic-root"
+                ]
+              }
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Synthetic%20year'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-archives'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+              "method": "GET",
+              "query": "name='Synthetic year' and mimeType='application/vnd.google-apps.folder' and 'synthetic-archives' in parents and trashed=false",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,size",
+              "method": "POST",
+              "query": "",
+              "folder": null
+            }
+          ],
+          "downloadZip": {
+            "bytes": 8488,
+            "protectedEntry": "Synthetic year/Complete Portfolio.json"
+          }
+        },
+        "observationLocation": "Full exact before/after protected bytes, runtime snapshots, identity results, and phase-separated I/O are in C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-failures.json"
+      },
+      {
+        "kind": "year",
+        "mode": "tiny-resolved",
+        "failureStatus": "Archive failed. Current class was not cleared.",
+        "failureFeedback": "The archive could not be completed. The current class was not cleared. Archive file appears to be empty or invalid.",
+        "protectedKeys": [
+          "wft_portfolio",
+          "wft_students",
+          "wft_settings",
+          "wft_deletions",
+          "wft_selectedStudent",
+          "wft_pending_portfolio_sync_v1"
+        ],
+        "protectedBytesBeforeSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "protectedBytesAfterSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "runtimeBeforeSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "runtimeAfterSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "sameReferences": {
+          "students": true,
+          "images": true,
+          "photo": true,
+          "pending": true,
+          "session": true,
+          "pendingImages": true,
+          "analysis": true,
+          "context": true,
+          "reassessment": true
+        },
+        "failureRequests": [],
+        "failureUploads": 0,
+        "failureDownloadCalls": 0,
+        "failureClassClearCalls": 0,
+        "tinyResolvedCalls": 1,
+        "healthyRetry": {
+          "downloadCalls": 1,
+          "clearCalls": 1,
+          "uploads": 1,
+          "requests": [
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files/synthetic-root?fields=id,name,mimeType,trashed",
+              "method": "GET",
+              "query": "",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Archives'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-root'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+              "method": "GET",
+              "query": "name='Archives' and mimeType='application/vnd.google-apps.folder' and 'synthetic-root' in parents and trashed=false",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Synthetic%20year'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-archives'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+              "method": "GET",
+              "query": "name='Synthetic year' and mimeType='application/vnd.google-apps.folder' and 'synthetic-archives' in parents and trashed=false",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,size",
+              "method": "POST",
+              "query": "",
+              "folder": null
+            }
+          ],
+          "downloadZip": {
+            "bytes": 8488,
+            "protectedEntry": "Synthetic year/Complete Portfolio.json"
+          }
+        },
+        "observationLocation": "Full exact before/after protected bytes, runtime snapshots, identity results, and phase-separated I/O are in C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-failures.json"
+      },
+      {
+        "kind": "single",
+        "mode": "tiny-resolved",
+        "failureStatus": "Student export failed.",
+        "failureFeedback": "The student export could not be completed. Student export appears to be empty or invalid.",
+        "protectedKeys": [
+          "wft_portfolio",
+          "wft_students",
+          "wft_settings",
+          "wft_deletions",
+          "wft_selectedStudent",
+          "wft_pending_portfolio_sync_v1"
+        ],
+        "protectedBytesBeforeSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "protectedBytesAfterSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "runtimeBeforeSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "runtimeAfterSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "sameReferences": {
+          "students": true,
+          "images": true,
+          "photo": true,
+          "pending": true,
+          "session": true,
+          "pendingImages": true,
+          "analysis": true,
+          "context": true,
+          "reassessment": true
+        },
+        "failureRequests": [],
+        "failureUploads": 0,
+        "failureDownloadCalls": 0,
+        "failureClassClearCalls": 0,
+        "tinyResolvedCalls": 1,
+        "healthyRetry": {
+          "downloadCalls": 1,
+          "clearCalls": 0,
+          "uploads": 0,
+          "requests": [],
+          "downloadZip": {
+            "bytes": 2078,
+            "protectedEntry": "Synthetic - Portfolio.html"
+          }
+        },
+        "observationLocation": "Full exact before/after protected bytes, runtime snapshots, identity results, and phase-separated I/O are in C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-failures.json"
+      },
+      {
+        "kind": "year",
+        "mode": "signed-out",
+        "failureStatus": "Archive failed. Current class was not cleared.",
+        "failureFeedback": "The archive could not be completed. The current class was not cleared. Please sign in with Google before saving an archive to Drive.",
+        "protectedKeys": [
+          "wft_portfolio",
+          "wft_students",
+          "wft_settings",
+          "wft_deletions",
+          "wft_selectedStudent",
+          "wft_pending_portfolio_sync_v1"
+        ],
+        "protectedBytesBeforeSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "protectedBytesAfterSha256": "8674bb1ee01670a5532b1a911362bf332e83bd829ecf58ca9d885ac904f47cb3",
+        "runtimeBeforeSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "runtimeAfterSha256": "30cd61fbcd74f1d8ba65755fee22a030c6aae20569b034f2aafdcdece4879772",
+        "sameReferences": {
+          "students": true,
+          "images": true,
+          "photo": true,
+          "pending": true,
+          "session": true,
+          "pendingImages": true,
+          "analysis": true,
+          "context": true,
+          "reassessment": true
+        },
+        "failureRequests": [],
+        "failureUploads": 0,
+        "failureDownloadCalls": 0,
+        "failureClassClearCalls": 0,
+        "tinyResolvedCalls": 0,
+        "healthyRetry": {
+          "downloadCalls": 1,
+          "clearCalls": 1,
+          "uploads": 1,
+          "requests": [
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files/synthetic-root?fields=id,name,mimeType,trashed",
+              "method": "GET",
+              "query": "",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Archives'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-root'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+              "method": "GET",
+              "query": "name='Archives' and mimeType='application/vnd.google-apps.folder' and 'synthetic-root' in parents and trashed=false",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/drive/v3/files?q=name%3D'Synthetic%20year'%20and%20mimeType%3D'application%2Fvnd.google-apps.folder'%20and%20'synthetic-archives'%20in%20parents%20and%20trashed%3Dfalse&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc",
+              "method": "GET",
+              "query": "name='Synthetic year' and mimeType='application/vnd.google-apps.folder' and 'synthetic-archives' in parents and trashed=false",
+              "folder": null
+            },
+            {
+              "phase": "retry",
+              "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,size",
+              "method": "POST",
+              "query": "",
+              "folder": null
+            }
+          ],
+          "downloadZip": {
+            "bytes": 8488,
+            "protectedEntry": "Synthetic year/Complete Portfolio.json"
+          }
+        },
+        "observationLocation": "Full exact before/after protected bytes, runtime snapshots, identity results, and phase-separated I/O are in C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-failures.json"
+      }
+    ],
+    "regressions": [
+      {
+        "suite": "archive-connection.browser.cjs",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-connection.json",
+        "count": 76,
+        "passed": 76,
+        "failed": 0
+      },
+      {
+        "suite": "archive-integrity.browser.cjs",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\archive-integrity.json",
+        "count": 366,
+        "passed": 366,
+        "failed": 0
+      }
+    ],
+    "syntax": {
+      "count": 1,
+      "failed": 0,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\repair070-fixed\\syntax.log"
+    },
+    "diffCheck": "Passed for the only changed test file",
+    "diffNumstat": "76\t5\ttests/archive-failures.browser.cjs"
+  },
+  "seams": [
+    "Archives search returns files:[] and actual folder-create fetch gets HTTP200{} during refusal, then HTTP200 with a real synthetic ID for retry. Root/folder search, ensureDriveSubfolderPromise, wftDriveFetch and public handlers remain native.",
+    "Tiny cases resolve generateAsync with a nonempty30-byte synthetic Blob, below both size limits; it is deliberately invalid ZIP data. Actual original JSZip compression is restored before every retry.",
+    "Signed-out case clears both runtime tokens, signed-in flag and expiry before invoking the ordinary public archive flow. Normal year input/confirmation responses remain. Reconnection is restored only after failure capture.",
+    "downloadBlob and clearCurrentClassAfterSuccessfulArchive are counting pass-through wrappers in new cases, calling the real functions. Browser download events are counted separately at the failure/retry boundary. Healthy downloaded files are read from native download paths and decoded with installed JSZip; real year multipart captures are independently decoded too."
+  ],
+  "original_semantics": "Initial sign-out is rejected by the real saveArchiveZipToDrive guard after real archive generation, before any Drive request. The public handler does not have an earlier initial-token guard; none was bypassed or added. Failure feedback and retained state match the current source.",
+  "preserved": [
+    "All original8 scenarios, their seven ordered checks, native download events, failure aggregation and full real multipart captures match the baseline exactly.",
+    "New refusal snapshots retain nonempty current writing, native PNG selected media, pending writing/media, analysis/context/reassessment objects, selection, roster and counters; protected storage bytes and runtime values/references are asserted before retry.",
+    "Folder refusal permits its three real root validation/search/create requests but no upload, download or class clear. Both tiny cases and initial sign-out issue zero archive-related fetches.",
+    "Every new retry downloads a genuine readable ZIP containing protected saved writing; year retries additionally upload genuine multipart ZIP bytes and clear the class through the real handler."
+  ],
+  "errors": [],
+  "claims": {
+    "productionBug": false,
+    "scannerClosure": false,
+    "coverageIncrease": false
+  },
+  "limits": [
+    "No live Google Drive/accounts/credentials or network services; only controlled synthetic Drive fetch responses and local app assets. JSZip is the existing installed unchanged package.",
+    "The tiny result is synthetic refusal input, not a valid archive. Healthy retry ZIPs are genuine; native downloads are read and decoded, not inferred from filename/status alone.",
+    "Saved portfolio writing is asserted in ZIP contents. Current unsaved writing/media/pending are retention/snapshot guards; this does not claim those are newly included in archive contents.",
+    "No full gate/native coverage export, RepoWise refresh, Git mutation, index/manifest/dependency/frozen fixture/production edits or audit metadata writes by this writer. Coordinator owns review/integration/publication."
+  ]
+}

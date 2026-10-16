@@ -1,0 +1,244 @@
+{
+  "review_id": "repair-071-safety-review",
+  "decision": "accepted_no_blocker",
+  "blocking_findings": [],
+  "base_commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "inspected_git_head_at_end": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "completed_utc": "2026-10-16T06:10:33.887884+00:00",
+  "pins_sha256": {
+    "tests/crop-transparency.browser.cjs": {
+      "raw": "23c93f2d069fef6ed3eb873760b1381cd62fca5caf1222ae990c96c3bae723f3",
+      "lf": "1dc14ce79d9de3cd3b35b2dc7cfbb8075f431f9671c555a1c9009b8e47ca690c",
+      "baseline_git_blob": "77fb9a45432cf2a12bd9e34dc2c05003c4a1c03b",
+      "unchanged_from_baseline_lf": false,
+      "raw_unchanged_at_review_end": true
+    },
+    "js/app/photo-crop.js": {
+      "raw": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+      "lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "baseline_git_blob": "a6afecb5330827545a2a94163636b6665780d8ed",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "baseline_git_blob": "92b0112c2dde1f348e535caa1c98b89dc48ab7a5",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "baseline_git_blob": "fa822ac74b08552c316de5049f13f6af73788bc3",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "baseline_git_blob": "b37f52b9efad9ce0cc93d0bbc575d7e5bc76663a",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "baseline_git_blob": "26ea30755abd441468625d072aaadb574e0515e4",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/support/local-app-route.js": {
+      "raw": "c2a198f3d2cd2be8716d02d6ce74e8863ba2a166f369378631f2f247948b7037",
+      "lf": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+      "baseline_git_blob": "215d2950f3a012a2b0f65654332233eca72b105c",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/crop-ownership.browser.cjs": {
+      "raw": "ecfd9eb55e0771b5121a3f8ee56cde87c3e621a6d2f74b1bd98d57d4d9774507",
+      "lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "baseline_git_blob": "445f4f1c791694685ae390a0f376ce2e41e0d32a",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/script-loading.browser.cjs": {
+      "raw": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "lf": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "baseline_git_blob": "0b0e1c65bee7dfc3276e23dea17b8e6ba666cad4",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "baseline_git_blob": "578fc1e12b08ab6427722586a10155ec86af9518",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "baseline_git_blob": "1150406b3c4d4ee72f27b75f1da45c8f6ec34bfa",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/record-identity.cjs": {
+      "raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "baseline_git_blob": "ab88bb1a75ea7cb8e45388708af76c7189a2ddbd",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/session-retention.cjs": {
+      "raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "baseline_git_blob": "45e51a974b1edbb3047551d444ac9739bdbc6b6f",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "baseline_git_blob": "1e60130d70908d73d1d886c55f048cadc411e75e",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    },
+    "tests/archive-failures.browser.cjs": {
+      "raw": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "lf": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "baseline_git_blob": "ff8a9b7df562067111a2aa79fdbbe3f7fbcaa055",
+      "unchanged_from_baseline_lf": true,
+      "raw_unchanged_at_review_end": true
+    }
+  },
+  "html_pin": {
+    "raw": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+    "lf": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+    "unchanged_from_baseline_lf": true
+  },
+  "scope": "Single test-only candidate. Complete crop test/photo-crop module, actual acquisition/preview delegation, input registration/Apply route and supplied baseline/final/initial/diagnostic/regression receipts inspected. Existing068-070 source/test pins match immutable baseline; no changes proposed.",
+  "assessment": [
+    {
+      "anchors": [
+        "tests/crop-transparency.browser.cjs:9-48",
+        "tests/crop-transparency.browser.cjs:49-138"
+      ],
+      "reason": "Deleting only new gesture loop, fs import and report-file wiring reconstructs entire original test LF bytes. Original four complete receipt objects exactly match final first four. No old pixel/reset expectation weakened. New cases catch operation/assertion failures as passed:false and final filter rejects any failed row; fresh pages isolate each case and finally closes them."
+    },
+    {
+      "anchors": [
+        "tests/crop-transparency.browser.cjs:54-86",
+        "js/app/10-main-app.js:3202-3231",
+        "js/app/10-main-app.js:3290-3344",
+        "js/app/10-main-app.js:3450-3455",
+        "index.html:3778",
+        "index.html:3784",
+        "js/app/photo-crop.js:10-68",
+        "js/app/photo-crop.js:244-249"
+      ],
+      "reason": "Two real native PNG File inputs pass through actual handleSelectedImages/optimizer, then metadata is seeded for invalidation assertions. Crop button is the actual rendered .ocr-preview-crop, reaching delegated openCropModal; Apply uses actual cropApplyBtn listener. New cases contain no _cropRect assignment, direct openCropModal/applyCrop call, Image/drawImage replacement or manufactured output URL. Existing old four cases intentionally keep their earlier direct rectangle setup."
+    },
+    {
+      "anchors": [
+        "tests/crop-transparency.browser.cjs:88-119",
+        "js/app/photo-crop.js:96-114",
+        "js/app/photo-crop.js:214-242"
+      ],
+      "reason": "Real200x100 bitmap is displayed100x50 with aligned canvas/overlay origins. Native mouse and CDP touch events traverse actual DOM listeners; fixed expected positive/reverse rectangles are independent literals. Released drag must be null and later mouse move or new title touch/move/end must not alter it. Receipts record trusted overlay down/move/up or touchstart/move/end and trusted Apply clicks; no DOM dispatchEvent imitation or production coordinate helper is used to calculate expected values."
+    },
+    {
+      "anchors": [
+        "tests/crop-transparency.browser.cjs:120-138",
+        "js/app/photo-crop.js:116-181"
+      ],
+      "reason": "Both outputs decode to100x60 and five independent source-relative samples: white, black ink, white, red marker, white, with opaque alpha and JPEG channel tolerance<15. Original acquired PNG is exact and retained in originalDataUrl. Actual target object/id/queue stay while revision advances, Drive ID/name/upload time invalidates, pendingDriveUpload is true, target and primary OCR text/promise clear, and primary URL updates. Real applyCrop owns all mutations; stale-owner/request guards remain unchanged."
+    },
+    {
+      "anchors": [
+        "tests/crop-transparency.browser.cjs:75-83",
+        "tests/crop-transparency.browser.cjs:127-136"
+      ],
+      "reason": "Fixture has a distinct second photo with original OCR promise, current Alice writing, nonempty pending text, reassessment source and durable pending record. State JSON binds students/runtime owner/text/pending/source and exact six storage reads; separate reference/value checks protect array/target/unrelated photo+promise/pending/source. These are affirmative preservation premises, not only a no-error or empty-queue check. No new current/pending-media persistence or DOM owner-selector claim inferred."
+    },
+    {
+      "anchors": [
+        "worker outputs/repair071-fixed/attempt-1.json",
+        "worker outputs/repair071-fixed/diagnostic.log",
+        "worker work/repair071-mouse-diagnostic.cjs",
+        "tests/crop-transparency.browser.cjs:88-96"
+      ],
+      "reason": "Initial result is5/6, mouse rectangle y8 versus literal y10; no production fix claimed. Diagnostic wrapper adds logging only. Recorded overlay top273.90625 and delivered native clientY278 yield round((278-273.90625)*2)=8 under unchanged getCropPos. Final test translates both canvases by fractional remainder to an integral origin, retaining the same region and pixel literals. This corrects deterministic fixture geometry rather than assigning the rectangle or relaxing the oracle."
+    }
+  ],
+  "supplied_evidence": {
+    "reviewer_execution": "No app/test/browser reruns; parsed existing JSON/logs and inspected source only.",
+    "baseline_cases": 4,
+    "final_cases": 6,
+    "final_failed": 0,
+    "original_four_full_records_identical": true,
+    "new_cases": [
+      {
+        "input": "mouse",
+        "released": {
+          "x": 10,
+          "y": 10,
+          "w": 100,
+          "h": 60
+        },
+        "output_dimensions": [
+          100,
+          60
+        ],
+        "trusted_events": 16,
+        "all8target_state_flags_true": true,
+        "all6preservation_flags_true": true
+      },
+      {
+        "input": "touch-reverse",
+        "released": {
+          "x": 110,
+          "y": 70,
+          "w": -100,
+          "h": -60
+        },
+        "output_dimensions": [
+          100,
+          60
+        ],
+        "trusted_events": 15,
+        "all8target_state_flags_true": true,
+        "all6preservation_flags_true": true
+      }
+    ],
+    "additional_existing_suites": {
+      "crop_ownership_cases": 51,
+      "script_loading_cases": 2,
+      "reported_failed": 0
+    },
+    "initial_mouse_fixture_failure_retained": true,
+    "syntax": "Supplied one-file syntax log, no reviewer rerun.",
+    "reference_hashes_sha256_raw": {
+      "coordinator/outputs/repowise-repairs/repair-071-native-crop-input-contracts.json": "08bd5354da57ff40d538ea79bc1757e0231ee050e0418bd19eca62c2cc1f88bf",
+      "outputs/repair071-baseline/crop-transparency.log": "a5261d30f15697626aa417b7a1f4124ac54e85dd5bc475d4a31130f686e7b459",
+      "outputs/repair071-fixed/crop-transparency.json": "7446455637c2324b22dae33878e7f28681099c68324ce7a91570fc4a5772fbf1",
+      "outputs/repair071-fixed/crop-transparency.log": "49249f298f212a7d9b84b548769d4e315b5617b1e703a1b40241a3f6128a790b",
+      "outputs/repair071-fixed/crop-ownership.json": "55baa9328444e84389e514705aec3c640801d7a53e741959c803a002e24fad17",
+      "outputs/repair071-fixed/script-loading.json": "7c96cb2effe48f8bc1f5fc8262b1c5ed87dc89a4755bd55d8a06634ba88cc2d7",
+      "outputs/repair071-fixed/syntax.log": "c32daf3689b00307321f70a8fb04763e78d2fa58475b510783449a9a50d6b540",
+      "outputs/repair071-fixed/attempt-1.json": "edc72490ffbbaabd91d95a3f0428c7b38542e623516701d3fd0ec9fab13a4683",
+      "outputs/repair071-fixed/attempt-1.log": "a3909984f7dce0a76fdf620922f3f5fd4fdf9fabcb7d860f577ed93449e7e004",
+      "outputs/repair071-fixed/diagnostic.json": "545086a809e939463e88034e824166662d83d9a8479c15d771eaec8bf3495c39",
+      "outputs/repair071-fixed/diagnostic.log": "80cf7478db2ca32607fca636c85259479d8e73141ef3f61575f86e5633fb542e",
+      "work/repair071-mouse-diagnostic.cjs": "a759c0c2daab6282386efc573afa8b9816f600da2384e0bf0cb9133a68cbceea"
+    },
+    "canonical_worker_receipt_equals_coordinator_copy": true
+  },
+  "limits": [
+    "Read-only safety review; only this output written. No source/test/Git/index/tracker changes or test/app/browser execution. Exact candidate and listed production/prior068-070 pins rechecked unchanged at end. Parent audit documents may advance.",
+    "Browser-trusted CDP touch is not physical touchscreen hardware. One viewport, aligned origin and2:1display scale are tested; fractional origins/general zoom, every edge/cancel/multitouch/device are not established.",
+    "Five interior JPEG samples plus exact rectangle/dimensions do not prove every pixel/all formats. Existing four transparency/reset cases and51ownership cases remain separate evidence.",
+    "New pending payload has nonempty writing but an empty images array; protection of pending-photo content is not newly demonstrated here. Owner protection is runtime owner/source/state, not a new DOM dropdown assertion.",
+    "Native acquisition handler runs, but File picker/camera hardware selection is synthetic. External routes remain blocked and all input data is synthetic. No production bug, full-gate, live-service, deployment, coverage or scanner-closure claim."
+  ]
+}

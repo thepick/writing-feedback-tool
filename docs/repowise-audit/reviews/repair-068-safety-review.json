@@ -1,0 +1,188 @@
+{
+  "review_id": "repair-068-safety-review",
+  "decision": "accepted_no_blocker",
+  "blocking_findings": [],
+  "base_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "inspected_git_head_at_end": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "review_completed_utc": "2026-10-16T05:39:00.392681+00:00",
+  "pins_sha256": {
+    "js/app/00-storage-sync-patches.js": {
+      "baseline_git_blob": "00761b44f5d2bc760cbab58929dd61b07e71b5f3",
+      "before_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "after_raw": "8767b5a0b4354a851e5555a52d92e246b5a7f90fd3fa088f76abf3eabb057547",
+      "after_lf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184",
+      "unchanged_at_review_end": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "baseline_git_blob": "682c11daf493396b4e59347624491bea62e53afa",
+      "before_lf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+      "after_raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "after_lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "unchanged_at_review_end": true
+    },
+    "tests/record-identity.cjs": {
+      "baseline_git_blob": "80705a91ca9fc81f5c820593d1c8bdd736169d89",
+      "before_lf": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d",
+      "after_raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "after_lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "unchanged_at_review_end": true
+    },
+    "tests/session-retention.cjs": {
+      "baseline_git_blob": "ea468b7b6ede78db7e914ed38e73a0c0fa9e908b",
+      "before_lf": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+      "after_raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "after_lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "unchanged_at_review_end": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "baseline_git_blob": "bf4d9cd8548dd6eb889ea1f568fe4e89aa1ddab8",
+      "before_lf": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4",
+      "after_raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "after_lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "unchanged_at_review_end": true
+    }
+  },
+  "verification": [
+    {
+      "scope": "Production five-consumer policy",
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:1333-1366",
+        "js/app/00-storage-sync-patches.js:1583-1651",
+        "js/app/00-storage-sync-patches.js:1827-1891",
+        "js/app/00-storage-sync-patches.js:2330-2380",
+        "js/app/00-storage-sync-patches.js:6380-6390"
+      ],
+      "reason": "Exact reverse reconstruction of the added predicate and five substitutions restores the entire baseline00 LF bytes. Four Object.keys filters use the same six strict case-sensitive comparisons; validator negation equals its former six-string indexOf skip because Object.keys supplies primitive strings. No coercion/read of values, key reordering, symbol/inherited-key admission or new membership bag. Own __proto__/constructor remain eligible; null-prototype outputs unchanged. Array.filter extra callback arguments are ignored."
+    },
+    {
+      "scope": "Reads, metadata and failure boundaries",
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:1364",
+        "js/app/00-storage-sync-patches.js:1671-1689",
+        "js/app/00-storage-sync-patches.js:1781-1795",
+        "js/app/00-storage-sync-patches.js:2946-2948",
+        "js/app/00-storage-sync-patches.js:4494-4501",
+        "js/app/00-storage-sync-patches.js:5580-5591",
+        "js/app/00-storage-sync-patches.js:6347-6377",
+        "js/app/00-storage-sync-patches.js:6451-6483"
+      ],
+      "reason": "No guard/catch/read/write/rollback/publication code changed. Schema safe-mode and skipStudentIds paths stay intact; truthy _meta is still read twice after student traversal and attached by identity. Other four consumers avoid reading reserved payloads. Strict root/student/session errors and ordinary getter order/throw identity remain. The deliberately different five-name normalizePortfolioData policy is byte-unchanged and continues accepting _meta."
+    },
+    {
+      "scope": "VM dependency blast radius",
+      "anchors": [
+        "tests/record-identity.cjs:108",
+        "tests/record-identity.cjs:120",
+        "tests/record-identity.cjs:132",
+        "tests/session-retention.cjs:45",
+        "tests/portfolio-sync.cjs:9",
+        "tests/portfolio-replacement.cjs:7-19",
+        "tests/portfolio-save.cjs:7-20"
+      ],
+      "reason": "Search of actual callers/extractors confirms five explicit loader sites across three files now load the real predicate. Removing only those five name additions restores all three baseline files exactly; no expectation weakened. Replacement VM span incidentally includes the harmless hoisted predicate, stops before schema, and gains no runtime dependency. Save VM keeps its existing validator/schema stubs. Native full-script consumers need no loader change."
+    },
+    {
+      "scope": "New native contracts and preserved checkers",
+      "anchors": [
+        "tests/record-identity.browser.cjs:135-159",
+        "tests/record-identity.browser.cjs:174-281",
+        "tests/record-identity.browser.cjs:299-304"
+      ],
+      "reason": "Removing only the108-line four-case insertion restores the entire baseline native test. Real normalization/index/health/roster/strict persistence execute; health/roster provider seam supplies the same deliberately mixed-root object, and native settings/ID generation remain. Independent literals require exact keys/order/null prototypes/metadata identity; malformed near-match roots fail before writes; reserved getters stay unread except preserved schema _meta double-read; ordinary sessions getter/throw order is explicit. Legacy arrays/invalid skip/safe-mode identity/zero ID allocation are checked. Each run reloads the local app, JSON transport preserves own __proto__, caught errors become failed rows, and final failed-row/page-error aggregation remains. External requests still abort; no live calls or user data added."
+    }
+  ],
+  "supplied_evidence_review": {
+    "method": "Read-only source reconstruction plus parsing/hash verification of supplied receipts; no reruns.",
+    "structured_suite_summaries": [
+      {
+        "suite": "record-identity.cjs",
+        "before": 34,
+        "after": 34,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      },
+      {
+        "suite": "session-retention.cjs",
+        "before": 4,
+        "after": 4,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      },
+      {
+        "suite": "record-identity.browser.cjs",
+        "before": 50,
+        "after": 54,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      },
+      {
+        "suite": "preference-integrity.browser.cjs",
+        "before": 105,
+        "after": 105,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      },
+      {
+        "suite": "portfolio-index.browser.cjs",
+        "before": 189,
+        "after": 189,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      },
+      {
+        "suite": "session-retention.browser.cjs",
+        "before": 89,
+        "after": 89,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      },
+      {
+        "suite": "storage-integrity.browser.cjs",
+        "before": 784,
+        "after": 784,
+        "original_case_names_order_retained": true,
+        "all_supplied_rows_pass": true
+      }
+    ],
+    "structured_totals": {
+      "before": 1255,
+      "after": 1259,
+      "node_vm_cases_each": 38,
+      "native_browser_before": 1217,
+      "native_browser_after": 1221,
+      "failed_rows": 0
+    },
+    "portfolio_sync": "Eighth focused suite is NodeVM with unstructured success log before/after; no invented case count.",
+    "original_policy_proof": "Read actual Module route wrapper: it replaces only storage-script body with preserved original file, asserts exactly one local response needle and prints original raw hash. Preserved original LF exactly matches baseline Git; raw hash matches beforeRaw. All54 supplied rows pass, and the four new full case records equal candidate records exactly. This is an original-policy route substitution after candidate work, not a claimed pre-edit checkout run.",
+    "syntax": "Supplied log reports5 syntax checks; no reviewer syntax execution.",
+    "reference_hashes_sha256_raw": {
+      "outputs/repair068-baseline/record-identity.json": "b8a1ac54061eb205a8a7413273d534be1915be2d85a22be3db9d7c10b352ef09",
+      "outputs/repair068-fixed/record-identity.json": "b8a1ac54061eb205a8a7413273d534be1915be2d85a22be3db9d7c10b352ef09",
+      "outputs/repair068-baseline/session-retention.json": "f8a1c7933de636b2404f356b46dac42a6113ec8f484a8cfd886bbf4085edf9ce",
+      "outputs/repair068-fixed/session-retention.json": "f8a1c7933de636b2404f356b46dac42a6113ec8f484a8cfd886bbf4085edf9ce",
+      "outputs/repair068-baseline/record-identity.browser.json": "70323fe1b4aa550e477888438c71a9cfee63d54466719cbf4317fc103c73a1fd",
+      "outputs/repair068-fixed/record-identity.browser.json": "98f6032dfe01ccfbdbc8a66feeddb85278ac1877bd0c27e108de3a8e0f26bd7c",
+      "outputs/repair068-baseline/preference-integrity.browser.json": "30cab144e02982c3656bd2fde09f2c7201e5e9fd02b7ea19f98636ec6a39a1cc",
+      "outputs/repair068-fixed/preference-integrity.browser.json": "30cab144e02982c3656bd2fde09f2c7201e5e9fd02b7ea19f98636ec6a39a1cc",
+      "outputs/repair068-baseline/portfolio-index.browser.json": "b9237549ab25274061a056611420c34792cde23ebe96cc0aa56c8b4b58e6b4a7",
+      "outputs/repair068-fixed/portfolio-index.browser.json": "b8c9db1f1ae70c0514f4ddbc9b1580c6ee2c10f2214c129dc1f7d417b3c41850",
+      "outputs/repair068-baseline/session-retention.browser.json": "4b04eb57f0ad31a3f819b805c7d26a1a96d370c8131423795cd3061ef63e44ca",
+      "outputs/repair068-fixed/session-retention.browser.json": "4b04eb57f0ad31a3f819b805c7d26a1a96d370c8131423795cd3061ef63e44ca",
+      "outputs/repair068-baseline/storage-integrity.browser.json": "fee5077e5642c1f06d57ff848bbc9f14fdabfbb123827dcce939fb427e2cd50d",
+      "outputs/repair068-fixed/storage-integrity.browser.json": "fee5077e5642c1f06d57ff848bbc9f14fdabfbb123827dcce939fb427e2cd50d",
+      "outputs/repair068-baseline/new-contract-original-policy.json": "96195579b8faabac572b7b1a4b7d0ae9a410a5e143e884096d09a7cfdc753740",
+      "outputs/repair-068-portfolio-root-policy.json": "ac93e2fb18977f48780213bc4f72b7e192447e4cec07d2fc9f2e254a238824db",
+      "work/repair068-original-policy.cjs": "e70fdbbd92f3d4e1c644aef5635926ab5e25882976d29254298ca5d1c9c1e906",
+      "work/repair068-original/00-storage-sync-patches.js": "0ddb92e188919afaf02e47d245d1b44095700a0b7b62ec9ab03b8c00c8d04c8b",
+      "outputs/repair068-baseline/new-contract-original-policy.log": "1e23fda5e95f866c45f155896790e873a9f86bf8f42be67b6e6da9089f205f73",
+      "outputs/repair068-fixed/syntax.log": "759e3d76dac5779490a4f724589dfd1c9d8a25b3050d6f96bc5536236453931f",
+      "outputs/repair068-baseline/portfolio-sync.log": "f99b7817ad127eb784b5bd9d6087666073e4c09ed4b83e98a64a18443d2a1008",
+      "outputs/repair068-fixed/portfolio-sync.log": "f99b7817ad127eb784b5bd9d6087666073e4c09ed4b83e98a64a18443d2a1008"
+    }
+  },
+  "limits": [
+    "Read-only review; no app/test/browser runs or source/test/config/Git/index/tracker changes. Only own scratch and requested reports written. Approval is scoped to pinned five-file candidate; source hashes rechecked unchanged at end.",
+    "Focused parity evidence and static exact reconstruction support policy preservation; they are not a full gate, branch coverage, live-service, publication or scanner-closure claim. Root owns integration and final validation.",
+    "The predicate classifies only Object.keys strings at these five consumers. No new public generic key API or symbol/coercion contract is asserted. Additional own nonenumerable/symbol/inherited cases are statically unchanged by retained Object.keys, not separate new native receipts."
+  ]
+}
