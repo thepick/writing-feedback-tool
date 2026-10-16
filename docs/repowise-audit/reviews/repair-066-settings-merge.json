@@ -1,0 +1,210 @@
+{
+  "repair_id": "repair-066",
+  "generated_at": "2026-10-16T04:42:33.304Z",
+  "timezone": "Asia/Bangkok",
+  "status": "ready_for_coordinator_review",
+  "operation": "P11 bounded maintenance edit to mergeWftSettings; no runtime defect alleged.",
+  "production_base": "95026f777921d878ab68183950dd0cf83c0df112",
+  "authorization": "Coordinator expansion after repair-065 proofs; only mergeWftSettings and genuinely missing assertions in existing preference scenario matrix.",
+  "files": {
+    "js/app/00-storage-sync-patches.js": {
+      "beforeRaw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+      "afterRaw": "0ddb92e188919afaf02e47d245d1b44095700a0b7b62ec9ab03b8c00c8d04c8b",
+      "beforeLf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "afterLf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84"
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "beforeRaw": "f24c3c803930b595fefc0c252180ad4abafbb31ba32039f4932338b5bf12513d",
+      "afterRaw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+      "beforeLf": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+      "afterLf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b"
+    }
+  },
+  "function": {
+    "name": "mergeWftSettings",
+    "beforeSha256Lf": "12b8fa14aaf5bbe2f8e7b525dbbe5931c64c3fa4d3e437cd6ec1d3e30366a64a",
+    "afterSha256Lf": "f2fc94dd552c84d08b1b0e7fcbe5c907caf88dd055b0979fbbe6d786fef4d12c",
+    "beforeLines": 39,
+    "afterLines": 28,
+    "ownPropertyCopyLoops": {
+      "before": 4,
+      "after": 2
+    }
+  },
+  "source_scope_verified": "Replacing only the original merge function with its candidate body exactly reproduces the complete current production file after LF normalization. Removing only the new invariant assertions exactly reproduces the original preference scenario file.",
+  "callers_read": [
+    "downloadAndMergeDuplicateSettings: accumulated local settings take priority over duplicates",
+    "syncWftSettingsIfNeeded: pending preference and newer local snapshot preference",
+    "applyLoadedSettings: incoming preference merge followed by restoration of existing device credential before durable write"
+  ],
+  "preserved_contracts": [
+    "Clone local, then cloud, with unchanged cloneWftJson exception/fallback behavior.",
+    "Choose first/second cloned source by the same preferLocal truthiness, then retain for-in and Object.prototype.hasOwnProperty.call. No new helper, Object.assign, or spread.",
+    "Object.create(null) output; own enumerable string keys only; exact insertion and winner order.",
+    "Roster guard and mergeWftStudents(localCopy.students, cloudCopy.students) order, plus final apiKey exclusion, remain byte-identical.",
+    "Existing storage/rollback/recovery, newer-edit republish, native UI, key exclusion, prototype-like keys, immutability and source/preference matrix cases all retained."
+  ],
+  "validation": {
+    "preference_integrity": {
+      "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\settings-baseline\\preference-integrity.json",
+      "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\settings-fixed\\preference-integrity.json",
+      "before": {
+        "count": 105,
+        "passed": 105,
+        "failed": 0
+      },
+      "after": {
+        "count": 105,
+        "passed": 105,
+        "failed": 0
+      },
+      "strengthened_existing_matrix_cases": 8,
+      "added_assertions_per_matrix_case": 2
+    },
+    "settings_deletions_sync": [
+      {
+        "phase": "baseline",
+        "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\settings-baseline\\settings-deletions-sync.log",
+        "count": 14,
+        "passed": 14,
+        "failed": 0,
+        "names": [
+          "Settings delayed create and next sync",
+          "Settings stable create",
+          "Settings delayed update and next sync",
+          "Settings stable update",
+          "Settings failed pull merge and recovery",
+          "Settings failed push merge and recovery",
+          "Settings edit during pull",
+          "Deletions delayed create and next sync",
+          "Deletions stable create",
+          "Deletions delayed update and next sync",
+          "Deletions stable update",
+          "Deletions failed pull merge and recovery",
+          "Deletions failed push merge and recovery",
+          "Deletions edit during pull"
+        ]
+      },
+      {
+        "phase": "fixed",
+        "file": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\settings-fixed\\settings-deletions-sync.log",
+        "count": 14,
+        "passed": 14,
+        "failed": 0,
+        "names": [
+          "Settings delayed create and next sync",
+          "Settings stable create",
+          "Settings delayed update and next sync",
+          "Settings stable update",
+          "Settings failed pull merge and recovery",
+          "Settings failed push merge and recovery",
+          "Settings edit during pull",
+          "Deletions delayed create and next sync",
+          "Deletions stable create",
+          "Deletions delayed update and next sync",
+          "Deletions stable update",
+          "Deletions failed pull merge and recovery",
+          "Deletions failed push merge and recovery",
+          "Deletions edit during pull"
+        ]
+      }
+    ],
+    "differential_contract": {
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\settings-fixed\\merge-contract.json",
+      "script": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\work\\settings-merge-contract.cjs",
+      "count": 14,
+      "passed": 14,
+      "failed": 0,
+      "cases": [
+        {
+          "mode": "metadata",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "metadata",
+          "preferLocal": true,
+          "passed": true
+        },
+        {
+          "mode": "roster",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "roster",
+          "preferLocal": true,
+          "passed": true
+        },
+        {
+          "mode": "one-roster",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "one-roster",
+          "preferLocal": true,
+          "passed": true
+        },
+        {
+          "mode": "false-roster",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "false-roster",
+          "preferLocal": true,
+          "passed": true
+        },
+        {
+          "mode": "fallback",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "fallback",
+          "preferLocal": true,
+          "passed": true
+        },
+        {
+          "mode": "null-inputs",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "null-inputs",
+          "preferLocal": true,
+          "passed": true
+        },
+        {
+          "mode": "throwing-getter",
+          "preferLocal": false,
+          "passed": true
+        },
+        {
+          "mode": "throwing-getter",
+          "preferLocal": true,
+          "passed": true
+        }
+      ],
+      "limit": "Differential VM check of the exact before/after merge and unchanged clone functions. Roster callback is a tracing stub; actual roster semantics remain covered by native browser cases."
+    },
+    "syntax": {
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\settings-fixed\\syntax.log",
+      "files": [
+        "js/app/00-storage-sync-patches.js",
+        "tests/preference-integrity-scenarios.js"
+      ],
+      "checked": 2,
+      "failed": 0
+    },
+    "diff_whitespace": "git diff --check passed for the two authorized source files"
+  },
+  "phase_order": "Four oracle suites and all eight sensitivity pairs completed and repair-065 receipt saved before settings baseline, source refactor and after validation.",
+  "limitations": [
+    "No full repository suite, live service, deployment or RepoWise refresh run by this writer; coordinator owns integration and combined validation.",
+    "Differential VM cases use a tracing roster stub to compare guard/call order. Native browser matrix verifies actual roster behavior.",
+    "Supplemental contract cases are temporary work scripts, not new permanent test knobs.",
+    "No other production function changed; upload, save/replacement and policy sharing remain outside this edit."
+  ]
+}

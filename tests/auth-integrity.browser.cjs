@@ -261,6 +261,13 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                 await p.route('https://accounts.google.com/**', route => { navigations++; return route.abort(); });
                 await p.evaluate(mode => {
                     localStorage.clear(); sessionStorage.clear();
+                    const saveDraft = saveWftOAuthDraftBeforeRedirect;
+                    saveWftOAuthDraftBeforeRedirect = function(reason) {
+                        const saved = saveDraft(reason);
+                        // Capture actual storage before the real redirect assigns location.
+                        if (saved) window.__redirectState = { draft: JSON.parse(localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY)), pending: JSON.parse(localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY)) };
+                        return saved;
+                    };
                     document.getElementById('studentWriting').value = 'Current synthetic recovery writing';
                     selectedStudent = 'Alice';
                     window.__photo = 'data:image/png;base64,AAAA'; window.__callbacks = 0;
@@ -287,14 +294,40 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     } }) } } } : undefined;
                 }, mode);
                 // Exercise the sync and Sign In entry points, including callback sign-in via the popup.
-                await p.evaluate(mode => {
+                const allowedRedirect = ['full', 'retry', 'drive-backed'].includes(mode);
+                const navigationFinished = allowedRedirect ? p.waitForEvent('framenavigated') : null;
+                const beforeNavigation = await p.evaluate(mode => {
                     if (mode.startsWith('selected-') || mode === 'rollback-recovery') handleGoogleSignIn();
                     else if (['quota', 'memory', 'retry', 'full', 'drive-backed', 'popup-throws'].includes(mode)) manualSaveToDrive();
                     else requestDriveAccess(() => __callbacks++);
+                    return window.__redirectState;
                 }, mode);
                 await p.waitForTimeout(100);
-                const allowedRedirect = ['full', 'retry', 'drive-backed'].includes(mode);
+                if (allowedRedirect) await navigationFinished;
                 assert.equal(navigations, allowedRedirect ? 1 : 0, 'Unsafe redirect must not leave the tab');
+                if (allowedRedirect) {
+                    lastObserved = beforeNavigation;
+                    assert.ok(lastObserved?.draft, 'The text draft must be durable before navigation');
+                    assert.equal(lastObserved.draft.text, 'Current synthetic recovery writing');
+                    assert.equal(lastObserved.draft.selectedStudent, 'Alice');
+                    assert.equal(lastObserved.draft.manualGenreOverrideValue, '__auto__');
+                    assert.equal(lastObserved.draft.writingGenreSelectValue, '__auto__');
+                    assert.deepEqual(lastObserved.pending, { studentName: 'Alice', signature: 'recovery', sessionData: {
+                        id: 'recovery', originalText: 'Current synthetic recovery writing', images: [mode === 'drive-backed'
+                            ? { dataUrl: '', pendingDriveUpload: false, driveFileId: 'durable-photo', dataUrlRemovedForStorage: true }
+                            : { dataUrl: 'data:image/png;base64,AAAA', originalDataUrl: 'data:image/png;base64,AAAA', pendingDriveUpload: true }]
+                    } }, 'Complete pending writing and recoverable photos must be durable before navigation');
+                    await p.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
+                    lastObserved.reloaded = await p.evaluate(() => {
+                        stopWftSyncPolling(); stopDriveAutoSync(); scheduleWftCloudSync = () => {};
+                        return { text: document.getElementById('studentWriting').value, student: selectedStudent,
+                            selection: document.getElementById('studentSelect').value,
+                            genre: document.getElementById('writingGenreSelect').value, manualGenre: manualGenreOverrideValue,
+                            pending: getPendingPortfolioSync(), draft: localStorage.getItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY) };
+                    });
+                    assert.deepEqual(lastObserved.reloaded, { text: lastObserved.draft.text, student: 'Alice', selection: 'Alice',
+                        genre: '__auto__', manualGenre: '__auto__', pending: lastObserved.pending, draft: null }, 'Reload must restore the saved writing and pending work');
+                }
                 if (!allowedRedirect) {
                     lastObserved = await p.evaluate(() => ({
                         samePending: pendingPortfolioSync === __pendingBefore, sameSelected: selectedImages === __selectedBefore,

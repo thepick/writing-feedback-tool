@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T10:39:51.295236+07:00",
+  "updated_at": "2026-10-16T12:16:44.813204+07:00",
   "timezone": "Asia/Bangkok",
-  "status": "bug_focused_phase_complete",
-  "active_repair": null,
+  "status": "risk_prioritized_code_health_active",
+  "active_repair": "repair-066-settings-merge",
   "index_provenance": {
     "last_sync_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
     "repository_metadata_head": "69a996eb4463d9734030b8439b0d1851776cd86b",
@@ -34,11 +34,11 @@
       "performance": 30
     },
     "by_status": {
-      "reviewed_no_change": 593,
-      "needs_revalidation": 308,
+      "reviewed_no_change": 599,
+      "needs_revalidation": 303,
       "confirmed_repair_candidate": 52,
       "candidate_needs_regression": 17,
-      "unreviewed": 33
+      "unreviewed": 32
     },
     "by_severity": {
       "medium": 369,
@@ -48,18 +48,18 @@
       "unrated": 44
     },
     "all_rows_by_status": {
-      "reviewed_no_change": 599,
-      "needs_revalidation": 308,
+      "reviewed_no_change": 605,
+      "needs_revalidation": 303,
       "confirmed_repair_candidate": 53,
       "candidate_needs_regression": 17,
-      "unreviewed": 33,
+      "unreviewed": 32,
       "fixed_verified": 32,
       "not_detected_unverified": 1
     },
     "verified_fixed": 32,
-    "unresolved_present": 410,
+    "unresolved_present": 404,
     "unresolved_absent": 2,
-    "unresolved_behavioral_leads": 4
+    "unresolved_behavioral_leads": 1
   },
   "repairs": [
     {
@@ -1707,6 +1707,83 @@
       "thread_id": "01a140bb-d411-7a52-9f82-de537714d5e0",
       "status": "reviewed_complete",
       "outcome": "Ten initial test-only signals verified. Changed test files require a current context/hash review before retaining their outcomes."
+    },
+    {
+      "id": "repair-065-storage-safety-oracles",
+      "title": "Prove redirect recovery, cleared pending state, upload execution and commit refresh in native tests",
+      "status": "reviewed_focused_tests_passed_pending_batch_validation",
+      "thread_id": "01a142f5-b3a1-7183-b032-8af14c1886a5",
+      "scope": [
+        "047-L1",
+        "047-L2",
+        "054-L1",
+        "057-L1"
+      ],
+      "base_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+      "limits": "Test evidence gaps; no current production defect or scanner clearance claimed.",
+      "report": "reviews/repair-065-storage-oracles.json",
+      "reviews": [
+        "reviews/repair-065-safety-review.json",
+        "reviews/repair-065-regression-review.json"
+      ],
+      "native_cases_before": 219,
+      "native_cases_after": 219,
+      "old_pass_new_fail_fault_pairs": 8,
+      "shape_observations": "reviews/repair-065-local-shape-observations.json",
+      "scanner_tradeoff": "Added explicit test oracles increase test-only branch/size metrics; checkRedirectRecovery CCN22→26. Preserve necessary data-recovery assertions; no production bug inferred or metric-only extraction admitted."
+    },
+    {
+      "id": "repair-066-settings-merge",
+      "title": "Remove mirrored settings merge copy loops while preserving precedence and credentials",
+      "status": "reviewed_focused_tests_passed_pending_batch_validation",
+      "scope": [
+        "code_health:finding_4db26584b9741348c94f"
+      ],
+      "thread_id": "01a142f5-b3a1-7183-b032-8af14c1886a5",
+      "admission_report": "reviews/batch-007-storage-risk-admission.json",
+      "limits": "Maintenance improvement, not reproduced product defect; no clearance claimed.",
+      "report": "reviews/repair-066-settings-merge.json",
+      "shape_proof": "reviews/repair-066-local-shape-proof.json",
+      "native_cases_before": 105,
+      "native_cases_after": 105,
+      "differential_cases": 14,
+      "complexity_before": 16,
+      "complexity_after": 13,
+      "warning_retained": true,
+      "focused_cases_before": 119,
+      "focused_cases_after": 119,
+      "unit_vm_cases_before": 14,
+      "unit_vm_cases_after": 14,
+      "reviews": [
+        "reviews/repair-066-safety-review.json",
+        "reviews/repair-066-regression-review.json"
+      ]
+    },
+    {
+      "id": "repair-067-mobile-header",
+      "title": "Separate mobile Sign Out and Settings controls and let sync status fit",
+      "status": "candidate_tested_reviewed_committed_pending_integration",
+      "thread_id": "01a14310-0c6f-7fd2-98eb-fa69bb7242d3",
+      "worktree": "work/mobile-header",
+      "scope": [
+        "index.html"
+      ],
+      "base_commit": "c814963f9f277920b876eef8f707f9572912ac95",
+      "priority": "User-reported concrete usability issue before optional maintenance",
+      "limits": "Primary007source/runtime frozen; isolated candidate only, not merged or deployed.",
+      "candidate_commit": "b0aa0fe36be872b1cb38a118f7a433cc33b8ddef",
+      "report": "reviews/repair-067-mobile-header.json",
+      "reviews": [
+        "reviews/repair-067-safety-review.json",
+        "reviews/repair-067-regression-review.json"
+      ],
+      "geometry_states": 143,
+      "native_interactions": 11,
+      "auth_cases_before": 111,
+      "auth_cases_after": 111,
+      "startup_smoke_cases_before": 2,
+      "startup_smoke_cases_after": 2,
+      "preview": "outputs/mobile-header-067-preview.png"
     }
   ],
   "findings": [
@@ -52068,7 +52145,7 @@
       "scanner_id": "1d1e11eee1cf4c118951e4f7cbefb672",
       "scanner_status": "open",
       "present": true,
-      "status": "needs_revalidation",
+      "status": "reviewed_no_change",
       "classification": "compact_ordered_goal_policy_retained",
       "review": {
         "reason": "CCN28 is accurate across55 nonblank lines with maximum nesting2. The function keeps insufficient/limited samples separate from scorable work, returns teacher review for missing numeric evidence, selects the lowest active category with rubric-order ties, normalizes the category growth tip, applies one of six exact category goal messages, and accepts a non-generic detailed goal only when it names that selected category. Its checklist is then built under the dedicated two-item policy. Six contiguous constant-message branches are an obvious possible table conversion, but a new table/lookup plus unmapped-category behavior would save only a few lines and leave the substantive input/fallback/override decisions intact. Existing default-focus helpers use different pedagogical wording and cannot replace this block unchanged. No reusable operation or net clarity benefit was identified that justifies a new dispatch table or one-use wrappers under the exact wording/calibration scope. Retain the compact policy; no score/category or short-sample guard should be removed to reduce its counter.",
@@ -52231,7 +52308,38 @@
         "code_health:finding_360e96c0bf7e43661286"
       ],
       "assigned_chat": "01a14148-e0c4-7f21-8ad3-2e4c8b4d6a09",
-      "related_repair": "repair-012"
+      "related_repair": "repair-012",
+      "risk_admission_007": {
+        "disposition": "retain",
+        "classification": "sample_and_evidence_policy_retained",
+        "reason": "Keep early insufficient/limited-sample plans, absent-numeric-evidence teacher review, lowest-active-category rubric tie order, six distinct teaching messages and the non-generic category-specific detailed override. These branches establish pedagogical precedence; a dispatch table or one-use wrapper would relocate decisions without useful deletion. No concrete wrong-result/security defect found.",
+        "report": "reviews/batch-007-feedback-risk-admission.json",
+        "source_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+        "function_sha256_normalized_lf": "1649fefca9084687eb10f1bead067049cdbce1f1175c87e9e59070a7dd2cd325",
+        "verified_observation_details": {
+          "ccn": 28,
+          "cognitive": 31,
+          "nloc": 55,
+          "dispatch_share": 0.22,
+          "symbol_line": 5914,
+          "deepest_block": {
+            "start": 5915,
+            "end": 5927
+          }
+        },
+        "source_anchors": [
+          [
+            5861,
+            5873
+          ],
+          [
+            5914,
+            5971
+          ]
+        ],
+        "reviewed_current_callers": true,
+        "coordinator_reviewed": true
+      }
     },
     {
       "id": "code_health:finding_7a4eb428dcd144100e52",
@@ -52722,7 +52830,7 @@
       "scanner_id": "6a256df65e6742d2be7ad71e5cd61178",
       "scanner_status": "open",
       "present": true,
-      "status": "needs_revalidation",
+      "status": "reviewed_no_change",
       "classification": "intentional_policy_or_schema_shape_retained",
       "review": {
         "coordinator_reviewed": true,
@@ -52869,7 +52977,38 @@
         "code_health:finding_30846f5c87e3f081cd02"
       ],
       "assigned_chat": "01a1413d-29d2-7101-bb33-bbd0dcba5664",
-      "related_repair": "repair-010"
+      "related_repair": "repair-010",
+      "risk_admission_007": {
+        "disposition": "retain",
+        "classification": "ordered_priority_policy_retained",
+        "reason": "Keep finite numeric-score admission (including zero), rubric-order ties, lowest-score first, growGoal/nextTime precedence, score<=8/two-category supplement, bounded computed-Flow admission and Grammar/Spelling defaults. Checklist threshold/order differ intentionally. The outer function body matches the prior review; only its unreachable local duplicate-update branch warrants the separate tiny deletion below. No ranking/calibration rewrite is justified.",
+        "report": "reviews/batch-007-feedback-risk-admission.json",
+        "source_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+        "function_sha256_normalized_lf": "ea6e393412e2c5df58dc9a687b4c73002c78485dbf9a54de733c9e8080b933df",
+        "verified_observation_details": {
+          "ccn": 34,
+          "cognitive": 36,
+          "nloc": 53,
+          "dispatch_share": 0.0,
+          "symbol_line": 6292,
+          "deepest_block": {
+            "start": 6317,
+            "end": 6322
+          }
+        },
+        "source_anchors": [
+          [
+            6248,
+            6288
+          ],
+          [
+            6292,
+            6351
+          ]
+        ],
+        "reviewed_current_callers": true,
+        "coordinator_reviewed": true
+      }
     },
     {
       "id": "code_health:finding_08b13adf7c4b98cebed0",
@@ -53003,7 +53142,7 @@
       "scanner_id": "9d5625ec73634146b24f3a24c83437de",
       "scanner_status": "open",
       "present": true,
-      "status": "needs_revalidation",
+      "status": "reviewed_no_change",
       "classification": "intentional_policy_or_schema_shape_retained",
       "review": {
         "coordinator_reviewed": true,
@@ -53144,7 +53283,38 @@
         "code_health:finding_0be1d750101405d79892"
       ],
       "assigned_chat": "01a1413d-29d2-7101-bb33-bbd0dcba5664",
-      "related_repair": "repair-010"
+      "related_repair": "repair-010",
+      "risk_admission_007": {
+        "disposition": "retain",
+        "classification": "model_output_trust_boundary_retained",
+        "reason": "Flat checks preserve accepted legacy aliases, original-writing whole-word quote membership, category/priority membership, paragraph meaning, 180/220/130 text caps, expansion/sentence bounds and shared concrete/relevant-revision validation. Each rejects a distinct class of unsupported teaching content. Repeated checks in assembly also protect fallback/selection entry paths; deleting them would weaken grounding. No concrete wrong-result/security defect found.",
+        "report": "reviews/batch-007-feedback-risk-admission.json",
+        "source_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+        "function_sha256_normalized_lf": "131c75655f9e39a047e490f4be5072b0266288ef31d077f6eee4c14e9a00a63a",
+        "verified_observation_details": {
+          "ccn": 34,
+          "cognitive": 33,
+          "nloc": 37,
+          "dispatch_share": 0.0,
+          "symbol_line": 6371,
+          "deepest_block": {
+            "start": 6374,
+            "end": 6374
+          }
+        },
+        "source_anchors": [
+          [
+            6175,
+            6240
+          ],
+          [
+            6371,
+            6408
+          ]
+        ],
+        "reviewed_current_callers": true,
+        "coordinator_reviewed": true
+      }
     },
     {
       "id": "code_health:finding_88d56b7b2769df774320",
@@ -54053,7 +54223,7 @@
       "scanner_id": "06454f60c31a423c8fdb50d045f710e4",
       "scanner_status": "open",
       "present": true,
-      "status": "needs_revalidation",
+      "status": "reviewed_no_change",
       "classification": "intentional_policy_or_schema_shape_retained",
       "review": {
         "coordinator_reviewed": true,
@@ -54206,7 +54376,42 @@
         "code_health:finding_462e05bcd837b7e85209"
       ],
       "assigned_chat": "01a1413d-29d2-7101-bb33-bbd0dcba5664",
-      "related_repair": "repair-010"
+      "related_repair": "repair-010",
+      "risk_admission_007": {
+        "disposition": "retain",
+        "classification": "bounded_shared_selection_transaction_retained",
+        "reason": "One selected/seen/category state spans required-category-first selection, continued search after rejected duplicates, constrained repeat-quote fallback, unique-category pass, minimum-example completion and grounded coverage fallback. Existing fallback adders have different admission rules; generalizing them would add state/options and obscure order. Null-prototype quote deduplication and validation remain visible. Prior dictionary-key and later-example bugs are already fixed and are not new leads. No worthwhile split or new defect found.",
+        "report": "reviews/batch-007-feedback-risk-admission.json",
+        "source_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+        "function_sha256_normalized_lf": "70bafc596a6a683d5e185d7363bf9957a69709cad5421b35a2fb749a45ba45ad",
+        "verified_observation_details": {
+          "ccn": 33,
+          "cognitive": 44,
+          "nloc": 74,
+          "dispatch_share": 0.0,
+          "symbol_line": 6930,
+          "deepest_block": {
+            "start": 6974,
+            "end": 6978
+          }
+        },
+        "source_anchors": [
+          [
+            6930,
+            7015
+          ],
+          [
+            6948,
+            6968
+          ],
+          [
+            6853,
+            6871
+          ]
+        ],
+        "reviewed_current_callers": true,
+        "coordinator_reviewed": true
+      }
     },
     {
       "id": "code_health:finding_954463e2c9a968745031",
@@ -54582,7 +54787,7 @@
       "scanner_id": "faffc2abe4384d29b9ac57d06cb3d71e",
       "scanner_status": "open",
       "present": true,
-      "status": "needs_revalidation",
+      "status": "reviewed_no_change",
       "classification": "intentional_policy_or_schema_shape_retained",
       "review": {
         "coordinator_reviewed": true,
@@ -54723,7 +54928,34 @@
         "code_health:finding_c9cb059592b435e51d58"
       ],
       "assigned_chat": "01a1413d-29d2-7101-bb33-bbd0dcba5664",
-      "related_repair": "repair-010"
+      "related_repair": "repair-010",
+      "risk_admission_007": {
+        "disposition": "retain",
+        "classification": "saved_schema_compatibility_retained",
+        "reason": "The compact object maps saved string/object goals, detailed-versus-summary precedence, corrected text/markup aliases and genre/sample metadata. categoryScores and overall preserve unknown/zero distinctions; changing these logical defaults to numerical fallbacks would invent assessment evidence. The immediate caller restores saved guide/version before ensure. No useful schema abstraction or concrete wrong-result/security defect found.",
+        "report": "reviews/batch-007-feedback-risk-admission.json",
+        "source_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+        "function_sha256_normalized_lf": "edd0ccc71698d28c9ae6af81d99703e45fc2b447467c7d7d4a546b0e5c784785",
+        "verified_observation_details": {
+          "ccn": 30,
+          "cognitive": 29,
+          "nloc": 30,
+          "dispatch_share": 0.0,
+          "symbol_line": 7136,
+          "deepest_block": {
+            "start": 7141,
+            "end": 7143
+          }
+        },
+        "source_anchors": [
+          [
+            7129,
+            7166
+          ]
+        ],
+        "reviewed_current_callers": true,
+        "coordinator_reviewed": true
+      }
     },
     {
       "id": "code_health:finding_388125686d54705ffbee",
@@ -63792,7 +64024,7 @@
       "scanner_id": "0fddba49209d4fd19b6a4a03a13b6746",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
+      "status": "reviewed_no_change",
       "classification": null,
       "review": null,
       "evidence_fingerprint": "4f0796703f33886c3f458f933d4e935980d190229b551dc3941929bcfd4d9cdc",
@@ -63834,7 +64066,34 @@
       ],
       "identity_aliases": [
         "code_health:finding_58a8b9f1eed6f92f7106"
-      ]
+      ],
+      "risk_admission_007": {
+        "disposition": "retain",
+        "classification": "data_loss_boundary_retained",
+        "reason": "The six OR operators reject either NaN index, the same-index no-op, and both lower/upper bounds before splice and OCR invalidation. This is the actual repair045 data-loss boundary, not six redundant checks. Splitting into one-use predicates would hide the complete admission rule. Current controlled native assertions explicitly preserve prefix parsing and drag-index fallback; tightening parseInt would change that contract. No new wrong-result/security risk established in this guard.",
+        "report": "reviews/batch-007-feedback-risk-admission.json",
+        "source_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+        "function_sha256_normalized_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237",
+        "verified_observation_details": {
+          "operator_count": 6,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 3537,
+          "symbol_index": 72
+        },
+        "source_anchors": [
+          [
+            3477,
+            3500
+          ],
+          [
+            3537,
+            3591
+          ]
+        ],
+        "reviewed_current_callers": true,
+        "coordinator_reviewed": true
+      }
     },
     {
       "id": "code_health:finding_422849494d832f75eae6",
@@ -141237,6 +141496,23 @@
       "raw_checkout_newline_only_changes": [
         "tests/detailed-parser.browser.cjs"
       ]
+    },
+    {
+      "id": "batch-007",
+      "status": "validated_pending_merge",
+      "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/188",
+      "source_commit": "c814963f9f277920b876eef8f707f9572912ac95",
+      "validation_report": "reviews/batch-007-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "all_source_pins_unchanged": true,
+      "independent_reviews": [
+        "reviews/repair-065-safety-review.json",
+        "reviews/repair-065-regression-review.json",
+        "reviews/repair-066-safety-review.json",
+        "reviews/repair-066-regression-review.json"
+      ]
     }
   ],
   "workflow_policy": {
@@ -141263,17 +141539,21 @@
     "selected_by_user": "Focus on confirmed bugs; replace modules only where worthwhile (Recommended)",
     "selected_at": "2026-10-16T02:12:28.256716+00:00",
     "scope": "Current writing-feedback-tool campaign",
-    "required_work": "Investigate credible user-facing bug leads; fix reproducible defects with regressions. Retain harmless warnings with reasons. Module replacement needs demonstrated benefit and preserved behavior.",
+    "required_work": "Reassess remaining findings by actual impact. Admit confirmed bugs, meaningful data-safety tests and maintainability improvements that remove real duplicated policy. Retain necessary checks and warnings whose repair offers no clear benefit.",
     "optional_work": "The 96-edit maintenance queue is an optional backlog, not a completion target. Do not fill batches with cosmetic cleanup.",
-    "verification": "Keep risk-proportionate focused tests, one source writer, independent read-only review and full validation before merge. No wholesale rebuild authorized."
+    "verification": "Keep risk-proportionate focused tests, one source writer, independent read-only review and full validation before merge. No wholesale rebuild authorized.",
+    "resumed_instruction": "Continue remaining Code Health findings, highest risk first; skip changes without real benefit."
   },
   "required_work_summary": {
-    "confirmed_unresolved_bugs": 0,
+    "confirmed_unresolved_bugs": 1,
     "unconfirmed_application_leads": 0,
-    "test_oracle_leads": 4,
+    "test_oracle_leads": 0,
     "optional_historical_maintenance_edits": 96,
-    "note": "All9 current application leads examined:6native bug repairs published/verified;3no active shipped defect established.4test-oracle leads and historical maintenance remain optional;this is not a general bug-free guarantee.",
-    "confirmed_fixes_awaiting_publication": 0
+    "note": "Current mobile header bug reproduced, candidate independently reviewed and ready; not yet deployed. Four storage safety test gaps and one settings merge improvement await007fullgate/publication. Maintenance remains behind this concrete user issue.",
+    "confirmed_fixes_awaiting_publication": 0,
+    "test_oracle_improvements_awaiting_publication": 4,
+    "user_reported_usability_leads": 1,
+    "reviewed_product_fixes_awaiting_publication": 1
   },
   "remaining_operation_queue": {
     "report": "reviews/remaining-operation-queue.json",
@@ -141283,8 +141563,8 @@
     "candidate_edit_operations": 96,
     "additional_lead_only_operations": 12,
     "bounded_routing_families": 9,
-    "status": "optional_backlog_not_completion_target",
-    "note": "Historical catalog based on00c source;96 is not a newly validated remaining-edit count and is not a completion target."
+    "status": "historical_candidates_reopened_for_risk_and_benefit_admission",
+    "note": "Historical catalog only; current source and benefit must be verified before each edit. Previously fixed and retained entries must not be replayed as new work."
   },
   "active_reviews": [],
   "behavioral_leads": [
@@ -142015,10 +142295,14 @@
       ],
       "smallest_change": "After allowed redirect, inspect durable draft and pending record. Check text/student/session ID; check embedded photo bytes for full/retry and exact durable Drive ID for drive-backed. Keep the existing native entry points and navigation assertion.",
       "regression_recommendation": "Add a controlled held/pre-navigation omission or truncation fault and confirm the new assertions reject it; retain all existing12 cases. No such mutation or test was executed here.",
-      "status": "candidate_needs_regression",
+      "status": "fixed_verified",
       "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
       "report": "reviews/repair-047-ownership-harnesses.json",
-      "related_repair": "repair-047"
+      "related_repair": "repair-047",
+      "resolved_by": "repair-065-storage-safety-oracles",
+      "resolution": "Missing test assertions strengthened; actual healthy native cases pass and bounded fault sensitivity verified. No current product bug or scanner clearance claimed.",
+      "verification_report": "reviews/repair-065-storage-oracles.json",
+      "publication_status": "pending_batch_gate_and_publication"
     },
     {
       "id": "047-L2",
@@ -142049,10 +142333,14 @@
       ],
       "smallest_change": "For pending-clear, assert result.pending===null and result.storedPending===null, alongside the existing empty-portfolio, no-sync and flush assertions.",
       "regression_recommendation": "Use a narrow old-upload completion fault that resurrects cleared pending memory and/or durable record, and verify the new oracle fails. Native production guard behavior has not been reproduced or changed here.",
-      "status": "candidate_needs_regression",
+      "status": "fixed_verified",
       "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
       "report": "reviews/repair-047-ownership-harnesses.json",
-      "related_repair": "repair-047"
+      "related_repair": "repair-047",
+      "resolved_by": "repair-065-storage-safety-oracles",
+      "resolution": "Missing test assertions strengthened; actual healthy native cases pass and bounded fault sensitivity verified. No current product bug or scanner clearance claimed.",
+      "verification_report": "reviews/repair-065-storage-oracles.json",
+      "publication_status": "pending_batch_gate_and_publication"
     },
     {
       "id": "049-L1",
@@ -142231,12 +142519,16 @@
       ],
       "smallest_change": "For localNewer only, assert r.uploads.length === 1 before the existing payload loop. Keep cloud-newer semantics.",
       "regression_recommendation": "Demonstrate that suppressing the local-newer push fails this checker, and compare both conflict directions with exact uploaded image metadata. This review did not run a mutation or reproduction.",
-      "status": "candidate_needs_regression",
+      "status": "fixed_verified",
       "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
       "report": "reviews/repair-054-portfolio-harnesses.json",
       "related_repair": "repair-054",
       "coordinator_source_evidence_reviewed": true,
-      "fix_applied": false
+      "fix_applied": false,
+      "resolved_by": "repair-065-storage-safety-oracles",
+      "resolution": "Missing test assertions strengthened; actual healthy native cases pass and bounded fault sensitivity verified. No current product bug or scanner clearance claimed.",
+      "verification_report": "reviews/repair-065-storage-oracles.json",
+      "publication_status": "pending_batch_gate_and_publication"
     },
     {
       "id": "057-L1",
@@ -142270,12 +142562,31 @@
       ],
       "smallest_change": "Assert observed.refreshes > 0 for failure === refresh. If claiming exact post-clear timing, also record cleared in the throwing hook and assert that premise; avoid hard-coding an unverified exact call count.",
       "regression_recommendation": "Check both new and replacement refresh cases. A targeted bypass of the refresh callback should fail the new premise assertion; the existing committed bytes/null draft/reload oracles must remain. No mutation or test executed here.",
-      "status": "candidate_needs_regression",
+      "status": "fixed_verified",
       "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
       "report": "reviews/repair-057-storage-harnesses.json",
       "related_repair": "repair-057",
       "coordinator_source_evidence_reviewed": true,
-      "fix_applied": false
+      "fix_applied": false,
+      "resolved_by": "repair-065-storage-safety-oracles",
+      "resolution": "Missing test assertions strengthened; actual healthy native cases pass and bounded fault sensitivity verified. No current product bug or scanner clearance claimed.",
+      "verification_report": "reviews/repair-065-storage-oracles.json",
+      "publication_status": "pending_batch_gate_and_publication"
+    },
+    {
+      "id": "manual-mobile-header-overlap",
+      "file": "index.html",
+      "function": "mobile header account/status/action layout",
+      "status": "confirmed_bug_fix_reviewed_pending_publication",
+      "classification": "user_reported_mobile_usability_defect",
+      "reason": "Current code reproduced actual SignOut/Settings rectangle overlap in9normal sync geometry states and a blocked real360px SignOutclick. IsolatedCSScandidate passes143geometry states/11nativeactionsequences and111auth+2startup cases before/after; bothindependentreviewsaccepted. Primaryruntimeunchangeduntil007gatefinishes.",
+      "priority": "highest current product usability defect; ahead of optional maintenance",
+      "source": "User message and Screenshot_2026-10-14-12-40-16-756_com.android.chrome-edit.jpg",
+      "repair_id": "repair-067-mobile-header",
+      "thread_id": "01a14310-0c6f-7fd2-98eb-fa69bb7242d3",
+      "scope_limit": "No claim RepoWise detected CSS geometry or current native failure until reproduction. No real account/photo used in QA.",
+      "candidate_commit": "b0aa0fe36be872b1cb38a118f7a433cc33b8ddef",
+      "report": "reviews/repair-067-mobile-header.json"
     }
   ],
   "coverage_evidence": {
@@ -142308,7 +142619,7 @@
       "google-drive-migration.js": true,
       "js/app/dialogs.js": true,
       "js/app/storage-recovery.js": true,
-      "js/app/00-storage-sync-patches.js": true,
+      "js/app/00-storage-sync-patches.js": false,
       "js/app/portfolio-export.js": true,
       "js/app/10-main-app.js": true,
       "js/app/photo-crop.js": true,

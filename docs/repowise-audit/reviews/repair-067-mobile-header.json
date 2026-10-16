@@ -1,0 +1,189 @@
+{
+  "createdAt": "2026-10-16T05:01:37.847Z",
+  "timezone": "Asia/Bangkok",
+  "sourceRoot": "C:/Users/Michael/Documents/Codex/2026-10-15/files-pasted-by-the-user-you/work/mobile-header",
+  "baseCommit": "c814963f9f277920b876eef8f707f9572912ac95",
+  "changedFiles": [
+    "index.html"
+  ],
+  "sourceEditScope": "Header CSS only; no markup, handler, JavaScript, dependency, fixture, test-runner or manifest edits. Source edits stopped after candidate checks.",
+  "htmlSHA256": {
+    "before": "c633ebd0399ff9e29897686957bf1488a9d1351acf8c063b280be648ce292e7c",
+    "after": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63"
+  },
+  "baseline": {
+    "cases": 104,
+    "failingLayoutCases": 71,
+    "signOutSettingsOverlapCases": 9,
+    "overlapCases": [
+      {
+        "width": 320,
+        "mode": "name",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 320,
+        "mode": "long-name",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 360,
+        "mode": "name",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 360,
+        "mode": "avatar",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 360,
+        "mode": "long-name",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 390,
+        "mode": "name",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 390,
+        "mode": "avatar",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 390,
+        "mode": "long-name",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      },
+      {
+        "width": 430,
+        "mode": "avatar",
+        "state": "syncing",
+        "text": "New writing is ready to sync to portfolio"
+      }
+    ],
+    "failedInteractionWidths": [
+      360
+    ],
+    "description": "At 360px Settings intercepted the native Sign Out click. Layout checks also caught identity clipping, undersized mobile targets and long status overflow."
+  },
+  "candidate": {
+    "mobileEmulation": {
+      "cases": 104,
+      "failures": 0,
+      "widths": [
+        320,
+        360,
+        390,
+        430,
+        640,
+        768,
+        1024,
+        1440
+      ],
+      "nativeTouchActionChecks": [
+        {
+          "width": 320,
+          "passed": true
+        },
+        {
+          "width": 360,
+          "passed": true
+        },
+        {
+          "width": 390,
+          "passed": true
+        },
+        {
+          "width": 430,
+          "passed": true
+        },
+        {
+          "width": 640,
+          "passed": true
+        },
+        {
+          "width": 768,
+          "passed": true
+        },
+        {
+          "width": 1024,
+          "passed": true
+        },
+        {
+          "width": 1440,
+          "passed": true
+        }
+      ]
+    },
+    "desktop": {
+      "cases": 39,
+      "failures": 0,
+      "widths": [
+        768,
+        1024,
+        1440
+      ],
+      "nativeMouseActionChecks": [
+        {
+          "width": 768,
+          "passed": true
+        },
+        {
+          "width": 1024,
+          "passed": true
+        },
+        {
+          "width": 1440,
+          "passed": true
+        }
+      ]
+    },
+    "pageErrors": [],
+    "assertions": "Visible header items inside header bounds; pairwise non-overlap; no page horizontal overflow; text containers do not clip/overflow; mobile actions at least44x44; Settings opens/closes separately and does not sign out; Sign Out disconnects and reveals sign-in without opening Settings; saved portfolio bytes and unsaved textarea bytes preserved."
+  },
+  "existingChecks": {
+    "auth-before": {
+      "cases": 111,
+      "passed": 111,
+      "report": "auth-before.json"
+    },
+    "auth-after": {
+      "cases": 111,
+      "passed": 111,
+      "report": "auth-after.json"
+    },
+    "public-smoke-before": {
+      "cases": 2,
+      "passed": 2,
+      "report": "public-smoke-before.json"
+    },
+    "public-smoke-after": {
+      "cases": 2,
+      "passed": 2,
+      "report": "public-smoke-after.json"
+    }
+  },
+  "scenarios": "Signed out; signed in without avatar; signed in with local synthetic avatar; long profile name. Statuses: Synced; New writing is ready to sync to portfolio; long readable error; unbroken long synthetic status. Full shipped local scripts executed in headless Edge. External requests aborted. Sync scheduling/provider operations replaced only at service boundaries; existing native handlers retained.",
+  "screenshots": [
+    "before-390.png",
+    "after-390.png",
+    "after-390-header.png",
+    "before-1440.png",
+    "after-desktop-1440.png",
+    "after-320-avatar.png",
+    "after-640-long-name.png",
+    "after-desktop-768-name.png"
+  ],
+  "reproduction": "Set NODE_PATH to C:/Users/Michael/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules. Run installed Node against work/header-qa.cjs after and work/header-qa.cjs after-desktop desktop. Before report used native mouse clicks; final mobile checks use native taps. Existing checks: tests/auth-integrity.browser.cjs and tests/script-loading.browser.cjs with WFT_TEST_ROOT equal sourceRoot and WFT_TEST_REPORT outside worktree.",
+  "limits": "No physical Android/iOS device, live sign-in/provider, Drive or AI testing. External images/libraries blocked in responsive QA; synthetic avatar supplied inline. Existing script-loading smoke serves its previously installed JSZip locally. Did not run full suite (coordinator owns frozen full gate). No primary repo edits, Git state changes, commits, PR, publication, dependency changes, tracker/index writes or messages to coordinator."
+}

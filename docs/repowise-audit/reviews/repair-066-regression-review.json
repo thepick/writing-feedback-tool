@@ -1,0 +1,169 @@
+{
+  "review_id": "repair-066-regression-review",
+  "verdict": "accepted_with_limits",
+  "blockers": [],
+  "summary": "The bounded refactor removes two duplicated copy-loop bodies without changing settings preference, own-key insertion order, clone fallback, roster/deletion behavior or credential exclusion. No regression found. Supplied receipts retain105 native preference cases and14 Node VM settings/deletion cases;14 supplemental VM cases compare genuinely distinct old/new implementations. This is maintenance, not a production-bug repair.",
+  "baseline_git_commit": "bd5441ac46fcae48e9b912985b766836f5b5ecc1",
+  "baseline_binding": "Worker receipt labels production_base95026f. Saved original00/scenario files independently match immutable bd5441a after LF normalization and match the receipt before hashes; the labels therefore refer to identical assigned baseline bytes.",
+  "reviewed_source_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "baseline_git_raw": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "baseline_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "worker_original_raw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+      "reviewed_current_raw": "0ddb92e188919afaf02e47d245d1b44095700a0b7b62ec9ab03b8c00c8d04c8b",
+      "reviewed_current_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84"
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "baseline_git_raw": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+      "baseline_lf": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+      "worker_original_raw": "f24c3c803930b595fefc0c252180ad4abafbb31ba32039f4932338b5bf12513d",
+      "reviewed_current_raw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+      "reviewed_current_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b"
+    }
+  },
+  "function_hashes_and_scope": {
+    "only_merge_function_changed_normalized_lf": true,
+    "clone_body_unchanged": true,
+    "roster_guard_and_api_key_tail_unchanged": true,
+    "old_merge_sha256_lf_plus_trailing_newline": "12b8fa14aaf5bbe2f8e7b525dbbe5931c64c3fa4d3e437cd6ec1d3e30366a64a",
+    "new_merge_sha256_lf_plus_trailing_newline": "f2fc94dd552c84d08b1b0e7fcbe5c907caf88dd055b0979fbbe6d786fef4d12c",
+    "old_span": [
+      5226,
+      5264
+    ],
+    "new_span": [
+      5226,
+      5253
+    ]
+  },
+  "source_review": {
+    "file": "js/app/00-storage-sync-patches.js",
+    "current_lines": [
+      5226,
+      5253
+    ],
+    "reason": "Local clone still precedes cloud clone. Aliases select the same ordered cloned objects as the old if/else; their assignment does not enumerate or read source properties. Two for-in loops preserve own-property checks and value reads. The null-prototype output and complete roster-guard/merge/API-key-delete tail remain byte-identical. Reading the local preferLocal parameter for two ternaries instead of one if does not trigger coercion/getter hooks. Replacing only this merge body exactly reproduces the complete current00 file after LF normalization.",
+    "callers_at_baseline": [
+      {
+        "function": "downloadAndMergeDuplicateSettings",
+        "lines": [
+          5155,
+          5167
+        ],
+        "contract": "Accumulated local settings win over duplicate-file values."
+      },
+      {
+        "function": "syncWftSettingsIfNeeded",
+        "lines": [
+          5273,
+          5364
+        ],
+        "contract": "Pending preference/newer local snapshots, roster deletions, required persistence and republish remain intact."
+      },
+      {
+        "function": "applyLoadedSettings",
+        "lines": [
+          6293,
+          6331
+        ],
+        "contract": "Incoming preference merge; existing device credential restored before durable write; unchanged rollback/recovery and UI publication."
+      }
+    ],
+    "clone": "cloneWftJson:4403-4409 unchanged: JSON clone or catch-return-original. This matters for getter and circular-input behavior."
+  },
+  "assertion_review": {
+    "file": "tests/preference-integrity-scenarios.js",
+    "added_lines": [
+      167,
+      174
+    ],
+    "preservation": {
+      "old_content_byte_identical_after_removing_new_block_normalized_lf": true,
+      "added_lines": 8,
+      "range": [
+        167,
+        174
+      ],
+      "equal_helper": "JSON.stringify(actual) === JSON.stringify(expected)"
+    },
+    "reason": "Removing exactly the eight added lines reproduces the entire old scenario file after LF normalization. Existing cases, assertions, resets and fail-on-failure aggregation remain. In each of8 existing source/preference matrix cases, two new assertions check the actual null prototype and independent literal expected own keys/order/values. The equal helper at12 compares JSON.stringify strings, so key order is genuinely checked. Expected local/cloud/both/empty JSON is not derived from returned output or a second merge algorithm. It deliberately preserves single-source duplicate rosters, both-source sorted/deduplicated union, unknown metadata, prototype-like own keys and credential omission.",
+    "native_driver": "Unchanged preference-integrity.browser.cjs:24 evaluates the complete scenario source against shipped scripts; startup and uncaught-error cases remain."
+  },
+  "parity_review": {
+    "script": "work/settings-merge-contract.cjs",
+    "hash": {
+      "raw_sha256": "fa3faf275d4ea485083afc89a793450baf803441e52dfe96b58ba71fcc3ebc83",
+      "bytes": 4331
+    },
+    "reason": "The script separately loads saved original and current production source, then extracts real cloneWftJson and mergeWftSettings bodies. Original bytes bind to Gitbd5441a, and independently verified merge hashes differ. Each observation uses a fresh VM and fresh operands. assert.equal compares old/new serialized observations before marking a case passed: getter read trace, error.message, null prototype, own-key order and output values. Circular self references force the real clone fallback; inherited enumerable properties, hidden keys and symbols exercise exclusion. Throwing getters produce a real propagated message/trace. No expected merge result is substituted.",
+    "matrix": "7 modes x2 boolean preferences: metadata, both rosters, one roster, false/null roster, circular clone fallback, null inputs, throwing getter.",
+    "limits": [
+      "Roster merge is a tracing stub returning a fixed array: it compares guard/call/argument order, while native metadata cases verify real roster semantics.",
+      "The probe compares error.message, not error constructor/stack/identity. Self-reference outputs use local/cloud-reference labels. It is not exhaustive proxy or adversarial mutation coverage."
+    ]
+  },
+  "execution_evidence": {
+    "native_preference": {
+      "before": "outputs/settings-baseline/preference-integrity.json",
+      "after": "outputs/settings-fixed/preference-integrity.json",
+      "before_after_passed": 105,
+      "same105_names_and_order": true
+    },
+    "settings_deletions": {
+      "before": "outputs/settings-baseline/settings-deletions-sync.log",
+      "after": "outputs/settings-fixed/settings-deletions-sync.log",
+      "before_after_passed": 14,
+      "same14_names_and_order": true,
+      "classification": "Node VM suite settings-deletions-sync.cjs, not native browser. Its PASS Settings/Deletions and Settings/deletions sync summary differ from the separate browser driver PASS browser/Browser settings/deletions sync output."
+    },
+    "differential": {
+      "report": "outputs/settings-fixed/merge-contract.json",
+      "passed": 14,
+      "failed": 0,
+      "report_hash": {
+        "raw_sha256": "b68f8adb64b7bd5f84b64ed3c00a4d1af4d15893939ebbed0a5230dcb9c21b45",
+        "bytes": 9512
+      }
+    },
+    "syntax": "Worker syntax.log reports2 checks passed; inspected as supplied evidence only. No reviewer test/syntax/probe rerun."
+  },
+  "frozen_fixtures": {
+    "tests/fixtures/analysis-pipeline-baseline.js": {
+      "baseline_git_raw_sha256": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+      "current_raw_sha256": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+      "normalized_lf_sha256": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+      "matches_baseline_normalized_lf": true
+    },
+    "tests/fixtures/portfolio-renderer-baseline.js": {
+      "baseline_git_raw_sha256": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+      "current_raw_sha256": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+      "normalized_lf_sha256": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+      "matches_baseline_normalized_lf": true
+    }
+  },
+  "final_probe_receipt_hashes": {
+    "work/settings-merge-contract.cjs": {
+      "raw_sha256": "fa3faf275d4ea485083afc89a793450baf803441e52dfe96b58ba71fcc3ebc83",
+      "bytes": 4331
+    },
+    "work/make-settings-receipt.cjs": {
+      "raw_sha256": "261ef4ad0fc56d59fce01d9a146f76fa5acddd6430d7cf4649f8a6d475206a4c",
+      "bytes": 7264
+    },
+    "outputs/repair-066-settings-merge.json": {
+      "raw_sha256": "26f971c8c20ff04a0f09551750a3fbc57fb635ef2599d541143b6397b65a15da",
+      "bytes": 8775
+    }
+  },
+  "detailed_evidence_receipt": {
+    "path": "work/repowise-review-066/static-evidence.json",
+    "sha256_raw": "159fb4ac7c0bc148a9c5dfdcdd060919ca0fac52c6804629cf7f77a0fda7775c",
+    "contains": "Before/after source hashes, all selected native/Node logs and reports, parity output/probe hashes, unchanged caller hashes, fixture identities and read traces."
+  },
+  "end_check": "Both reviewed source/test raw hashes and all three current probe/receipt hashes matched again immediately before report save.",
+  "limits": [
+    "Read-only source/evidence review. No app/browser/tests/syntax/parity execution, source/test/Git/index/tracker changes or additional agents. Only own scratch/report written.",
+    "Baseline and after executions are worker-supplied receipts. They do not independently attest process-to-source identity; exact reviewed files and artifacts are pinned here. Coordinator owns combined freeze/full gate/adoption.",
+    "No production defect, live Drive/OAuth behavior, full repository pass, scanner closure or security clearance is claimed."
+  ]
+}

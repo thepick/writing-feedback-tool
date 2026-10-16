@@ -1,0 +1,393 @@
+{
+  "repair_id": "repair-065",
+  "generated_at": "2026-10-16T04:40:45.296Z",
+  "timezone": "Asia/Bangkok",
+  "source_base": "95026f777921d878ab68183950dd0cf83c0df112",
+  "status": "ready_for_coordinator_review",
+  "scope": "Four existing native test oracles only; all original scenario names, assertions and blocked-redirect cases retained.",
+  "native": {
+    "suites": [
+      {
+        "file": "tests/auth-integrity.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\baseline\\auth-integrity.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\fixed-final\\auth-integrity-verified.json",
+        "before": {
+          "count": 111,
+          "passed": 111,
+          "failed": 0
+        },
+        "after": {
+          "count": 111,
+          "passed": 111,
+          "failed": 0
+        },
+        "hashes": {
+          "beforeRaw": "79b4b1ae8b0778ae7de4c81f8ef11c44c7a75c33e6e4fedde7290321af5951da",
+          "afterRaw": "15b95507de994eb87fbb115f1fb814d1a1282fbc6e2429609c3027de7ec9a926",
+          "beforeLf": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+          "afterLf": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79"
+        },
+        "staticAssertCallSites": {
+          "before": 52,
+          "after": 59
+        }
+      },
+      {
+        "file": "tests/media-ownership.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\baseline\\media-ownership.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\fixed-final\\media-ownership.json",
+        "before": {
+          "count": 52,
+          "passed": 52,
+          "failed": 0
+        },
+        "after": {
+          "count": 52,
+          "passed": 52,
+          "failed": 0
+        },
+        "hashes": {
+          "beforeRaw": "ac2bbc54d727e69525ef318d9b4404515b4691b0e96b5de0c00b294e114b93ab",
+          "afterRaw": "0bcc083f387069e9807446d0eb66a79d806affbcb5795180e61080b4d142f023",
+          "beforeLf": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+          "afterLf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b"
+        },
+        "staticAssertCallSites": {
+          "before": 68,
+          "after": 70
+        }
+      },
+      {
+        "file": "tests/record-identity.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\baseline\\record-identity.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\fixed-final\\record-identity.json",
+        "before": {
+          "count": 50,
+          "passed": 50,
+          "failed": 0
+        },
+        "after": {
+          "count": 50,
+          "passed": 50,
+          "failed": 0
+        },
+        "hashes": {
+          "beforeRaw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762",
+          "afterRaw": "a6bbfbac9af692cce558da903ae48d9d0a61de460795f29e617591e64031834c",
+          "beforeLf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+          "afterLf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499"
+        },
+        "staticAssertCallSites": {
+          "before": 59,
+          "after": 60
+        }
+      },
+      {
+        "file": "tests/pending-commit-publication.browser.cjs",
+        "baseline": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\baseline\\pending-commit-publication.json",
+        "fixed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\fixed-final\\pending-commit-publication.json",
+        "before": {
+          "count": 6,
+          "passed": 6,
+          "failed": 0
+        },
+        "after": {
+          "count": 6,
+          "passed": 6,
+          "failed": 0
+        },
+        "hashes": {
+          "beforeRaw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86",
+          "afterRaw": "de2c8e5bb0f19a47ef3e951dcbef6ee7573d54116898becffc92d76c84e661aa",
+          "beforeLf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+          "afterLf": "7a887eaffe5b6f67d8f7cf479c0b7d5642463a95af1be93cb3468b86da36f19b"
+        },
+        "staticAssertCallSites": {
+          "before": 20,
+          "after": 22
+        }
+      }
+    ],
+    "before": {
+      "cases": 219,
+      "passed": 219,
+      "failed": 0
+    },
+    "after": {
+      "cases": 219,
+      "passed": 219,
+      "failed": 0
+    }
+  },
+  "leads": [
+    "047-L1",
+    "047-L2",
+    "054-L1",
+    "057-L1"
+  ],
+  "redirect_boundary": "Test wrapper calls the unchanged real saveWftOAuthDraftBeforeRedirect, then synchronously reads actual localStorage before returning to the real location assignment. The existing initiating evaluation returns the serialized snapshot. Real Google route remains intercepted/aborted. Wait for the aborted navigation frame event, then goto the local app in the same context and verify normal shipped startup restores exact text/student/genres/pending and consumes the draft.",
+  "fault_proofs": {
+    "pairs": 8,
+    "all_old_accept_new_reject": true,
+    "summary": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\summary.json",
+    "script": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\work\\run-faults.cjs",
+    "details": [
+      {
+        "id": "redirect-full-missing-draft",
+        "suite": "auth-integrity",
+        "mode": "full",
+        "fault": "localStorage.removeItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 1,
+            "passed": 1,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-full-missing-draft-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-full-missing-draft-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 1,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "redirect preserves current work full",
+                "error": "The text draft must be durable before navigation"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-full-missing-draft-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-full-missing-draft-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "redirect-retry-truncated-photo",
+        "suite": "auth-integrity",
+        "mode": "retry",
+        "fault": "const p = JSON.parse(localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY)); p.sessionData.images[0].dataUrl = ''; localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(p));",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 1,
+            "passed": 1,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-retry-truncated-photo-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-retry-truncated-photo-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 1,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "redirect preserves current work retry",
+                "error": "Complete pending writing and recoverable photos must be durable before navigation\n+ actual - expected\n\n  {\n    sessionData: {\n      id: 'recovery',\n      images: [\n        {\n+         dataUrl: '',\n-         dataUrl: 'data:image/png;base64,AAAA',\n          originalDataUrl: 'data:image/png;base64,AAAA',\n          pendingDriveUpload: true\n        }\n      ],\n      originalText: 'Current synthetic recovery writing'\n"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-retry-truncated-photo-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-retry-truncated-photo-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "redirect-drive-missing-reference",
+        "suite": "auth-integrity",
+        "mode": "drive-backed",
+        "fault": "const p = JSON.parse(localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY)); delete p.sessionData.images[0].driveFileId; localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(p));",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 1,
+            "passed": 1,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-drive-missing-reference-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-drive-missing-reference-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 1,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "redirect preserves current work drive-backed",
+                "error": "Complete pending writing and recoverable photos must be durable before navigation\n+ actual - expected\n\n  {\n    sessionData: {\n      id: 'recovery',\n      images: [\n        {\n          dataUrl: '',\n          dataUrlRemovedForStorage: true,\n-         driveFileId: 'durable-photo',\n          pendingDriveUpload: false\n        }\n      ],\n      originalText: 'Current synthetic recovery writing'\n    },\n"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-drive-missing-reference-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\redirect-drive-missing-reference-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "pending-clear-memory-resurrection",
+        "suite": "media-ownership",
+        "fault": "pendingPortfolioSync = owner;",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 1,
+            "passed": 1,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-memory-resurrection-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-memory-resurrection-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 1,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "pending-clear",
+                "error": "Old upload completion must not resurrect cleared pending writing\n+ actual - expected\n\n+ {\n+   sessionData: {\n+     createdAt: '2026-10-10T00:00:00Z',\n+     id: 'first',\n+     images: [\n+       {\n+         dataUrl: '',\n+         dataUrlRemovedForStorage: true,\n+         driveFileId: 'uploaded-file',\n+         driveName: 'Alice__session__synthetic.png.png',\n+         driveUploadedAt: '2026-10-16T04:39:07.771Z',\n+         imageId: 'photo-one',\n+         mimeType: 'image/png',\n+         name: 'synthetic.png',\n+         pendingDriveUpload: false\n+       }\n+     ],\n+     originalText: 'Synthetic writing.'\n+   },\n+   signature: 'alice-old',\n+   studentName: 'Alice'\n+ }\n- null\n"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-memory-resurrection-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-memory-resurrection-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "pending-clear-durable-resurrection",
+        "suite": "media-ownership",
+        "fault": "localStorage.setItem(PENDING_PORTFOLIO_SYNC_KEY, JSON.stringify(owner));",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 1,
+            "passed": 1,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-durable-resurrection-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-durable-resurrection-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 1,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "pending-clear",
+                "error": "Old upload completion must not resurrect cleared pending writing\n+ actual - expected\n\n+ {\n+   sessionData: {\n+     createdAt: '2026-10-10T00:00:00Z',\n+     id: 'first',\n+     images: [\n+       {\n+         dataUrl: '',\n+         dataUrlRemovedForStorage: true,\n+         driveFileId: 'uploaded-file',\n+         driveName: 'Alice__session__synthetic.png.png',\n+         driveUploadedAt: '2026-10-16T04:39:17.442Z',\n+         imageId: 'photo-one',\n+         mimeType: 'image/png',\n+         name: 'synthetic.png',\n+         pendingDriveUpload: false\n+       }\n+     ],\n+     originalText: 'Synthetic writing.'\n+   },\n+   signature: 'alice-old',\n+   studentName: 'Alice'\n+ }\n- null\n"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-durable-resurrection-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\pending-clear-durable-resurrection-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "local-newer-no-upload",
+        "suite": "record-identity",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 6,
+            "passed": 6,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\local-newer-no-upload-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\local-newer-no-upload-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 6,
+            "passed": 5,
+            "failures": [
+              {
+                "name": "photo-conflict-sync-local-newer",
+                "error": "Newer local writing must upload to the canonical portfolio"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\local-newer-no-upload-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\local-newer-no-upload-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "refresh-hook-bypassed",
+        "suite": "pending-commit-publication",
+        "fault": "updateSyncPortfolioButtonState = () => {};",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 2,
+            "passed": 2,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-bypassed-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-bypassed-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 2,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "new writing: refresh",
+                "error": "The throwing refresh hook must run"
+              },
+              {
+                "name": "replacement: refresh",
+                "error": "The throwing refresh hook must run"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-bypassed-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-bypassed-new.log"
+          }
+        },
+        "demonstrated": true
+      },
+      {
+        "id": "refresh-hook-only-before-clear",
+        "suite": "pending-commit-publication",
+        "fault": "try { updateSyncPortfolioButtonState(); } catch {} updateSyncPortfolioButtonState = () => {};",
+        "versions": {
+          "old": {
+            "exit": 0,
+            "count": 2,
+            "passed": 2,
+            "failures": [],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-only-before-clear-old.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-only-before-clear-old.log"
+          },
+          "new": {
+            "exit": 1,
+            "count": 2,
+            "passed": 0,
+            "failures": [
+              {
+                "name": "new writing: refresh",
+                "error": "The throwing refresh hook must observe pending memory and storage already cleared"
+              },
+              {
+                "name": "replacement: refresh",
+                "error": "The throwing refresh hook must observe pending memory and storage already cleared"
+              }
+            ],
+            "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-only-before-clear-new.json",
+            "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\outputs\\faults-verified\\refresh-hook-only-before-clear-new.log"
+          }
+        },
+        "demonstrated": true
+      }
+    ]
+  },
+  "production_storage_source_unchanged_through_oracle_proofs": true,
+  "preserved_boundaries": [
+    "Local-newer requires at least one upload; cloud-newer may upload zero; existing payload checks retained.",
+    "Pending-clear retains existing no-sync/empty-portfolio/flush and unrelated-writing/saved-portfolio checks.",
+    "Refresh premise requires positive observations after actual durable removal AND null pending memory; no exact callback count frozen."
+  ],
+  "attempt_history": "Initial auth edits and exploratory paused-navigation captures failed; retained outputs/fixed, outputs/faults, outputs/faults-final and non-verified outputs/fixed-final/auth-integrity.* are superseded. Fault harness initially failed on CRLF extraction and now normalizes only its in-memory source. Final passing auth is auth-integrity-verified.json; final fault evidence is faults-verified only.",
+  "limitations": [
+    "No live OAuth, Google, Drive, file-existence/download, AI, credentials or real student data tested. Drive recovery proves exact retained reference, not remote existence.",
+    "Auth uses synthetic photo bytes and normal local app re-entry, not a live OAuth roundtrip.",
+    "Media faults resurrect captured pending after held upload settles; they establish oracle sensitivity, not an actual production callback defect. Durable-only resurrection may be rehydrated by the real getter, so its first failure is the memory-null check.",
+    "Fault probes compile temporary harness variants in memory and replace browser services/hooks/storage writes; production files are never altered by probes.",
+    "No full repository sweep, publication, Git/index/tracker edits, dependency/config changes or RepoWise refresh performed by this writer. Coordinator owns integration."
+  ]
+}

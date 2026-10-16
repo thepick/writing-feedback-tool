@@ -1,0 +1,483 @@
+{
+  "review_id": "repair-065-regression-review",
+  "verdict": "accepted_with_scoped_limits",
+  "blockers": [],
+  "summary": "The final four test changes close the assigned oracle gaps without removing prior cases/assertions. Worker healthy receipts retain all219 cases (111+52+50+6); all8 fault pairs have old-checker exit0 and strengthened-checker exit1 with concrete case failures. These are test-strengthening/checker-sensitivity results, not proof of a current production defect or scanner clearance.",
+  "baseline_git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "worker_task": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety",
+  "reviewed_source_hashes": {
+    "tests/auth-integrity.browser.cjs": {
+      "reviewed_raw": "15b95507de994eb87fbb115f1fb814d1a1282fbc6e2429609c3027de7ec9a926",
+      "reviewed_lf": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79",
+      "baseline_git_raw": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+      "baseline_git_lf": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+      "unchanged_at_review_end": true
+    },
+    "tests/media-ownership.browser.cjs": {
+      "reviewed_raw": "0bcc083f387069e9807446d0eb66a79d806affbcb5795180e61080b4d142f023",
+      "reviewed_lf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+      "baseline_git_raw": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "baseline_git_lf": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "unchanged_at_review_end": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "reviewed_raw": "a6bbfbac9af692cce558da903ae48d9d0a61de460795f29e617591e64031834c",
+      "reviewed_lf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+      "baseline_git_raw": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+      "baseline_git_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+      "unchanged_at_review_end": true
+    },
+    "tests/pending-commit-publication.browser.cjs": {
+      "reviewed_raw": "de2c8e5bb0f19a47ef3e951dcbef6ee7573d54116898becffc92d76c84e661aa",
+      "reviewed_lf": "7a887eaffe5b6f67d8f7cf479c0b7d5642463a95af1be93cb3468b86da36f19b",
+      "baseline_git_raw": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+      "baseline_git_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+      "unchanged_at_review_end": true
+    },
+    "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety\\work\\run-faults.cjs": {
+      "reviewed_raw": "7c620ed594a06d758ad5ebe25982e1db7bf88e20dbf3a45c4430ca00070b111f",
+      "reviewed_lf": "7c620ed594a06d758ad5ebe25982e1db7bf88e20dbf3a45c4430ca00070b111f",
+      "unchanged_at_review_end": true
+    }
+  },
+  "immutable_application_context_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "immutable_git_blob_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "normalized_lf_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+    },
+    "js/app/10-main-app.js": {
+      "immutable_git_blob_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "normalized_lf_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b"
+    }
+  },
+  "saved_worker_originals": {
+    "auth-integrity": {
+      "worker_original_raw_sha256": "79b4b1ae8b0778ae7de4c81f8ef11c44c7a75c33e6e4fedde7290321af5951da",
+      "matches_git95026f_normalized_lf": true
+    },
+    "media-ownership": {
+      "worker_original_raw_sha256": "ac2bbc54d727e69525ef318d9b4404515b4691b0e96b5de0c00b294e114b93ab",
+      "matches_git95026f_normalized_lf": true
+    },
+    "record-identity": {
+      "worker_original_raw_sha256": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762",
+      "matches_git95026f_normalized_lf": true
+    },
+    "pending-commit-publication": {
+      "worker_original_raw_sha256": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86",
+      "matches_git95026f_normalized_lf": true
+    }
+  },
+  "scope": "Read the four diffs, complete changed scenario functions and their aggregation, actual immutable storage callers/guards, run-faults instrumentation and native result/log receipts. No tests/browser/application code rerun; no source/test/Git/index/tracker changes. Only own scratch/report written. Separate066 mergeSettings source refactor is outside this review.",
+  "groups": [
+    {
+      "test": "tests/auth-integrity.browser.cjs",
+      "anchors": [
+        {
+          "lines": [
+            257,
+            350
+          ],
+          "role": "Existing12-mode recovery matrix and new pre-navigation/full-startup assertions"
+        }
+      ],
+      "verdict": "accepted; provisional auth hold cleared by final verified receipts",
+      "reason": "The wrapper calls the saved real saveWftOAuthDraftBeforeRedirect, captures parsed actual localStorage only on its successful return, and returns the real result. It does not fabricate state, force success or bypass canPreserveRedirectWork. Actual manualSaveToDrive/handleGoogleSignIn/requestDriveAccess entry points remain. An independent literal requires complete pending student/signature/session/text/photo fields, processed/original bytes or durable Drive reference, plus text-draft student/genre. The real provider navigation is intercepted, then p.goto reloads the same local origin in a fresh document; actual startup must restore exact text/selection/genre/pending and consume the draft. This is genuine persisted-state restoration, rather than assigning an observed object back to the UI.",
+      "app_context": "Git95026f 00-storage:3419-3575 saves pending and draft before location.href; restoreWftOAuthDraftAfterRedirect3480-3522 restores actual fields. Full/retry/drive-backed allowed; existing blocked quota/memory/selected-photo/recovery/popup cases remain.",
+      "healthy": {
+        "baseline": {
+          "cases": 111,
+          "passed": 111,
+          "failures": []
+        },
+        "final": {
+          "cases": 111,
+          "passed": 111,
+          "failures": []
+        },
+        "receipt": "outputs/fixed-final/auth-integrity-verified.json"
+      },
+      "fault_ids": [
+        "redirect-full-missing-draft",
+        "redirect-retry-truncated-photo",
+        "redirect-drive-missing-reference"
+      ],
+      "fault_meaning": "Storage.setItem wrapper injects omissions after the real draft write and before the source-capturing wrapper returns. The old checker accepts navigation alone; the new checker rejects missing draft, missing processed dataUrl and missing Drive reference at the intended assertion. These simulate storage/result faults for checker sensitivity; no source defect is claimed.",
+      "limits": [
+        "The processed-photo probe retains originalDataUrl: it proves detection of lost processed-photo bytes, not total loss of every photo representation.",
+        "The fixture embeds a placeholder data URL; these assertions check exact retained serialized bytes/references, not image decoding or live Drive availability. Real-pixel media tests remain unchanged.",
+        "The local return uses a new native document navigation, not the literal page.reload API; external OAuth is intercepted and no provider/account flow is tested."
+      ]
+    },
+    {
+      "test": "tests/media-ownership.browser.cjs",
+      "anchors": [
+        {
+          "lines": [
+            96,
+            145
+          ],
+          "role": "Real pending clear between held upload start/completion"
+        },
+        {
+          "lines": [
+            253,
+            268
+          ],
+          "role": "New null memory and durable-pending assertions"
+        }
+      ],
+      "verdict": "accepted for checker sensitivity",
+      "reason": "The unchanged scenario starts real manual save/image serialization, waits until upload callback is held, calls actual clearPendingPortfolioSync, releases the old callback and waits for manualSyncInProgress to finish. The new assertions require both result.pending and raw storedPending null, retaining unsynced/no-portfolio/flush checks and every other media/pixel oracle. They catch resurrection which the old pending-clear exception intentionally did not inspect.",
+      "healthy": {
+        "baseline": {
+          "cases": 52,
+          "passed": 52,
+          "failures": []
+        },
+        "final": {
+          "cases": 52,
+          "passed": 52,
+          "failures": []
+        },
+        "receipt": "outputs/fixed-final/media-ownership.json"
+      },
+      "fault_ids": [
+        "pending-clear-memory-resurrection",
+        "pending-clear-durable-resurrection"
+      ],
+      "limits": [
+        "Both fault probes mutate memory/storage after the real held completion has finished. They demonstrate an old checker gap and the new checker detecting bad terminal state; they do not reproduce a faulty production completion callback.",
+        "getPendingPortfolioSync loads a durable stale record into memory, so the durable probe fails the first null-memory assertion as well; it does not uniquely isolate execution of the subsequent raw-storage assertion."
+      ]
+    },
+    {
+      "test": "tests/record-identity.browser.cjs",
+      "anchors": [
+        {
+          "lines": [
+            174,
+            183
+          ],
+          "role": "Real local/cloud newer merge and nonempty upload oracle"
+        }
+      ],
+      "verdict": "accepted",
+      "reason": "The local-newer case starts with genuinely different cloud text/photo metadata, marks the local portfolio dirty and invokes real syncWftPortfolioIfNeeded. The existing JSON-upload seam records supplied payloads. Requiring uploads.length>0 prevents the empty existing for-of loop from vacuously passing; all winning text/photo metadata and per-upload Drive-reference checks remain. The cloud-newer branch keeps its original behavior.",
+      "app_context": "Git95026f 00-storage:5610-5701 merges real snapshots, then pushes when local pending/duplicates and merged fingerprint differs from cloud.",
+      "healthy": {
+        "baseline": {
+          "cases": 50,
+          "passed": 50,
+          "failures": []
+        },
+        "final": {
+          "cases": 50,
+          "passed": 50,
+          "failures": []
+        },
+        "receipt": "outputs/fixed-final/record-identity.json"
+      },
+      "fault_ids": [
+        "local-newer-no-upload"
+      ],
+      "limits": [
+        "The probe replaces the sync invocation with a no-op while local winning data already exists. It proves checker sensitivity to an omitted push; no broken current sync path is claimed. Upload dispatch/payload is observed through the existing stub, not live network/server persistence."
+      ]
+    },
+    {
+      "test": "tests/pending-commit-publication.browser.cjs",
+      "anchors": [
+        {
+          "lines": [
+            34,
+            49
+          ],
+          "role": "Count actual throwing refresh after real memory/storage clear"
+        },
+        {
+          "lines": [
+            74,
+            92
+          ],
+          "role": "Require invocation/order plus existing publication/reload state"
+        }
+      ],
+      "verdict": "accepted",
+      "reason": "The throwing hook increments refreshesAfterClear only after the real removeItem returned, pending memory is null and original Storage.getItem confirms the durable key absent. Both new-writing and replacement receipts show refreshes=1/refreshesAfterClear=1. Old-checker-passing probes suppress the hook or invoke it only before clear; strengthened assertions reject both. The real commit/clear path and its caught refresh failure run, and existing saved text/session/deletion/signature/no-duplicate reload assertions remain. Read-after-clear and signature-failure controls are preserved.",
+      "app_context": "Git95026f 00-storage:8259-8265 removes durable pending, clears memory, catches refresh error;8345-8385 commits storage, clears pending and publishes signature while retaining rollback on required failures.",
+      "healthy": {
+        "baseline": {
+          "cases": 6,
+          "passed": 6,
+          "failures": []
+        },
+        "final": {
+          "cases": 6,
+          "passed": 6,
+          "failures": []
+        },
+        "receipt": "outputs/fixed-final/pending-commit-publication.json"
+      },
+      "fault_ids": [
+        "refresh-hook-bypassed",
+        "refresh-hook-only-before-clear"
+      ],
+      "limits": [
+        "The injected hook failures are controlled seams, not failures of an external service."
+      ]
+    }
+  ],
+  "preservation": {
+    "all_original_case_names_and_order_retained": {
+      "auth-integrity": true,
+      "media-ownership": true,
+      "record-identity": true,
+      "pending-commit-publication": true
+    },
+    "baseline_cases": 219,
+    "final_healthy_cases": 219,
+    "old_assertions_preserved": "Read actual diffs: additions/instrumentation only, apart from replacing return/observation declarations to add fields and prefixing the old record-identity checker with the upload assertion. No old assertion, scenario or terminal failure aggregation removed.",
+    "bounded_four_test_diff": "Only the assigned four test diffs are admitted here; no assertion about all current app bytes being frozen."
+  },
+  "fault_pair_receipts": [
+    {
+      "id": "redirect-full-missing-draft",
+      "suite": "auth-integrity",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 1,
+          "passed": 1,
+          "failures": [],
+          "receipt": "outputs/faults-verified/redirect-full-missing-draft-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 1,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "redirect preserves current work full",
+              "error": "The text draft must be durable before navigation"
+            }
+          ],
+          "receipt": "outputs/faults-verified/redirect-full-missing-draft-new.json"
+        }
+      }
+    },
+    {
+      "id": "redirect-retry-truncated-photo",
+      "suite": "auth-integrity",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 1,
+          "passed": 1,
+          "failures": [],
+          "receipt": "outputs/faults-verified/redirect-retry-truncated-photo-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 1,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "redirect preserves current work retry",
+              "error": "Complete pending writing and recoverable photos must be durable before navigation"
+            }
+          ],
+          "receipt": "outputs/faults-verified/redirect-retry-truncated-photo-new.json"
+        }
+      }
+    },
+    {
+      "id": "redirect-drive-missing-reference",
+      "suite": "auth-integrity",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 1,
+          "passed": 1,
+          "failures": [],
+          "receipt": "outputs/faults-verified/redirect-drive-missing-reference-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 1,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "redirect preserves current work drive-backed",
+              "error": "Complete pending writing and recoverable photos must be durable before navigation"
+            }
+          ],
+          "receipt": "outputs/faults-verified/redirect-drive-missing-reference-new.json"
+        }
+      }
+    },
+    {
+      "id": "pending-clear-memory-resurrection",
+      "suite": "media-ownership",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 1,
+          "passed": 1,
+          "failures": [],
+          "receipt": "outputs/faults-verified/pending-clear-memory-resurrection-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 1,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "pending-clear",
+              "error": "Old upload completion must not resurrect cleared pending writing"
+            }
+          ],
+          "receipt": "outputs/faults-verified/pending-clear-memory-resurrection-new.json"
+        }
+      }
+    },
+    {
+      "id": "pending-clear-durable-resurrection",
+      "suite": "media-ownership",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 1,
+          "passed": 1,
+          "failures": [],
+          "receipt": "outputs/faults-verified/pending-clear-durable-resurrection-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 1,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "pending-clear",
+              "error": "Old upload completion must not resurrect cleared pending writing"
+            }
+          ],
+          "receipt": "outputs/faults-verified/pending-clear-durable-resurrection-new.json"
+        }
+      }
+    },
+    {
+      "id": "local-newer-no-upload",
+      "suite": "record-identity",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 6,
+          "passed": 6,
+          "failures": [],
+          "receipt": "outputs/faults-verified/local-newer-no-upload-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 6,
+          "passed": 5,
+          "failures": [
+            {
+              "name": "photo-conflict-sync-local-newer",
+              "error": "Newer local writing must upload to the canonical portfolio"
+            }
+          ],
+          "receipt": "outputs/faults-verified/local-newer-no-upload-new.json"
+        }
+      }
+    },
+    {
+      "id": "refresh-hook-bypassed",
+      "suite": "pending-commit-publication",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 2,
+          "passed": 2,
+          "failures": [],
+          "receipt": "outputs/faults-verified/refresh-hook-bypassed-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 2,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "new writing: refresh",
+              "error": "The throwing refresh hook must run"
+            },
+            {
+              "name": "replacement: refresh",
+              "error": "The throwing refresh hook must run"
+            }
+          ],
+          "receipt": "outputs/faults-verified/refresh-hook-bypassed-new.json"
+        }
+      }
+    },
+    {
+      "id": "refresh-hook-only-before-clear",
+      "suite": "pending-commit-publication",
+      "outcomes": {
+        "old": {
+          "exit": 0,
+          "cases": 2,
+          "passed": 2,
+          "failures": [],
+          "receipt": "outputs/faults-verified/refresh-hook-only-before-clear-old.json"
+        },
+        "new": {
+          "exit": 1,
+          "cases": 2,
+          "passed": 0,
+          "failures": [
+            {
+              "name": "new writing: refresh",
+              "error": "The throwing refresh hook must observe pending memory and storage already cleared"
+            },
+            {
+              "name": "replacement: refresh",
+              "error": "The throwing refresh hook must observe pending memory and storage already cleared"
+            }
+          ],
+          "receipt": "outputs/faults-verified/refresh-hook-only-before-clear-new.json"
+        }
+      }
+    }
+  ],
+  "adverse_and_superseded_evidence": {
+    "prior_complete_auth_run": {
+      "receipt": "outputs/fixed-final/auth-integrity.json",
+      "cases": 111,
+      "passed": 110,
+      "failures": [
+        {
+          "name": "redirect preserves current work full",
+          "error": "Unsafe redirect must not leave the tab"
+        }
+      ],
+      "treatment": "Retained as a failed attempt; the final verified111 run is separate. Earlier navigation/capture attempts also failed or lacked case reports and are not counted as successful regression proof."
+    },
+    "initial_summary": "outputs/faults/summary.json",
+    "intermediate_summary": "outputs/faults-final/summary.json",
+    "selected_summary": "outputs/faults-verified/summary.json",
+    "nonblocking_limit": "One prior full auth attempt saw navigation count0 instead of1. The original100ms navigation observation and event timing retain false-negative/flakiness risk; no weakened expected state or silent retry is present in the reviewed source."
+  },
+  "evidence_receipt": {
+    "path": "work/repowise-review-065/final-evidence-pins.json",
+    "sha256_raw": "f2fca3f9840844e077afb5c4be7da634d26986674c03127ca66343a1e1133d99",
+    "selected_native_summary_sha256": "e640f09d2e54e0cc8a8b3ff5f21509b19c84090c4b7ae66f17bc6b78812b1f7c",
+    "healthy_auth111_sha256": "09d9a7d603abf6201a11975c4da2e68cac9374b93f9809328734bca891e9b83c"
+  },
+  "limits": [
+    "Worker-supplied native receipts were inspected, not independently executed. Report hashes bind the artifacts read; they are not independent cryptographic proof of process execution.",
+    "Auth/test/probe artifacts changed during review. Exact reviewed final four test/script hashes above all matched again at review end; earlier pins are retained in own scratch. New changes require a delta check.",
+    "No application/runtime bug, complete behavioral coverage, full-suite pass, scanner closure, production network/OAuth, live account, Drive acknowledgement or security clearance is claimed."
+  ]
+}

@@ -5226,30 +5226,19 @@ function mergeWftStudents(localStudents, cloudStudents) {
 function mergeWftSettings(localSettings, cloudSettings, preferLocal) {
     var localCopy = cloneWftJson(localSettings || {});
     var cloudCopy = cloneWftJson(cloudSettings || {});
+    var firstCopy = preferLocal ? cloudCopy : localCopy;
+    var secondCopy = preferLocal ? localCopy : cloudCopy;
     var merged = Object.create(null);
     var key;
 
-    if (preferLocal) {
-        for (key in cloudCopy) {
-            if (Object.prototype.hasOwnProperty.call(cloudCopy, key)) {
-                merged[key] = cloudCopy[key];
-            }
+    for (key in firstCopy) {
+        if (Object.prototype.hasOwnProperty.call(firstCopy, key)) {
+            merged[key] = firstCopy[key];
         }
-        for (key in localCopy) {
-            if (Object.prototype.hasOwnProperty.call(localCopy, key)) {
-                merged[key] = localCopy[key];
-            }
-        }
-    } else {
-        for (key in localCopy) {
-            if (Object.prototype.hasOwnProperty.call(localCopy, key)) {
-                merged[key] = localCopy[key];
-            }
-        }
-        for (key in cloudCopy) {
-            if (Object.prototype.hasOwnProperty.call(cloudCopy, key)) {
-                merged[key] = cloudCopy[key];
-            }
+    }
+    for (key in secondCopy) {
+        if (Object.prototype.hasOwnProperty.call(secondCopy, key)) {
+            merged[key] = secondCopy[key];
         }
     }
 
