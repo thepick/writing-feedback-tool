@@ -1,0 +1,171 @@
+{
+  "repair": "022b",
+  "created_at": "2026-10-15T23:12:55.355630+00:00",
+  "source_commit": "95fec80952dc8cbf60539dde0a8f8e9f6666eaef",
+  "source_file": "tests/google-drive-migration.browser.cjs",
+  "finding": {
+    "id": "code_health:finding_d763af2881aa6ebe85e9",
+    "function": "runNativeMigrationCases",
+    "held": true,
+    "original_max_nesting": 5,
+    "new_max_nesting": 3,
+    "scanner_clearance": "Pending coordinator commit/index refresh; no index writes performed here."
+  },
+  "change": "Flattened cancel, mismatch, corrupt-retry and shared-success host flow. Named the existing completed-marker callback without changing its body. Default scenarios still follow the successful path. No early continue; common checks and page close remain outside scenario guards.",
+  "metrics": {
+    "before": [
+      {
+        "name": "migrationRoute",
+        "ccn": 29,
+        "cognitive": 32,
+        "nloc": 30,
+        "max_nesting": 2,
+        "start_line": 17,
+        "end_line": 46,
+        "param_count": 1,
+        "assertion_count": 2
+      },
+      {
+        "name": "runNativeMigrationCases",
+        "ccn": 11,
+        "cognitive": 28,
+        "nloc": 86,
+        "max_nesting": 5,
+        "start_line": 6,
+        "end_line": 91,
+        "param_count": 0,
+        "assertion_count": 21
+      }
+    ],
+    "after": [
+      {
+        "name": "verifyCompletedMarkerAccount",
+        "ccn": 2,
+        "cognitive": 1,
+        "nloc": 1,
+        "max_nesting": 1,
+        "start_line": 81,
+        "end_line": 81,
+        "param_count": 0,
+        "assertion_count": 0
+      },
+      {
+        "name": "migrationRoute",
+        "ccn": 29,
+        "cognitive": 32,
+        "nloc": 30,
+        "max_nesting": 2,
+        "start_line": 17,
+        "end_line": 46,
+        "param_count": 1,
+        "assertion_count": 2
+      },
+      {
+        "name": "runNativeMigrationCases",
+        "ccn": 14,
+        "cognitive": 28,
+        "nloc": 87,
+        "max_nesting": 3,
+        "start_line": 6,
+        "end_line": 92,
+        "param_count": 0,
+        "assertion_count": 21
+      }
+    ]
+  },
+  "verification": {
+    "command_before_and_after": "node scripts/run-tests.cjs --suite tests/google-drive-migration.browser.cjs --out <own scratch/before or after>",
+    "receipts": {
+      "before": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022b\\before\\suite-results.json",
+        "sha256": "f6da42b7cd061cd461acc367aab7d84b35c565e0499f4279125ffcc7303696ab",
+        "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022b\\before\\google-drive-migration.browser.json",
+        "native_report_sha256": "c9ad564d23b7cc52a85f4bdc8bdceda8f0adbbf62527b5eb09b519c44a2abc25",
+        "syntax_passed": 90,
+        "native_suites_passed": 1,
+        "native_cases_passed": 4,
+        "complete": true,
+        "passed": true
+      },
+      "after": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022b\\after\\suite-results.json",
+        "sha256": "f736661e199b792a61cd71229c680233852df58a4ccc2739d280031a819fc0d9",
+        "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022b\\after\\google-drive-migration.browser.json",
+        "native_report_sha256": "c9ad564d23b7cc52a85f4bdc8bdceda8f0adbbf62527b5eb09b519c44a2abc25",
+        "syntax_passed": 90,
+        "native_suites_passed": 1,
+        "native_cases_passed": 4,
+        "complete": true,
+        "passed": true
+      }
+    },
+    "complete_native_report_equal": true,
+    "per_case": [
+      {
+        "name": "cancel",
+        "passed": true,
+        "requests": 2,
+        "new_files": 0,
+        "complete_calls_and_metadata_equal": true
+      },
+      {
+        "name": "account-mismatch",
+        "passed": true,
+        "requests": 3,
+        "new_files": 0,
+        "complete_calls_and_metadata_equal": true
+      },
+      {
+        "name": "verified-copy",
+        "passed": true,
+        "requests": 29,
+        "new_files": 5,
+        "complete_calls_and_metadata_equal": true
+      },
+      {
+        "name": "corrupt-retry",
+        "passed": true,
+        "requests": 38,
+        "new_files": 5,
+        "complete_calls_and_metadata_equal": true
+      }
+    ],
+    "all_23_assertion_calls_retained": true,
+    "all_164_call_nodes_and_arguments_in_order": true,
+    "call_comparison_note": "Tree-sitter leaf tokens compared in source order, excluding the two enclosing IIFE/catch call nodes and normalizing only the diagnostic callback name/function spelling.",
+    "static_proof": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022b\\static-proof.json",
+    "migration_route_raw_sha256_before_and_after": "50810c96b5da50478b4be89900837ee2d2fcb2342506b23284c0d30790af76f8",
+    "prefix_and_common_tail_raw_identical": true,
+    "corrupt_retry": "Await result and exact copiedCount+1 assertion remain before all shared success checks.",
+    "same_scope": "Public ensure, GSI setup, native DOM actions, request order, originals/parents/read-only/report/page-close checks retained."
+  },
+  "scope": {
+    "changed_code_files": [
+      "tests/google-drive-migration.browser.cjs"
+    ],
+    "other_89_code_files_raw_and_lf_exact": true,
+    "config_files_raw_and_lf_exact": [
+      "scripts/case-report-suites.json"
+    ],
+    "before_source_sha256": "492a7249316ccbb9f3d6f3b3edf35284f1d15925c41519d8d207c1a8b4700a42",
+    "after_source_sha256": "de149de4b50963a56613239ca403f9c966f51c44f316f1444349a93d64338e27",
+    "lf_preserved": true,
+    "parent_dirty_audit_files_untouched": true,
+    "git_or_index_mutations": false
+  },
+  "limits": [
+    "CCN moved 11 to 14 and NLOC 86 to 87; no attempt to chase retained complexity/size warnings.",
+    "No full 76-suite/unit repeat, native coverage capture, real Google/OAuth/live service testing, commit, push, merge, RepoWise refresh, or health-score claim. Coordinator handles acceptance and integration."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "reason": "Full original file and diff read; all23 assertion callsites retained, cancel/mismatch/retry/default-success flow and common checks preserve order. Independent receipt/hash/native JSON equality and89othercode+1config raw pins verified. Primary nesting target pending committed refresh; CCN14/NLOC87 retained for finite scenario orchestration, no helper added."
+  },
+  "committed_refresh": {
+    "source_commit": "1b8af7acb39e3c8921ef56144e8733e10abd9a82",
+    "all88_health_state_registry_agree": true,
+    "nesting_warning_absent_verified": true,
+    "total_verified_scanner_clearances": 23,
+    "remaining_host_complexity_and_size_individually_retained": true
+  }
+}

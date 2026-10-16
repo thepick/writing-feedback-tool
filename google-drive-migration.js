@@ -93,9 +93,15 @@
     }
     await scan(roots[0], null);
     const copied = await list(newToken, "appProperties has { key='oauthSource' and value=" + quote(config.oldClient) + ' }');
+    const copiesByOriginal = new Map();
+    for (const file of copied) {
+      const original = file.appProperties?.oauthOriginal;
+      if (!copiesByOriginal.has(original)) copiesByOriginal.set(original, []);
+      copiesByOriginal.get(original).push(file);
+    }
     const ids = {};
     for (const node of nodes) {
-      const previous = copied.filter(file => file.appProperties?.oauthOriginal === node.id);
+      const previous = copiesByOriginal.get(node.id) || [];
       if (previous.length > 1) throw new Error('Duplicate recovery copies require reconciliation.');
       if (previous[0]) { ids[node.id] = previous[0].id; continue; }
       const metadata = {name: node.name, mimeType: node.mimeType, appProperties: {oauthSource: config.oldClient, oauthOriginal: node.id}};

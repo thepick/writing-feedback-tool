@@ -1,0 +1,164 @@
+{
+  "repair_id": "repair-024",
+  "source_base": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "created_at_utc": "2026-10-15T23:30:54.491278+00:00",
+  "status": "native_missing_body_tests_verified_pending_coordinator",
+  "scanner_record": "code_health:finding_7cafeb9e1b470fe325be",
+  "summary": "Two real native missing-body cases exercise unmodified wftConfirm false and wftTextInput null cancellation guards. No production changes.",
+  "scope": {
+    "changed_code_files": [
+      "tests/storage-dialog-keyboard.browser.cjs"
+    ],
+    "other_89_code_files_raw_identical": true,
+    "configuration_raw_identical": [
+      "scripts/case-report-suites.json"
+    ],
+    "before_source_sha256": "9931415e110418757f2babc83750a4d761f63a8c3f027afd818c3d6b2163b73c",
+    "after_source_sha256": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+    "newlines_outside_additions_preserved": true,
+    "existing_code_exact_reconstruction": true,
+    "route_callback_unchanged": true,
+    "git_index_tracker_runtime_writes": false
+  },
+  "verified_contract": {
+    "wftConfirm": "Strict false comparison passes while actual document.body is absent.",
+    "wftTextInput": "Strict null comparison passes while actual document.body is absent.",
+    "body_restoration": "The same real body object is appended in finally on either resolution or failure. Native passing cases independently check body identity/restoration and no mounted dialog. Failure-path restoration is source-verified; no forced app-method replacement.",
+    "native_new_case_checks": [
+      {
+        "name": "missing-body-confirm",
+        "passed": true,
+        "checks": [
+          {
+            "name": "Real page body was absent during the public dialog call",
+            "passed": true
+          },
+          {
+            "name": "Missing body safely cancels the public dialog",
+            "passed": true
+          },
+          {
+            "name": "Same page body is restored without mounting a dialog",
+            "passed": true
+          },
+          {
+            "name": "Cancelled workflow preserves bytes, roster, selection and dirty state",
+            "passed": true
+          },
+          {
+            "name": "No browser script errors",
+            "passed": true
+          }
+        ],
+        "storage_roster_selection_dirty_snapshot_exact": true,
+        "dialog_titles": []
+      },
+      {
+        "name": "missing-body-text",
+        "passed": true,
+        "checks": [
+          {
+            "name": "Real page body was absent during the public dialog call",
+            "passed": true
+          },
+          {
+            "name": "Missing body safely cancels the public dialog",
+            "passed": true
+          },
+          {
+            "name": "Same page body is restored without mounting a dialog",
+            "passed": true
+          },
+          {
+            "name": "Cancelled workflow preserves bytes, roster, selection and dirty state",
+            "passed": true
+          },
+          {
+            "name": "No browser script errors",
+            "passed": true
+          }
+        ],
+        "storage_roster_selection_dirty_snapshot_exact": true,
+        "dialog_titles": []
+      }
+    ],
+    "production_methods_replaced": []
+  },
+  "tests": {
+    "receipts": {
+      "before": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-024\\before\\suite-results.json",
+        "sha256": "0787f834ac8ea51a4d02a398ee91e516afab2a5f67767214c6fa7723fba16881",
+        "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-024\\before\\storage-dialog-keyboard.browser.json",
+        "native_report_sha256": "97ddc349e244031308a321c64f699c9039287ba0c1c718787ee073495d58b4bb",
+        "syntax_passed": 90,
+        "native_cases_passed": 28,
+        "checks_passed": 159,
+        "complete": true,
+        "passed": true
+      },
+      "after": {
+        "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-024\\after-final\\suite-results.json",
+        "sha256": "cbc7f4c77c5979448151bb3bcfdbd148f75b9095e903da4fc82e337751738c45",
+        "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-024\\after-final\\storage-dialog-keyboard.browser.json",
+        "native_report_sha256": "aadc19dda928af4f55a293715438dcb31e7857435ef56c133c68529485e3f554",
+        "syntax_passed": 90,
+        "native_cases_passed": 30,
+        "checks_passed": 169,
+        "complete": true,
+        "passed": true
+      }
+    },
+    "existing_28_case_order_and_159_check_vectors_identical": true,
+    "existing_errors_alerts_blocked_requests_and_featureflags_identical": true,
+    "final_30_cases_169_checks": true,
+    "initial_unnamed_probe_after_receipt_preserved": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-024\\after\\suite-results.json",
+    "note": "Final rerun names the existing in-page probe for useful browser failure diagnostics; no callback body change. Full report snapshots across runs are not claimed byte-identical because accepted renames contain current timestamps."
+  },
+  "metrics": {
+    "before": [
+      {
+        "name": "runKeyboardScenario",
+        "ccn": 11,
+        "cognitive": 18,
+        "nloc": 44,
+        "max_nesting": 3,
+        "start_line": 104,
+        "end_line": 147,
+        "assertion_count": 0
+      }
+    ],
+    "after": [
+      {
+        "name": "exerciseMissingBodyFallback",
+        "ccn": 2,
+        "cognitive": 3,
+        "nloc": 9,
+        "max_nesting": 2,
+        "start_line": 132,
+        "end_line": 140,
+        "assertion_count": 0
+      },
+      {
+        "name": "runKeyboardScenario",
+        "ccn": 14,
+        "cognitive": 23,
+        "nloc": 57,
+        "max_nesting": 3,
+        "start_line": 105,
+        "end_line": 161,
+        "assertion_count": 0
+      }
+    ]
+  },
+  "exact_patch": "diff --git a/tests/storage-dialog-keyboard.browser.cjs b/tests/storage-dialog-keyboard.browser.cjs\nindex 1b98531..1bb9c8b 100644\n--- a/tests/storage-dialog-keyboard.browser.cjs\n+++ b/tests/storage-dialog-keyboard.browser.cjs\n@@ -5,6 +5,7 @@ const scenarios = ['chooser-cancel-enter','chooser-cancel-space','chooser-escape\n scenarios.push('chooser-submit-enter','chooser-submit-space','text-button-submit-enter','text-button-submit-space','text-submit-confirm-cancel-space','text-submit-confirm-submit-space');\n scenarios.push('archive-cancel-enter','archive-cancel-space','archive-escape','archive-input-submit-enter','archive-button-submit-enter','archive-button-submit-space');\n for (const field of ['chooser','text']) for (const signal of ['composing','229']) for (const key of ['Enter','Escape']) scenarios.push(`${field}-ime-${signal}-${key}`);\n+scenarios.push('missing-body-confirm','missing-body-text');\n \n async function checkCompositionSignal(page, scenario, selector, check) {\n   const result=await page.locator(selector).evaluate((el,name)=>{\n@@ -127,7 +128,20 @@ async function runKeyboardScenario(browser, scenario, cases) {\n     const check=(name,passed)=>checks.push({name,passed:!!passed});\n     const key=scenario.endsWith('space')?'Space':scenario.endsWith('escape')?'Escape':'Enter';\n     const accepted=scenario.startsWith('text-submit-confirm-submit-');\n-    if(scenario.startsWith('archive-')) {\n+    if(scenario.startsWith('missing-body-')) {\n+      const fallback=await page.evaluate(async function exerciseMissingBodyFallback(name){\n+        const body=document.body;\n+        let bodyAbsent,result;\n+        try {\n+          body.remove();bodyAbsent=document.body===null;\n+          result=await (name==='missing-body-confirm'?wftConfirm('Synthetic confirmation'):wftTextInput('Synthetic input'));\n+        } finally {document.documentElement.appendChild(body);}\n+        return {bodyAbsent,result,bodyRestored:document.body===body,dialogCount:document.querySelectorAll('.wft-confirm-backdrop').length};\n+      },scenario);\n+      check('Real page body was absent during the public dialog call',fallback.bodyAbsent);\n+      check('Missing body safely cancels the public dialog',fallback.result===(scenario==='missing-body-confirm'?false:null));\n+      check('Same page body is restored without mounting a dialog',fallback.bodyRestored&&fallback.dialogCount===0);\n+    } else if(scenario.startsWith('archive-')) {\n       await runArchiveWorkflow(page, scenario, key, check);\n     } else {\n       await page.locator('#adminTabBtn').click();\n",
+  "limits": [
+    "No production behavior change, full76-suite run, coverage capture/import, live Google/services, physical OS IME, commit/push/merge or RepoWise refresh in this repair.",
+    "Existing missing-body guards were already correct; scanner coverage clearance awaits the fresh full004 native capture/import. The separate terminal-EOF coverage measurement lead is untouched.",
+    "The host test driver grows44to57 nonblank lines/CCN11to14; maximum nesting stays3. No extra generic helper or test framework added."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "reason": "Complete dialog and keyboard harness sources read, full scoped diff reviewed. Real body detach/public calls/finally restore remain direct, all old workflow branches and common assertions kept. Independent receipt/hash/pin checks:89othercode+1config unchanged,90syntax pass, original28/159 check vectors identical, new2/10 checks pass with exact before/after data snapshots. Source correct before addition; coverage closure awaits full004capture."
+  }
+}

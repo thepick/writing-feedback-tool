@@ -1,0 +1,185 @@
+{
+  "repair_id": "repair-021",
+  "source_base": "c225561882e845a905a32c32d6321e3b815b14e9",
+  "created_at_utc": "2026-10-15T22:28:02.133163+00:00",
+  "status": "refactor_verified_pending_coordinator",
+  "scanner_record": "code_health:finding_28ab15e0abd57a32278e",
+  "finding_held": true,
+  "summary": "Skip strictly missing backup keys early and lazily initialize readErrors without an extra nested if; preserve validation, redaction, key/error order and all recovery phases.",
+  "scope": {
+    "changed_files": [
+      "js/app/storage-recovery.js",
+      "tests/storage-health.cjs"
+    ],
+    "application_function": "buildWftEmergencyBackupObject",
+    "all_application_bytes_outside_function_identical": true,
+    "exact_two_replacements_verified": true,
+    "other_87_raw_and_lf_identical": true,
+    "no_callers_exports_config_dependencies_or_fixtures_changed": true
+  },
+  "callers_verified": [
+    "downloadWftEmergencyBackup -> settings emergency download",
+    "saveWftPreMigrationBackupToDrive -> actual Drive acknowledgement/local fallback",
+    "corrupt-portfolio/deletion-recovery/preference-integrity/recovery-cache/storage-health test callers",
+    "script-loading public-global discovery"
+  ],
+  "application_metrics": {
+    "before": {
+      "ccn": 17,
+      "cognitive": 39,
+      "nloc": 71,
+      "max_nesting": 4,
+      "bumps": 3,
+      "start_line": 214,
+      "end_line": 293
+    },
+    "after": {
+      "ccn": 17,
+      "cognitive": 34,
+      "nloc": 70,
+      "max_nesting": 3,
+      "bumps": 3,
+      "start_line": 214,
+      "end_line": 292
+    }
+  },
+  "application_replacements": [
+    {
+      "before": "            if (raw !== null) {\r\n                var value = bk === 'wft_settings' ? JSON.parse(raw) : parseWftBackupValue(raw);\r\n                if (bk === 'wft_settings') {\r\n                    // Raw or invalid settings cannot be safely exported with credentials removed.\r\n                    validateWftRequiredStorage(bk, value);\r\n                    delete value.apiKey;\r\n                }\r\n                backup.contents[bk] = value;\r\n            }\r\n",
+      "after": "            if (raw === null) continue;\r\n            var value = bk === 'wft_settings' ? JSON.parse(raw) : parseWftBackupValue(raw);\r\n            if (bk === 'wft_settings') {\r\n                // Raw or invalid settings cannot be safely exported with credentials removed.\r\n                validateWftRequiredStorage(bk, value);\r\n                delete value.apiKey;\r\n            }\r\n            backup.contents[bk] = value;\r\n"
+    },
+    {
+      "before": "if (!backup.readErrors) backup.readErrors = [];",
+      "after": "backup.readErrors = backup.readErrors || [];"
+    }
+  ],
+  "tests": {
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\before\\suite-results.json",
+      "suites": [
+        {
+          "suite": "tests/recovery-cache.browser.cjs",
+          "status": 0,
+          "error": null
+        },
+        {
+          "suite": "tests/storage-health.cjs",
+          "status": 0,
+          "error": null
+        }
+      ],
+      "syntax_passed": 89,
+      "native_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\before\\recovery-cache.browser.json",
+      "native_scenarios": 36,
+      "native_assertions": 429,
+      "failures": 0
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\after\\suite-results.json",
+      "suites": [
+        {
+          "suite": "tests/recovery-cache.browser.cjs",
+          "status": 0,
+          "error": null
+        },
+        {
+          "suite": "tests/storage-health.cjs",
+          "status": 0,
+          "error": null
+        }
+      ],
+      "syntax_passed": 89,
+      "native_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\after\\recovery-cache.browser.json",
+      "native_scenarios": 36,
+      "native_assertions": 429,
+      "failures": 0
+    }
+  },
+  "additional_old_code_contract_checks": {
+    "command": "node tests/storage-health.cjs",
+    "exit_code": 0,
+    "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\enhanced-unit-before.log",
+    "new_assertions": 7,
+    "outcome": "All added checks passed against old production source before the application edit. Refactor parity checks, not a behavior bug reproduction.",
+    "contracts": [
+      "one failure is disclosed",
+      "complete backup omits readErrors",
+      "strict missing key is omitted",
+      "contents retain fixed backup-key order",
+      "three read errors preserve key order",
+      "unreadable keys become null",
+      "other readable backup data survives"
+    ]
+  },
+  "native_parity": {
+    "before_after_assertion_vectors_identical": true,
+    "same36scenarios": true,
+    "same429assertions": true,
+    "what_is_compared": "Scenario names, assertion labels and passed flags. Each run independently asserts exact seeded storage/recovery/pending bytes and truthful visible outcomes; wall-clock timestamps/download filenames are not claimed byte-identical across runs.",
+    "guards": [
+      "valid settings credential redaction",
+      "unredactable settings null and readErrors/incomplete notice",
+      "stored and recovery settings bytes unchanged",
+      "raw corrupt non-settings writing retained",
+      "full in-tab pending photo bytes retained despite persisted stripped marker",
+      "OAuth draft writing/student/genres retained",
+      "required transaction and safe-mode failures remain truthful",
+      "Drive acknowledgement, asynchronous/synchronous failure and local fallback callbacks"
+    ]
+  },
+  "test_metrics": {
+    "before": {
+      "name": "<anonymous@17>",
+      "ccn": 7,
+      "cognitive": 15,
+      "nloc": 74,
+      "max_nesting": 4,
+      "start_line": 17,
+      "end_line": 93
+    },
+    "after": {
+      "name": "<anonymous@17>",
+      "ccn": 10,
+      "cognitive": 20,
+      "nloc": 90,
+      "max_nesting": 4,
+      "start_line": 17,
+      "end_line": 109
+    }
+  },
+  "source_hashes": {
+    "js/app/storage-recovery.js": {
+      "before": {
+        "raw": "f3f0e10775b443b055ec81d57d59b2e94e97207b2025eb22c5777d009e1a523c",
+        "normalized_lf": "dbf942fc73198c3b417d92ff95aa4f93aa3f13158ceb17aa20d466bf7cd50636"
+      },
+      "after": {
+        "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+        "normalized_lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+      }
+    },
+    "tests/storage-health.cjs": {
+      "before": {
+        "raw": "6d6eb9a782b1a889a2dc2568d448053bc21c8c331493cf12db4346a815585ce5",
+        "normalized_lf": "28a8453507b9a9dee754761eb5c5b5427d95e6358cc0e75df650870540a0bb37"
+      },
+      "after": {
+        "raw": "b41ffa69731cf65e30a03f284d58da44d459b6b21e3561adbc118909652642a0",
+        "normalized_lf": "60c42547c6bef79f836e8cc4e4241ca59748eaa4ddf83628582226f030e77280"
+      }
+    }
+  },
+  "all_89_source_pins": {
+    "before": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\before.json",
+    "after": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-021\\after.json"
+  },
+  "behavior_preserved": "Only raw===null skips the key; empty strings and JSON null still take the old parse path. No following operation or finally exists in that loop. Error-list assignment stays inside catch and uses/reuses the same lazily created array. Settings root validation and delete apiKey remain before publishing contents. Pending photo/recovery snapshots, optional counts and flags are byte-identical outside the edited blocks.",
+  "scanner_clearance_claimed": false,
+  "not_checked": [
+    "RepoWise/index refresh and actual finding closure",
+    "Full75-suite batch gate",
+    "Commit/push/merge/publication",
+    "Live Drive/model/accounts or real user data"
+  ],
+  "risk": "No behavior change intended; the coordinator must confirm the stored finding on its next refresh. The added test contracts raise the existing unit-driver metric from CCN7 to10; all seven assertions verify backup shape/data-loss contracts and no new framework is introduced."
+}

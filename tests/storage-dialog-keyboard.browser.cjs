@@ -5,6 +5,7 @@ const scenarios = ['chooser-cancel-enter','chooser-cancel-space','chooser-escape
 scenarios.push('chooser-submit-enter','chooser-submit-space','text-button-submit-enter','text-button-submit-space','text-submit-confirm-cancel-space','text-submit-confirm-submit-space');
 scenarios.push('archive-cancel-enter','archive-cancel-space','archive-escape','archive-input-submit-enter','archive-button-submit-enter','archive-button-submit-space');
 for (const field of ['chooser','text']) for (const signal of ['composing','229']) for (const key of ['Enter','Escape']) scenarios.push(`${field}-ime-${signal}-${key}`);
+scenarios.push('missing-body-confirm','missing-body-text');
 
 async function checkCompositionSignal(page, scenario, selector, check) {
   const result=await page.locator(selector).evaluate((el,name)=>{
@@ -127,7 +128,20 @@ async function runKeyboardScenario(browser, scenario, cases) {
     const check=(name,passed)=>checks.push({name,passed:!!passed});
     const key=scenario.endsWith('space')?'Space':scenario.endsWith('escape')?'Escape':'Enter';
     const accepted=scenario.startsWith('text-submit-confirm-submit-');
-    if(scenario.startsWith('archive-')) {
+    if(scenario.startsWith('missing-body-')) {
+      const fallback=await page.evaluate(async function exerciseMissingBodyFallback(name){
+        const body=document.body;
+        let bodyAbsent,result;
+        try {
+          body.remove();bodyAbsent=document.body===null;
+          result=await (name==='missing-body-confirm'?wftConfirm('Synthetic confirmation'):wftTextInput('Synthetic input'));
+        } finally {document.documentElement.appendChild(body);}
+        return {bodyAbsent,result,bodyRestored:document.body===body,dialogCount:document.querySelectorAll('.wft-confirm-backdrop').length};
+      },scenario);
+      check('Real page body was absent during the public dialog call',fallback.bodyAbsent);
+      check('Missing body safely cancels the public dialog',fallback.result===(scenario==='missing-body-confirm'?false:null));
+      check('Same page body is restored without mounting a dialog',fallback.bodyRestored&&fallback.dialogCount===0);
+    } else if(scenario.startsWith('archive-')) {
       await runArchiveWorkflow(page, scenario, key, check);
     } else {
       await page.locator('#adminTabBtn').click();

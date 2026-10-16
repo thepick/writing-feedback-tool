@@ -2,6 +2,7 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const localAppRoute = require('./support/local-app-route');
 const root = path.resolve(__dirname, '..');
 
 (async () => {
@@ -10,13 +11,7 @@ const root = path.resolve(__dirname, '..');
         const page = await browser.newPage();
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
-        await page.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            if (!fs.existsSync(file)) return route.fulfill({ status: 404, body: '' });
-            return route.fulfill({ status: 200, contentType: file.endsWith('.js') ? 'application/javascript' : file.endsWith('.html') ? 'text/html' : 'application/octet-stream', body: fs.readFileSync(file) });
-        });
+        await page.route('**/*', route => localAppRoute(route, root, 'application/octet-stream'));
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
         await page.waitForFunction(() => typeof renameStudent === 'function');
         const result = await page.evaluate(async () => {

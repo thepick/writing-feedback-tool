@@ -1,0 +1,1792 @@
+{
+  "repair_id": "repair-027",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "dff5375bba4f9d8c3e43794010830da860b87615",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+  },
+  "source_verification": {
+    "assigned_hash_matches": true,
+    "all_four_inspected_production_files_match_indexed_git_blobs": true,
+    "production_edits": false,
+    "all_tests_cited_from_immutable_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d"
+  },
+  "metrics_verification": {
+    "method": "Installed unchanged RepoWise pure walk_file_complexity(path, javascript, normalized bytes); Python -B; no CLI/index/health operation.",
+    "walker_file": "C:/Users/Michael/AppData/Roaming/uv/tools/repowise/Lib/site-packages/repowise/core/analysis/health/complexity/walker.py",
+    "function_count": 7,
+    "all_assignment_ccn_nloc_cognitive_nesting_bumps_params_condition_counts_reproduced": true,
+    "not_independently_recomputed": [
+      "file dependent count11",
+      "centrality floor4",
+      "health impact/severity",
+      "scanner status/open identity"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_d00b9d5502398c47c254",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "brain_method",
+      "symbol": "ensureDriveFolderPromise",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_orchestration",
+      "reason": "The 78-line resolver owns one cache/search/select/create sequence and one run-scoped promise lifecycle. Existing validateCachedDriveFolderPromise and chooseCanonicalDriveFolderPromise already isolate reusable decisions. Token assertions on both sides of awaits and conditional rejection cleanup are required; a create-only wrapper would mainly move code.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4209",
+        "js/app/00-storage-sync-patches.js:4216",
+        "js/app/00-storage-sync-patches.js:4226",
+        "js/app/00-storage-sync-patches.js:4248",
+        "js/app/00-storage-sync-patches.js:4255",
+        "js/app/00-storage-sync-patches.js:4275",
+        "js/app/00-storage-sync-patches.js:4281",
+        "js/app/00-storage-sync-patches.js:4289"
+      ],
+      "verified_metrics": {
+        "name": "ensureDriveFolderPromise",
+        "start_line": 4209,
+        "end_line": 4295,
+        "ccn": 14,
+        "max_nesting": 1,
+        "cognitive": 13,
+        "nloc": 78,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4216,
+          4221
+        ],
+        "complex_conditions": [
+          {
+            "line": 4216,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "nloc": 78,
+        "max_nesting": 1,
+        "dependents_count": 11,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 4209,
+        "deepest_block": {
+          "start": 4216,
+          "end": 4221
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2587 loadStudentFileFromDrive",
+        "00-storage-sync-patches.js:2619 saveStudentFileToDrive",
+        "00-storage-sync-patches.js:4128 ensureDriveFolder",
+        "00-storage-sync-patches.js:4983 findWftFilesByNamePromise",
+        "00-storage-sync-patches.js:5836 sync run",
+        "00-storage-sync-patches.js:6206 uploadBlobToDrive",
+        "10-main-app.js:3027 findAllWftFilesByNameInRootPromise",
+        "10-main-app.js:3095 duplicate-file backup",
+        "portfolio-export.js:891 ensureArchiveYearFolderPromise"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/archive-connection.browser.cjs:27-53 actual resolver at root-search/cached-validation/canonical-summary; assertions 76-85 require intended authorization, no stale upload, class retained, retry notice",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-folder-selection.cjs:14-33 dependency chooser ordered summaries, winner/cache IDs and stale-connection rejection (unit helper, not full resolver)"
+      ],
+      "regression_recommendation": "No shape-only extraction. If folder resolution changes, cover valid cache, canonical duplicates, create/missing-ID failure, same-run promise reuse, rejected-promise retry and token change at each awaited boundary; retain archive-connection native assertions."
+    },
+    {
+      "record_id": "code_health:finding_28e616ea3e52a8bb7d01",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "brain_method",
+      "symbol": "uploadSessionImagesToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_orchestration",
+      "reason": "The 126 NLOC includes named findCurrentImage, nextUpload, doUploadImage and validateCurrentUpload bodies. Outer CCN14/nesting2 describes initial preconditions, image ID preparation/filtering and a content-match helper; total size alone overstates one monolithic decision body. Keep this per-session closure; U1 targets real repeated queue checks inside it.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6968",
+        "js/app/00-storage-sync-patches.js:6974",
+        "js/app/00-storage-sync-patches.js:6981",
+        "js/app/00-storage-sync-patches.js:6989",
+        "js/app/00-storage-sync-patches.js:6998",
+        "js/app/00-storage-sync-patches.js:7019",
+        "js/app/00-storage-sync-patches.js:7098"
+      ],
+      "verified_metrics": {
+        "name": "uploadSessionImagesToDrive",
+        "start_line": 6968,
+        "end_line": 7099,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 126,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6969,
+          6972
+        ],
+        "complex_conditions": [
+          {
+            "line": 6969,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "nloc": 126,
+        "max_nesting": 2,
+        "dependents_count": 11,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 6968,
+        "deepest_block": {
+          "start": 6969,
+          "end": 6972
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7137 syncPendingPortfolioMedia -> nextSession",
+        "00-storage-sync-patches.js:7855-7867 uploadPendingPortfolioMediaBeforeCommit (skipPortfolioSave=true, pendingOwner=pending)"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,39-77 held compression/folder stages; 82-103 stale cases issue zero requests, errors settle, happy cases preserve authorization and photo reference",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failed writes/IO retain bytes; edits/additions/deletions/reorder and pending ownership preserve correct writing/photo metadata"
+      ],
+      "regression_recommendation": "Preserve empty-input callback, uploaded-photo idempotency and both saved/pending call forms. Run native media ownership and held compression/folder suites on any refactor; unchanged source reviewed here only."
+    },
+    {
+      "record_id": "code_health:finding_e96067246b2b35f12f3f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "brain_method",
+      "symbol": "nextUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_signal",
+      "reason": "Brain-method score combines queue length and CCN17 on the same nextUpload span as U1 complex-method candidate finding_208c5411ec68f45b4ab0. It is not a second repair: preserve compression, stale-response and local-write stages while evaluating the shared queue-identity predicate once.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7019",
+        "js/app/00-storage-sync-patches.js:7020",
+        "js/app/00-storage-sync-patches.js:7040",
+        "js/app/00-storage-sync-patches.js:7068",
+        "js/app/00-storage-sync-patches.js:7075",
+        "js/app/00-storage-sync-patches.js:7094"
+      ],
+      "verified_metrics": {
+        "name": "nextUpload",
+        "start_line": 7019,
+        "end_line": 7097,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 32,
+        "nloc": 77,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7025,
+          7029
+        ],
+        "complex_conditions": [
+          {
+            "line": 7020,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7026,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7038,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "nloc": 77,
+        "max_nesting": 4,
+        "dependents_count": 11,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 7019,
+        "deepest_block": {
+          "start": 7025,
+          "end": 7029
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7038 skip obsolete stored image",
+        "00-storage-sync-patches.js:7094 upload completion",
+        "00-storage-sync-patches.js:7098 initial queue start"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 zero stale outgoing requests versus one happy request; corrupt bytes retained",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-206 error propagation, retry and multiple-photo IDs; 241-251 changed/deleted/reordered photos and concurrent writing preserved"
+      ],
+      "regression_recommendation": "For candidate U1, share only the exact token+array-length+element-identity predicate at 7020 and 7053-7054. Keep before/during error messages, catch/return contracts, image-content comparison, pending-owner signature, strict snapshot reads and post-response guard separate. Cover token, array replacement/reorder, photo mutation, compression/folder holds, retry, multi-image completion and unrelated new writing."
+    },
+    {
+      "record_id": "code_health:finding_ee563f008ccb5e1394f5",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "brain_method",
+      "symbol": "finishManualSaveToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_signal",
+      "reason": "The 72-line/CCN13 brain warning shares the exact completion duplication identified by M1 finding_d6815d339003e60e0a6b. Count one repair opportunity, not another extraction of commit logging or error reporting.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7905",
+        "js/app/00-storage-sync-patches.js:7910",
+        "js/app/00-storage-sync-patches.js:7933",
+        "js/app/00-storage-sync-patches.js:7964"
+      ],
+      "verified_metrics": {
+        "name": "finishManualSaveToDrive",
+        "start_line": 7905,
+        "end_line": 7980,
+        "ccn": 13,
+        "max_nesting": 3,
+        "cognitive": 21,
+        "nloc": 72,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7910,
+          7921
+        ],
+        "complex_conditions": [
+          {
+            "line": 7907,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7913,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7914,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7915,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7923,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "nloc": 72,
+        "max_nesting": 3,
+        "dependents_count": 11,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 7905,
+        "deepest_block": {
+          "start": 7910,
+          "end": 7921
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7990 pending-media upload completion",
+        "00-storage-sync-patches.js:7993 direct manual-save branch"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145 held upload/flush setup, new Bob writing and signout during flush; 208-220,253-262 current pending remains retryable and stale completion cannot show synced",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:73-85 failed commit retains pending and blocks flush; retry succeeds after storage repair"
+      ],
+      "regression_recommendation": "For candidate M1, compare V2 resolved true/false/undefined and rejection plus legacy true/false/undefined, including new pending writing/signout during each completion. Preserve V2 !!result versus legacy success !== false, commit-failure notices and rejection-only logging/handling. Existing native pending/flush assertions cover only part of this matrix."
+    },
+    {
+      "record_id": "code_health:finding_c07b722b69fa2e172071",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "savePortfolioData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_recovery_nesting",
+      "reason": "Deepest block6484-6487 is the second write failing inside the quota-recovery catch. Keeping it nested ensures heavy-field stripping happens only after the first failure, the second failure propagates, and syncing runs only after a durable write. Extracting a single-use retry would hide this 30-NLOC recovery boundary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6459",
+        "js/app/00-storage-sync-patches.js:6474",
+        "js/app/00-storage-sync-patches.js:6477",
+        "js/app/00-storage-sync-patches.js:6481",
+        "js/app/00-storage-sync-patches.js:6484",
+        "js/app/00-storage-sync-patches.js:6489"
+      ],
+      "verified_metrics": {
+        "name": "savePortfolioData",
+        "start_line": 6458,
+        "end_line": 6491,
+        "ccn": 15,
+        "max_nesting": 4,
+        "cognitive": 26,
+        "nloc": 30,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6484,
+          6487
+        ],
+        "complex_conditions": [
+          {
+            "line": 6460,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6467,
+            "operator_count": 2,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 6475,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 15,
+        "cognitive": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 6458,
+        "deepest_block": {
+          "start": 6484,
+          "end": 6487
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1985 savePortfolioAsync",
+        "00-storage-sync-patches.js:2026 saveStudentPortfolioAsync",
+        "00-storage-sync-patches.js:4758 saveWftStudentChange(localOnly=true)",
+        "00-storage-sync-patches.js:6828 saveStudentSession",
+        "00-storage-sync-patches.js:6941,6945 syncAllToDrive legacy branch",
+        "10-main-app.js:8489,8505 lifecycle legacy saves"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:164-176 required write/normalization/corruption failures preserve history and allow retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:191-202 first quota write fails, actual second write preserves writing/photo identity",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:28-44,64-85 strict writes reject corrupt bytes, block cloud work, retain pending and allow repair/retry"
+      ],
+      "regression_recommendation": "Retain two-attempt quota path, normalization failure propagation, localOnly suppression, safe-mode bypass and corrupt/recovery preflight. Existing native quota and required-failure assertions are suitable; no new wrapper required."
+    },
+    {
+      "record_id": "code_health:finding_2d208e4c30ee82fb58d1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "saveStudentSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_optional_side_effect_guards",
+      "reason": "Four nesting levels come first from the optional Lamport flag/try/fallback expression at6816-6823, not deeply coupled business branches. The required portfolio write then precedes independent optional cache and rendering guards. Flattening by merging catches would let an optional failure skip the save or hide a required failure.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6813",
+        "js/app/00-storage-sync-patches.js:6816",
+        "js/app/00-storage-sync-patches.js:6817",
+        "js/app/00-storage-sync-patches.js:6825",
+        "js/app/00-storage-sync-patches.js:6828",
+        "js/app/00-storage-sync-patches.js:6829",
+        "js/app/00-storage-sync-patches.js:6835"
+      ],
+      "verified_metrics": {
+        "name": "saveStudentSession",
+        "start_line": 6811,
+        "end_line": 6842,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 38,
+        "nloc": 29,
+        "bumps": 4,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6817,
+          6823
+        ],
+        "complex_conditions": [
+          {
+            "line": 6829,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6831,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 6835,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 17,
+        "cognitive": 38,
+        "dispatch_share": 0.0,
+        "symbol_line": 6811,
+        "deepest_block": {
+          "start": 6817,
+          "end": 6823
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:8359 commitPendingPortfolioSync; required failure retained/rolled back at 8366-8370"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:63-94 exact retained IDs/new writing/photo metadata across cap/date modes; 100-107 own special student names",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:157-162 optional preliminary normalizer failure still reaches authoritative durable normalizer; 164-176 required failures throw",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/optional-storage.browser.cjs:61-73 failed optional cache keeps primary writing, failed primary never publishes cache"
+      ],
+      "regression_recommendation": "Preserve primary save before optional cache/render; retain exact retention/prototype-name and optional/required-normalizer assertions. Any Lamport change needs enabled/missing/throwing clock-helper checks, not covered by the cited assertions."
+    },
+    {
+      "record_id": "code_health:finding_add44f6ffde542978602",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "nextUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_async_failure_boundary",
+      "reason": "The deepest block7025-7029 validates recovery and strict storage inside a callback-facing error/return boundary. Later compression and persisted metadata failures need their own catches. U1 removes a repeated predicate without deleting these lifecycle boundaries; no general callback flattening is justified.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7024",
+        "js/app/00-storage-sync-patches.js:7025",
+        "js/app/00-storage-sync-patches.js:7029",
+        "js/app/00-storage-sync-patches.js:7040",
+        "js/app/00-storage-sync-patches.js:7042",
+        "js/app/00-storage-sync-patches.js:7075",
+        "js/app/00-storage-sync-patches.js:7093"
+      ],
+      "verified_metrics": {
+        "name": "nextUpload",
+        "start_line": 7019,
+        "end_line": 7097,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 32,
+        "nloc": 77,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7025,
+          7029
+        ],
+        "complex_conditions": [
+          {
+            "line": 7020,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7026,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7038,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 17,
+        "cognitive": 32,
+        "dispatch_share": 0.0,
+        "symbol_line": 7019,
+        "deepest_block": {
+          "start": 7025,
+          "end": 7029
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7038 skip obsolete stored image",
+        "00-storage-sync-patches.js:7094 upload completion",
+        "00-storage-sync-patches.js:7098 initial queue start"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 zero stale outgoing requests versus one happy request; corrupt bytes retained",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-206 error propagation, retry and multiple-photo IDs; 241-251 changed/deleted/reordered photos and concurrent writing preserved"
+      ],
+      "regression_recommendation": "For candidate U1, share only the exact token+array-length+element-identity predicate at 7020 and 7053-7054. Keep before/during error messages, catch/return contracts, image-content comparison, pending-owner signature, strict snapshot reads and post-response guard separate. Cover token, array replacement/reorder, photo mutation, compression/folder holds, retry, multi-image completion and unrelated new writing."
+    },
+    {
+      "record_id": "code_health:finding_368b80509a8e9d4eae46",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "ensureDriveFolderPromise",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_cache_and_connection_guards",
+      "reason": "CCN14/cognitive13/nesting1 is a flat resolver with anonymous promise continuations. Run reuse, cached validity, missing selected/created IDs and owner-safe cleanup are distinct outcomes. Global file dependent count11 is not evidence that each resolver branch should become a public helper.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4210",
+        "js/app/00-storage-sync-patches.js:4216",
+        "js/app/00-storage-sync-patches.js:4228",
+        "js/app/00-storage-sync-patches.js:4250",
+        "js/app/00-storage-sync-patches.js:4266",
+        "js/app/00-storage-sync-patches.js:4282"
+      ],
+      "verified_metrics": {
+        "name": "ensureDriveFolderPromise",
+        "start_line": 4209,
+        "end_line": 4295,
+        "ccn": 14,
+        "max_nesting": 1,
+        "cognitive": 13,
+        "nloc": 78,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4216,
+          4221
+        ],
+        "complex_conditions": [
+          {
+            "line": 4216,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 13,
+        "nloc": 78,
+        "dispatch_share": 0.0,
+        "symbol_line": 4209,
+        "deepest_block": {
+          "start": 4216,
+          "end": 4221
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2587 loadStudentFileFromDrive",
+        "00-storage-sync-patches.js:2619 saveStudentFileToDrive",
+        "00-storage-sync-patches.js:4128 ensureDriveFolder",
+        "00-storage-sync-patches.js:4983 findWftFilesByNamePromise",
+        "00-storage-sync-patches.js:5836 sync run",
+        "00-storage-sync-patches.js:6206 uploadBlobToDrive",
+        "10-main-app.js:3027 findAllWftFilesByNameInRootPromise",
+        "10-main-app.js:3095 duplicate-file backup",
+        "portfolio-export.js:891 ensureArchiveYearFolderPromise"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/archive-connection.browser.cjs:27-53 actual resolver at root-search/cached-validation/canonical-summary; assertions 76-85 require intended authorization, no stale upload, class retained, retry notice",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-folder-selection.cjs:14-33 dependency chooser ordered summaries, winner/cache IDs and stale-connection rejection (unit helper, not full resolver)"
+      ],
+      "regression_recommendation": "No shape-only extraction. If folder resolution changes, cover valid cache, canonical duplicates, create/missing-ID failure, same-run promise reuse, rejected-promise retry and token change at each awaited boundary; retain archive-connection native assertions."
+    },
+    {
+      "record_id": "code_health:finding_316c9c90c39eb353ff7e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "savePortfolioData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_storage_policy_and_retry",
+      "reason": "CCN15 includes safe-mode/schema/proactive-strip feature gates plus required preflight and exactly one quota fallback. Normalization errors must rethrow before any attempted write; second-write errors must prevent sync. These policies fit in30NLOC and already call established normalization/heavy-field helpers.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6458",
+        "js/app/00-storage-sync-patches.js:6465",
+        "js/app/00-storage-sync-patches.js:6467",
+        "js/app/00-storage-sync-patches.js:6475",
+        "js/app/00-storage-sync-patches.js:6482",
+        "js/app/00-storage-sync-patches.js:6489"
+      ],
+      "verified_metrics": {
+        "name": "savePortfolioData",
+        "start_line": 6458,
+        "end_line": 6491,
+        "ccn": 15,
+        "max_nesting": 4,
+        "cognitive": 26,
+        "nloc": 30,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6484,
+          6487
+        ],
+        "complex_conditions": [
+          {
+            "line": 6460,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6467,
+            "operator_count": 2,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 6475,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 26,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 6458,
+        "deepest_block": {
+          "start": 6484,
+          "end": 6487
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1985 savePortfolioAsync",
+        "00-storage-sync-patches.js:2026 saveStudentPortfolioAsync",
+        "00-storage-sync-patches.js:4758 saveWftStudentChange(localOnly=true)",
+        "00-storage-sync-patches.js:6828 saveStudentSession",
+        "00-storage-sync-patches.js:6941,6945 syncAllToDrive legacy branch",
+        "10-main-app.js:8489,8505 lifecycle legacy saves"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:164-176 required write/normalization/corruption failures preserve history and allow retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:191-202 first quota write fails, actual second write preserves writing/photo identity",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:28-44,64-85 strict writes reject corrupt bytes, block cloud work, retain pending and allow repair/retry"
+      ],
+      "regression_recommendation": "Retain two-attempt quota path, normalization failure propagation, localOnly suppression, safe-mode bypass and corrupt/recovery preflight. Existing native quota and required-failure assertions are suitable; no new wrapper required."
+    },
+    {
+      "record_id": "code_health:finding_92d392954c103b46d657",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "saveStudentSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_required_then_optional_order",
+      "reason": "CCN17/cognitive38 is high for29NLOC because feature/type/fallback guards accompany four protected operations. The primary save at6828 is outside the optional catches; own-property initialization and retainWftStudentSessions are established helpers. A new wrapper per optional branch would relocate decisions without reducing duplicated logic.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6812",
+        "js/app/00-storage-sync-patches.js:6813",
+        "js/app/00-storage-sync-patches.js:6816",
+        "js/app/00-storage-sync-patches.js:6826",
+        "js/app/00-storage-sync-patches.js:6827",
+        "js/app/00-storage-sync-patches.js:6828",
+        "js/app/00-storage-sync-patches.js:6829",
+        "js/app/00-storage-sync-patches.js:6835"
+      ],
+      "verified_metrics": {
+        "name": "saveStudentSession",
+        "start_line": 6811,
+        "end_line": 6842,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 38,
+        "nloc": 29,
+        "bumps": 4,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6817,
+          6823
+        ],
+        "complex_conditions": [
+          {
+            "line": 6829,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6831,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 6835,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 38,
+        "nloc": 29,
+        "dispatch_share": 0.0,
+        "symbol_line": 6811,
+        "deepest_block": {
+          "start": 6817,
+          "end": 6823
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:8359 commitPendingPortfolioSync; required failure retained/rolled back at 8366-8370"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:63-94 exact retained IDs/new writing/photo metadata across cap/date modes; 100-107 own special student names",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:157-162 optional preliminary normalizer failure still reaches authoritative durable normalizer; 164-176 required failures throw",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/optional-storage.browser.cjs:61-73 failed optional cache keeps primary writing, failed primary never publishes cache"
+      ],
+      "regression_recommendation": "Preserve primary save before optional cache/render; retain exact retention/prototype-name and optional/required-normalizer assertions. Any Lamport change needs enabled/missing/throwing clock-helper checks, not covered by the cited assertions."
+    },
+    {
+      "record_id": "code_health:finding_c10259400e5c0857bbc5",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "uploadSessionImagesToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_image_preparation_and_matching",
+      "reason": "Outer CCN14 excludes separately named queue/uploader/validator decisions. Its remaining decisions establish no-op inputs, deterministic IDs, already-uploaded filtering and saved-image matching after quota stripping. Existing ensureWftImageId/clone/stableStringify helpers express the reusable work; keep the coherent orchestration.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6969",
+        "js/app/00-storage-sync-patches.js:6981",
+        "js/app/00-storage-sync-patches.js:6984",
+        "js/app/00-storage-sync-patches.js:6989",
+        "js/app/00-storage-sync-patches.js:6993",
+        "js/app/00-storage-sync-patches.js:7001",
+        "js/app/00-storage-sync-patches.js:7009",
+        "js/app/00-storage-sync-patches.js:7017"
+      ],
+      "verified_metrics": {
+        "name": "uploadSessionImagesToDrive",
+        "start_line": 6968,
+        "end_line": 7099,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 126,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6969,
+          6972
+        ],
+        "complex_conditions": [
+          {
+            "line": 6969,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 16,
+        "nloc": 126,
+        "dispatch_share": 0.0,
+        "symbol_line": 6968,
+        "deepest_block": {
+          "start": 6969,
+          "end": 6972
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7137 syncPendingPortfolioMedia -> nextSession",
+        "00-storage-sync-patches.js:7855-7867 uploadPendingPortfolioMediaBeforeCommit (skipPortfolioSave=true, pendingOwner=pending)"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,39-77 held compression/folder stages; 82-103 stale cases issue zero requests, errors settle, happy cases preserve authorization and photo reference",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failed writes/IO retain bytes; edits/additions/deletions/reorder and pending ownership preserve correct writing/photo metadata"
+      ],
+      "regression_recommendation": "Preserve empty-input callback, uploaded-photo idempotency and both saved/pending call forms. Run native media ownership and held compression/folder suites on any refactor; unchanged source reviewed here only."
+    },
+    {
+      "record_id": "code_health:finding_208c5411ec68f45b4ab0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "nextUpload",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "shared_guard_simplification_candidate_U1",
+      "reason": "The exact token/length/element-identity test at7020 is repeated at7053-7054 before the additional image-content check. A small local predicate shared by these two sites removes duplicated queue-ownership rules and makes later changes consistent. Keep all boundary-specific throws/callback returns and the looser in-flight response check unchanged; do not move doUploadImage merely to lower scores.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7020",
+        "js/app/00-storage-sync-patches.js:7053",
+        "js/app/00-storage-sync-patches.js:7054",
+        "js/app/00-storage-sync-patches.js:7070"
+      ],
+      "verified_metrics": {
+        "name": "nextUpload",
+        "start_line": 7019,
+        "end_line": 7097,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 32,
+        "nloc": 77,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7025,
+          7029
+        ],
+        "complex_conditions": [
+          {
+            "line": 7020,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7026,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7038,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 32,
+        "nloc": 77,
+        "dispatch_share": 0.0,
+        "symbol_line": 7019,
+        "deepest_block": {
+          "start": 7025,
+          "end": 7029
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7038 skip obsolete stored image",
+        "00-storage-sync-patches.js:7094 upload completion",
+        "00-storage-sync-patches.js:7098 initial queue start"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 zero stale outgoing requests versus one happy request; corrupt bytes retained",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-206 error propagation, retry and multiple-photo IDs; 241-251 changed/deleted/reordered photos and concurrent writing preserved"
+      ],
+      "regression_recommendation": "For candidate U1, share only the exact token+array-length+element-identity predicate at 7020 and 7053-7054. Keep before/during error messages, catch/return contracts, image-content comparison, pending-owner signature, strict snapshot reads and post-response guard separate. Cover token, array replacement/reorder, photo mutation, compression/folder holds, retry, multi-image completion and unrelated new writing."
+    },
+    {
+      "record_id": "code_health:finding_db81152159f3182b6759",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "validateCurrentUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_guard_with_shared_candidate_overlap",
+      "reason": "The 12-line validator deliberately checks four separate owners: token/queue/content, pending writing/signature, recovery state and saved-photo identity. It runs both before upload and after folder resolution. Only the common queue predicate overlaps U1; replacing all guards with one opaque helper or deleting the second invocation would weaken stale-upload protection.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7052",
+        "js/app/00-storage-sync-patches.js:7053",
+        "js/app/00-storage-sync-patches.js:7057",
+        "js/app/00-storage-sync-patches.js:7060",
+        "js/app/00-storage-sync-patches.js:7061",
+        "js/app/00-storage-sync-patches.js:7062",
+        "js/app/00-storage-sync-patches.js:7064",
+        "js/app/00-storage-sync-patches.js:7095",
+        "js/app/00-storage-sync-patches.js:6208"
+      ],
+      "verified_metrics": {
+        "name": "validateCurrentUpload",
+        "start_line": 7052,
+        "end_line": 7063,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 12,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7053,
+          7056
+        ],
+        "complex_conditions": [
+          {
+            "line": 7053,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7057,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7060,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7062,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 7052,
+        "deepest_block": {
+          "start": 7053,
+          "end": 7056
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7064 before binary upload",
+        "00-storage-sync-patches.js:7095 passed to uploadBlobToDrive; called at 6208 after asynchronous folder resolution"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,30-36,65-77 release held compression/folder; 82-103 require zero stale requests and settled errors, while new essay/UI switch permits current photo",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:253-262 pending replacement, newer analysis, corruption and failed upload retain current pending writing"
+      ],
+      "regression_recommendation": "Do not flatten or remove the ownership layers. U1 may reuse the exact common queue-identity predicate; run both held-boundary and saved/pending ownership suites and explicitly test array replacement/reorder before folder release."
+    },
+    {
+      "record_id": "code_health:finding_d6815d339003e60e0a6b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "finishManualSaveToDrive",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicated_completion_policy_candidate_M1",
+      "reason": "V2 resolved completion7935-7948 and legacy completion7965-7978 repeat unlocking, token/new-pending guards and success/failure UI policy. A local completion function can own that duplicated rule, with callers explicitly passing !!result and success !== false. Leave commit checks, flush-specific logs and rejection handling separate; the different result contracts prevent blind callback substitution.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7935",
+        "js/app/00-storage-sync-patches.js:7936",
+        "js/app/00-storage-sync-patches.js:7937",
+        "js/app/00-storage-sync-patches.js:7942",
+        "js/app/00-storage-sync-patches.js:7946",
+        "js/app/00-storage-sync-patches.js:7965",
+        "js/app/00-storage-sync-patches.js:7966",
+        "js/app/00-storage-sync-patches.js:7967",
+        "js/app/00-storage-sync-patches.js:7972",
+        "js/app/00-storage-sync-patches.js:7977"
+      ],
+      "verified_metrics": {
+        "name": "finishManualSaveToDrive",
+        "start_line": 7905,
+        "end_line": 7980,
+        "ccn": 13,
+        "max_nesting": 3,
+        "cognitive": 21,
+        "nloc": 72,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7910,
+          7921
+        ],
+        "complex_conditions": [
+          {
+            "line": 7907,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7913,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7914,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7915,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7923,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 21,
+        "nloc": 72,
+        "dispatch_share": 0.0,
+        "symbol_line": 7905,
+        "deepest_block": {
+          "start": 7910,
+          "end": 7921
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7990 pending-media upload completion",
+        "00-storage-sync-patches.js:7993 direct manual-save branch"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145 held upload/flush setup, new Bob writing and signout during flush; 208-220,253-262 current pending remains retryable and stale completion cannot show synced",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:73-85 failed commit retains pending and blocks flush; retry succeeds after storage repair"
+      ],
+      "regression_recommendation": "For candidate M1, compare V2 resolved true/false/undefined and rejection plus legacy true/false/undefined, including new pending writing/signout during each completion. Preserve V2 !!result versus legacy success !== false, commit-failure notices and rejection-only logging/handling. Existing native pending/flush assertions cover only part of this matrix."
+    },
+    {
+      "record_id": "code_health:finding_b772cb0e474a867c6a0b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "saveStudentSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_independent_optional_operations",
+      "reason": "Four bumps represent preliminary normalization, Lamport stamping, optional IndexedDB publication and optional rendering. Their catches intentionally isolate failures with different severity, while required save is between preparation and optional publication. The optional-normalizer and failed-primary/no-cache assertions directly protect this separation.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6813",
+        "js/app/00-storage-sync-patches.js:6816",
+        "js/app/00-storage-sync-patches.js:6828",
+        "js/app/00-storage-sync-patches.js:6829",
+        "js/app/00-storage-sync-patches.js:6835"
+      ],
+      "verified_metrics": {
+        "name": "saveStudentSession",
+        "start_line": 6811,
+        "end_line": 6842,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 38,
+        "nloc": 29,
+        "bumps": 4,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6817,
+          6823
+        ],
+        "complex_conditions": [
+          {
+            "line": 6829,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6831,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 6835,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 17,
+        "max_nesting": 4,
+        "symbol_line": 6811,
+        "deepest_block": {
+          "start": 6817,
+          "end": 6823
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:8359 commitPendingPortfolioSync; required failure retained/rolled back at 8366-8370"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:63-94 exact retained IDs/new writing/photo metadata across cap/date modes; 100-107 own special student names",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/session-retention.browser.cjs:157-162 optional preliminary normalizer failure still reaches authoritative durable normalizer; 164-176 required failures throw",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/optional-storage.browser.cjs:61-73 failed optional cache keeps primary writing, failed primary never publishes cache"
+      ],
+      "regression_recommendation": "Preserve primary save before optional cache/render; retain exact retention/prototype-name and optional/required-normalizer assertions. Any Lamport change needs enabled/missing/throwing clock-helper checks, not covered by the cited assertions."
+    },
+    {
+      "record_id": "code_health:finding_20894b7df80971e6e886",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "uploadSessionImagesToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_precondition_and_normalization_stages",
+      "reason": "Three outer bumps are the no-op precondition/callback, ID/pending-state loop and no-remaining callback. Each ends or prepares the same queue; splitting these tiny stages would add wrappers. Saved-image comparison is already named findCurrentImage and queue work is already nextUpload.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6969",
+        "js/app/00-storage-sync-patches.js:6981",
+        "js/app/00-storage-sync-patches.js:6983",
+        "js/app/00-storage-sync-patches.js:6993",
+        "js/app/00-storage-sync-patches.js:6998",
+        "js/app/00-storage-sync-patches.js:7019"
+      ],
+      "verified_metrics": {
+        "name": "uploadSessionImagesToDrive",
+        "start_line": 6968,
+        "end_line": 7099,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 126,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6969,
+          6972
+        ],
+        "complex_conditions": [
+          {
+            "line": 6969,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 14,
+        "max_nesting": 2,
+        "symbol_line": 6968,
+        "deepest_block": {
+          "start": 6969,
+          "end": 6972
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7137 syncPendingPortfolioMedia -> nextSession",
+        "00-storage-sync-patches.js:7855-7867 uploadPendingPortfolioMediaBeforeCommit (skipPortfolioSave=true, pendingOwner=pending)"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,39-77 held compression/folder stages; 82-103 stale cases issue zero requests, errors settle, happy cases preserve authorization and photo reference",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failed writes/IO retain bytes; edits/additions/deletions/reorder and pending ownership preserve correct writing/photo metadata"
+      ],
+      "regression_recommendation": "Preserve empty-input callback, uploaded-photo idempotency and both saved/pending call forms. Run native media ownership and held compression/folder suites on any refactor; unchanged source reviewed here only."
+    },
+    {
+      "record_id": "code_health:finding_b9ce9226d15ad39d7611",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "nextUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_async_error_stages",
+      "reason": "Four bumps reflect initial ownership rejection, recovery/snapshot precheck, end-of-queue callback and compression error handling. They protect different times and error contracts. U1 consolidates the actual repeated identity predicate; collapsing these stages would conceal when bytes can leave the browser.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7020",
+        "js/app/00-storage-sync-patches.js:7024",
+        "js/app/00-storage-sync-patches.js:7031",
+        "js/app/00-storage-sync-patches.js:7040",
+        "js/app/00-storage-sync-patches.js:7042",
+        "js/app/00-storage-sync-patches.js:7049"
+      ],
+      "verified_metrics": {
+        "name": "nextUpload",
+        "start_line": 7019,
+        "end_line": 7097,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 32,
+        "nloc": 77,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7025,
+          7029
+        ],
+        "complex_conditions": [
+          {
+            "line": 7020,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7026,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7038,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 17,
+        "max_nesting": 4,
+        "symbol_line": 7019,
+        "deepest_block": {
+          "start": 7025,
+          "end": 7029
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7038 skip obsolete stored image",
+        "00-storage-sync-patches.js:7094 upload completion",
+        "00-storage-sync-patches.js:7098 initial queue start"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 zero stale outgoing requests versus one happy request; corrupt bytes retained",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-206 error propagation, retry and multiple-photo IDs; 241-251 changed/deleted/reordered photos and concurrent writing preserved"
+      ],
+      "regression_recommendation": "For candidate U1, share only the exact token+array-length+element-identity predicate at 7020 and 7053-7054. Keep before/during error messages, catch/return contracts, image-content comparison, pending-owner signature, strict snapshot reads and post-response guard separate. Cover token, array replacement/reorder, photo mutation, compression/folder holds, retry, multi-image completion and unrelated new writing."
+    },
+    {
+      "record_id": "code_health:finding_b7be92ac9d86ce17b33e",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "ensureDriveFolderPromise",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_size_signal",
+      "reason": "78NLOC/87 physical lines includes query construction, request metadata and promise chaining for the already-reviewed cache/search/select/create operation. This size warning overlaps resolver brain/complex signals; existing cache-validator and canonical-selector helpers make another single-use extraction unnecessary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4209",
+        "js/app/00-storage-sync-patches.js:4233",
+        "js/app/00-storage-sync-patches.js:4255",
+        "js/app/00-storage-sync-patches.js:4275",
+        "js/app/00-storage-sync-patches.js:4295"
+      ],
+      "verified_metrics": {
+        "name": "ensureDriveFolderPromise",
+        "start_line": 4209,
+        "end_line": 4295,
+        "ccn": 14,
+        "max_nesting": 1,
+        "cognitive": 13,
+        "nloc": 78,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4216,
+          4221
+        ],
+        "complex_conditions": [
+          {
+            "line": 4216,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 78,
+        "ccn": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 4209,
+        "deepest_block": {
+          "start": 4216,
+          "end": 4221
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2587 loadStudentFileFromDrive",
+        "00-storage-sync-patches.js:2619 saveStudentFileToDrive",
+        "00-storage-sync-patches.js:4128 ensureDriveFolder",
+        "00-storage-sync-patches.js:4983 findWftFilesByNamePromise",
+        "00-storage-sync-patches.js:5836 sync run",
+        "00-storage-sync-patches.js:6206 uploadBlobToDrive",
+        "10-main-app.js:3027 findAllWftFilesByNameInRootPromise",
+        "10-main-app.js:3095 duplicate-file backup",
+        "portfolio-export.js:891 ensureArchiveYearFolderPromise"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/archive-connection.browser.cjs:27-53 actual resolver at root-search/cached-validation/canonical-summary; assertions 76-85 require intended authorization, no stale upload, class retained, retry notice",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-folder-selection.cjs:14-33 dependency chooser ordered summaries, winner/cache IDs and stale-connection rejection (unit helper, not full resolver)"
+      ],
+      "regression_recommendation": "No shape-only extraction. If folder resolution changes, cover valid cache, canonical duplicates, create/missing-ID failure, same-run promise reuse, rejected-promise retry and token change at each awaited boundary; retain archive-connection native assertions."
+    },
+    {
+      "record_id": "code_health:finding_302dbc0b60d9c7879a9d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "uploadSessionImagesToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_enclosing_size_signal",
+      "reason": "126NLOC covers the entire per-session closure including named queue and validator functions, so it overlaps nextUpload and validateCurrentUpload sizes. U1 offers a concrete shared-rule improvement; extracting the complete inner queue to a five-plus-argument global solely to shorten the enclosing span would worsen ownership visibility.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6968",
+        "js/app/00-storage-sync-patches.js:6998",
+        "js/app/00-storage-sync-patches.js:7019",
+        "js/app/00-storage-sync-patches.js:7051",
+        "js/app/00-storage-sync-patches.js:7052",
+        "js/app/00-storage-sync-patches.js:7099"
+      ],
+      "verified_metrics": {
+        "name": "uploadSessionImagesToDrive",
+        "start_line": 6968,
+        "end_line": 7099,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 126,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6969,
+          6972
+        ],
+        "complex_conditions": [
+          {
+            "line": 6969,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 126,
+        "ccn": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 6968,
+        "deepest_block": {
+          "start": 6969,
+          "end": 6972
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7137 syncPendingPortfolioMedia -> nextSession",
+        "00-storage-sync-patches.js:7855-7867 uploadPendingPortfolioMediaBeforeCommit (skipPortfolioSave=true, pendingOwner=pending)"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,39-77 held compression/folder stages; 82-103 stale cases issue zero requests, errors settle, happy cases preserve authorization and photo reference",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failed writes/IO retain bytes; edits/additions/deletions/reorder and pending ownership preserve correct writing/photo metadata"
+      ],
+      "regression_recommendation": "Preserve empty-input callback, uploaded-photo idempotency and both saved/pending call forms. Run native media ownership and held compression/folder suites on any refactor; unchanged source reviewed here only."
+    },
+    {
+      "record_id": "code_health:finding_0dd0b44ef3cf9a917f4b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "nextUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_size_signal",
+      "reason": "77NLOC includes nested binary upload/validator declarations and completion metadata fields. The real repeated predicate is tracked once as U1. Keeping compression, final request guard and save-after-response adjacent makes the state machine auditable; no separate large-method extraction is proposed.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7019",
+        "js/app/00-storage-sync-patches.js:7041",
+        "js/app/00-storage-sync-patches.js:7051",
+        "js/app/00-storage-sync-patches.js:7052",
+        "js/app/00-storage-sync-patches.js:7075",
+        "js/app/00-storage-sync-patches.js:7079",
+        "js/app/00-storage-sync-patches.js:7097"
+      ],
+      "verified_metrics": {
+        "name": "nextUpload",
+        "start_line": 7019,
+        "end_line": 7097,
+        "ccn": 17,
+        "max_nesting": 4,
+        "cognitive": 32,
+        "nloc": 77,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7025,
+          7029
+        ],
+        "complex_conditions": [
+          {
+            "line": 7020,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7026,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7038,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 77,
+        "ccn": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 7019,
+        "deepest_block": {
+          "start": 7025,
+          "end": 7029
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7038 skip obsolete stored image",
+        "00-storage-sync-patches.js:7094 upload completion",
+        "00-storage-sync-patches.js:7098 initial queue start"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:82-103 zero stale outgoing requests versus one happy request; corrupt bytes retained",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-206 error propagation, retry and multiple-photo IDs; 241-251 changed/deleted/reordered photos and concurrent writing preserved"
+      ],
+      "regression_recommendation": "For candidate U1, share only the exact token+array-length+element-identity predicate at 7020 and 7053-7054. Keep before/during error messages, catch/return contracts, image-content comparison, pending-owner signature, strict snapshot reads and post-response guard separate. Cover token, array replacement/reorder, photo mutation, compression/folder holds, retry, multi-image completion and unrelated new writing."
+    },
+    {
+      "record_id": "code_health:finding_dda7cb8583c1ac2b8c1b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "finishManualSaveToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_size_signal",
+      "reason": "72NLOC includes two logging payloads and two completion implementations. M1 addresses the duplicated completion policy directly; this size warning is the same refactor scope, not grounds to extract the logging objects or add another orchestration layer.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7905",
+        "js/app/00-storage-sync-patches.js:7912",
+        "js/app/00-storage-sync-patches.js:7933",
+        "js/app/00-storage-sync-patches.js:7951",
+        "js/app/00-storage-sync-patches.js:7964",
+        "js/app/00-storage-sync-patches.js:7980"
+      ],
+      "verified_metrics": {
+        "name": "finishManualSaveToDrive",
+        "start_line": 7905,
+        "end_line": 7980,
+        "ccn": 13,
+        "max_nesting": 3,
+        "cognitive": 21,
+        "nloc": 72,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7910,
+          7921
+        ],
+        "complex_conditions": [
+          {
+            "line": 7907,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7913,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7914,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7915,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 7923,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 72,
+        "ccn": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 7905,
+        "deepest_block": {
+          "start": 7910,
+          "end": 7921
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7990 pending-media upload completion",
+        "00-storage-sync-patches.js:7993 direct manual-save branch"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145 held upload/flush setup, new Bob writing and signout during flush; 208-220,253-262 current pending remains retryable and stale completion cannot show synced",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:73-85 failed commit retains pending and blocks flush; retry succeeds after storage repair"
+      ],
+      "regression_recommendation": "For candidate M1, compare V2 resolved true/false/undefined and rejection plus legacy true/false/undefined, including new pending writing/signout during each completion. Preserve V2 !!result versus legacy success !== false, commit-failure notices and rejection-only logging/handling. Existing native pending/flush assertions cover only part of this matrix."
+    },
+    {
+      "record_id": "code_health:finding_8db10553c83e85be9dd7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "uploadSessionImagesToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_primitive_domain_inference",
+      "reason": "The heuristic correctly counts5 parameters, but they are student identifier, session object, callback, mode flag and pending-owner object; typed and primitive counts are both0 in untyped JS. Only two production callers exist, one supplying3 arguments and one supplying the pending-mode pair. No repeated bundle or invalid argument permutation is evidenced; an options/domain object would add caller churn.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6968",
+        "js/app/00-storage-sync-patches.js:7137",
+        "js/app/00-storage-sync-patches.js:7855",
+        "js/app/00-storage-sync-patches.js:7867"
+      ],
+      "verified_metrics": {
+        "name": "uploadSessionImagesToDrive",
+        "start_line": 6968,
+        "end_line": 7099,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 126,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6969,
+          6972
+        ],
+        "complex_conditions": [
+          {
+            "line": 6969,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 6968
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7137 syncPendingPortfolioMedia -> nextSession",
+        "00-storage-sync-patches.js:7855-7867 uploadPendingPortfolioMediaBeforeCommit (skipPortfolioSave=true, pendingOwner=pending)"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,39-77 held compression/folder stages; 82-103 stale cases issue zero requests, errors settle, happy cases preserve authorization and photo reference",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failed writes/IO retain bytes; edits/additions/deletions/reorder and pending ownership preserve correct writing/photo metadata"
+      ],
+      "regression_recommendation": "Preserve empty-input callback, uploaded-photo idempotency and both saved/pending call forms. Run native media ownership and held compression/folder suites on any refactor; unchanged source reviewed here only."
+    },
+    {
+      "record_id": "code_health:finding_a1105537f3efefcc76dc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "uploadSessionImagesToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_short_circuit_input_guard",
+      "reason": "The four OR operators encode5 reasons to do no upload and settle the callback. Order protects sessionData.images access when sessionData is absent and its length when images is absent. One compact negative guard is clearer than five identical callback/return blocks or a single-use predicate.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6969",
+        "js/app/00-storage-sync-patches.js:6970",
+        "js/app/00-storage-sync-patches.js:6971"
+      ],
+      "verified_metrics": {
+        "name": "uploadSessionImagesToDrive",
+        "start_line": 6968,
+        "end_line": 7099,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 16,
+        "nloc": 126,
+        "bumps": 3,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6969,
+          6972
+        ],
+        "complex_conditions": [
+          {
+            "line": 6969,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 6968
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7137 syncPendingPortfolioMedia -> nextSession",
+        "00-storage-sync-patches.js:7855-7867 uploadPendingPortfolioMediaBeforeCommit (skipPortfolioSave=true, pendingOwner=pending)"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,39-77 held compression/folder stages; 82-103 stale cases issue zero requests, errors settle, happy cases preserve authorization and photo reference",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failed writes/IO retain bytes; edits/additions/deletions/reorder and pending ownership preserve correct writing/photo metadata"
+      ],
+      "regression_recommendation": "Preserve empty-input callback, uploaded-photo idempotency and both saved/pending call forms. Run native media ownership and held compression/folder suites on any refactor; unchanged source reviewed here only."
+    },
+    {
+      "record_id": "code_health:finding_0ebf1243a621949a6e83",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "validateCurrentUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_compound_owner_invariant",
+      "reason": "Three OR operators reject token change, queue length change, changed item identity/order or current image-content mutation before sending bytes. This is one stale-photo invariant with one error. U1 can share its first three terms with7020, but the image-content clause and every guarded invocation must remain; no independent repair beyond U1.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7053",
+        "js/app/00-storage-sync-patches.js:7054",
+        "js/app/00-storage-sync-patches.js:7055",
+        "js/app/00-storage-sync-patches.js:7064",
+        "js/app/00-storage-sync-patches.js:7095"
+      ],
+      "verified_metrics": {
+        "name": "validateCurrentUpload",
+        "start_line": 7052,
+        "end_line": 7063,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 12,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7053,
+          7056
+        ],
+        "complex_conditions": [
+          {
+            "line": 7053,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7057,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7060,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 7062,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 7052
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7064 before binary upload",
+        "00-storage-sync-patches.js:7095 passed to uploadBlobToDrive; called at 6208 after asynchronous folder resolution"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:5-10,30-36,65-77 release held compression/folder; 82-103 require zero stale requests and settled errors, while new essay/UI switch permits current photo",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:253-262 pending replacement, newer analysis, corruption and failed upload retain current pending writing"
+      ],
+      "regression_recommendation": "Do not flatten or remove the ownership layers. U1 may reuse the exact common queue-identity predicate; run both held-boundary and saved/pending ownership suites and explicitly test array replacement/reorder before folder release."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "review027-manual-save-rejection-status",
+      "status": "source_supported_not_reproduced",
+      "classification": "completion_failure_status_asymmetry",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:7937",
+        "js/app/00-storage-sync-patches.js:7949",
+        "js/app/00-storage-sync-patches.js:7956",
+        "js/app/00-storage-sync-patches.js:7958"
+      ],
+      "observation": "Resolved flush and legacy completion protect a newly staged pending essay before applying old completion UI. The V2 rejection branch checks token only, then applies old failure UI even when new pending writing exists. Current pending data is retained; a misleading retry/status message is a plausible UI issue, not a demonstrated data-loss bug.",
+      "regression_recommendation": "Hold flush, stage a different new pending essay, reject the old flush; assert pending bytes/signature survive and specify intended status/button behavior. Existing pending-new-during-flush scenario releases true, not rejection; do not silently alter rejection semantics as part of M1.",
+      "original_lead_id": "L1",
+      "reason": "Resolved flush and legacy completion protect a newly staged pending essay before applying old completion UI. The V2 rejection branch checks token only, then applies old failure UI even when new pending writing exists. Current pending data is retained; a misleading retry/status message is a plausible UI issue, not a demonstrated data-loss bug.",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "finishManualSaveToDrive"
+    }
+  ],
+  "summary": {
+    "records": 24,
+    "status_counts": {
+      "reviewed_no_change": 22,
+      "candidate_needs_regression": 1,
+      "confirmed_repair_candidate": 1
+    },
+    "repair_opportunities": [
+      {
+        "id": "U1",
+        "primary_record": "code_health:finding_208c5411ec68f45b4ab0",
+        "scope": "One local queue identity predicate shared at7020 and7053-7054; preserves time-specific checks/messages. Candidate needs native regressions before adoption."
+      },
+      {
+        "id": "M1",
+        "primary_record": "code_health:finding_d6815d339003e60e0a6b",
+        "scope": "One local manual completion policy for V2 resolved and legacy callbacks, preserving their distinct boolean contracts. Real duplication confirmed; behavior parity still untested."
+      }
+    ],
+    "retained_tradeoffs": "Quota retry/required-storage preflight; optional normalizer/Lamport/cache/render boundaries; full asynchronous owner revalidation; per-session closure; compact short-circuit guards.",
+    "scanner_clearances_claimed": 0
+  },
+  "limits": [
+    "Read-only source review and pure metrics replay only. No source edits, app/test execution, browser/live Google/AI calls, installations, Git/index/cache/docs/tracker mutations.",
+    "Test assertions were read, not executed. All cited tests use immutable413c1cf even if the simultaneous tests-only editor changes current files.",
+    "All7 complete target functions, their nested functions, relevant production call sites/guards and cited assertion/setup blocks were inspected; no claim of whole-repository behavioral audit.",
+    "Metric agreement does not prove a defect. M1/U1 require coordinator source/fact recheck and focused behavioral parity tests before any repair/adoption.",
+    "No scanner finding is marked closed. Review dispositions and duplicate groupings are recommendations for coordinator adoption only."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "method": "Read every individual retained/candidate reason and caller/test anchors; checked plausible repairs separately from confirmed bugs. Independently replayed numerical walker fields for all assigned records. Immutable production+HTML hashes and exact current observation facts must pass central adopter before any tracker mutation. Read-only test references are versioned413; no testpass or scannerclosure claim."
+  }
+}

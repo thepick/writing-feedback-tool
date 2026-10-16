@@ -1,0 +1,41 @@
+{
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "method": "Same uniquely matching exact source-line fingerprint, call path and detector facts; only call and enclosing loop line offsets advance six. These remain existing findings, with no clearance claimed.",
+  "mappings": [
+    {
+      "campaign_id": "code_health:finding_aec09199a40a7f63d703",
+      "observed_id": "code_health:finding_e292555523dc02d15651",
+      "old_line": 112,
+      "new_line": 118,
+      "source_line_fingerprint": "e40ca1f1147881f230fb9270d611d541bdf6d45d0baab4a751e306ee6eb8626b",
+      "call_path": [
+        "google-drive-migration.js::recoverFolder",
+        "google-drive-migration.js::read",
+        "google-drive-migration.js::request"
+      ]
+    },
+    {
+      "campaign_id": "code_health:finding_89bf1a01f14a82e136da",
+      "observed_id": "code_health:finding_6bdca990cae45725ac1e",
+      "old_line": 103,
+      "new_line": 109,
+      "source_line_fingerprint": "2e1b16534a1b5e1f1de27c820e58a7c452413fd5bdebc1cfa5dfe55760a69a8e",
+      "call_path": [
+        "google-drive-migration.js::recoverFolder",
+        "google-drive-migration.js::request"
+      ]
+    },
+    {
+      "campaign_id": "code_health:finding_c72146652f87125846f3",
+      "observed_id": "code_health:finding_77e8dc12197996e3e746",
+      "old_line": 111,
+      "new_line": 117,
+      "source_line_fingerprint": "4ac5ab7c7f8c54c9b374df6d9ee83186044676f675dde3ae547260b5f1b16fda",
+      "call_path": [
+        "google-drive-migration.js::recoverFolder",
+        "google-drive-migration.js::upload",
+        "google-drive-migration.js::request"
+      ]
+    }
+  ]
+}

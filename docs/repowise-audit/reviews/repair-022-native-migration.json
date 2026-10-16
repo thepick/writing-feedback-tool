@@ -1,0 +1,219 @@
+{
+  "repair_id": "repair-022",
+  "source_base": "44a7282c727eb6d0735cbd65247f72e45bfe37c0",
+  "created_at_utc": "2026-10-15T22:57:10.438869+00:00",
+  "status": "native_test_integration_verified_pending_coordinator",
+  "scanner_records": [
+    "code_health:finding_c9064893d7223bb4ffd1",
+    "code_health:finding_ac236ee8c53f6b06a02a"
+  ],
+  "summary": "Restore four native public migration scenarios with required reports, including normal unknown zero/false/null roundtrip preservation. No production changes.",
+  "scope": {
+    "changed_existing_files": [
+      "scripts/case-report-suites.json"
+    ],
+    "added_files": [
+      "tests/google-drive-migration.browser.cjs"
+    ],
+    "application_files_changed": [],
+    "all89prior_codefiles_raw_and_lf_identical": true,
+    "only_manifest_addition": "tests/google-drive-migration.browser.cjs",
+    "existing_helper_unchanged": "tests/support/local-app-route.js",
+    "new_inventory": {
+      "all_suites": 76,
+      "code_syntax_inputs": 90,
+      "native_suites_expected_at_full_gate": 59
+    }
+  },
+  "historical_driver": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-12\\writing-feedback-final-audit-validation\\work\\native-migration-lifecycle.cjs",
+    "sha256_raw": "2ab63104643d861596634321100679c350d81d1a92ebf5dd91b906494934185b",
+    "historical_file_unchanged": true,
+    "original_not_executed_in_place": true,
+    "historical_pass_not_claimed_as_current": true,
+    "adaptations": [
+      "current root fallback and existing local asset helper",
+      "name existing runner for diagnostics",
+      "name existing request boundary for diagnostics",
+      "reuse only local origin branch",
+      "required runner report path and expected case count"
+    ],
+    "original_assertion_call_sites_retained": 21,
+    "added_assertion_call_sites": 2,
+    "new_assertion": "All four expected scenarios must run, and zero/false/null unknown scalar fields must survive successful native recovery; existing assertions retained."
+  },
+  "tests": {
+    "before": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\before\\suite-results.json",
+      "existing_suite": "test-google-drive-migration.cjs",
+      "passed": true,
+      "syntax_passed": 89
+    },
+    "after": {
+      "receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\after-final\\suite-results.json",
+      "suites": [
+        {
+          "suite": "test-google-drive-migration.cjs",
+          "status": 0,
+          "error": null,
+          "report": null,
+          "nativeInstrumented": false
+        },
+        {
+          "suite": "tests/google-drive-migration.browser.cjs",
+          "status": 0,
+          "error": null,
+          "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\after-final\\google-drive-migration.browser.json",
+          "nativeInstrumented": true
+        }
+      ],
+      "passed": true,
+      "syntax_passed": 90,
+      "required_native_report_validated_by_official_runner": true,
+      "native_report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\after-final\\google-drive-migration.browser.json"
+    }
+  },
+  "native_cases": [
+    {
+      "name": "cancel",
+      "passed": true,
+      "requests": 2,
+      "new_synthetic_files": 0,
+      "old_token_requests_get_only": true
+    },
+    {
+      "name": "account-mismatch",
+      "passed": true,
+      "requests": 3,
+      "new_synthetic_files": 0,
+      "old_token_requests_get_only": true
+    },
+    {
+      "name": "verified-copy",
+      "passed": true,
+      "requests": 29,
+      "new_synthetic_files": 5,
+      "old_token_requests_get_only": true
+    },
+    {
+      "name": "corrupt-retry",
+      "passed": true,
+      "requests": 38,
+      "new_synthetic_files": 5,
+      "old_token_requests_get_only": true
+    }
+  ],
+  "asserted_contracts": [
+    "Cancel and account mismatch make zero writes; old-token access is GET-only.",
+    "Exact original file bytes and parent arrays remain unchanged in all scenarios.",
+    "Successful nested recovery remaps parent/photo IDs and preserves unknown JSON fields.",
+    "Corrupt upload is rejected, no completion marker is written and starting empty stays disabled.",
+    "Retry reuses existing copies and adds only one verified completion marker.",
+    "Completed-marker retry is GET-only; real native page has no uncaught errors.",
+    "Successful native recovery preserves unknownScalars {score:0,enabled:false,empty:null} alongside the existing unknown string field."
+  ],
+  "targeted_native_coverage": {
+    "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\targeted-native-final.lcov.summary.json",
+    "lcov": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\targeted-native-final.lcov",
+    "lcov_sha256": "8c0cfaf15854b195dde1ed9b8ef078bd36f7595198be1263bc2db5bef39258a7",
+    "scope": "One current native suite/four scenarios, not a new whole-repository coverage baseline. No ingestion or scanner refresh.",
+    "migration_source_sha256_normalized_lf": "58452e769c8d4b4753a50e3fdc18d41deaafa49052233f31fb1dbf5d997a9142",
+    "migration": {
+      "covered": 117,
+      "executable": 135,
+      "percent": 86.66666666666667,
+      "uncovered": [
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        71,
+        73,
+        74,
+        75,
+        76,
+        170
+      ]
+    },
+    "all8captured_source_hashes_match_current": true,
+    "method": "Fresh native Edge V8 precise ranges mapped to native possible-breakpoint lines. Exact source hashes verified after CRLF normalization. Per-suite contexts and hit-wins line union; no branch coverage. Frozen reference contexts, source mutations and VM snippets are excluded.",
+    "exclusions": 0,
+    "coverage_tooling_or_denominator_changed": false
+  },
+  "source_hashes": {
+    "tests/google-drive-migration.browser.cjs": {
+      "raw": "492a7249316ccbb9f3d6f3b3edf35284f1d15925c41519d8d207c1a8b4700a42",
+      "normalized_lf": "492a7249316ccbb9f3d6f3b3edf35284f1d15925c41519d8d207c1a8b4700a42"
+    },
+    "scripts/case-report-suites.json": {
+      "before_raw": "bbdd21a14991d684921034bd1fa9740b882df3133c651da00b079a8c93db865a",
+      "after_raw": "676040a68dcec63dfb222f5f7d419173e1a8491582b8a9c33a366c47f4b5c5b1",
+      "after_normalized_lf": "06c158d18779400de21b4c71fabdeaee4acebba9e2d72b3ddc36f57a9e1fd305"
+    }
+  },
+  "all_code_and_config_pins": {
+    "before": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\before.json",
+    "after": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\after-final.json",
+    "approved_before_manifest": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-022-before-source-pins.json"
+  },
+  "test_metrics": [
+    {
+      "name": "migrationRoute",
+      "ccn": 29,
+      "cognitive": 32,
+      "nloc": 30,
+      "max_nesting": 2,
+      "start_line": 17,
+      "end_line": 46,
+      "param_count": 1,
+      "assertion_count": 2
+    },
+    {
+      "name": "runNativeMigrationCases",
+      "ccn": 11,
+      "cognitive": 28,
+      "nloc": 86,
+      "max_nesting": 5,
+      "start_line": 6,
+      "end_line": 91,
+      "param_count": 0,
+      "assertion_count": 21
+    }
+  ],
+  "remaining_limits": [
+    "No full76-suite batch run, Git mutation, RepoWise/index update, global coverage import or scanner-clearance claim.",
+    "The final targeted native migration capture is 117/135 (86.67%). AppData/merge compatibility paths and several defensive branches remain unhit natively; VM protocol coverage is separate.",
+    "The existing native EOF breakpoint remains in the denominator; no measurement adjustments were made.",
+    "The named synthetic request adapter isCCN29/depth2; runner isCCN11/depth5. These test-shape observations may appear on the next scan and need individual coordinator review. No guards were removed to lower metrics.",
+    "No real Google/Drive/OAuth accounts, privacy permissions, service calls or user data tested."
+  ],
+  "scanner_clearance_claimed": false,
+  "parent_quality_followup": {
+    "fixture_added": {
+      "unknownScalars": {
+        "score": 0,
+        "enabled": false,
+        "empty": null
+      }
+    },
+    "existing_unknown_string_and_assertion_retained": true,
+    "successful_cases_with_scalar_assertion": [
+      "verified-copy",
+      "corrupt-retry"
+    ],
+    "production_unchanged": true,
+    "previous_report_preserved": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\report-before-scalars.json",
+    "previous_driver_preserved": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\driver-before-scalars.cjs",
+    "previous_after_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\after\\suite-results.json",
+    "previous_targeted_capture": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\targeted-native.lcov.summary.json",
+    "fresh_after_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-022\\after-final\\suite-results.json"
+  }
+}

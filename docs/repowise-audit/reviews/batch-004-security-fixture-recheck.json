@@ -1,0 +1,22 @@
+{
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "file": "tests/student-read-ownership.browser.cjs",
+  "current_normalized_lf_sha256": "59136717cd99e5736cccd64b2785c1a97b4239ba96ccd63020662fb465c4e2b7",
+  "signals": [
+    {
+      "id": "security:c9c6ceed56584b0d0f74a14a",
+      "old_line": 25,
+      "current_line": 23,
+      "exact_mock_statement_unchanged": true,
+      "statement_sha256": "1c86057250fef37c82ec041ba6ae8d2f10b93530a17d5bc6e750f3fe8dc8dc7d"
+    },
+    {
+      "id": "security:d2163c49fae3c31e3809a566",
+      "old_line": 41,
+      "current_line": 39,
+      "exact_mock_statement_unchanged": true,
+      "statement_sha256": "517149f642a5d1da791c55de7d978c2db43cd17e4d389cd01df82aeaab8ca5d1"
+    }
+  ],
+  "basis": "Original001 individually reviewed fixture intent;025 full source diff/identical Google handler except local branch, paired native50request parity. No security snippets copied; no live service calls or new full-history scan claimed."
+}

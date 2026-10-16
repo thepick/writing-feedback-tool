@@ -1,0 +1,1152 @@
+{
+  "repair_id": "repair-032",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "8be13c9f0eeadb7fe9975c5e4b680f596607745e",
+  "source_hashes_normalized_lf": {
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "verification": {
+    "complete_assigned_functions_read": [
+      "switchTab",
+      "removeStudent",
+      "getPreferredStudentForManagement",
+      "renameStudent",
+      "updateOcrControls",
+      "resetCurrentClassData",
+      "updateSelectedImagePreview",
+      "handleSelectedImages",
+      "getDroppedImageFiles",
+      "bindPreviewReorderHandlers",
+      "setActiveStudentForPortfolioReassessment",
+      "syncUiState"
+    ],
+    "assignment_main_hash_matches": true,
+    "inspected_production_files_equal_indexed_commit": true,
+    "metrics": "Installed unchanged RepoWise complexity.walk_file read-only source walk under Python -B. All assigned numerical fields, spans, deepest blocks and the single conditional count matched. Assignment graph dependents_count/centrality_floor were retained without recomputing graph reach.",
+    "test_evidence": "Final test references use immutable git-show source_commit evidence; no current moving route or runner assertions are claimed. Tests inspected only, no execution or passing claims.",
+    "immutable_test_blobs": {
+      "tests/main-app-health.browser.cjs": "5d6b6951daa3b5eeb1bce1a2fecb5cc9f5060d51",
+      "tests/class-deletion.browser.cjs": "86d4ece0999648af6dd912ab155a0a8b43de3be5",
+      "tests/deletion-durability.browser.cjs": "424fd6930fac209931d78b20b7547f8b9b34d329",
+      "tests/rename-confirmation.browser.cjs": "ca7aaef18b56af982c592e230788be8ecf84c727",
+      "tests/student-rename.browser.cjs": "0e236b4efeec0fdd103303e2a19b993215cd1a18",
+      "tests/storage-dialog-keyboard.browser.cjs": "1b98531e0aade4c56605b5af75122eadce79f891",
+      "tests/image-preparation.browser.cjs": "7e62f19bb6a4f915899e8da608b8918c9088adc9",
+      "tests/analysis-identity.browser.cjs": "b6e618a320c06b5250a92371a77448a5aeeb18be",
+      "tests/crop-ownership.browser.cjs": "24bb1f871ccfc93fccf869fce867e5214718380e",
+      "tests/portfolio-html.browser.cjs": "77a26b1807eb5c1b20be4423c0bb58f47ae8117e",
+      "tests/preference-integrity-scenarios.js": "76fa415ca74dfeaf24d19672f0644eeab7c6d1c8",
+      "tests/student-selection-storage.browser.cjs": "9f58fa3889f37608f06142f3e28cc1d1243d31d3",
+      "tests/analysis-pipeline.browser.cjs": "ce8c74a70a14918f3ba48472bb327042d1052c9a"
+    },
+    "shared_guard_anchors": [
+      "js/app/00-storage-sync-patches.js:4735-4793 saveWftStudentChange preflight/rollback/commit-before-publication",
+      "js/app/00-storage-sync-patches.js:4495-4498 strict portfolio snapshot",
+      "js/app/storage-recovery.js:146-157 recovery-aware required settings read",
+      "js/app/00-storage-sync-patches.js:8114-8129 captured input/image context comparison",
+      "js/app/photo-crop.js:150-178 guarded crop publication and :195-212 current-session reset"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_f1a85ebe6badc0db9024",
+      "file": "js/app/10-main-app.js",
+      "marker": "brain_method",
+      "symbol": "renameStudent",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_rename_dialog_transaction_boundaries",
+      "reason": "87 NLOC/CCN24 is accurate, but the flow has necessary boundaries: prompt validation, held-confirmation revalidation, portfolio conflict prevention, strict settings/portfolio staging, atomic save and committed UI selection. Keep them visible. A duplicated case-insensitive target predicate has a separate minimal opportunity under the complex-method record; do not split the whole transaction for size.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:333-431 complete rename lifecycle",
+        "js/app/10-main-app.js:350-365 normalized target and pre-confirmation duplicate check",
+        "js/app/10-main-app.js:375-391 live roster revalidation and portfolio-name conflict prevent stale overwrite",
+        "js/app/10-main-app.js:383-406 strict portfolio/settings staging and shared transaction",
+        "js/app/10-main-app.js:415-430 committed selection and independent optional refreshes"
+      ],
+      "verified_metrics": {
+        "name": "renameStudent",
+        "start_line": 333,
+        "end_line": 431,
+        "ccn": 24,
+        "cognitive": 36,
+        "nloc": 87,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          407,
+          411
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 24,
+        "nloc": 87,
+        "max_nesting": 3,
+        "dependents_count": 4,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 333,
+        "deepest_block": {
+          "start": 407,
+          "end": 411
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:330 manageSelectedStudent after native chooser; tests/rename-confirmation.browser.cjs:88 and :169 direct workflow/retry calls"
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:8-17 held input/confirmation matrix including intervening save, source/target changes, corrupt/read-failing data, all five storage writes and prototype-like names",
+        "tests/rename-confirmation.browser.cjs:113-140 invalid/failure state equality, preserved sessions/images/settings, correct new selection and tombstones",
+        "tests/rename-confirmation.browser.cjs:164-178 one-time settings staging read failure and retry preserve unrelated settings, writing and pending work",
+        "tests/student-rename.browser.cjs:57-72 failed transaction retains roster/bytes/counters; success transfers exact writing"
+      ],
+      "regression_recommendation": "For optional predicate reuse, preserve both pre-dialog and post-dialog scans over current students, exact old-name exclusion, case-insensitive target comparison, case-only rename, prototype-like names and changes during both dialogs. Retain strict readWftRequiredStorage settings staging from repair013 and full transaction/failure matrix."
+    },
+    {
+      "record_id": "code_health:finding_f6834b9c5e4e8fceaddc",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "switchTab",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_guarded_three_tab_dispatch",
+      "reason": "30 NLOC/CCN9 is small and shallow. Two required-element guards prevent partial class updates; portfolio refresh must precede render and unknown names fall back to the tool. Existing health assertions remove each node and verify exact state/order. A registry or wrapper would add machinery for three tabs.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:27-59 complete tab switch",
+        "js/app/10-main-app.js:28-35 all six DOM elements checked before class mutations",
+        "js/app/10-main-app.js:46-57 portfolio refresh-before-render and unknown-tab tool fallback"
+      ],
+      "verified_metrics": {
+        "name": "switchTab",
+        "start_line": 27,
+        "end_line": 59,
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 30,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          34,
+          34
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 27,
+        "deepest_block": {
+          "start": 34,
+          "end": 34
+        }
+      },
+      "callers": [
+        "index.html:3320-3322 native navigation buttons; :3414 roster-help link",
+        "js/app/10-main-app.js:62 restoreActiveTab; :7660 reassessment tool navigation",
+        "js/app/00-storage-sync-patches.js:7175 openStudentPortfolio"
+      ],
+      "test_assertion_references": [
+        "tests/main-app-health.browser.cjs:12-34 removes each required node then verifies no partial mutation; all tabs/unknown fallback and exact portfolio refresh/render order"
+      ],
+      "regression_recommendation": "No repair proposed. Preserve missing-element atomicity, one active tab, tool hidden state, unknown-tab default and refresh-before-render ordering."
+    },
+    {
+      "record_id": "code_health:finding_55123223b3537cb6beee",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "removeStudent",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_confirm_stage_commit_publish_sequence",
+      "reason": "27 NLOC stages current portfolio/deletion/roster state after user confirmation and delegates persistence to the existing shared transaction. The catch prevents false UI success on save failure; independent optional refresh catches keep later UI work running. Those protections explain the complexity and should stay local.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:150-177 complete confirmed delete",
+        "js/app/10-main-app.js:158-167 fresh portfolio/deletions staged after confirmation",
+        "js/app/10-main-app.js:164-172 shared transaction handles write failure before UI publication",
+        "js/app/10-main-app.js:175-176 independent optional refresh failures"
+      ],
+      "verified_metrics": {
+        "name": "removeStudent",
+        "start_line": 150,
+        "end_line": 177,
+        "ccn": 10,
+        "cognitive": 18,
+        "nloc": 27,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          168,
+          172
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 18,
+        "nloc": 27,
+        "dispatch_share": 0.0,
+        "symbol_line": 150,
+        "deepest_block": {
+          "start": 168,
+          "end": 172
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:65-85 renderStudentList native delete listener; deletion durability/crop tests also invoke the public function"
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:18-21 native delete/reset/clear controls; :65-76 failed writes retain bytes/roster/selection/markers/counters and no flush; :85-99 successful outcomes",
+        "tests/deletion-durability.browser.cjs:111-137 failed portfolio/marker writes preserve runtime/storage/pending work and publish no dirty state",
+        "tests/crop-ownership.browser.cjs:7-13,:179-204 successful deletion invalidates crop; failed class reset retains its current owner"
+      ],
+      "regression_recommendation": "No structural split proposed. Retain decline/no-name, fresh reads after confirmation, staged tombstones, all-or-nothing save, unchanged pending work on failure, optional-view failure independence and selected-versus-other-student deletion."
+    },
+    {
+      "record_id": "code_health:finding_10e7dca06a9c039721b2",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getPreferredStudentForManagement",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_explicit_selection_priority",
+      "reason": "14 NLOC simply tries valid portfolio selection, valid tool selection, runtime selection and first-roster fallback in that order. Repeated roster membership checks validate different candidates, not duplicate work. A generic candidate iterator would hide priority and optional-DOM behavior for little saving.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:180-196 complete priority selector",
+        "js/app/10-main-app.js:182-193 portfolio selection, tool selection and runtime selection each require live roster membership",
+        "js/app/10-main-app.js:195 first-roster/empty fallback"
+      ],
+      "verified_metrics": {
+        "name": "getPreferredStudentForManagement",
+        "start_line": 180,
+        "end_line": 196,
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 14,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          182,
+          184
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 180,
+        "deepest_block": {
+          "start": 182,
+          "end": 184
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:328 manageSelectedStudent passes the result as chooser default; :198-319 chooser guards empty roster and resolves the chosen current option"
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:51-62 native chooser submission/cancellation; :137 chooser select focus",
+        "tests/rename-confirmation.browser.cjs:8-17 source/target roster changes are checked during later rename dialogs; no direct preferred-student priority matrix found"
+      ],
+      "regression_recommendation": "If changed later, directly test missing/select-empty/stale selections at each tier, different valid selections, runtime-only selection, empty roster and first-roster fallback. Preserve portfolio-over-tool-over-runtime priority."
+    },
+    {
+      "record_id": "code_health:finding_0e39cb918814ab53819c",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "renameStudent",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_case_insensitive_target_predicate",
+      "reason": "The same old-name-excluding, case-insensitive target-name predicate is spelled twice in roster.some callbacks, before and after confirmation. Reuse one local predicate reading the current student argument and captured names; keep both scans over live students at their current points. This prevents validation drift without capturing a stale roster or hiding the save boundary. No broad transaction extraction.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:333-431 complete rename lifecycle",
+        "js/app/10-main-app.js:350-365 normalized target and pre-confirmation duplicate check",
+        "js/app/10-main-app.js:375-391 live roster revalidation and portfolio-name conflict prevent stale overwrite",
+        "js/app/10-main-app.js:383-406 strict portfolio/settings staging and shared transaction",
+        "js/app/10-main-app.js:415-430 committed selection and independent optional refreshes"
+      ],
+      "verified_metrics": {
+        "name": "renameStudent",
+        "start_line": 333,
+        "end_line": 431,
+        "ccn": 24,
+        "cognitive": 36,
+        "nloc": 87,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          407,
+          411
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 24,
+        "cognitive": 36,
+        "nloc": 87,
+        "dispatch_share": 0.0,
+        "symbol_line": 333,
+        "deepest_block": {
+          "start": 407,
+          "end": 411
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:330 manageSelectedStudent after native chooser; tests/rename-confirmation.browser.cjs:88 and :169 direct workflow/retry calls"
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:8-17 held input/confirmation matrix including intervening save, source/target changes, corrupt/read-failing data, all five storage writes and prototype-like names",
+        "tests/rename-confirmation.browser.cjs:113-140 invalid/failure state equality, preserved sessions/images/settings, correct new selection and tombstones",
+        "tests/rename-confirmation.browser.cjs:164-178 one-time settings staging read failure and retry preserve unrelated settings, writing and pending work",
+        "tests/student-rename.browser.cjs:57-72 failed transaction retains roster/bytes/counters; success transfers exact writing"
+      ],
+      "regression_recommendation": "For optional predicate reuse, preserve both pre-dialog and post-dialog scans over current students, exact old-name exclusion, case-insensitive target comparison, case-only rename, prototype-like names and changes during both dialogs. Retain strict readWftRequiredStorage settings staging from repair013 and full transaction/failure matrix."
+    },
+    {
+      "record_id": "code_health:finding_e8cc8c120b2d5102edee",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "updateOcrControls",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "use_native_class_toggle_with_existing_readiness",
+      "reason": "After assigning extractBtn.disabled, pulse readiness is exactly !extractBtn.disabled && !hasText. Use classList.toggle with that force condition instead of repeating busy/image logic in an add/remove branch. This deletes control flow using an existing native DOM operation while keeping camera/upload labels, missing-element guards and disabled behavior.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2910-2938 complete control refresh",
+        "js/app/10-main-app.js:2915 missing Extract button guard",
+        "js/app/10-main-app.js:2916-2918 queue/text/busy readiness and disabled assignment",
+        "js/app/10-main-app.js:2922-2928 optional camera/upload labels",
+        "js/app/10-main-app.js:2933-2937 pulse readiness repeats the disabled-button condition"
+      ],
+      "verified_metrics": {
+        "name": "updateOcrControls",
+        "start_line": 2910,
+        "end_line": 2938,
+        "ccn": 12,
+        "cognitive": 13,
+        "nloc": 23,
+        "max_nesting": 2,
+        "bumps": 2,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2922,
+          2926
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 13,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 2910,
+        "deepest_block": {
+          "start": 2922,
+          "end": 2926
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:3297 image preparation preflight; :7780 syncUiState; syncUiState is used by input, OCR, crop, image changes and analysis cleanup"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:287-298 stopped cached OCR retry clears loading and leaves Extract usable",
+        "tests/analysis-pipeline.browser.cjs:177-187 captures text/disabled/loading/aria state of Analyze/Stop/Extract; :264 exact retained pipeline parity",
+        "tests/image-preparation.browser.cjs:46-48,:65-70 native acquisition keeps readable/safe previews and rejects invalid image"
+      ],
+      "regression_recommendation": "Direct UI state matrix with queue empty/nonempty, whitespace/text and analyzing true/false; assert disabled and pulse-ready together, exact camera/upload labels and missing optional buttons. Preserve literal button labels/icons and accessibility attributes."
+    },
+    {
+      "record_id": "code_health:finding_3e3fe17b6405143e08e9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "resetCurrentClassData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_complete_deletion_coverage",
+      "reason": "62 NLOC covers roster-only names, portfolio-only names, every saved session, failed atomic persistence, optional refreshes and available sync functions. Combining the two traversals would need a union structure and risks losing per-session tombstones needed after re-adding a student. Existing class-deletion assertions explicitly cover those distinctions.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3120-3193 complete reset sequence",
+        "js/app/10-main-app.js:3139-3157 roster-only, portfolio-only and every saved session staged as deleted",
+        "js/app/10-main-app.js:3159-3165 shared transaction before destructive UI changes",
+        "js/app/10-main-app.js:3170-3189 refresh failure isolation then bounded sync/flush availability guards"
+      ],
+      "verified_metrics": {
+        "name": "resetCurrentClassData",
+        "start_line": 3120,
+        "end_line": 3193,
+        "ccn": 19,
+        "cognitive": 32,
+        "nloc": 62,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3151,
+          3156
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 32,
+        "nloc": 62,
+        "dispatch_share": 0.0,
+        "symbol_line": 3120,
+        "deepest_block": {
+          "start": 3151,
+          "end": 3156
+        }
+      },
+      "callers": [
+        "index.html:3357 Reset Current Class native button; tests call the same public function for persistence/crop/analysis ownership cases"
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:65-76 failed reset retains storage/runtime/UI/markers/counters and never flushes; :92-100 successful reset includes portfolio-only Carol and every session then flushes once",
+        "tests/deletion-durability.browser.cjs:111-137 failed writes retain pending work; :165-177 reset covers portfolio-only sessions and existing tombstones",
+        "tests/analysis-identity.browser.cjs:86-118 and :240-246 old aborted analysis cannot damage a newer run after reset",
+        "tests/crop-ownership.browser.cjs:7-13,:179-204 successful reset invalidates stale crop while failed reset retains it"
+      ],
+      "regression_recommendation": "No loop consolidation proposed. Preserve no-archive warning, cancel, roster-only and portfolio-only names, each session tombstone, prior markers, later re-add semantics, transaction failure recovery, pending work and one flush after a successful reset."
+    },
+    {
+      "record_id": "code_health:finding_45b725ac14e6b01af784",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "updateSelectedImagePreview",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "consolidate_shared_preview_panel_class_update",
+      "reason": "The renderer has genuine duplicate panel-body lookup and opposite has-photos class operations in both queue branches. Compute panelBody once after the wrapper/list guard and apply one forced classList.toggle from queue nonemptiness, retaining branch-specific HTML/status/handler work. Keep URL validation, all escaping, move/reset bounds and final UI sync exactly; do not extract the HTML strings just to lower metrics.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3195-3238 complete safe preview renderer",
+        "js/app/10-main-app.js:3198 optional wrapper/list guard can return before syncUiState",
+        "js/app/10-main-app.js:3204-3218 image URL allowlist, attribute/text escaping and per-index button bounds",
+        "js/app/10-main-app.js:3222-3223 and 3233-3234 duplicate panel-body lookup/opposite class updates",
+        "js/app/10-main-app.js:3237 final UI synchronization"
+      ],
+      "verified_metrics": {
+        "name": "updateSelectedImagePreview",
+        "start_line": 3195,
+        "end_line": 3238,
+        "ccn": 16,
+        "cognitive": 31,
+        "nloc": 43,
+        "max_nesting": 3,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3202,
+          3219
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 31,
+        "nloc": 43,
+        "dispatch_share": 0.0,
+        "symbol_line": 3195,
+        "deepest_block": {
+          "start": 3202,
+          "end": 3219
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:3315,3326 acquisition success/failure; :3378 removal; :3399 move; :3451 crop reset; :3571 drop; :7582,7619 saved-image restore",
+        "js/app/photo-crop.js:177 current apply and :207 reset after request/owner validation"
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-html.browser.cjs:81-89 constructs unsafe/safe direct previews; :147-151 asserts no preview injection and valid restored images",
+        "tests/crop-ownership.browser.cjs:77-88 move/drag/remove/reset paths; :197-204 primary bytes/cache and stale completion invariants",
+        "tests/image-preparation.browser.cjs:65-70 safe SVG raster preview and invalid-image queue preservation"
+      ],
+      "regression_recommendation": "For shared class update, compare no/one/multiple images, first/last move controls, missing originalDataUrl reset control, both safe/unsafe URLs, escaped names, existing delegated handlers, wrapper show and panel-body has-photos classes. Preserve missing wrapper/list early return and final syncUiState contract."
+    },
+    {
+      "record_id": "code_health:finding_923f8b26e74d245f0060",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "handleSelectedImages",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "share_image_file_filter_with_drop_boundary",
+      "reason": "The MIME filter loop at3285-3288 is identical to3337-3342. One small shared image-file filtering helper can serve native camera/upload and dropped files, preserving FileList/array-like order and exact image/ prefix semantics. Keep acquisition context checks and all-or-nothing preparation. The apparent duplicate syncUiState calls must remain until the preview-missing-DOM fallback is accounted for.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3283-3330 complete acquisition lifecycle",
+        "js/app/10-main-app.js:3284-3288 image MIME filter duplicates getDroppedImageFiles",
+        "js/app/10-main-app.js:3294-3313 captures full owner/input/image context then commits prepared batch only when current",
+        "js/app/10-main-app.js:3315-3316 and 3326-3327 preview refresh followed by explicit UI refresh",
+        "js/app/10-main-app.js:3323-3328 stale failures do not replace newer queue/status"
+      ],
+      "verified_metrics": {
+        "name": "handleSelectedImages",
+        "start_line": 3283,
+        "end_line": 3330,
+        "ccn": 17,
+        "cognitive": 24,
+        "nloc": 46,
+        "max_nesting": 3,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3323,
+          3329
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 24,
+        "nloc": 46,
+        "dispatch_share": 0.0,
+        "symbol_line": 3283,
+        "deepest_block": {
+          "start": 3323,
+          "end": 3329
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:3615 desktop file drop; :8388-8396 camera and upload input change listeners"
+      ],
+      "test_assertion_references": [
+        "tests/image-preparation.browser.cjs:41-70 actual transparent/opaque/resize/SVG acquisition and invalid-image preservation",
+        "tests/analysis-identity.browser.cjs:66-77 held preparation then owner change; :227-230 Bob queue/text and prior pending result retained",
+        "tests/analysis-pipeline.browser.cjs:177-187,:264 native image/OCR/cleanup state parity; concurrent same-owner acquisitions not established by inspected assertions"
+      ],
+      "regression_recommendation": "For common file filtering, keep array/FileList-like order, null entries, empty/non-image MIME and image/* acceptance; preserve no-input no-op versus non-image visible error, all-or-nothing preparation, stale owner/writing/queue rejection and real image optimization. Keep explicit sync fallback until optional-preview DOM behavior is tested."
+    },
+    {
+      "record_id": "code_health:finding_212f64bf7e0d299b02c0",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getDroppedImageFiles",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_dimension_shared_image_file_filter",
+      "reason": "13 NLOC has one useful shared responsibility with acquisition: nullable-entry/image MIME filtering. Delegate that loop to the same small helper proposed under handleSelectedImages while keeping this event/DataTransfer boundary and [] result. Do not adapt upload inputs into fake drag events or broaden MIME acceptance. One repair across two records.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3332-3344 complete drop boundary",
+        "js/app/10-main-app.js:3334 missing event/dataTransfer/files/empty guards",
+        "js/app/10-main-app.js:3338-3341 same image MIME filter as acquisition",
+        "js/app/10-main-app.js:3600-3615 desktop drop excludes internal reordering before invoking file acquisition"
+      ],
+      "verified_metrics": {
+        "name": "getDroppedImageFiles",
+        "start_line": 3332,
+        "end_line": 3344,
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 13,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3338,
+          3342
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 3332,
+        "deepest_block": {
+          "start": 3338,
+          "end": 3342
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:3608 bindDesktopImageDrop drop callback; its result is passed to handleSelectedImages :3615"
+      ],
+      "test_assertion_references": [
+        "tests/image-preparation.browser.cjs:46-70 validates downstream acquisition with native Files; no direct DataTransfer MIME/null/empty matrix found",
+        "tests/crop-ownership.browser.cjs:81-84 validates an internal reorder custom MIME path, which must remain separate from external file drops"
+      ],
+      "regression_recommendation": "Add direct boundary checks for null event, absent/null DataTransfer, absent/empty files, actual FileList/DataTransfer files, mixed image/text files and nullable entries; preserve order and returning [] without status mutation. Internal reorder must not become an external upload."
+    },
+    {
+      "record_id": "code_health:finding_b3313ac8bbb7938fdc52",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "setActiveStudentForPortfolioReassessment",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_dom_option_roster_distinction",
+      "reason": "22 NLOC distinguishes an existing select option from roster membership before appending a reassessment-only option. Runtime selection and best-effort storage happen even without the optional select. A selector shortcut would require escaping arbitrary student names, while Array.from/some adds allocation; the explicit scan and guards are clearer.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7513-7534 complete selection helper",
+        "js/app/10-main-app.js:7514 no-name guard then best-effort selection persistence",
+        "js/app/10-main-app.js:7518-7532 existing-option scan distinguishes DOM option from roster membership before append",
+        "js/app/10-main-app.js:7660-7664 caller invokes after required grade save and before loading source text"
+      ],
+      "verified_metrics": {
+        "name": "setActiveStudentForPortfolioReassessment",
+        "start_line": 7513,
+        "end_line": 7534,
+        "ccn": 9,
+        "cognitive": 14,
+        "nloc": 22,
+        "max_nesting": 3,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7521,
+          7524
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 14,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 7513,
+        "deepest_block": {
+          "start": 7521,
+          "end": 7524
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:7661 reassessPortfolioSession; confirmation freshness is already tracked by repair028 and not a new lead here"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:103-114 failed grade preference save leaves owner/selection and current writing/pending intact",
+        "tests/preference-integrity-scenarios.js:117-128 late neatness preference failure retains loaded source and durable settings",
+        "tests/student-selection-storage.browser.cjs:34-39 selection persistence fault still preserves typed writing, saved bytes and pending owner"
+      ],
+      "regression_recommendation": "No options-query rewrite proposed. If changed later, check existing option, missing option with absent roster name, roster name without option, missing select, blank name and localStorage failure while preserving intended visible/runtime selection. Keep separate DOM/roster checks."
+    },
+    {
+      "record_id": "code_health:finding_0f615577a20e82dd9090",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "syncUiState",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_stale_result_and_control_refresh_order",
+      "reason": "27 NLOC already calls named meter/resize/OCR/neatness/genre/pulse/sync-button helpers. Its own branches close stale crop and clear stale displayed assessment while leaving pending work separately available. Another helper would merely move these safety mutations and obscure order. Keep the missing-DOM guard and busy/text control logic.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7759-7786 complete UI coordinator",
+        "js/app/10-main-app.js:7760 stale crop closes before remaining updates",
+        "js/app/10-main-app.js:7764 optional text/Analyze guard",
+        "js/app/10-main-app.js:7765-7774 stale analysis clears display only, leaving pending work separately owned",
+        "js/app/10-main-app.js:7775-7785 busy/text controls and existing shared refresh helpers"
+      ],
+      "verified_metrics": {
+        "name": "syncUiState",
+        "start_line": 7759,
+        "end_line": 7786,
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 27,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          7760,
+          7760
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 27,
+        "dispatch_share": 0.0,
+        "symbol_line": 7759,
+        "deepest_block": {
+          "start": 7760,
+          "end": 7760
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:115 roster population; :878,889,897 settings/genre handlers; :3237 preview; :3316,3327 acquisition; :3651,3701,3723 OCR; :7675,7684,7697,7703 reassessment; :8154 completion; :8305 clear and :8433 input/startup",
+        "js/app/00-storage-sync-patches.js:3511 legacy reset guarded invocation"
+      ],
+      "test_assertion_references": [
+        "tests/student-selection-storage.browser.cjs:34-39 changing student invalidates stale displayed result while typed writing/pending/saved portfolio survive even selection storage failure",
+        "tests/analysis-identity.browser.cjs:217-230 stale save/print/preparation rejected; :249-267 unchanged and interrupted analysis controls/retained work",
+        "tests/analysis-pipeline.browser.cjs:177-187,:264 full UI, pending, busy and controller parity"
+      ],
+      "regression_recommendation": "No wrapper extraction needed. Keep stale crop/result invalidation before dependent refreshes, pending result preservation, text/busy/stop states, optional DOM handling and exact visible placeholders. Do not remove callers merely because preview usually calls syncUiState; its optional-DOM guard can bypass that call."
+    },
+    {
+      "record_id": "code_health:finding_d0630a1456fd1926a3a9",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "removeStudent",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_delete_error_boundaries",
+      "reason": "Three bumps come from confirmed deletion, transaction failure handling and independent optional view refreshes. An early return or common catch that hides all refreshes would lose the distinction between persistence failure and a later optional display failure. Preserve current error-containment and staged write behavior.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:150-177 complete confirmed delete",
+        "js/app/10-main-app.js:158-167 fresh portfolio/deletions staged after confirmation",
+        "js/app/10-main-app.js:164-172 shared transaction handles write failure before UI publication",
+        "js/app/10-main-app.js:175-176 independent optional refresh failures"
+      ],
+      "verified_metrics": {
+        "name": "removeStudent",
+        "start_line": 150,
+        "end_line": 177,
+        "ccn": 10,
+        "cognitive": 18,
+        "nloc": 27,
+        "max_nesting": 3,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          168,
+          172
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 10,
+        "max_nesting": 3,
+        "symbol_line": 150,
+        "deepest_block": {
+          "start": 168,
+          "end": 172
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:65-85 renderStudentList native delete listener; deletion durability/crop tests also invoke the public function"
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:18-21 native delete/reset/clear controls; :65-76 failed writes retain bytes/roster/selection/markers/counters and no flush; :85-99 successful outcomes",
+        "tests/deletion-durability.browser.cjs:111-137 failed portfolio/marker writes preserve runtime/storage/pending work and publish no dirty state",
+        "tests/crop-ownership.browser.cjs:7-13,:179-204 successful deletion invalidates crop; failed class reset retains its current owner"
+      ],
+      "regression_recommendation": "No structural split proposed. Retain decline/no-name, fresh reads after confirmation, staged tombstones, all-or-nothing save, unchanged pending work on failure, optional-view failure independence and selected-versus-other-student deletion."
+    },
+    {
+      "record_id": "code_health:finding_43bbb77b41c8510afc27",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "renameStudent",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_four_distinct_rename_guard_regions",
+      "reason": "Four bumps correspond to asynchronous validation, portfolio conflict handling, transaction failure recovery and committed selection UI. The deepest block reports failure and exits before success UI; flattening it is not a repair. The small reusable duplicate-target predicate belongs to the separate complex-method candidate, with both live validations retained.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:333-431 complete rename lifecycle",
+        "js/app/10-main-app.js:350-365 normalized target and pre-confirmation duplicate check",
+        "js/app/10-main-app.js:375-391 live roster revalidation and portfolio-name conflict prevent stale overwrite",
+        "js/app/10-main-app.js:383-406 strict portfolio/settings staging and shared transaction",
+        "js/app/10-main-app.js:415-430 committed selection and independent optional refreshes"
+      ],
+      "verified_metrics": {
+        "name": "renameStudent",
+        "start_line": 333,
+        "end_line": 431,
+        "ccn": 24,
+        "cognitive": 36,
+        "nloc": 87,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          407,
+          411
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 24,
+        "max_nesting": 3,
+        "symbol_line": 333,
+        "deepest_block": {
+          "start": 407,
+          "end": 411
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:330 manageSelectedStudent after native chooser; tests/rename-confirmation.browser.cjs:88 and :169 direct workflow/retry calls"
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:8-17 held input/confirmation matrix including intervening save, source/target changes, corrupt/read-failing data, all five storage writes and prototype-like names",
+        "tests/rename-confirmation.browser.cjs:113-140 invalid/failure state equality, preserved sessions/images/settings, correct new selection and tombstones",
+        "tests/rename-confirmation.browser.cjs:164-178 one-time settings staging read failure and retry preserve unrelated settings, writing and pending work",
+        "tests/student-rename.browser.cjs:57-72 failed transaction retains roster/bytes/counters; success transfers exact writing"
+      ],
+      "regression_recommendation": "For optional predicate reuse, preserve both pre-dialog and post-dialog scans over current students, exact old-name exclusion, case-insensitive target comparison, case-only rename, prototype-like names and changes during both dialogs. Retain strict readWftRequiredStorage settings staging from repair013 and full transaction/failure matrix."
+    },
+    {
+      "record_id": "code_health:finding_1f5c8ffa1136e017d383",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "symbol": "resetCurrentClassData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_tombstone_and_publication_guards",
+      "reason": "The deepest session loop only records nonempty session keys, preserving session deletion history independently of student deletion. Other bumps separate durable-save failure, optional UI refresh and optional sync publication. They protect different failure modes and must not be collapsed into one generic reset callback.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3120-3193 complete reset sequence",
+        "js/app/10-main-app.js:3139-3157 roster-only, portfolio-only and every saved session staged as deleted",
+        "js/app/10-main-app.js:3159-3165 shared transaction before destructive UI changes",
+        "js/app/10-main-app.js:3170-3189 refresh failure isolation then bounded sync/flush availability guards"
+      ],
+      "verified_metrics": {
+        "name": "resetCurrentClassData",
+        "start_line": 3120,
+        "end_line": 3193,
+        "ccn": 19,
+        "cognitive": 32,
+        "nloc": 62,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3151,
+          3156
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 19,
+        "max_nesting": 3,
+        "symbol_line": 3120,
+        "deepest_block": {
+          "start": 3151,
+          "end": 3156
+        }
+      },
+      "callers": [
+        "index.html:3357 Reset Current Class native button; tests call the same public function for persistence/crop/analysis ownership cases"
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:65-76 failed reset retains storage/runtime/UI/markers/counters and never flushes; :92-100 successful reset includes portfolio-only Carol and every session then flushes once",
+        "tests/deletion-durability.browser.cjs:111-137 failed writes retain pending work; :165-177 reset covers portfolio-only sessions and existing tombstones",
+        "tests/analysis-identity.browser.cjs:86-118 and :240-246 old aborted analysis cannot damage a newer run after reset",
+        "tests/crop-ownership.browser.cjs:7-13,:179-204 successful reset invalidates stale crop while failed reset retains it"
+      ],
+      "regression_recommendation": "No loop consolidation proposed. Preserve no-archive warning, cancel, roster-only and portfolio-only names, each session tombstone, prior markers, later re-add semantics, transaction failure recovery, pending work and one flush after a successful reset."
+    },
+    {
+      "record_id": "code_health:finding_43c4f37218a3d7d78f2b",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "renameStudent",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_reviewable_rename_workflow",
+      "reason": "Much of the87 NLOC is user-facing dialog/error text plus strict staging and UI refresh. A size-only split would scatter the transaction reviewers need to see together. Reuse the repeated target predicate if adopted, but retain the fresh portfolio read, strict required settings read, all failure exits and explicit success publication.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:333-431 complete rename lifecycle",
+        "js/app/10-main-app.js:350-365 normalized target and pre-confirmation duplicate check",
+        "js/app/10-main-app.js:375-391 live roster revalidation and portfolio-name conflict prevent stale overwrite",
+        "js/app/10-main-app.js:383-406 strict portfolio/settings staging and shared transaction",
+        "js/app/10-main-app.js:415-430 committed selection and independent optional refreshes"
+      ],
+      "verified_metrics": {
+        "name": "renameStudent",
+        "start_line": 333,
+        "end_line": 431,
+        "ccn": 24,
+        "cognitive": 36,
+        "nloc": 87,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          407,
+          411
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 87,
+        "ccn": 24,
+        "dispatch_share": 0.0,
+        "symbol_line": 333,
+        "deepest_block": {
+          "start": 407,
+          "end": 411
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:330 manageSelectedStudent after native chooser; tests/rename-confirmation.browser.cjs:88 and :169 direct workflow/retry calls"
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:8-17 held input/confirmation matrix including intervening save, source/target changes, corrupt/read-failing data, all five storage writes and prototype-like names",
+        "tests/rename-confirmation.browser.cjs:113-140 invalid/failure state equality, preserved sessions/images/settings, correct new selection and tombstones",
+        "tests/rename-confirmation.browser.cjs:164-178 one-time settings staging read failure and retry preserve unrelated settings, writing and pending work",
+        "tests/student-rename.browser.cjs:57-72 failed transaction retains roster/bytes/counters; success transfers exact writing"
+      ],
+      "regression_recommendation": "For optional predicate reuse, preserve both pre-dialog and post-dialog scans over current students, exact old-name exclusion, case-insensitive target comparison, case-only rename, prototype-like names and changes during both dialogs. Retain strict readWftRequiredStorage settings staging from repair013 and full transaction/failure matrix."
+    },
+    {
+      "record_id": "code_health:finding_25cfcad7b6b9aeda0afd",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "resetCurrentClassData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_reset_scope_and_recovery_copy",
+      "reason": "62 NLOC includes the no-archive confirmation, deletion coverage explanations, failure recovery instructions and guarded one-time flush. Existing shared saveWftStudentChange already owns persistence. No extra reset helper or message extraction is justified solely by the size threshold.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3120-3193 complete reset sequence",
+        "js/app/10-main-app.js:3139-3157 roster-only, portfolio-only and every saved session staged as deleted",
+        "js/app/10-main-app.js:3159-3165 shared transaction before destructive UI changes",
+        "js/app/10-main-app.js:3170-3189 refresh failure isolation then bounded sync/flush availability guards"
+      ],
+      "verified_metrics": {
+        "name": "resetCurrentClassData",
+        "start_line": 3120,
+        "end_line": 3193,
+        "ccn": 19,
+        "cognitive": 32,
+        "nloc": 62,
+        "max_nesting": 3,
+        "bumps": 4,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3151,
+          3156
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 62,
+        "ccn": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 3120,
+        "deepest_block": {
+          "start": 3151,
+          "end": 3156
+        }
+      },
+      "callers": [
+        "index.html:3357 Reset Current Class native button; tests call the same public function for persistence/crop/analysis ownership cases"
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:65-76 failed reset retains storage/runtime/UI/markers/counters and never flushes; :92-100 successful reset includes portfolio-only Carol and every session then flushes once",
+        "tests/deletion-durability.browser.cjs:111-137 failed writes retain pending work; :165-177 reset covers portfolio-only sessions and existing tombstones",
+        "tests/analysis-identity.browser.cjs:86-118 and :240-246 old aborted analysis cannot damage a newer run after reset",
+        "tests/crop-ownership.browser.cjs:7-13,:179-204 successful reset invalidates stale crop while failed reset retains it"
+      ],
+      "regression_recommendation": "No loop consolidation proposed. Preserve no-archive warning, cancel, roster-only and portfolio-only names, each session tombstone, prior markers, later re-add semantics, transaction failure recovery, pending work and one flush after a successful reset."
+    },
+    {
+      "record_id": "code_health:finding_e2af21eb0f97cffb7a98",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "bindPreviewReorderHandlers",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "share_terminal_drag_cleanup",
+      "reason": "147 NLOC spans multiple independently registered event callbacks; measured binder CCN is only3. A real shared operation is repeated four times: clearPreviewDragClasses, remove list is-dragging and set previewDragIndex=-1. Use one local terminal cleanup callback for dragend and the three drop exits. Keep ordinary clearPreviewDragClasses separate because dragstart/hover cleanup must retain active drag state. Preserve attach-once/delegation and all photo/cache mutations.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3420-3575 complete delegated event registration",
+        "js/app/10-main-app.js:3422-3425 optional list and attach-once guards",
+        "js/app/10-main-app.js:3481-3484,3527-3531,3542-3546,3567-3569 repeat identical terminal drag cleanup",
+        "js/app/10-main-app.js:3435-3459 crop/reset/remove delegation retains photo-byte/cache synchronization",
+        "js/app/10-main-app.js:3548-3573 orientation-aware splice, cache invalidation and final publication"
+      ],
+      "verified_metrics": {
+        "name": "bindPreviewReorderHandlers",
+        "start_line": 3420,
+        "end_line": 3575,
+        "ccn": 3,
+        "cognitive": 2,
+        "nloc": 147,
+        "max_nesting": 1,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3422,
+          3422
+        ]
+      },
+      "verified_observation_details": {
+        "nloc": 147,
+        "ccn": 3,
+        "dispatch_share": 0.0,
+        "symbol_line": 3420,
+        "deepest_block": {
+          "start": 3422,
+          "end": 3422
+        }
+      },
+      "callers": [
+        "js/app/10-main-app.js:3224 updateSelectedImagePreview; attach-once guard allows repeated list.innerHTML replacement without duplicate listeners"
+      ],
+      "test_assertion_references": [
+        "tests/crop-ownership.browser.cjs:81-84 native delegated drag drop; :179-204 crop/photo/status ownership and reset controls",
+        "tests/analysis-identity.browser.cjs:138-151 native remove/retry clicks; :287-298 cached extraction promise and controls invariants; separate callback error/range matrix still needed"
+      ],
+      "regression_recommendation": "For shared drag cleanup, dispatch dragend, no-card drop, NaN/same-index drop and valid desktop/mobile before/after drops; assert previewDragIndex=-1 and all drag classes gone. Re-render twice, ensure single handler effect, preserve index fallback/MIME, photo object identity, OCR cache invalidation, first/last order and crop/reset delegation. Keep invalid-range lead separate."
+    },
+    {
+      "record_id": "code_health:finding_fe492c49b9e78bfdb45b",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "getDroppedImageFiles",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_drop_event_shape_guard",
+      "reason": "The four alternatives protect missing event, DataTransfer, files and empty collection before access. They describe a real trust/input boundary and return an empty list without side effects. Shared image filtering removes duplicated file logic, not this event validation. Optional-chaining alone would be a stylistic rewrite rather than a needed repair.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3332-3344 complete drop boundary",
+        "js/app/10-main-app.js:3334 missing event/dataTransfer/files/empty guards",
+        "js/app/10-main-app.js:3338-3341 same image MIME filter as acquisition",
+        "js/app/10-main-app.js:3600-3615 desktop drop excludes internal reordering before invoking file acquisition"
+      ],
+      "verified_metrics": {
+        "name": "getDroppedImageFiles",
+        "start_line": 3332,
+        "end_line": 3344,
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 13,
+        "max_nesting": 2,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3338,
+          3342
+        ],
+        "assigned_condition": {
+          "line": 3334,
+          "operator_count": 3,
+          "enclosing_construct": "if"
+        }
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 3332
+      },
+      "callers": [
+        "js/app/10-main-app.js:3608 bindDesktopImageDrop drop callback; its result is passed to handleSelectedImages :3615"
+      ],
+      "test_assertion_references": [
+        "tests/image-preparation.browser.cjs:46-70 validates downstream acquisition with native Files; no direct DataTransfer MIME/null/empty matrix found",
+        "tests/crop-ownership.browser.cjs:81-84 validates an internal reorder custom MIME path, which must remain separate from external file drops"
+      ],
+      "regression_recommendation": "Add direct boundary checks for null event, absent/null DataTransfer, absent/empty files, actual FileList/DataTransfer files, mixed image/text files and nullable entries; preserve order and returning [] without status mutation. Internal reorder must not become an external upload."
+    }
+  ],
+  "additional_leads": [
+    {
+      "lead_id": "review032-preview-drop-index-range",
+      "file": "js/app/10-main-app.js",
+      "function": "bindPreviewReorderHandlers/drop callback",
+      "classification": "missing_drop_index_range_validation",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "Drop validates NaN/equal indices but not source/target bounds. An out-of-range custom MIME/text index or a stale drag index after the queue changes can make items.splice(fromIndex,1)[0] undefined; the callback inserts that value, replaces selectedImages, then dereferences every item.extractedText. This can corrupt the queue and throw instead of rejecting the drop. The nearby Move helper validates bounds, so the two native reorder paths have different admission rules. Source-supported; not run or reproduced.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3533-3545 custom MIME/text fallback and only NaN/equality checks",
+        "js/app/10-main-app.js:3552-3565 splice result inserted before unchecked item dereference",
+        "js/app/10-main-app.js:3388-3391 moveSelectedImage has explicit source/target bounds",
+        "js/app/10-main-app.js:3352-3359 internal MIME can identify reorder drag"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:3224 registered on actual preview list after safe renderer"
+      ],
+      "test_assertion_references": [
+        "tests/crop-ownership.browser.cjs:81-84 uses valid custom MIME index0 into a two-photo queue; :179-204 protects stale crop invariants, not invalid drop admission"
+      ],
+      "regression_recommendation": "Dispatch actual delegated drop events with negative/too-large indices and a drag begun before queue removal/replacement; assert no exception, exact photos/order/cache bytes retained, no undefined entries and terminal drag cleanup. Preserve valid desktop/mobile before/after drops and MIME/text fallback. Keep bounds repair separate from cleanup deduplication.",
+      "id": "review032-preview-drop-index-range"
+    },
+    {
+      "lead_id": "review032-overlapping-image-preparation",
+      "file": "js/app/10-main-app.js",
+      "function": "handleSelectedImages",
+      "classification": "possible_lost_concurrent_same_owner_acquisition",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "Each acquisition captures the entire current image queue before awaiting optimization. Two overlapping camera/upload additions for unchanged owner/text can start from the same context; when one commits its prepared image, the second context becomes stale because images/primaryImage changed, so the second addition silently returns at3312. Camera/upload controls are relabeled but not disabled during preparation, and independent async change handlers are not serialized. This may lose an intended same-owner page addition. Intent and actual native behavior require a held-optimization regression; do not weaken stale-owner protection merely to append everything.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3294-3313 captured context, async preparation and final equality rejection",
+        "js/app/10-main-app.js:2910-2928 camera/upload controls remain available",
+        "js/app/10-main-app.js:8388-8396 separate async input-change acquisition handlers",
+        "js/app/00-storage-sync-patches.js:8114-8129 image queue and primary image are part of equality"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:66-77 intentionally tests owner change during a single held preparation; :227-230 protects newer owner queue/text",
+        "tests/image-preparation.browser.cjs:46-70 covers sequential public acquisition only"
+      ],
+      "regression_recommendation": "Hold two real acquisition calls at optimizeImageForOcr for the same owner/writing, release in both orders, and decide the intended acceptance/order contract for both pages. Require clear retry feedback or preservation of both intended additions while retaining current rejection on student/writing/source changes, failed-batch queue preservation and image safety.",
+      "id": "review032-overlapping-image-preparation"
+    }
+  ],
+  "summary": {
+    "assigned_records": 19,
+    "unique_functions": 12,
+    "proposed_status_counts": {
+      "reviewed_no_change": 13,
+      "confirmed_repair_candidate": 6
+    },
+    "minimal_repairs": [
+      "One local duplicate-name predicate reused by both live rename validations, without removing either scan.",
+      "Native forced pulse class toggle using already-assigned Extract readiness.",
+      "One shared preview panel-body class update, retaining safe HTML and optional DOM guards.",
+      "One image-file filter shared between direct acquisition and dropped files (two records, one repair).",
+      "One terminal drag cleanup callback reused by dragend/drop exits."
+    ],
+    "retained": "Roster persistence/confirmation boundaries, reset tombstone coverage, option-versus-roster selection checks, tab required-DOM atomicity and stale analysis invalidation remain explicit. No new score-only wrappers.",
+    "rejected_shortcut": "Do not simply delete explicit syncUiState after updateSelectedImagePreview: its optional wrapper/list guard returns before the internal sync, so those apparent duplicates have a fallback role.",
+    "duplicate_leads_omitted": "repair028 reassessment confirmation freshness already tracked; repair013 strict rename settings snapshot retained and asserted.",
+    "scanner_state": "No scanner closure, index refresh, cache/database operation or tracker mutation; parent must recheck current source/facts before adoption."
+  },
+  "limits": [
+    "No source, docs, tracker, dependency, Git, index or cache mutations; no app tests, browser/runtime exercise, live AI/Drive calls or test-pass claims. Only own scratch and UTF-8 report written.",
+    "All nineteen assignments individually reasoned. Six candidate records represent five minimal operations, not six independent defects. Structural candidates still require regression checks before editing; two behavioral leads are unconfirmed.",
+    "Metrics verified with installed read-only walker; graph import/dependent counts were copied assignment facts.",
+    "Shared AI-Library START-HERE reread; knowledge/library-rules already consulted and no curated project note available. memU history used as background only; Ponytail full active."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "individual_reasons_read": 19,
+    "independent_numeric_walker_replay_records": 19,
+    "scope": "Individually reasoned read-only dispositions accepted. Candidates need baseline/regression tests and new behavioral leads remain unconfirmed. Central immutable-production/finding-fact guards required. No graph recomputation or app-test pass claim."
+  }
+}

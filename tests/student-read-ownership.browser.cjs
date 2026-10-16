@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path');
+const localAppRoute = require('./support/local-app-route');
 const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'));
 const folderType = 'application/vnd.google-apps.folder';
 
@@ -13,10 +14,7 @@ const folderType = 'application/vnd.google-apps.folder';
             await page.route('**/*', async route => {
                 const req = route.request(), url = new URL(req.url()), query = url.searchParams.get('q') || '';
                 const reply = data => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
-                if (url.origin === 'http://127.0.0.1:8765') {
-                    const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-                    return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
-                }
+                if (url.origin === 'http://127.0.0.1:8765') return localAppRoute(route, root);
                 if (url.origin !== 'https://www.googleapis.com') return route.abort();
                 if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, body: '' });
                 requests.push({ url: url.href, method: req.method(), body: req.postData(), token: req.headers().authorization });

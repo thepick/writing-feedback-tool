@@ -1,0 +1,347 @@
+{
+  "repair_id": "repair-026",
+  "source_base": "8be13c9f0eeadb7fe9975c5e4b680f596607745e",
+  "created_at_utc": "2026-10-15T23:58:25.879352+00:00",
+  "status": "exporter_measurement_correction_verified_pending_coordinator",
+  "lead_id": "native-coverage-terminal-breakpoint-denominator",
+  "finding_held": true,
+  "summary": "Exclude only type:return points at column0 on the final empty EOF line from the effective coverage denominator. Full raw native line-set validation and every covered-line check remain enforced.",
+  "scope": {
+    "shared_tool_changed": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\do-next-05\\export-coverage.cjs",
+    "tool_before_sha256": "01d55f2e9f42950dec8e97ca42add5b6dff52c924a8da3dc1a15a1642c9f2875",
+    "tool_after_sha256": "d81306670c61191aa22db175fd988e3ecf53f0e10d3ef93ab86599615194f886",
+    "repository_90_code_hashes_and_configuration_unchanged": true,
+    "configuration_pins": {
+      "scripts/case-report-suites.json": "676040a68dcec63dfb222f5f7d419173e1a8491582b8a9c33a366c47f4b5c5b1"
+    },
+    "preload_and_summarizer_only_read_not_modified": true,
+    "raw_capture_files_unchanged": 2057,
+    "raw_records_checked": 7742,
+    "all_original_capture_source_location_hashes_unchanged": true,
+    "original_file_hashes_verified": 2073,
+    "source_mutation_or_threshold_changes": false,
+    "git_index_tracker_runtime_package_writes": false
+  },
+  "policy": {
+    "exact_condition": "source final split-on-LF line is empty AND native point.type is return AND point.lineNumber is that final line AND point.columnNumber is0. Every other native point is retained.",
+    "raw_validation": "record.executableLines must still equal the entire unfiltered native point-line set before any exclusion. Raw records and location files are never modified.",
+    "covered_guard": "Every record.coveredLines entry must belong to that record effective executable set; a covered EOF measurement fails instead of being silently discarded.",
+    "reporting": "New terminalEofExclusionSources and terminalEofExclusions metadata counts unique captured source hashes separately from existing page-context exclusions; summary method states the rule."
+  },
+  "control": {
+    "purpose": "Historical003 immutable data re-export regression only; not current coverage and not imported.",
+    "manifest": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-manifest.json",
+    "capture_files": 2057,
+    "raw_records": 7742,
+    "source_files": 8,
+    "control_root": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-repo",
+    "copied_capture_change": "Only capture.test is rebased to this owned control snapshot; every other JSON value and all source/location bytes remain exact.",
+    "index_html_commit": "c043b71cf218d220ff8607218318068b5b584995",
+    "index_html_sha256": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "receipts": {
+      "before": {
+        "exit_code": 0,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-before.log",
+        "lcov": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-before.lcov",
+        "lcov_sha256": "2c85566d8d6f9ceb9bed5ff87a08a97222f8094c941eb88ec38e7a59b1f71076",
+        "summary": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-before.lcov.summary.json",
+        "summary_sha256": "1a2909eea4397a779a219376bbcaa6efa007a29af9ae9c8daa4bb041ecd5851e",
+        "totals": {
+          "covered": 10108,
+          "executable": 11080,
+          "percent": 91.2274368231047
+        },
+        "tests": 58,
+        "contexts": 464,
+        "files": 8
+      },
+      "after": {
+        "exit_code": 0,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-after.log",
+        "lcov": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-after.lcov",
+        "lcov_sha256": "eaeca639213452ca66e88b02012f1b7c13c77e2af00c1254e6e9b9e6b25ada59",
+        "summary": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\control-after.lcov.summary.json",
+        "summary_sha256": "64c2b5a0272f1295e76c1e2eded1a8949741e54ffc2a6c41744510f66f9b90be",
+        "totals": {
+          "covered": 10108,
+          "executable": 11072,
+          "percent": 91.29335260115607
+        },
+        "tests": 58,
+        "contexts": 464,
+        "files": 8
+      }
+    },
+    "real_lf_and_crlf_sources_exercised": [
+      {
+        "file": "google-drive-migration.js",
+        "lf_count": 169,
+        "crlf_count": 169
+      },
+      {
+        "file": "js/app/dialogs.js",
+        "lf_count": 231,
+        "crlf_count": 0
+      },
+      {
+        "file": "js/app/storage-recovery.js",
+        "lf_count": 360,
+        "crlf_count": 360
+      },
+      {
+        "file": "js/app/00-storage-sync-patches.js",
+        "lf_count": 8381,
+        "crlf_count": 8381
+      },
+      {
+        "file": "js/app/portfolio-export.js",
+        "lf_count": 1092,
+        "crlf_count": 1092
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "lf_count": 8617,
+        "crlf_count": 8617
+      },
+      {
+        "file": "js/app/photo-crop.js",
+        "lf_count": 258,
+        "crlf_count": 258
+      },
+      {
+        "file": "js/app/99-lightbox.js",
+        "lf_count": 34,
+        "crlf_count": 34
+      }
+    ],
+    "full_lcov_comparison": {
+      "test_source_contexts_unchanged": 464,
+      "context_covered_counts_and_all_other_DA_values_identical": true,
+      "only_context_DA_rows_removed": 464,
+      "unique_file_line_points_removed": 8,
+      "covered_total_unchanged": 10108,
+      "all_actual_unhit_interior_returns_retained": true,
+      "all_original_reference_context_exclusions_retained": 103
+    },
+    "removed_unique_native_points": [
+      {
+        "file": "google-drive-migration.js",
+        "source_hash": "444f21014a872da31ec38886bd7d3c5f1df37120624b9cae97a85e531b670f9b",
+        "lineNumber": 169,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 170,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/dialogs.js",
+        "source_hash": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+        "lineNumber": 231,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 232,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/storage-recovery.js",
+        "source_hash": "f3f0e10775b443b055ec81d57d59b2e94e97207b2025eb22c5777d009e1a523c",
+        "lineNumber": 360,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 361,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/00-storage-sync-patches.js",
+        "source_hash": "ca88093125284d2b7cb9efb9e10f5cbcfea0728c683e70bc570be831a4af6a6f",
+        "lineNumber": 8381,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 8382,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/portfolio-export.js",
+        "source_hash": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+        "lineNumber": 1092,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 1093,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "source_hash": "be45df002484901aacc24ec3d5cdd64a1d4079872652c1b3ec7c3f861c18c5a8",
+        "lineNumber": 8617,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 8618,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/photo-crop.js",
+        "source_hash": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+        "lineNumber": 258,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 259,
+        "covered_in_any_raw_record": false
+      },
+      {
+        "file": "js/app/99-lightbox.js",
+        "source_hash": "0ca315422d1850cb7a35c5a3a9ff04440789c91eab84ffb9dc5bba4a17c6d453",
+        "lineNumber": 34,
+        "columnNumber": 0,
+        "type": "return",
+        "lcov_line": 35,
+        "covered_in_any_raw_record": false
+      }
+    ],
+    "actual_unhit_interior_return_examples_retained": [
+      {
+        "file": "google-drive-migration.js",
+        "line": 29,
+        "columnNumber": 147,
+        "type": "return",
+        "text": "async function hash(bytes) { return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), n => n.toString(16).padStart(2, '0')).join(''); }"
+      },
+      {
+        "file": "js/app/dialogs.js",
+        "line": 35,
+        "columnNumber": 19,
+        "type": "return",
+        "text": "return;"
+      },
+      {
+        "file": "js/app/dialogs.js",
+        "line": 119,
+        "columnNumber": 19,
+        "type": "return",
+        "text": "return;"
+      },
+      {
+        "file": "js/app/storage-recovery.js",
+        "line": 15,
+        "columnNumber": 67,
+        "type": "return",
+        "text": "function generateWftShortId(len) { return _wftGenShortId(len || 8); }"
+      },
+      {
+        "file": "js/app/storage-recovery.js",
+        "line": 95,
+        "columnNumber": 30,
+        "type": "return",
+        "text": "return meta.deviceLamport;"
+      },
+      {
+        "file": "js/app/00-storage-sync-patches.js",
+        "line": 640,
+        "columnNumber": 49,
+        "type": "return",
+        "text": "return settings.assessScriptQuality === true;"
+      },
+      {
+        "file": "js/app/00-storage-sync-patches.js",
+        "line": 675,
+        "columnNumber": 16,
+        "type": "return",
+        "text": "return 0.05;"
+      },
+      {
+        "file": "js/app/portfolio-export.js",
+        "line": 51,
+        "columnNumber": 87,
+        "type": "return",
+        "text": "return String(html || \"\").replace(/<[^>]+>/g, \" \").replace(/\\s+/g, \" \").trim();"
+      },
+      {
+        "file": "js/app/portfolio-export.js",
+        "line": 198,
+        "columnNumber": 131,
+        "type": "return",
+        "text": "return buildExportHtmlDocument(studentName + \" - Portfolio\", '<div class=\"empty\">No writing sessions recorded yet.</div>');"
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "line": 125,
+        "columnNumber": 15,
+        "type": "return",
+        "text": "return;"
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "line": 130,
+        "columnNumber": 15,
+        "type": "return",
+        "text": "return;"
+      },
+      {
+        "file": "js/app/photo-crop.js",
+        "line": 145,
+        "columnNumber": 15,
+        "type": "return",
+        "text": "return;"
+      },
+      {
+        "file": "js/app/99-lightbox.js",
+        "line": 6,
+        "columnNumber": 30,
+        "type": "return",
+        "text": "if (!lb || !lbImg) return;"
+      },
+      {
+        "file": "js/app/99-lightbox.js",
+        "line": 7,
+        "columnNumber": 53,
+        "type": "return",
+        "text": "if (!imgEl || !imgEl.getAttribute('src')) return;"
+      }
+    ],
+    "measurement_effect_only": "10108/11080 (91.2274%) to10108/11072 (91.2934%). No new application execution or test coverage is claimed."
+  },
+  "checks": {
+    "exporter_node_syntax_passed": true,
+    "boundary_checks": {
+      "actualExporterFilterUsed": true,
+      "results": [
+        {
+          "case": "LF terminal return",
+          "interiorReturnKept": true,
+          "onlyEmptyEofReturnExcluded": true
+        },
+        {
+          "case": "CRLF terminal return",
+          "interiorReturnKept": true,
+          "onlyEmptyEofReturnExcluded": true
+        },
+        {
+          "case": "No terminal newline",
+          "realLastLineReturnKept": true
+        },
+        {
+          "case": "Other point kind or column at EOF",
+          "otherPointsKept": true
+        },
+        {
+          "case": "Covered EOF measurement",
+          "rejectedInsteadOfDiscardingCoverage": true
+        }
+      ]
+    },
+    "boundary_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-026\\boundary-results.json",
+    "raw_immutable_hash_recheck_passed": true,
+    "source_and_context_checks_unchanged": true
+  },
+  "exact_patch": "--- export-coverage.before.cjs\n+++ export-coverage.cjs\n@@ -1,7 +1,7 @@\n const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');\n const [directory, root, output] = process.argv.slice(2), hash = s => crypto.createHash('sha256').update(s).digest('hex');\n const normalize = s => s.replaceAll('\\r\\n', '\\n');\n-const files = new Map(), tests = new Map(), exclusions = [], sourceHashes = {};\n+const files = new Map(), tests = new Map(), exclusions = [], sourceHashes = {}, terminalEofExclusions = new Map();\n for (const name of fs.readdirSync(directory).filter(name => name.endsWith('.json'))) {\n     const capture = JSON.parse(fs.readFileSync(path.join(directory, name), 'utf8'));\n     exclusions.push(...capture.excluded.map(row => ({test:capture.test, ...row})));\n@@ -16,11 +16,18 @@\n         const locations = JSON.parse(fs.readFileSync(path.join(directory, 'sources', record.source_hash+'.locations.json'), 'utf8'));\n         const denominator = [...new Set(locations.map(point => point.lineNumber+1))].sort((a,b) => a-b);\n         assert.deepEqual(record.executableLines.slice().sort((a,b) => a-b), denominator, 'Native executable lines');\n+        const sourceLines = source.split('\\n'), finalLine = sourceLines.length-1;\n+        const executable = new Set(locations.filter(point => {\n+            const terminal = sourceLines[finalLine] === '' && point.type === 'return' && point.lineNumber === finalLine && point.columnNumber === 0;\n+            if (terminal) terminalEofExclusions.set(record.source_hash, {file:record.file, source_hash:record.source_hash, line:finalLine+1, column:0, type:'return'});\n+            return !terminal;\n+        }).map(point => point.lineNumber+1));\n+        for (const line of record.coveredLines) assert(executable.has(line), 'Covered line must remain in the effective native denominator');\n         const context = test+'\\0'+record.file;\n         if (!tests.has(context)) tests.set(context, {test, file:record.file, executable:new Set(), covered:new Set()});\n         if (!files.has(record.file)) files.set(record.file, {executable:new Set(), covered:new Set()});\n         for (const result of [tests.get(context), files.get(record.file)]) {\n-            for (const line of record.executableLines) result.executable.add(line);\n+            for (const line of executable) result.executable.add(line);\n             for (const line of record.coveredLines) { assert(result.executable.has(line)); result.covered.add(line); }\n         }\n     }\n@@ -34,9 +41,10 @@\n     lcov.push('LF:'+executable.size, 'LH:'+covered.size, 'end_of_record');\n }\n const summary = {created:new Date().toISOString(), root, sourceHashes, tests:[...new Set([...tests.values()].map(row=>row.test))], exclusions,\n-    method:'Fresh native Edge V8 precise ranges mapped to native possible-breakpoint lines. Exact source hashes verified after CRLF normalization. Per-suite contexts and hit-wins line union; no branch coverage. Frozen reference contexts, source mutations and VM snippets are excluded.',\n+    method:'Fresh native Edge V8 precise ranges mapped to native possible-breakpoint lines. Exact source hashes verified after CRLF normalization. Full raw native line sets are validated; only return points at column 0 of the final empty EOF line are excluded from effective executable-line totals. Per-suite contexts and hit-wins line union; no branch coverage. Frozen reference contexts, source mutations and VM snippets are excluded.',\n+    terminalEofExclusionSources:terminalEofExclusions.size, terminalEofExclusions:[...terminalEofExclusions.values()],\n     files:Object.fromEntries([...files].map(([name, row])=>[name,{covered:row.covered.size, executable:row.executable.size, percent:100*row.covered.size/row.executable.size, uncovered:[...row.executable].filter(line=>!row.covered.has(line)).sort((a,b)=>a-b)}]))};\n const totals = Object.values(summary.files).reduce((sum,row)=>({covered:sum.covered+row.covered, executable:sum.executable+row.executable}),{covered:0,executable:0});\n summary.totals = {...totals, percent:100*totals.covered/totals.executable};\n fs.writeFileSync(output, lcov.join('\\n')+'\\n'); fs.writeFileSync(output+'.summary.json', JSON.stringify(summary,null,2)+'\\n');\n-console.log(JSON.stringify({tests:summary.tests.length, files:Object.fromEntries(Object.entries(summary.files).map(([name,{covered,executable,percent}])=>[name,{covered,executable,percent}])), totals:summary.totals, exclusions:exclusions.length}));\n+console.log(JSON.stringify({tests:summary.tests.length, files:Object.fromEntries(Object.entries(summary.files).map(([name,{covered,executable,percent}])=>[name,{covered,executable,percent}])), totals:summary.totals, exclusions:exclusions.length, terminalEofExclusionSources:terminalEofExclusions.size}));\n",
+  "limits": [
+    "No new browser run, current-source coverage capture, global coverage import, RepoWise refresh, source commit, push/merge or live-service testing. The coordinator will freeze tool hashes and use this exporter for the fresh004 capture.",
+    "Control test paths are explicitly rebased only for existing exporter context validation. Historical003 source bytes and Git003 index are copied into an owned isolated snapshot; old captures are never exported against current changed app scripts.",
+    "This corrects a measurement artifact, not application behavior or an additional executed line. Real unhit returns remain visible."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "exact_patch_and_controls_read": true,
+    "independently_verified": "Exporter before/after and both control LCOV/summary hashes; all2073 original source/location/capture hashes; all58test contexts/source hashes/reference exclusions; all8 per-file covered counts unchanged and exactly8 terminal rows removed. Five actual-filter boundary cases read. Strict90source+config pin check required before gate.",
+    "current_capture_or_ingestion_claimed": false
+  }
+}

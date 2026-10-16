@@ -1,0 +1,712 @@
+{
+  "repair_id": "repair-041",
+  "reviewed_repair": "repair-039",
+  "review_scope": "Baseline regression and source semantics only; isolated preview diff not reviewed in this stage.",
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "inspected_git_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "reviewed_at_utc": "2026-10-16T00:23:24.222985+00:00",
+  "conclusion": "The recorded native run supports both real modal-time failures on the frozen baseline. Five controls exercise the target paths and seven failed check blocks have concrete assertion evidence. Strengthen rejection-state oracles and add an unchanged legacy/no-date positive before relying on a repair. No independent app execution or repair approval is claimed.",
+  "source_hashes_normalized_lf": {
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+    "tests/support/local-app-route.js": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "tests/preference-integrity-scenarios.js": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+    "tests/analysis-identity.browser.cjs": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+    "tests/portfolio-replacement.cjs": "83e2ba84e046c2741740159204d255f1432b1c5fef5645f5f466d2a9b2f722f5",
+    "tests/portfolio-replacement.browser.cjs": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33"
+  },
+  "evidence_receipts_sha256": {
+    "work/repowise-repair-039/stage-one-regression.browser.cjs": "606415c95683d628a9fce5d7988798302b65bf2978f13efd6729fe54c09e2f76",
+    "work/repowise-repair-039/native-results.json": "5be26af1baa8df8400de252dd03e2d34db9c815a05b54c8e17ab897e489fa4da",
+    "work/repowise-repair-039/final-run-receipt.json": "babb003a92cb24fa15fad13df58abc5a13a21cbbd92dad909e6b950fa02b541f",
+    "work/repowise-repair-039/final-run.stdout.txt": "a019ec73990b8a8b5c60c94a96adb6ebaaf4beba3858add10186cf9f9fdeb6fe",
+    "work/repowise-repair-039/final-run.stderr.txt": "f7b2c9d1a914e8f9eecbf4bf91164d91b5266e9e8b0b70eccaf4dde37c3cbdba"
+  },
+  "baseline_report_read": {
+    "file": "outputs/repowise-repairs/repair-039-reassessment-regression.json",
+    "sha256_at_review": "b85f7f1338a344704f37cdfbec782626f6250db0b22db3f6b07a9853a7763b4d",
+    "note": "Worker-owned report was being compacted; conclusions are pinned primarily to unchanged script/native-results hashes, not a copied snapshot or 90-file map."
+  },
+  "native_reachability": [
+    {
+      "path": "source-delete-confirm / source-delete-cancel",
+      "assessment": "substantiated_by_source_and_native_receipt",
+      "reason": "The first page opens the public Portfolio/Reassess modal. A second page in the same browser context clicks the real Remove Entry UI, waits for its source to disappear, and the first page independently waits for findPortfolioSession to return null before accepting/canceling. Shared localStorage is real; no fake storage event, direct deletion assignment during the modal, forced click or replacement confirmation is used. The saved entry stays deleted: the failure is stale loading and displacement, not resurrection of saved history.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 112,
+          "end_line": 132,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 148,
+          "end_line": 174,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6844,
+          "end_line": 6877,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7430,
+          "end_line": 7436,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7624,
+          "end_line": 7672,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "path": "late-analysis-confirm / late-analysis-cancel",
+      "assessment": "substantiated_by_source_and_native_receipt",
+      "reason": "The public Analyze button starts analyzeWriting; only callOpenRouter responses are simulated. Its first completion is gated, then Portfolio/Reassess opens the actual modal. Releasing that provider seam allows all three real parsing/rendering/pending-persistence stages to complete. At-dialog snapshots show analyzing=true/pending absent; before acceptance analyzing=false, Bob latestAnalysisData and matching runtime/disk pending exist. Confirmation clears both pending copies and the latest result while Bob has no committed session. Navigation only changes visible panels, so it does not invalidate the captured writing context.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 70,
+          "end_line": 82,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 108,
+          "end_line": 116,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 134,
+          "end_line": 178,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 27,
+          "end_line": 59,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8075,
+          "end_line": 8088,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 8196,
+          "end_line": 8277,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7742,
+          "end_line": 7751,
+          "role": ""
+        }
+      ]
+    }
+  ],
+  "harness_assessment": {
+    "false_green_found": false,
+    "reason": "check() records assertion exceptions as failed blocks; all seven baseline failures are ERR_ASSERTION. Per-case operational errors become harnessError and the final harness-error assertion must be zero. The final aggregate demands zero failed blocks and produces the recorded exit1 with actual7/expected0. Page errors are independently checked in every case. No reassess/find/source-loading/confirmation/context/pending-persistence target is stubbed.",
+    "anchors": [
+      {
+        "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+        "start_line": 98,
+        "end_line": 105,
+        "role": ""
+      },
+      {
+        "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+        "start_line": 154,
+        "end_line": 178,
+        "role": ""
+      },
+      {
+        "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+        "start_line": 180,
+        "end_line": 196,
+        "role": ""
+      }
+    ],
+    "simulation_boundaries": [
+      "Synthetic initial class/saved/current state and native-canvas PNG fixtures.",
+      "callOpenRouter completion strings/gate only for delayed analysis; all app analysis stages remain real.",
+      "Alert collector and disabled background cloud scheduler; external-origin routes abort.",
+      "Grade-failure control alone injects a wft_settings Storage write failure, restored after observation."
+    ],
+    "measurement_caveat": "Seven means seven failing check blocks, not seven individually executed comparison operands. Some grouped blocks stop at their first failing comparison; the raw snapshots independently show grade/photo and pending/latest changes."
+  },
+  "case_evidence": [
+    {
+      "name": "ordinary-confirm",
+      "recorded_passed_check_blocks": 3,
+      "recorded_failed_check_blocks": [],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": true,
+      "analyzing_at_dialog": false,
+      "pending_at_dialog": true,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": false,
+      "persisted_pending_after_accept": false,
+      "latest_before": false,
+      "latest_after": false,
+      "owner_before": "Bob",
+      "owner_after": "Alice",
+      "grade_before": "5",
+      "grade_after": "6",
+      "image_ids_before": [
+        "bob-photo"
+      ],
+      "image_ids_after": [
+        "saved-photo"
+      ],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": null
+    },
+    {
+      "name": "ordinary-cancel",
+      "recorded_passed_check_blocks": 3,
+      "recorded_failed_check_blocks": [],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": true,
+      "analyzing_at_dialog": false,
+      "pending_at_dialog": true,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": true,
+      "persisted_pending_after_accept": true,
+      "latest_before": false,
+      "latest_after": false,
+      "owner_before": "Bob",
+      "owner_after": "Bob",
+      "grade_before": "5",
+      "grade_after": "5",
+      "image_ids_before": [
+        "bob-photo"
+      ],
+      "image_ids_after": [
+        "bob-photo"
+      ],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": null
+    },
+    {
+      "name": "source-delete-confirm",
+      "recorded_passed_check_blocks": 4,
+      "recorded_failed_check_blocks": [
+        "Deleted source must not replace current writing after held confirmation",
+        "Deleted source must not publish a stale reassessment owner",
+        "Deleted source must preserve current pending writing/photo result",
+        "Deleted source must preserve current grade and photo"
+      ],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": true,
+      "analyzing_at_dialog": false,
+      "pending_at_dialog": true,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": false,
+      "persisted_pending_after_accept": false,
+      "latest_before": false,
+      "latest_after": false,
+      "owner_before": "Bob",
+      "owner_after": "Alice",
+      "grade_before": "5",
+      "grade_after": "6",
+      "image_ids_before": [
+        "bob-photo"
+      ],
+      "image_ids_after": [
+        "saved-photo"
+      ],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": null
+    },
+    {
+      "name": "source-delete-cancel",
+      "recorded_passed_check_blocks": 5,
+      "recorded_failed_check_blocks": [],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": true,
+      "analyzing_at_dialog": false,
+      "pending_at_dialog": true,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": true,
+      "persisted_pending_after_accept": true,
+      "latest_before": false,
+      "latest_after": false,
+      "owner_before": "Bob",
+      "owner_after": "Bob",
+      "grade_before": "5",
+      "grade_after": "5",
+      "image_ids_before": [
+        "bob-photo"
+      ],
+      "image_ids_after": [
+        "bob-photo"
+      ],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": null
+    },
+    {
+      "name": "late-analysis-confirm",
+      "recorded_passed_check_blocks": 4,
+      "recorded_failed_check_blocks": [
+        "Newly completed pending result must remain durable after an older confirmation",
+        "Newly completed result must retain its runtime owner and report",
+        "Newly completed result must keep its writing/owner until teacher reviews the changed context"
+      ],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": false,
+      "analyzing_at_dialog": true,
+      "pending_at_dialog": false,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": false,
+      "persisted_pending_after_accept": false,
+      "latest_before": true,
+      "latest_after": false,
+      "owner_before": "Bob",
+      "owner_after": "Alice",
+      "grade_before": "5",
+      "grade_after": "6",
+      "image_ids_before": [],
+      "image_ids_after": [
+        "saved-photo"
+      ],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": 3
+    },
+    {
+      "name": "late-analysis-cancel",
+      "recorded_passed_check_blocks": 5,
+      "recorded_failed_check_blocks": [],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": false,
+      "analyzing_at_dialog": true,
+      "pending_at_dialog": false,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": true,
+      "persisted_pending_after_accept": true,
+      "latest_before": true,
+      "latest_after": true,
+      "owner_before": "Bob",
+      "owner_after": "Bob",
+      "grade_before": "5",
+      "grade_after": "5",
+      "image_ids_before": [],
+      "image_ids_after": [],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": 3
+    },
+    {
+      "name": "grade-save-failure",
+      "recorded_passed_check_blocks": 4,
+      "recorded_failed_check_blocks": [],
+      "harness_errors": false,
+      "page_errors": [],
+      "dialog_pending_warning": true,
+      "analyzing_at_dialog": false,
+      "pending_at_dialog": true,
+      "pending_before_accept": true,
+      "runtime_pending_matches_persisted_before_accept": true,
+      "pending_after_accept": true,
+      "persisted_pending_after_accept": true,
+      "latest_before": false,
+      "latest_after": false,
+      "owner_before": "Bob",
+      "owner_after": "Bob",
+      "grade_before": "5",
+      "grade_after": "5",
+      "image_ids_before": [
+        "bob-photo"
+      ],
+      "image_ids_after": [
+        "bob-photo"
+      ],
+      "saved_portfolio_and_deletions_unchanged_through_acceptance": true,
+      "provider_completion_count": null
+    }
+  ],
+  "controls_review": [
+    {
+      "case": "ordinary-confirm",
+      "assessment": "real_and_essential",
+      "reason": "The pending Bob result is already runtime/disk durable when the real warning opens. Accepting intentionally loads Alice text/photo/owner/grade/source and clears it. This must continue to pass; a blanket reject-when-any-pending guard would be wrong. Add an explicit disk-pending-null comparison to its existing successful-load block rather than a redundant acknowledged-pending case.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 30,
+          "end_line": 55,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 162,
+          "end_line": 169,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "case": "ordinary-cancel",
+      "assessment": "real",
+      "reason": "Cancel uses the actual modal button and deep-compares the complete captured current-work/preferences snapshot.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 148,
+          "end_line": 161,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "case": "source-delete-cancel",
+      "assessment": "real",
+      "reason": "The comparison is against the state after the genuine second-tab deletion, preserving that valid deletion while retaining current work. It correctly does not demand restoration of the deleted source.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 117,
+          "end_line": 141,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 155,
+          "end_line": 161,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "case": "late-analysis-cancel",
+      "assessment": "real",
+      "reason": "The comparison is against the newly completed real analysis state, so cancel must keep the new report and durable pending work rather than restore the older at-dialog snapshot.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 134,
+          "end_line": 141,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 155,
+          "end_line": 161,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "case": "grade-save-failure",
+      "assessment": "real_target_with_scoped_storage_fault",
+      "reason": "A real acceptance reaches the actual required grade save, whose settings write is made to fail. The current snapshot stays exact and actionable kept-writing feedback is recorded; it does not replace reassessment or the grade helper.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 142,
+          "end_line": 161,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7536,
+          "end_line": 7542,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7649,
+          "end_line": 7653,
+          "role": ""
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "start_line": 103,
+          "end_line": 128,
+          "role": ""
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "review041-rejection-state-oracle-gap",
+      "priority": "P2",
+      "classification": "regression_oracle_gap",
+      "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+      "function": "source-delete-confirm and late-analysis-confirm checks",
+      "reason": "The source-delete rejection checks omit selectedStudent/studentSelect, persisted selection/settings, and the persisted pending key. A repair that keeps text/runtime pending but switches owner or removes the durable pending copy could pass. Late-analysis checks cover both pending copies and runtime owner/latest, but omit grade/photo/preferences and rendered report preservation. Captured before/after fields already exist, so this needs only a focused preservation projection, not new fixtures.",
+      "recommendation": "For both rejected confirmations compare the existing current-work snapshot fields: writing, owner/select and stored selection, grades/override/neatness/settings, images/primary image, reassessment source, runtime+persisted pending, latest and corrected output. Keep saved portfolio/deletion comparisons relative to result.before after legitimate background work. Allow the new refusal alert/status; do not require every UI byte to remain identical.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 57,
+          "end_line": 68,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 155,
+          "end_line": 178,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7649,
+          "end_line": 7675,
+          "role": ""
+        }
+      ],
+      "required_before_repair_acceptance": true
+    },
+    {
+      "id": "review041-legacy-no-date-positive-gap",
+      "priority": "P2",
+      "classification": "missing_minimal_positive_control",
+      "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+      "function": "seed and ordinary confirmation control",
+      "reason": "Every saved source fixture has both id and createdAt. A new source-freshness comparison could mistake normalized/defaulted metadata for a changed entry or unnecessarily require a date. The public read path clones/defaults records, and the schema save path has additional date normalization, so this edge is relevant to the proposed snapshot guard.",
+      "recommendation": "Add one real unchanged-source confirm case with a stable id but no createdAt/date/timestamp (and preferably no pre-existing pending result, covering the otherwise absent clean successful load). Let real time pass while the real modal is open; assert normal text/owner/source loading and unchanged saved bytes. Use the same canonical read representation on both sides. Do not broaden this into a no-id claim: normalizePortfolioData synthesizes time-based IDs for missing IDs, an existing separate reachability limitation not reproduced here.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 36,
+          "end_line": 38,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 95,
+          "end_line": 95,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7415,
+          "end_line": 7436,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4490,
+          "end_line": 4497,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6366,
+          "end_line": 6381,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 1256,
+          "end_line": 1329,
+          "role": ""
+        }
+      ],
+      "required_before_repair_acceptance": true
+    },
+    {
+      "id": "review041-same-id-change-scope-gap",
+      "priority": "P3",
+      "classification": "conditional_coverage_gap",
+      "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+      "function": "source freshness cases",
+      "reason": "Deletion proves absence handling, not detection of changed content under the same stable session ID. Both are described in the proposed next-stage source-snapshot policy.",
+      "recommendation": "If the preview claims changed-source protection, add one same-ID changed-writing/image source negative through a genuine competing save path. Otherwise describe the verified regression scope as missing-source and newly-arrived-pending only. This is not a newly reproduced application finding.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 117,
+          "end_line": 132,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7625,
+          "end_line": 7631,
+          "role": ""
+        }
+      ],
+      "required_before_repair_acceptance": "only for a claimed same-ID changed-source guarantee"
+    }
+  ],
+  "semantic_constraints": [
+    {
+      "rule": "Validate before deliberate load mutations",
+      "reason": "Capture Bob tool context before await and validate immediately after true confirmation, before grade save, active source assignment, switchTab, tool student selection or text/image changes. Comparing after Bob intentionally becomes Alice would falsely reject the successful ordinary case. Portfolio selection alone is not the tool owner.",
+      "anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7624,
+          "end_line": 7677,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8102,
+          "end_line": 8129,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 85,
+          "end_line": 88,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "rule": "Distinguish acknowledged pending work from newly arrived work",
+      "reason": "An unchanged pre-existing pending result is explicitly warned about and may be replaced on acceptance. A result created or changed during the wait is outside that acknowledgment. Compare relevant pending content/version, not just whether any pending record exists. Cancel must always preserve the latest before-acceptance state.",
+      "anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7640,
+          "end_line": 7647,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 7742,
+          "end_line": 7751,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 134,
+          "end_line": 178,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "rule": "Use context helpers with their actual scope and side effects",
+      "reason": "captureCurrentWritingContext covers tool owner, exact writing, image payload/primary image and active source. It does not cover pending work, latest output or assessment preferences. It also synchronizes selectedStudent/localStorage and can clear a mismatched active source; it is not a pure read or a substitute for a separate pending/source freshness snapshot.",
+      "anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 8102,
+          "end_line": 8129,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6569,
+          "end_line": 6582,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 575,
+          "end_line": 605,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "rule": "Re-read the targeted source, not the whole portfolio",
+      "reason": "Validate the selected entry and relevant original/derived reassessment inputs; unrelated portfolio changes need not invalidate consent. Use matching normalization on both reads. Keep stable identity priority, original/corrected-text fallback and the later image-restore/commit guards. Do not relax missing-source replacement refusal.",
+      "anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7415,
+          "end_line": 7436,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7504,
+          "end_line": 7510,
+          "role": ""
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "start_line": 7575,
+          "end_line": 7621,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 4490,
+          "end_line": 4497,
+          "role": ""
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "start_line": 6354,
+          "end_line": 6384,
+          "role": ""
+        },
+        {
+          "file": "tests/portfolio-replacement.cjs",
+          "start_line": 53,
+          "end_line": 64,
+          "role": ""
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "start_line": 83,
+          "end_line": 94,
+          "role": ""
+        }
+      ]
+    },
+    {
+      "rule": "Do not freeze all background work or forbid every snapshot change",
+      "reason": "Background completion and second-tab deletion are legitimate. Compare the relevant current work/source to what was acknowledged, refuse the stale action and preserve the newer state. The tests correctly use result.before after those events for preservation checks; newly added feedback/status should remain permitted.",
+      "anchors": [
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 117,
+          "end_line": 141,
+          "role": ""
+        },
+        {
+          "file": "work/repowise-repair-039/stage-one-regression.browser.cjs",
+          "start_line": 155,
+          "end_line": 178,
+          "role": ""
+        }
+      ]
+    }
+  ],
+  "additional_leads": [],
+  "limits": [
+    "Read-only semantic/receipt review; no app tests were executed and no independent fresh reproduction or test-pass claim is made.",
+    "No isolated preview source/diff was inspected or approved in this stage. Original repository source is still the stated7527 commit; future preview/final changes require separate review and native validation.",
+    "No repository/Git/index/tracker/docs/runtime/cache/package writes, other-agent messages or spawned agents. Only own scratch and this UTF-8 review report were written.",
+    "No live AI/Drive/OAuth, physical interaction, source replacement/rename race, modal-time preference/photo mutation or reload recovery was exercised by this reviewer.",
+    "Only inspected-file hashes and compact case facts are included; the worker native-results receipt retains raw snapshots and the full frozen-input pin evidence."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "source_hashes_verified": true,
+    "scope": "Independent BASELINE source/reachability/contract review accepted. Requirements forwarded to sole scratch-preview editor. No preview patch approval or fresh app-test execution by reviewer. Stage039 original baseline is reproduced, not yet repaired."
+  }
+}

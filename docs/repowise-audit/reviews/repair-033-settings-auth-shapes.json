@@ -1,0 +1,1778 @@
+{
+  "repair_id": "repair-033",
+  "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+  "inspected_git_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "source_verification": {
+    "assignment_normalized_hash_matches": true,
+    "all_five_inspected_production_files_match_indexed_blobs": true,
+    "immutable_test_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
+    "production_edits": false
+  },
+  "metrics_verification": {
+    "method": "Installed unchanged RepoWise pure walk_file_complexity(path,javascript,normalized bytes),Python -B;no CLI/health/index operation.",
+    "complete_assigned_functions": 20,
+    "all_assignment_ccn_cognitive_nloc_nesting_bumps_params_dispatch_deepest_blocks_and_condition_counts_reproduced": true,
+    "not_independently_verified": [
+      "extract_method_stage_refused(exception_state) metadata copied,not rerun",
+      "scanner severity/impact/status/identity"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_b4b35b3f12976f4da859",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "migrateLegacyApiKeyStorage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_copy_before_legacy_cleanup",
+      "reason": "25NLOC/CCN9 separates optional legacy absence from required safe destination/copy verification and settings cleanup. Recovery buffers must block migration;failed copy or cleanup must keep the original credential recoverable. Existing copyLegacyApiKey helper already isolates destination policy;another wrapper obscures the two-store boundary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:442",
+        "js/app/00-storage-sync-patches.js:443",
+        "js/app/00-storage-sync-patches.js:455",
+        "js/app/00-storage-sync-patches.js:456",
+        "js/app/00-storage-sync-patches.js:457",
+        "js/app/00-storage-sync-patches.js:458",
+        "js/app/00-storage-sync-patches.js:461",
+        "js/app/00-storage-sync-patches.js:463",
+        "js/app/00-storage-sync-patches.js:464",
+        "js/app/00-storage-sync-patches.js:465",
+        "js/app/00-storage-sync-patches.js:466"
+      ],
+      "verified_metrics": {
+        "name": "migrateLegacyApiKeyStorage",
+        "start_line": 442,
+        "end_line": 467,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 15,
+        "nloc": 25,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          455,
+          466
+        ],
+        "complex_conditions": [
+          {
+            "line": 457,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 15,
+        "nloc": 25,
+        "dispatch_share": 0.0,
+        "symbol_line": 442,
+        "deepest_block": {
+          "start": 455,
+          "end": 466
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:481 getStoredApiKey; later callers use strict migration error rather than silently losing legacy credential"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:350-378 session read/copy/settings read/cleanup failures retain only legacy copy, retry recovers, conflicting active key preserved, safe copy/empty key and metadata cases",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:495-502 credential migration cannot erase pending settings recovery before image"
+      ],
+      "regression_recommendation": "Preserve copy-then-delete ordering, conflicting active key/only-copy protection, recovery-before-image gates and normalized errors. Existing native migration-failure/destination/retained-key tests are appropriate;no new storage wrapper."
+    },
+    {
+      "record_id": "code_health:finding_b8929aea0f5d35e99e78",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "copyLegacyApiKey",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_short_destination_verification",
+      "reason": "11NLOC/CCN10 protects a different active session key,requires an alternate local safe copy before removing legacy,then rereads both destinations. The boolean count reflects real only-copy safety and required readbacks;no storage read is redundant across writes/failures.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:443",
+        "js/app/00-storage-sync-patches.js:444",
+        "js/app/00-storage-sync-patches.js:445",
+        "js/app/00-storage-sync-patches.js:447",
+        "js/app/00-storage-sync-patches.js:448",
+        "js/app/00-storage-sync-patches.js:449",
+        "js/app/00-storage-sync-patches.js:451",
+        "js/app/00-storage-sync-patches.js:452",
+        "js/app/00-storage-sync-patches.js:453"
+      ],
+      "verified_metrics": {
+        "name": "copyLegacyApiKey",
+        "start_line": 443,
+        "end_line": 454,
+        "ccn": 10,
+        "max_nesting": 2,
+        "cognitive": 10,
+        "nloc": 11,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          445,
+          450
+        ],
+        "complex_conditions": [
+          {
+            "line": 445,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 447,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 10,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 443,
+        "deepest_block": {
+          "start": 445,
+          "end": 450
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:463 migrateLegacyApiKeyStorage calls before deleting settings.apiKey at464-465"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:370-378 none/same/different/different-with-safe-copy/empty destination matrix;active session key never replaced when different",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:351-368 failed copy keeps source and retry removes only after destination exists"
+      ],
+      "regression_recommendation": "Keep reread verification of session/local destinations and different-session-key behavior. Existing destination matrix/read-write failure/retry cases protect this;never remove validation based on low line count."
+    },
+    {
+      "record_id": "code_health:finding_9b4aa07ab42ab6350d8c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "persistApiKeyStorageFromInput",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_credential_transaction_and_recovery",
+      "reason": "46NLOC/CCN18 is one credential change protocol:four store before images,private recovery,required shape,session/local/remember writes,readback,legacy cleanup,then UI/runtime commit. A rollback only runs with complete captured values. Moving these phases into helpers risks exception-state ownership;the scanner extraction-refusal metadata agrees with this source complexity but is not used as a blanket dismissal.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:491",
+        "js/app/00-storage-sync-patches.js:498",
+        "js/app/00-storage-sync-patches.js:500",
+        "js/app/00-storage-sync-patches.js:501",
+        "js/app/00-storage-sync-patches.js:505",
+        "js/app/00-storage-sync-patches.js:511",
+        "js/app/00-storage-sync-patches.js:513",
+        "js/app/00-storage-sync-patches.js:516",
+        "js/app/00-storage-sync-patches.js:517",
+        "js/app/00-storage-sync-patches.js:519",
+        "js/app/00-storage-sync-patches.js:521",
+        "js/app/00-storage-sync-patches.js:522",
+        "js/app/00-storage-sync-patches.js:523",
+        "js/app/00-storage-sync-patches.js:527",
+        "js/app/00-storage-sync-patches.js:530",
+        "js/app/00-storage-sync-patches.js:531",
+        "js/app/00-storage-sync-patches.js:533"
+      ],
+      "verified_metrics": {
+        "name": "persistApiKeyStorageFromInput",
+        "start_line": 491,
+        "end_line": 536,
+        "ccn": 18,
+        "max_nesting": 3,
+        "cognitive": 30,
+        "nloc": 46,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          501,
+          504
+        ],
+        "complex_conditions": [
+          {
+            "line": 500,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 519,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 531,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 30,
+        "nloc": 46,
+        "dispatch_share": 0.0,
+        "symbol_line": 491,
+        "deepest_block": {
+          "start": 501,
+          "end": 504
+        },
+        "extract_method_stage_refused": [
+          "exception_state"
+        ]
+      },
+      "callers": [
+        "00-storage-sync-patches.js:438 saveWftApiKeyFromForm; native API input/remember handlers route through this required-save wrapper"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:387-414 remember/session-only/forget/no-key modes plus get/set/remove failures preserve all original stores/form and retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:424-467 failed legacy cleanup restores before images;failed rollback blocks runtime/recovery secrets are not exported;486-502 verification read failure and settings recovery guard"
+      ],
+      "regression_recommendation": "Retain all four before images, required settings shape, write/readback, rollback completeness/recovery, committed UI/runtime state and settings-recovery guard. Existing key-mode/failure/cleanup/recovery/readback native matrix should stay. extract_method_stage_refused(exception_state) copied as observation, not a prohibition or a reason to skip review."
+    },
+    {
+      "record_id": "code_health:finding_bce2bd1af6dae6674398",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "saveSettingsToLocalStorage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "shared_form_candidate_overlap_and_required_write_policy",
+      "reason": "S1 covers the copied form overlay. Remaining42NLOC/CCN16 handles null-prototype clone,own override metadata without incoming apiKey,required preflight/write rollback,dirty scheduling/safe mode and sanitized return. Those different persistence/publication duties fit one save boundary and must not be merged with the soft snapshot catch.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:550",
+        "js/app/00-storage-sync-patches.js:551",
+        "js/app/00-storage-sync-patches.js:552",
+        "js/app/00-storage-sync-patches.js:553",
+        "js/app/00-storage-sync-patches.js:555",
+        "js/app/00-storage-sync-patches.js:572",
+        "js/app/00-storage-sync-patches.js:575",
+        "js/app/00-storage-sync-patches.js:578",
+        "js/app/00-storage-sync-patches.js:580",
+        "js/app/00-storage-sync-patches.js:583",
+        "js/app/00-storage-sync-patches.js:586",
+        "js/app/00-storage-sync-patches.js:589"
+      ],
+      "verified_metrics": {
+        "name": "saveSettingsToLocalStorage",
+        "start_line": 550,
+        "end_line": 591,
+        "ccn": 16,
+        "max_nesting": 2,
+        "cognitive": 19,
+        "nloc": 42,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          572,
+          582
+        ],
+        "complex_conditions": [
+          {
+            "line": 553,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 573,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 576,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 583,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 586,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 19,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 550,
+        "deepest_block": {
+          "start": 572,
+          "end": 582
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:594 saveWftPreferencesFromForm;1250 getOrCreateStudentId;2371 roster identity initialization;5989 page-hide with suppression restored in finally",
+        "10-main-app.js:884 grade changes;7548 reassessment neatness"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:58-99 required save/preflight failure restores form, exact old bytes, no dirty scheduling and page-hide suppression",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:151-156 helper input/unknown own metadata not mutated;521-531 unrelated writer keeps retained legacy key while snapshot excludes it",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31 required saved-data failures preserve storage/UI/counters and no outgoing writes"
+      ],
+      "regression_recommendation": "S1 reuses form helper only;leave clone/override credential exclusion, required preflight/write catch with full form rollback, dirty/safe-mode routes and sanitized return untouched. Run native preference/integrity/retained-key/held settings sync cases."
+    },
+    {
+      "record_id": "code_health:finding_2d394d4a42f8699016a8",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "updateSettingsFromForm",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "shared_form_overlay_candidate_S1",
+      "reason": "The existing14NLOC updateSettingsFromForm helper558-570 is copied line-for-line in getLocalSettingsSnapshot4464-4476. Reuse this helper with a settings parameter in both callers,keeping each caller exception policy and roster handling. This centralizes actual preference field/lookup/fallback rules without a table-driven form abstraction.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:558",
+        "js/app/00-storage-sync-patches.js:559",
+        "js/app/00-storage-sync-patches.js:563",
+        "js/app/00-storage-sync-patches.js:566",
+        "js/app/00-storage-sync-patches.js:568",
+        "js/app/00-storage-sync-patches.js:570",
+        "js/app/00-storage-sync-patches.js:575",
+        "js/app/00-storage-sync-patches.js:4464",
+        "js/app/00-storage-sync-patches.js:4469",
+        "js/app/00-storage-sync-patches.js:4472",
+        "js/app/00-storage-sync-patches.js:4476"
+      ],
+      "verified_metrics": {
+        "name": "updateSettingsFromForm",
+        "start_line": 558,
+        "end_line": 571,
+        "ccn": 10,
+        "max_nesting": 1,
+        "cognitive": 9,
+        "nloc": 14,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          563,
+          563
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 558,
+        "deepest_block": {
+          "start": 563,
+          "end": 563
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:575 saveSettingsToLocalStorage inside required-save catch; identical form-read sequence4464-4476 in getLocalSettingsSnapshot"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:58-99 complete form restoration on required failure;129-149 custom/default/student-grade settings save policy",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:521-530 ordinary save preserves metadata and retained legacy key;forms read indirectly through real writer",
+        "Scope limit: no cited missing-control/throwing-getter matrix comparing writer and soft snapshot;S1 requires this parity"
+      ],
+      "regression_recommendation": "S1: promote existing nested updateSettingsFromForm to a small file-local/global-style helper taking settings, reuse in both writer575 and snapshot4464-4476. Preserve field order, repeated/optional lookups, no storage writes and each caller own catch policy. Compare absent controls/optional functions and thrown getters:writer rejects/restores form,snapshot keeps partial soft overlay. Update any source-extraction fixtures that acquire an external helper dependency."
+    },
+    {
+      "record_id": "code_health:finding_086b03609864337ff67d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "getWeightDescriptionText",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_weight_description_policy",
+      "reason": "15NLOC/CCN10 selects optional saved/live profile and neatness state,scales six ordered non-neatness weights,skips missing categories and optionally appends Neatness. Existing formatPercentFromWeight/getNeatnessWeight helpers already own reusable math. Another category/description wrapper would distribute a small readable policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:687",
+        "js/app/00-storage-sync-patches.js:688",
+        "js/app/00-storage-sync-patches.js:689",
+        "js/app/00-storage-sync-patches.js:690",
+        "js/app/00-storage-sync-patches.js:691",
+        "js/app/00-storage-sync-patches.js:693",
+        "js/app/00-storage-sync-patches.js:695",
+        "js/app/00-storage-sync-patches.js:697",
+        "js/app/00-storage-sync-patches.js:699",
+        "js/app/00-storage-sync-patches.js:700"
+      ],
+      "verified_metrics": {
+        "name": "getWeightDescriptionText",
+        "start_line": 687,
+        "end_line": 701,
+        "ccn": 10,
+        "max_nesting": 2,
+        "cognitive": 10,
+        "nloc": 15,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          695,
+          698
+        ],
+        "complex_conditions": [
+          {
+            "line": 699,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 10,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 687,
+        "deepest_block": {
+          "start": 695,
+          "end": 698
+        }
+      },
+      "callers": [
+        "10-main-app.js:1120 updateScoreDisplay supplies saved assessmentPolicy profile/neatness state or live fallback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/analysis-policy.browser.cjs:246-260 assessment policy persists into pending/saved data;grade4-photo visible weighting explicitly contains Neatness(10%)",
+        "Scope limit: this is one visible description assertion, not an exhaustive category ordering/weight/fallback matrix"
+      ],
+      "regression_recommendation": "Retain optional saved profile/neatness overrides, stable category order, scale/rounding and missing category skips. Direct override/default/neatness/missing-weight matrix only if changed;no general format-description abstraction."
+    },
+    {
+      "record_id": "code_health:finding_f0ffb4d38fa5294004d9",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "completeWftGoogleSignInWithAccessToken",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_auth_publication_boundary",
+      "reason": "41NLOC/CCN12 validates token/TTL before operation increment,distinguishes failed session persistence from failed old-token cleanup,then publishes current connection and immediate user UI while profile fetch proceeds. Delayed onSuccess rechecks operation so stale completions cannot run. Each optional persistence catch protects a separate non-authoritative hint.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3256",
+        "js/app/00-storage-sync-patches.js:3257",
+        "js/app/00-storage-sync-patches.js:3261",
+        "js/app/00-storage-sync-patches.js:3262",
+        "js/app/00-storage-sync-patches.js:3263",
+        "js/app/00-storage-sync-patches.js:3264",
+        "js/app/00-storage-sync-patches.js:3266",
+        "js/app/00-storage-sync-patches.js:3270",
+        "js/app/00-storage-sync-patches.js:3277",
+        "js/app/00-storage-sync-patches.js:3283",
+        "js/app/00-storage-sync-patches.js:3293",
+        "js/app/00-storage-sync-patches.js:3295",
+        "js/app/00-storage-sync-patches.js:3297"
+      ],
+      "verified_metrics": {
+        "name": "completeWftGoogleSignInWithAccessToken",
+        "start_line": 3255,
+        "end_line": 3303,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 15,
+        "nloc": 41,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3268,
+          3268
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 15,
+        "nloc": 41,
+        "dispatch_share": 0.0,
+        "symbol_line": 3255,
+        "deepest_block": {
+          "start": 3268,
+          "end": 3268
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3250 owned migration completion forwards token,TTL,scope,source,callback; queued callback rechecks operation3297"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:334-336 supported/invalid TTL completion matrix;371-381 session save failure remains connected with truthful warning, read failure fails closed and revoke failure does not defeat local signout",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:411-462 profile/migration/popup/queued/signout callbacks cannot publish after newer operation, including away-and-back same token"
+      ],
+      "regression_recommendation": "Preserve strict token/TTL validation, operation increment, session-save/old-token-cleanup warning distinction, immediate connection publication, profile fetch and owned delayed callback. Native TTL/persistence/ownership/popup scenarios are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_dc5417fc9d643005862c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "restoreGoogleStateFromStorage",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "unreachable_legacy_restore_candidate_S2",
+      "reason": "The entire second success route3389-3399 depends on migrateOldWftTokenToSessionStorage,which unconditionally returns false at6155-6158 to avoid relabelling old-client tokens. Search found this sole production call and no test reference. Delete the unreachable route(and orphan stub if final reference check agrees);keep valid session restore and legacy cleanup/reconnect warning.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3377",
+        "js/app/00-storage-sync-patches.js:3379",
+        "js/app/00-storage-sync-patches.js:3385",
+        "js/app/00-storage-sync-patches.js:3389",
+        "js/app/00-storage-sync-patches.js:3390",
+        "js/app/00-storage-sync-patches.js:3397",
+        "js/app/00-storage-sync-patches.js:3398",
+        "js/app/00-storage-sync-patches.js:3401",
+        "js/app/00-storage-sync-patches.js:3407",
+        "js/app/00-storage-sync-patches.js:3411",
+        "js/app/00-storage-sync-patches.js:6155",
+        "js/app/00-storage-sync-patches.js:6156",
+        "js/app/00-storage-sync-patches.js:6157"
+      ],
+      "verified_metrics": {
+        "name": "restoreGoogleStateFromStorage",
+        "start_line": 3376,
+        "end_line": 3415,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 10,
+        "nloc": 38,
+        "bumps": 2,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3379,
+          3384
+        ],
+        "complex_conditions": [
+          {
+            "line": 3377,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3411,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 38,
+        "dispatch_share": 0.0,
+        "symbol_line": 3376,
+        "deepest_block": {
+          "start": 3379,
+          "end": 3384
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3601 restoreGoogleSessionOnce;10-main-app.js:8442 DOMContentLoaded and8475 persisted pageshow"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:323-330 restore helper rejects malformed/invalid token/expiry and accepts valid session;392-406 actual reload restores unremoved valid token with warning/retry",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/script-loading.browser.cjs:70-74 actual saved/empty startup plus pageshow remain signed out with writing unchanged",
+        "Scope limit: token-helper/reload assertions do not directly cover every full-restorer branch;S2 should explicitly verify legacy-local-only token rejection"
+      ],
+      "regression_recommendation": "S2:delete unreachable3389-3399 migration-success block because migrateOldWftTokenToSessionStorage6155-6158 unconditionally returns false. Its only production reference is3389 and no tests reference it;remove resulting orphan stub if full-ref check still agrees. Keep valid session restore and failed/legacy token cleanup/signout/expired marker warning. Add full-restorer valid-session vs legacy-local-only/invalid/missing tests plus native reload/pageshow/ownership checks;never enable old-client token migration."
+    },
+    {
+      "record_id": "code_health:finding_d3be814e187dbe8a1464",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "isPreviousDraftCompatible",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_draft_identity_guard",
+      "reason": "8NLOC/CCN9 is a flat compatibility predicate for previous draft existence,exact text,student and two genre controls with legacy defaults. Matching text alone could overwrite another owner/genre draft;the explicit early returns make recovery requirements visible. No shared equality helper is needed for one captured draft comparison.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3466",
+        "js/app/00-storage-sync-patches.js:3467",
+        "js/app/00-storage-sync-patches.js:3468",
+        "js/app/00-storage-sync-patches.js:3469",
+        "js/app/00-storage-sync-patches.js:3470",
+        "js/app/00-storage-sync-patches.js:3471",
+        "js/app/00-storage-sync-patches.js:3426",
+        "js/app/00-storage-sync-patches.js:3431"
+      ],
+      "verified_metrics": {
+        "name": "isPreviousDraftCompatible",
+        "start_line": 3466,
+        "end_line": 3473,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 8,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3467,
+          3467
+        ],
+        "complex_conditions": [
+          {
+            "line": 3469,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3470,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3471,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 3466,
+        "deepest_block": {
+          "start": 3467,
+          "end": 3467
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3426 saveWftOAuthDraftBeforeRedirect checks previous captured draft before writing3431"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:108-125 actual draft preservation keeps exact text/student/genre and refuses to overwrite previous or unreadable draft;102-104 same text with different current owner/genre stays occupied",
+        "Scope limit: occupancy assertions also exercise restore path;preservation-specific equality/default branch matrix is incomplete"
+      ],
+      "regression_recommendation": "Retain exact text/student/both-genre match and empty/default normalization. If changed,assert preservation refuses differing owner/genre/text and permits identical old supported defaults;existing native occupied/unreadable draft protections remain."
+    },
+    {
+      "record_id": "code_health:finding_31894d13c79e9cd5f5de",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "requestDriveAccess",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_popup_redirect_auth_orchestration",
+      "reason": "47NLOC/CCN11 starts an auth-operation owner,captures optional sync intent,tries GIS with separately owned success/error callbacks,then constructs redirect only after required work preservation. Popup failure and redirect preservation have different consequences;one generic callback/redirect helper would mostly move this policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3524",
+        "js/app/00-storage-sync-patches.js:3525",
+        "js/app/00-storage-sync-patches.js:3526",
+        "js/app/00-storage-sync-patches.js:3530",
+        "js/app/00-storage-sync-patches.js:3534",
+        "js/app/00-storage-sync-patches.js:3535",
+        "js/app/00-storage-sync-patches.js:3541",
+        "js/app/00-storage-sync-patches.js:3542",
+        "js/app/00-storage-sync-patches.js:3550",
+        "js/app/00-storage-sync-patches.js:3551",
+        "js/app/00-storage-sync-patches.js:3556",
+        "js/app/00-storage-sync-patches.js:3558",
+        "js/app/00-storage-sync-patches.js:3565",
+        "js/app/00-storage-sync-patches.js:3574",
+        "js/app/00-storage-sync-patches.js:3575"
+      ],
+      "verified_metrics": {
+        "name": "requestDriveAccess",
+        "start_line": 3524,
+        "end_line": 3576,
+        "ccn": 11,
+        "max_nesting": 3,
+        "cognitive": 19,
+        "nloc": 47,
+        "bumps": 3,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3531,
+          3531
+        ],
+        "complex_conditions": [
+          {
+            "line": 3534,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 19,
+        "nloc": 47,
+        "dispatch_share": 0.0,
+        "symbol_line": 3524,
+        "deepest_block": {
+          "start": 3531,
+          "end": 3531
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3583 handleGoogleSignIn;7891 manualSaveToDrive retry after owned access callback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:230-252 native popup success/cancel/error and redirect/popup-throws-save-failure:callback count,current text,required draft save and intercepted navigation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:411-462 stale popup/migration/queued callbacks cannot change current connection"
+      ],
+      "regression_recommendation": "Preserve operation capture before async callbacks, popup success/error ownership, prompt/scope, redirect URI construction and required draft/photos preservation before navigation. Existing native intercepted popup/redirect and stale-operation matrix is suitable;no generic auth callback wrapper."
+    },
+    {
+      "record_id": "code_health:finding_8c30481081ed05ba172a",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "showSignedInState",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_small_signed_in_dom_projection",
+      "reason": "21NLOC/CCN14 largely counts fallback name/email/photo choices and independent optional DOM nodes. The function changes one header identity presentation,sets textContent,shows/hides avatar and status. Small per-field wrappers or compressed ternaries would lower counts while obscuring explicit missing-node/fallback behavior.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3642",
+        "js/app/00-storage-sync-patches.js:3645",
+        "js/app/00-storage-sync-patches.js:3646",
+        "js/app/00-storage-sync-patches.js:3647",
+        "js/app/00-storage-sync-patches.js:3648",
+        "js/app/00-storage-sync-patches.js:3649",
+        "js/app/00-storage-sync-patches.js:3651",
+        "js/app/00-storage-sync-patches.js:3653",
+        "js/app/00-storage-sync-patches.js:3654",
+        "js/app/00-storage-sync-patches.js:3658",
+        "js/app/00-storage-sync-patches.js:3661"
+      ],
+      "verified_metrics": {
+        "name": "showSignedInState",
+        "start_line": 3642,
+        "end_line": 3662,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 14,
+        "nloc": 21,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3654,
+          3659
+        ],
+        "complex_conditions": [
+          {
+            "line": 3647,
+            "operator_count": 2,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 3648,
+            "operator_count": 2,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 14,
+        "nloc": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 3642,
+        "deepest_block": {
+          "start": 3654,
+          "end": 3659
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3284 immediate token feedback;3381/3383 session restore;3393/3395 unreachable migration route;3615 owned profile success;3633/3636 owned cached/generic profile fallback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:230-244 popup connected/error UI and retained writing;411-462 stale profile success/error cannot replace current owned sign-in",
+        "Scope limit: no cited exhaustive absent-DOM/name/email/photo fallback matrix"
+      ],
+      "regression_recommendation": "Keep optional header nodes,textContent rather than HTML, name/email/photo fallback, avatar hide/show, duplicate-maintenance notice and connecting status. Existing profile-ownership/native popup evidence is partial;missing DOM/name/email/photo cases only if changed."
+    },
+    {
+      "record_id": "code_health:finding_68f7ee0e0b913e2c6dca",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "parseWftGoogleApiErrorText",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_tolerant_google_error_parser",
+      "reason": "22NLOC/CCN12 initializes a usable raw-text error,tries JSON and then reads optional Google code/message/first reason or status fallback. Malformed nested data must not discard already-parsed message/raw fields. One function already centralizes XHR/fetch error interpretation;no repeated parser to merge.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3804",
+        "js/app/00-storage-sync-patches.js:3806",
+        "js/app/00-storage-sync-patches.js:3813",
+        "js/app/00-storage-sync-patches.js:3814",
+        "js/app/00-storage-sync-patches.js:3815",
+        "js/app/00-storage-sync-patches.js:3816",
+        "js/app/00-storage-sync-patches.js:3817",
+        "js/app/00-storage-sync-patches.js:3819",
+        "js/app/00-storage-sync-patches.js:3820",
+        "js/app/00-storage-sync-patches.js:3821",
+        "js/app/00-storage-sync-patches.js:3825",
+        "js/app/00-storage-sync-patches.js:3827"
+      ],
+      "verified_metrics": {
+        "name": "parseWftGoogleApiErrorText",
+        "start_line": 3804,
+        "end_line": 3828,
+        "ccn": 12,
+        "max_nesting": 3,
+        "cognitive": 16,
+        "nloc": 22,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3819,
+          3823
+        ],
+        "complex_conditions": [
+          {
+            "line": 3815,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3819,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 16,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 3804,
+        "deepest_block": {
+          "start": 3819,
+          "end": 3823
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2462 createWftSubfolder XHR error;3871 wftDriveFetch response.text error"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:35-46 native fetch/XHR classify401/403/quota/rate/404 and retain status/reason;154-163 fixtures include malformed text and reason arrays",
+        "Scope limit: error.status-string fallback and every malformed nested shape not separately asserted"
+      ],
+      "regression_recommendation": "Retain malformed-text fallback, original raw text, numeric code, message and first reason/status fallback precedence. Existing native fetch/XHR/malformed cases are partial;add exact parser matrix if changed instead of adding a single-use parse wrapper."
+    },
+    {
+      "record_id": "code_health:finding_f947131d17a6a38f1ee7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "wftDriveFetch",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "redundant_url_prefix_candidate_S3",
+      "reason": "The /upload/ prefix comparison3846 is subsumed by exact broader prefix https://www.googleapis.com/ at3845. For ordinary URL strings,the conjunction rejects exactly the same URLs as the first comparison alone. Delete only this redundant condition;keep all transport/auth/current-attempt validation and response classification intact.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3841",
+        "js/app/00-storage-sync-patches.js:3845",
+        "js/app/00-storage-sync-patches.js:3846",
+        "js/app/00-storage-sync-patches.js:3847",
+        "js/app/00-storage-sync-patches.js:3850",
+        "js/app/00-storage-sync-patches.js:3855",
+        "js/app/00-storage-sync-patches.js:3864",
+        "js/app/00-storage-sync-patches.js:3878",
+        "js/app/00-storage-sync-patches.js:3880",
+        "js/app/00-storage-sync-patches.js:3886"
+      ],
+      "verified_metrics": {
+        "name": "wftDriveFetch",
+        "start_line": 3841,
+        "end_line": 3899,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 10,
+        "nloc": 50,
+        "bumps": 1,
+        "param_count": 4,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3865,
+          3865
+        ],
+        "complex_conditions": [
+          {
+            "line": 3845,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 50,
+        "dispatch_share": 0.0,
+        "symbol_line": 3841,
+        "deepest_block": {
+          "start": 3865,
+          "end": 3865
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:2492 cache validation;2542 discovery;2567 JSON multipart;4019 summaries;4174 saveFileToDrive supplies connection/current-attempt;4241/4255 folder search/create;5008/5033 lookup/download;6164/6170 legacy JSON reads",
+        "10-main-app.js:3035 duplicate lookup,3048 move;portfolio-export.js:563 download,861/869 folder search/create,914 archive ZIP upload; callers provide connection guards where needed"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:35-46 blocked URL/offline/expired emit no request;status/reason/log redaction and native XHR errors;154-176 intercepted error/malformed/upload cases",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-upload-ownership.browser.cjs:81-109 late errors/accepted responses cannot steal retry/current-account state;tests/archive-connection.browser.cjs:76-85 intended auth, stale-upload rejection and retained class",
+        "S3 needs exact allow/reject parity for both permitted path families plus deceptive/relative URLs"
+      ],
+      "regression_recommendation": "S3:delete only redundant second prefix comparison3846:every https://www.googleapis.com/upload/ URL already starts with https://www.googleapis.com/. Keep exact first absolute-prefix/trailing-slash policy,offline/expiry rejection, Authorization, connection assertion,current-request error gate and status/blocked-state handling. Prove allowed drive/upload paths and rejected other/deceptive/relative paths parity,then native transport/archive/late-ownership suites."
+    },
+    {
+      "record_id": "code_health:finding_cb937b1294bc411abc3f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "getLocalSettingsSnapshot",
+      "proposed_status": "reviewed_no_change",
+      "classification": "shared_form_candidate_overlap_and_soft_snapshot_contract",
+      "reason": "S1 reuses the duplicated form overlay4464-4476. The strict settings preflight/read outside try must still throw,while optional form lookup failures retain partial saved/form values and perform roster fallback before credential deletion. Sharing the whole writer would add writes or change this error contract.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4459",
+        "js/app/00-storage-sync-patches.js:4460",
+        "js/app/00-storage-sync-patches.js:4461",
+        "js/app/00-storage-sync-patches.js:4463",
+        "js/app/00-storage-sync-patches.js:4464",
+        "js/app/00-storage-sync-patches.js:4476",
+        "js/app/00-storage-sync-patches.js:4477",
+        "js/app/00-storage-sync-patches.js:4480",
+        "js/app/00-storage-sync-patches.js:4481",
+        "js/app/00-storage-sync-patches.js:4486"
+      ],
+      "verified_metrics": {
+        "name": "getLocalSettingsSnapshot",
+        "start_line": 4459,
+        "end_line": 4488,
+        "ccn": 16,
+        "max_nesting": 3,
+        "cognitive": 27,
+        "nloc": 27,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4480,
+          4484
+        ],
+        "complex_conditions": [
+          {
+            "line": 4477,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4481,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 27,
+        "nloc": 27,
+        "dispatch_share": 0.0,
+        "symbol_line": 4459,
+        "deepest_block": {
+          "start": 4480,
+          "end": 4484
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5277 and5331 settings sync original/current snapshots;6334 saveSettingsToDrive;portfolio-export.js:946 captured archive class state"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:350-368 migration failure preserves legacy local key while snapshot excludes it;521-531 same after ordinary/loaded/class writers;542-567 actual outgoing bodies and snapshot exclude credentials",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/settings-deletions-sync.browser.cjs:57 uses actual snapshot during native held sync;state/read failures covered by integrity suite",
+        "Scope limit:soft form-read exception fallback is not directly covered by cited native assertions"
+      ],
+      "regression_recommendation": "S1 replaces only duplicated form overlay with same existing helper parameterized by settings;retain strict preflight/read outside try, roster handling/fallback inside caller catch and final apiKey removal. Do not cache form state or share strict/soft catch policy."
+    },
+    {
+      "record_id": "code_health:finding_d8efee12893b85aa3963",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "applyLoadedSettings",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_settings_roster_commit_boundary",
+      "reason": "37NLOC/CCN14 validates incoming/current required data,unions roster,preserves existing device credential,then writes settings/roster with rollback before publishing runtime/form/UI. Final dirty mark records retained local roster differences.029/P2 covers merge helper loops separately;this commit boundary should remain explicit.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6293",
+        "js/app/00-storage-sync-patches.js:6294",
+        "js/app/00-storage-sync-patches.js:6295",
+        "js/app/00-storage-sync-patches.js:6296",
+        "js/app/00-storage-sync-patches.js:6298",
+        "js/app/00-storage-sync-patches.js:6301",
+        "js/app/00-storage-sync-patches.js:6302",
+        "js/app/00-storage-sync-patches.js:6304",
+        "js/app/00-storage-sync-patches.js:6306",
+        "js/app/00-storage-sync-patches.js:6307",
+        "js/app/00-storage-sync-patches.js:6308",
+        "js/app/00-storage-sync-patches.js:6309",
+        "js/app/00-storage-sync-patches.js:6311",
+        "js/app/00-storage-sync-patches.js:6317",
+        "js/app/00-storage-sync-patches.js:6319",
+        "js/app/00-storage-sync-patches.js:6324"
+      ],
+      "verified_metrics": {
+        "name": "applyLoadedSettings",
+        "start_line": 6293,
+        "end_line": 6330,
+        "ccn": 14,
+        "max_nesting": 3,
+        "cognitive": 20,
+        "nloc": 37,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6311,
+          6314
+        ],
+        "complex_conditions": [
+          {
+            "line": 6294,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6324,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 20,
+        "nloc": 37,
+        "dispatch_share": 0.0,
+        "symbol_line": 6293,
+        "deepest_block": {
+          "start": 6311,
+          "end": 6314
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:5269 saveSettingsLocalOnly restores suppression in finally;6242 legacy cloud settings download applies inside failure catch"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:175-218 settings/roster/rollback failure preserves form/runtime/storage/counters;success keeps unknown own metadata/union roster and suppression;invalid root leaves bytes unchanged",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:521-531 loaded settings preserves existing local legacy credential while sanitized return/snapshot exclude it"
+      ],
+      "regression_recommendation": "Retain validated input/required snapshots and union, stored local credential preservation, settings+roster rollback/recovery, committed-before-runtime/form publication and local-roster dirty publication.029/P2 settings merge remains a separate earlier opportunity;do not duplicate it."
+    },
+    {
+      "record_id": "code_health:finding_a8a87935472a58468993",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "requestDriveAccess",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_three_auth_failure_stages",
+      "reason": "Three bumps represent optional intent-marker persistence,guarded GIS popup attempt and fallback redirect work. Marker failure is non-fatal,popup setup failure can fall back,and failed draft/photo preservation must prevent navigation. Combining these catches or making intent storage required changes supported behavior.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3530",
+        "js/app/00-storage-sync-patches.js:3531",
+        "js/app/00-storage-sync-patches.js:3534",
+        "js/app/00-storage-sync-patches.js:3535",
+        "js/app/00-storage-sync-patches.js:3558",
+        "js/app/00-storage-sync-patches.js:3565",
+        "js/app/00-storage-sync-patches.js:3574",
+        "js/app/00-storage-sync-patches.js:3575"
+      ],
+      "verified_metrics": {
+        "name": "requestDriveAccess",
+        "start_line": 3524,
+        "end_line": 3576,
+        "ccn": 11,
+        "max_nesting": 3,
+        "cognitive": 19,
+        "nloc": 47,
+        "bumps": 3,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3531,
+          3531
+        ],
+        "complex_conditions": [
+          {
+            "line": 3534,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 11,
+        "max_nesting": 3,
+        "symbol_line": 3524,
+        "deepest_block": {
+          "start": 3531,
+          "end": 3531
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3583 handleGoogleSignIn;7891 manualSaveToDrive retry after owned access callback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:230-252 native popup success/cancel/error and redirect/popup-throws-save-failure:callback count,current text,required draft save and intercepted navigation",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:411-462 stale popup/migration/queued callbacks cannot change current connection"
+      ],
+      "regression_recommendation": "Preserve operation capture before async callbacks, popup success/error ownership, prompt/scope, redirect URI construction and required draft/photos preservation before navigation. Existing native intercepted popup/redirect and stale-operation matrix is suitable;no generic auth callback wrapper."
+    },
+    {
+      "record_id": "code_health:finding_e7551d61caac0aa4e1e6",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "saveFileToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_multipart_and_owned_save_sequence",
+      "reason": "68NLOC/CCN7 includes request metadata/boundary formatting and required storage/credential checks on both sides of async lookup,response ID/cache,ack and current-attempt failure handling. Moving multipart text to a one-use builder mostly relocates size. Keep repeated trust-boundary validation;the earlier owner/queue work is tracked separately.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4139",
+        "js/app/00-storage-sync-patches.js:4142",
+        "js/app/00-storage-sync-patches.js:4144",
+        "js/app/00-storage-sync-patches.js:4147",
+        "js/app/00-storage-sync-patches.js:4153",
+        "js/app/00-storage-sync-patches.js:4155",
+        "js/app/00-storage-sync-patches.js:4156",
+        "js/app/00-storage-sync-patches.js:4157",
+        "js/app/00-storage-sync-patches.js:4164",
+        "js/app/00-storage-sync-patches.js:4171",
+        "js/app/00-storage-sync-patches.js:4173",
+        "js/app/00-storage-sync-patches.js:4178",
+        "js/app/00-storage-sync-patches.js:4181",
+        "js/app/00-storage-sync-patches.js:4182",
+        "js/app/00-storage-sync-patches.js:4184",
+        "js/app/00-storage-sync-patches.js:4189",
+        "js/app/00-storage-sync-patches.js:4196",
+        "js/app/00-storage-sync-patches.js:4197"
+      ],
+      "verified_metrics": {
+        "name": "saveFileToDrive",
+        "start_line": 4139,
+        "end_line": 4206,
+        "ccn": 7,
+        "max_nesting": 3,
+        "cognitive": 12,
+        "nloc": 68,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4142,
+          4151
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "nloc": 68,
+        "ccn": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 4139,
+        "deepest_block": {
+          "start": 4142,
+          "end": 4151
+        }
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1682 index legacy fallback;4297-4330 promise wrapper passes current attempt;6335 saveSettingsToDrive;6502 legacy portfolio push;storage-recovery.js:326 backup save",
+        "00-storage-sync-patches.js:4174 wftDriveFetch receives captured connection and isCurrentSave; same callback signature(error,id,data) preserved"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:159-169 held file lookup then damaged local portfolio;210-212 require zero actual upload and propagated failure",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:542-567 real raw/legacy settings multipart strips credential without mutating caller",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:324-337 native build/save multipart/ack preserves primary;tests/storage-upload-ownership.browser.cjs:81-109 late-attempt/current-signout/legacy ownership"
+      ],
+      "regression_recommendation": "Keep credential stripping and required storage before request, repeated strict checks after lookup/before acknowledgement, current connection/attempt guards, valid returned ID,cache and404/error callback semantics. Multipart formatting accounts for size;no body-builder wrapper needed. Native corrupt-lookup,credentials,index transport,late-upload ownership tests are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_44bdc87f8713f0fe0b34",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "finishWftGoogleSignInWithAccessToken",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_primitive_domain_inference",
+      "reason": "Five arguments adapt OAuth token,TTL,scope,diagnostic source and optional callback to the completion function. Token/TTL validation and operation guards are explicit;scope/source are used for provider/log contracts. No inconsistent argument ordering is evidenced;an options object would churn redirect/popup/completion adapters without reducing risk.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3197",
+        "js/app/00-storage-sync-patches.js:3198",
+        "js/app/00-storage-sync-patches.js:3203",
+        "js/app/00-storage-sync-patches.js:3205",
+        "js/app/00-storage-sync-patches.js:3211",
+        "js/app/00-storage-sync-patches.js:3223",
+        "js/app/00-storage-sync-patches.js:3232",
+        "js/app/00-storage-sync-patches.js:3242",
+        "js/app/00-storage-sync-patches.js:3250",
+        "js/app/00-storage-sync-patches.js:3367",
+        "js/app/00-storage-sync-patches.js:3548"
+      ],
+      "verified_metrics": {
+        "name": "finishWftGoogleSignInWithAccessToken",
+        "start_line": 3197,
+        "end_line": 3253,
+        "ccn": 2,
+        "max_nesting": 1,
+        "cognitive": 1,
+        "nloc": 56,
+        "bumps": 0,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3198,
+          3201
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 3197
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3367 OAuth redirect;3548 GIS popup, both pass token/TTL/scope/source/optional manual callback"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:411-462 held migration/IDB-open/profile/queued/popup completion cannot overwrite a newer operation, including same-token away-and-back",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:230-244 popup success callback exactly once versus cancelled/error none"
+      ],
+      "regression_recommendation": "Keep5-argument adapter contract with complete-signin;preserve operation checks before local/cache/IDB remap and after every await/cursor,transaction completion/abort and owned final callback. No options-object churn solely for parameter count."
+    },
+    {
+      "record_id": "code_health:finding_879a20d0d0bc9e7a59ac",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "completeWftGoogleSignInWithAccessToken",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_adapter_parameter_count",
+      "reason": "The matching five-argument complete-signin signature is intentionally forwarded unchanged by the migration finisher. scope/source log context and delayed onSuccess are meaningful,not unrelated primitive fields. Scanner typed/primitive counts0 cannot establish a missing domain object in this untyped callback adapter.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3255",
+        "js/app/00-storage-sync-patches.js:3256",
+        "js/app/00-storage-sync-patches.js:3286",
+        "js/app/00-storage-sync-patches.js:3288",
+        "js/app/00-storage-sync-patches.js:3289",
+        "js/app/00-storage-sync-patches.js:3290",
+        "js/app/00-storage-sync-patches.js:3295",
+        "js/app/00-storage-sync-patches.js:3250"
+      ],
+      "verified_metrics": {
+        "name": "completeWftGoogleSignInWithAccessToken",
+        "start_line": 3255,
+        "end_line": 3303,
+        "ccn": 12,
+        "max_nesting": 2,
+        "cognitive": 15,
+        "nloc": 41,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3268,
+          3268
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 3255
+      },
+      "callers": [
+        "00-storage-sync-patches.js:3250 owned migration completion forwards token,TTL,scope,source,callback; queued callback rechecks operation3297"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:334-336 supported/invalid TTL completion matrix;371-381 session save failure remains connected with truthful warning, read failure fails closed and revoke failure does not defeat local signout",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/auth-integrity.browser.cjs:411-462 profile/migration/popup/queued/signout callbacks cannot publish after newer operation, including away-and-back same token"
+      ],
+      "regression_recommendation": "Preserve strict token/TTL validation, operation increment, session-save/old-token-cleanup warning distinction, immediate connection publication, profile fetch and owned delayed callback. Native TTL/persistence/ownership/popup scenarios are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_a84beffd019dbbae5cda",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "saveFileToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_owned_callback_adapter",
+      "reason": "filename,content,mimeType,completion callback and optional current-attempt predicate describe one existing save adapter. isCurrentSave prevents obsolete status/error publication while accepted IDs/callbacks remain usable. Replacing it with an options object would affect promise/index/backup/legacy callers without removing complexity.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4139",
+        "js/app/00-storage-sync-patches.js:4140",
+        "js/app/00-storage-sync-patches.js:4152",
+        "js/app/00-storage-sync-patches.js:4174",
+        "js/app/00-storage-sync-patches.js:4178",
+        "js/app/00-storage-sync-patches.js:4192",
+        "js/app/00-storage-sync-patches.js:4193",
+        "js/app/00-storage-sync-patches.js:4196",
+        "js/app/00-storage-sync-patches.js:4203"
+      ],
+      "verified_metrics": {
+        "name": "saveFileToDrive",
+        "start_line": 4139,
+        "end_line": 4206,
+        "ccn": 7,
+        "max_nesting": 3,
+        "cognitive": 12,
+        "nloc": 68,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4142,
+          4151
+        ],
+        "complex_conditions": []
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 4139
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1682 index legacy fallback;4297-4330 promise wrapper passes current attempt;6335 saveSettingsToDrive;6502 legacy portfolio push;storage-recovery.js:326 backup save",
+        "00-storage-sync-patches.js:4174 wftDriveFetch receives captured connection and isCurrentSave; same callback signature(error,id,data) preserved"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:159-169 held file lookup then damaged local portfolio;210-212 require zero actual upload and propagated failure",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:542-567 real raw/legacy settings multipart strips credential without mutating caller",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/portfolio-index.browser.cjs:324-337 native build/save multipart/ack preserves primary;tests/storage-upload-ownership.browser.cjs:81-109 late-attempt/current-signout/legacy ownership"
+      ],
+      "regression_recommendation": "Keep credential stripping and required storage before request, repeated strict checks after lookup/before acknowledgement, current connection/attempt guards, valid returned ID,cache and404/error callback semantics. Multipart formatting accounts for size;no body-builder wrapper needed. Native corrupt-lookup,credentials,index transport,late-upload ownership tests are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_8c1e5a2b0423614dea4b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "uploadBlobToDrive",
+      "proposed_status": "reviewed_no_change",
+      "classification": "false_positive_upload_owner_callback_adapter",
+      "reason": "Five parameters describe filename,binary Blob,MIME,completion and pre-request owner validator. The final callback must revalidate after folder resolution before bytes leave;bundling arguments into a new object adds churn to the sole production caller and does not improve ownership safety.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6199",
+        "js/app/00-storage-sync-patches.js:6200",
+        "js/app/00-storage-sync-patches.js:6204",
+        "js/app/00-storage-sync-patches.js:6206",
+        "js/app/00-storage-sync-patches.js:6207",
+        "js/app/00-storage-sync-patches.js:6208",
+        "js/app/00-storage-sync-patches.js:6218",
+        "js/app/00-storage-sync-patches.js:6224",
+        "js/app/00-storage-sync-patches.js:6228",
+        "js/app/00-storage-sync-patches.js:7068",
+        "js/app/00-storage-sync-patches.js:7095"
+      ],
+      "verified_metrics": {
+        "name": "uploadBlobToDrive",
+        "start_line": 6199,
+        "end_line": 6230,
+        "ccn": 4,
+        "max_nesting": 2,
+        "cognitive": 4,
+        "nloc": 32,
+        "bumps": 1,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6200,
+          6203
+        ],
+        "complex_conditions": [
+          {
+            "line": 6200,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 6199
+      },
+      "callers": [
+        "00-storage-sync-patches.js:7068 uploadSessionImagesToDrive uses(result,error) callback and7052/7095 current-owner validator;folder resolution calls validator6208 immediately before request"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-upload-boundary.browser.cjs:39-77 held compression/folder ownership;82-103 stale bytes emit zero outgoing requests, settle errors, happy uses intended Authorization",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:196-220,241-262 failure retains bytes and owner/current metadata;pending writer remains retryable"
+      ],
+      "regression_recommendation": "Retain5-argument callback/validateOwner adapter, captured token and last-moment validator after folder resolution. No new options object. Existing compression/folder/current-owner tests protect this;027/U1 is already tracked separately."
+    },
+    {
+      "record_id": "code_health:finding_28e9907a3784b89751de",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "verifyApiKeyStorage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_three_store_readback_invariant",
+      "reason": "Four boolean operators include two OR mismatches plus key/remember fallbacks in expected values. The one condition asserts one transaction invariant across session key,remembered local key and remembered policy;any mismatch must fail before legacy source cleanup and UI publication. Do not replace readbacks with presumed write success.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:493",
+        "js/app/00-storage-sync-patches.js:494",
+        "js/app/00-storage-sync-patches.js:495",
+        "js/app/00-storage-sync-patches.js:496",
+        "js/app/00-storage-sync-patches.js:522",
+        "js/app/00-storage-sync-patches.js:523",
+        "js/app/00-storage-sync-patches.js:527"
+      ],
+      "verified_metrics": {
+        "name": "verifyApiKeyStorage",
+        "start_line": 493,
+        "end_line": 497,
+        "ccn": 8,
+        "max_nesting": 2,
+        "cognitive": 9,
+        "nloc": 5,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          495,
+          495
+        ],
+        "complex_conditions": [
+          {
+            "line": 494,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 495,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 493
+      },
+      "callers": [
+        "00-storage-sync-patches.js:522 persistApiKeyStorageFromInput after session/local/remember writes and before legacy-key cleanup523-525"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:387-414 actual mode-dependent values and storage failures restore old stores/form;486-493 failed destination readback retains unresolved recovery before image and bounded retry confirms original key"
+      ],
+      "regression_recommendation": "Keep one compound readback check covering all three stores and mode-dependent absence/true/false values. Splitting into separate setters or verify-on-write shortcuts risks inconsistent credentials;native verification failure/recovery tests are appropriate."
+    },
+    {
+      "record_id": "code_health:finding_50d9e7d39f28106a6a3f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "saveSettingsToLocalStorage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_v2_dirty_publication_gate",
+      "reason": "Three AND operators gate V2 dirty scheduling on engine enabled,no suppression and safe mode inactive(with optional function existence). All terms matter:local/internal saves cannot spuriously schedule,and safe mode takes a different legacy route. One compact gate is clearer than nested flags or a one-use eligibility helper.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:583",
+        "js/app/00-storage-sync-patches.js:584",
+        "js/app/00-storage-sync-patches.js:585",
+        "js/app/00-storage-sync-patches.js:586"
+      ],
+      "verified_metrics": {
+        "name": "saveSettingsToLocalStorage",
+        "start_line": 550,
+        "end_line": 591,
+        "ccn": 16,
+        "max_nesting": 2,
+        "cognitive": 19,
+        "nloc": 42,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          572,
+          582
+        ],
+        "complex_conditions": [
+          {
+            "line": 553,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 573,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 576,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 583,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 586,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 550
+      },
+      "callers": [
+        "00-storage-sync-patches.js:594 saveWftPreferencesFromForm;1250 getOrCreateStudentId;2371 roster identity initialization;5989 page-hide with suppression restored in finally",
+        "10-main-app.js:884 grade changes;7548 reassessment neatness"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:58-99 required save/preflight failure restores form, exact old bytes, no dirty scheduling and page-hide suppression",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:151-156 helper input/unknown own metadata not mutated;521-531 unrelated writer keeps retained legacy key while snapshot excludes it",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31 required saved-data failures preserve storage/UI/counters and no outgoing writes"
+      ],
+      "regression_recommendation": "S1 reuses form helper only;leave clone/override credential exclusion, required preflight/write catch with full form rollback, dirty/safe-mode routes and sanitized return untouched. Run native preference/integrity/retained-key/held settings sync cases."
+    },
+    {
+      "record_id": "code_health:finding_b77d5a59154a4da066cc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "saveSettingsToLocalStorage",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_safe_mode_legacy_save_gate",
+      "reason": "This distinct three-AND gate requires available/active safe mode,Drive access and callable legacy writer before upload. It is not the negation of the prior V2 condition because suppression/engine flags differ. Merging the routes or caching live safe-mode reads as a metric fix could change fallback behavior.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:583",
+        "js/app/00-storage-sync-patches.js:586",
+        "js/app/00-storage-sync-patches.js:587",
+        "js/app/00-storage-sync-patches.js:589"
+      ],
+      "verified_metrics": {
+        "name": "saveSettingsToLocalStorage",
+        "start_line": 550,
+        "end_line": 591,
+        "ccn": 16,
+        "max_nesting": 2,
+        "cognitive": 19,
+        "nloc": 42,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          572,
+          582
+        ],
+        "complex_conditions": [
+          {
+            "line": 553,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 573,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 576,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 583,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 586,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 550
+      },
+      "callers": [
+        "00-storage-sync-patches.js:594 saveWftPreferencesFromForm;1250 getOrCreateStudentId;2371 roster identity initialization;5989 page-hide with suppression restored in finally",
+        "10-main-app.js:884 grade changes;7548 reassessment neatness"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:58-99 required save/preflight failure restores form, exact old bytes, no dirty scheduling and page-hide suppression",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/preference-integrity-scenarios.js:151-156 helper input/unknown own metadata not mutated;521-531 unrelated writer keeps retained legacy key while snapshot excludes it",
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:15-31 required saved-data failures preserve storage/UI/counters and no outgoing writes"
+      ],
+      "regression_recommendation": "S1 reuses form helper only;leave clone/override credential exclusion, required preflight/write catch with full form rollback, dirty/safe-mode routes and sanitized return untouched. Run native preference/integrity/retained-key/held settings sync cases."
+    },
+    {
+      "record_id": "code_health:finding_f9de7f79d6d6f74e74ae",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "isWftLikelyDriveOrSyncError",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_structured_async_error_evidence",
+      "reason": "The condition short-circuits absent error then accepts status,reason or notFound metadata as sufficient Drive/sync evidence before textual matching. Those fields are alternatives from different transport helpers. Replacing the OR with only message matching would miss structured failures;the tiny classifier needs no wrapper.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1113",
+        "js/app/00-storage-sync-patches.js:1114",
+        "js/app/00-storage-sync-patches.js:1115",
+        "js/app/00-storage-sync-patches.js:1116",
+        "js/app/00-storage-sync-patches.js:1121",
+        "js/app/00-storage-sync-patches.js:1123",
+        "js/app/00-storage-sync-patches.js:1125"
+      ],
+      "verified_metrics": {
+        "name": "isWftLikelyDriveOrSyncError",
+        "start_line": 1113,
+        "end_line": 1117,
+        "ccn": 8,
+        "max_nesting": 1,
+        "cognitive": 7,
+        "nloc": 5,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1115,
+          1115
+        ],
+        "complex_conditions": [
+          {
+            "line": 1115,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 1113
+      },
+      "callers": [
+        "00-storage-sync-patches.js:1123 unhandledrejection listener sends a guarded visible background retry/reconnect notice"
+      ],
+      "test_assertion_references": [
+        "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/drive-lifecycle.browser.cjs:129-134 no uncaught errors during native service failures;redacted log/error flows35-40",
+        "Scope limit:no direct classifier truth-table/unhandledrejection notice assertion was found among inspected tests;do not count general no-pageerror checks as direct proof"
+      ],
+      "regression_recommendation": "Keep err null short-circuit and structured status/reason/notFound evidence OR message family regex. Direct structured/non-string/null/message classifier checks and actual notice dispatch needed only if changed;do not weaken explicit error handling."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "records": 25,
+    "status_counts": {
+      "reviewed_no_change": 22,
+      "confirmed_repair_candidate": 3
+    },
+    "new_repair_opportunities": [
+      {
+        "id": "repair033-S1",
+        "primary_record": "code_health:finding_2d394d4a42f8699016a8",
+        "scope": "Reuse existing form-overlay helper with settings parameter in required writer and soft snapshot reader;preserve caller-local exception policies.",
+        "cost": "One promoted helper/two calls,remove13-line duplicated read sequence;no new dependency/table mapping."
+      },
+      {
+        "id": "repair033-S2",
+        "primary_record": "code_health:finding_dc5417fc9d643005862c",
+        "scope": "Delete unreachable old-token migration success branch3389-3399;6155 helper always returns false and has one source caller/no test references.",
+        "cost": "Deletion;remove orphan false stub only after final full-ref check. Add direct full-restorer legacy rejection parity before adoption."
+      },
+      {
+        "id": "repair033-S3",
+        "primary_record": "code_health:finding_f947131d17a6a38f1ee7",
+        "scope": "Delete redundant /upload/ URL-prefix comparison already subsumed by https://www.googleapis.com/;retain exact allowed-domain/path policy and every IO/owner guard.",
+        "cost": "One conjunct deletion;verify allow/reject URL matrix and native transport ownership."
+      }
+    ],
+    "existing_opportunities_not_duplicated": [
+      "repair029/P2 settings merge copy loops",
+      "repair027/U1 media queue-owner checks",
+      "repair027/M1 manual completion policy",
+      "repair031/C1 empty indicator loops andC2 identical ready-button rendering"
+    ],
+    "retained_tradeoffs": "Credential only-copy migration,three-store verified writes and before-image recovery;strict vs soft form/settings boundaries;token TTL/current-operation ownership;required draft/photo preservation;late current-attempt transport and multi-key apply rollback.",
+    "new_behavioral_leads": 0,
+    "scanner_clearances_claimed": 0
+  },
+  "limits": [
+    "Read-only source/assertion review and pure installed metrics replay only. No tests,source/test/Git/index/tracker/docs/runtime/dependency/cache changes or live services;only own scratch/report written.",
+    "Complete20 assigned functions/nested helpers plus relevant callers and guards read. High-fanout persistence/transport helpers were traced through representative auth/settings/archive/media/late-IO paths,not every unrelated caller body.",
+    "All test assertions cited from immutable413c1cf;they document intended behavior,not new pass results. Explicit gaps remain for full-restorer legacy rejection,soft snapshot form exceptions,all UI fallback combinations and generic classifier truth table.",
+    "S1/S2/S3 are source-confirmed refactor candidates requiring coordinator byte/fact recheck and appropriate parity regressions. No production edits,no repaired behavior or scanner closure claimed.",
+    "Parameter-count false positives are contract-specific judgments,not a blanket dismissal of five-argument functions. No existing lead duplicated and no new behavioral lead asserted."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "individual_reasons_read": 25,
+    "independent_numeric_records_matched": 25,
+    "candidate_source_spot_checks": [
+      "Form updater is existing writer-local closure; promoting accepts mutable settings and preserves strict writer versus soft snapshot catches.",
+      "wftDriveFetch broader URL prefix subsumes upload prefix for documented ordinary string callers.",
+      "Old migration branch remains candidate pending final reference and restore parity tests."
+    ],
+    "limits": "No tests or graph recomputation by this read-only review. Keep trust-boundary reads and IO ownership guards. Candidate edits require baseline/regression checks."
+  }
+}

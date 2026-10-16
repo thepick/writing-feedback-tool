@@ -49,10 +49,14 @@ try {
     assert.throws(() => runTests({ root, out: path.join(root, 'invalid'), selected: ['tests/absent.cjs'] }), /Unknown suite/);
     for (const supplements of [{}, [null], [''], [{ file: 'test.cjs' }], [{ file: 'test.cjs', reportRequired: 'false' }]]) assert.throws(() => runTests({ root, out: path.join(root, 'invalid'), supplements }), /Supplemental|supplemental/);
     const route = require('../tests/support/local-app-route');
-    const asset = url => route({ request: () => ({ url: () => url }), abort: () => 'aborted', fulfill: value => value }, root);
+    const asset = (url, fallbackContentType) => route({ request: () => ({ url: () => url }), abort: () => 'aborted', fulfill: value => value }, root, fallbackContentType);
     assert.equal(asset('https://external.invalid/file.js'), 'aborted');
     assert.equal(asset('http://127.0.0.1:8765/google-drive-migration.js').contentType, 'application/javascript');
     for (const name of ['/missing.js', '/%2e%2e%5csecret', '/tests']) assert.equal(asset('http://127.0.0.1:8765' + name).status, 404);
+    fs.writeFileSync(path.join(root, 'index.html'), ''); fs.writeFileSync(path.join(root, 'favicon-32x32.png'), '');
+    assert.equal(asset('http://127.0.0.1:8765/favicon-32x32.png').contentType, 'text/html', 'Existing default MIME is retained');
+    assert.equal(asset('http://127.0.0.1:8765/favicon-32x32.png', 'application/octet-stream').contentType, 'application/octet-stream', 'Opted-in asset MIME is retained');
+    assert.deepEqual(['/index.html', '/google-drive-migration.js'].map(name => asset('http://127.0.0.1:8765' + name, 'application/octet-stream').contentType), ['text/html', 'application/javascript'], 'HTML and JavaScript MIME override the fallback');
     console.log('Runner checks passed: fixture strings, required/optional reports, failure, timeout, termination, valid/empty/missing/stale/malformed/failed reports, preload, invalid selections/manifests and local routing.');
 } finally {
     // Delete only this uniquely created fixture directory, including after a failed assertion.

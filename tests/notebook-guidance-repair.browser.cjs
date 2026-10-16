@@ -2,6 +2,7 @@ const {chromium} = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const localAppRoute = require('./support/local-app-route');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
 
 function runNotebookGuidanceCases() {
@@ -255,12 +256,7 @@ function runNotebookGuidanceCases() {
         const page = await browser.newPage();
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
-        await page.route('**/*', route => {
-            const url = new URL(route.request().url());
-            if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
-            const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-            return route.fulfill(fs.existsSync(file) ? {contentType:file.endsWith('.js') ? 'application/javascript' : 'text/html', body:fs.readFileSync(file)} : {status:404, body:''});
-        });
+        await page.route('**/*', route => localAppRoute(route, root));
         await page.goto('http://127.0.0.1:8765', {waitUntil:'domcontentloaded'});
         const result = await page.evaluate(runNotebookGuidanceCases);
         assert.deepEqual(errors, []);

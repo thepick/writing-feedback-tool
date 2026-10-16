@@ -16,8 +16,8 @@ function context(source, globals) {
 
 (async () => {
     const production = 'js/app/00-storage-sync-patches.js';
-    for (const file of [production]) {
-        const source = section(file, 'function loadPortfolioAsync()', 'function renderStudentPortfolioAsync(');
+    {
+        const source = section(production, 'function loadPortfolioAsync()', 'function renderStudentPortfolioAsync(');
         const portfolio = { Alice: { sessions: [{ id: 'keep' }] } };
         let saves = 0;
         const app = context(source, {
@@ -52,8 +52,8 @@ function context(source, globals) {
         await assert.rejects(promise, /write failed/);
     }
 
-    for (const file of ['js/app/storage-recovery.js']) {
-        const source = section(file, '// ── Emergency Backup ──', 'function downloadWftEmergencyBackup(');
+    {
+        const source = section('js/app/storage-recovery.js', '// ── Emergency Backup ──', 'function downloadWftEmergencyBackup(');
         const flags = Object.fromEntries([...source.matchAll(/\b(WFT_[A-Z0-9_]+)\b/g)].map(match => [match[1], false]));
         const values = { wft_settings: '{"unknown":{"keep":true}}', wft_students: 'null', wft_portfolio: '{invalid', wft_selectedStudent: 'Alice', wft_google_user: '' };
         const app = context(source, {
@@ -67,6 +67,22 @@ function context(source, globals) {
         assert.equal(backup.sessionCount, 2);
         assert.equal(backup.schemaVersion, 2);
         assert.ok(!isNaN(Date.parse(backup.timestamp)));
+        assert.deepEqual(backup.readErrors, ['wft_deletions']);
+        const originalGetItem = app.localStorage.getItem;
+        app.localStorage.getItem = key => Object.hasOwn(values, key) ? values[key] : null;
+        const complete = JSON.parse(JSON.stringify(app.buildWftEmergencyBackupObject()));
+        assert.equal(Object.hasOwn(complete, 'readErrors'), false, 'Complete backups omit the error list');
+        assert.equal(Object.hasOwn(complete.contents, 'wft_deletions'), false, 'Missing keys stay absent');
+        assert.deepEqual(Object.keys(complete.contents), ['wft_settings', 'wft_students', 'wft_portfolio', 'wft_selectedStudent', 'wft_google_user']);
+        app.localStorage.getItem = key => {
+            if (key === 'wft_settings' || key === 'wft_students') throw new Error('unavailable');
+            return originalGetItem(key);
+        };
+        const incomplete = JSON.parse(JSON.stringify(app.buildWftEmergencyBackupObject()));
+        assert.deepEqual(incomplete.readErrors, ['wft_settings', 'wft_students', 'wft_deletions'], 'Read failures retain backup-key order');
+        assert.deepEqual([incomplete.contents.wft_settings, incomplete.contents.wft_students, incomplete.contents.wft_deletions], [null, null, null]);
+        assert.equal(incomplete.contents.wft_selectedStudent, 'Alice', 'Unreadable keys do not discard other backup data');
+        app.localStorage.getItem = originalGetItem;
         app.getPortfolioData = () => { throw new Error('portfolio unavailable'); };
         const fallback = app.buildWftEmergencyBackupObject();
         assert.equal(fallback.studentNames.length, 0);
