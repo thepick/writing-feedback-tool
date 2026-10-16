@@ -1,0 +1,251 @@
+{
+  "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "scope": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim.",
+  "records": [
+    {
+      "id": "code_health:finding_55691a30eadb5aba5f9f",
+      "function_sha256_lf": "46d8299da47310ee78d0b591621beca016e50e0a8027283359c154162db19240",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_d6fe9a1e2d9c86e011a9",
+      "function_sha256_lf": "16d278a01bde60859c8463e8abd8dfa3db31f604c1e84a35abe774d35da70bd0",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_2063be3138b94708785b",
+      "function_sha256_lf": "8bedcd696f6ef3a14f2a61f821596f0287e8e2c45893e73333e8e883418fcd56",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_8b2aec4428c8aeb31578",
+      "function_sha256_lf": "b307054d8b5d6ad406374c089d0a18ba3400e1ac9ece6089da04f94f5ac58302",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_f2f5fc196d1368f6353f",
+      "function_sha256_lf": "6da074ccf9fdcf385c33b1b3fb3f1982b743078978d676509d94c2dafc5bb1f4",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_1f4b2c0b0071ee3639a2",
+      "function_sha256_lf": "a084a1d1dda4f8013797dcaf6e8b59f7670099a9e2cb611a0cd2d81a7dc5905c",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_0968a631eb7c5f5e1d95",
+      "function_sha256_lf": "d411e62c65944ae25c7ab60db4c2e63d059cb28f48ffeb541dc49c3af985a2fd",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_d3148a775cf7154fe106",
+      "function_sha256_lf": "0e9615bf65f154ea0b3730759d3f8264f15835a93bd9379c95438631edc92105",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_463c90fd2de6356ae2db",
+      "function_sha256_lf": "296eebcb72e589e7e947438d89e6d029cdcb45a14980f88dbe87d32b8961947c",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_3c7e058b65c8ca9a24a2",
+      "function_sha256_lf": "e9a0e34d8ec2fd5ae4a0212665f44bda00e662530a320d42110fc7df2f437301",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_990e0395dd7d82aaac43",
+      "function_sha256_lf": "33d9ec88864969cc5f90b42230a987f6dff24b57a6f1c5e4b80823acbb09ce1d",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_ea31773c37d0074f31d2",
+      "function_sha256_lf": "86b820af5e179ab9ac12fe1a11ba3ee9c8ac14b553939cc06bf409026d2d45dd",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_ca33c20e174a2bfda950",
+      "function_sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_7cf232b061699f0ff1c4",
+      "function_sha256_lf": "8e1efb63ed6461ca55e399003496637f1878be47c8136fa20cba1293b31746a7",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_2ff46a2378726dc81a97",
+      "function_sha256_lf": "9512ca4bfa3e24b5e554a92eb5aabed693734fd71af38405fe3935b97df42979",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_2f138c7deab593679403",
+      "function_sha256_lf": "947ddbbd666160c3b3d65681bc732d763ab9e1606a0f7494095b10d363055823",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_1a34a0bbf46ddefab5e7",
+      "function_sha256_lf": "99700d0f7e1b19e85dc47321e1fc28e41927d7d40bba2422ab1f8e79f9988a84",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_659258563fb64c05b01b",
+      "function_sha256_lf": "50c3d268888b8c3a937053bea510b44f52b303c4ba68ecfe31e7d73148a6d53e",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_9fbb8c985399646392b7",
+      "function_sha256_lf": "9d4898ba8530b26b866a99a8b43713586f80195c6ca1fb27f5ee0e888fb5c2d3",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_aa72763e7f980e196e85",
+      "function_sha256_lf": "1403e5e3e65eb3e53ddd6dbbb244a4c7e93acd7d7769c26da5aa8c9a32f5d16a",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_a1d3edb67f1235db4b52",
+      "function_sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_dffec2060f1195e595db",
+      "function_sha256_lf": "9be520d177e661b929886f9fe2d55ccbc3e95ddfc84a436f1981579b4e76e0f8",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_c7eaf07e563a1b77b630",
+      "function_sha256_lf": "feee1b0fcad0dfc73b5a1a2092af75bac8b06347c608b22b93e6a4f71ccc08f9",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_83aadb338a812a5c1310",
+      "function_sha256_lf": "703a7f0817ecca875bc23e8f65259cde248913ab147220733d0df6d0a1793cc1",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_7df1adb8c891ab2a8721",
+      "function_sha256_lf": "47bf4838a866ce9bd9d27e79e681fdca04567d041518b2820db0d25757d1dd20",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_95da106900a2c477e281",
+      "function_sha256_lf": "86b820af5e179ab9ac12fe1a11ba3ee9c8ac14b553939cc06bf409026d2d45dd",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_9ae6fddb1587d38c6426",
+      "function_sha256_lf": "970c9a8d477a026e7694c3e8baa3272cf50f6a9fe9bbe50be64e94c2b829d912",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_750d0054ac70a8565c25",
+      "function_sha256_lf": "1e87ef5d4fe5636357bd552888ac9a70929313527f06d7a6376166064f55664b",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_eba7f088a4fab7fddea3",
+      "function_sha256_lf": "3a459f23a3d3149fbf14fe8cf409c39c8cd8b4f52391813d29d1088031fc2d57",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_1582cf75d826c8ccf5f4",
+      "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_cecbe8636e3d91233515",
+      "function_sha256_lf": "c8c1a0d4b3aa0e63bf90ccfc8572ae113a1ceac08171d7a7abc1053915a2e6ca",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_2869a3657f251ae42502",
+      "function_sha256_lf": "68237e72d6efdd59540a2ef347f7fafc0bff84b445bc1c59ed77b83e0fa45ff1",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_70c2709f24f09b856658",
+      "function_sha256_lf": "5d537c4adae377552f5f76383bc90bc2d3feeeadff52fd3862f9086ced4262de",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_d2e17a6f2a3c946cdf22",
+      "function_sha256_lf": "f0ad92cb4a48173532ae55ce2eb5fc7d5905ccf57429ded50175a5aa6b3a045c",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_5b685ceb1955a261c1eb",
+      "function_sha256_lf": "c7f95fe11187f0f2d6cb6b8b063b899e04819ffb223759364ef71af0ac2cac27",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_b355d7e617534febc944",
+      "function_sha256_lf": "7fd7499b34ffca97c95bc4b5a4689e86dbf733d13178cf2b9433c3e9dee6aa97",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_73bec908e177949698d7",
+      "function_sha256_lf": "e6d237fea98c9a843221720c96c1f4a911c4c11198380b0a570c30247a2898c3",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_aeeba123d237efa7f611",
+      "function_sha256_lf": "3cb17c60184c154ffcc493e628ff9fa86e309740b6b8da5f35040b8da4f5ed11",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_c7032b60a83d25295aed",
+      "function_sha256_lf": "7fd780e365198c8ad20670aa6198133c9ab362cafb5607acf3d12da8c4a4f70f",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_1eb81af14115d6558a96",
+      "function_sha256_lf": "a1c983c034c6f9b31f5bddcb56b50b12f4cf0054efcd58bdb1ee7600a7a6b665",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_c99e888f784b0bc76750",
+      "function_sha256_lf": "21bdf573459bf1042e42498e78411a8e4ee4ad11e3ffa046fbfe3fecca846408",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_08148a5fbe3130655bba",
+      "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_7e5e160a165282d1b84f",
+      "function_sha256_lf": "13bb0ddf06b8218f0d752931849b1dfa25fd5544794a6fec442bceeefa98ef99",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_a785a09dfafbeb9573d0",
+      "function_sha256_lf": "e6d237fea98c9a843221720c96c1f4a911c4c11198380b0a570c30247a2898c3",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_bd262137e5d6d346dc75",
+      "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_7e9e3bd687e666b878c1",
+      "function_sha256_lf": "56985ede4c0814cc5c3ff07a027de90077b588385074772e9e4043b101da2be9",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_0956f3c90bb76c36955b",
+      "function_sha256_lf": "5a47cbdc4c7bf5abee0aaa549f82a9f3713cbb1dc3f66615b23dfbf3785f2e1e",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_9594f4eb52ffbcf09db0",
+      "function_sha256_lf": "4fe477011c7c78ef2e512c1844d1cc4f1f4526c7ae88c7172f8b7990e8563fa3",
+      "metrics_replayed": true
+    },
+    {
+      "id": "code_health:finding_07c825055cecc7b49cbc",
+      "function_sha256_lf": "d4314c0cfbe877bfc304120a9ca5b7e237d89bd8791519e9f81a8c68e3c348a0",
+      "metrics_replayed": true
+    }
+  ]
+}

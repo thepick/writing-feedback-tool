@@ -1,0 +1,135 @@
+{
+  "repair_id": "repair-040-v2",
+  "related_repair": "repair-039",
+  "related_lead": "review028-reassessment-confirmation-freshness",
+  "stage": "focused_independent_version_two_review",
+  "verdict": "approve_exact_isolated_version_two",
+  "blocking_findings": [],
+  "required_changes": [],
+  "integration_performed": false,
+  "tests_executed_by_reviewer": false,
+  "historical_source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "inspected_original_git_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "exact_inspected_hashes": {
+    "version_one_main_raw": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+    "version_two_main_raw": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+    "version_two_main_normalized_lf": "4f28f69d7cc04a91a2bd7a88c66cd85909e46afc0a37558d5dfd5e0f00a2aac1",
+    "updated_worker_report": "6b20e556bf205aa420beef01ad8091c0c30bf4220b7e6ea107174ef6fe903ac2",
+    "immutable_v1_v2_driver": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24",
+    "deletion_only_v1_raw_results": "d7bd39ab1c48e93e394e9cb12b0f0dcf84373bab6bb43e916b76e2369109a9f5",
+    "version_two_raw_results": "d2a40f7f4eae8f520389cceb4627310ae958862be71eebe9eb4fc9f42a3e0ba8",
+    "v1_to_v2_diff": "2d11c80a99e82416cf680c13562451c16a82c091576857304f71c6b3450f66e2",
+    "historical_base_to_v2_diff": "e37fbc42067a69dca58b4eb1cd5bd4b643f407ff65b53c09adc0c1f6a5b99ce2"
+  },
+  "delta_verification": {
+    "exact_added_field": "storedDeletions: readWftStudentChangeStorage(WFT_DELETIONS_STORAGE_KEY),",
+    "removing_exact_one_added_line_restores_entire_reviewed_v1_file_byte_for_byte": true,
+    "same_98_copied_file_paths": true,
+    "other_97_copied_files_byte_identical_to_v1": true,
+    "outside_reassessment_function_identical_to_historical7527_after_LF_normalization": true,
+    "referenced_artifact_hashes_checked": 21,
+    "original90_raw_freeze_not_reasserted_after_coordinator_publication": true
+  },
+  "prior_blocker_disposition": {
+    "id": "repair040-preview-B1",
+    "status": "addressed_in_exact_isolated_preview",
+    "reason": "storedDeletions is read through recovery-aware readWftStudentChangeStorage in the existing local readCurrentWork snapshot. The same snapshot is taken before confirmation and compared synchronously after acceptance before grade/source/writing/pending mutations. A changed log now makes that comparison fail without normalizing the log or touching the sync engine. If its read throws,the existing bounded capture/acceptance catches retain current work.",
+    "evidence_anchors": [
+      "preview-v2-repo/js/app/10-main-app.js:7664",
+      "preview-v2-repo/js/app/10-main-app.js:7671",
+      "preview-v2-repo/js/app/10-main-app.js:7691",
+      "preview-v2-repo/js/app/10-main-app.js:7693",
+      "preview-v2-repo/js/app/10-main-app.js:7694",
+      "preview-v2-repo/js/app/10-main-app.js:7703",
+      "preview-v2-repo/js/app/storage-recovery.js:146"
+    ]
+  },
+  "regression_evidence_review": {
+    "method": "Read actual added driver clauses and raw result fields,verify field equality/premises and exact source/driver/receipt hashes using data inspection only. Worker runtime results remain attributed to worker;no rerun here.",
+    "same_driver_used_on_both_versions": true,
+    "driver_sha256": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24",
+    "premises_verified_in_both_worker_raw_records": [
+      "Physical portfolio source still present",
+      "Actual applyDeletionsToPortfolio policy excludes source after real recordSessionDeletion/saveDeletionsLocalOnly writer",
+      "All captured current writing/owner/grade/neatness/photo/source/pending/analysis/genre/corrected/output fields unchanged from dialog-open state before acceptance",
+      "Portfolio/settings/selection/roster/stored-pending bytes unchanged from dialog-open state",
+      "Only deletion-log bytes differ before acceptance"
+    ],
+    "version_one_worker_artifact": {
+      "cases": 1,
+      "expected_failed_labels": [
+        "Changed work or source refuses old consent with a retry notice",
+        "Rejected confirmation preserves complete current work, owner, preferences and report"
+      ],
+      "harness_errors": 0,
+      "browser_errors": 0,
+      "observed_deltas_read_from_artifact": "Writing/owner/grade changed and pending was cleared despite unchanged other captured inputs;receipt exit1 is the expected negative control."
+    },
+    "version_two_worker_artifact": {
+      "cases": 16,
+      "assertions": 79,
+      "reported_failed_labels": [],
+      "deletion_case_assertions": 6,
+      "deletion_refusal_notice_and_current_work_pending_report_preferences_retained": true,
+      "portfolio_and_new_tombstone_bytes_retained": true,
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    "source_bound_receipts": [
+      {
+        "path": "work/repowise-repair-039/version-2/deletion-before/receipt.json",
+        "sha256": "e2752dc57360781ab63cea6a69581af0994039251b0478dad4fb053887ac5517",
+        "main_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+        "exit_code": 1
+      },
+      {
+        "path": "work/repowise-repair-039/version-2/accepted/focused.receipt.json",
+        "sha256": "2992c279e091adc760ea84cce9620c8726dd5a1ce2ce22b5fafcb833653d4da4",
+        "main_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+        "exit_code": 0
+      },
+      {
+        "path": "work/repowise-repair-039/version-2/accepted/preference-integrity.receipt.json",
+        "sha256": "147a9c968057938c98dbec15b9ad2c16a88a31fddb87589b914cb7b7554177e0",
+        "main_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+        "exit_code": 0
+      },
+      {
+        "path": "work/repowise-repair-039/version-2/accepted/analysis-identity.receipt.json",
+        "sha256": "1d127ed058e81501fb5f242ffe92bdbbd2eeeb60264c3605be7ca8759355f39a",
+        "main_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+        "exit_code": 0
+      }
+    ],
+    "worker_existing_suite_results": [
+      {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "reported_count": 105,
+        "reported_exit": 0
+      },
+      {
+        "suite": "tests/analysis-identity.browser.cjs",
+        "reported_count": 23,
+        "reported_exit": 0
+      }
+    ],
+    "driver_evidence_anchors": [
+      "version-2/accepted/driver.browser.cjs:161-170 real sync-writer seam and actual policy result",
+      "version-2/accepted/driver.browser.cjs:189-199 deletion-only premise equality",
+      "version-2/accepted/driver.browser.cjs:248 ordinary-success durable pending-null oracle",
+      "version-2/accepted/driver.browser.cjs:263-268 retry and full preservation after refusal"
+    ]
+  },
+  "preservation_of_v1_acceptance": "The entire application delta from reviewed f41 is one added raw read/serialized field. All earlier strict-source binding,pure work capture,acknowledged-existing-pending compatibility,legacy selector/raw-byte policy,read failure catches,grade rollback and downstream image/replacement guards are otherwise byte-identical. Worker reruns retain all15 earlier controls with strengthened stored-pending success assertion and add the new deletion-only case.",
+  "accepted_tradeoffs": [
+    "Conservative retry now includes unrelated/equivalently serialized deletion-log changes as well as portfolio/settings/current work. This matches the accepted whole-byte fencing policy.",
+    "This fences new deletion-log arrival during the held confirmation. It does not migrate/filter tombstones already present at dialog opening or create a general cross-tab atomic transaction.",
+    "New field uses a pure recovery-aware read and the existing failure catches. Dedicated recovery/deletion-read injection was not added;those paths are source-inspected,not claimed as new runtime coverage."
+  ],
+  "limits": [
+    "Focused follow-up on the prior deletion-log blocker;no repeated whole-source audit or app test execution. No source/test/Git/index/tracker/docs/runtime/cache/dependency edits or integration;only own scratch/output written.",
+    "Current original publication/checkout EOL reconciliation belongs to coordinator. Historical7527 is the named preview base;the obsolete original90 raw-freeze receipt is not treated as current. Only read-only Git objects/current HEAD metadata were inspected here.",
+    "Worker evidence uses a labeled controlled sync-writer seam with real deletion helpers and real dialog/storage/runtime;it does not establish a live Drive/cloud journey. No live AI/OAuth or full modified-source gate was run by this reviewer.",
+    "Approval is for exact5be2b687... isolated code and inspected test contracts. Coordinator integration,official suite adaptation/registration and applicable final validation remain separate actions;no deployment or scanner closure is claimed."
+  ]
+}

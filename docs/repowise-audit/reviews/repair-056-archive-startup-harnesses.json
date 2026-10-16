@@ -1,0 +1,748 @@
+{
+  "repair_id": "repair-056",
+  "title": "Review archive, startup and CSV security harnesses",
+  "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "source_hashes": {
+    "tests/archive-connection.browser.cjs": {
+      "raw": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "normalized_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9"
+    },
+    "tests/archive-failures.browser.cjs": {
+      "raw": "748e335a4c8757d49ab2ac6d17f03f392a49b374cab79409c83bebdc464e045b",
+      "normalized_lf": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9"
+    },
+    "tests/archive-integrity.browser.cjs": {
+      "raw": "11f7807415cea27c165ad2584c37e7d58e81a0649acc9b0927ff243dc808029b",
+      "normalized_lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8"
+    },
+    "tests/script-loading.browser.cjs": {
+      "raw": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "normalized_lf": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836"
+    },
+    "tests/csv-formula.browser.cjs": {
+      "raw": "d119d1f3fda0594f4443655353e8518b7a9643665b5c59153639182ee6f086db",
+      "normalized_lf": "d7ceebdd3292fa9d7eee4231b85c910508bd56d732820752d8bb9aa8081f2c78"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_41424acaaa71fa628e81",
+      "file": "tests/archive-connection.browser.cjs",
+      "symbol": "runArchiveConnectionScenario",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 24,
+        "cognitive": 29,
+        "nloc": 67,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 63,
+          "end": 63
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runArchiveConnectionScenario",
+          "start_line": 8,
+          "end_line": 74,
+          "ccn": 24,
+          "cognitive": 29,
+          "nloc": 67,
+          "max_nesting": 3,
+          "bumps": 2,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 24,
+          "cognitive": 29,
+          "nloc": 67,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The67-line evaluated scenario holds15 deliberate account/refresh/sign-out boundaries across folder lookup, photo loading, compression, upload acknowledgment and download. It captures actual multipart ZIP bytes and exact retained class bytes. Named service/seed helpers already separate the mechanics; another fixture options framework would obscure the timing contract. The unused realRoot binding can be removed alongside an eventual useful same-file asset adapter cleanup, not as a standalone complexity rewrite.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_f215a3da5418d44ab994",
+      "file": "tests/archive-connection.browser.cjs",
+      "symbol": "respondToArchiveConnectionRequest",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 23,
+        "nloc": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 34,
+        "deepest_block": {
+          "start": 36,
+          "end": 52
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "respondToArchiveConnectionRequest",
+          "start_line": 34,
+          "end_line": 54,
+          "ccn": 16,
+          "cognitive": 23,
+          "nloc": 21,
+          "max_nesting": 2,
+          "bumps": 1,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 16,
+          "cognitive": 23,
+          "nloc": 21,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The21-line service responder changes credentials at precisely different request boundaries and returns a typed photo Blob separately from JSON folder/upload responses. Each branch drives a distinct ownership check. A generic status table would erase mutation timing, parent metadata or binary response type.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_38c411f4b93eac2e69b1",
+      "file": "tests/archive-connection.browser.cjs",
+      "symbol": "checkArchiveConnectionOutcome",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 76,
+        "deepest_block": {
+          "start": 78,
+          "end": 78
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkArchiveConnectionOutcome",
+          "start_line": 76,
+          "end_line": 86,
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 11,
+          "max_nesting": 1,
+          "bumps": 0,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 11,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The11-line oracle distinguishes which stages may upload, enforces intended Authorization on every request, verifies actual archived essay bytes and truthfully retained/cleared class status, then checks reported retry and page errors. These independent assertions are essential to reject stale-account success; do not collapse them into one broad success flag.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_ecf09ab8445f7108ec24",
+      "file": "tests/archive-connection.browser.cjs",
+      "symbol": "runArchiveConnectionScenario",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 67,
+        "ccn": 24,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 63,
+          "end": 63
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runArchiveConnectionScenario",
+          "start_line": 8,
+          "end_line": 74,
+          "ccn": 24,
+          "cognitive": 29,
+          "nloc": 67,
+          "max_nesting": 3,
+          "bumps": 2,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "nloc": 67,
+          "ccn": 24,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The67-line evaluated scenario holds15 deliberate account/refresh/sign-out boundaries across folder lookup, photo loading, compression, upload acknowledgment and download. It captures actual multipart ZIP bytes and exact retained class bytes. Named service/seed helpers already separate the mechanics; another fixture options framework would obscure the timing contract. The unused realRoot binding can be removed alongside an eventual useful same-file asset adapter cleanup, not as a standalone complexity rewrite.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_d5174fb3feb40c31672b",
+      "file": "tests/archive-connection.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 18.18,
+        "clone_pair_count": 4,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/rename-confirmation.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 76,
+        "symbol": "checkArchiveConnectionOutcome"
+      },
+      "verified_metrics": {
+        "function": {},
+        "detector_details": {
+          "cross_file_duplication_pct": 18.18,
+          "clone_pair_count": 4,
+          "worst_clone_lines": 13,
+          "worst_clone_partner": "tests/rename-confirmation.browser.cjs",
+          "worst_clone_co_change": 0
+        }
+      },
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The worst13-line clone crosses browser launch, pinned JSZip/local route and stage-loop setup. Reuse only the existing local-app-route helper after the exact JSZip exception; retain token/account mutation fixtures, Authorization and actual multipart ZIP assertions. The unused realRoot binding in the same file may be deleted during that edit. This is one adapter cleanup, not a rewrite of the67-line ownership scenario.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_845a81c24bb25fdf5436",
+      "file": "tests/archive-failures.browser.cjs",
+      "symbol": "runArchiveScenario",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 62,
+        "dispatch_share": 0.33,
+        "symbol_line": 15,
+        "deepest_block": {
+          "start": 35,
+          "end": 35
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runArchiveScenario",
+          "start_line": 15,
+          "end_line": 77,
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 62,
+          "max_nesting": 1,
+          "bumps": 0,
+          "dispatch_share": 0.33
+        },
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 62,
+          "dispatch_share": 0.33
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The62-line scenario separately injects unavailable library, rejected compression, local download failure and empty/refused upload acknowledgment. It verifies six exact protected keys, runtime writing/selection, truthful stage status and a successful real retry, then captures complete multipart Blobs. Existing check helpers already separate the meaningful assertions; no stateful archive-test framework is needed.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_02a68868618be3f1e02c",
+      "file": "tests/archive-failures.browser.cjs",
+      "symbol": "archiveFetch",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 38,
+        "deepest_block": {
+          "start": 41,
+          "end": 47
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "archiveFetch",
+          "start_line": 38,
+          "end_line": 50,
+          "ccn": 10,
+          "cognitive": 12,
+          "nloc": 13,
+          "max_nesting": 2,
+          "bumps": 2,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 12,
+          "nloc": 13,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The13-line fetch boundary validates the Google origin, captures full Blob/method/headers, and distinguishes missing ID from403 refusal before real retry. Its folder-name responses preserve actual production prerequisites. Keep these exact service contracts rather than replacing the final uploader or ZIP operation with a canned result.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_a313e6a0b2a02488bdd8",
+      "file": "tests/archive-failures.browser.cjs",
+      "symbol": "checkFailureBoundary",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 5,
+        "dispatch_share": 0.0,
+        "symbol_line": 60,
+        "deepest_block": {
+          "start": 61,
+          "end": 61
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkFailureBoundary",
+          "start_line": 60,
+          "end_line": 64,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 5,
+          "max_nesting": 1,
+          "bumps": 0,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 5,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The5-line assertion group deliberately distinguishes student export failure, year archive failure and saved-to-Drive-but-download-failed retention. It also verifies the specific reported cause and allowed upload count. The CCN9 comes from necessary expected-output alternatives, not duplicated application logic.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_eba234f172007837bb09",
+      "file": "tests/archive-failures.browser.cjs",
+      "symbol": "runArchiveScenario",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 62,
+        "ccn": 10,
+        "dispatch_share": 0.33,
+        "symbol_line": 15,
+        "deepest_block": {
+          "start": 35,
+          "end": 35
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runArchiveScenario",
+          "start_line": 15,
+          "end_line": 77,
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 62,
+          "max_nesting": 1,
+          "bumps": 0,
+          "dispatch_share": 0.33
+        },
+        "detector_details": {
+          "nloc": 62,
+          "ccn": 10,
+          "dispatch_share": 0.33
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The62-line scenario separately injects unavailable library, rejected compression, local download failure and empty/refused upload acknowledgment. It verifies six exact protected keys, runtime writing/selection, truthful stage status and a successful real retry, then captures complete multipart Blobs. Existing check helpers already separate the meaningful assertions; no stateful archive-test framework is needed.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_a3e6b3a5c6fa0e0e9a5c",
+      "file": "tests/archive-failures.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 17.12,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/openrouter-failures.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 79,
+        "symbol": "runScenario"
+      },
+      "verified_metrics": {
+        "function": {},
+        "detector_details": {
+          "cross_file_duplication_pct": 17.12,
+          "clone_pair_count": 5,
+          "worst_clone_lines": 13,
+          "worst_clone_partner": "tests/openrouter-failures.browser.cjs",
+          "worst_clone_co_change": 0
+        }
+      },
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The worst13-line clone is browser launch/scenario-loop/finally/report aggregation, and the existing archiveRoute also shares the local asset scaffold. Reuse the existing local-app-route helper only after the pinned JSZip exception; keep the specialized boundary mocks, complete Blob capture and all7failure/retry assertions. No generic browser-runner extraction and no guaranteed aggregate DRY clearance.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_eb23143f973d0b6f92ec",
+      "file": "tests/archive-integrity.browser.cjs",
+      "symbol": "observePhotoExport",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 113,
+        "deepest_block": {
+          "start": 114,
+          "end": 114
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "observePhotoExport",
+          "start_line": 113,
+          "end_line": 126,
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 14,
+          "max_nesting": 1,
+          "bumps": 0,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "This14-line fixture selects nine local/original/Drive/missing/unchecked/error sources, injects only the exact decode/download/ZIP failure boundary, invokes the real single/year export, and reads actual ZIP photos and manifest. The source selection and restoration are meaningful fixture policy; an options-driven factory would add ceremony.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_6d67cb0b1d9803f92f47",
+      "file": "tests/archive-integrity.browser.cjs",
+      "symbol": "checkPhotoExportSources",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 21,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 128,
+        "deepest_block": {
+          "start": 129,
+          "end": 137
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkPhotoExportSources",
+          "start_line": 128,
+          "end_line": 138,
+          "ccn": 11,
+          "cognitive": 21,
+          "nloc": 11,
+          "max_nesting": 3,
+          "bumps": 1,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 21,
+          "nloc": 11,
+          "dispatch_share": 0.0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The11-line two-mode/nine-source matrix distinguishes completion, destructive class clear, included real ZIP photo and truthful metadata-only manifest. Failed sources must retain the class and report failure. These are distinct safety outcomes that must stay explicit; do not shorten the tests by sharing a generic successful-export oracle.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_b6389b9811aeedd4ac00",
+      "file": "tests/archive-integrity.browser.cjs",
+      "symbol": "observeArchiveChange",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 27,
+        "cognitive": 29,
+        "nloc": 31,
+        "dispatch_share": 0.62,
+        "symbol_line": 140,
+        "deepest_block": {
+          "start": 146,
+          "end": 146
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "observeArchiveChange",
+          "start_line": 140,
+          "end_line": 170,
+          "ccn": 27,
+          "cognitive": 29,
+          "nloc": 31,
+          "max_nesting": 2,
+          "bumps": 1,
+          "dispatch_share": 0.62
+        },
+        "detector_details": {
+          "ccn": 27,
+          "cognitive": 29,
+          "nloc": 31,
+          "dispatch_share": 0.62
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The31-line held-boundary fixture mutates actual saved writing, same-ID text/photo revision, roster, settings, current draft/photo, pending/reassessment state or corrupt/read-failed storage at four real archive stages. Its local mutate helper already groups the actions. Keep entered/release sequencing and exact acceptance-time snapshots, instead of parameterizing a generic race simulator.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_c0f0e57ae1b6bd084044",
+      "file": "tests/archive-integrity.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 8.39,
+        "clone_pair_count": 17,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/session-retention.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 256,
+        "symbol": "checkActualArchiveDialogs"
+      },
+      "verified_metrics": {
+        "function": {},
+        "detector_details": {
+          "cross_file_duplication_pct": 8.39,
+          "clone_pair_count": 17,
+          "worst_clone_lines": 15,
+          "worst_clone_partner": "tests/session-retention.browser.cjs",
+          "worst_clone_co_change": 0
+        }
+      },
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The worst15-line clone is shared native browser launch/local routing/report scaffolding; actual image/snapshot/dialog oracles are distinct. The useful small reuse is the existing local-app-route helper after the pinned JSZip exception. Keep all named native cases, actual ZIP bytes and synthetic-service limits; do not create a generic archive fixture framework.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_2a1382c40c21517b7c37",
+      "file": "tests/script-loading.browser.cjs",
+      "symbol": "<anonymous@5>",
+      "marker": "nested_complexity",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 19,
+        "cognitive": 50,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 8,
+          "end": 77
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 82,
+          "ccn": 19,
+          "cognitive": 50,
+          "nloc": 78,
+          "max_nesting": 4,
+          "bumps": 1,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "max_nesting": 4,
+          "ccn": 19,
+          "cognitive": 50,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The78-line root deliberately runs empty and saved startup in isolated contexts, records actual HTML script order and globals, checks one metadata initialization, real drawer/crop controls, escaped export and pagehide/pageshow preservation. Depth4 comes from the two-scenario browser transaction and controlled routing. Keep those sequential lifecycle checks; the separate local asset reuse can remove duplication without splitting the stateful oracle.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_53cd03ddef0fff61c0fa",
+      "file": "tests/script-loading.browser.cjs",
+      "symbol": "<anonymous@5>",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 50,
+        "nloc": 78,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 8,
+          "end": 77
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 82,
+          "ccn": 19,
+          "cognitive": 50,
+          "nloc": 78,
+          "max_nesting": 4,
+          "bumps": 1,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "ccn": 19,
+          "cognitive": 50,
+          "nloc": 78,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The78-line root deliberately runs empty and saved startup in isolated contexts, records actual HTML script order and globals, checks one metadata initialization, real drawer/crop controls, escaped export and pagehide/pageshow preservation. Depth4 comes from the two-scenario browser transaction and controlled routing. Keep those sequential lifecycle checks; the separate local asset reuse can remove duplication without splitting the stateful oracle.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_bc5b71332347bd24eed1",
+      "file": "tests/script-loading.browser.cjs",
+      "symbol": "<anonymous@5>",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 78,
+        "ccn": 19,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 8,
+          "end": 77
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 82,
+          "ccn": 19,
+          "cognitive": 50,
+          "nloc": 78,
+          "max_nesting": 4,
+          "bumps": 1,
+          "dispatch_share": 0.0
+        },
+        "detector_details": {
+          "nloc": 78,
+          "ccn": 19,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The78-line root deliberately runs empty and saved startup in isolated contexts, records actual HTML script order and globals, checks one metadata initialization, real drawer/crop controls, escaped export and pagehide/pageshow preservation. Depth4 comes from the two-scenario browser transaction and controlled routing. Keep those sequential lifecycle checks; the separate local asset reuse can remove duplication without splitting the stateful oracle.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_16db8cc9c2b3d4382f78",
+      "file": "tests/script-loading.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.98,
+        "clone_pair_count": 1,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/archive-connection.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 5,
+        "symbol": "<anonymous@5>"
+      },
+      "verified_metrics": {
+        "function": {},
+        "detector_details": {
+          "cross_file_duplication_pct": 10.98,
+          "clone_pair_count": 1,
+          "worst_clone_lines": 9,
+          "worst_clone_partner": "tests/archive-connection.browser.cjs",
+          "worst_clone_co_change": 0
+        }
+      },
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The9-line route clone shares pinned JSZip/local-file handling with archive-connection. Keep JSZip routing, external-request collection and script-order capture, then delegate the local asset branch to the existing helper. This preserves the specific startup/lifecycle oracle and removes repeated file lookup/serving without a new test framework.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    },
+    {
+      "record_id": "code_health:finding_88cab154abd2f5be01d7",
+      "file": "tests/csv-formula.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 39.39,
+        "clone_pair_count": 11,
+        "worst_clone_lines": 11,
+        "worst_clone_partner": "tests/image-preparation.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "function": {},
+        "detector_details": {
+          "cross_file_duplication_pct": 39.39,
+          "clone_pair_count": 11,
+          "worst_clone_lines": 11,
+          "worst_clone_partner": "tests/image-preparation.browser.cjs",
+          "worst_clone_co_change": 0
+        }
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_safety_oracle",
+      "reason": "The34-line CSV suite already uses the shared local asset helper from025. Remaining39.39% duplication is the11-line native imports/root/browser/page/error/load scaffold shared with other tiny suites. Keep the security-specific formula, whitespace, quotes, ordinary numeric/Boolean values, real CSV exporters and source immutability assertions; a shared browser fixture would add API coupling solely to reduce the header percentage.",
+      "regression_recommendation": "For adapter cleanup, run the assigned native suite before/after and preserve every case/result, pinned JSZip source, external requests, missing-file/MIME handling and actual captured ZIP/download boundaries. No product behavior or oracle weakening."
+    }
+  ],
+  "summary": {
+    "records": 19,
+    "retained": 15,
+    "confirmed_candidate_records": 4,
+    "unique_adapter_candidates": 4,
+    "source_changes": 0,
+    "tests_run": 0,
+    "scanner_closures": 0
+  },
+  "verification": "Root read complete connection/failure/startup/CSV suites, full assigned integrity functions and caller/setup/report/clone ranges. All19 actual shape/clone detector outputs replayed against exact immutable assigned test bytes. Reused the root historical90-source clone archive; no second corpus run.",
+  "limits": [
+    "Archive clone facts include stored00c co-change metadata, not independently rebuilt history; current005 global clone union is not asserted identical.",
+    "Default/native safety oracles and controlled service seams are source-reviewed; no browser/runtime/syntax/full-gate outcome claimed.",
+    "Adapters may retain the largest footer/import clone and other complexity/size warnings; do not promise scanner clearance."
+  ]
+}

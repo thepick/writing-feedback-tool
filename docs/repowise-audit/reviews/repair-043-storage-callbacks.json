@@ -1,0 +1,2572 @@
+{
+  "repair_id": "repair-043",
+  "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "storage_file_verification": {
+    "raw_sha256": "ca88093125284d2b7cb9efb9e10f5cbcfea0728c683e70bc570be831a4af6a6f",
+    "normalized_lf_sha256": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "current_bytes_equal_historical_git_blob_normalized_lf": true,
+    "current_raw_and_lf_hashes_match_assignment": true
+  },
+  "evidence_policy": "All cited production/test lines refer to historical Git00c9454e6c89f258cb3afc938201a10feda16087. Only assigned00 current raw/LF equality is asserted. Concurrent039 main/test/config integration is outside these facts.",
+  "inspected_caller_scopes": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "scopes": [
+        "1470-1519 image conversion/compression;7042-7053 compression upload call/owner boundary",
+        "1689-1747 index loading;1679-1680 index upload call",
+        "1980-2048 async portfolio access/render caller;2377-2393 existing resolver;2844-2892 lazy fallback",
+        "3197-3253 auth migration continuation;3367 redirect caller;3524-3576 popup request;3583/7891 request callsites",
+        "4008-4125 folder summaries/selection;4139-4206 save;4248 canonical-selection caller;4337-4361 retries",
+        "4437-4455 fingerprints;4952-5126 cached-file lookup/download/upload;5273-5441 settings/deletion sync;5610-5699 portfolio sync;5767-5903 orchestrator",
+        "6354-6455 normalization/shape/stripping;6462-6482 save validation and quota fallback;6527-6528 merge normalization callsites;7626 async render call"
+      ]
+    },
+    {
+      "file": "js/app/storage-recovery.js",
+      "scopes": [
+        "146-186 recovery-aware required reads/validation/preflight"
+      ]
+    },
+    {
+      "file": "js/app/portfolio-export.js",
+      "scopes": [
+        "721-729 getActivePortfolioForExport strict reads/deletions/normalization"
+      ]
+    },
+    {
+      "file": "index.html",
+      "scopes": [
+        "3751 explicit index reload UI callback"
+      ]
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "scopes": [
+        "Historical callsite search for assigned function names; no assigned wrapper call found.039 reassessment implementation was not re-reviewed."
+      ]
+    }
+  ],
+  "grouped_enclosing_functions": [
+    {
+      "function": "resizeImageDataUrlToBlob",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 1470,
+      "line_end": 1510,
+      "sha256_normalized_lf": "d6dbd3295d46dbc62d1b68c05d8bea98e794dbbe394e37c4399e68dbe167d789",
+      "record_ids": [
+        "code_health:finding_55691a30eadb5aba5f9f"
+      ]
+    },
+    {
+      "function": "loadStudentPortfolioAsync",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 1988,
+      "line_end": 2006,
+      "sha256_normalized_lf": "9d80125180375c5d534bde68a92fbf4ac85bdf30f6083a6fda89f80039f2ed05",
+      "record_ids": [
+        "code_health:finding_d6fe9a1e2d9c86e011a9"
+      ]
+    },
+    {
+      "function": "saveStudentPortfolioAsync",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 2008,
+      "line_end": 2028,
+      "sha256_normalized_lf": "d9f7f7d02ccc7826a5426b9239af8066c2ec4294828db5525fb9b7bde926ba16",
+      "record_ids": [
+        "code_health:finding_2063be3138b94708785b"
+      ]
+    },
+    {
+      "function": "loadPortfolioIndexFromDrive",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 1689,
+      "line_end": 1747,
+      "sha256_normalized_lf": "07a1ef87352692100390ee1be3011bd2439a80336fa7d9d45b783343ac7893ad",
+      "record_ids": [
+        "code_health:finding_8b2aec4428c8aeb31578"
+      ]
+    },
+    {
+      "function": "finishWftGoogleSignInWithAccessToken",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 3197,
+      "line_end": 3253,
+      "sha256_normalized_lf": "9e9c4e5036fe7ca70479d48febc9c77afe62b4af4f8b51e3b67c792b51278b2b",
+      "record_ids": [
+        "code_health:finding_f2f5fc196d1368f6353f"
+      ]
+    },
+    {
+      "function": "requestDriveAccess",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 3524,
+      "line_end": 3576,
+      "sha256_normalized_lf": "c217fd7254e53157643e00043f6deffffb51f040690c6bc8364e55d093c46887",
+      "record_ids": [
+        "code_health:finding_1f4b2c0b0071ee3639a2"
+      ]
+    },
+    {
+      "function": "getWftFolderSyncFileSummary",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 4008,
+      "line_end": 4064,
+      "sha256_normalized_lf": "35e24205ca344a880f059174e03b6a39e88df136e8f70f531f2d0fb324536602",
+      "record_ids": [
+        "code_health:finding_0968a631eb7c5f5e1d95"
+      ]
+    },
+    {
+      "function": "chooseCanonicalDriveFolderPromise",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 4066,
+      "line_end": 4125,
+      "sha256_normalized_lf": "08ca7b27df5546c710f668d10197937a86fa000351daae42cbcb8aa5b21b5633",
+      "record_ids": [
+        "code_health:finding_d3148a775cf7154fe106"
+      ]
+    },
+    {
+      "function": "saveFileToDrive",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 4139,
+      "line_end": 4206,
+      "sha256_normalized_lf": "562977a7afda9c034b0854e6ff4b6151839aa66d060f8f8c0a62465a11238f19",
+      "record_ids": [
+        "code_health:finding_463c90fd2de6356ae2db"
+      ]
+    },
+    {
+      "function": "saveFileToDrivePromise",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 4337,
+      "line_end": 4361,
+      "sha256_normalized_lf": "39a51c44102be86da9b95459cd4aaa6aff35f1ab13f8fe6eeb8a594860eb97a6",
+      "record_ids": [
+        "code_health:finding_3c7e058b65c8ca9a24a2"
+      ]
+    },
+    {
+      "function": "validateCachedDriveFilePromise",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 4952,
+      "line_end": 4979,
+      "sha256_normalized_lf": "5aeeab8f75db9bc3104676372e213b66e849b8f5eeab31a056385496500f702c",
+      "record_ids": [
+        "code_health:finding_990e0395dd7d82aaac43"
+      ]
+    },
+    {
+      "function": "downloadWftJsonFilePromise",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 5027,
+      "line_end": 5056,
+      "sha256_normalized_lf": "12791be74e23c9f67956d89f6cc7976940a3a019144bd6a5a6484377ab5ba623",
+      "record_ids": [
+        "code_health:finding_ea31773c37d0074f31d2",
+        "code_health:finding_95da106900a2c477e281"
+      ]
+    },
+    {
+      "function": "uploadWftJsonFilePromise",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 5058,
+      "line_end": 5126,
+      "sha256_normalized_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "record_ids": [
+        "code_health:finding_ca33c20e174a2bfda950",
+        "code_health:finding_7cf232b061699f0ff1c4",
+        "code_health:finding_a1d3edb67f1235db4b52"
+      ]
+    },
+    {
+      "function": "syncWftSettingsIfNeeded",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 5273,
+      "line_end": 5360,
+      "sha256_normalized_lf": "9be520d177e661b929886f9fe2d55ccbc3e95ddfc84a436f1981579b4e76e0f8",
+      "record_ids": [
+        "code_health:finding_2ff46a2378726dc81a97",
+        "code_health:finding_dffec2060f1195e595db"
+      ]
+    },
+    {
+      "function": "syncWftDeletionsIfNeeded",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 5363,
+      "line_end": 5441,
+      "sha256_normalized_lf": "feee1b0fcad0dfc73b5a1a2092af75bac8b06347c608b22b93e6a4f71ccc08f9",
+      "record_ids": [
+        "code_health:finding_2f138c7deab593679403",
+        "code_health:finding_c7eaf07e563a1b77b630",
+        "code_health:finding_9ae6fddb1587d38c6426"
+      ]
+    },
+    {
+      "function": "syncWftNow",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 5767,
+      "line_end": 5903,
+      "sha256_normalized_lf": "f82a10eea8d987a2b516a7da1814c2bc76405b9d0d42b5a8f2af3cacb7780286",
+      "record_ids": [
+        "code_health:finding_1a34a0bbf46ddefab5e7"
+      ]
+    },
+    {
+      "function": "normalizePortfolioData",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 6354,
+      "line_end": 6385,
+      "sha256_normalized_lf": "de207b55db2a9f3f640f437279e4cccc7cbf64c706f22aa5e27e1a2a3e3de33f",
+      "record_ids": [
+        "code_health:finding_659258563fb64c05b01b",
+        "code_health:finding_750d0054ac70a8565c25"
+      ]
+    },
+    {
+      "function": "stripPortfolioHeavyFields",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 6409,
+      "line_end": 6451,
+      "sha256_normalized_lf": "c63e519ce2ac0f413ef619b0cf35329d1fdbe006c61f107ee01513a47d9e04b9",
+      "record_ids": [
+        "code_health:finding_9fbb8c985399646392b7",
+        "code_health:finding_aa72763e7f980e196e85"
+      ]
+    },
+    {
+      "function": "syncWftPortfolioIfNeeded",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 5610,
+      "line_end": 5699,
+      "sha256_normalized_lf": "703a7f0817ecca875bc23e8f65259cde248913ab147220733d0df6d0a1793cc1",
+      "record_ids": [
+        "code_health:finding_83aadb338a812a5c1310"
+      ]
+    },
+    {
+      "function": "loadStudentPortfolioLazy",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 2844,
+      "line_end": 2892,
+      "sha256_normalized_lf": "22d572b43b8901869c39f85bf97158784e0839af3a0a73ea320c9fd37f4a9187",
+      "record_ids": [
+        "code_health:finding_7df1adb8c891ab2a8721"
+      ]
+    },
+    {
+      "function": "validateWftPortfolioShape",
+      "file": "js/app/00-storage-sync-patches.js",
+      "line_start": 6387,
+      "line_end": 6397,
+      "sha256_normalized_lf": "dd4510c4d3d07dfdb25af4c29f67786ad9217e054b4bd3f9a65d57c0ca01b582",
+      "record_ids": [
+        "code_health:finding_eba7f088a4fab7fddea3"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_55691a30eadb5aba5f9f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous>",
+      "enclosing_function": "resizeImageDataUrlToBlob",
+      "function_span": [
+        1476,
+        1509
+      ],
+      "function_sha256_normalized_lf": "46d8299da47310ee78d0b591621beca016e50e0a8027283359c154162db19240",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 1476,
+        "end_line": 1509,
+        "ccn": 8,
+        "max_nesting": 4,
+        "cognitive": 20,
+        "nloc": 34,
+        "bumps": 2,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1505,
+          1508
+        ],
+        "complex_conditions": []
+      },
+      "verified_symbol_index": 9,
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 8,
+        "cognitive": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 1476,
+        "symbol_index": 9,
+        "deepest_block": {
+          "start": 1505,
+          "end": 1508
+        }
+      },
+      "reason": "The four-level callback joins separate decode, resize, encoder-null and original-byte fallback paths. The outer catch and the encoder callback catch cover different stages; flattening them or wrapping the entire callback would change error/fallback delivery rather than remove duplicate policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1476",
+        "js/app/00-storage-sync-patches.js:1478",
+        "js/app/00-storage-sync-patches.js:1497",
+        "js/app/00-storage-sync-patches.js:1501",
+        "js/app/00-storage-sync-patches.js:1505"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:1512",
+        "js/app/00-storage-sync-patches.js:7042"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:171",
+        "tests/media-ownership.browser.cjs:223",
+        "tests/media-ownership.browser.cjs:230",
+        "tests/media-ownership.browser.cjs:236"
+      ],
+      "regression_recommendation": "If compression changes, exercise decode failure, oversized dimensions, null toBlob, encoding failure and original-data fallback; existing photo-compressed assertions check MIME/nonempty bytes and dimensions, not every fallback.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_d6fe9a1e2d9c86e011a9",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous>",
+      "enclosing_function": "loadStudentPortfolioAsync",
+      "function_span": [
+        1989,
+        2005
+      ],
+      "function_sha256_normalized_lf": "16d278a01bde60859c8463e8abd8dfa3db31f604c1e84a35abe774d35da70bd0",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 1989,
+        "end_line": 2005,
+        "ccn": 7,
+        "max_nesting": 4,
+        "cognitive": 12,
+        "nloc": 17,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1997,
+          2001
+        ],
+        "complex_conditions": []
+      },
+      "verified_symbol_index": 24,
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 7,
+        "cognitive": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 1989,
+        "symbol_index": 24,
+        "deepest_block": {
+          "start": 1997,
+          "end": 2001
+        }
+      },
+      "reason": "The first-own-ID-map loop repeats the resolution policy in saveStudentPortfolioAsync and resolveStudentPortfolioKey. Extend the existing resolver to accept the already-read portfolio, then return portfolio[resolvedKey] or empty sessions. Keep direct-name priority, flag gating, first alias order and required settings errors. This removes a second policy implementation without another portfolio read.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1989",
+        "js/app/00-storage-sync-patches.js:1993",
+        "js/app/00-storage-sync-patches.js:1997",
+        "js/app/00-storage-sync-patches.js:2377",
+        "js/app/00-storage-sync-patches.js:2385"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:2038",
+        "js/app/00-storage-sync-patches.js:7626"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:77",
+        "tests/optional-storage.browser.cjs:85",
+        "tests/optional-storage.browser.cjs:90",
+        "tests/optional-storage.browser.cjs:101",
+        "tests/split-storage.browser.cjs:150"
+      ],
+      "regression_recommendation": "Retain native special-name/ID and protected-read assertions; add direct-name-versus-ID collision, duplicate map aliases, unknown ID and flag-off cases. Verify the resolver receives the existing snapshot.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_existing_resolution_policy",
+      "candidate_id": "043-R1"
+    },
+    {
+      "record_id": "code_health:finding_2063be3138b94708785b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous>",
+      "enclosing_function": "saveStudentPortfolioAsync",
+      "function_span": [
+        2009,
+        2027
+      ],
+      "function_sha256_normalized_lf": "8bedcd696f6ef3a14f2a61f821596f0287e8e2c45893e73333e8e883418fcd56",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 2009,
+        "end_line": 2027,
+        "ccn": 6,
+        "max_nesting": 4,
+        "cognitive": 11,
+        "nloc": 18,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2018,
+          2021
+        ],
+        "complex_conditions": [
+          {
+            "line": 2013,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 25,
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 6,
+        "cognitive": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 2009,
+        "symbol_index": 25,
+        "deepest_block": {
+          "start": 2018,
+          "end": 2021
+        }
+      },
+      "reason": "The write callback must keep its strict read and write in one microtask, but its nested ID-map search is the same policy already implemented by resolveStudentPortfolioKey. Reuse that resolver with this snapshot; do not replace the whole callback with loadPortfolioAsync().then(), which would reintroduce lost concurrent student saves.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2009",
+        "js/app/00-storage-sync-patches.js:2010",
+        "js/app/00-storage-sync-patches.js:2013",
+        "js/app/00-storage-sync-patches.js:2017",
+        "js/app/00-storage-sync-patches.js:2025",
+        "js/app/00-storage-sync-patches.js:2377"
+      ],
+      "callers": [
+        "Public async persistence facade; native callers/assertions below."
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:82",
+        "tests/optional-storage.browser.cjs:85",
+        "tests/optional-storage.browser.cjs:86",
+        "tests/optional-storage.browser.cjs:89",
+        "tests/optional-storage.browser.cjs:90",
+        "tests/optional-storage.browser.cjs:101",
+        "tests/split-storage.browser.cjs:108",
+        "tests/split-storage.browser.cjs:151"
+      ],
+      "regression_recommendation": "R1: retain concurrent Alice/Bob saves, special own keys and failed settings/portfolio reads; add duplicate aliases and direct-name precedence. Confirm a single synchronous read-modify-write section remains.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_existing_resolution_policy",
+      "candidate_id": "043-R1"
+    },
+    {
+      "record_id": "code_health:finding_8b2aec4428c8aeb31578",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "loadPortfolioIndexFromDrive",
+      "function_span": [
+        1719,
+        1732
+      ],
+      "function_sha256_normalized_lf": "b307054d8b5d6ad406374c089d0a18ba3400e1ac9ece6089da04f94f5ac58302",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 1719,
+        "end_line": 1732,
+        "ccn": 11,
+        "max_nesting": 3,
+        "cognitive": 16,
+        "nloc": 14,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          1726,
+          1726
+        ],
+        "complex_conditions": [
+          {
+            "line": 1720,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1722,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_symbol_index": 16,
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 16,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 1719,
+        "symbol_index": 16,
+        "deepest_block": {
+          "start": 1726,
+          "end": 1726
+        }
+      },
+      "reason": "The 14-line discovery callback handles absent files, canonical fallback, missing ID, optional cache/duplicate notifications and optional downloader availability. These are compatibility and advisory-cache boundaries, not repeated work. Its parent separately validates accepted index format and persists only accepted data.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:1689",
+        "js/app/00-storage-sync-patches.js:1719",
+        "js/app/00-storage-sync-patches.js:1722",
+        "js/app/00-storage-sync-patches.js:1728",
+        "js/app/00-storage-sync-patches.js:1734"
+      ],
+      "callers": [
+        "index.html:3751"
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:129",
+        "tests/split-storage.browser.cjs:131",
+        "tests/split-storage.browser.cjs:132",
+        "tests/drive-lifecycle.browser.cjs:62",
+        "tests/drive-lifecycle.browser.cjs:66"
+      ],
+      "regression_recommendation": "Retain missing/invalid/error/canonical index cases; no helper justified for this one discovery stage.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_f2f5fc196d1368f6353f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "finishWftGoogleSignInWithAccessToken",
+      "function_span": [
+        3210,
+        3251
+      ],
+      "function_sha256_normalized_lf": "6da074ccf9fdcf385c33b1b3fb3f1982b743078978d676509d94c2dafc5bb1f4",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 3210,
+        "end_line": 3251,
+        "ccn": 9,
+        "max_nesting": 3,
+        "cognitive": 16,
+        "nloc": 41,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3221,
+          3240
+        ],
+        "complex_conditions": []
+      },
+      "verified_symbol_index": 127,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 16,
+        "nloc": 41,
+        "dispatch_share": 0.0,
+        "symbol_line": 3210,
+        "symbol_index": 127,
+        "deepest_block": {
+          "start": 3221,
+          "end": 3240
+        }
+      },
+      "reason": "This migration continuation coordinates three storage representations: local image references, pending image references and the IndexedDB cursor. Current-auth checks before and after asynchronous IDB open and transaction abort are essential. A generic remapping wrapper would obscure which stores are optional and which operation owns publication.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3197",
+        "js/app/00-storage-sync-patches.js:3210",
+        "js/app/00-storage-sync-patches.js:3214",
+        "js/app/00-storage-sync-patches.js:3224",
+        "js/app/00-storage-sync-patches.js:3232",
+        "js/app/00-storage-sync-patches.js:3240",
+        "js/app/00-storage-sync-patches.js:3250"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:3367",
+        "js/app/00-storage-sync-patches.js:3548"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:412",
+        "tests/auth-integrity.browser.cjs:424",
+        "tests/auth-integrity.browser.cjs:434",
+        "tests/auth-integrity.browser.cjs:459",
+        "tests/auth-integrity.browser.cjs:460"
+      ],
+      "regression_recommendation": "Retain held migration, held IDB-open, sign-out, newer account and away/back ownership scenarios; test local and pending remap results if this callback changes.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_1f4b2c0b0071ee3639a2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "requestDriveAccess",
+      "function_span": [
+        3541,
+        3549
+      ],
+      "function_sha256_normalized_lf": "a084a1d1dda4f8013797dcaf6e8b59f7670099a9e2cb611a0cd2d81a7dc5905c",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 3541,
+        "end_line": 3549,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 9,
+        "nloc": 9,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          3543,
+          3547
+        ],
+        "complex_conditions": [
+          {
+            "line": 3543,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 3544,
+            "operator_count": 2,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_symbol_index": 142,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 3541,
+        "symbol_index": 142,
+        "deepest_block": {
+          "start": 3543,
+          "end": 3547
+        }
+      },
+      "reason": "This nine-line provider callback first rejects obsolete auth operations, then distinguishes missing response, provider error and successful token completion. The error-description fallback adds decisions but has a concrete user-visible purpose; moving it into a new helper would merely relocate this small boundary.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:3541",
+        "js/app/00-storage-sync-patches.js:3542",
+        "js/app/00-storage-sync-patches.js:3544",
+        "js/app/00-storage-sync-patches.js:3548"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:3583",
+        "js/app/00-storage-sync-patches.js:7891"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:412",
+        "tests/auth-integrity.browser.cjs:440",
+        "tests/auth-integrity.browser.cjs:443",
+        "tests/auth-integrity.browser.cjs:459"
+      ],
+      "regression_recommendation": "Keep held popup response ownership scenarios; if touched, explicitly cover undefined response and error/error_description provider payloads. Existing cited assertions primarily cover late success.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_0968a631eb7c5f5e1d95",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "getWftFolderSyncFileSummary",
+      "function_span": [
+        4021,
+        4059
+      ],
+      "function_sha256_normalized_lf": "d411e62c65944ae25c7ab60db4c2e63d059cb28f48ffeb541dc49c3af985a2fd",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 4021,
+        "end_line": 4059,
+        "ccn": 14,
+        "max_nesting": 2,
+        "cognitive": 17,
+        "nloc": 37,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.46,
+        "deepest_block": [
+          4038,
+          4056
+        ],
+        "complex_conditions": [
+          {
+            "line": 4022,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 4041,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4044,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4048,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4052,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 155,
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 17,
+        "nloc": 37,
+        "dispatch_share": 0.46,
+        "symbol_line": 4021,
+        "symbol_index": 155,
+        "deepest_block": {
+          "start": 4038,
+          "end": 4056
+        }
+      },
+      "reason": "The summary loop accumulates first IDs for three distinct sync filenames plus newest time. The repeated field assignments represent the summary schema, not independent implementations of one mutable rule. The parent supplies an archive connection and checks it before returning or falling back, so a failed listing cannot silently authorize stale-account selection.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4008",
+        "js/app/00-storage-sync-patches.js:4021",
+        "js/app/00-storage-sync-patches.js:4029",
+        "js/app/00-storage-sync-patches.js:4040",
+        "js/app/00-storage-sync-patches.js:4059",
+        "js/app/00-storage-sync-patches.js:4061"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4075"
+      ],
+      "test_assertion_references": [
+        "tests/drive-folder-selection.cjs:13",
+        "tests/drive-folder-selection.cjs:23",
+        "tests/drive-folder-selection.cjs:31",
+        "tests/archive-connection.browser.cjs:78",
+        "tests/archive-connection.browser.cjs:79",
+        "tests/archive-connection.browser.cjs:83"
+      ],
+      "regression_recommendation": "Keep summary ordering, filename precedence, empty/error result and connection-change assertions. The folder-selection unit stubs summary IO; archive-connection covers the actual summary connection boundary.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_d3148a775cf7154fe106",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "chooseCanonicalDriveFolderPromise",
+      "function_span": [
+        4083,
+        4124
+      ],
+      "function_sha256_normalized_lf": "0e9615bf65f154ea0b3730759d3f8264f15835a93bd9379c95438631edc92105",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 4083,
+        "end_line": 4124,
+        "ccn": 17,
+        "max_nesting": 2,
+        "cognitive": 21,
+        "nloc": 35,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4090,
+          4101
+        ],
+        "complex_conditions": [
+          {
+            "line": 4097,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4117,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 4117,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_symbol_index": 160,
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 21,
+        "nloc": 35,
+        "dispatch_share": 0.0,
+        "symbol_line": 4083,
+        "symbol_index": 160,
+        "deepest_block": {
+          "start": 4090,
+          "end": 4101
+        }
+      },
+      "reason": "The selection callback owns scoring, stable timestamp tie-breaks, winner cache publication and an explanatory reason. isNewerTiedSummary already names the nontrivial shared tie rule. Replacing score additions with a dispatch table or extracting one-use cache setters would not reduce the selection policy.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4066",
+        "js/app/00-storage-sync-patches.js:4083",
+        "js/app/00-storage-sync-patches.js:4090",
+        "js/app/00-storage-sync-patches.js:4099",
+        "js/app/00-storage-sync-patches.js:4107",
+        "js/app/00-storage-sync-patches.js:4115"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4248"
+      ],
+      "test_assertion_references": [
+        "tests/drive-folder-selection.cjs:23",
+        "tests/drive-folder-selection.cjs:29",
+        "tests/drive-folder-selection.cjs:31",
+        "tests/drive-folder-selection.cjs:33",
+        "tests/drive-folder-selection.cjs:38",
+        "tests/drive-folder-selection.cjs:54",
+        "tests/drive-folder-selection.cjs:55"
+      ],
+      "regression_recommendation": "Retain no/single folder, weighted settings/portfolio/deletions, stable ties, fallback modifiedTime, listing failure and stale connection cases.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_463c90fd2de6356ae2db",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "saveFileToDrive",
+      "function_span": [
+        4194,
+        4204
+      ],
+      "function_sha256_normalized_lf": "296eebcb72e589e7e947438d89e6d029cdcb45a14980f88dbe87d32b8961947c",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 4194,
+        "end_line": 4204,
+        "ccn": 9,
+        "max_nesting": 2,
+        "cognitive": 11,
+        "nloc": 11,
+        "bumps": 2,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4196,
+          4196
+        ],
+        "complex_conditions": [
+          {
+            "line": 4196,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4197,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 168,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 4194,
+        "symbol_index": 168,
+        "deepest_block": {
+          "start": 4196,
+          "end": 4196
+        }
+      },
+      "reason": "The catch must settle an obsolete owned request without changing cache or status, clear cache on a current 404, and update legacy UI only for an unowned request. These distinctions explain its compact CCN9; removing ownership or merging its status branches would let late replies affect a new run.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4139",
+        "js/app/00-storage-sync-patches.js:4194",
+        "js/app/00-storage-sync-patches.js:4196",
+        "js/app/00-storage-sync-patches.js:4198",
+        "js/app/00-storage-sync-patches.js:4201",
+        "js/app/00-storage-sync-patches.js:4203"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4337"
+      ],
+      "test_assertion_references": [
+        "tests/storage-upload-ownership.browser.cjs:18",
+        "tests/storage-upload-ownership.browser.cjs:82",
+        "tests/storage-upload-ownership.browser.cjs:87",
+        "tests/storage-upload-ownership.browser.cjs:93",
+        "tests/storage-upload-ownership.browser.cjs:97"
+      ],
+      "regression_recommendation": "Keep actual held late-success/late-error, sign-out/reconnect and direct legacy callback cases; explicitly retain current 404 versus permission failure behavior.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_3c7e058b65c8ca9a24a2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "saveFileToDrivePromise",
+      "function_span": [
+        4342,
+        4358
+      ],
+      "function_sha256_normalized_lf": "e9a0e34d8ec2fd5ae4a0212665f44bda00e662530a320d42110fc7df2f437301",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 4342,
+        "end_line": 4358,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 17,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4344,
+          4347
+        ],
+        "complex_conditions": [
+          {
+            "line": 4344,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4348,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 182,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 4342,
+        "symbol_index": 182,
+        "deepest_block": {
+          "start": 4344,
+          "end": 4347
+        }
+      },
+      "reason": "The bounded retry callback intentionally treats 404 as cache invalidation with 250ms retry, transient failures as exponential retry, and other failures as immediate rejection. Each attempt rechecks the captured connection. The compound stop condition describes this single policy directly; another predicate or wrapper would hide it.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4337",
+        "js/app/00-storage-sync-patches.js:4341",
+        "js/app/00-storage-sync-patches.js:4344",
+        "js/app/00-storage-sync-patches.js:4348",
+        "js/app/00-storage-sync-patches.js:4351",
+        "js/app/00-storage-sync-patches.js:4356"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5076"
+      ],
+      "test_assertion_references": [
+        "tests/storage-upload-ownership.browser.cjs:83",
+        "tests/storage-upload-ownership.browser.cjs:87",
+        "tests/storage-upload-ownership.browser.cjs:91",
+        "tests/storage-upload-ownership.browser.cjs:93",
+        "tests/storage-upload-ownership.browser.cjs:97",
+        "tests/preference-integrity-scenarios.js:543",
+        "tests/preference-integrity-scenarios.js:556",
+        "tests/preference-integrity-scenarios.js:565"
+      ],
+      "regression_recommendation": "Keep three-attempt bounds, late callbacks, reconnection and actual multipart retries; add exact 404/250ms versus transient 500/1000ms timing if changing this policy.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_990e0395dd7d82aaac43",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "validateCachedDriveFilePromise",
+      "function_span": [
+        4968,
+        4974
+      ],
+      "function_sha256_normalized_lf": "33d9ec88864969cc5f90b42230a987f6dff24b57a6f1c5e4b80823acbb09ce1d",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 4968,
+        "end_line": 4974,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 7,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          4969,
+          4969
+        ],
+        "complex_conditions": [
+          {
+            "line": 4969,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_symbol_index": 197,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 4968,
+        "symbol_index": 197,
+        "deepest_block": {
+          "start": 4969,
+          "end": 4969
+        }
+      },
+      "reason": "The seven-line callback requires matching ID, filename, nontrashed state and expected parent, then invalidates advisory cache on mismatch. Its decisions count defensive metadata defaults as well as validation. These independent cache trust checks should remain visible together.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:4952",
+        "js/app/00-storage-sync-patches.js:4968",
+        "js/app/00-storage-sync-patches.js:4969",
+        "js/app/00-storage-sync-patches.js:4970",
+        "js/app/00-storage-sync-patches.js:4972"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4990",
+        "js/app/00-storage-sync-patches.js:4994",
+        "js/app/00-storage-sync-patches.js:4999"
+      ],
+      "test_assertion_references": [
+        "tests/drive-lifecycle.browser.cjs:262",
+        "tests/drive-lifecycle.browser.cjs:264",
+        "tests/drive-lifecycle.browser.cjs:266",
+        "tests/drive-lifecycle.browser.cjs:268"
+      ],
+      "regression_recommendation": "Recommended direct metadata matrix: wrong ID/name/parent, trashed, missing parents, non-OK response and malformed response. Cited lifecycle assertions cover related students-folder validation, not a direct complete test of this exact cached-file helper.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_ea31773c37d0074f31d2",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "downloadWftJsonFilePromise",
+      "function_span": [
+        5035,
+        5055
+      ],
+      "function_sha256_normalized_lf": "86b820af5e179ab9ac12fe1a11ba3ee9c8ac14b553939cc06bf409026d2d45dd",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5035,
+        "end_line": 5055,
+        "ccn": 17,
+        "max_nesting": 3,
+        "cognitive": 25,
+        "nloc": 20,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5042,
+          5047
+        ],
+        "complex_conditions": [
+          {
+            "line": 5036,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5043,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5046,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 204,
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 25,
+        "nloc": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 5035,
+        "symbol_index": 204,
+        "deepest_block": {
+          "start": 5042,
+          "end": 5047
+        }
+      },
+      "reason": "This parser is the common IO trust boundary for five caller-selected contracts: settings, deletions, student, index and full portfolio. Required data rethrows parse/shape errors while optional data returns null. A generic validator registry would add dispatch machinery and risk conflating optional index compatibility with required writing.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5027",
+        "js/app/00-storage-sync-patches.js:5035",
+        "js/app/00-storage-sync-patches.js:5040",
+        "js/app/00-storage-sync-patches.js:5042",
+        "js/app/00-storage-sync-patches.js:5045",
+        "js/app/00-storage-sync-patches.js:5047",
+        "js/app/00-storage-sync-patches.js:5052"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:1703",
+        "js/app/00-storage-sync-patches.js:1729",
+        "js/app/00-storage-sync-patches.js:2598",
+        "js/app/00-storage-sync-patches.js:5099",
+        "js/app/00-storage-sync-patches.js:5322",
+        "js/app/00-storage-sync-patches.js:5409",
+        "js/app/00-storage-sync-patches.js:5671"
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:203",
+        "tests/corrupt-portfolio.browser.cjs:204",
+        "tests/corrupt-portfolio.browser.cjs:215",
+        "tests/corrupt-portfolio.browser.cjs:216",
+        "tests/split-storage.browser.cjs:131"
+      ],
+      "regression_recommendation": "Retain required malformed/invalid-shape failures and optional index missing/invalid behavior; no structural repair needed.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_ca33c20e174a2bfda950",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "uploadWftJsonFilePromise",
+      "enclosing_function": "uploadWftJsonFilePromise",
+      "function_span": [
+        5058,
+        5126
+      ],
+      "function_sha256_normalized_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "verified_metrics": {
+        "name": "uploadWftJsonFilePromise",
+        "start_line": 5058,
+        "end_line": 5126,
+        "ccn": 10,
+        "max_nesting": 1,
+        "cognitive": 9,
+        "nloc": 61,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.44,
+        "deepest_block": [
+          5060,
+          5063
+        ],
+        "complex_conditions": []
+      },
+      "verified_symbol_index": null,
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 61,
+        "dispatch_share": 0.44,
+        "symbol_line": 5058,
+        "deepest_block": {
+          "start": 5060,
+          "end": 5063
+        }
+      },
+      "reason": "The useful duplication is the same filename-to-fingerprint choice at 5072-5074 and 5100-5102. Select the existing fingerprint function once per upload and use it for intended and downloaded values (preserving each ||{} fallback). This makes timeout verification and intended hashing share one policy. Do not alter preflight, credential stripping, schema validation, canonical lookup or accepted-hash comparison.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5060",
+        "js/app/00-storage-sync-patches.js:5064",
+        "js/app/00-storage-sync-patches.js:5072",
+        "js/app/00-storage-sync-patches.js:5087",
+        "js/app/00-storage-sync-patches.js:5099",
+        "js/app/00-storage-sync-patches.js:5100",
+        "js/app/00-storage-sync-patches.js:5104"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:1680",
+        "js/app/00-storage-sync-patches.js:5310",
+        "js/app/00-storage-sync-patches.js:5348",
+        "js/app/00-storage-sync-patches.js:5402",
+        "js/app/00-storage-sync-patches.js:5430",
+        "js/app/00-storage-sync-patches.js:5658",
+        "js/app/00-storage-sync-patches.js:5687"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:543",
+        "tests/preference-integrity-scenarios.js:561",
+        "tests/preference-integrity-scenarios.js:565",
+        "tests/portfolio-index.browser.cjs:327",
+        "tests/portfolio-index.browser.cjs:336"
+      ],
+      "regression_recommendation": "R2 requires focused settings/deletions/portfolio/index equality and mismatch cases through SAVE_FILE_TIMEOUT recovery, plus non-timeout rejection and missing canonical file. Existing inspected tests prove native multipart sanitation/index upload and ordinary timeout retry ownership, not this entire recovery matrix.",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "duplicate_verification_dispatch_policy",
+      "candidate_id": "043-R2"
+    },
+    {
+      "record_id": "code_health:finding_7cf232b061699f0ff1c4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "uploadWftJsonFilePromise",
+      "function_span": [
+        5099,
+        5113
+      ],
+      "function_sha256_normalized_lf": "8e1efb63ed6461ca55e399003496637f1878be47c8136fa20cba1293b31746a7",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5099,
+        "end_line": 5113,
+        "ccn": 11,
+        "max_nesting": 2,
+        "cognitive": 11,
+        "nloc": 13,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5105,
+          5108
+        ],
+        "complex_conditions": [
+          {
+            "line": 5105,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 209,
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 5099,
+        "symbol_index": 209,
+        "deepest_block": {
+          "start": 5105,
+          "end": 5108
+        }
+      },
+      "reason": "The downloaded-value callback repeats the intended-value fingerprint dispatch, so it participates in R2. Retain its exact equality gate and original timeout error on mismatch; canonical existence alone is not evidence of a successful save. Other nested branches preserve ID-versus-file-list compatibility and need no independent extraction.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5072",
+        "js/app/00-storage-sync-patches.js:5099",
+        "js/app/00-storage-sync-patches.js:5100",
+        "js/app/00-storage-sync-patches.js:5104",
+        "js/app/00-storage-sync-patches.js:5105",
+        "js/app/00-storage-sync-patches.js:5112"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5087"
+      ],
+      "test_assertion_references": [
+        "tests/storage-upload-ownership.browser.cjs:91",
+        "tests/storage-upload-ownership.browser.cjs:93",
+        "tests/portfolio-index.browser.cjs:336"
+      ],
+      "regression_recommendation": "R2: add actual timeout recovery equality/mismatch and invalid-required-cloud-payload assertions for all filename contracts; preserve rejection error and cache publication timing.",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "same_shared_policy_candidate_as_upload_parent",
+      "candidate_id": "043-R2"
+    },
+    {
+      "record_id": "code_health:finding_2ff46a2378726dc81a97",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "syncWftSettingsIfNeeded",
+      "function_span": [
+        5322,
+        5357
+      ],
+      "function_sha256_normalized_lf": "9512ca4bfa3e24b5e554a92eb5aabed693734fd71af38405fe3935b97df42979",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5322,
+        "end_line": 5357,
+        "ccn": 12,
+        "max_nesting": 1,
+        "cognitive": 11,
+        "nloc": 28,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5330,
+          5337
+        ],
+        "complex_conditions": [
+          {
+            "line": 5346,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 222,
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 5322,
+        "symbol_index": 222,
+        "deepest_block": {
+          "start": 5330,
+          "end": 5337
+        }
+      },
+      "reason": "This settings merge continuation rebases a newer local settings counter after download, reapplies student deletions, conditionally saves local state, uploads only when needed, then acknowledges the captured counter. Settings prefer-local rules and UI application differ from portfolio sync, so a generic stream callback would discard meaningful sequencing.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5322",
+        "js/app/00-storage-sync-patches.js:5326",
+        "js/app/00-storage-sync-patches.js:5330",
+        "js/app/00-storage-sync-patches.js:5336",
+        "js/app/00-storage-sync-patches.js:5341",
+        "js/app/00-storage-sync-patches.js:5347",
+        "js/app/00-storage-sync-patches.js:5354"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5845"
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:102",
+        "tests/settings-deletions-sync.browser.cjs:104",
+        "tests/settings-deletions-sync.browser.cjs:106",
+        "tests/settings-deletions-sync.browser.cjs:110",
+        "tests/settings-deletions-sync.browser.cjs:119",
+        "tests/settings-deletions-sync.browser.cjs:124",
+        "tests/settings-deletions-sync.browser.cjs:127"
+      ],
+      "regression_recommendation": "Retain create/update counter races and failed-pull/push storage rollback assertions; no one-use helper suggested.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_2f138c7deab593679403",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "syncWftDeletionsIfNeeded",
+      "function_span": [
+        5409,
+        5439
+      ],
+      "function_sha256_normalized_lf": "947ddbbd666160c3b3d65681bc732d763ab9e1606a0f7494095b10d363055823",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5409,
+        "end_line": 5439,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 26,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5414,
+          5420
+        ],
+        "complex_conditions": [
+          {
+            "line": 5428,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 226,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 5409,
+        "symbol_index": 226,
+        "deepest_block": {
+          "start": 5414,
+          "end": 5420
+        }
+      },
+      "reason": "The deletion continuation must merge all tombstones, reread and remerge after a newer deletion counter, persist only changed state, and acknowledge only the captured counter after any push. This differs from the settings UI/roster path and from portfolio stale-snapshot retry; merging the three implementations is not a safe simplification.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5409",
+        "js/app/00-storage-sync-patches.js:5414",
+        "js/app/00-storage-sync-patches.js:5417",
+        "js/app/00-storage-sync-patches.js:5423",
+        "js/app/00-storage-sync-patches.js:5429",
+        "js/app/00-storage-sync-patches.js:5436"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5840"
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:102",
+        "tests/settings-deletions-sync.browser.cjs:104",
+        "tests/settings-deletions-sync.browser.cjs:106",
+        "tests/settings-deletions-sync.browser.cjs:113",
+        "tests/settings-deletions-sync.browser.cjs:119",
+        "tests/settings-deletions-sync.browser.cjs:124",
+        "tests/settings-deletions-sync.browser.cjs:127"
+      ],
+      "regression_recommendation": "Retain deletion create/update races and failed local persistence; assert newly added tombstones survive late downloads and uploads.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_1a34a0bbf46ddefab5e7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "syncWftNow",
+      "function_span": [
+        5855,
+        5869
+      ],
+      "function_sha256_normalized_lf": "99700d0f7e1b19e85dc47321e1fc28e41927d7d40bba2422ab1f8e79f9988a84",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5855,
+        "end_line": 5869,
+        "ccn": 10,
+        "max_nesting": 3,
+        "cognitive": 13,
+        "nloc": 14,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5863,
+          5867
+        ],
+        "complex_conditions": [
+          {
+            "line": 5858,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5859,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5863,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 243,
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 5855,
+        "symbol_index": 243,
+        "deepest_block": {
+          "start": 5863,
+          "end": 5867
+        }
+      },
+      "reason": "The terminal index continuation is a completion barrier: current-run ownership, required storage, recovery and dirty-index failure are checked before lastPollAt or optional broadcast. The small best-effort broadcast catch must not fail otherwise completed sync. Moving these guards into a success wrapper would make completion order less explicit.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5855",
+        "js/app/00-storage-sync-patches.js:5856",
+        "js/app/00-storage-sync-patches.js:5857",
+        "js/app/00-storage-sync-patches.js:5859",
+        "js/app/00-storage-sync-patches.js:5862",
+        "js/app/00-storage-sync-patches.js:5864",
+        "js/app/00-storage-sync-patches.js:5868"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5850",
+        "js/app/00-storage-sync-patches.js:5852"
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:339",
+        "tests/portfolio-index.browser.cjs:349",
+        "tests/portfolio-index.browser.cjs:351",
+        "tests/drive-lifecycle.browser.cjs:78",
+        "tests/drive-lifecycle.browser.cjs:80",
+        "tests/drive-lifecycle.browser.cjs:81",
+        "tests/drive-lifecycle.browser.cjs:84",
+        "tests/drive-lifecycle.browser.cjs:87"
+      ],
+      "regression_recommendation": "Retain index failure leaves timestamp/dirty state unchanged, retry clears dirty state, and actual same-origin broadcast validity assertions.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_659258563fb64c05b01b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "normalizePortfolioData",
+      "function_span": [
+        6366,
+        6382
+      ],
+      "function_sha256_normalized_lf": "50c3d268888b8c3a937053bea510b44f52b303c4ba68ecfe31e7d73148a6d53e",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 6366,
+        "end_line": 6382,
+        "ccn": 11,
+        "max_nesting": 2,
+        "cognitive": 11,
+        "nloc": 17,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6375,
+          6379
+        ],
+        "complex_conditions": [
+          {
+            "line": 6367,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_symbol_index": 273,
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 6366,
+        "symbol_index": 273,
+        "deepest_block": {
+          "start": 6375,
+          "end": 6379
+        }
+      },
+      "reason": "Session normalization deliberately clones sessions and each image, fills legacy display/default fields, removes OCR text, and derives pending state from Drive references. The CCN counts independent compatibility defaults inside a small map callback. Reusing heavy-field stripping here would change retained metadata and image bytes. Legacy generated-ID/date volatility was already examined in039/040; no duplicate lead.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6366",
+        "js/app/00-storage-sync-patches.js:6367",
+        "js/app/00-storage-sync-patches.js:6368",
+        "js/app/00-storage-sync-patches.js:6369",
+        "js/app/00-storage-sync-patches.js:6373",
+        "js/app/00-storage-sync-patches.js:6376",
+        "js/app/00-storage-sync-patches.js:6378"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4492",
+        "js/app/00-storage-sync-patches.js:6411",
+        "js/app/00-storage-sync-patches.js:6467",
+        "js/app/00-storage-sync-patches.js:6527"
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:14",
+        "tests/record-identity.browser.cjs:37",
+        "tests/record-identity.browser.cjs:183",
+        "tests/media-ownership.browser.cjs:233",
+        "tests/media-ownership.browser.cjs:234"
+      ],
+      "regression_recommendation": "Keep clone isolation, special own names, existing IDs/dates and Drive reference/pending behavior. If changed, add missing-ID/date normalization assertions without changing acknowledged legacy semantics.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_9fbb8c985399646392b7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "stripPortfolioHeavyFields",
+      "function_span": [
+        6414,
+        6448
+      ],
+      "function_sha256_normalized_lf": "9d4898ba8530b26b866a99a8b43713586f80195c6ca1fb27f5ee0e888fb5c2d3",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 6414,
+        "end_line": 6448,
+        "ccn": 9,
+        "max_nesting": 1,
+        "cognitive": 8,
+        "nloc": 30,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6415,
+          6415
+        ],
+        "complex_conditions": [
+          {
+            "line": 6436,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6440,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6444,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 277,
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 6414,
+        "symbol_index": 277,
+        "deepest_block": {
+          "start": 6415,
+          "end": 6415
+        }
+      },
+      "reason": "The session stripping callback implements two different storage fallback policies: keep a fixed image metadata projection, then remove oversized HTML entirely while truncating oversized markup and original text with distinct flags. A generic field table would need action/flag options for only three fields and would obscure the intentional difference.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6414",
+        "js/app/00-storage-sync-patches.js:6419",
+        "js/app/00-storage-sync-patches.js:6436",
+        "js/app/00-storage-sync-patches.js:6440",
+        "js/app/00-storage-sync-patches.js:6444"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:6453",
+        "js/app/00-storage-sync-patches.js:6482"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:177",
+        "tests/media-ownership.browser.cjs:233"
+      ],
+      "regression_recommendation": "Keep image identity/revision assertions; add 50000/50001 boundaries and flag results for all three text fields if this fallback changes. Existing cited assertions do not prove every text-size boundary.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_aa72763e7f980e196e85",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "enclosing_function": "stripPortfolioHeavyFields",
+      "function_span": [
+        6420,
+        6432
+      ],
+      "function_sha256_normalized_lf": "1403e5e3e65eb3e53ddd6dbbb244a4c7e93acd7d7769c26da5aa8c9a32f5d16a",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 6420,
+        "end_line": 6432,
+        "ccn": 10,
+        "max_nesting": 0,
+        "cognitive": 9,
+        "nloc": 13,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": null,
+        "complex_conditions": []
+      },
+      "verified_symbol_index": 278,
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 6420,
+        "symbol_index": 278
+      },
+      "reason": "This 13-line callback constructs an allowlisted lightweight image record with defaults and a truthful byte-removal flag. makeImageMetadataLocalStorageSafe retains other own metadata and has a different contract; getSessionImagePayloads also uses different MIME/pending defaults. Reusing either would change persisted records rather than delete equivalent work.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6420",
+        "js/app/00-storage-sync-patches.js:6423",
+        "js/app/00-storage-sync-patches.js:6424",
+        "js/app/00-storage-sync-patches.js:6427",
+        "js/app/00-storage-sync-patches.js:6429",
+        "js/app/00-storage-sync-patches.js:6430",
+        "js/app/00-storage-sync-patches.js:1380"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:6419"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:177",
+        "tests/media-ownership.browser.cjs:233",
+        "tests/media-ownership.browser.cjs:234"
+      ],
+      "regression_recommendation": "Keep imageId/imageRevision, Drive reference and removal/pending flags; test null image entries and absent metadata if this projection changes.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_a1d3edb67f1235db4b52",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "uploadWftJsonFilePromise",
+      "enclosing_function": "uploadWftJsonFilePromise",
+      "function_span": [
+        5058,
+        5126
+      ],
+      "function_sha256_normalized_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "verified_metrics": {
+        "name": "uploadWftJsonFilePromise",
+        "start_line": 5058,
+        "end_line": 5126,
+        "ccn": 10,
+        "max_nesting": 1,
+        "cognitive": 9,
+        "nloc": 61,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.44,
+        "deepest_block": [
+          5060,
+          5063
+        ],
+        "complex_conditions": []
+      },
+      "verified_symbol_index": null,
+      "verified_observation_details": {
+        "nloc": 61,
+        "ccn": 10,
+        "dispatch_share": 0.44,
+        "symbol_line": 5058,
+        "deepest_block": {
+          "start": 5060,
+          "end": 5063
+        }
+      },
+      "reason": "The nloc61 marker describes the same upload function already reviewed under the complexity record. R2 removes one genuinely duplicated dispatch policy; the remaining preflight/sanitization, save, canonical resolution, timeout verification and return normalization are one coherent IO transaction. Do not split it solely to meet length thresholds.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5058",
+        "js/app/00-storage-sync-patches.js:5072",
+        "js/app/00-storage-sync-patches.js:5076",
+        "js/app/00-storage-sync-patches.js:5087",
+        "js/app/00-storage-sync-patches.js:5099",
+        "js/app/00-storage-sync-patches.js:5116"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:1680",
+        "js/app/00-storage-sync-patches.js:5310",
+        "js/app/00-storage-sync-patches.js:5402",
+        "js/app/00-storage-sync-patches.js:5658"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:543",
+        "tests/preference-integrity-scenarios.js:565",
+        "tests/portfolio-index.browser.cjs:336"
+      ],
+      "regression_recommendation": "Apply only the shared R2 proposal/regressions; no additional length-driven helper.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_marker_same_upload_candidate",
+      "candidate_id": "043-R2"
+    },
+    {
+      "record_id": "code_health:finding_dffec2060f1195e595db",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "syncWftSettingsIfNeeded",
+      "enclosing_function": "syncWftSettingsIfNeeded",
+      "function_span": [
+        5273,
+        5360
+      ],
+      "function_sha256_normalized_lf": "9be520d177e661b929886f9fe2d55ccbc3e95ddfc84a436f1981579b4e76e0f8",
+      "verified_metrics": {
+        "name": "syncWftSettingsIfNeeded",
+        "start_line": 5273,
+        "end_line": 5360,
+        "ccn": 5,
+        "max_nesting": 1,
+        "cognitive": 4,
+        "nloc": 72,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5275,
+          5275
+        ],
+        "complex_conditions": [
+          {
+            "line": 5275,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5281,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_symbol_index": null,
+      "verified_observation_details": {
+        "nloc": 72,
+        "ccn": 5,
+        "dispatch_share": 0.0,
+        "symbol_line": 5273,
+        "deepest_block": {
+          "start": 5275,
+          "end": 5275
+        }
+      },
+      "reason": "The nloc72 parent includes a local acknowledgement closure and debug decision logging around the settings lookup/create/merge/rebase/push transaction. Splitting these phases would require threading captured hash/counter/pending values and would not remove repeated work. The complex child is independently retained above.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5273",
+        "js/app/00-storage-sync-patches.js:5284",
+        "js/app/00-storage-sync-patches.js:5293",
+        "js/app/00-storage-sync-patches.js:5304",
+        "js/app/00-storage-sync-patches.js:5317",
+        "js/app/00-storage-sync-patches.js:5322",
+        "js/app/00-storage-sync-patches.js:5348"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5845"
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:102",
+        "tests/settings-deletions-sync.browser.cjs:119",
+        "tests/settings-deletions-sync.browser.cjs:124",
+        "tests/settings-deletions-sync.browser.cjs:127"
+      ],
+      "regression_recommendation": "Preserve actual orchestrator follow-up and failed persistence assertions; no independent size repair.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_c7eaf07e563a1b77b630",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "syncWftDeletionsIfNeeded",
+      "enclosing_function": "syncWftDeletionsIfNeeded",
+      "function_span": [
+        5363,
+        5441
+      ],
+      "function_sha256_normalized_lf": "feee1b0fcad0dfc73b5a1a2092af75bac8b06347c608b22b93e6a4f71ccc08f9",
+      "verified_metrics": {
+        "name": "syncWftDeletionsIfNeeded",
+        "start_line": 5363,
+        "end_line": 5441,
+        "ccn": 3,
+        "max_nesting": 1,
+        "cognitive": 2,
+        "nloc": 66,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5365,
+          5365
+        ],
+        "complex_conditions": [
+          {
+            "line": 5365,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": null,
+      "verified_observation_details": {
+        "nloc": 66,
+        "ccn": 3,
+        "dispatch_share": 0.0,
+        "symbol_line": 5363,
+        "deepest_block": {
+          "start": 5365,
+          "end": 5365
+        }
+      },
+      "reason": "The nloc66 deletion parent adds first-cloud creation even when persisted tombstones exist without a dirty flag. Its own counter acknowledgement and merge phases are not interchangeable with settings or portfolio behavior. Size alone does not justify a generalized synchronization engine.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5363",
+        "js/app/00-storage-sync-patches.js:5374",
+        "js/app/00-storage-sync-patches.js:5385",
+        "js/app/00-storage-sync-patches.js:5396",
+        "js/app/00-storage-sync-patches.js:5402",
+        "js/app/00-storage-sync-patches.js:5409",
+        "js/app/00-storage-sync-patches.js:5436"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5840"
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:102",
+        "tests/settings-deletions-sync.browser.cjs:113",
+        "tests/settings-deletions-sync.browser.cjs:119",
+        "tests/settings-deletions-sync.browser.cjs:124"
+      ],
+      "regression_recommendation": "Preserve nonpending-but-nonempty tombstone creation, counter races and failure rollback; keep the child callback in its owning transaction.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_83aadb338a812a5c1310",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "syncWftPortfolioIfNeeded",
+      "enclosing_function": "syncWftPortfolioIfNeeded",
+      "function_span": [
+        5610,
+        5699
+      ],
+      "function_sha256_normalized_lf": "703a7f0817ecca875bc23e8f65259cde248913ab147220733d0df6d0a1793cc1",
+      "verified_metrics": {
+        "name": "syncWftPortfolioIfNeeded",
+        "start_line": 5610,
+        "end_line": 5699,
+        "ccn": 4,
+        "max_nesting": 1,
+        "cognitive": 3,
+        "nloc": 77,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5612,
+          5612
+        ],
+        "complex_conditions": [
+          {
+            "line": 5612,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": null,
+      "verified_observation_details": {
+        "nloc": 77,
+        "ccn": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 5610,
+        "deepest_block": {
+          "start": 5612,
+          "end": 5612
+        }
+      },
+      "reason": "The nloc77 portfolio parent intentionally abandons a stale local snapshot and queues follow-up instead of rebasing as settings/deletions do. Required reads, deletion filtering before and after union, local-save-before-push, and captured-counter acknowledgement are separate correctness obligations. A shared stream helper would need extensive policy parameters.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5610",
+        "js/app/00-storage-sync-patches.js:5621",
+        "js/app/00-storage-sync-patches.js:5630",
+        "js/app/00-storage-sync-patches.js:5641",
+        "js/app/00-storage-sync-patches.js:5658",
+        "js/app/00-storage-sync-patches.js:5672",
+        "js/app/00-storage-sync-patches.js:5676",
+        "js/app/00-storage-sync-patches.js:5681",
+        "js/app/00-storage-sync-patches.js:5687"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5850"
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-sync.browser.cjs:31",
+        "tests/portfolio-sync.browser.cjs:34",
+        "tests/portfolio-sync.browser.cjs:36",
+        "tests/portfolio-sync.browser.cjs:39",
+        "tests/portfolio-sync.browser.cjs:42",
+        "tests/portfolio-sync.browser.cjs:50",
+        "tests/storage-upload-ownership.browser.cjs:102",
+        "tests/storage-upload-ownership.browser.cjs:104"
+      ],
+      "regression_recommendation": "Retain real union/timestamp/deletion/restore/failed-write and delayed-save follow-up assertions; no size-only extraction.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_7df1adb8c891ab2a8721",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "enclosing_function": "loadStudentPortfolioLazy",
+      "function_span": [
+        2859,
+        2889
+      ],
+      "function_sha256_normalized_lf": "47bf4838a866ce9bd9d27e79e681fdca04567d041518b2820db0d25757d1dd20",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 2859,
+        "end_line": 2889,
+        "ccn": 8,
+        "max_nesting": 2,
+        "cognitive": 8,
+        "nloc": 31,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          2863,
+          2874
+        ],
+        "complex_conditions": [
+          {
+            "line": 2860,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 116,
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 2859,
+        "symbol_index": 116
+      },
+      "reason": "The four boolean operators at2860 prove a usable cache container/data/sessions array and an optional matching student identity. The optional missing studentId supports legacy cache entries; removing that clause or trusting only sessions would change compatibility or show another student. The parent falls back to strict local/cloud reads on a miss.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:2844",
+        "js/app/00-storage-sync-patches.js:2853",
+        "js/app/00-storage-sync-patches.js:2859",
+        "js/app/00-storage-sync-patches.js:2860",
+        "js/app/00-storage-sync-patches.js:2877",
+        "js/app/00-storage-sync-patches.js:2883"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:2844"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:132",
+        "tests/optional-storage.browser.cjs:137",
+        "tests/optional-storage.browser.cjs:144",
+        "tests/optional-storage.browser.cjs:148",
+        "tests/optional-storage.browser.cjs:149",
+        "tests/optional-storage.browser.cjs:173",
+        "tests/optional-storage.browser.cjs:184",
+        "tests/optional-storage.browser.cjs:185"
+      ],
+      "regression_recommendation": "Retain valid/wrong-ID/invalid-session caches, single immediate callback and real background refresh; explicitly preserve legacy missing-ID compatibility if touched.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_95da106900a2c477e281",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "enclosing_function": "downloadWftJsonFilePromise",
+      "function_span": [
+        5035,
+        5055
+      ],
+      "function_sha256_normalized_lf": "86b820af5e179ab9ac12fe1a11ba3ee9c8ac14b553939cc06bf409026d2d45dd",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5035,
+        "end_line": 5055,
+        "ccn": 17,
+        "max_nesting": 3,
+        "cognitive": 25,
+        "nloc": 20,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5042,
+          5047
+        ],
+        "complex_conditions": [
+          {
+            "line": 5036,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5043,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5046,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 204,
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 5035,
+        "symbol_index": 204
+      },
+      "reason": "The four-operator condition checks the students container only for the recognized index format. Unsupported-format data is returned for the caller to reject as an unusable index, while malformed recognized indices throw. Both behaviors are needed by loadPortfolioIndexFromDrive; wrapping this one expression would merely move validation.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5045",
+        "js/app/00-storage-sync-patches.js:5046",
+        "js/app/00-storage-sync-patches.js:1704",
+        "js/app/00-storage-sync-patches.js:1734"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:1703",
+        "js/app/00-storage-sync-patches.js:1729"
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:131",
+        "tests/drive-lifecycle.browser.cjs:62",
+        "tests/drive-lifecycle.browser.cjs:66"
+      ],
+      "regression_recommendation": "Retain wrong-format fallback versus recognized-format null/array/missing students rejection; no generic shape predicate.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_9ae6fddb1587d38c6426",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "enclosing_function": "syncWftDeletionsIfNeeded",
+      "function_span": [
+        5385,
+        5440
+      ],
+      "function_sha256_normalized_lf": "970c9a8d477a026e7694c3e8baa3272cf50f6a9fe9bbe50be64e94c2b829d912",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 5385,
+        "end_line": 5440,
+        "ccn": 7,
+        "max_nesting": 2,
+        "cognitive": 7,
+        "nloc": 46,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          5396,
+          5399
+        ],
+        "complex_conditions": [
+          {
+            "line": 5396,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 224,
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 5385,
+        "symbol_index": 224
+      },
+      "reason": "The three-operator guard skips remote deletion-file creation only when there is no pending push and all three deletion collections are empty. Each collection is independent; an OR or dirty-only test would drop existing tombstones or create unnecessary empty files. The condition states the intended skip case directly.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:5385",
+        "js/app/00-storage-sync-patches.js:5393",
+        "js/app/00-storage-sync-patches.js:5396",
+        "js/app/00-storage-sync-patches.js:5402"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:5840"
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:102",
+        "tests/settings-deletions-sync.browser.cjs:113"
+      ],
+      "regression_recommendation": "Add each individual nonempty deletedStudents/restoredStudents/deletedSessions collection with pending false, plus all-empty and pending-true cases if changing this guard; existing race assertions cover pending streams.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    },
+    {
+      "record_id": "code_health:finding_750d0054ac70a8565c25",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "enclosing_function": "normalizePortfolioData",
+      "function_span": [
+        6357,
+        6383
+      ],
+      "function_sha256_normalized_lf": "1e87ef5d4fe5636357bd552888ac9a70929313527f06d7a6376166064f55664b",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 6357,
+        "end_line": 6383,
+        "ccn": 8,
+        "max_nesting": 1,
+        "cognitive": 7,
+        "nloc": 27,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6358,
+          6360
+        ],
+        "complex_conditions": [
+          {
+            "line": 6358,
+            "operator_count": 4,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 6362,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 272,
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 6357,
+        "symbol_index": 272
+      },
+      "reason": "The five-name root metadata filter is a literal compatibility policy, not an unreadable boolean accident.029 already proposes sharing six-name filters elsewhere; this function omits _meta, so blindly applying that helper would change behavior. Keep this exact policy unless a separate metadata contract decision and regression justifies convergence.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6357",
+        "js/app/00-storage-sync-patches.js:6358",
+        "js/app/00-storage-sync-patches.js:6390"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4492",
+        "js/app/00-storage-sync-patches.js:6411",
+        "js/app/00-storage-sync-patches.js:6467",
+        "js/app/00-storage-sync-patches.js:6527"
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:14",
+        "tests/record-identity.browser.cjs:37",
+        "tests/portfolio-index.browser.cjs:57",
+        "tests/portfolio-index.browser.cjs:62"
+      ],
+      "regression_recommendation": "If consolidating with029, test every reserved name and _meta independently and decide which contract owns _meta. Do not introduce a second duplicate metadata lead.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_policy_difference_related_to_existing_029"
+    },
+    {
+      "record_id": "code_health:finding_eba7f088a4fab7fddea3",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "enclosing_function": "validateWftPortfolioShape",
+      "function_span": [
+        6389,
+        6396
+      ],
+      "function_sha256_normalized_lf": "3a459f23a3d3149fbf14fe8cf409c39c8cd8b4f52391813d29d1088031fc2d57",
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 6389,
+        "end_line": 6396,
+        "ccn": 6,
+        "max_nesting": 1,
+        "cognitive": 5,
+        "nloc": 8,
+        "bumps": 0,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "deepest_block": [
+          6390,
+          6390
+        ],
+        "complex_conditions": [
+          {
+            "line": 6392,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_symbol_index": 274,
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 6389,
+        "symbol_index": 274
+      },
+      "reason": "The three-operator validation rejects absent/scalar/array students and missing/nonarray sessions before persistence or cloud merge. Every clause excludes a distinct invalid shape; a one-use isValidStudent wrapper would hide the trust boundary and only move the detector result.",
+      "evidence_anchors": [
+        "js/app/00-storage-sync-patches.js:6387",
+        "js/app/00-storage-sync-patches.js:6389",
+        "js/app/00-storage-sync-patches.js:6392",
+        "js/app/00-storage-sync-patches.js:6394"
+      ],
+      "callers": [
+        "js/app/00-storage-sync-patches.js:4491",
+        "js/app/00-storage-sync-patches.js:5044",
+        "js/app/00-storage-sync-patches.js:5047",
+        "js/app/00-storage-sync-patches.js:5068",
+        "js/app/00-storage-sync-patches.js:5591",
+        "js/app/00-storage-sync-patches.js:5673",
+        "js/app/00-storage-sync-patches.js:6462"
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:198",
+        "tests/corrupt-portfolio.browser.cjs:199",
+        "tests/corrupt-portfolio.browser.cjs:203",
+        "tests/corrupt-portfolio.browser.cjs:204",
+        "tests/corrupt-portfolio.browser.cjs:215",
+        "tests/corrupt-portfolio.browser.cjs:216"
+      ],
+      "regression_recommendation": "Retain required-read/invalid-cloud/split-file rejection and empty-valid-portfolio assertions; no weakening of required shapes or empty-on-error fallback.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_structure"
+    }
+  ],
+  "candidate_interventions": [
+    {
+      "id": "043-R1",
+      "status": "confirmed_repair_candidate",
+      "records": [
+        "code_health:finding_d6fe9a1e2d9c86e011a9",
+        "code_health:finding_2063be3138b94708785b"
+      ],
+      "smallest_change": "Let existing resolveStudentPortfolioKey accept an already-read portfolio snapshot; reuse it in both async student wrappers. Preserve one-argument lazy caller and atomic synchronous write section.",
+      "risk": "Must preserve direct-name priority, first mapped alias, null-prototype own keys, flag-off no settings read, required-read rejection, and unknown-ID behavior."
+    },
+    {
+      "id": "043-R2",
+      "status": "candidate_needs_regression",
+      "records": [
+        "code_health:finding_ca33c20e174a2bfda950",
+        "code_health:finding_7cf232b061699f0ff1c4",
+        "code_health:finding_a1d3edb67f1235db4b52"
+      ],
+      "smallest_change": "Choose one existing filename-specific fingerprint function per upload and use it for intended and timeout-readback values. Preserve current falsy-value normalization and all validation/IO steps.",
+      "risk": "No inspected test directly proves the complete SAVE_FILE_TIMEOUT readback equality/mismatch matrix. Require targeted regressions before adoption; no new transport abstraction."
+    }
+  ],
+  "additional_leads": [],
+  "assertion_sources": {
+    "tests/portfolio-index.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8"
+    },
+    "tests/split-storage.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0"
+    },
+    "tests/recovery-cache.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "c22d93ed48c8233ead94fcc5d978a27ee37b57891ab5d1c380612057c266bd0e"
+    },
+    "tests/optional-storage.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe"
+    },
+    "tests/auth-integrity.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512"
+    },
+    "tests/drive-folder-selection.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "54560c40fc82fc3825d5cabf1edbadcd29952ac6f1077d3750249b4454b22c36"
+    },
+    "tests/drive-lifecycle.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6"
+    },
+    "tests/archive-connection.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9"
+    },
+    "tests/corrupt-portfolio.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675"
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97"
+    },
+    "tests/settings-deletions-sync.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+    },
+    "tests/portfolio-sync.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0"
+    },
+    "tests/media-ownership.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8"
+    },
+    "tests/media-upload-boundary.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab"
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646"
+    },
+    "tests/record-identity.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d"
+    },
+    "tests/record-identity.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d"
+    },
+    "tests/image-preparation.browser.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81"
+    },
+    "tests/portfolio-sync.cjs": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_normalized_lf": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4"
+    }
+  },
+  "verification": {
+    "operation": "Installed RepoWise pure JavaScript complexity walker on exact normalized00 bytes; no CLI health/index/import run.",
+    "command_runtime": "C:/Users/Michael/AppData/Roaming/uv/tools/repowise/Scripts/python.exe -B",
+    "records": 29,
+    "unique_detected_function_spans": 27,
+    "all_stored_numeric_fields_and_deepest_blocks_match": true,
+    "all_complex_condition_lines_operator_counts_constructs_match": true,
+    "all_symbol_lines_and_preceding_same_name_symbol_indices_match": true,
+    "function_hash_convention": "SHA256 of inclusive one-based source line slices, normalized LF, preserving source trailing LF.",
+    "test_assertions_read_only": true
+  },
+  "summary": {
+    "records": 29,
+    "status_counts": {
+      "reviewed_no_change": 25,
+      "confirmed_repair_candidate": 2,
+      "candidate_needs_regression": 2
+    },
+    "unique_candidate_interventions": 2,
+    "overlapping_upload_length_marker": 1,
+    "scanner_closures": 0,
+    "behavioral_bug_claims": 0,
+    "application_tests_run": 0
+  },
+  "limits": [
+    "Independent source review and pure-walker verification only; no application/browser tests were run, no test-pass claim.",
+    "Current original00 bytes/hash rechecked while constructing report; other files and tests were inspected from immutable historical Git objects. No all-current-script freeze claim.",
+    "Cited tests have differing isolation: drive-folder-selection stubs summary IO; settings/deletion/portfolio tests can stub transport; native ownership/credential/index scenarios retain their named boundaries. Their assertions are not represented as proving untested branches.",
+    "Existing019/027/029/031/033/035/038/040 findings remain separate; no scanner status, source, Git index, tracker, docs, dependencies or runtime was changed. Only own scratch and this output were written.",
+    "Reviewer disposition is advisory for coordinator adoption; candidate tests are recommendations, not executed reproductions."
+  ],
+  "coordinator_acceptance": {
+    "each_individual_reason_read": true,
+    "all_assigned_facts_and_actual_function_metrics_verified": true,
+    "immutable00_raw_and_lf_match": true,
+    "historical_related_source_hashes_verified": true,
+    "historical_main_outside039_and045_exact": true,
+    "no_tests_or_scanner_clearance_claimed": true,
+    "report": "reviews/batch-005-readonly-043-044-acceptance.json"
+  }
+}

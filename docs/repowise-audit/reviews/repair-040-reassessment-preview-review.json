@@ -1,0 +1,221 @@
+{
+  "repair_id": "repair-040-preview",
+  "related_repair": "repair-039",
+  "related_lead": "review028-reassessment-confirmation-freshness",
+  "stage": "independent_concrete_isolated_preview_review",
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "inspected_git_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "verdict": "revise_preview_before_integration",
+  "integration_performed": false,
+  "tests_executed_by_reviewer": false,
+  "inspected_source": {
+    "preview_main_path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-repo\\js\\app\\10-main-app.js",
+    "main_before_sha256_raw": "be45df002484901aacc24ec3d5cdd64a1d4079872652c1b3ec7c3f861c18c5a8",
+    "main_preview_sha256_raw": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+    "main_preview_sha256_normalized_lf": "049da7dccd47bf69dfd4a525e8c0339e976babb00ff083b179c1e392fb93a696",
+    "baseline_function_sha256_raw": "197987cdfb00b4a18de92a7c6a352052247935d22c406c7c535f49dee95f2f03",
+    "preview_function_sha256_raw": "26d9c7c335c3845e981e18094ee798133a480b63e3846a5e4584037594dd08d3",
+    "outside_reassessment_function_identical": true,
+    "crlf_preserved": true,
+    "source_hashes_normalized_lf": {
+      "js/app/10-main-app.js": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+      "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+      "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+      "index.html": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+    }
+  },
+  "frozen_input_checks": {
+    "original_source_files": 90,
+    "preview_unmodified_source_files": 89,
+    "original90_mismatches": [],
+    "preview89plus_main_mismatches": [],
+    "configuration_mismatches": [],
+    "coverage_tool_mismatches": [],
+    "index_html_sha256_raw": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "all_reported_referenced_artifact_hashes_verified": 21
+  },
+  "blockers": [
+    {
+      "id": "repair040-preview-B1",
+      "priority": "P1",
+      "title": "Deletion-log-only source invalidation is not fenced",
+      "classification": "remaining_source_freshness_gap_in_existing039_lead",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "The new raw portfolio/current-work guard does not read wft_deletions. Real sync saves a merged newer deletion log independently at saveDeletionsLocalOnly,then can await settings network work before portfolio filtering/persistence. Confirmation can arrive in that interval:portfolio bytes,settings,current writing and pending still match,so this preview loads a source that the new tombstone already excludes and clears acknowledged current/pending work. The public Remove Entry regression removes the portfolio entry too,so it does not cover this deletion-only interval.",
+      "source_path": [
+        "00-storage-sync-patches.js:5409-5425 downloads/merges and saves cloud deletion data through saveDeletionsLocalOnly",
+        "00-storage-sync-patches.js:4881-4890 writes only WFT_DELETIONS_STORAGE_KEY after read-only preflight;does not update portfolio/settings",
+        "00-storage-sync-patches.js:5840-5850 runs deletion sync,then asynchronous settings sync,then portfolio sync",
+        "00-storage-sync-patches.js:5614-5615 and5674-5681 apply latest tombstones to portfolio later",
+        "00-storage-sync-patches.js:4822 and4835-4836 treat matching student/session tombstones as removal evidence",
+        "preview js/app/10-main-app.js:7648-7665 readCurrentWork omits deletion bytes;7692 compares only portfolio and that snapshot;7702-7725 then mutate grade/work and clear pending"
+      ],
+      "evidence_anchors": [
+        "work/repowise-repair-039/preview-repo/js/app/10-main-app.js:7648",
+        "work/repowise-repair-039/preview-repo/js/app/10-main-app.js:7663",
+        "work/repowise-repair-039/preview-repo/js/app/10-main-app.js:7692",
+        "work/repowise-repair-039/preview-repo/js/app/10-main-app.js:7702",
+        "work/repowise-repair-039/preview-repo/js/app/10-main-app.js:7725",
+        "js/app/00-storage-sync-patches.js:4886",
+        "js/app/00-storage-sync-patches.js:5425",
+        "js/app/00-storage-sync-patches.js:5840",
+        "js/app/00-storage-sync-patches.js:5845",
+        "js/app/00-storage-sync-patches.js:5850",
+        "js/app/00-storage-sync-patches.js:4836",
+        "work/repowise-repair-039/preview-accepted/driver.browser.cjs:130"
+      ],
+      "smallest_required_change": "Add one recovery-aware raw deletion-log field to readCurrentWork,for example storedDeletions: readWftStudentChangeStorage(WFT_DELETIONS_STORAGE_KEY). It is then captured before the dialog and compared at the existing synchronous post-confirm gate;read failures use the existing catch. Use raw bytes,not normalized getDeletionsData,which can swallow errors and introduce generated defaults. No sync engine change or source normalization write is needed.",
+      "required_regression": "While the real confirmation is held,write a strictly newer source/student tombstone through the same real saveDeletionsLocalOnly helper(or native deletion pull held before portfolio sync). Assert matching source is excluded by actual deletion policy while portfolio/settings/selection/current work/pending bytes remain otherwise unchanged,then confirm and require review/retry with every current-work field retained. This may use a labeled controlled sync-writer seam;do not claim a real cloud journey. Retain all15 existing cases and exact-source receipts.",
+      "policy_scope": "New tombstone arrival during the held dialog belongs to the existing freshness repair. This does not request migration of older deleted entries,a new global lock or a general cross-tab transaction."
+    }
+  ],
+  "accepted_as_implemented": [
+    {
+      "requirement": "Strict source binding before confirmation",
+      "assessment": "7627-7631 refuses unresolved recovery,reads one logical raw portfolio snapshot,validates/normalizes that same value and locates source with existing stable-ID-first/createdAt selector. It avoids the soft display reader failure fallback and derives text/grade/images from the bound source.",
+      "anchors": [
+        "preview:7627",
+        "preview:7628",
+        "preview:7629",
+        "preview:7631",
+        "00-storage-sync-patches.js:4490",
+        "10-main-app.js:7415"
+      ]
+    },
+    {
+      "requirement": "Read-only current-work capture",
+      "assessment": "7648-7665 reads raw DOM/runtime owner,exact text,complete selectedImages including originalDataUrl/OCR properties,primary image,source,latest result,corrected data,genre,grade/override/neatness,stored settings/selection and runtime/stored pending. It does not call the impure current-writing context helper on rejection.",
+      "anchors": [
+        "preview:7648",
+        "preview:7655",
+        "preview:7658",
+        "preview:7659",
+        "preview:7663",
+        "00-storage-sync-patches.js:8107",
+        "00-storage-sync-patches.js:8116"
+      ]
+    },
+    {
+      "requirement": "Freshness gate precedes grade/current-work mutations",
+      "assessment": "7688-7700 compares before the unchanged original grade/load body begins7702. Both failed reads and changed snapshots alert/return;Cancel returns before the gate. No post-confirm await separates the gate from initial synchronous load.",
+      "anchors": [
+        "preview:7686",
+        "preview:7690",
+        "preview:7692",
+        "preview:7694",
+        "preview:7698",
+        "preview:7702"
+      ]
+    },
+    {
+      "requirement": "Runtime plus stored pending and acknowledged-existing compatibility",
+      "assessment": "Opening getPendingPortfolioSync hydration is preserved before snapshot/warning. Snapshot compares full runtime content plus raw persisted bytes and validates persisted named-student/object-session shape. Unchanged existing pending remains allowed;late same-ID/signature storage-only change is detected.",
+      "anchors": [
+        "preview:7649",
+        "preview:7651",
+        "preview:7652",
+        "preview:7664",
+        "preview:7669",
+        "preview:7679",
+        "driver:161-184",
+        "driver:217-224"
+      ]
+    },
+    {
+      "requirement": "Legacy ID/date volatility",
+      "assessment": "Only one normalized source object is used;acceptance compares stored raw portfolio bytes rather than regenerated normalized IDs/date defaults. No-date stable-ID and direct createdAt-selector cases explicitly hold the modal across20ms. No storage normalization is written by the guard.",
+      "anchors": [
+        "preview:7629",
+        "preview:7691",
+        "preview:7692",
+        "driver:112-125",
+        "driver:185",
+        "00-storage-sync-patches.js:6368"
+      ]
+    },
+    {
+      "requirement": "Read/parse/recovery failure and downstream ownership",
+      "assessment": "Strict source and pending read/parse failures have bounded catches before load;truthy student-change recovery aborts before/after dialog. Byte comparison need not reparse changed source because any change is rejected. The complete original grade-failure,image-restore-context and missing-source replacement behavior outside the added gate is byte-identical.",
+      "anchors": [
+        "preview:7627",
+        "preview:7632",
+        "preview:7651",
+        "preview:7671",
+        "preview:7690",
+        "preview:7693",
+        "preview:7703",
+        "10-main-app.js:7616",
+        "00-storage-sync-patches.js:8321",
+        "00-storage-sync-patches.js:8357"
+      ]
+    }
+  ],
+  "accepted_tradeoffs": [
+    "Any raw portfolio change,including unrelated student writes or equivalent serialization,requires a new action. This conservative retry policy is explicit in the code and avoids a new per-record identity/fingerprint framework.",
+    "Any stored settings/selection change and full current-work value change also requires retry. The snapshot stays local to the held operation and is not logged/exported by the patch.",
+    "A synchronous check establishes freshness at confirmation acceptance;it is not a cross-tab atomic transaction or a lock on later work. Existing image/replacement guards remain necessary.",
+    "The id-less createdAt compatibility control enters the public function directly. It does not establish that existing generated-ID renderer buttons are a stable legacy API;this preview does not change that pre-existing rendering behavior.",
+    "Recovery-refusal branches are source-inspected,not backed by a new dedicated recovery injection. This is a disclosed test limit,not a reason to remove the recovery guards."
+  ],
+  "test_evidence_review": {
+    "method": "Read the complete accepted native driver and selected result/receipt fields;verified every referenced artifact hash and all receipts against exact f41ccc... preview main. No test executed by this reviewer.",
+    "worker_reported_focused": {
+      "cases": 15,
+      "assertions": 73,
+      "failed_labels": [],
+      "harness_errors": 0,
+      "page_errors": 0
+    },
+    "oracles": "Driver239-243 checks exact writing/owner/grade/class grade/neatness/photo/source/pending/report and protected bytes at rejection. Source-edit case176-178 proves one same-ID record rather than accidental duplicate insertion. Storage-only pending180-183 proves cached runtime/settings/selection/portfolio stayed unchanged while persisted payload changed. Read-failure213-216 checks complete equality and retry notice.",
+    "worker_existing_suite_receipts": [
+      {
+        "path": "work/repowise-repair-039/preview-accepted/focused.receipt.json",
+        "exit_code": 0,
+        "main_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5"
+      },
+      {
+        "path": "work/repowise-repair-039/preview-reviewed/preference-integrity.receipt.json",
+        "exit_code": 0,
+        "main_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5"
+      },
+      {
+        "path": "work/repowise-repair-039/preview-reviewed/analysis-identity.receipt.json",
+        "exit_code": 0,
+        "main_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5"
+      }
+    ],
+    "existing_suite_results_attribution": "Worker stdout/receipts report preference-integrity105 and analysis-identity23 on f41ccc...;not independent reruns or a full modified-source gate. Original full004 completion was reported by coordinator,not recaptured here.",
+    "artifact_sha256": {
+      "work/repowise-repair-039/preview-accepted/focused.receipt.json": "f23670c07a359aa67c86377e7b14314d7decc9b589fb31bd7fd23b7b3170c76f",
+      "work/repowise-repair-039/preview-accepted/driver.browser.cjs": "55a17c46b1be925fce2fd04883b5889f527e4b1c8c9f3a65b0934fdebbe0c8e3",
+      "work/repowise-repair-039/preview-accepted/native-results.json": "d807986975b1d03440a979f7babd6d7a3642f56e0833f90dcb3ab81b849c41bf",
+      "work/repowise-repair-039/preview-reviewed/preference-integrity.receipt.json": "c6808ab14e0f4300402957b035baabd0627d671072e8e430a4927ee5347a62c1",
+      "work/repowise-repair-039/preview-reviewed/analysis-identity.receipt.json": "046d1431df15d143649c5383630d40ab00e4d2e803f13c09c1a56b9c5ccc6531",
+      "work/repowise-repair-039/preview-main-app.diff": "64b03557e2f502040b0622903d8640fa8dbafb700be54b88d3d09df6769a055b"
+    },
+    "preview_report_sha256": "cff52b67da232ab06021236ac3a47b02f78a6e945a516bea3a7588f188b4999c",
+    "gap": "No accepted-driver case changes only a relevant deletion log while the physical source portfolio entry remains present."
+  },
+  "required_changes_before_integration": [
+    "Add recovery-aware raw deletion-log bytes to the existing local freshness snapshot.",
+    "Add the focused deletion-only-arrival regression with premises proving no other captured field caused refusal;rerun appropriate focused/related checks on the newly pinned preview hash and return that exact diff for review."
+  ],
+  "summary": {
+    "blocking_findings": 1,
+    "other_baseline_requirements_accepted": 6,
+    "preview_outside_reassessment_function_unchanged": true,
+    "main_repository_mutations": false,
+    "new_independent_runtime_results": false,
+    "integration_or_fix_clearance_claimed": false
+  },
+  "limits": [
+    "Read-only concrete code/artifact review. No app tests,source/test/Git/index/tracker/config/docs/runtime/cache/dependency edits,other chats/messages or integration;only own work/repowise-review-040 and this output written.",
+    "Exact f41ccc... preview only. All90 original source pins,89 other preview source files,configuration,HTML and three coverage tools rechecked. Current main matches immutable7527 after LF normalization;raw CRLF file hashes and unchanged prefix/suffix separately verified.",
+    "Deletion-only finding is source-supported from actual sync writer/phase ordering and the missing snapshot field. It was not executed or reproduced in this review. Do not present it as an observed post-preview failure or a new independent lead.",
+    "The reviewer did not inspect screenshots physically or run live Drive/AI/OAuth. Existing worker fixtures intercept service boundaries and include explicit controlled data/storage seams.",
+    "Worker focused/existing-suite results are attributed to inspected exact-hash artifacts. No full modified-source gate,coverage import,deployment or scanner closure is asserted."
+  ]
+}

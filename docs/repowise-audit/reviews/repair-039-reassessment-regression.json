@@ -1,0 +1,205 @@
+{
+  "repair_id": "repair-039",
+  "lead_id": "review028-reassessment-confirmation-freshness",
+  "stage": "scratch regression only; no repair authorized",
+  "status": "reproduced_on_unchanged_baseline",
+  "source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "generated_at": "2026-10-16T00:15:58.850Z",
+  "timezone": "Asia/Bangkok",
+  "summary": "Two genuine modal-time paths reproduce stale-source loading and loss of a newly persisted pending assessment. Seven expected preservation assertions fail; 28 supporting/control assertions pass. Five control cases fully pass; no harness or browser errors. No repository application/test/config edits.",
+  "test_summary": {
+    "cases": 7,
+    "fully_passing_controls": 5,
+    "reproduced_risk_cases": 2,
+    "passed_assertions": 28,
+    "expected_contract_failures": 7,
+    "harness_errors": 0,
+    "browser_errors": 0,
+    "process_exit": 1,
+    "false_green": false
+  },
+  "cases": [
+    {
+      "name": "ordinary-confirm",
+      "passed_assertions": 3,
+      "failed_assertions": [],
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    {
+      "name": "ordinary-cancel",
+      "passed_assertions": 3,
+      "failed_assertions": [],
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    {
+      "name": "source-delete-confirm",
+      "passed_assertions": 4,
+      "failed_assertions": [
+        "Deleted source must not replace current writing after held confirmation",
+        "Deleted source must not publish a stale reassessment owner",
+        "Deleted source must preserve current pending writing/photo result",
+        "Deleted source must preserve current grade and photo"
+      ],
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    {
+      "name": "source-delete-cancel",
+      "passed_assertions": 5,
+      "failed_assertions": [],
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    {
+      "name": "late-analysis-confirm",
+      "passed_assertions": 4,
+      "failed_assertions": [
+        "Newly completed pending result must remain durable after an older confirmation",
+        "Newly completed result must retain its runtime owner and report",
+        "Newly completed result must keep its writing/owner until teacher reviews the changed context"
+      ],
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    {
+      "name": "late-analysis-cancel",
+      "passed_assertions": 5,
+      "failed_assertions": [],
+      "harness_errors": 0,
+      "browser_errors": 0
+    },
+    {
+      "name": "grade-save-failure",
+      "passed_assertions": 4,
+      "failed_assertions": [],
+      "harness_errors": 0,
+      "browser_errors": 0
+    }
+  ],
+  "exact_user_paths": [
+    {
+      "case": "source-delete-confirm",
+      "steps": [
+        "First tab contains Bob current writing/photo and a persisted Bob pending result.",
+        "Open Portfolio, choose Alice, click the shipped Reassess Writing button and hold its actual confirmation.",
+        "Open a second app tab in the same browser context; choose Alice in Portfolio, click Remove from Portfolio and confirm Remove Entry.",
+        "Wait until the first tab findPortfolioSession also sees the deleted source; first tab confirmation remains open.",
+        "Click Load for Reassessment in the first tab."
+      ],
+      "observed": "The source stays deleted and its tombstone stays saved, but the first tab loads captured Alice writing/photo, switches current owner Bob to Alice and grade 5 to 6, publishes a reassessment source pointing at the deleted entry, and clears Bob pending data from runtime and storage.",
+      "expected_contract": "Revalidate source after consent; if missing/changed, stop before mutating current work/preferences and ask teacher to retry.",
+      "user_reachability": "Only synthetic initial records are seeded. Both reassessment and deletion use real shipped button handlers and dialogs. No forced clicks, beneath-modal interaction, replacement wftConfirm, direct storage mutation during confirmation, or fake storage event.",
+      "limits": "Deletion of the saved source is not undone by confirmation. This is a stale load and displacement of current work, not saved-history resurrection."
+    },
+    {
+      "case": "late-analysis-confirm",
+      "steps": [
+        "Enter synthetic Bob writing and click the shipped Analyze Writing button.",
+        "Hold the first synthetic AI completion; the real analysis remains in progress.",
+        "Click Portfolio, choose Alice and click Reassess Writing; its real confirmation opens while Bob analysis is still running.",
+        "Release the synthetic AI completion. All three real pipeline steps finish behind the modal, creating latestAnalysisData and a newly persisted pending Bob assessment.",
+        "Click Load for Reassessment on the earlier prompt, whose text has no pending-result replacement warning."
+      ],
+      "observed": "Before acceptance: pending Bob session sess_1792109752807_oh87mf exists in runtime and localStorage and its report is populated. After acceptance: both pending copies and latestAnalysisData are null; writing and current owner change to Alice. The pending Bob assessment was never committed to the saved portfolio.",
+      "expected_contract": "Do not discard newly arrived pending work under a confirmation built before that result existed. A safe minimal behavior is abort and ask teacher to review/retry.",
+      "user_reachability": "Only callOpenRouter completion strings are simulated. Analysis entry, every intermediate parser/renderer/pending-persistence step, navigation, reassessment and confirmation use the real app. No current owner/writing/pending assignment occurs while the modal is open.",
+      "limits": "No live AI or Drive calls. The loss is the synthetic current assessment/draft; saved portfolio history is unchanged."
+    }
+  ],
+  "controls": [
+    "ordinary-confirm: existing warning shown; source text, photo identity, source owner and grade load; pre-existing pending result intentionally clears.",
+    "ordinary-cancel: exact storage/current writing/photo/pending/owner/grade/output snapshot retained.",
+    "source-delete-cancel: second-tab deletion remains saved while current work/preferences remain exact.",
+    "late-analysis-cancel: newly completed Bob report, durable pending result and writing/owner retained exactly.",
+    "grade-save-failure: injected wft_settings write failure leaves exact current work/preferences and gives explicit kept-writing feedback."
+  ],
+  "source_and_callers": [
+    "js/app/10-main-app.js:7624-7672 — source/text captured before await wftConfirm; grade save, source assignment, selection/writing changes and clearPendingPortfolioSync after it without freshness validation.",
+    "js/app/10-main-app.js:7430-7436 — findPortfolioSession reads current local portfolio; first-tab missing-source precondition verifies deletion independently.",
+    "js/app/10-main-app.js:7575-7621 — image restoration protects its later writing context; cannot protect the earlier confirmation boundary.",
+    "js/app/10-main-app.js:8196-8277 — real analysis can continue across portfolio navigation and publish a pending result while the dialog is open.",
+    "js/app/00-storage-sync-patches.js:7515-7520 — public reassess/remove buttons are emitted without an isAnalyzing lock.",
+    "js/app/00-storage-sync-patches.js:6844-6878 — real remove-entry confirmation, portfolio removal and deletion persistence.",
+    "js/app/00-storage-sync-patches.js:7742-7751 — real analysis result publishes runtime and persisted pending work.",
+    "js/app/00-storage-sync-patches.js:8115-8129 — captureCurrentWritingContext/isCurrentWritingContext are available for the next-stage guard.",
+    "tests/preference-integrity-scenarios.js:103-128 — existing failed-grade/late-neatness preservation expectations; read only here.",
+    "tests/analysis-identity.browser.cjs:166-180,273-280 — existing held-provider and loaded-source ownership patterns; read only here.",
+    "tests/portfolio-replacement.cjs:53-60 and tests/portfolio-replacement.browser.cjs:83-90 — missing-source commit path preserves pending data; no stale-source safety relaxation proposed."
+  ],
+  "policy_basis": "The visible pending-result warning is decided before the await and is absent for the result that arrives later. Preserving changed work until renewed teacher review is the explicit regression contract, inferred from campaign saved-work safety and existing ownership/pending-preservation tests. No claim that a general modal should freeze all background work, and no repair is applied in this stage.",
+  "smallest_proposed_next_stage_fix": {
+    "location": "reassessPortfolioSession only, before any post-confirmation grade/preference/current-work mutation",
+    "approach": "Capture the original source snapshot, current writing context and pending-result snapshot before wftConfirm. After acceptance, re-read source and compare source contents/identity plus current writing/pending context. If any relevant context changed, alert and return with current work/preferences intact. Use existing helpers and preserve normal/cancel/grade-failure behavior. Keep source/owner validation through image restore and later portfolio commit.",
+    "affected_scope": [
+      "js/app/10-main-app.js shared reassessment function",
+      "one focused native held-confirmation regression after next-stage authorization",
+      "scripts/case-report-suites.json only if coordinator later authorizes registering the new suite"
+    ],
+    "no_need_for": "No new dependencies, sync engine changes, generic modal lock, coverage tooling change, or weakened missing-source replacement guard.",
+    "policy_choice": "Abort/retry is the smallest proposed behavior. Automatically accepting the newest source or silently discarding a newly completed result would require a different policy decision."
+  },
+  "relevant_next_stage_suites": {
+    "before_and_after": [
+      "scratch reassessment-confirmation.browser.cjs (baseline intentionally red; after repair all expected contracts should pass)",
+      "tests/analysis-identity.browser.cjs",
+      "tests/preference-integrity.browser.cjs",
+      "tests/portfolio-replacement.browser.cjs",
+      "tests/portfolio-replacement.cjs",
+      "tests/pending-portfolio.browser.cjs",
+      "tests/pending-portfolio.cjs"
+    ],
+    "broader_integration_owned_by_coordinator": "Run the complete official gate only after coordinator authorizes repository edits and frozen-input changes. Existing full004gate was not touched or duplicated by this worker."
+  },
+  "pin_summary": {
+    "all_90_sources_match": true,
+    "config_matches": true,
+    "index_html_unchanged": true,
+    "three_coverage_tools_match": true,
+    "before_after_identical": true,
+    "source_pin_manifest": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-004-source-pins.json",
+    "source_pin_manifest_sha256": "925223fec9071b976c14d2948c49ad5197ac8baae489d3f3e77b9d41d54a5059",
+    "tool_pin_manifest_sha256": "66b5022e2ce48772ccc39d37343398dae06d402de365cfa9262db9606ff32dfa"
+  },
+  "preserved_full_report": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\stage-one-full-report.json",
+    "bytes": 394714,
+    "sha256": "f5cb3f7ee8e5bda8047ee355871dad575e12e0614d3ac5d126a0af7748d28c74",
+    "contents": "All original raw snapshots, exact pin maps and screenshot hashes; preserved byte-for-byte before compaction."
+  },
+  "receipts": {
+    "raw_results": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\native-results.json",
+    "execution_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\final-run-receipt.json",
+    "sha256": {
+      "reassessment-confirmation.browser.cjs": "606415c95683d628a9fce5d7988798302b65bf2978f13efd6729fe54c09e2f76",
+      "native-results.json": "5be26af1baa8df8400de252dd03e2d34db9c815a05b54c8e17ab897e489fa4da",
+      "final-run.stdout.txt": "a019ec73990b8a8b5c60c94a96adb6ebaaf4beba3858add10186cf9f9fdeb6fe",
+      "final-run.stderr.txt": "f7b2c9d1a914e8f9eecbf4bf91164d91b5266e9e8b0b70eccaf4dde37c3cbdba",
+      "final-run-receipt.json": "babb003a92cb24fa15fad13df58abc5a13a21cbbd92dad909e6b950fa02b541f",
+      "write-evidence.cjs": "626562f89fa5189631b5647f21c623600afc7f1697f36618a54ea051f2e669b3"
+    }
+  },
+  "scope_compliance": {
+    "repository_writes": false,
+    "git_writes": false,
+    "installs": false,
+    "live_accounts_or_student_data": false,
+    "external_service_calls": false,
+    "tracker_docs_index_health_coverage_changes": false,
+    "additional_chats_or_agents": false,
+    "all_90_source_pins_match_before_after": true,
+    "case_report_config_pin_matches_before_after": true,
+    "coverage_tool_pins_match_before_after": true,
+    "index_html_byte_identical": true,
+    "memory_and_library": "Read memu-retrieve and Ponytail full skills; memU retrieval completed; shared START-HERE and knowledge/library-rules read. Knowledge contained no project-specific curated note. Parent/repository AGENTS lookup found no additional file in the relevant ancestor paths; supplied instructions apply.",
+    "dependency_basis": "Existing reviewed Playwright and installed Edge; no new download, package, execution configuration or adopted third-party code."
+  },
+  "limits": [
+    "Stage one ends here. No repository repair, registration, full suite run, tracker disposition, publication or integration occurred.",
+    "Cross-tab source deletion and same-tab late completion are reproduced. Source replacement/rename, other late owner/writing mutation paths, browser reload recovery, and real Drive/AI/OAuth were not tested.",
+    "Synthetic PNGs are generated by native canvas; exact text/storage/runtime/current owner/grade/photo/report snapshots and screenshot hashes are included.",
+    "An exploratory first run was strengthened to await first-tab visibility of deletion before acceptance; final receipt/snapshots come from the strengthened regression with no harness errors.",
+    "The initial and final read-only git status show coordinator-owned docs changes/untracked audit reports; this worker made no repository writes."
+  ]
+}

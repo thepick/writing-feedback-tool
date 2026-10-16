@@ -1,0 +1,1633 @@
+{
+  "repair_id": "repair-044",
+  "title": "Portfolio rendering and feedback static review",
+  "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "walker_inspection_git_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js@00c9454e6c89f258cb3afc938201a10feda16087": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "index.html@00c9454e6c89f258cb3afc938201a10feda16087": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+  },
+  "storage_raw_sha256": "ca88093125284d2b7cb9efb9e10f5cbcfea0728c683e70bc570be831a4af6a6f",
+  "verification": {
+    "assigned_records": 20,
+    "all_20_detector_spans_and_numerical_details_match": true,
+    "method": "Installed RepoWise walker and seven detectors replayed read-only with Python -B, then complete assigned functions, surrounding guards/callers and historical actual test assertions inspected. No application or test execution.",
+    "metrics_receipt": "work/repowise-review-044/metrics.json",
+    "rules": {
+      "brain_method": "NLOC >=70, judged CCN >=9 and centrality floor; supplied indexed context11 dependents/p80=4 yields floor4.",
+      "nested_complexity": "judged depth >=4",
+      "complex_method": "judged CCN >=9; dispatch correction does not alter these zero-dispatch functions",
+      "bumpy_road": "bumps >=3 and judged CCN >=5",
+      "large_method": "NLOC >=60 and raw CCN >=3",
+      "primitive_obsession": "untyped parameter count >=5; no fixed-signature exemption here",
+      "complex_conditional": "boolean operators >=3"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_1582cf75d826c8ccf5f4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "brain_method",
+      "symbol": "renderStudentPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_orchestrator",
+      "reason": "The 74-line renderer already delegates stats, cards, charts and feedback. Its visible guards distinguish missing DOM, no selection, empty portfolio and optional async loading; extracting a wrapper only to reduce the brain score would move these decisions. Retain this shape. The optional async ownership lead is reported separately.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7613-7652",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7654-7691",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 14,
+          "nloc": 74,
+          "max_nesting": 1,
+          "dependents_count": 11,
+          "centrality_floor": 4,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "renderStudentPortfolio",
+          "start_line": 7613,
+          "end_line": 7691,
+          "ccn": 14,
+          "cognitive": 13,
+          "nloc": 74,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7616,
+            7616
+          ]
+        },
+        "judged_ccn": 14,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "nloc": 74,
+        "max_nesting": 1,
+        "dependents_count": 11,
+        "centrality_floor": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 7613,
+        "deepest_block": {
+          "start": 7616,
+          "end": 7616
+        }
+      },
+      "callers": [
+        "switchTab portfolio branch at historical main:49-53",
+        "openStudentPortfolio:7179",
+        "portfolio selector onchange at historical index.html:3378",
+        "async adapter:2030-2052"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "No shape-only rewrite. If the separate async lead is pursued, use an explicit selected-owner oracle, not parity alone."
+    },
+    {
+      "record_id": "code_health:finding_cecbe8636e3d91233515",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "nextStudent",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_redundancy_candidate",
+      "reason": "nextStudent iterates Object.keys of its captured strict normalized portfolio; normalizePortfolioData creates an own sessions array for each retained key. The second portfolio/student/sessions ternary at 7128 repeats that guaranteed contract. Use portfolio[studentName].sessions directly; retain serial traversal, final fresh read, callback errors and early returns. This removes redundant work but does not claim to clear the depth finding.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7101-7142",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "4490-4498",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6354-6384",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "max_nesting": 4,
+          "ccn": 7,
+          "cognitive": 14,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "nextStudent",
+          "start_line": 7120,
+          "end_line": 7140,
+          "ccn": 7,
+          "cognitive": 14,
+          "nloc": 21,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7121,
+            7126
+          ]
+        },
+        "judged_ccn": 7,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 7,
+        "cognitive": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 7120,
+        "deepest_block": {
+          "start": 7121,
+          "end": 7126
+        }
+      },
+      "callers": [
+        "syncPendingPortfolioMedia entry points:3624,6923,6942",
+        "nextSession:7133"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "upload",
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "81-97: held real boundary requests, credentials, newer essay retention, acknowledged media, pending-owner isolation, errors and unchanged corrupt bytes."
+        },
+        {
+          "key": "ownership",
+          "file": "tests/media-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "196-207, 241-263: saved mutation/write failure/retry and pending owner/token changes; newer text/photo/reference/order/deletion state retained."
+        }
+      ],
+      "regression_recommendation": "When adopting, preserve zero/multiple-student traversal and corrupt/recovery final-read failure behavior; existing held-upload tests cover ownership. No new abstraction."
+    },
+    {
+      "record_id": "code_health:finding_2869a3657f251ae42502",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "symbol": "destroyWftPortfolioCharts",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_failure_isolation",
+      "reason": "Depth 4 comes from the small registry loop, optional destroy method and per-instance try/catch. Catching each failing chart separately lets later charts be destroyed, and deletion after the catch always clears the registry. Moving the catch outside the loop changes cleanup behavior; a helper would only hide nesting.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7434-7443",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7613-7618",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "max_nesting": 4,
+          "ccn": 6,
+          "cognitive": 12,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "destroyWftPortfolioCharts",
+          "start_line": 7434,
+          "end_line": 7443,
+          "ccn": 6,
+          "cognitive": 12,
+          "nloc": 10,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7436,
+            7442
+          ]
+        },
+        "judged_ccn": 6,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 6,
+        "cognitive": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 7434,
+        "deepest_block": {
+          "start": 7436,
+          "end": 7442
+        }
+      },
+      "callers": [
+        "renderStudentPortfolio:7617"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Retain; renderer assertion 150 requires throwing destroy to leave an empty registry."
+    },
+    {
+      "record_id": "code_health:finding_70c2709f24f09b856658",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "buildSessionFeedbackSummary",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_compatibility_fallbacks",
+      "reason": "This 11-line object builder has CCN 11 because of explicit legacy detailed/genre defaults and four sanitized summary fields. The next-time normalization and generated encouraging closing differ from the detailed saved model. A shared fallback wrapper would obscure precedence for little reuse.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6739-6749",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7734-7735",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 11,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "buildSessionFeedbackSummary",
+          "start_line": 6739,
+          "end_line": 6749,
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 11,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            6740,
+            6740
+          ]
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 6739,
+        "deepest_block": {
+          "start": 6740,
+          "end": 6740
+        }
+      },
+      "callers": [
+        "saveCurrentSessionToPortfolio saves summary:7734"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        },
+        {
+          "key": "missing",
+          "file": "tests/missing-feedback.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "47-51 and 61-69: saved unknown versus genuine zero/numeric score behavior; 114-123: actual saved-session path."
+        }
+      ],
+      "regression_recommendation": "Retain genre precedence and missing-field behavior; existing summary/detail fixture assertions apply."
+    },
+    {
+      "record_id": "code_health:finding_d2e17a6f2a3c946cdf22",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "buildPortfolioDetailedFeedback",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_redundancy_candidate",
+      "reason": "getBasePortfolioCategoryKeys returns a fresh six-item array without Neatness. Remove the extra slice allocation at 6755 and the always-true categoryScores object and absent-Neatness checks at 6769; keep categoryScores.Neatness != null so zero remains assessed. Preserve later custom-category deduplication and all saved-feedback fallbacks. This is a local cleanup, not a reason to split the whole builder.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6751-6774",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7187-7196",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 19,
+          "cognitive": 18,
+          "nloc": 51,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "buildPortfolioDetailedFeedback",
+          "start_line": 6751,
+          "end_line": 6804,
+          "ccn": 19,
+          "cognitive": 18,
+          "nloc": 51,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            6752,
+            6752
+          ]
+        },
+        "judged_ccn": 19,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 18,
+        "nloc": 51,
+        "dispatch_share": 0.0,
+        "symbol_line": 6751,
+        "deepest_block": {
+          "start": 6752,
+          "end": 6752
+        }
+      },
+      "callers": [
+        "saveCurrentSessionToPortfolio saves detail:7735"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        },
+        {
+          "key": "missing",
+          "file": "tests/missing-feedback.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "47-51 and 61-69: saved unknown versus genuine zero/numeric score behavior; 114-123: actual saved-session path."
+        },
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Compare saved category order and fields for missing/zero Neatness, extra categories, genre defaults and unknown scores. Parent may combine with the similarly redundant Neatness guard at 7202."
+    },
+    {
+      "record_id": "code_health:finding_5b685ceb1955a261c1eb",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_sanitized_compatibility_adapter",
+      "reason": "The 26-line per-category callback reconciles source score with assessment fallback, omits genuinely absent categories, optionally invokes the feedback builder with an isolated failure fallback, and sanitizes saved text. Its notice-row branches preserve different legacy forms; feedback/source arrays are capped at eight, while normalized legacy patternNotes are not capped here. Do not flatten these distinctions or claim all rows are bounded.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6776-6801",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 20,
+          "cognitive": 22,
+          "nloc": 26,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 6776,
+          "end_line": 6801,
+          "ccn": 20,
+          "cognitive": 22,
+          "nloc": 26,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            6784,
+            6790
+          ]
+        },
+        "judged_ccn": 20,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 20,
+        "cognitive": 22,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 6776,
+        "symbol_index": 290,
+        "deepest_block": {
+          "start": 6784,
+          "end": 6790
+        }
+      },
+      "callers": [
+        "buildPortfolioDetailedFeedback keys.forEach:6776",
+        "normalizeNoticeRows at historical main:2049-2059"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        },
+        {
+          "key": "missing",
+          "file": "tests/missing-feedback.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "47-51 and 61-69: saved unknown versus genuine zero/numeric score behavior; 114-123: actual saved-session path."
+        }
+      ],
+      "regression_recommendation": "Retain; if editing this callback later, cover throwing/missing builder, numeric zero versus null, row aliases and exact sanitization/fallback precedence."
+    },
+    {
+      "record_id": "code_health:finding_b355d7e617534febc944",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "findCurrentImage",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_first_match_candidate",
+      "reason": "Both sessions.filter(...)[0] and imageId-filter(...)[0] allocate and traverse the entire collection while needing only the first match. Native find is already used by this codebase; use it for these two lookups. Keep ID-first/index fallback, source-image fingerprint and the precise storage-trim exception. This improves lookup work without a score-only helper.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6998-7018",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6968-6997",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7020-7067",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 20,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "findCurrentImage",
+          "start_line": 6998,
+          "end_line": 7018,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 20,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            6999,
+            6999
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 6998,
+        "deepest_block": {
+          "start": 6999,
+          "end": 6999
+        }
+      },
+      "callers": [
+        "uploadSessionImagesToDrive pre-upload/current-image validation",
+        "upload completion current lookup:7077"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "upload",
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "81-97: held real boundary requests, credentials, newer essay retention, acknowledged media, pending-owner isolation, errors and unchanged corrupt bytes."
+        },
+        {
+          "key": "ownership",
+          "file": "tests/media-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "196-207, 241-263: saved mutation/write failure/retry and pending owner/token changes; newer text/photo/reference/order/deletion state retained."
+        }
+      ],
+      "regression_recommendation": "Preserve first-match behavior, absent/deleted/reordered media, changed reference/bytes, trimmed stored data and held pending owner cases. Treat strict normalized session input as the contract; do not silently broaden malformed sparse input support."
+    },
+    {
+      "record_id": "code_health:finding_73bec908e177949698d7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_upload_commit_boundary",
+      "reason": "CCN 17 reflects distinct upload-error, credential/queue/image freshness, missing result ID, current portfolio lookup and local-save failure boundaries. The successful ack updates only the still-current image and then persists/schedules sync before advancing. Consolidating these guards into a boolean or callback wrapper would hide ownership and error flow.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7068-7095",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7020-7067",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 17,
+          "cognitive": 28,
+          "nloc": 28,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 7068,
+          "end_line": 7095,
+          "ccn": 17,
+          "cognitive": 28,
+          "nloc": 28,
+          "max_nesting": 3,
+          "bumps": 4,
+          "param_count": 2,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7088,
+            7091
+          ]
+        },
+        "judged_ccn": 17,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 28,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 7068,
+        "symbol_index": 302,
+        "deepest_block": {
+          "start": 7088,
+          "end": 7091
+        }
+      },
+      "callers": [
+        "doUploadImage uploadBlobToDrive completion callback",
+        "nextUpload continuation:7094",
+        "uploadSessionImagesToDrive:7137,7855"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "upload",
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "81-97: held real boundary requests, credentials, newer essay retention, acknowledged media, pending-owner isolation, errors and unchanged corrupt bytes."
+        },
+        {
+          "key": "ownership",
+          "file": "tests/media-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "196-207, 241-263: saved mutation/write failure/retry and pending owner/token changes; newer text/photo/reference/order/deletion state retained."
+        }
+      ],
+      "regression_recommendation": "Retain; held native upload scenarios assert stale owners and replaced/deleted photos are not acknowledged, and durable failures reach the caller."
+    },
+    {
+      "record_id": "code_health:finding_aeeba123d237efa7f611",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "openStudentPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ui_guards_separate_behavior_lead",
+      "reason": "The short function coordinates selected-student persistence, crop ownership, optional DOM elements and desktop-only scrolling. Those guards are meaningful. No structural extraction is warranted. Its admin-tab destination is separately suspicious against the actual portfolio panel layout and roster caller; see the unconfirmed behavior lead.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7168-7185",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 18,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "openStudentPortfolio",
+          "start_line": 7168,
+          "end_line": 7185,
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 18,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 1,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7172,
+            7172
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 7168,
+        "deepest_block": {
+          "start": 7172,
+          "end": 7172
+        }
+      },
+      "callers": [
+        "historical main renderStudentList name click:76-79",
+        "historical main switchTab:27-59",
+        "historical index.html portfolioPanel:3374-3386"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "crop",
+          "file": "tests/crop-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "74: openStudentPortfolio(Bob/Alice) calls; 179-204: crop ownership assertions. No portfolio-panel visibility assertion."
+        }
+      ],
+      "regression_recommendation": "Retain guard visibility. Add a real roster-name click visibility regression only for the separate navigation lead."
+    },
+    {
+      "record_id": "code_health:finding_c7032b60a83d25295aed",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "renderPortfolioGrowGoalBlock",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_explicit_small_presentation",
+      "reason": "The 15-line goal renderer has four intentional labels, field-specific fallback chains, safe bold rendering and a next-time-only grammar normalization. The high boolean CCN comes largely from those fallbacks. A table/loop rewrite would add indirection and must still retain the special normalization; no useful repair follows from this score alone.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7338-7352",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 17,
+          "cognitive": 16,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "renderPortfolioGrowGoalBlock",
+          "start_line": 7338,
+          "end_line": 7352,
+          "ccn": 17,
+          "cognitive": 16,
+          "nloc": 15,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7339,
+            7339
+          ]
+        },
+        "judged_ccn": 17,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 7338,
+        "deepest_block": {
+          "start": 7339,
+          "end": 7339
+        }
+      },
+      "callers": [
+        "openPortfolioDetailedFeedback:7413"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        },
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Retain fallback-only, empty-goal, bold and hostile-markup expectations."
+    },
+    {
+      "record_id": "code_health:finding_1eb81af14115d6558a96",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "openPortfolioDetailedFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_distinct_modal_contract",
+      "reason": "The detailed modal preserves the older-entry message, ordered categories, first existing category expanded, no-category message and optional grow goal. It displays overall zero by != null. Shared shell/category/goal helpers already exist; extracting another wrapper for subtitle or branching would not simplify the behavior.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7392-7415",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7296-7336",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 24,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "openPortfolioDetailedFeedback",
+          "start_line": 7392,
+          "end_line": 7415,
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 24,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7405,
+            7411
+          ]
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 24,
+        "dispatch_share": 0.0,
+        "symbol_line": 7392,
+        "deepest_block": {
+          "start": 7405,
+          "end": 7411
+        }
+      },
+      "callers": [
+        "session card detailed button:7533",
+        "category modal View Detailed button:7428"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        },
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Retain actual category-to-detailed navigation, empty/legacy data, order, first-open category, zero overall and safe rendering."
+    },
+    {
+      "record_id": "code_health:finding_c99e888f784b0bc76750",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "openPortfolioCategoryFeedback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_distinct_modal_contract",
+      "reason": "The category modal has its own missing-category message, one expanded category and a safe data-attribute link to the detailed modal. These differ from the full-detail loop and older-entry branch. Existing shell rendering already shares the useful common work; do not fuse the two contracts for a CCN threshold.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7417-7430",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7322-7336",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "openPortfolioCategoryFeedback",
+          "start_line": 7417,
+          "end_line": 7430,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 14,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 3,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7421,
+            7421
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 7417,
+        "deepest_block": {
+          "start": 7421,
+          "end": 7421
+        }
+      },
+      "callers": [
+        "session category chip onclick:7531"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        },
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Retain missing category, hostile title/attributes, zero/unknown scores and real View Detailed action coverage."
+    },
+    {
+      "record_id": "code_health:finding_08148a5fbe3130655bba",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "renderStudentPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_orchestrator",
+      "reason": "The complex-method signal covers the same renderer as the brain/large records. Its CCN 14 is distributed across boundary checks and dataset defaults, not a deep decision tree (depth 1). Existing helper calls keep the main flow readable. The optional held-load owner risk needs a targeted behavioral fix rather than a structural wrapper.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7613-7691",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 14,
+          "cognitive": 13,
+          "nloc": 74,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "renderStudentPortfolio",
+          "start_line": 7613,
+          "end_line": 7691,
+          "ccn": 14,
+          "cognitive": 13,
+          "nloc": 74,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7616,
+            7616
+          ]
+        },
+        "judged_ccn": 14,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 13,
+        "nloc": 74,
+        "dispatch_share": 0.0,
+        "symbol_line": 7613,
+        "deepest_block": {
+          "start": 7616,
+          "end": 7616
+        }
+      },
+      "callers": [
+        "historical main:53,176,428,3172",
+        "openStudentPortfolio:7179",
+        "historical index.html:3378"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "No additional shape repair; assess the separate async-owner lead with a controlled ordering test."
+    },
+    {
+      "record_id": "code_health:finding_7e5e160a165282d1b84f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_diagnostic_shape_existing_lead",
+      "reason": "The twelve-line rejection callback defensively records name/message/stack, clears busy state, and refuses stale-token UI writes. Those fallbacks are useful for thrown values. Its separate missing newer-pending UI guard was already recorded as review027-manual-save-rejection-status; do not create another lead or regard retaining the shape as clearing that behavior risk.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7933-7960",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 12,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 7949,
+          "end_line": 7960,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 12,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7952,
+            7952
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 7949,
+        "symbol_index": 342,
+        "deepest_block": {
+          "start": 7952,
+          "end": 7952
+        }
+      },
+      "callers": [
+        "manualSaveToDrive V2 flush promise rejection:7949"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "ownership",
+          "file": "tests/media-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "196-207, 241-263: saved mutation/write failure/retry and pending owner/token changes; newer text/photo/reference/order/deletion state retained."
+        }
+      ],
+      "regression_recommendation": "Reuse review027-manual-save-rejection-status regression: reject an old flush after newer pending writing arrives under the same token; newer pending status must survive. Existing ownership tests are related, not proof of that exact catch case."
+    },
+    {
+      "record_id": "code_health:finding_a785a09dfafbeb9573d0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_upload_commit_boundary",
+      "reason": "Four bumps describe the same upload-completion callback as the complex-method row: errors return immediately, ownership loss skips acknowledgment, commit failures propagate, and success continues the queue. Keeping these distinct transitions visible is safer than relocating blocks to clear the bumpy-road marker.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7068-7095",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "bumps": 4,
+          "ccn": 17,
+          "max_nesting": 3
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 7068,
+          "end_line": 7095,
+          "ccn": 17,
+          "cognitive": 28,
+          "nloc": 28,
+          "max_nesting": 3,
+          "bumps": 4,
+          "param_count": 2,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7088,
+            7091
+          ]
+        },
+        "judged_ccn": 17,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 17,
+        "max_nesting": 3,
+        "symbol_line": 7068,
+        "symbol_index": 302,
+        "deepest_block": {
+          "start": 7088,
+          "end": 7091
+        }
+      },
+      "callers": [
+        "doUploadImage uploadBlobToDrive completion callback",
+        "nextUpload:7094"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "upload",
+          "file": "tests/media-upload-boundary.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "81-97: held real boundary requests, credentials, newer essay retention, acknowledged media, pending-owner isolation, errors and unchanged corrupt bytes."
+        },
+        {
+          "key": "ownership",
+          "file": "tests/media-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "196-207, 241-263: saved mutation/write failure/retry and pending owner/token changes; newer text/photo/reference/order/deletion state retained."
+        }
+      ],
+      "regression_recommendation": "Same held upload and failure assertions as the corresponding complex row; no second repair should be counted."
+    },
+    {
+      "record_id": "code_health:finding_bd262137e5d6d346dc75",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "symbol": "renderStudentPortfolio",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_orchestrator",
+      "reason": "The renderer is 74 NLOC, above the detector threshold of 60, but its code is one ordered render transaction with existing helpers for expensive subparts. Splitting HTML assembly merely to reach 59 lines does not remove work or improve ownership. This is a third valid signal on the same function, not a third repair.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7613-7691",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "nloc": 74,
+          "ccn": 14,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "renderStudentPortfolio",
+          "start_line": 7613,
+          "end_line": 7691,
+          "ccn": 14,
+          "cognitive": 13,
+          "nloc": 74,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7616,
+            7616
+          ]
+        },
+        "judged_ccn": 14,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "nloc": 74,
+        "ccn": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 7613,
+        "deepest_block": {
+          "start": 7616,
+          "end": 7616
+        }
+      },
+      "callers": [
+        "historical main switchTab:53",
+        "historical index.html selector:3378"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Retain; preserve stats count, session order, chart lifecycle, storage purity and actions if a separately justified change is later made."
+    },
+    {
+      "record_id": "code_health:finding_7e9e3bd687e666b878c1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "setupWftPortfolioCharts",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_meaningful_parameter_boundary",
+      "reason": "The five untyped parameters are two canvas IDs and three related but distinct chart inputs. There is one clear caller, and an object wrapper would add property names without reducing state or validation. Retain zero-versus-unknown filtering, empty-axis defaults, missing Chart/canvas fallbacks and deferred lookup of current canvases.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7560-7611",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7690",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "function": {
+          "name": "setupWftPortfolioCharts",
+          "start_line": 7560,
+          "end_line": 7611,
+          "ccn": 1,
+          "cognitive": 0,
+          "nloc": 52,
+          "max_nesting": 0,
+          "bumps": 0,
+          "param_count": 5,
+          "dispatch_share": 0.0,
+          "deepest_block": null
+        },
+        "judged_ccn": 1,
+        "judged_nesting": 0
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 7560
+      },
+      "callers": [
+        "renderStudentPortfolio:7690"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Retain renderer checks 144 and 146-150 for unknown axes, library/canvas absence, deferred rerenders and throwing chart cleanup."
+    },
+    {
+      "record_id": "code_health:finding_0956f3c90bb76c36955b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "symbol": "updateStatusBar",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_unused_parameter_candidate",
+      "reason": "target and targetEnabled are never read by updateStatusBar. Historical updateMeter computes fill/badge using them before the sole call. Remove only these two unused formal and forwarded arguments, leaving words/fillWidth/fillBackground/badgeText and the caller calculations intact. This removes real dead interface state, not an object wrapper.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "8026-8036",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "function": {
+          "name": "updateStatusBar",
+          "start_line": 8026,
+          "end_line": 8036,
+          "ccn": 7,
+          "cognitive": 6,
+          "nloc": 11,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 6,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            8030,
+            8030
+          ]
+        },
+        "judged_ccn": 7,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 8026
+      },
+      "callers": [
+        "historical main wrapped updateMeter:8521-8554; only call:8552"
+      ],
+      "test_assertion_references": [],
+      "regression_recommendation": "No direct status-bar assertion found in inspected tests. If adopted, check word text, width, color and badge for target off, zero, below/exact/above target and missing DOM nodes; preserve upstream target calculations."
+    },
+    {
+      "record_id": "code_health:finding_9594f4eb52ffbcf09db0",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "setWftSanitizedInnerHtml",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_exact_empty_value_contract",
+      "reason": "The three-operator conditional chooses fallback only for null, undefined or empty string and only when fallbackHtml exists. false and zero must not be treated as requests for fallback. The sanitizer is then applied at the assignment boundary. Replacing this with a truthiness check or a one-use predicate would obscure or change that contract.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6681-6689",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "setWftSanitizedInnerHtml",
+          "start_line": 6681,
+          "end_line": 6689,
+          "ccn": 8,
+          "cognitive": 7,
+          "nloc": 9,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 3,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            6682,
+            6682
+          ]
+        },
+        "judged_ccn": 8,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 6681
+      },
+      "callers": [
+        "historical main detailed/grow goal rendering:4674,4687",
+        "historical main notebook:7183,7186",
+        "corrected story:7990",
+        "showOriginal corrected/original panels:8052,8058"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "feedback",
+          "file": "tests/feedback-compatibility.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+        }
+      ],
+      "regression_recommendation": "Retain direct target, unsafe HTML removal, explicit null fallback and missing-target checks. Add false/zero distinctions only if changing this condition."
+    },
+    {
+      "record_id": "code_health:finding_07c825055cecc7b49cbc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "symbol": "getSessionCategoryKeys",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "minimal_redundant_inner_guard_candidate",
+      "reason": "The outer condition intentionally includes score zero and the two legacy assessment flags; retain all three boolean operators. The fresh base category list excludes Neatness, so the nested keys.indexOf check at 7202 is redundant: push once when the outer condition holds. Keep Object.keys(scores) deduplication so custom/existing categories stay unique. This will not clear the assigned outer-condition flag.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7198-7208",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7187-7196",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "verified_metrics": {
+        "detector_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "getSessionCategoryKeys",
+          "start_line": 7198,
+          "end_line": 7208,
+          "ccn": 8,
+          "cognitive": 8,
+          "nloc": 11,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "dispatch_share": 0.0,
+          "deepest_block": [
+            7202,
+            7202
+          ]
+        },
+        "judged_ccn": 8,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 7198
+      },
+      "callers": [
+        "getPortfolioCategoryKeys:7210-7217",
+        "getPortfolioFeedbackCategoryOrder:7302-7308",
+        "renderWftPortfolioSessionCardHtml:7527"
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        },
+        {
+          "key": "missing",
+          "file": "tests/missing-feedback.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "47-51 and 61-69: saved unknown versus genuine zero/numeric score behavior; 114-123: actual saved-session path."
+        }
+      ],
+      "regression_recommendation": "Compare exact category ordering for no Neatness, numeric zero, each legacy flag, extra categories and scored Neatness. Do not replace the outer condition with a helper just to hide its metric."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "review044-roster-portfolio-panel",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "openStudentPortfolio",
+      "reason": "The real roster name button calls openStudentPortfolio(name), which selects and renders the portfolio but calls switchTab('admin'). Historical switchTab explicitly hides portfolioPanel and activates adminPanel for that value; portfolioContent is inside portfolioPanel. This appears to leave the rendered portfolio hidden after a name click. This is source-supported, not reproduced.",
+      "classification": "possible_navigation_destination_error",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7168-7185",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "27-59",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "65-89",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "index.html",
+          "lines": "3374-3386",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "key": "crop",
+          "file": "tests/crop-ownership.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "74: openStudentPortfolio(Bob/Alice) calls; 179-204: crop ownership assertions. No portfolio-panel visibility assertion."
+        }
+      ],
+      "regression_recommendation": "Use the actual roster name button for a saved student and assert portfolioPanel and portfolio tab active, selected student/cards correct and crop invalidated. Assess switching to the portfolio tab while preserving dropdown population and avoiding redundant rendering. No runtime behavior claimed."
+    },
+    {
+      "id": "review044-async-portfolio-stale-owner",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "renderStudentPortfolio",
+      "reason": "With the optional async path enabled, the completion for captured student A puts A data in _asyncStudentData then recursively renders using the current selector value. If the selector changed to B while A was loading, B can label/action A sessions; a late rejection can also overwrite the current view. There is no selector/generation check before either write. The flag is false by default, so this lead concerns the opt-in path; source supported and not reproduced.",
+      "classification": "possible_async_owner_mismatch",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "1137",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "1988-2006",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "2030-2052",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "2913",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7613-7643",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7654-7691",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        },
+        {
+          "file": "index.html",
+          "lines": "3378",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "key": "renderer",
+          "file": "tests/portfolio-renderer.browser.cjs",
+          "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+          "assertions": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+        }
+      ],
+      "regression_recommendation": "Enable the existing optional flag, hold actual asynchronous loads, change the real selector A to B, release both orders including late failure, and assert only the selected owner data/actions/error render. Check preserved adapter cleanup and storage purity. Existing immediate async parity does not establish this oracle."
+    }
+  ],
+  "related_existing_leads": [
+    {
+      "id": "review027-manual-save-rejection-status",
+      "related_record_id": "code_health:finding_7e5e160a165282d1b84f",
+      "action": "Reference existing lead; no duplicate created."
+    }
+  ],
+  "test_source_receipts": {
+    "feedback": {
+      "file": "tests/feedback-compatibility.browser.cjs",
+      "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_raw": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+      "sha256_normalized_lf": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+      "assertions_read": "31-38: missing/zero scores, safe markup, goal fallback, real category/detail modal navigation and saved summary/detail genre/score values; 64-66 assert errors and renderer/flow outputs."
+    },
+    "missing": {
+      "file": "tests/missing-feedback.browser.cjs",
+      "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_raw": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+      "sha256_normalized_lf": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+      "assertions_read": "47-51 and 61-69: saved unknown versus genuine zero/numeric score behavior; 114-123: actual saved-session path."
+    },
+    "renderer": {
+      "file": "tests/portfolio-renderer.browser.cjs",
+      "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_raw": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323",
+      "sha256_normalized_lf": "3680c70c99ab365d65b1ba0af16ffb669710956fabab2aad24aa557aa092c323",
+      "assertions_read": "134-159: baseline/candidate parity plus explicit storage, chart, mixed/unknown/legacy score, deferred chart, cleanup and feedback-action expectations. 153-158 cover immediate async outcomes/adapters, not held owner changes."
+    },
+    "upload": {
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_raw": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "sha256_normalized_lf": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "assertions_read": "81-97: held real boundary requests, credentials, newer essay retention, acknowledged media, pending-owner isolation, errors and unchanged corrupt bytes."
+    },
+    "ownership": {
+      "file": "tests/media-ownership.browser.cjs",
+      "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_raw": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "sha256_normalized_lf": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "assertions_read": "196-207, 241-263: saved mutation/write failure/retry and pending owner/token changes; newer text/photo/reference/order/deletion state retained."
+    },
+    "crop": {
+      "file": "tests/crop-ownership.browser.cjs",
+      "commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "sha256_raw": "b5a6f6354c1c34bbe2a9c785a983e1b7c101ecfece212ae45bf627e157ac5181",
+      "sha256_normalized_lf": "b5a6f6354c1c34bbe2a9c785a983e1b7c101ecfece212ae45bf627e157ac5181",
+      "assertions_read": "74: openStudentPortfolio(Bob/Alice) calls; 179-204: crop ownership assertions. No portfolio-panel visibility assertion."
+    }
+  },
+  "summary": {
+    "records": 20,
+    "confirmed_minimal_candidates": 5,
+    "reviewed_no_change": 15,
+    "additional_unreproduced_behavior_leads": 2,
+    "candidate_scope": "Five local opportunities: normalized sessions access; redundant fresh base-key copy/checks; first-match image/session lookups; unused status-bar arguments; redundant inner Neatness check. No candidate requires a new framework or wrapper. Most leave the original detector flag present.",
+    "adoption": "Parent must review each reason and decide adoption; no scanner status/closure changes made."
+  },
+  "limits": [
+    "Graph dependents11/p80floor4 are supplied indexed facts, not independently regenerated; brain detector replay verifies their threshold application.",
+    "Anonymous symbol_index is copied source-binding metadata; exact callback location/name is checked, graph ordinal not regenerated.",
+    "Storage full raw and LF hashes rechecked against assignment and immutable Git00c9454 before writing. Main caller and HTML context are historical Git00c9454, with explicit historical hashes; concurrent039 main/test/manifest changes were outside this review. No claim that all current scripts are frozen.",
+    "Test assertions were read from immutable Git00c9454 and hash-receipted; no tests run and no new pass claims. Coverage references identify relevant existing assertions, not proof of the two new behavior leads.",
+    "No source, tests, Git/index/cache, runtime/dependencies, docs or tracker changes. Only own scratch and this output written."
+  ],
+  "coordinator_acceptance": {
+    "each_individual_reason_read": true,
+    "all_assigned_facts_and_actual_function_metrics_verified": true,
+    "immutable00_raw_and_lf_match": true,
+    "historical_related_source_hashes_verified": true,
+    "historical_main_outside039_and045_exact": true,
+    "no_tests_or_scanner_clearance_claimed": true,
+    "report": "reviews/batch-005-readonly-043-044-acceptance.json"
+  }
+}

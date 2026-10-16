@@ -1,0 +1,308 @@
+{
+  "repair_id": "repair-053",
+  "phase": "read_only_preparation_complete_waiting_for_explicit_coordinator_release",
+  "coordinator": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
+  "repo": "C:/Users/Michael/Documents/GitHub/Repowise/writing-feedback-tool",
+  "permission_boundary": "Batch005 gate session37525 was reported running by coordinator. No app/browser/test/syntax execution or repository/Git/index/tracker/docs/dependency edits authorized. Time passing and gate completion do not release edits. Coordinator owns integration and must explicitly authorize regressions/source changes after005 publication.",
+  "method": "Read current source, actual controls/callers, native test source, canonical reports/current-findings, shared library and relevant memU recall. Read-only PowerShell text inspection/hashing; no imported app code or executed third-party code. No agents or chats created.",
+  "historical_references": [
+    "docs/repowise-audit/current-findings.md:106,116,119",
+    "docs/repowise-audit/reviews/repair-050-notebook-policies.json additional_leads[review050-disabled-target-status-badge]",
+    "docs/repowise-audit/reviews/repair-049-rendering-audit-genre.json additional_leads[049-L1,049-L3]",
+    "docs/repowise-audit/reviews/repair-029-portfolio-shapes.json additional_leads[review029-invalid-dateiso-display]"
+  ],
+  "candidate_order": [
+    "review050-disabled-target-status-badge",
+    "049-L1"
+  ],
+  "batch_recommendation": "First two leads justify focused native regressions after release. Do not force an unsupported third visible bug to meet a batch count.029 is a malformed stored-field lead with no located display consumer;049-L3 is an optional third assessment, not adopted implementation scope, and has no established current malformed producer path.",
+  "candidates": [
+    {
+      "id": "review050-disabled-target-status-badge",
+      "status": "source_supported_needs_native_regression",
+      "reproduced": false,
+      "source": "js/app/10-main-app.js:4929-5009,7815-7838,8366-8395,8576-8610,8665; js/app/00-storage-sync-patches.js:6255-6290,8028-8038; index.html:3448-3452,3722-3727",
+      "verified_premises": [
+        "Real checkbox is #useWordCountTarget; numeric input is #targetWordCount, default200/min1. Disabling checkbox disables the input without clearing its configured value.",
+        "isWordCountTargetEnabled reads actual checked state, defaulting true only if checkbox absent. getTargetWordCountValue independently parses target and falls back200 for missing, invalid, zero or negative values.",
+        "Original updateMeter returns at4975 for target-off; wrapper calls that original, then independently calculates status-bar fields. Wrapper8593 selects Target off for nonempty disabled writing, but8606 unconditionally selects On target when words===target. Disabled fill remains0%.",
+        "updateStatusBar publishes badgeText directly to #statusBarStatus; target/targetEnabled parameters are not read. It does not correct the wrapper result.",
+        "Student text input calls syncUiState and resolves current wrapped updateMeter. Checkbox change and applyWftPreferenceForm also resolve wrapper. Numeric target input listener8387 captures the original updateMeter before reassignment8577; a numeric-input-only event is not a reliable wrapper exercise. Do not broaden this fix into listener rewiring."
+      ],
+      "smallest_complete_change_if_confirmed": "At wrapper8606 gate exact override with targetEnabled: if (targetEnabled && words === target) badgeText = On target. No change to original meter, status writer interface, target getter or other thresholds.",
+      "reach": {
+        "source": [
+          "js/app/10-main-app.js wrapper only"
+        ],
+        "test": [
+          "tests/main-app-health.browser.cjs: exerciseMainAppHealth; add one real-control meter check and call it alongside existing checks"
+        ],
+        "fixtures_config_exports": "No change needed; suite already inventoried and report-required. No new dependency/helper/suite."
+      },
+      "native_regression_plan": [
+        "Save/restore writing, target and checkbox states. In real full app, set enabled target100 via numeric input event, switch checkbox off via change, then set exactly100 words via textarea input. Assert checkbox false/input disabled, actual word count100, visible status Target off and statusBarMeterFill0%; original studentPanelMeterFill also0%.",
+        "Use real events to check disabled99 and101 remain Target off; disabled0 remains Start typing...; re-enable100 gives On target and100%fill. Toggle off again at exact count to exercise checkbox caller.",
+        "Preserve enabled100 thresholds with counts0/74/75/94/95/99/100/101/105/106/151: Start typing..., Need more detail below75, Getting close75..94, Near target95..105 except exact100, Above target>105; fill capped100%.",
+        "Retain getTargetWordCountValue fallback for0/negative/blank/non-numeric and missing input, and missing-checkbox default. These are current contracts, not permission to change schema. Avoid claiming zero target is accepted as configured target."
+      ],
+      "existing_native_suites": [
+        "tests/main-app-health.browser.cjs",
+        "tests/preference-integrity.browser.cjs",
+        "tests/analysis-policy.browser.cjs"
+      ],
+      "coverage_gap": "No current test reference to statusBarStatus found across tests. missing-feedback108 switches target off for analysis but does not assert badge. Existing suites have been read only."
+    },
+    {
+      "id": "049-L1",
+      "status": "source_supported_needs_native_regression",
+      "reproduced": false,
+      "source": "js/app/10-main-app.js:4134-4174,4282-4291,4425,4770-4779,4796-4803,4874-4905; js/app/00-storage-sync-patches.js:6751-6797,7737 (saved feedback through shared builder)",
+      "verified_premises": [
+        "getEvidenceTokens builds ordinary-object bag and ordinary-object stop lookup. It lowercases row.area+row.comment and tokenizes ASCII words of at least4letters.",
+        "Inherited constructor is truthy at stop lookup4148, so literal constructor evidence is not added as an own bag key; bag lookup4160 can independently accept inherited constructor when unrelated nonempty evidence rows contain no constructor.",
+        "isValidTeacherComment uses overlap after its other validation guards. buildTeacherComment can accept that AI candidate; getAuditTeacherCommentSource can report it passed; buildAuditValidationRows can report evidence match. No severity or runtime occurrence claimed.",
+        "No rows is deliberately neutral true; this differs from a nonempty row list containing no substantive tokens. Preserve that distinction.",
+        "Do not generalize this exact bug to __proto__/toString/hasOwnProperty literals: current regex strips underscores and lowercases mixed-case names. constructor is the direct standard inherited-token case."
+      ],
+      "smallest_complete_change_if_confirmed": "Keep current objects/token policy. At4148 use !Object.prototype.hasOwnProperty.call(stop, words[j]); at4160 use Object.prototype.hasOwnProperty.call(bag, words[i]). This house pattern already exists at6140 for notebook content words. Both checks are necessary; no new dictionary abstraction or stop-word expansion.",
+      "reach": {
+        "source": [
+          "js/app/10-main-app.js getEvidenceTokens and commentOverlapsEvidence"
+        ],
+        "test": [
+          "tests/main-app-health.browser.cjs: add direct helper and full teacher-comment/audit assertions using existing native app"
+        ],
+        "fixtures_config_exports": "No fixture/config/export edits required. Separate notebook tokenizer already has own-key handling and its constructor test is not proof of this helper."
+      },
+      "native_regression_plan": [
+        "Unrelated rows [{area:Details,comment:Birds gather nearby.}] and comment Constructor => false. Literal [{area:Details,comment:Constructor}] must produce own bag.constructor===true and overlap true; overlap alone cannot prove token admission because inherited lookup already made it true.",
+        "Ordinary shared substantive token =>true; unrelated token=>false; case folding and4letter minimum retained; configured stop words such as your/writing/clear suppressed; nonempty stop-only rows=>false; []/null/undefined rows=>neutral true; null rows/fields retain defaults.",
+        "Use scored Grammar8 candidate The constructor belongs in this phrase. with unrelated rows; other guards should pass so isValidTeacherComment false, buildTeacherComment selects grounded fallback, getAuditTeacherCommentSource says fallback and evidence-validation row false for unsupported original candidate. Literal constructor rows accept the same candidate; genuine grounded feedback remains accepted. Use at least28characters: teacherizeWording1730-1736 replaces shorter scored Grammar comments and would remove constructor before this integration assertion.",
+        "Check representative score0/string0 and missing scores retain existing neutral/grounded comment paths; no rubric or student-comment wording rewrites."
+      ],
+      "existing_native_suites": [
+        "tests/main-app-health.browser.cjs",
+        "tests/missing-feedback.browser.cjs",
+        "tests/feedback-compatibility.browser.cjs",
+        "tests/analysis-pipeline.browser.cjs"
+      ],
+      "coverage_gap": "No direct references to either evidence helper in current tests. record-identity and notebook-guidance constructor assertions target different functions. Pipeline compares shared helpers against baseline; keep independent true/false oracles."
+    },
+    {
+      "id": "review029-invalid-dateiso-display",
+      "status": "source_supported_stored_field_issue_visible_impact_overstated_unconfirmed",
+      "reproduced": false,
+      "source": "js/app/00-storage-sync-patches.js:1256-1315,1318-1353,7504,7657; js/app/portfolio-export.js:91-97,177,308; tests/session-retention.cjs:14-44",
+      "verified_premises": [
+        "Actual field is dateIso (lowercase so), not dateISO. Truthy invalid dateIso is preserved; missing displayDate with no legacy date invokes setDisplayDateFromIso. Invalid Date getters do not ordinarily throw and source can assemble undefined NaN, NaN.",
+        "normalizeWftSessionForStorage is the sole direct normalizer caller; normalizeWftStudentRecord loops through it and schema normalization uses the student record normalizer. The issue can affect normalized stored metadata, but its occurrence in real records was not checked.",
+        "Whole current js/tests/index search located displayDate/dateIso only within this normalizer, with no current renderer reading displayDate. Portfolio card uses sess.date || Unknown date; portfolio-export getSessionDate preserves date/createdAt/updatedAt/timestamp precedence. Notebook date also uses session.date. Do not claim a proven visible saved-session defect or change those readers.",
+        "Existing date and displayDate are intentionally preserved if truthy, including nonparseable legacy labels. Existing updatedAt, normalizedAt, IDs, createdAt/legacy precedence, dateIso and merge identity must not be refreshed as part of a display fallback."
+      ],
+      "recommendation": "Hold outside the first implementation scope unless coordinator explicitly adopts a stored-metadata guard. Its visible-defect framing is not supported by inspected consumers; it should not be forced into a three-fix batch.",
+      "smallest_optional_guard": "If adopted, test invalid dd.getTime() inside existing formatter and use existing catch-policy raw session.dateIso as display fallback. Preserve dateIso itself and existing date/displayDate precedence. Deriving a replacement from createdAt or rewriting invalid dateIso would introduce a new policy not established here.",
+      "regression_plan_if_adopted": "Extend existing tests/session-retention.cjs extracted function context: valid fixed createdAt/updatedAt/normalizedAt/id plus dateIso invalid, no date/displayDate => raw invalid-string fallback, no NaN display, other fields unchanged; repeat normalization stable. Controls valid ISO, supplied displayDate, legacy date label, missing dateIso fallback, missing IDs/ticking-clock ordering. Native session-retention.browser covers storage/retention but has no existing dateIso fixture.",
+      "existing_native_suites": [
+        "tests/session-retention.cjs",
+        "tests/session-retention.browser.cjs",
+        "tests/portfolio-replacement.cjs",
+        "tests/record-identity.cjs"
+      ],
+      "reach_if_adopted": "One nested formatter plus existing session-retention.cjs; no new helper, renderer, export, migration, schema or fixture framework."
+    },
+    {
+      "id": "049-L3",
+      "status": "additional_assessment_only_missing_value_coercion_source_supported_current_producer_reachability_unconfirmed",
+      "reproduced": false,
+      "source": "js/app/10-main-app.js:551-555,985-1058,1438-1515,1614-1639,2146-2176,2257-2337,2411-2423,4713-4768,4828-4835,4874-4905,7113-7142,7871-7900,7992-8048,8147-8159,8278-8284,8291-8317; js/app/00-storage-sync-patches.js:6751-6797 (persisted category feedback schema)",
+      "verified_premises": [
+        "Grammar errorDensity, Flow average, Flow varietyScore guards (twice), Ideas multiplier use isFinite(Number(value)). null/empty/whitespace pass numeric guard; undefined/NaN/non-finite values fail.",
+        "Error density, average and multiplier explicitly format converted Number and can display0.00 per100words,0.0words,0.000 for missing values. Sentence variety interpolates original value instead: null yields (null/100), empty/whitespace yields blank/whitespace numerator. The lead's all-measured-zero wording is overstated for variety.",
+        "renderTeacherAuditView is a real teacher-only native view. Its only non-null caller is presentAnalysisResult8048. getAuditRawRows has one production caller at4899; renderAuditRowsTable escapes it. No located saved-session route feeds this audit renderer.",
+        "Current scorable production path derives Flow with analyzeSentenceVariety and grammar with applyComputedGrammarAssessment: numbers, including intentional real0. Ideas adjustment emits multiplier1 for unscored/no-target/met-target or a computed number. parseStep1 null varietyScore is intermediate, overwritten by applyCorrectedWritingMetrics and not the flowData property read by this audit.",
+        "Low-sample path creates no raw numeric fields: absent flowData becomes null then {} at audit, yielding undefined average/varietyScore, which do not pass the guard; absent adjustment skips Ideas branch. Do not equate a null flowData container with null metric fields.",
+        "Legacy saved sessions may preserve unknown custom fields, but notebook reconstruction is separate and does not call renderTeacherAuditView. No actual legacy null-field audit reach established by source."
+      ],
+      "recommendation": "Keep candidate_needs_regression as a defensive boundary possibility, not a confirmed active analysis bug or an automatically approved third fix. Coordinator may explicitly adopt it after freeze release if guarding malformed raw data is worthwhile.",
+      "smallest_optional_change": "Reuse existing getNumericAssessmentScore as a presence/finite guard at the five numeric guard sites, keeping each current format/interpolation and label-only variety behavior. Helper is unbounded (not clampRubricScore), accepts number/string0 and rejects null/undefined/blank/non-finite. It would also reject booleans/arrays/objects currently Number-coercible; real producers are number/string schemas, but acknowledge that boundary change before adoption. No global Number conversion rewrite or addAuditRawRow policy change.",
+      "regression_plan_if_adopted": "Existing native main-app-health or missing-feedback harness: independent Grammar errorDensity, Flow average/varietyScore, Ideas adjustment.multiplier matrix for null/undefined/empty/whitespace/NaN/Infinity/-Infinity,0/string0, ordinary numeric strings/numbers. Missing numeric rows omitted; label-only variety retained without null/blank numerator; genuine0 retained with current units/precision. Assert actual teacherAuditView Scoring Data DOM as well as helper rows, and compare normal scorable/low-sample output to existing expectations.",
+      "existing_native_suites": [
+        "tests/main-app-health.browser.cjs",
+        "tests/missing-feedback.browser.cjs",
+        "tests/analysis-pipeline.browser.cjs"
+      ],
+      "coverage_gap": "No current tests directly reference getAuditRawRows. Missing-feedback tests missing rubric scores, not missing raw metrics. Pipeline UI captures audit but shares this helper with its reference; parity alone is not an independent missing-metric oracle.",
+      "approved_implementation_scope": false
+    }
+  ],
+  "release_sequence": [
+    "Stop after this plan; coordinator must explicitly release native regressions and repository edits after005 publication.",
+    "At release recheck pins/current files and coordinator scope; regressions must first fail for intended reason against unchanged source, with full native app and actual controls for badge.",
+    "If confirmed, smallest fix per lead with focused validation/commit under coordinator Git ownership. Use existing native suites/case report convention; no new manifest or coverage tools.",
+    "Coordinator arranges the two independent read-only reviewers, full native suite before merge, tracker/index/push/merge/publication. This chat has not created reviewers or claimed gate results."
+  ],
+  "limits": [
+    "No new runtime reproduction, passing suite, scanner closure, actual malformed saved-record occurrence, performance result or live-service claim.",
+    "Only own scratch and the requested report were written. All current91 syntax-source files, case manifest and three coverage tools compared to coordinator pins with zero mismatches at assessment time; exact receipts attached below.",
+    "Historical report locations/line spans are historical evidence; current source anchors and hashes here were read directly. The source_commit value in coordinator pins is a label, not a newly verified Git HEAD."
+  ],
+  "generated_at": "2026-10-16T08:26:18.7914789+07:00",
+  "source_receipt": {
+    "coordinator_pin_source_commit_label": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+    "source_code_files": 91,
+    "manifest_files": 1,
+    "coverage_tools": 3,
+    "all95_pins_match": true,
+    "html_extra_match_readbaseline": true,
+    "runtime_execution": false,
+    "receipt": "work/repowise-repair-053/final-source-receipt.json",
+    "baseline_receipt": "work/repowise-repair-053/read-baseline-hashes.json",
+    "files": [
+      {
+        "group": "files",
+        "path": "js/app/00-storage-sync-patches.js",
+        "sha256_raw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+        "sha256_normalized_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "js/app/10-main-app.js",
+        "sha256_raw": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+        "sha256_normalized_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "js/app/portfolio-export.js",
+        "sha256_raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+        "sha256_normalized_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "tests/analysis-pipeline.browser.cjs",
+        "sha256_raw": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+        "sha256_normalized_lf": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "tests/feedback-compatibility.browser.cjs",
+        "sha256_raw": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+        "sha256_normalized_lf": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "tests/main-app-health.browser.cjs",
+        "sha256_raw": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+        "sha256_normalized_lf": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "tests/missing-feedback.browser.cjs",
+        "sha256_raw": "7163cf74d254a52f084655130819040f93e88eb91fadcdc8469d9d97f9e39791",
+        "sha256_normalized_lf": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "tests/session-retention.browser.cjs",
+        "sha256_raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de",
+        "sha256_normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "files",
+        "path": "tests/session-retention.cjs",
+        "sha256_raw": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+        "sha256_normalized_lf": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "config_files",
+        "path": "scripts/case-report-suites.json",
+        "sha256_raw": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+        "sha256_normalized_lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "coverage_tools",
+        "path": "work/do-next-05/coverage-preload.cjs",
+        "sha256_raw": "a60b0853b9f4d63ff24e568daa6110478bef73bdd36d1b1d1b37465a5d59a22a",
+        "sha256_normalized_lf": "a60b0853b9f4d63ff24e568daa6110478bef73bdd36d1b1d1b37465a5d59a22a",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "coverage_tools",
+        "path": "work/do-next-05/export-coverage.cjs",
+        "sha256_raw": "d81306670c61191aa22db175fd988e3ecf53f0e10d3ef93ab86599615194f886",
+        "sha256_normalized_lf": "d81306670c61191aa22db175fd988e3ecf53f0e10d3ef93ab86599615194f886",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "coverage_tools",
+        "path": "work/summarize-coverage.cjs",
+        "sha256_raw": "85ee78990734b07a83998f044c63891550e4ee94704471e39c214e78b0e93995",
+        "sha256_normalized_lf": "85ee78990734b07a83998f044c63891550e4ee94704471e39c214e78b0e93995",
+        "matches_coordinator_pin": true
+      },
+      {
+        "group": "html",
+        "path": "index.html",
+        "sha256_raw": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+        "sha256_normalized_lf": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+      }
+    ],
+    "functions": [
+      {
+        "file": "js/app/10-main-app.js",
+        "symbol": "getEvidenceTokens",
+        "start": 4134,
+        "end": 4152,
+        "sha256_normalized_lf_with_trailing_lf": "97e9b237b35ee6048b18df5aa299fc8a5e72e7f5b81263adf110ac7b27ff8e92"
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "symbol": "commentOverlapsEvidence",
+        "start": 4154,
+        "end": 4163,
+        "sha256_normalized_lf_with_trailing_lf": "e848a7afb87d8bfd4ba03fd64ebccb4e427a55649c839ce773d5383c2dd51be4"
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "symbol": "updateMeter wrapper assignment",
+        "start": 8577,
+        "end": 8610,
+        "sha256_normalized_lf_with_trailing_lf": "10d829827e5c4841a69c7615384637ef0e67416ebe9a64d2c9ac968be26ab8a6"
+      },
+      {
+        "file": "js/app/00-storage-sync-patches.js",
+        "symbol": "normalizeWftSessionDate",
+        "start": 1256,
+        "end": 1311,
+        "sha256_normalized_lf_with_trailing_lf": "0172c46f6032ea5080b7675bb3421c129747d56fa289867f64410dbd71e67f90"
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "symbol": "getAuditRawRows",
+        "start": 4718,
+        "end": 4768,
+        "sha256_normalized_lf_with_trailing_lf": "ce0eac8a8b1436cdd44e8fa4ce84a6d20e0acff33c72035a859a18948e182d9b"
+      }
+    ]
+  },
+  "coordinator_acceptance": {
+    "all_candidate_plans_and_limits_read": true,
+    "direct95source_config_tool_pins_plus_html_verified": true,
+    "all14listed_context_hashes_and5function_hashes_verified": true,
+    "stage": "read_only_plan_accepted_no_runtime_or_edits_released",
+    "decisions": {
+      "badge_and_inherited_evidence": "Queue native regressions after005 publication; not yet confirmed bugs.",
+      "date_metadata": "Reviewed without change: malformed displayDate has no located current renderer/consumer. Earlier visible-defect framing overstated; preserve normalization policy until a real effect is established.",
+      "raw_audit_metrics": "Reviewed without change: inspected live producers supply numeric fields, absent low-sample fields stay undefined, and saved notebook path does not call live teacher audit. No established affected producer; broad input-policy change unjustified currently. Reopen if nullable raw fields or a new audit producer is adopted."
+    }
+  }
+}

@@ -1,0 +1,326 @@
+{
+  "basis": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "scope": "Five immutable assigned test files; historical app/helper/runner references only. Concurrent045 and046 changes excluded. Root replays60 shape/conditional records; DRY and I/O retain documented graph/history limitations. No new runtime pass or scanner closure claim.",
+  "records": [
+    {
+      "id": "code_health:finding_73792a574b42e8236c19",
+      "metrics_replayed": true,
+      "function_sha256_lf": "fb9a52654be847060e71038574aebc59cbb0d52b291f0d227409a1ceea328b2c"
+    },
+    {
+      "id": "code_health:finding_e673407f389e26d90ad5",
+      "metrics_replayed": true,
+      "function_sha256_lf": "82da8b92979815a4f79aec144e91ceaeb423e9ec13898c2f04262804ba47d6ab"
+    },
+    {
+      "id": "code_health:finding_d70b311c8cef34ed959d",
+      "metrics_replayed": true,
+      "function_sha256_lf": "65597f5357f0ea88ace97fef78f7c7270764af9fc86fc629e3792f58cd96fb75"
+    },
+    {
+      "id": "code_health:finding_9ed9ee996a2e3ba97e2e",
+      "metrics_replayed": true,
+      "function_sha256_lf": "65712600c8931f50e458706c4c849bbe577ad87454527117ffa4a2af1e301ac1"
+    },
+    {
+      "id": "code_health:finding_bf74a4880d990f5c83c7",
+      "metrics_replayed": true,
+      "function_sha256_lf": "853f31eb01e1eb0db0868842b57b70adab8b4cba0a644f8e013da1e1c2b91a59"
+    },
+    {
+      "id": "code_health:finding_a4fcf0b1e3303769475c",
+      "metrics_replayed": true,
+      "function_sha256_lf": "c0bd2c3fe14f6f5a6557da5e3c47f221e8e4a61a4abd84115df30148585a16f0"
+    },
+    {
+      "id": "code_health:finding_97506bb4c786936411e9",
+      "metrics_replayed": true,
+      "function_sha256_lf": "fb9a52654be847060e71038574aebc59cbb0d52b291f0d227409a1ceea328b2c"
+    },
+    {
+      "id": "code_health:finding_fa1e3f3fce82ffa1cfd4",
+      "metrics_replayed": true,
+      "function_sha256_lf": "5071bd6691a378853970452b37d99c84df44e4d400775665f41b0b2a72a58912"
+    },
+    {
+      "id": "code_health:finding_0870c25d4075e0357488",
+      "metrics_replayed": true,
+      "function_sha256_lf": "31c1dab948a4b82df516b039d481383756b5400438c50c2ac7330bb2c58eba5a"
+    },
+    {
+      "id": "code_health:finding_a0776e0bdddefccee43d",
+      "metrics_replayed": true,
+      "function_sha256_lf": "6f946211feb264945fddf2cf0700ac9c64f4fb17cd1aada644c6772855e8c40d"
+    },
+    {
+      "id": "code_health:finding_5306a999694aea8b140a",
+      "metrics_replayed": true,
+      "function_sha256_lf": "59acfa3ecad11d3437dfccb70a9df1d07f0cae97af8e5b24dbfdd191389b8b82"
+    },
+    {
+      "id": "code_health:finding_6b4d070b6bd4a357369e",
+      "metrics_replayed": true,
+      "function_sha256_lf": "590ae77a4b0b546bd153c1dbe46802be183822c83af7cc33e91e876186f67116"
+    },
+    {
+      "id": "code_health:finding_d56e623610c171ece3bd",
+      "metrics_replayed": true,
+      "function_sha256_lf": "fd4e3b11ebda0b49aa3cc62e90464f0232f4f1b242b30dd5268e2919a1d060f2"
+    },
+    {
+      "id": "code_health:finding_50998bdcd4425c8109be",
+      "metrics_replayed": true,
+      "function_sha256_lf": "4e673bf2c6fd050b99bc0fa5bc07306e411c9bfe70e2bde58978391120665d5a"
+    },
+    {
+      "id": "code_health:finding_f1363ca369412b5bc505",
+      "metrics_replayed": true,
+      "function_sha256_lf": "40e30e7c72f9403a745c502f7785ce31a170c4c32531ffa4cf0b9f8607bc4297"
+    },
+    {
+      "id": "code_health:finding_5434c3357e16481b0da7",
+      "metrics_replayed": true,
+      "function_sha256_lf": "4a812ecd805787119fa7a3cbfb0bda67502140399060e28ce954881968267058"
+    },
+    {
+      "id": "code_health:finding_b1b9f4fbf4ed7111bf83",
+      "metrics_replayed": true,
+      "function_sha256_lf": "9dd54243a60778b7094508ac85e1ad8daa70aad2f344b3b0bfcd515013604bd8"
+    },
+    {
+      "id": "code_health:finding_8b0f5d04e40a276ec8b4",
+      "scope": "DRY/global-clone or I/O source/worker-replay evidence; no root graph regeneration"
+    },
+    {
+      "id": "code_health:finding_9c5c31a2ca73143c40fc",
+      "metrics_replayed": true,
+      "function_sha256_lf": "40e30e7c72f9403a745c502f7785ce31a170c4c32531ffa4cf0b9f8607bc4297"
+    },
+    {
+      "id": "code_health:finding_90441d787da9c922c417",
+      "scope": "DRY/global-clone or I/O source/worker-replay evidence; no root graph regeneration"
+    },
+    {
+      "id": "code_health:finding_6e1080aa83faa6dfdfaf",
+      "metrics_replayed": true,
+      "function_sha256_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef"
+    },
+    {
+      "id": "code_health:finding_cd72665a4e7d4b713d24",
+      "metrics_replayed": true,
+      "function_sha256_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1"
+    },
+    {
+      "id": "code_health:finding_1532a4324157c282bf5e",
+      "metrics_replayed": true,
+      "function_sha256_lf": "fd3bb7827e0282dfb9077e668850cb6cd58f62bfd7ee9e371273454109198b66"
+    },
+    {
+      "id": "code_health:finding_a9aec3d32ff745fb44e3",
+      "metrics_replayed": true,
+      "function_sha256_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef"
+    },
+    {
+      "id": "code_health:finding_a610c7bc1c616cfe053f",
+      "metrics_replayed": true,
+      "function_sha256_lf": "bcb6e4202e7b2b9f7e32f651cdfd409a9e34268dd227d1d7f6692b82f73f9a60"
+    },
+    {
+      "id": "code_health:finding_d3a20ba993962aa7d807",
+      "metrics_replayed": true,
+      "function_sha256_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1"
+    },
+    {
+      "id": "code_health:finding_cdb8be83656852c7ab1c",
+      "metrics_replayed": true,
+      "function_sha256_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef"
+    },
+    {
+      "id": "code_health:finding_213d9f8b3e19418bec05",
+      "metrics_replayed": true,
+      "function_sha256_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1"
+    },
+    {
+      "id": "code_health:finding_1e0a39c50c6ccb76ba44",
+      "metrics_replayed": true,
+      "function_sha256_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef"
+    },
+    {
+      "id": "code_health:finding_96c00aeeb88b86b3a25d",
+      "metrics_replayed": true,
+      "function_sha256_lf": "bcb6e4202e7b2b9f7e32f651cdfd409a9e34268dd227d1d7f6692b82f73f9a60"
+    },
+    {
+      "id": "performance:perf3_769dc30b84623e2d7139",
+      "scope": "DRY/global-clone or I/O source/worker-replay evidence; no root graph regeneration"
+    },
+    {
+      "id": "code_health:finding_0031d0f63452bdba310b",
+      "metrics_replayed": true,
+      "function_sha256_lf": "2c01701e041e4c4eb3589f22129d9a1db012cde37b4e0607430153c50c74e985"
+    },
+    {
+      "id": "code_health:finding_e98a1eb74db943150fcb",
+      "metrics_replayed": true,
+      "function_sha256_lf": "76fd32561c97fed97a466c5e56fb030ac10efc59934ecc5db7c1b85c2bf4e117"
+    },
+    {
+      "id": "code_health:finding_500c4166d1ca157a5541",
+      "metrics_replayed": true,
+      "function_sha256_lf": "a7ac19e7656ba80bfa4ac36bc9723e895ef985323bd19b65b3f65c41c58297ea"
+    },
+    {
+      "id": "code_health:finding_96910a3a1fb70bb0a175",
+      "metrics_replayed": true,
+      "function_sha256_lf": "148f777f9a783aa9e4808365fd0e5ebed334867600347f3d303195c0300c3ab2"
+    },
+    {
+      "id": "code_health:finding_e7d9bc21d5bd55cdff4b",
+      "metrics_replayed": true,
+      "function_sha256_lf": "63efdb75d2f85234e296ceb610d704111984bcd6d5c471eb7f56300ca1695484"
+    },
+    {
+      "id": "code_health:finding_0f425b4b82357b6157a1",
+      "metrics_replayed": true,
+      "function_sha256_lf": "d179a273f83b73c44c7f62ec8c5608b22a1a82b1c12200f61b9059ecb3b446cf"
+    },
+    {
+      "id": "code_health:finding_a342a0ef30b71cae9eb3",
+      "metrics_replayed": true,
+      "function_sha256_lf": "ae3487877eaeffcda3f0a8c259ee365eff6bbdf1853eb984eb852e579e42fa2c"
+    },
+    {
+      "id": "code_health:finding_998220186c13aa82abd3",
+      "metrics_replayed": true,
+      "function_sha256_lf": "88d7dab7dca3876b0db6abad60d236e1e2cc7c8ebc261a89f50e981b0be8cf90"
+    },
+    {
+      "id": "code_health:finding_a50e80e97edcd6e6becf",
+      "metrics_replayed": true,
+      "function_sha256_lf": "a49f85ad8c3d94718ae622afe9a326f07c000a2c7cf8da2057c9de0b191f43f4"
+    },
+    {
+      "id": "code_health:finding_b5d688594926455874d4",
+      "metrics_replayed": true,
+      "function_sha256_lf": "a7ac19e7656ba80bfa4ac36bc9723e895ef985323bd19b65b3f65c41c58297ea"
+    },
+    {
+      "id": "code_health:finding_21a0bbf20192af2be592",
+      "metrics_replayed": true,
+      "function_sha256_lf": "2c01701e041e4c4eb3589f22129d9a1db012cde37b4e0607430153c50c74e985"
+    },
+    {
+      "id": "code_health:finding_5be9ea529bf82cdfbbf3",
+      "metrics_replayed": true,
+      "function_sha256_lf": "16aff502742139337e5cc7301dc6249310bed0bcf3d9fc60b1c424cf8c433018"
+    },
+    {
+      "id": "code_health:finding_34d155a11ae12094772a",
+      "metrics_replayed": true,
+      "function_sha256_lf": "a7ac19e7656ba80bfa4ac36bc9723e895ef985323bd19b65b3f65c41c58297ea"
+    },
+    {
+      "id": "code_health:finding_61ea1e71eb770a77989a",
+      "metrics_replayed": true,
+      "function_sha256_lf": "63efdb75d2f85234e296ceb610d704111984bcd6d5c471eb7f56300ca1695484"
+    },
+    {
+      "id": "code_health:finding_248573c51c1521f8340e",
+      "scope": "DRY/global-clone or I/O source/worker-replay evidence; no root graph regeneration"
+    },
+    {
+      "id": "code_health:finding_d0e737c875554facd17c",
+      "metrics_replayed": true,
+      "function_sha256_lf": "d239d4de8bb940553bb91143dd61081d5e948ada12205e794cc4ac2ba20caecf"
+    },
+    {
+      "id": "code_health:finding_a740bcc836201e83c5ce",
+      "metrics_replayed": true,
+      "function_sha256_lf": "f6b482dbacfc0aba26623b4b85a408a4fe33886d67912d5f59b094df0916e74a"
+    },
+    {
+      "id": "code_health:finding_0936878f9d4d502c6b66",
+      "metrics_replayed": true,
+      "function_sha256_lf": "53d5d71ae801a7895ba5faa71581e0fbaae40fbf6182d2f85066034860dec610"
+    },
+    {
+      "id": "code_health:finding_cd2035047a3147bd9357",
+      "metrics_replayed": true,
+      "function_sha256_lf": "d2909980d89eeeb760cf5109e3e728db54b84777873cd28b09c04a4637326580"
+    },
+    {
+      "id": "code_health:finding_2444ef38d170f9e459d0",
+      "metrics_replayed": true,
+      "function_sha256_lf": "2a627f297e994faa809419ee08470ee0fb350d667d03c0bb9791173dea9cea57"
+    },
+    {
+      "id": "code_health:finding_43881671adf95bb4b43c",
+      "metrics_replayed": true,
+      "function_sha256_lf": "d3f9ec88ffb0738362754487191303a0e88c9334441df3dd4ff060aad4867d77"
+    },
+    {
+      "id": "code_health:finding_a0a176f446cbb821d487",
+      "metrics_replayed": true,
+      "function_sha256_lf": "33e348ee66a66e823aae233f99e05f794791c4f29529cce35e1bc1573e9b5ef9"
+    },
+    {
+      "id": "code_health:finding_d71333b5f8e26e1a7718",
+      "metrics_replayed": true,
+      "function_sha256_lf": "d7205513a95f6c10304fc57e397bc10b33337189ab60a3b5385638a1b29c56eb"
+    },
+    {
+      "id": "code_health:finding_d5756f8057e6210e77d4",
+      "metrics_replayed": true,
+      "function_sha256_lf": "ac8a6c18a197bf31c5f97578655cdd5dcf1ceabdfd520626abf1d35660679bac"
+    },
+    {
+      "id": "code_health:finding_50f759c7ce8caf72ba0f",
+      "metrics_replayed": true,
+      "function_sha256_lf": "107acf4f10e565e00bcf8151cab471b21d7482b31f2ffd49463422640798b5ce"
+    },
+    {
+      "id": "code_health:finding_532b474a093fc3ebb820",
+      "metrics_replayed": true,
+      "function_sha256_lf": "33defa8b54c342d48346703e7d0d8583209ddf1afeaa1d15d5492a4bdf4637bd"
+    },
+    {
+      "id": "code_health:finding_7d7006df9ec6314480bd",
+      "metrics_replayed": true,
+      "function_sha256_lf": "d7205513a95f6c10304fc57e397bc10b33337189ab60a3b5385638a1b29c56eb"
+    },
+    {
+      "id": "code_health:finding_d85646f671cd92e5433a",
+      "metrics_replayed": true,
+      "function_sha256_lf": "ac8a6c18a197bf31c5f97578655cdd5dcf1ceabdfd520626abf1d35660679bac"
+    },
+    {
+      "id": "code_health:finding_f2a785c9259d4530ddc5",
+      "metrics_replayed": true,
+      "function_sha256_lf": "8e1165b01ea278f724b1a1fd368a54fe3d66c6be4096adc1998882a54b9230ac"
+    },
+    {
+      "id": "code_health:finding_c70d17d30550958c4d95",
+      "metrics_replayed": true,
+      "function_sha256_lf": "7236ccb2a31e2123edca5309e64d8c28fdb178ed6053c5685372aa065b0b09a9"
+    },
+    {
+      "id": "code_health:finding_541a0914ff6d42267451",
+      "metrics_replayed": true,
+      "function_sha256_lf": "79163be9f9842ed3da90a90d4f70dc086657e679def8ea704ea7d889d6b3ad5b"
+    },
+    {
+      "id": "code_health:finding_7abfbf4a2f826653796d",
+      "metrics_replayed": true,
+      "function_sha256_lf": "b521b72d88e72015a1dbd0b7b37c91b2fd197676cccfdbeb78d89e73f0218450"
+    },
+    {
+      "id": "code_health:finding_f91d9ed74c28e5ef0ee7",
+      "metrics_replayed": true,
+      "function_sha256_lf": "e6f4645b480f0a1f769bd36a262c9ca4509c4d1277fe4e152989b19bbbc5327f"
+    },
+    {
+      "id": "performance:perf3_68900cb25de5c2f8b778",
+      "scope": "DRY/global-clone or I/O source/worker-replay evidence; no root graph regeneration"
+    }
+  ]
+}

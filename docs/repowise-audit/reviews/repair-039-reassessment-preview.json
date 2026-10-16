@@ -1,0 +1,282 @@
+{
+ "repair_id": "repair-039",
+ "lead_id": "review028-reassessment-confirmation-freshness",
+ "preview_version": 2,
+ "status": "isolated_deletion_delta_ready_for_review",
+ "published_or_integrated": false,
+ "generated_at": "2026-10-16T00:42:07.440Z",
+ "timezone": "Asia/Bangkok",
+ "historical_source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+ "summary": "Version two adds exactly one recovery-aware raw deletion-log field to the reviewed f41 local snapshot. Deletion-only arrival now refuses stale consent before any grade/current-work/pending mutation. All 15 earlier cases plus the new focused case pass; original repository remains untouched by this worker.",
+ "version_one": {
+  "report": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-1\\repair-039-reassessment-preview.json",
+   "sha256": "cff52b67da232ab06021236ac3a47b02f78a6e945a516bea3a7588f188b4999c"
+  },
+  "main_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+  "immutable_source_path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-repo",
+  "immutable_native_artifacts": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-accepted",
+  "preservation_receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\copy-and-v1-preservation.json",
+   "sha256": "72005f79456f2007e9176b3cb7c87e847a699c149d8a123e82bdc94caf4e369d"
+  },
+  "all_98_source_files_and_accepted_artifacts_still_exact": true,
+  "original_reviewed_report_sha256": "cff52b67da232ab06021236ac3a47b02f78a6e945a516bea3a7588f188b4999c"
+ },
+ "version_two": {
+  "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\preview-v2-repo",
+  "main_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+  "copied_files": 98,
+  "only_changed_file": "js/app/10-main-app.js",
+  "delta": "storedDeletions: readWftStudentChangeStorage(WFT_DELETIONS_STORAGE_KEY)",
+  "v1_to_v2_exact_diff": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\v1-to-v2.diff",
+   "sha256": "2d11c80a99e82416cf680c13562451c16a82c091576857304f71c6b3450f66e2"
+  },
+  "full_historical_base_to_v2_exact_diff": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\historical-base-to-v2.diff",
+   "sha256": "e37fbc42067a69dca58b4eb1cd5bd4b643f407ff65b53c09adc0c1f6a5b99ce2"
+  },
+  "integrity_receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\integrity.json",
+   "sha256": "74ee76c50f34496ac41088c4b6a2306129242c796cfa917f6943eb983b420d25"
+  },
+  "source_delta_receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\source-delta-receipt.json",
+   "sha256": "701b7926e2f78611c867a14a677eaf1c377cedd788ac4b467ce43915708e507b"
+  },
+  "all_other_89_sources_config_html_assets_unchanged": true,
+  "outside_reassessment_function_identical_to_historical_base": true
+ },
+ "deletion_only_reproduction": {
+  "tested_main_sha256": "f41cccde49f0da254cb0623be6d328f8e8bc152067574be3d53fcd84ca8f85d5",
+  "exit": 1,
+  "cases": 1,
+  "passed_assertions": 4,
+  "intended_failures": [
+   "Changed work or source refuses old consent with a retry notice",
+   "Rejected confirmation preserves complete current work, owner, preferences and report"
+  ],
+  "harness_errors": 0,
+  "browser_errors": 0,
+  "writer": "recordSessionDeletion + real saveDeletionsLocalOnly; controlled sync-writer seam",
+  "policy": {
+   "writer": "recordSessionDeletion + real saveDeletionsLocalOnly; controlled sync-writer seam",
+   "physicalSourcePresent": true,
+   "sourceExcludedByPolicy": true,
+   "sourceCreatedAt": "2026-10-01T00:00:00.000Z",
+   "tombstone": {
+    "id": "del_mva8qot5_yvm1",
+    "type": "session",
+    "studentId": "",
+    "studentName": "Alice",
+    "sessionId": "saved-alice",
+    "deletedAt": "2026-10-16T00:40:06.425Z",
+    "deviceId": "dev_5cd6ofn85w",
+    "reason": "teacher_delete"
+   }
+  },
+  "unchanged_premise": "The actual tombstone policy excludes the still-physically-present source. Portfolio/settings/selection/roster/stored-pending bytes and every captured writing/owner/photo/source/report/genre/grade/neatness/runtime-pending field exactly match dialog-open state. Only deletion-log bytes differ.",
+  "observed_on_f41": {
+   "writing_before": "Bob has current unsaved writing.  Keep the exact spacing.\nSecond line.",
+   "writing_after": "Alice saved an older story about a mountain.",
+   "owner_before": "Bob",
+   "owner_after": "Alice",
+   "pending_before": "pending-bob",
+   "pending_after": null,
+   "stored_pending_after": null,
+   "grade_before": "5",
+   "grade_after": "6"
+  },
+  "receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\deletion-before\\receipt.json",
+   "sha256": "e2752dc57360781ab63cea6a69581af0994039251b0478dad4fb053887ac5517"
+  },
+  "immutable_driver": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\deletion-before\\driver.browser.cjs",
+   "sha256": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24"
+  },
+  "raw_snapshots": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\deletion-before\\native-results.json",
+   "sha256": "d7bd39ab1c48e93e394e9cb12b0f0dcf84373bab6bb43e916b76e2369109a9f5"
+  }
+ },
+ "final_validation": {
+  "main_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+  "focused_cases": 16,
+  "focused_assertions": 79,
+  "failed_assertions": 0,
+  "harness_errors": 0,
+  "browser_errors": 0,
+  "cases": [
+   {
+    "name": "ordinary-confirm",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "ordinary-cancel",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "source-delete-confirm",
+    "pass": true,
+    "assertions": 11
+   },
+   {
+    "name": "source-delete-cancel",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "late-analysis-confirm",
+    "pass": true,
+    "assertions": 10
+   },
+   {
+    "name": "late-analysis-cancel",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "grade-save-failure",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "ordinary-no-dates-confirm",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "legacy-timestamp-confirm",
+    "pass": true,
+    "assertions": 3
+   },
+   {
+    "name": "pending-read-failure-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "portfolio-read-failure-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "pending-parse-failure-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "storage-only-pending-confirm",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "original-photo-change-confirm",
+    "pass": true,
+    "assertions": 4
+   },
+   {
+    "name": "source-save-confirm",
+    "pass": true,
+    "assertions": 5
+   },
+   {
+    "name": "deletion-only-confirm",
+    "pass": true,
+    "assertions": 6
+   }
+  ],
+  "focused_receipt": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\focused.receipt.json",
+   "sha256": "2992c279e091adc760ea84cce9620c8726dd5a1ce2ce22b5fafcb833653d4da4"
+  },
+  "immutable_driver": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\driver.browser.cjs",
+   "sha256": "b35be5136d9785560d4d4558a7402402e045a38f781fe8cbacf1401edf650e24"
+  },
+  "raw_snapshots": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\native-results.json",
+   "sha256": "d2a40f7f4eae8f520389cceb4627310ae958862be71eebe9eb4fc9f42a3e0ba8"
+  },
+  "artifact_and_screenshot_hashes": {
+   "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\artifact-hashes.json",
+   "sha256": "2d178ffdc99c971696ab6cd066e0a8e0ae4a727153cf4848e481d63ee5e69d7f"
+  },
+  "deletion_only_after": {
+   "refused_with_retry_notice": true,
+   "newer_tombstone_and_portfolio_bytes_preserved": true,
+   "complete_current_work_owner_preferences_report_pending_preserved": true
+  },
+  "existing_suites": [
+   {
+    "suite": "tests/preference-integrity.browser.cjs",
+    "passed": 105,
+    "exit": 0,
+    "receipt": {
+     "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\preference-integrity.receipt.json",
+     "sha256": "147a9c968057938c98dbec15b9ad2c16a88a31fddb87589b914cb7b7554177e0"
+    },
+    "stdout": {
+     "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\preference-integrity.stdout.txt",
+     "sha256": "e164677354f4565a1e6f885b0ce1e14f3cf616348b41c03ad162bec8dbda282b"
+    },
+    "stderr": {
+     "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\preference-integrity.stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+   },
+   {
+    "suite": "tests/analysis-identity.browser.cjs",
+    "passed": 23,
+    "exit": 0,
+    "receipt": {
+     "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\analysis-identity.receipt.json",
+     "sha256": "1d127ed058e81501fb5f242ffe92bdbbd2eeeb60264c3605be7ca8759355f39a"
+    },
+    "stdout": {
+     "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\analysis-identity.stdout.txt",
+     "sha256": "122b9deb9f85252c7d0ff00ce880645b8aad98c8e9292142c896b7b0bf5cce3a"
+    },
+    "stderr": {
+     "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-039\\version-2\\accepted\\analysis-identity.stderr.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+   }
+  ]
+ },
+ "reviewer_response": [
+  {
+   "review": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-040-reassessment-preview-review.json",
+    "sha256": "dc9d097725823b80f48807dc463a19555d2f43f19d42dff08b9a1c647aa33c47"
+   },
+   "blocker": "repair040-preview-B1",
+   "response": "Reproduced with the real saveDeletionsLocalOnly sync-writer seam on exact f41 before change. Added only the requested raw recovery-aware deletion snapshot field and retained every prior control. Full current-work comparison after refusal includes corrected/genre state, too."
+  },
+  {
+   "review": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-041-reassessment-preview-review.json",
+    "sha256": "ff605c3480b05b53ba9242abef1209157f209d11d4372017a50bd8fabb9422a4"
+   },
+   "response": "Earlier legacy and preservation oracles retained. Added explicit ordinary-success stored-pending===null assertion. Recovery refusal remains source-inspected, not claimed as injected coverage. Coordinator owns documented checkout EOL reconciliation; none was changed here."
+  }
+ ],
+ "provenance_and_limits": [
+  "Version two is copied from the immutable reviewed preview, not from the changed original checkout. Its exact raw 89-other-file/config/HTML/asset equality is relative to that scratch source. The older version-one original raw-pin receipt is historical; no renewed old raw-freeze or current HEAD claim is made.",
+  "Full integration diff is against the named historical 7527 Git blob, reconstructed to the original documented CRLF bytes with both LF and raw SHA checks. This is a read-only Git-object read, not a current working-tree/source/index scan or modification.",
+  "The new case is a labeled controlled sync-writer seam using real recordSessionDeletion/saveDeletionsLocalOnly and actual applyDeletionsToPortfolio policy. It does not claim a real cloud journey or live-service test. The real dialog and actual DOM/storage/runtime are used; all external origins are aborted.",
+  "Conservative retry tradeoff now covers any deletion-log byte change as well as portfolio/settings/current-work changes, including unrelated updates. This fences arrival during confirmation, not migration/filtering of older physically retained deleted records.",
+  "No generic snapshot framework, new global helper, sync-engine change, modal lock, dependency, later image/commit guard change, full gate, coverage import, Git/index/tracker mutation, official test registration, integration or publication.",
+  "Recovery injection and live Drive/AI/OAuth remain untested. Main-repository checkout changes/publication belong to the coordinator. Both reviewers must inspect this exact new hash before integration."
+ ],
+ "integration_boundary": {
+  "authorized_now": "Isolated preview only; wait for concrete reviewer follow-up/integration authorization.",
+  "application": "Only reassessPortfolioSession in js/app/10-main-app.js; version-two delta is one snapshot field.",
+  "official_tests": "Proposed tests/portfolio-reassessment.browser.cjs after separate integration authorization, adapting the native driver and keeping all 16 cases/premises and stored-pending-null success oracle.",
+  "manifest": "No registration now. Coordinator decides one case-report suite entry after adopting the official test."
+ }
+}

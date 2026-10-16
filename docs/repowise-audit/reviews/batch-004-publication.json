@@ -1,0 +1,76 @@
+{
+  "batch": "batch-004",
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/185",
+  "merge_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "verified_at": "2026-10-16T00:38:06.079602+00:00",
+  "pages_build": "built",
+  "pages_build_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "tested_source_commit": "7527d83d2aaaa725d98ef3d6dca41816ede18394",
+  "all_committed_source_blobs_identical": true,
+  "all_normalized_lf_pins_match": true,
+  "source_pin_count": 90,
+  "configuration_pin_count": 1,
+  "configuration_checkout_newline_only_changes": [],
+  "raw_source_pins_match": 85,
+  "checkout_newline_only_changes": [
+    "tests/google-drive-migration.browser.cjs",
+    "tests/missing-feedback.browser.cjs",
+    "tests/portfolio-renderer.browser.cjs",
+    "tests/storage-dialog-keyboard.browser.cjs",
+    "tests/support/local-app-route.js"
+  ],
+  "files": [
+    {
+      "file": "google-drive-migration.js",
+      "http_status": 200,
+      "bytes": 13194,
+      "git_sha256": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+      "live_sha256": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+      "exact_git_bytes": true
+    },
+    {
+      "file": "js/app/storage-recovery.js",
+      "http_status": 200,
+      "bytes": 15259,
+      "git_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "live_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static deployment and exact source equivalence; no real accounts, writing, Google, Drive or model calls.",
+  "post_merge_index_verification": {
+    "head": "00c9454e6c89f258cb3afc938201a10feda16087",
+    "state_registry_all88metrics_agree": true,
+    "all8coverage_counts_and_percent_sourcehashes_match": true,
+    "lcov_contexts": 472,
+    "test_file_maps": 379,
+    "strict_mapping_complete": true,
+    "totals": {
+      "covered": 10201,
+      "executable": 11077,
+      "percent": 92.09172158526677
+    },
+    "verified_at": "2026-10-16T00:41:19.893350+00:00",
+    "provenance": {
+      "last_sync_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "repository_metadata_head": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "health_analyzed_commits": [
+        [
+          "00c9454e6c89f258cb3afc938201a10feda16087",
+          88
+        ]
+      ]
+    },
+    "dashboard": {
+      "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+      "health": 4.5,
+      "health_cli_precise": 4.53,
+      "maintainability": 4.6,
+      "static_performance": 9.2,
+      "method": "Actual overview reload after merged-source index, strict fresh59-native coverage import and full health. Header00c9454;Do next2items/7serious4files;current91% module coverage without older-report warning."
+    },
+    "history_review": "reviews/history-context-review-00c9454.json",
+    "history_signals_replayed": 44
+  }
+}

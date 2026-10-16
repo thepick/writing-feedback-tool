@@ -1,0 +1,452 @@
+{
+  "basis": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "reports": [
+    {
+      "id": "repair-057",
+      "name": "repair-057-storage-harnesses.json",
+      "sha256": "58a25206da82bddb8fc1936f80f7a114a4fc7d72ee016f134c01e552182f88da",
+      "assignment_sha256": "a843a22c4e856114199d75f56f3093b1e55d3c232ce772639d97e268a48a607f"
+    },
+    {
+      "id": "repair-058",
+      "name": "repair-058-media-portfolio-harnesses.json",
+      "sha256": "b449ea4735b15463c78e6140d130cdd55ee8dbf601c3c7634c0724141c8c3bf5",
+      "assignment_sha256": "3fc88bc78cf241e42d8ebad8d969671de62f48c0e2b09d247c92ca63f978333b"
+    }
+  ],
+  "records": [
+    {
+      "id": "code_health:finding_39972fb07ea171d91fde",
+      "file": "tests/class-deletion.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "1495fe3214fe79d2f08257bf1c61c88ccd24adb7ae03fef6ec60c840e50c7891"
+    },
+    {
+      "id": "code_health:finding_717f58b2083cafd32ed4",
+      "file": "tests/class-deletion.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "1495fe3214fe79d2f08257bf1c61c88ccd24adb7ae03fef6ec60c840e50c7891"
+    },
+    {
+      "id": "code_health:finding_1d843be7f50439511641",
+      "file": "tests/class-deletion.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_341a107a9fd3d840b37c",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "358e5d19905c3fd182cc801b586fbb7d22887fa0ba2ecbd3c64a1b1215c7624c"
+    },
+    {
+      "id": "code_health:finding_2c97f89ef33b930e177b",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_58dcdb6608145bd5ed26",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "complex_conditional",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "358e5d19905c3fd182cc801b586fbb7d22887fa0ba2ecbd3c64a1b1215c7624c"
+    },
+    {
+      "id": "code_health:finding_f4e8432758c40a946bbd",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "complex_conditional",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "358e5d19905c3fd182cc801b586fbb7d22887fa0ba2ecbd3c64a1b1215c7624c"
+    },
+    {
+      "id": "code_health:finding_ae453a360bd95fa61daa",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "54f4b88f73c11b13a95f02f7760fc5a6700badbe02a6939a8b8c09d8f9f7478c"
+    },
+    {
+      "id": "code_health:finding_462dcc351c71e400ee3d",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "54f4b88f73c11b13a95f02f7760fc5a6700badbe02a6939a8b8c09d8f9f7478c"
+    },
+    {
+      "id": "code_health:finding_4893cf08bb5ae166eb8e",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "54f4b88f73c11b13a95f02f7760fc5a6700badbe02a6939a8b8c09d8f9f7478c"
+    },
+    {
+      "id": "code_health:finding_c0f177fd0c19241ff17d",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_489183df2dd8d8744d1c",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "complex_conditional",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "1729ac895490d73614919c4546d2efb39c06c9536bdc76ee04180ccb5902f1e3"
+    },
+    {
+      "id": "code_health:finding_7041aa95c1ab7c98200b",
+      "file": "tests/preference-integrity.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_ca57037d27555320805f",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "a18a80d50dcebd60d29ec7807505d838e1ad46dcca3d156746562039fc23ce0c"
+    },
+    {
+      "id": "code_health:finding_aaf383178b76f56da2be",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "19af0a45487ad852401a373f594f5ca6d92d5328b59430120b2f29cb370cf48c"
+    },
+    {
+      "id": "code_health:finding_67e0cd1b6a8c92f79e5c",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "9559d10c767c69adcc69bc32d23c1f85f1e39251e0e17e7eaefdc65bb1d04ae3"
+    },
+    {
+      "id": "code_health:finding_b04caf15b6931492d5ea",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "5104ec96cca78d2f09f6d2bfe78aefcdca163296a765647a610afc243a9ad067"
+    },
+    {
+      "id": "code_health:finding_5d1eb75cd297ec384b50",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "a18a80d50dcebd60d29ec7807505d838e1ad46dcca3d156746562039fc23ce0c"
+    },
+    {
+      "id": "code_health:finding_17ce0cce1930c0bc5070",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "19af0a45487ad852401a373f594f5ca6d92d5328b59430120b2f29cb370cf48c"
+    },
+    {
+      "id": "code_health:finding_241aec90374475ff57a6",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_6f76ca4ed548a3b45a97",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "e9c94b414b38c25b7dba7db4e1fa9a49683c67330160e0cac628397c189d3904"
+    },
+    {
+      "id": "code_health:finding_16c64c2a184431b16205",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "e9fdf56dd3206490475a827a2fc685f8b009dc444a645d552785e7a14497f705"
+    },
+    {
+      "id": "code_health:finding_1211ef84f5feb095204b",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "primitive_obsession",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "e9c94b414b38c25b7dba7db4e1fa9a49683c67330160e0cac628397c189d3904"
+    },
+    {
+      "id": "code_health:finding_accd5aba18f79b2d9999",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "io_in_loop",
+      "proof": "Source-only I/O isolation path reviewed; graph/rank/cost not regenerated.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "performance:perf3_33039e5829a7d1318880",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "io_in_loop",
+      "proof": "Source-only I/O isolation path reviewed; graph/rank/cost not regenerated.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_4ac8491954ec6fcd130d",
+      "file": "tests/corrupt-portfolio.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "794f9115496eb95bfc7dc77c449ef30bfa35122e407269c0fd9518001cde2119"
+    },
+    {
+      "id": "code_health:finding_3950fcf55e93d82f8063",
+      "file": "tests/corrupt-portfolio.browser.cjs",
+      "marker": "bumpy_road",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "794f9115496eb95bfc7dc77c449ef30bfa35122e407269c0fd9518001cde2119"
+    },
+    {
+      "id": "code_health:finding_c0e356fbf188b37be38c",
+      "file": "tests/corrupt-portfolio.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "794f9115496eb95bfc7dc77c449ef30bfa35122e407269c0fd9518001cde2119"
+    },
+    {
+      "id": "code_health:finding_c67b19acce629039408a",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "094e956eccc32d96eba53168f9660ab76803f51124b942a279301d854aa31fab"
+    },
+    {
+      "id": "code_health:finding_4a4191a6c326f518d7f9",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "094e956eccc32d96eba53168f9660ab76803f51124b942a279301d854aa31fab"
+    },
+    {
+      "id": "code_health:finding_d2b18d43cdb6cc9e91aa",
+      "file": "tests/deletion-durability.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "19afac2ea63cc5393d5c3d983e06e6dfe87dd21838f4779b0049cb40a345df4d"
+    },
+    {
+      "id": "code_health:finding_eaebebe81e5cd3e15235",
+      "file": "tests/deletion-durability.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "3180d45f2cbdaa95625a9989392f08e62d16aa14caf573f325b655c99fe60c14"
+    },
+    {
+      "id": "code_health:finding_47086b374bcafe376e31",
+      "file": "tests/deletion-merge.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "637c9a054d1550c3bedc393ae7b8e5fd406669775f1f29d5c5ee459bcecda6a1"
+    },
+    {
+      "id": "code_health:finding_942b10662480a46ec8a1",
+      "file": "tests/deletion-merge.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "637c9a054d1550c3bedc393ae7b8e5fd406669775f1f29d5c5ee459bcecda6a1"
+    },
+    {
+      "id": "code_health:finding_1680dfdc2c2903f2af21",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "038f3780468c70c1eb820fb32acef31e8ab40a0563e3eba1516d1473595faa59"
+    },
+    {
+      "id": "code_health:finding_c12bceffea7618fdd8b8",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "038f3780468c70c1eb820fb32acef31e8ab40a0563e3eba1516d1473595faa59"
+    },
+    {
+      "id": "code_health:finding_200b7f89bb709f880329",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "038f3780468c70c1eb820fb32acef31e8ab40a0563e3eba1516d1473595faa59"
+    },
+    {
+      "id": "code_health:finding_bb483c9c40cb5b8453ab",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "6ffc2abef03094623a0f424e95808b200c39fa5a9a5f30a34eed8bcd6a72a6a5"
+    },
+    {
+      "id": "code_health:finding_22d1f5de4bf7e22b8cca",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "8f1a485c4fa4a681646f74450209d15249fe79825cb32aaa68f997fadccae44a"
+    },
+    {
+      "id": "code_health:finding_ed57c83e3c13fa85d009",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "81c230bc8e03de1b3e125d019ac1d149777229756c82a694315cb702abf2b5a1"
+    },
+    {
+      "id": "code_health:finding_610b93475e328f905a6c",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "45adcfedbf99db9d1044a5777a163a4a0b18f2c74073361088348f3588ab44eb"
+    },
+    {
+      "id": "code_health:finding_c3978aff4543b6851d31",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "6ffc2abef03094623a0f424e95808b200c39fa5a9a5f30a34eed8bcd6a72a6a5"
+    },
+    {
+      "id": "code_health:finding_ba559d6dc72385ac8e8b",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "bumpy_road",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "8f1a485c4fa4a681646f74450209d15249fe79825cb32aaa68f997fadccae44a"
+    },
+    {
+      "id": "code_health:finding_40d1a80c7dd317811846",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "8f1a485c4fa4a681646f74450209d15249fe79825cb32aaa68f997fadccae44a"
+    },
+    {
+      "id": "code_health:finding_112b8b7c85259f7e792f",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "6ffc2abef03094623a0f424e95808b200c39fa5a9a5f30a34eed8bcd6a72a6a5"
+    },
+    {
+      "id": "code_health:finding_898530e97870b376ca26",
+      "file": "tests/notebook-guide.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "f8f61afcb3a9b847643c967472e7d3bf60e61eaf8291ed0d3ac4724004f47cc4"
+    },
+    {
+      "id": "code_health:finding_11f605dd287d9c2e0c11",
+      "file": "tests/portfolio-removal.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "a53706932006c00ccee8c5e23cda2933494bdb25b83f81f51090cc46f0a43f83"
+    },
+    {
+      "id": "code_health:finding_fd5616187b5342041dc1",
+      "file": "tests/portfolio-removal.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "a53706932006c00ccee8c5e23cda2933494bdb25b83f81f51090cc46f0a43f83"
+    },
+    {
+      "id": "code_health:finding_eb2b04694e8a4d4925c6",
+      "file": "tests/portfolio-render-failures.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "4bb06681758ae5fdc369e4aebea2b7e1818ca1dc78f8139a465f17d31bb677a2"
+    },
+    {
+      "id": "code_health:finding_6621240af0e5e4025e77",
+      "file": "tests/portfolio-render-failures.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector span, severity, reason and all emitted details matched; stored engine enrichment matches independent reviewer receipt.",
+      "function_context_sha256_lf": "4bb06681758ae5fdc369e4aebea2b7e1818ca1dc78f8139a465f17d31bb677a2"
+    }
+  ],
+  "file_pins": {
+    "tests/rename-confirmation.browser.cjs": {
+      "raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf",
+      "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465"
+    },
+    "tests/storage-dialog-keyboard.browser.cjs": {
+      "raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b",
+      "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4"
+    },
+    "tests/pending-commit-publication.browser.cjs": {
+      "raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86",
+      "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c"
+    },
+    "tests/deletion-recovery.browser.cjs": {
+      "raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+      "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+    },
+    "tests/class-deletion.browser.cjs": {
+      "raw": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48",
+      "normalized_lf": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae"
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "normalized_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5"
+    },
+    "tests/media-upload-boundary.browser.cjs": {
+      "raw": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "normalized_lf": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab"
+    },
+    "tests/image-preparation.browser.cjs": {
+      "raw": "97c63242cd57bddb7963b2946377b816b645ecb98a57aa5573a1cc3f0f462f19",
+      "normalized_lf": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81"
+    },
+    "tests/corrupt-portfolio.browser.cjs": {
+      "raw": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "normalized_lf": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675"
+    },
+    "tests/crop-transparency.browser.cjs": {
+      "raw": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+      "normalized_lf": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1"
+    },
+    "tests/deletion-durability.browser.cjs": {
+      "raw": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+      "normalized_lf": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429"
+    },
+    "tests/deletion-merge.browser.cjs": {
+      "raw": "1b85dbcb9c92f8bb011fb99c2b8940fd12436c25e63368cf14bb024176f02987",
+      "normalized_lf": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2"
+    },
+    "tests/portfolio-removal.browser.cjs": {
+      "raw": "005bc8ee18110db59ad8b73c104767bc8386e76c2d9cdd5ef3ce88464d10256a",
+      "normalized_lf": "35acb1c28a4da150070905bc9ba5b68ec4c04376ff17c0f6aab7499a80196dd8"
+    },
+    "tests/portfolio-render-failures.browser.cjs": {
+      "raw": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+      "normalized_lf": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b"
+    },
+    "tests/notebook-guide.browser.cjs": {
+      "raw": "851afd0acd495bab673f81b1400513901b3db22891c29ee5ef61d0b6d5657ba3",
+      "normalized_lf": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497"
+    }
+  },
+  "counts": {
+    "complex_method": 16,
+    "large_method": 9,
+    "dry_violation": 13,
+    "complex_conditional": 3,
+    "nested_complexity": 4,
+    "primitive_obsession": 1,
+    "io_in_loop": 2,
+    "bumpy_road": 2
+  },
+  "coordinator_acceptance": {
+    "at": "2026-10-16T01:47:22.721527+00:00",
+    "report_ids": [
+      "repair-057",
+      "repair-058"
+    ],
+    "record_count": 50,
+    "actual_detector_replays": 48,
+    "source_only_io_reviews": 2
+  }
+}

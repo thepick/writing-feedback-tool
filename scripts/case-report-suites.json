@@ -26,6 +26,7 @@
   "tests/portfolio-html.browser.cjs",
   "tests/portfolio-image-slots.browser.cjs",
   "tests/portfolio-index.browser.cjs",
+  "tests/portfolio-reassessment.browser.cjs",
   "tests/portfolio-render-failures.browser.cjs",
   "tests/portfolio-renderer.browser.cjs",
   "tests/preference-integrity.browser.cjs",

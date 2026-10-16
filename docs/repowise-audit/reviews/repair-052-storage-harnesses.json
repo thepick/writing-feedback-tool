@@ -1,0 +1,967 @@
+{
+  "repair_id": "repair-052",
+  "title": "Review storage integrity, public controls and held-upload harnesses",
+  "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "source_hashes": {
+    "tests/storage-public-ui.browser.cjs": {
+      "raw": "9a4750e2912db5287cc8b44263af22a520c181bb137f1507eb8e333901d61264",
+      "lf": "7405caf2e75f7b56008750ffd5021aea84dd94eb0005fb7ddae47e03473af3ee"
+    },
+    "tests/storage-integrity.browser.cjs": {
+      "raw": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+      "lf": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd"
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "raw": "63d86ad3bbe41ec9cbe98fbeecf554a7887f953ac62a24f400151524c3d1ff89",
+      "lf": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97"
+    },
+    "tests/storage-held-request.browser.cjs": {
+      "raw": "2fcb3300e5d9b35f4daa3bad6a8ce521e3d073d1262eef3d8cf4e576d14bbdd7",
+      "lf": "2fcb3300e5d9b35f4daa3bad6a8ce521e3d073d1262eef3d8cf4e576d14bbdd7"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_77f3be269471aa661c48",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "routeStorageRequest",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 13,
+        "deepest_block": {
+          "start": 16,
+          "end": 16
+        }
+      },
+      "verified_metrics": {
+        "name": "routeStorageRequest",
+        "start_line": 13,
+        "end_line": 21,
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 9,
+        "max_nesting": 3,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The9-line dispatcher serves pinned installed JSZip, local files and specialized Google requests. Only its local file branch duplicates the existing local-app-route helper. Preserve the exact JSZip source pin, blocked-external evidence, OPTIONS and Google request capture. Compare the old JSON missing-file404 headers before adopting; no broad dispatcher rewrite.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_1c4203340f5c8a9b5485",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "replyDriveRequest",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 6,
+        "dispatch_share": 0.0,
+        "symbol_line": 22,
+        "deepest_block": {
+          "start": 23,
+          "end": 23
+        }
+      },
+      "verified_metrics": {
+        "name": "replyDriveRequest",
+        "start_line": 22,
+        "end_line": 27,
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 6,
+        "max_nesting": 2,
+        "bumps": 3,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_service_fault_policy",
+      "reason": "The6-line responder deliberately distinguishes older-copy move refusal, folder-create refusal, parent mutation and malformed media reads. The three bumps are those service fault boundaries. A generic reply table would hide request-body and scenario-dependent behavior.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_917aab5fd7aed8eed17d",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "replyDriveQuery",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 16,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 28,
+        "deepest_block": {
+          "start": 29,
+          "end": 29
+        }
+      },
+      "verified_metrics": {
+        "name": "replyDriveQuery",
+        "start_line": 28,
+        "end_line": 36,
+        "ccn": 13,
+        "cognitive": 16,
+        "nloc": 9,
+        "max_nesting": 2,
+        "bumps": 4,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_service_query_policy",
+      "reason": "The9-line query responder prioritizes duplicate-backup, media, per-student and portfolio queries, retains actual root-parent metadata and filters only live root copies. Its four bumps mirror different Google contracts; no new mock framework is justified.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_3111371d66b2ca8235c4",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "checkPortfolioViews",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 41
+      },
+      "verified_metrics": {
+        "name": "checkPortfolioViews",
+        "start_line": 41,
+        "end_line": 56,
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 16,
+        "max_nesting": 0,
+        "bumps": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_export_print_oracle",
+      "reason": "The16-line helper clicks real roster controls and portfolio selection, opens an actual ZIP download and popup, checks selected-only exact writing, detached opener and print scheduling. Combined assertions are the safety oracle. Keep the meaningful native boundaries and existing OS-print-only substitution.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_1e16b4f451761fdb4f18",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "replyDriveRequest",
+      "marker": "bumpy_road",
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 10,
+        "max_nesting": 2,
+        "symbol_line": 22,
+        "deepest_block": {
+          "start": 23,
+          "end": 23
+        }
+      },
+      "verified_metrics": {
+        "name": "replyDriveRequest",
+        "start_line": 22,
+        "end_line": 27,
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 6,
+        "max_nesting": 2,
+        "bumps": 3,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_service_fault_policy",
+      "reason": "The6-line responder deliberately distinguishes older-copy move refusal, folder-create refusal, parent mutation and malformed media reads. The three bumps are those service fault boundaries. A generic reply table would hide request-body and scenario-dependent behavior.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_374742b549826bee0456",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "replyDriveQuery",
+      "marker": "bumpy_road",
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 13,
+        "max_nesting": 2,
+        "symbol_line": 28,
+        "deepest_block": {
+          "start": 29,
+          "end": 29
+        }
+      },
+      "verified_metrics": {
+        "name": "replyDriveQuery",
+        "start_line": 28,
+        "end_line": 36,
+        "ccn": 13,
+        "cognitive": 16,
+        "nloc": 9,
+        "max_nesting": 2,
+        "bumps": 4,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_service_query_policy",
+      "reason": "The9-line query responder prioritizes duplicate-backup, media, per-student and portfolio queries, retains actual root-parent metadata and filters only live root copies. Its four bumps mirror different Google contracts; no new mock framework is justified.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_859af07b8b5b8bc2527d",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "runStorageScenario",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 120,
+        "ccn": 7,
+        "dispatch_share": 0.67,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 108,
+          "end": 119
+        }
+      },
+      "verified_metrics": {
+        "name": "runStorageScenario",
+        "start_line": 5,
+        "end_line": 125,
+        "ccn": 7,
+        "cognitive": 9,
+        "nloc": 120,
+        "max_nesting": 2,
+        "bumps": 1,
+        "dispatch_share": 0.67
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_scenario_transaction",
+      "reason": "The120-line root already delegates views, writing, callback, duplicate, media and drop checks. It owns one isolated browser context, genuine download/popup/event handling, final primary-byte assertions and close. Dispatch correction gives judgedCCN7. Only the separately identified local asset branch needs possible reuse; splitting this transaction would add fixture plumbing.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_7afcbd5ba99da91ccf4f",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 11.64,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/storage-dialog-keyboard.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 126,
+        "symbol": "initializeStorageScenario"
+      },
+      "verified_metrics": {},
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_small_fixture_clone",
+      "reason": "The worst10-line cross-file clone is the browser-launch, scenario loop, close and result-report scaffold. It intentionally guarantees all14 contexts are exercised and failures aggregated. The smaller asset-route clone has a separate candidate; do not introduce a generic browser scenario runner to remove this footer.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_1697a4b8d259bb0fd00f",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": null,
+      "marker": "io_in_loop",
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/storage-public-ui.browser.cjs::__module__",
+          "tests/storage-public-ui.browser.cjs::runStorageScenario"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 141,
+        "symbol_line": 138,
+        "symbol": "<anonymous@138>",
+        "role_owner": "tests/storage-public-ui.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_514fa14bb37103b12e44"
+      },
+      "verified_metrics": {},
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_test_io_boundary",
+      "reason": "The14-case module loop reaches runStorageScenario, which creates isolated contexts and reads local pinned assets; export also reads the actual downloaded ZIP. This bounded native test filesystem work is required isolation/oracle behavior, not product N+1 evidence. The promoted performance record has the same path, test role and inherent_to_boundary/may_lead=false facts; no graph/rank regeneration or independent latency claim.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "performance:perf3_514fa14bb37103b12e44",
+      "file": "tests/storage-public-ui.browser.cjs",
+      "symbol": "tests/storage-public-ui.browser.cjs::__module__",
+      "marker": "io_in_loop",
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/storage-public-ui.browser.cjs::runStorageScenario"
+        ],
+        "shared_path_suffix": [
+          "tests/storage-public-ui.browser.cjs::__module__",
+          "tests/storage-public-ui.browser.cjs::runStorageScenario"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "verified_metrics": {},
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_test_io_boundary",
+      "reason": "The14-case module loop reaches runStorageScenario, which creates isolated contexts and reads local pinned assets; export also reads the actual downloaded ZIP. This bounded native test filesystem work is required isolation/oracle behavior, not product N+1 evidence. The promoted performance record has the same path, test role and inherent_to_boundary/may_lead=false facts; no graph/rank regeneration or independent latency claim.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_b59505b3a3453bdfaba9",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "runCloudRequiredCases",
+      "marker": "nested_complexity",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 6,
+        "cognitive": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 68,
+        "deepest_block": {
+          "start": 69,
+          "end": 82
+        }
+      },
+      "verified_metrics": {
+        "name": "runCloudRequiredCases",
+        "start_line": 68,
+        "end_line": 83,
+        "ccn": 6,
+        "cognitive": 20,
+        "nloc": 16,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_invalid_cloud_matrix",
+      "reason": "The16-line group crosses two required streams with six invalid bodies, exercising real parsing/apply boundaries and asserting unchanged snapshots, an error and zero outgoing writes. Depth4 comes from the matrix, evaluated browser closure and local assertion catch. Preserve each case and failure report.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_4096b367dcecf86feed0",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "runDeletionPolicyCases",
+      "marker": "nested_complexity",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 21,
+        "cognitive": 32,
+        "dispatch_share": 0.0,
+        "symbol_line": 124,
+        "deepest_block": {
+          "start": 141,
+          "end": 150
+        }
+      },
+      "verified_metrics": {
+        "name": "runDeletionPolicyCases",
+        "start_line": 124,
+        "end_line": 183,
+        "ccn": 21,
+        "cognitive": 32,
+        "nloc": 60,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_deletion_compatibility_matrix",
+      "reason": "The60-line browser group enumerates timestamp/Lamport precedence, four legacy/current tombstone forms, split-file/merge parity, owner mismatches, special own keys and restore boundaries. These are distinct compatibility contracts exercised through real helpers. Nested loops and explicit expected results remain clearer than a configurable deletion-test engine.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_166b844f89a7e3ce09bc",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "runRequiredCase",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 13,
+        "nloc": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 15,
+        "deepest_block": {
+          "start": 23,
+          "end": 23
+        }
+      },
+      "verified_metrics": {
+        "name": "runRequiredCase",
+        "start_line": 15,
+        "end_line": 34,
+        "ccn": 9,
+        "cognitive": 13,
+        "nloc": 20,
+        "max_nesting": 2,
+        "bumps": 2,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_required_read_failure_oracle",
+      "reason": "The20-line case invokes actual writer/control entry points after exact required-store corruption/read failure, always restores Storage.getItem in finally, and compares primary bytes, memory, UI, counters and acknowledgments. The visible-failure alternatives distinguish unload handlers from ordinary returns; do not collapse these checks.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_e468e4d675f32bce5d17",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "runDeletionPolicyCases",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 32,
+        "nloc": 60,
+        "dispatch_share": 0.0,
+        "symbol_line": 124,
+        "deepest_block": {
+          "start": 141,
+          "end": 150
+        }
+      },
+      "verified_metrics": {
+        "name": "runDeletionPolicyCases",
+        "start_line": 124,
+        "end_line": 183,
+        "ccn": 21,
+        "cognitive": 32,
+        "nloc": 60,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_deletion_compatibility_matrix",
+      "reason": "The60-line browser group enumerates timestamp/Lamport precedence, four legacy/current tombstone forms, split-file/merge parity, owner mismatches, special own keys and restore boundaries. These are distinct compatibility contracts exercised through real helpers. Nested loops and explicit expected results remain clearer than a configurable deletion-test engine.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_efae386de7cfa965585f",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "runCompactionCases",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 24,
+        "nloc": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 185,
+        "deepest_block": {
+          "start": 192,
+          "end": 196
+        }
+      },
+      "verified_metrics": {
+        "name": "runCompactionCases",
+        "start_line": 185,
+        "end_line": 205,
+        "ccn": 9,
+        "cognitive": 24,
+        "nloc": 21,
+        "max_nesting": 3,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_compaction_boundary_oracle",
+      "reason": "The21-line group checks the opt-in and disabled policies, exact90-day and recent/old records, missing/invalid timestamps, legacy keys, last200 log retention, unknown metadata, student tombstones, immutability and idempotence. These branches encode required boundary expectations and should not be removed for CCN9.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_eac0d63c55f858b16f57",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "runDeletionPolicyCases",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 60,
+        "ccn": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 124,
+        "deepest_block": {
+          "start": 141,
+          "end": 150
+        }
+      },
+      "verified_metrics": {
+        "name": "runDeletionPolicyCases",
+        "start_line": 124,
+        "end_line": 183,
+        "ccn": 21,
+        "cognitive": 32,
+        "nloc": 60,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_deletion_compatibility_matrix",
+      "reason": "The60-line browser group enumerates timestamp/Lamport precedence, four legacy/current tombstone forms, split-file/merge parity, owner mismatches, special own keys and restore boundaries. These are distinct compatibility contracts exercised through real helpers. Nested loops and explicit expected results remain clearer than a configurable deletion-test engine.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_9f733e328960b7279b3b",
+      "file": "tests/storage-integrity.browser.cjs",
+      "symbol": "initializeIntegrityFixture",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 65,
+        "ccn": 28,
+        "dispatch_share": 1.0,
+        "symbol_line": 224,
+        "deepest_block": {
+          "start": 260,
+          "end": 260
+        }
+      },
+      "verified_metrics": {
+        "name": "initializeIntegrityFixture",
+        "start_line": 224,
+        "end_line": 288,
+        "ccn": 28,
+        "cognitive": 27,
+        "nloc": 65,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 1.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_browser_fixture_dispatch",
+      "reason": "The65-line evaluated setup defines exact storage/roster/sync before-images and27 actual entry actions with bounded event adapters. Its dispatch share1 yields a compact judged complexity. Keeping this browser serialization boundary and native action map avoids replacing the methods under test or passing a large globals factory.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_230b478afcad973c3531",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": "<anonymous@26>",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 16,
+        "nloc": 100,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 26,
+        "deepest_block": {
+          "start": 28,
+          "end": 124
+        }
+      },
+      "verified_metrics": {
+        "name": "<anonymous@26>",
+        "start_line": 26,
+        "end_line": 126,
+        "ccn": 10,
+        "cognitive": 16,
+        "nloc": 100,
+        "max_nesting": 3,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ownership_scenario_transaction",
+      "reason": "The100-line root owns eight isolated account/upload race scenarios, native clock, actual held routes, before/after captures and terminal cleanup. It already delegates setup/start/finish/final checks. Keep the transaction intact; the service-local asset branch has a separate candidate.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_db0cea056752bd0b5b4c",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": "handleServiceRequest",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 19,
+        "nloc": 28,
+        "dispatch_share": 0.5,
+        "symbol_line": 33,
+        "deepest_block": {
+          "start": 36,
+          "end": 36
+        }
+      },
+      "verified_metrics": {
+        "name": "handleServiceRequest",
+        "start_line": 33,
+        "end_line": 60,
+        "ccn": 15,
+        "cognitive": 19,
+        "nloc": 28,
+        "max_nesting": 3,
+        "bumps": 2,
+        "dispatch_share": 0.5
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "This28-line responder owns held multipart requests, token-qualified saved files and account migration/read responses. Reuse only the existing local asset branch. Keep upload metadata/body parsing and completion boundaries intact; compare the old JSON-object404 and external mocks before adoption.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_d5e98f1e37090946ce89",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": "replyToReadRequest",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 48,
+        "deepest_block": {
+          "start": 56,
+          "end": 56
+        }
+      },
+      "verified_metrics": {
+        "name": "replyToReadRequest",
+        "start_line": 48,
+        "end_line": 58,
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 11,
+        "max_nesting": 2,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_account_read_protocol",
+      "reason": "The11-line responder distinguishes user info, migration marker identity, query-by-name plus token ownership, root metadata and stored file/media content. A broad success mock would erase account reconnection and cached-file validation coverage. Keep the current explicit service contracts.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_11407a1d7000887c6dfa",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": "finishSignoutReconnect",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 90,
+        "deepest_block": {
+          "start": 91,
+          "end": 91
+        }
+      },
+      "verified_metrics": {
+        "name": "finishSignoutReconnect",
+        "start_line": 90,
+        "end_line": 99,
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 10,
+        "max_nesting": 3,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_reconnection_race_oracle",
+      "reason": "Ten lines drive three real timeout attempts, sign out, save new writing while disconnected, reconnect a new token, then release old and current uploads in order. Exact status/dot/lock/token assertions prove ownership. Do not replace this sequence with a boolean scenario result.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_1a90d8292e073ccf9903",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": "<anonymous@26>",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 100,
+        "ccn": 10,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 26,
+        "deepest_block": {
+          "start": 28,
+          "end": 124
+        }
+      },
+      "verified_metrics": {
+        "name": "<anonymous@26>",
+        "start_line": 26,
+        "end_line": 126,
+        "ccn": 10,
+        "cognitive": 16,
+        "nloc": 100,
+        "max_nesting": 3,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ownership_scenario_transaction",
+      "reason": "The100-line root owns eight isolated account/upload race scenarios, native clock, actual held routes, before/after captures and terminal cleanup. It already delegates setup/start/finish/final checks. Keep the transaction intact; the service-local asset branch has a separate candidate.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_116f23f684db12591de4",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 12.1,
+        "clone_pair_count": 3,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/storage-held-request.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 6,
+        "symbol": "initializeOwnershipState"
+      },
+      "verified_metrics": {},
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_small_fixture_clone",
+      "reason": "The worst10-line clone is initial synthetic storage/identity state also used by the held-request test, with different token/counter/pending baselines. A configurable fixture factory would obscure those before-images. The smaller local asset branch has a separate reuse candidate; keep the account-specific setup explicit.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_5ca6f0b1b222bdb367fd",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "symbol": "<anonymous@26>",
+      "marker": "function_hotspot",
+      "verified_observation_details": {
+        "modification_count": 5,
+        "repo_p80": 1,
+        "ccn": 10,
+        "max_nesting": 3,
+        "symbol_line": 26
+      },
+      "verified_metrics": {},
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ownership_scenario_transaction",
+      "reason": "The100-line root owns eight isolated account/upload race scenarios, native clock, actual held routes, before/after captures and terminal cleanup. It already delegates setup/start/finish/final checks. Keep the transaction intact; the service-local asset branch has a separate candidate. Historical range blame independently returns five commits and actualCCN10/nesting3; storedp80=1 meets the floor5. Retain this risk signal rather than rewrite tested chronology.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_bfcf3ebf003b174fd360",
+      "file": "tests/storage-held-request.browser.cjs",
+      "symbol": "<anonymous@5>",
+      "marker": "nested_complexity",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 21,
+        "cognitive": 43,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 23,
+          "end": 26
+        }
+      },
+      "verified_metrics": {
+        "name": "<anonymous@5>",
+        "start_line": 5,
+        "end_line": 75,
+        "ccn": 21,
+        "cognitive": 43,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The71-line root correctly keeps actual held requests, three bounded timeout retries, late release, newer writing snapshots and cleanup together. Only lines22-25 repeat the existing local-app-route helper. Delegate that local branch while preserving all Google/OPTIONS/request/abort behavior and exact invariant report. Group nesting/complexity/size rows as one local reuse operation; no guaranteed clearance.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_b732c9ff348ddfb246a2",
+      "file": "tests/storage-held-request.browser.cjs",
+      "symbol": "<anonymous@5>",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 43,
+        "nloc": 71,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 23,
+          "end": 26
+        }
+      },
+      "verified_metrics": {
+        "name": "<anonymous@5>",
+        "start_line": 5,
+        "end_line": 75,
+        "ccn": 21,
+        "cognitive": 43,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The71-line root correctly keeps actual held requests, three bounded timeout retries, late release, newer writing snapshots and cleanup together. Only lines22-25 repeat the existing local-app-route helper. Delegate that local branch while preserving all Google/OPTIONS/request/abort behavior and exact invariant report. Group nesting/complexity/size rows as one local reuse operation; no guaranteed clearance.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_98485cb8749defada08b",
+      "file": "tests/storage-held-request.browser.cjs",
+      "symbol": "checkHeldRequestInvariants",
+      "marker": "complex_method",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 9
+      },
+      "verified_metrics": {
+        "name": "checkHeldRequestInvariants",
+        "start_line": 9,
+        "end_line": 16,
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 8,
+        "max_nesting": 0,
+        "bumps": 0,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_late_upload_preservation_oracle",
+      "reason": "The8-line oracle simultaneously requires all three actual timeout attempts, failed inactive run, no newer text in old payloads, unchanged durable/newer pending writing, no obsolete synced status and no page errors. These independent invariants prevent false success; keep them explicit.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_229cb91cb1ac685a58c4",
+      "file": "tests/storage-held-request.browser.cjs",
+      "symbol": "<anonymous@5>",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 71,
+        "ccn": 21,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 23,
+          "end": 26
+        }
+      },
+      "verified_metrics": {
+        "name": "<anonymous@5>",
+        "start_line": 5,
+        "end_line": 75,
+        "ccn": 21,
+        "cognitive": 43,
+        "nloc": 71,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_branch",
+      "reason": "The71-line root correctly keeps actual held requests, three bounded timeout retries, late release, newer writing snapshots and cleanup together. Only lines22-25 repeat the existing local-app-route helper. Delegate that local branch while preserving all Google/OPTIONS/request/abort behavior and exact invariant report. Group nesting/complexity/size rows as one local reuse operation; no guaranteed clearance.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    },
+    {
+      "record_id": "code_health:finding_73b0629d0342f5021c60",
+      "file": "tests/storage-held-request.browser.cjs",
+      "symbol": null,
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 21.33,
+        "clone_pair_count": 3,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/storage-upload-ownership.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 5,
+        "symbol": "<anonymous@5>"
+      },
+      "verified_metrics": {},
+      "evidence_receipt": "work/repowise-coordinator/repair-052-storage-harness-facts.json",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_small_fixture_clone",
+      "reason": "The worst10-line clone is the initial storage and sync identity setup. It deliberately differs from ownership scenarios in token and dirty/held-run setup. Keep these small explicit before-images; reuse the existing local asset handler separately, without creating a shared state factory.",
+      "regression_recommendation": "For local asset reuse, run current native suite before/after and compare case/assertion/request evidence, existing helper contracts and404 differences; preserve Google mocks, data bytes, handlers and cleanup. Retained assertions need no source rewrite."
+    }
+  ],
+  "summary": {
+    "records": 29,
+    "retained": 24,
+    "confirmed_candidate_records": 3,
+    "regression_candidate_records": 2,
+    "distinct_reuse_operations": 3,
+    "source_changes": 0,
+    "tests_run": 0,
+    "scanner_closures": 0
+  },
+  "verification": "Root read all four complete sources. All26shape/clone detector outputs match indexed details on identical current test bytes; one historical blame range rebuilt; two raw/promoted I/O records traced in source without graph regeneration. Full90-source clone replay archived once for later related reviews.",
+  "limits": [
+    "Stored00c co-change metadata and global function p80 not independently rebuilt; report states that basis.",
+    "Current app046/source changes outside these immutable tests are excluded; no new browser or syntax pass claimed.",
+    "Reuse may leave other size/complexity/clone warnings. Missing-file MIME/body differences must be explicitly validated, never silently asserted identical."
+  ]
+}

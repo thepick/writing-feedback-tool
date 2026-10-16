@@ -1,0 +1,484 @@
+{
+  "repair_id": "repair-051",
+  "title": "Review compact unit scaffolds and runner fixture I/O",
+  "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "method": "Root read every clone region and corresponding extraction/VM setup; full90-source historical pure clone detector with stored00c co-change metadata matched all11 details. Root read full storage-health and runner checks, replayed current identical-source function metrics/native direct I/O and historical blame range. No runtime suite or whole-current-app freeze claim.",
+  "findings": [
+    {
+      "record_id": "code_health:finding_db029d1060192426b222",
+      "file": "scripts/check-test-runner.cjs",
+      "marker": "io_in_loop",
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": false,
+        "loop_line": 13,
+        "sink_call": "fs.writeFileSync",
+        "role_owner": null,
+        "execution_role": "tooling",
+        "opportunity_id": "perf3_7eb9a5dfed5a434878d4"
+      },
+      "verified_metrics": {
+        "biomarker_type": "io_in_loop",
+        "severity": "medium",
+        "function_name": null,
+        "line_start": 13,
+        "line_end": 13,
+        "details": {
+          "boundary_kind": "filesystem",
+          "cross_function": false,
+          "loop_line": 13,
+          "sink_call": "fs.writeFileSync"
+        },
+        "reason": "a filesystem call runs once per loop iteration (I/O call inside a loop)",
+        "deduction": null
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The loop writes one independent temporary fixture program per report contract, before executing those children to prove malformed/empty/stale/failed reports are rejected. Actual per-file writes are necessary to test the runner subprocess and filesystem boundary. This bounded tooling setup is not a product N+1; caching or skipping files would weaken the self-check.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_98bad080ba873a305de4",
+      "file": "tests/class-deletion.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 9.09,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/student-rename.cjs",
+        "worst_clone_co_change": 4
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 9.09,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/student-rename.cjs",
+        "worst_clone_co_change": 4
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The clone is imports plus strict extraction of the recovery/commit source, shared with the rename fixture. Class deletion then exercises three different destructive entry points with its own VM state. A new shared loader for this9-line prefix would add an API without removing a product policy; keep the explicit missing-section assertions.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_b1dcffd38f5b717a7e0f",
+      "file": "tests/deletion-merge.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 18.87,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/settings-deletions-sync.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 18.87,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/settings-deletions-sync.cjs",
+        "worst_clone_co_change": 0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The10-line prefix imports the native VM and extracts a fixed named function list with strict bounds checks. Settings/deletion sync uses different named functions and a different VM/state fixture. No existing shared function-list loader fits; introducing one solely for this small setup clone costs more than leaving the tested explicit extraction.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_7ab9c4252d5ca5a30579",
+      "file": "tests/drive-folder-selection.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.91,
+        "clone_pair_count": 1,
+        "worst_clone_lines": 6,
+        "worst_clone_partner": "tests/portfolio-index-load.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 10.91,
+        "clone_pair_count": 1,
+        "worst_clone_lines": 6,
+        "worst_clone_partner": "tests/portfolio-index-load.cjs",
+        "worst_clone_co_change": 0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "All six clone lines are imports, reading the shipped storage script and strict start/end markers. This fixture extracts canonical-folder selection; its partner extracts portfolio-index loading. A shared loader would parameterize this tiny setup, without simplifying either folder policy or the identity/failure oracle.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_17a77e2184d06c5924b5",
+      "file": "tests/neatness-scoring.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 15.52,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 15.52,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The duplicated prefix is imports and strict extraction of assessNeatnessFromImage. The own response builder and VM boundary deliberately test six missing criteria and scored output. Reusing a portfolio/deletion fixture would introduce unrelated globals and configuration for an8-line setup prefix.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_25e178330cbedd7e9342",
+      "file": "tests/pending-portfolio.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 13.04,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 13.04,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "This8-line prefix reads and strictly bounds the pending image-stripping/persistence section, followed by a distinct photo-recoverability section. The fixture owns exact pending bytes, quota fallback and Drive references. A generic extraction wrapper would hide which shipped boundary is executed without removing a duplicated product algorithm.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_9713ff13edfc8d5c00bf",
+      "file": "tests/portfolio-index-load.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 14.58,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 6,
+        "worst_clone_partner": "tests/drive-folder-selection.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 14.58,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 6,
+        "worst_clone_partner": "tests/drive-folder-selection.cjs",
+        "worst_clone_co_change": 0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The6-line import/read/bounds scaffold resembles the folder test, but the index loader has its own enable/safe/cache/timing matrix. Keep explicit source markers and per-test VM globals; there is no existing shared loader to reuse and no behavioral defect in this small prefix.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_d571f3e0e8dc34723374",
+      "file": "tests/portfolio-save.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 13.41,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-sync.cjs",
+        "worst_clone_co_change": 2
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 13.41,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-sync.cjs",
+        "worst_clone_co_change": 2
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The9-line clone is imports plus strict extraction before a fixture with dirty-mark, storage retry and failure assertions. The near-copy sync fixture extracts a different interval. A helper would need to expose file/start/end/global setup and would merely relocate this compact harness scaffold.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_ae857b3e841bd8464b5b",
+      "file": "tests/portfolio-sync.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 17.04,
+        "clone_pair_count": 11,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-save.cjs",
+        "worst_clone_co_change": 2
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 17.04,
+        "clone_pair_count": 11,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-save.cjs",
+        "worst_clone_co_change": 2
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "Clone regions are imports/extraction, a small JSON clone helper and a held-promise gate. The gate intentionally separates entered from release so tests can mutate real local counters between phases. Keep scenario-specific fixtures and exact failure/acknowledgment assertions; no existing shared harness helper fits these tiny pieces.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_eccc654a22ebb1108ff3",
+      "file": "tests/settings-deletions-sync.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 13.91,
+        "clone_pair_count": 10,
+        "worst_clone_lines": 6,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 2
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 13.91,
+        "clone_pair_count": 10,
+        "worst_clone_lines": 6,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 2
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The common setup is imports/named-function slicing and the small clone/entered-release gate shared with portfolio sync. This fixture has stream-specific settings/deletion state and UI-before-image checks. Moving the gate or VM setup into a new configurable test framework would add coupling without removing a product duplication.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_64343803d3bcb7a25471",
+      "file": "tests/storage-health.cjs",
+      "marker": "large_method",
+      "verified_observation_details": {
+        "nloc": 90,
+        "ccn": 8,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 17,
+        "deepest_block": {
+          "start": 92,
+          "end": 105
+        }
+      },
+      "verified_metrics": {
+        "name": "<anonymous@17>",
+        "start_line": 17,
+        "end_line": 109,
+        "ccn": 8,
+        "nloc": 90,
+        "max_nesting": 3
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The90-line root contains two named source sections: async ID lookup/promise failure and emergency backup preservation/redaction. The recent repair already removed obsolete one-file loops. The remaining branches are exact error/raw-byte/privacy assertions and independent before-image setup; another wrapper would only redistribute these oracles.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_9934b52e0c0db9b89709",
+      "file": "tests/storage-health.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 8.65,
+        "clone_pair_count": 6,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-removal.cjs",
+        "worst_clone_co_change": 0
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 8.65,
+        "clone_pair_count": 6,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-removal.cjs",
+        "worst_clone_co_change": 0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The worst9-line clone is native imports and the beginning of a strict section reader. The local reader includes file-qualified missing-boundary errors and supports two different source files. No existing exported loader serves it; retain this small explicit setup rather than create a new API for imports and source slicing.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_8af0d42678ef30e65221",
+      "file": "tests/storage-health.cjs",
+      "marker": "function_hotspot",
+      "verified_observation_details": {
+        "modification_count": 5,
+        "repo_p80": 1,
+        "ccn": 8,
+        "max_nesting": 3,
+        "symbol_line": 17
+      },
+      "verified_metrics": {
+        "name": "<anonymous@17>",
+        "start_line": 17,
+        "end_line": 109,
+        "ccn": 8,
+        "nloc": 90,
+        "max_nesting": 3,
+        "modification_count": 5,
+        "repo_p80_from_store": 1,
+        "blame_commit_ids": [
+          "00c9454e6c89f258cb3afc938201a10feda16087",
+          "14e7102f3c4c65ba02bd733abe4b372ba2d27c7b",
+          "4256f5b9c6f0866adf0f3e8c8181c66177ed69b0",
+          "7fa3b87a4959f9013391c8d52fcbde4b7722e9b7",
+          "a20060805d00f1e2204c71881a180287b424946d"
+        ]
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The exact function span retains five distinct blamed commits and CCN8/nesting3, satisfying the detector floor at max(p80=1,5). This is a valid history-plus-shape risk signal. The already simplified root now holds backup integrity/privacy and async error oracles; keep future changes focused instead of splitting assertions or rewriting history to clear the risk.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "code_health:finding_e3971bd30d47501900db",
+      "file": "tests/student-rename.cjs",
+      "marker": "dry_violation",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 20.0,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 4
+      },
+      "verified_metrics": {
+        "cross_file_duplication_pct": 20.0,
+        "clone_pair_count": 9,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/class-deletion.cjs",
+        "worst_clone_co_change": 4
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The shared9-line recovery-source prefix with class deletion is small; rename then supplies unique before-image, input-confirmation and conflict fixtures. Keep the exact recovery/commit source in view, with strict bounds assertions, rather than add a shared loader solely to reduce the reported header duplication.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    },
+    {
+      "record_id": "performance:perf3_7eb9a5dfed5a434878d4",
+      "file": "scripts/check-test-runner.cjs",
+      "marker": "io_in_loop",
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [],
+        "shared_path_suffix": [],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "direct",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "tooling"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 2,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "direct",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "verified_metrics": {
+        "biomarker_type": "io_in_loop",
+        "severity": "medium",
+        "function_name": null,
+        "line_start": 13,
+        "line_end": 13,
+        "details": {
+          "boundary_kind": "filesystem",
+          "cross_function": false,
+          "loop_line": 13,
+          "sink_call": "fs.writeFileSync"
+        },
+        "reason": "a filesystem call runs once per loop iteration (I/O call inside a loop)",
+        "deduction": null
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_test_scaffold_or_boundary_retained",
+      "reason": "The loop writes one independent temporary fixture program per report contract, before executing those children to prove malformed/empty/stale/failed reports are rejected. Actual per-file writes are necessary to test the runner subprocess and filesystem boundary. This bounded tooling setup is not a product N+1; caching or skipping files would weaken the self-check. This promoted record has the same direct line13 cause, tooling role and inherent_to_boundary/may_lead=false facts; it is not a second repair.",
+      "regression_recommendation": "Retain all current source-boundary, error, data-integrity and native runner assertions; use existing full-batch gate when app source changes."
+    }
+  ],
+  "source_hashes": {
+    "scripts/check-test-runner.cjs": {
+      "raw": "f97df97b4e07a8b73113288b9b9a457b4747ae44fde96079860f77301985991c",
+      "lf": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612"
+    },
+    "tests/class-deletion.cjs": {
+      "raw": "602de41f7472e6014dded1c05de286758a500f71f82738e7542c6f36d582dcd1",
+      "lf": "602de41f7472e6014dded1c05de286758a500f71f82738e7542c6f36d582dcd1"
+    },
+    "tests/deletion-merge.cjs": {
+      "raw": "78d5027dea341e573cbd28eb021d973852df599a3b4d66d30b1b40083f2102a2",
+      "lf": "3a9f0f43dce516c89c9e184d3d9894236bd0e956cd2854446876f8c9b05ed9c0"
+    },
+    "tests/drive-folder-selection.cjs": {
+      "raw": "59849b8e7e8b4eeec98514737da522266104ce47ac93baa3ab9d89ae59845e74",
+      "lf": "54560c40fc82fc3825d5cabf1edbadcd29952ac6f1077d3750249b4454b22c36"
+    },
+    "tests/neatness-scoring.cjs": {
+      "raw": "e8483eb8350a6eccd00b35efb09bc85296de8dfc75ca5a25c5113deb6aebe1aa",
+      "lf": "f5168fb6aa93639e504684ebb0513fdd3cfa57918d1adb916cd5b9352594ebdc"
+    },
+    "tests/pending-portfolio.cjs": {
+      "raw": "bd5860e352705c86fe312b9a489c437612771567921d5dd616ea3ef0c1db65bf",
+      "lf": "f68d82dd9e7dcf4e75cf508403ae105df0b58a647f3247f2095d6787c6530e23"
+    },
+    "tests/portfolio-index-load.cjs": {
+      "raw": "5c1c302e687f69775c74aab362cdb024376b92b245c6715b6bcb269a521a7bbb",
+      "lf": "a06818401a47a398b3c844d070c0ba3193f2739869095e47ad2fe25acfb0470c"
+    },
+    "tests/portfolio-save.cjs": {
+      "raw": "9099f36f39157506192976e6da44a5038e519d36f13fac62101598f4e95c05a7",
+      "lf": "9099f36f39157506192976e6da44a5038e519d36f13fac62101598f4e95c05a7"
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4",
+      "lf": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4"
+    },
+    "tests/settings-deletions-sync.cjs": {
+      "raw": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "lf": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b"
+    },
+    "tests/storage-health.cjs": {
+      "raw": "4ca4456751b5c909a014fa7b86c33d451e2656499b3eef791ee1cb8ff66162de",
+      "lf": "eaf6c8c760e788cc0342afc3ca8d29874a5da77b4ec9162d38371d41d132c7bf"
+    },
+    "tests/student-rename.cjs": {
+      "raw": "555f18cffcd227057c6dfda7ebfd432e73c6cb9b24f6a429952dbc8d9964812b",
+      "lf": "555f18cffcd227057c6dfda7ebfd432e73c6cb9b24f6a429952dbc8d9964812b"
+    }
+  },
+  "limits": [
+    "Historical co-change metadata and repository p80 are stored00c facts, not independently regenerated; pure clone matching and function-range blame were replayed.",
+    "No source/test/config edits, browser/syntax tests, index refresh or scanner clearance. Application context for the VM loaders is historical; concurrent046 is separate."
+  ]
+}
