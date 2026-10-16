@@ -7172,12 +7172,14 @@ function openStudentPortfolio(name) {
     try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) { }
     var studentSelect = document.getElementById('studentSelect');
     if (studentSelect) studentSelect.value = name;
-    switchTab('admin');
+    // The tab refreshes and renders immediately; select the target before switching.
     var sel = document.getElementById('portfolioStudentSelect');
+    if (sel) {
+        refreshPortfolioDropdown();
+        sel.value = name;
+    }
+    switchTab('portfolio');
     if (!sel) return;
-    sel.value = name;
-    renderStudentPortfolio();
-    updateExportSelectedStudentButton();
     var section = document.getElementById('portfolioSection');
     if (section && section.scrollIntoView) {
         if (!window.matchMedia('(max-width: 900px)').matches) { section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }

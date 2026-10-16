@@ -1,0 +1,5040 @@
+{
+  "repair_id": "repair-049",
+  "source_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "source_hashes_normalized_lf": {
+    "js/app/10-main-app.js": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94"
+  },
+  "assigned_current_file_verification": {
+    "raw_sha256": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+    "normalized_lf_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "current_matches_assignment_and_historical_d9": true,
+    "historical_00c_main_normalized_lf_sha256": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7"
+  },
+  "source_policy": "All citations use immutable d9bc81b9855ae736e84c931de5963fbaa785ca37 line numbers. Stored observation details retain original00c lines and ordinals. Historical and mapped current bodies/metrics were independently replayed; no anonymous ordinal regeneration. Only current main file raw/LF is asserted frozen.046 changes to00-storage and portfolio-html are excluded by historical reads.",
+  "inspected_scopes": [
+    {
+      "file": "js/app/10-main-app.js",
+      "scope": "All29 assigned function bodies in full, including full chooser Promise and title formatter; current/historical inclusive line hashes. Related guards/callers985-1045,1237-1271,1310-1320,2049-2119,3404-3426,3622-3670,4154-4163,4713-4717,4874-4903,5384-5399,5469-5493 and callsite searches through render/output/session helpers."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "scope": "Historical7508 saved genre metadata renderer and7726 corrected HTML capture callsites, not moving current046 source."
+    },
+    {
+      "file": "js/app/portfolio-export.js",
+      "scope": "Historical312 saved session genre metadata export callsite."
+    },
+    {
+      "files": [
+        "tests/analysis-pipeline.browser.cjs",
+        "tests/analysis-identity.browser.cjs",
+        "tests/correction-performance.browser.cjs",
+        "tests/missing-feedback.browser.cjs",
+        "tests/feedback-compatibility.browser.cjs",
+        "tests/record-identity.cjs",
+        "tests/notebook-guide.browser.cjs",
+        "tests/storage-dialog-keyboard.browser.cjs",
+        "tests/crop-ownership.browser.cjs"
+      ],
+      "scope": "Pinned actual assertions referenced per finding. Parity assertions are distinguished from independent expected-output oracles; test sources were never executed."
+    }
+  ],
+  "grouped_functions": [
+    {
+      "function": "<anonymous>",
+      "current_span": [
+        3671,
+        3728
+      ],
+      "historical_span": [
+        3669,
+        3726
+      ],
+      "sha256_normalized_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df",
+      "record_ids": [
+        "code_health:finding_355f2c8c145443a2c91f",
+        "code_health:finding_c265a3a523c583f74560"
+      ]
+    },
+    {
+      "function": "<anonymous>",
+      "current_span": [
+        1018,
+        1038
+      ],
+      "historical_span": [
+        1018,
+        1038
+      ],
+      "sha256_normalized_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381",
+      "record_ids": [
+        "code_health:finding_1cec729b60c0910038a8",
+        "code_health:finding_14c98c45fd927d16130a",
+        "code_health:finding_f61b81e17239b007f947",
+        "code_health:finding_cf938a3cb775f4a9762b"
+      ]
+    },
+    {
+      "function": "buildMinimalCorrectionMarkup",
+      "current_span": [
+        1283,
+        1308
+      ],
+      "historical_span": [
+        1283,
+        1308
+      ],
+      "sha256_normalized_lf": "216759dfe8d3022ffcb1cae862c735c7ea5826a9af383ce5017160eaea4fff88",
+      "record_ids": [
+        "code_health:finding_91b9a8251ba0cff648ab"
+      ]
+    },
+    {
+      "function": "renderCorrected",
+      "current_span": [
+        1323,
+        1359
+      ],
+      "historical_span": [
+        1323,
+        1359
+      ],
+      "sha256_normalized_lf": "469c9b0b5a9e09f4dc11f11378b1367dd5e5d9cd56498ec2e1a78e1edb6e9be5",
+      "record_ids": [
+        "code_health:finding_71b8c35d5c1cce2bdb4e"
+      ]
+    },
+    {
+      "function": "polishCategoryWording",
+      "current_span": [
+        2103,
+        2118
+      ],
+      "historical_span": [
+        2103,
+        2118
+      ],
+      "sha256_normalized_lf": "7908c7e2ad16b88bfbbb6851ce0cb235b2a1b66150771bba002c025b864638e1",
+      "record_ids": [
+        "code_health:finding_612b7a712640a912fac4"
+      ]
+    },
+    {
+      "function": "<anonymous>",
+      "current_span": [
+        3487,
+        3514
+      ],
+      "historical_span": [
+        3487,
+        3514
+      ],
+      "sha256_normalized_lf": "9e53e28880dbcb1dddfa6e653bd7e8f18dfb853b00aded20bb82bac4e8da429c",
+      "record_ids": [
+        "code_health:finding_fa1d91a12c1ab82ba63e"
+      ]
+    },
+    {
+      "function": "getEvidenceTokens",
+      "current_span": [
+        4134,
+        4152
+      ],
+      "historical_span": [
+        4132,
+        4150
+      ],
+      "sha256_normalized_lf": "97e9b237b35ee6048b18df5aa299fc8a5e72e7f5b81263adf110ac7b27ff8e92",
+      "record_ids": [
+        "code_health:finding_5d620393555ff50afc4c"
+      ]
+    },
+    {
+      "function": "isValidTeacherComment",
+      "current_span": [
+        4165,
+        4175
+      ],
+      "historical_span": [
+        4163,
+        4173
+      ],
+      "sha256_normalized_lf": "1d3cb435aae248aa0ff36f92c432251ec0e6ab4a2772b78bff40dfafd9f31033",
+      "record_ids": [
+        "code_health:finding_a12d8ec9390f76b1aaad"
+      ]
+    },
+    {
+      "function": "pickNoticeComment",
+      "current_span": [
+        4207,
+        4217
+      ],
+      "historical_span": [
+        4205,
+        4215
+      ],
+      "sha256_normalized_lf": "f04e93fb5d08a15479f12d478c8059b55234adc0b064d62e6002e495433db780",
+      "record_ids": [
+        "code_health:finding_5954cec915712fef2661"
+      ]
+    },
+    {
+      "function": "isGenericGrowthTip",
+      "current_span": [
+        4293,
+        4301
+      ],
+      "historical_span": [
+        4291,
+        4299
+      ],
+      "sha256_normalized_lf": "7b0acf2fc9379b7d414531aafa9933926dd1cf209692686596e542436082d268",
+      "record_ids": [
+        "code_health:finding_5656ce3ea2f986ff0085"
+      ]
+    },
+    {
+      "function": "addNoticeRowIfNew",
+      "current_span": [
+        4540,
+        4548
+      ],
+      "historical_span": [
+        4538,
+        4546
+      ],
+      "sha256_normalized_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da",
+      "record_ids": [
+        "code_health:finding_ac0528d81066bb73b342",
+        "code_health:finding_422849494d832f75eae6"
+      ]
+    },
+    {
+      "function": "renderDetailedAssessment",
+      "current_span": [
+        4650,
+        4690
+      ],
+      "historical_span": [
+        4648,
+        4688
+      ],
+      "sha256_normalized_lf": "638388057c6f7f891942f7f5487062200b16a3926e5a4ac21d6b516029a41675",
+      "record_ids": [
+        "code_health:finding_fc2d511f3416246213eb"
+      ]
+    },
+    {
+      "function": "getAuditRawRows",
+      "current_span": [
+        4718,
+        4768
+      ],
+      "historical_span": [
+        4716,
+        4766
+      ],
+      "sha256_normalized_lf": "ce0eac8a8b1436cdd44e8fa4ce84a6d20e0acff33c72035a859a18948e182d9b",
+      "record_ids": [
+        "code_health:finding_029e6991171b7c743b8d"
+      ]
+    },
+    {
+      "function": "buildAuditValidationRows",
+      "current_span": [
+        4796,
+        4814
+      ],
+      "historical_span": [
+        4794,
+        4812
+      ],
+      "sha256_normalized_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981",
+      "record_ids": [
+        "code_health:finding_d97607b9caf7c718fee8",
+        "code_health:finding_59891f8809ca49ea5883"
+      ]
+    },
+    {
+      "function": "getAuditBuilderRows",
+      "current_span": [
+        4816,
+        4826
+      ],
+      "historical_span": [
+        4814,
+        4824
+      ],
+      "sha256_normalized_lf": "4921d93a1ebd0db4a8bad064f770a79d17bee2bf2d19452f3a1f76ce76fba1a5",
+      "record_ids": [
+        "code_health:finding_3fe12dd27aa07dcffadb"
+      ]
+    },
+    {
+      "function": "formatToken",
+      "current_span": [
+        5062,
+        5091
+      ],
+      "historical_span": [
+        5060,
+        5089
+      ],
+      "sha256_normalized_lf": "398b96864274cf978b81d3dc9cef53f6ce438b7c1a9ee85119a2b7d7ca7857a3",
+      "record_ids": [
+        "code_health:finding_797243d7fc1eee66e607"
+      ]
+    },
+    {
+      "function": "isTitleCaseish",
+      "current_span": [
+        5105,
+        5119
+      ],
+      "historical_span": [
+        5103,
+        5117
+      ],
+      "sha256_normalized_lf": "9de84b6fe62158c69bf4cb0ea065c4399ceab65f3ef5a4d857622ef9f1914545",
+      "record_ids": [
+        "code_health:finding_30c5b963c3cbba9327b0"
+      ]
+    },
+    {
+      "function": "isLikelyStandaloneTitle",
+      "current_span": [
+        5121,
+        5130
+      ],
+      "historical_span": [
+        5119,
+        5128
+      ],
+      "sha256_normalized_lf": "8c6acb1f955a5cf790fd80c37835463b80cf2b836f3408e7a8c79bd78ef0b686",
+      "record_ids": [
+        "code_health:finding_cee752fc5633ce157f49"
+      ]
+    },
+    {
+      "function": "extractWritingTitleParts",
+      "current_span": [
+        5132,
+        5166
+      ],
+      "historical_span": [
+        5130,
+        5164
+      ],
+      "sha256_normalized_lf": "1e020afc1e841e6408901c27e83508d637fb3b8bd232eb166edffd70ada5d913",
+      "record_ids": [
+        "code_health:finding_1c0079bb97b26cbf34ea"
+      ]
+    },
+    {
+      "function": "normalizeWritingGenreInfo",
+      "current_span": [
+        5285,
+        5310
+      ],
+      "historical_span": [
+        5283,
+        5308
+      ],
+      "sha256_normalized_lf": "2448d5c603d1dea89ca5bf2048b90757cdcb08ca61071650a4f9f5ccd1b172d0",
+      "record_ids": [
+        "code_health:finding_6cc23b99db537ad525a4"
+      ]
+    },
+    {
+      "function": "getWritingGenreInfoFromSession",
+      "current_span": [
+        5312,
+        5325
+      ],
+      "historical_span": [
+        5310,
+        5323
+      ],
+      "sha256_normalized_lf": "c1e8e46fffaeaefcc830ae4f3911620e11b3efb7930b988298afab53243d5313",
+      "record_ids": [
+        "code_health:finding_af328843a23eda60d8e8"
+      ]
+    },
+    {
+      "function": "hasLetterFeatures",
+      "current_span": [
+        5335,
+        5363
+      ],
+      "historical_span": [
+        5333,
+        5361
+      ],
+      "sha256_normalized_lf": "28a640e1aa1d89319aa87adb6ac3920acb31af6873ce990ecdfa87a07c951f2a",
+      "record_ids": [
+        "code_health:finding_be7169774d0b3e171f27"
+      ]
+    },
+    {
+      "function": "looksLikePoem",
+      "current_span": [
+        5365,
+        5382
+      ],
+      "historical_span": [
+        5363,
+        5380
+      ],
+      "sha256_normalized_lf": "50ab618582d2669a35cf4ffe0adb35773d398deb5fdef25f242557978c6c2dff",
+      "record_ids": [
+        "code_health:finding_108b576ddc9a4fbc4f04"
+      ]
+    },
+    {
+      "function": "sanitizeGenreReferenceInFeedback",
+      "current_span": [
+        5496,
+        5512
+      ],
+      "historical_span": [
+        5494,
+        5510
+      ],
+      "sha256_normalized_lf": "bab605c0116cd0f56b9a94044f265ec356068b4b0a429e40da35b3017a7eea9e",
+      "record_ids": [
+        "code_health:finding_e0ba9c50da01859bca21"
+      ]
+    },
+    {
+      "function": "updateGenreReviewBox",
+      "current_span": [
+        5527,
+        5549
+      ],
+      "historical_span": [
+        5525,
+        5547
+      ],
+      "sha256_normalized_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a",
+      "record_ids": [
+        "code_health:finding_6aa8dd9c0ba6b9ece072",
+        "code_health:finding_29f0311595e8d8ff7770"
+      ]
+    },
+    {
+      "function": "<anonymous>",
+      "current_span": [
+        199,
+        319
+      ],
+      "historical_span": [
+        199,
+        319
+      ],
+      "sha256_normalized_lf": "cc80f39e586bc68147fd88eac0dda428ebc14b97e8654a5281c6a59da35ba3b8",
+      "record_ids": [
+        "code_health:finding_102dbeaf242ff2b1e0f6"
+      ]
+    },
+    {
+      "function": "titleCaseGeneratedWritingTitle",
+      "current_span": [
+        5022,
+        5097
+      ],
+      "historical_span": [
+        5020,
+        5095
+      ],
+      "sha256_normalized_lf": "133bf85813b4bb383a454ea434144e4ae19771b93da02b411c7799aa439835d3",
+      "record_ids": [
+        "code_health:finding_42034da6d555de0625e3"
+      ]
+    },
+    {
+      "function": "makeWritingGenreInfo",
+      "current_span": [
+        5275,
+        5283
+      ],
+      "historical_span": [
+        5273,
+        5281
+      ],
+      "sha256_normalized_lf": "6121c574130162f0aed5ea20ea1f47f7579393c25200e9f2e4e917571b04d937",
+      "record_ids": [
+        "code_health:finding_116b62f2c6940da9dded"
+      ]
+    },
+    {
+      "function": "getTeacherAuditOrder",
+      "current_span": [
+        4859,
+        4872
+      ],
+      "historical_span": [
+        4857,
+        4870
+      ],
+      "sha256_normalized_lf": "3a33796bb9369d7268665c0fefbad10023e2189485da3eed3e9fe23b933e4520",
+      "record_ids": [
+        "code_health:finding_8438b285c6cd5ae740c2"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_355f2c8c145443a2c91f",
+      "file": "js/app/10-main-app.js",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 15,
+        "cognitive": 31,
+        "dispatch_share": 0.0,
+        "symbol_line": 3669,
+        "symbol_index": 78,
+        "deepest_block": {
+          "start": 3676,
+          "end": 3689
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 3671,
+          "end_line": 3728,
+          "ccn": 15,
+          "cognitive": 31,
+          "max_nesting": 4,
+          "nloc": 57,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            3678,
+            3691
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 3669,
+          "end_line": 3726,
+          "ccn": 15,
+          "cognitive": 31,
+          "max_nesting": 4,
+          "nloc": 57,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            3676,
+            3689
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        3669,
+        3726
+      ],
+      "current_span": [
+        3671,
+        3728
+      ],
+      "function_sha256_normalized_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "extractTextFromSelectedImage",
+          "start_line": 3622,
+          "end_line": 3731
+        }
+      ],
+      "reason": "The nested OCR continuation handles cached versus provider text, preserves image order, checks current analysis context before/after awaits, then publishes one combined transcription. Its finally clears the shared promise and manual-analysis state only for its owner. A wrapper or flattened catch would risk clearing a newer run; depth4 is justified by these distinct phases.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3622",
+        "js/app/10-main-app.js:3645",
+        "js/app/10-main-app.js:3651",
+        "js/app/10-main-app.js:3671",
+        "js/app/10-main-app.js:3675",
+        "js/app/10-main-app.js:3687",
+        "js/app/10-main-app.js:3688",
+        "js/app/10-main-app.js:3698",
+        "js/app/10-main-app.js:3712",
+        "js/app/10-main-app.js:3715",
+        "js/app/10-main-app.js:3716"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:3622"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:266",
+        "tests/analysis-identity.browser.cjs:288",
+        "tests/analysis-identity.browser.cjs:289",
+        "tests/analysis-identity.browser.cjs:290",
+        "tests/analysis-identity.browser.cjs:291",
+        "tests/analysis-identity.browser.cjs:292",
+        "tests/analysis-identity.browser.cjs:293",
+        "tests/analysis-identity.browser.cjs:294"
+      ],
+      "regression_recommendation": "Keep stopped OCR with cached retry, no partial insertion, retained first-page cache, two requests only and completed-promise clearing. No nesting-only extraction.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_1cec729b60c0910038a8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 15,
+        "nloc": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 1018,
+        "symbol_index": 30,
+        "deepest_block": {
+          "start": 1020,
+          "end": 1020
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        1018,
+        1038
+      ],
+      "current_span": [
+        1018,
+        1038
+      ],
+      "function_sha256_normalized_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "buildLowSampleAnalysis",
+          "start_line": 985,
+          "end_line": 1059
+        }
+      ],
+      "reason": "The exact four-way eligibility test is repeated for rubric score, rubric reason and categoryScores. Compute one local canScore boolean inside this callback and reuse it in all three places; optionally assign categoryScores from the same computed score. This deletes repeated scoring policy and keeps quick/detailed outputs synchronized without another helper.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1018",
+        "js/app/10-main-app.js:1020",
+        "js/app/10-main-app.js:1021",
+        "js/app/10-main-app.js:1025",
+        "js/app/10-main-app.js:1031"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:985",
+        "js/app/10-main-app.js:8279"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:43",
+        "tests/analysis-pipeline.browser.cjs:44",
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:219",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120"
+      ],
+      "regression_recommendation": "R1: compare all category scores/reasons for insufficient/limited input, eligibility false/true, Organization/Flow versus other categories, and exact null/RUBRIC_MIN results. Preserve category labels and feedback text.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_scoring_predicate",
+      "candidate_id": "049-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_91b9a8251ba0cff648ab",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildMinimalCorrectionMarkup",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 13,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 1283,
+        "deepest_block": {
+          "start": 1294,
+          "end": 1298
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "buildMinimalCorrectionMarkup",
+          "start_line": 1283,
+          "end_line": 1308,
+          "ccn": 11,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 26,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1294,
+            1298
+          ]
+        },
+        "historical_function": {
+          "name": "buildMinimalCorrectionMarkup",
+          "start_line": 1283,
+          "end_line": 1308,
+          "ccn": 11,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 26,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1294,
+            1298
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 1300,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 1300,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        1283,
+        1308
+      ],
+      "current_span": [
+        1283,
+        1308
+      ],
+      "function_sha256_normalized_lf": "216759dfe8d3022ffcb1cae862c735c7ea5826a9af383ce5017160eaea4fff88",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The26-line minimal-markup builder normalizes existing model markup, short-circuits empty/already-marked output, then uses the common token diff, spacing and highlight eligibility helpers. Its newline branch preserves original line-break tokens. Sharing the loop with HTML rendering would require output/escaping/newline options and would not be a smaller repair.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1283",
+        "js/app/10-main-app.js:1287",
+        "js/app/10-main-app.js:1288",
+        "js/app/10-main-app.js:1289",
+        "js/app/10-main-app.js:1294",
+        "js/app/10-main-app.js:1299",
+        "js/app/10-main-app.js:1300"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:2164"
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:64",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:76",
+        "tests/correction-performance.browser.cjs:86",
+        "tests/correction-performance.browser.cjs:87",
+        "tests/correction-performance.browser.cjs:88",
+        "tests/correction-performance.browser.cjs:90",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92"
+      ],
+      "regression_recommendation": "Keep exact minimal markup, model-provided marks, punctuation/spacing and hostile-text escaping downstream. No generic token-output framework.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_71b8c35d5c1cce2bdb4e",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "renderCorrected",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 20,
+        "nloc": 35,
+        "dispatch_share": 0.0,
+        "symbol_line": 1323,
+        "deepest_block": {
+          "start": 1337,
+          "end": 1342
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "renderCorrected",
+          "start_line": 1323,
+          "end_line": 1359,
+          "ccn": 14,
+          "cognitive": 20,
+          "max_nesting": 3,
+          "nloc": 35,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1337,
+            1342
+          ]
+        },
+        "historical_function": {
+          "name": "renderCorrected",
+          "start_line": 1323,
+          "end_line": 1359,
+          "ccn": 14,
+          "cognitive": 20,
+          "max_nesting": 3,
+          "nloc": 35,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1337,
+            1342
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 1348,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 1348,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "historical_span": [
+        1323,
+        1359
+      ],
+      "current_span": [
+        1323,
+        1359
+      ],
+      "function_sha256_normalized_lf": "469c9b0b5a9e09f4dc11f11378b1367dd5e5d9cd56498ec2e1a78e1edb6e9be5",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The renderer has legitimate escaped HTML versus plain-text accumulation and normalized line-break handling. It already shares diff/spacing/token eligibility and markdown rendering helpers. Do not collapse it into the markup builder without proving title/line-break parity. Its title-wrapper replacement may lose highlights; that is separate source-supported lead049-L2, not a confirmed runtime defect here.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1323",
+        "js/app/10-main-app.js:1325",
+        "js/app/10-main-app.js:1331",
+        "js/app/10-main-app.js:1337",
+        "js/app/10-main-app.js:1343",
+        "js/app/10-main-app.js:1347",
+        "js/app/10-main-app.js:1355",
+        "js/app/10-main-app.js:1358"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:8046",
+        "js/app/00-storage-sync-patches.js:7726"
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:64",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:76",
+        "tests/correction-performance.browser.cjs:86",
+        "tests/correction-performance.browser.cjs:87",
+        "tests/correction-performance.browser.cjs:88",
+        "tests/correction-performance.browser.cjs:90",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92"
+      ],
+      "regression_recommendation": "Keep existing injection and single-word highlight assertions. Add explicit titled/plain correction DOM expectations before considering reuse or a fix, per049-L2.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": [
+        "049-L2"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_612b7a712640a912fac4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "polishCategoryWording",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 18,
+        "nloc": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 2103,
+        "deepest_block": {
+          "start": 2110,
+          "end": 2116
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "polishCategoryWording",
+          "start_line": 2103,
+          "end_line": 2118,
+          "ccn": 9,
+          "cognitive": 18,
+          "max_nesting": 3,
+          "nloc": 16,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            2110,
+            2116
+          ]
+        },
+        "historical_function": {
+          "name": "polishCategoryWording",
+          "start_line": 2103,
+          "end_line": 2118,
+          "ccn": 9,
+          "cognitive": 18,
+          "max_nesting": 3,
+          "nloc": 16,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            2110,
+            2116
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 2107,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 2107,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        2103,
+        2118
+      ],
+      "current_span": [
+        2103,
+        2118
+      ],
+      "function_sha256_normalized_lf": "7908c7e2ad16b88bfbbb6851ce0cb235b2a1b66150771bba002c025b864638e1",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "polishFeedback",
+          "start_line": 2064,
+          "end_line": 2119
+        }
+      ],
+      "reason": "The16-line nested wording pass applies common softening/teacher wording to several fields, but growthTip intentionally keeps multiple sentences while evidence/contentOrganization/sentenceVariety are reduced to one. Turning these few assignments into a configurable field table would obscure that difference and add machinery rather than remove a repeated policy implementation.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:2064",
+        "js/app/10-main-app.js:2067",
+        "js/app/10-main-app.js:2103",
+        "js/app/10-main-app.js:2107",
+        "js/app/10-main-app.js:2110",
+        "js/app/10-main-app.js:2112",
+        "js/app/10-main-app.js:2113",
+        "js/app/10-main-app.js:2114",
+        "js/app/10-main-app.js:2115"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:7916"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Preserve missing-assessment neutrality, real evidence, and multi-sentence growth tips. No field-transform wrapper solely for CCN9.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_fa1d91a12c1ab82ba63e",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 11,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 3487,
+        "symbol_index": 70,
+        "deepest_block": {
+          "start": 3501,
+          "end": 3505
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 3487,
+          "end_line": 3514,
+          "ccn": 10,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 28,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            3501,
+            3505
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 3487,
+          "end_line": 3514,
+          "ccn": 10,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 28,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            3501,
+            3505
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 3493,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 3493,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        3487,
+        3514
+      ],
+      "current_span": [
+        3487,
+        3514
+      ],
+      "function_sha256_normalized_lf": "9e53e28880dbcb1dddfa6e653bd7e8f18dfb853b00aded20bb82bac4e8da429c",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "bindPreviewReorderHandlers",
+          "start_line": 3420,
+          "end_line": 3577
+        }
+      ],
+      "reason": "The dragover callback is the live visual drop-zone policy: reject unrelated drags, locate the current target/dragged card, clear prior directional markers, select vertical/horizontal half and show move effect. clearPreviewDragClasses also removes dragging itself, so reusing it here would destroy the active-drag marker before drop. Its guard/geometry branches are intentional.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3487",
+        "js/app/10-main-app.js:3488",
+        "js/app/10-main-app.js:3490",
+        "js/app/10-main-app.js:3492",
+        "js/app/10-main-app.js:3497",
+        "js/app/10-main-app.js:3500",
+        "js/app/10-main-app.js:3501",
+        "js/app/10-main-app.js:3507",
+        "js/app/10-main-app.js:3513",
+        "js/app/10-main-app.js:3404",
+        "js/app/10-main-app.js:3407"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:3420"
+      ],
+      "test_assertion_references": [
+        "tests/crop-ownership.browser.cjs:255",
+        "tests/crop-ownership.browser.cjs:260",
+        "tests/crop-ownership.browser.cjs:265",
+        "tests/crop-ownership.browser.cjs:268",
+        "tests/crop-ownership.browser.cjs:271",
+        "tests/crop-ownership.browser.cjs:275"
+      ],
+      "regression_recommendation": "Retain drop ownership/terminal cleanup assertions. If changing dragover visuals, add actual desktop/mobile half-zone assertions; existing cited drop tests do not directly prove every dragover class.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_c265a3a523c583f74560",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 31,
+        "nloc": 57,
+        "dispatch_share": 0.0,
+        "symbol_line": 3669,
+        "symbol_index": 78,
+        "deepest_block": {
+          "start": 3676,
+          "end": 3689
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 3671,
+          "end_line": 3728,
+          "ccn": 15,
+          "cognitive": 31,
+          "max_nesting": 4,
+          "nloc": 57,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            3678,
+            3691
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 3669,
+          "end_line": 3726,
+          "ccn": 15,
+          "cognitive": 31,
+          "max_nesting": 4,
+          "nloc": 57,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            3676,
+            3689
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        3669,
+        3726
+      ],
+      "current_span": [
+        3671,
+        3728
+      ],
+      "function_sha256_normalized_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "extractTextFromSelectedImage",
+          "start_line": 3622,
+          "end_line": 3731
+        }
+      ],
+      "reason": "CCN15 is the same OCR continuation as the nested-complexity row. Its separate cache/provider, empty extraction, owner-only error and owner-only final cleanup branches prevent stale transcription or promise ownership loss. The existing named outer extraction function and context helpers already provide the useful structure.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3671",
+        "js/app/10-main-app.js:3678",
+        "js/app/10-main-app.js:3687",
+        "js/app/10-main-app.js:3688",
+        "js/app/10-main-app.js:3692",
+        "js/app/10-main-app.js:3698",
+        "js/app/10-main-app.js:3713",
+        "js/app/10-main-app.js:3716"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:3622"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-identity.browser.cjs:266",
+        "tests/analysis-identity.browser.cjs:288",
+        "tests/analysis-identity.browser.cjs:289",
+        "tests/analysis-identity.browser.cjs:290",
+        "tests/analysis-identity.browser.cjs:291",
+        "tests/analysis-identity.browser.cjs:292",
+        "tests/analysis-identity.browser.cjs:293",
+        "tests/analysis-identity.browser.cjs:294"
+      ],
+      "regression_recommendation": "Same OCR cancellation/cached retry regressions as the nested row; no additional metric-driven extraction.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "overlapping_marker_same_valid_ocr_transaction",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_5d620393555ff50afc4c",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getEvidenceTokens",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 4132,
+        "deepest_block": {
+          "start": 4141,
+          "end": 4148
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getEvidenceTokens",
+          "start_line": 4134,
+          "end_line": 4152,
+          "ccn": 9,
+          "cognitive": 11,
+          "max_nesting": 3,
+          "nloc": 19,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4143,
+            4150
+          ]
+        },
+        "historical_function": {
+          "name": "getEvidenceTokens",
+          "start_line": 4132,
+          "end_line": 4150,
+          "ccn": 9,
+          "cognitive": 11,
+          "max_nesting": 3,
+          "nloc": 19,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4141,
+            4148
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        4132,
+        4150
+      ],
+      "current_span": [
+        4134,
+        4152
+      ],
+      "function_sha256_normalized_lf": "97e9b237b35ee6048b18df5aa299fc8a5e72e7f5b81263adf110ac7b27ff8e92",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The19-line tokenizer collects substantive words from evidence areas/comments using a stop-word set and returns a bag for overlap checks. Its two loops and null/default guards are coherent. The two ordinary-object sets expose a separate inherited-key concern049-L1; retain the shape while investigating that correctness edge rather than introducing a token-service abstraction.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4134",
+        "js/app/10-main-app.js:4135",
+        "js/app/10-main-app.js:4136",
+        "js/app/10-main-app.js:4143",
+        "js/app/10-main-app.js:4145",
+        "js/app/10-main-app.js:4146",
+        "js/app/10-main-app.js:4147",
+        "js/app/10-main-app.js:4148",
+        "js/app/10-main-app.js:4154",
+        "js/app/10-main-app.js:4160"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4156",
+        "js/app/10-main-app.js:4173",
+        "js/app/10-main-app.js:4803"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58"
+      ],
+      "regression_recommendation": "049-L1: add direct true/false overlap tests for unrelated constructor text, literal constructor evidence, ordinary supported words and stop words. No execution was performed.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": [
+        "049-L1"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_a12d8ec9390f76b1aaad",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "isValidTeacherComment",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 4163,
+        "deepest_block": {
+          "start": 4165,
+          "end": 4165
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "isValidTeacherComment",
+          "start_line": 4165,
+          "end_line": 4175,
+          "ccn": 9,
+          "cognitive": 8,
+          "max_nesting": 1,
+          "nloc": 11,
+          "bumps": 0,
+          "param_count": 4,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4167,
+            4167
+          ]
+        },
+        "historical_function": {
+          "name": "isValidTeacherComment",
+          "start_line": 4163,
+          "end_line": 4173,
+          "ccn": 9,
+          "cognitive": 8,
+          "max_nesting": 1,
+          "nloc": 11,
+          "bumps": 0,
+          "param_count": 4,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4165,
+            4165
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        4163,
+        4173
+      ],
+      "current_span": [
+        4165,
+        4175
+      ],
+      "function_sha256_normalized_lf": "1d3cb435aae248aa0ff36f92c432251ec0e6ab4a2772b78bff40dfafd9f31033",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "This11-line validator rejects empty/long/raw-scoring comments, score-band overclaims, generic phrasing, category mismatch and unsupported evidence. Each guard enforces a distinct student-feedback invariant; replacing it with a compound boolean or validation registry would hide which policy rejects a candidate.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4165",
+        "js/app/10-main-app.js:4167",
+        "js/app/10-main-app.js:4168",
+        "js/app/10-main-app.js:4169",
+        "js/app/10-main-app.js:4170",
+        "js/app/10-main-app.js:4171",
+        "js/app/10-main-app.js:4172",
+        "js/app/10-main-app.js:4173"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4288",
+        "js/app/10-main-app.js:4776"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Retain missing-score neutrality and real evidence support; add direct per-guard rejection cases if changing the validator.049-L1 concerns the shared evidence lookup, not this guard list.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": [
+        "049-L1"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_5954cec915712fef2661",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "pickNoticeComment",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 4205,
+        "deepest_block": {
+          "start": 4207,
+          "end": 4213
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "pickNoticeComment",
+          "start_line": 4207,
+          "end_line": 4217,
+          "ccn": 10,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 11,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4209,
+            4215
+          ]
+        },
+        "historical_function": {
+          "name": "pickNoticeComment",
+          "start_line": 4205,
+          "end_line": 4215,
+          "ccn": 10,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 11,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4207,
+            4213
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 4211,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4212,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 4213,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4214,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        4205,
+        4215
+      ],
+      "current_span": [
+        4207,
+        4217
+      ],
+      "function_sha256_normalized_lf": "f04e93fb5d08a15479f12d478c8059b55234adc0b064d62e6002e495433db780",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The11-line picker returns the first nonempty notice matching the requested need-versus-strength polarity. The two explicit boolean branches are readable and preserve first-match ordering; a filter/find pipeline or option object would not remove meaningful work. Existing native assertions cover both polarities and empty input.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4207",
+        "js/app/10-main-app.js:4209",
+        "js/app/10-main-app.js:4211",
+        "js/app/10-main-app.js:4212",
+        "js/app/10-main-app.js:4213",
+        "js/app/10-main-app.js:4214"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4242",
+        "js/app/10-main-app.js:4243",
+        "js/app/10-main-app.js:4334",
+        "js/app/10-main-app.js:4393"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:57"
+      ],
+      "regression_recommendation": "Keep first matching need/strength and empty fallback. No repair needed.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_5656ce3ea2f986ff0085",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "isGenericGrowthTip",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 4291,
+        "deepest_block": {
+          "start": 4293,
+          "end": 4293
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "isGenericGrowthTip",
+          "start_line": 4293,
+          "end_line": 4301,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 9,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4295,
+            4295
+          ]
+        },
+        "historical_function": {
+          "name": "isGenericGrowthTip",
+          "start_line": 4291,
+          "end_line": 4299,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 9,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4293,
+            4293
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 4294,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4295,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 4296,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4297,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        4291,
+        4299
+      ],
+      "current_span": [
+        4293,
+        4301
+      ],
+      "function_sha256_normalized_lf": "7b0acf2fc9379b7d414531aafa9933926dd1cf209692686596e542436082d268",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The9-line generic-tip policy is a small, explicit rejection vocabulary plus two broader regexes. Exact phrases and regex patterns have different matching semantics. A Set or pattern registry would merely move these stable rules; removing them would allow vague feedback to pass as actionable.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4293",
+        "js/app/10-main-app.js:4294",
+        "js/app/10-main-app.js:4295",
+        "js/app/10-main-app.js:4296",
+        "js/app/10-main-app.js:4297",
+        "js/app/10-main-app.js:4298",
+        "js/app/10-main-app.js:4299"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4324",
+        "js/app/10-main-app.js:4805"
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120"
+      ],
+      "regression_recommendation": "If changing policy, test each literal/regex family and a concrete actionable tip as a negative control. No helper solely for branch count.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_ac0528d81066bb73b342",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "addNoticeRowIfNew",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 4538,
+        "deepest_block": {
+          "start": 4543,
+          "end": 4543
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "addNoticeRowIfNew",
+          "start_line": 4540,
+          "end_line": 4548,
+          "ccn": 9,
+          "cognitive": 9,
+          "max_nesting": 2,
+          "nloc": 9,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4545,
+            4545
+          ]
+        },
+        "historical_function": {
+          "name": "addNoticeRowIfNew",
+          "start_line": 4538,
+          "end_line": 4546,
+          "ccn": 9,
+          "cognitive": 9,
+          "max_nesting": 2,
+          "nloc": 9,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4543,
+            4543
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 4543,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 4545,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        4538,
+        4546
+      ],
+      "current_span": [
+        4540,
+        4548
+      ],
+      "function_sha256_normalized_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The9-line notice helper normalizes its two values, suppresses empty comments and rejects exact duplicate area/comment pairs before preserving insertion order. The CCN includes fallback defaults in the equality guard. Weakening equality to area-only or comment-only would discard distinct feedback; a separate predicate would only move the check.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4540",
+        "js/app/10-main-app.js:4541",
+        "js/app/10-main-app.js:4542",
+        "js/app/10-main-app.js:4543",
+        "js/app/10-main-app.js:4545",
+        "js/app/10-main-app.js:4547"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4555",
+        "js/app/10-main-app.js:4568",
+        "js/app/10-main-app.js:4576",
+        "js/app/10-main-app.js:4587",
+        "js/app/10-main-app.js:4600",
+        "js/app/10-main-app.js:4610",
+        "js/app/10-main-app.js:4625"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Keep identical pair de-duplication, same-area/different-comment and same-comment/different-area cases if touched. Existing cited feedback tests are integration coverage, not a full direct dedupe matrix.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_fc2d511f3416246213eb",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "renderDetailedAssessment",
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 16,
+        "nloc": 40,
+        "dispatch_share": 0.0,
+        "symbol_line": 4648,
+        "deepest_block": {
+          "start": 4661,
+          "end": 4673
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "renderDetailedAssessment",
+          "start_line": 4650,
+          "end_line": 4690,
+          "ccn": 16,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 40,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4663,
+            4675
+          ]
+        },
+        "historical_function": {
+          "name": "renderDetailedAssessment",
+          "start_line": 4648,
+          "end_line": 4688,
+          "ccn": 16,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 40,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4661,
+            4673
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        4648,
+        4688
+      ],
+      "current_span": [
+        4650,
+        4690
+      ],
+      "function_sha256_normalized_lf": "638388057c6f7f891942f7f5487062200b16a3926e5a4ac21d6b516029a41675",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The six category/title entries and optional Neatness entry are byte-for-byte the same policy as getTeacherAuditOrder. Reuse that existing function with {detailed:detailed} for baseOrder and remove this duplicate array/Neatness guard. The renderer should retain its own student comments, sanitized output and closing logic.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4650",
+        "js/app/10-main-app.js:4651",
+        "js/app/10-main-app.js:4659",
+        "js/app/10-main-app.js:4663",
+        "js/app/10-main-app.js:4859",
+        "js/app/10-main-app.js:4860",
+        "js/app/10-main-app.js:4868"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:8047"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "R2: compare student headings/order with and without Neatness and missing categories; verify teacher audit order is unchanged, scores/feedback stay sanitized and closing text remains exact.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_existing_category_order_policy",
+      "candidate_id": "049-R2",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_029e6991171b7c743b8d",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getAuditRawRows",
+      "verified_observation_details": {
+        "ccn": 24,
+        "cognitive": 36,
+        "nloc": 51,
+        "dispatch_share": 0.91,
+        "symbol_line": 4716,
+        "deepest_block": {
+          "start": 4725,
+          "end": 4764
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getAuditRawRows",
+          "start_line": 4718,
+          "end_line": 4768,
+          "ccn": 24,
+          "cognitive": 36,
+          "max_nesting": 3,
+          "nloc": 51,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.91,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4727,
+            4766
+          ]
+        },
+        "historical_function": {
+          "name": "getAuditRawRows",
+          "start_line": 4716,
+          "end_line": 4766,
+          "ccn": 24,
+          "cognitive": 36,
+          "max_nesting": 3,
+          "nloc": 51,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.91,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4725,
+            4764
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 4730,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4757,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4761,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 4732,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4759,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4763,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        4716,
+        4766
+      ],
+      "current_span": [
+        4718,
+        4768
+      ],
+      "function_sha256_normalized_lf": "ce0eac8a8b1436cdd44e8fa4ce84a6d20e0acff33c72035a859a18948e182d9b",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "This51-line dispatcher intentionally exposes different teacher-only raw evidence by category: grammar density/counts, flow statistics, handwriting criteria, word-count adjustment and fallback rubric/eligibility. addAuditRawRow already shares omission/string conversion. A generic descriptor framework would need per-category formatting hooks. Separate lead049-L3 concerns numeric coercion of missing values.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4718",
+        "js/app/10-main-app.js:4722",
+        "js/app/10-main-app.js:4726",
+        "js/app/10-main-app.js:4727",
+        "js/app/10-main-app.js:4740",
+        "js/app/10-main-app.js:4751",
+        "js/app/10-main-app.js:4758",
+        "js/app/10-main-app.js:4713"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4899"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Add category-specific raw-row expectations before altering this dispatcher.049-L3 needs explicit null/empty/zero numeric fixtures; existing score-band assertions do not prove raw-number omission.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": [
+        "049-L3"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_d97607b9caf7c718fee8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "buildAuditValidationRows",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 4794,
+        "deepest_block": {
+          "start": 4800,
+          "end": 4800
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "buildAuditValidationRows",
+          "start_line": 4796,
+          "end_line": 4814,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 19,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4802,
+            4802
+          ]
+        },
+        "historical_function": {
+          "name": "buildAuditValidationRows",
+          "start_line": 4794,
+          "end_line": 4812,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 19,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4800,
+            4800
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        4794,
+        4812
+      ],
+      "current_span": [
+        4796,
+        4814
+      ],
+      "function_sha256_normalized_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The19-line audit builder is an explicit checklist of builder, notice rows, raw-score exclusion, category, score-band, evidence and growth-tip checks, plus grammar/flow-specific explanations. Although some predicates overlap other validators, these rows report each criterion to the teacher rather than simply accept/reject a comment. Deleting rows or genericizing labels changes the diagnostic contract.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4796",
+        "js/app/10-main-app.js:4798",
+        "js/app/10-main-app.js:4799",
+        "js/app/10-main-app.js:4800",
+        "js/app/10-main-app.js:4801",
+        "js/app/10-main-app.js:4802",
+        "js/app/10-main-app.js:4803",
+        "js/app/10-main-app.js:4804",
+        "js/app/10-main-app.js:4805",
+        "js/app/10-main-app.js:4807",
+        "js/app/10-main-app.js:4810"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4892"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Keep validation labels/order, missing-score labels and category-specific diagnostics. Add exact checklist fixtures if changing row policy; no table abstraction for19 lines.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_3fe12dd27aa07dcffadb",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getAuditBuilderRows",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 4814,
+        "deepest_block": {
+          "start": 4819,
+          "end": 4819
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getAuditBuilderRows",
+          "start_line": 4816,
+          "end_line": 4826,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 11,
+          "bumps": 0,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4821,
+            4821
+          ]
+        },
+        "historical_function": {
+          "name": "getAuditBuilderRows",
+          "start_line": 4814,
+          "end_line": 4824,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 11,
+          "bumps": 0,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4819,
+            4819
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        4814,
+        4824
+      ],
+      "current_span": [
+        4816,
+        4826
+      ],
+      "function_sha256_normalized_lf": "4921d93a1ebd0db4a8bad064f770a79d17bee2bf2d19452f3a1f76ce76fba1a5",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The11-line builder-audit projection distinguishes recorded provenance from fallback builder/score/evidence summaries and explicitly marks missing sources. Those independent fields explain the branch count. Reusing one fallback across all fields would conceal which provenance was actually recorded.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4816",
+        "js/app/10-main-app.js:4818",
+        "js/app/10-main-app.js:4819",
+        "js/app/10-main-app.js:4820",
+        "js/app/10-main-app.js:4821",
+        "js/app/10-main-app.js:4822",
+        "js/app/10-main-app.js:4823",
+        "js/app/10-main-app.js:4824"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4897"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Test recorded versus absent audit metadata, missing item score and empty notice rows if touched. No score-only helper.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_797243d7fc1eee66e607",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "formatToken",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 5060,
+        "deepest_block": {
+          "start": 5064,
+          "end": 5066
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "formatToken",
+          "start_line": 5062,
+          "end_line": 5091,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 28,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5066,
+            5068
+          ]
+        },
+        "historical_function": {
+          "name": "formatToken",
+          "start_line": 5060,
+          "end_line": 5089,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 28,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5064,
+            5066
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5070,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5072,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5060,
+        5089
+      ],
+      "current_span": [
+        5062,
+        5091
+      ],
+      "function_sha256_normalized_lf": "398b96864274cf978b81d3dc9cef53f6ce438b7c1a9ee85119a2b7d7ca7857a3",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "titleCaseGeneratedWritingTitle",
+          "start_line": 5022,
+          "end_line": 5097
+        }
+      ],
+      "reason": "formatToken preserves punctuation around word segments, capitalizes first/last/post-colon words, keeps designated small words lower case and capitalizes terminal hyphenated segments. It depends on the title-level acronym policy in formatSegment. These branches calibrate actual output; splitting another helper would just pass more token state.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5062",
+        "js/app/10-main-app.js:5066",
+        "js/app/10-main-app.js:5069",
+        "js/app/10-main-app.js:5071",
+        "js/app/10-main-app.js:5072",
+        "js/app/10-main-app.js:5078",
+        "js/app/10-main-app.js:5084",
+        "js/app/10-main-app.js:5085",
+        "js/app/10-main-app.js:5086",
+        "js/app/10-main-app.js:5089"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5094"
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.cjs:36",
+        "tests/record-identity.cjs:37"
+      ],
+      "regression_recommendation": "Retain constructor-own-key and ordinary-title calibration; add apostrophe/hyphen/acronym/punctuation-only/first-last/post-colon examples before changing title casing. Existing direct assertions cover only two calibrations.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_30c5b963c3cbba9327b0",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "isTitleCaseish",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 5103,
+        "deepest_block": {
+          "start": 5108,
+          "end": 5115
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "isTitleCaseish",
+          "start_line": 5105,
+          "end_line": 5119,
+          "ccn": 9,
+          "cognitive": 10,
+          "max_nesting": 2,
+          "nloc": 15,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5110,
+            5117
+          ]
+        },
+        "historical_function": {
+          "name": "isTitleCaseish",
+          "start_line": 5103,
+          "end_line": 5117,
+          "ccn": 9,
+          "cognitive": 10,
+          "max_nesting": 2,
+          "nloc": 15,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5108,
+            5115
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5112,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5114,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5103,
+        5117
+      ],
+      "current_span": [
+        5105,
+        5119
+      ],
+      "function_sha256_normalized_lf": "9de84b6fe62158c69bf4cb0ea065c4399ceab65f3ef5a4d857622ef9f1914545",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The15-line title-likeness heuristic strips edge punctuation, counts meaningful words and accepts capitals/numerals/Roman numerals/small words at a calibrated60% threshold. It serves detection, not title rewriting; its small-word vocabulary need not match the formatter. A shared formatter word table would change classification.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5105",
+        "js/app/10-main-app.js:5106",
+        "js/app/10-main-app.js:5110",
+        "js/app/10-main-app.js:5111",
+        "js/app/10-main-app.js:5112",
+        "js/app/10-main-app.js:5114",
+        "js/app/10-main-app.js:5118"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5128"
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:64",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:76",
+        "tests/correction-performance.browser.cjs:86",
+        "tests/correction-performance.browser.cjs:87",
+        "tests/correction-performance.browser.cjs:88",
+        "tests/correction-performance.browser.cjs:90",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92",
+        "tests/record-identity.cjs:36",
+        "tests/record-identity.cjs:37"
+      ],
+      "regression_recommendation": "Add explicit threshold-neighbor, lowercase prose, punctuation-only and Roman-numeral title detection cases if altered. No threshold-driven extraction.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_cee752fc5633ce157f49",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "isLikelyStandaloneTitle",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 5119,
+        "deepest_block": {
+          "start": 5122,
+          "end": 5122
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "isLikelyStandaloneTitle",
+          "start_line": 5121,
+          "end_line": 5130,
+          "ccn": 12,
+          "cognitive": 11,
+          "max_nesting": 1,
+          "nloc": 10,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5124,
+            5124
+          ]
+        },
+        "historical_function": {
+          "name": "isLikelyStandaloneTitle",
+          "start_line": 5119,
+          "end_line": 5128,
+          "ccn": 12,
+          "cognitive": 11,
+          "max_nesting": 1,
+          "nloc": 10,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5122,
+            5122
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5122,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5124,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5124,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5126,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5119,
+        5128
+      ],
+      "current_span": [
+        5121,
+        5130
+      ],
+      "function_sha256_normalized_lf": "8c6acb1f955a5cf790fd80c37835463b80cf2b836f3408e7a8c79bd78ef0b686",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The10-line heuristic separately requires a following body, rejects sentence punctuation, long/numeric-only headings, then permits title case or a short-heading/longer-prose contrast. Each condition reduces false title detection and preserves a distinct fallback. A combined predicate or option bag would be less readable.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5121",
+        "js/app/10-main-app.js:5124",
+        "js/app/10-main-app.js:5125",
+        "js/app/10-main-app.js:5126",
+        "js/app/10-main-app.js:5127",
+        "js/app/10-main-app.js:5128",
+        "js/app/10-main-app.js:5129"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5159"
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:64",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:76",
+        "tests/correction-performance.browser.cjs:86",
+        "tests/correction-performance.browser.cjs:87",
+        "tests/correction-performance.browser.cjs:88",
+        "tests/correction-performance.browser.cjs:90",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92"
+      ],
+      "regression_recommendation": "Keep explicit Title prefixes and title-like/non-title opening lines, length/word limits and prose-length comparison. No structural repair.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_1c0079bb97b26cbf34ea",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "extractWritingTitleParts",
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 16,
+        "nloc": 33,
+        "dispatch_share": 0.0,
+        "symbol_line": 5130,
+        "deepest_block": {
+          "start": 5136,
+          "end": 5139
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "extractWritingTitleParts",
+          "start_line": 5132,
+          "end_line": 5166,
+          "ccn": 16,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 33,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5138,
+            5141
+          ]
+        },
+        "historical_function": {
+          "name": "extractWritingTitleParts",
+          "start_line": 5130,
+          "end_line": 5164,
+          "ccn": 16,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 33,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5136,
+            5139
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5145,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5151,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5157,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5147,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5153,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5159,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5130,
+        5164
+      ],
+      "current_span": [
+        5132,
+        5166
+      ],
+      "function_sha256_normalized_lf": "1e020afc1e841e6408901c27e83508d637fb3b8bd232eb166edffd70ada5d913",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The33-line extractor normalizes lines, tracks original indices, distinguishes inline Title:, separate Title: and inferred standalone titles, and slices body lines without losing their breaks. The return shapes are alike but slice boundaries differ. A shared return wrapper would relocate three assignments while hiding which original line is removed.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5132",
+        "js/app/10-main-app.js:5137",
+        "js/app/10-main-app.js:5144",
+        "js/app/10-main-app.js:5146",
+        "js/app/10-main-app.js:5147",
+        "js/app/10-main-app.js:5153",
+        "js/app/10-main-app.js:5159",
+        "js/app/10-main-app.js:5165"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:1239",
+        "js/app/10-main-app.js:5169",
+        "js/app/10-main-app.js:5366"
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:64",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:76",
+        "tests/correction-performance.browser.cjs:86",
+        "tests/correction-performance.browser.cjs:87",
+        "tests/correction-performance.browser.cjs:88",
+        "tests/correction-performance.browser.cjs:90",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92"
+      ],
+      "regression_recommendation": "Retain inline/separate labels, inferred title, leading blanks and no-title body; add independent expected title/body assertions, since existing LCS parity uses the same title helpers on both sides.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_6cc23b99db537ad525a4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "normalizeWritingGenreInfo",
+      "verified_observation_details": {
+        "ccn": 24,
+        "cognitive": 23,
+        "nloc": 23,
+        "dispatch_share": 0.61,
+        "symbol_line": 5283,
+        "deepest_block": {
+          "start": 5291,
+          "end": 5291
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "normalizeWritingGenreInfo",
+          "start_line": 5285,
+          "end_line": 5310,
+          "ccn": 24,
+          "cognitive": 23,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.61,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5293,
+            5293
+          ]
+        },
+        "historical_function": {
+          "name": "normalizeWritingGenreInfo",
+          "start_line": 5283,
+          "end_line": 5308,
+          "ccn": 24,
+          "cognitive": 23,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.61,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5291,
+            5291
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5291,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5292,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5293,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5296,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5297,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5298,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5293,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5294,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5295,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5298,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5299,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5300,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5283,
+        5308
+      ],
+      "current_span": [
+        5285,
+        5310
+      ],
+      "function_sha256_normalized_lf": "2448d5c603d1dea89ca5bf2048b90757cdcb08ca61071650a4f9f5ccd1b172d0",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The23-line normalizer defines defaults, accepts legacy genre aliases and repairs unsafe genre-specific nouns. These branches are the compatibility policy; the high dispatch share is expected. makeWritingGenreInfo already delegates here, so routing the return object through that factory would recurse. A lookup table would save little while obscuring noun/subtype conditions.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5285",
+        "js/app/10-main-app.js:5287",
+        "js/app/10-main-app.js:5289",
+        "js/app/10-main-app.js:5293",
+        "js/app/10-main-app.js:5294",
+        "js/app/10-main-app.js:5295",
+        "js/app/10-main-app.js:5296",
+        "js/app/10-main-app.js:5298",
+        "js/app/10-main-app.js:5299",
+        "js/app/10-main-app.js:5300",
+        "js/app/10-main-app.js:5301"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5276",
+        "js/app/10-main-app.js:5314",
+        "js/app/10-main-app.js:5483",
+        "js/app/10-main-app.js:5499",
+        "js/app/10-main-app.js:4683"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97"
+      ],
+      "regression_recommendation": "If changing aliases/defaults, add direct legacy-name/safeReference/subtype/confidence/source cases. Existing genre pipeline parity and unknown-score closings do not prove every alias.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_af328843a23eda60d8e8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "getWritingGenreInfoFromSession",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 13,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 5310,
+        "deepest_block": {
+          "start": 5312,
+          "end": 5312
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getWritingGenreInfoFromSession",
+          "start_line": 5312,
+          "end_line": 5325,
+          "ccn": 14,
+          "cognitive": 13,
+          "max_nesting": 1,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5314,
+            5314
+          ]
+        },
+        "historical_function": {
+          "name": "getWritingGenreInfoFromSession",
+          "start_line": 5310,
+          "end_line": 5323,
+          "ccn": 14,
+          "cognitive": 13,
+          "max_nesting": 1,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5312,
+            5312
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5313,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5315,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5310,
+        5323
+      ],
+      "current_span": [
+        5312,
+        5325
+      ],
+      "function_sha256_normalized_lf": "c1e8e46fffaeaefcc830ae4f3911620e11b3efb7930b988298afab53243d5313",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "This14-line saved-session adapter gives full writingGenreInfo priority, then supports legacy scalar fields, then falls back to text detection. The field defaults preserve old records and the saved source marker. Replacing it with a broad object spread would change alias precedence and which absent metadata triggers detection.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5312",
+        "js/app/10-main-app.js:5314",
+        "js/app/10-main-app.js:5315",
+        "js/app/10-main-app.js:5316",
+        "js/app/10-main-app.js:5321",
+        "js/app/10-main-app.js:5324"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:7132",
+        "js/app/10-main-app.js:7486",
+        "js/app/10-main-app.js:7721",
+        "js/app/portfolio-export.js:312",
+        "js/app/00-storage-sync-patches.js:7508"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/notebook-guide.browser.cjs:71"
+      ],
+      "regression_recommendation": "Add full-info versus scalar legacy metadata and text fallback/export/reassessment assertions if changing this adapter. The writingGenreMain-only fallback edge is not resolved by this review.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_be7169774d0b3e171f27",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "hasLetterFeatures",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 12,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 5333,
+        "deepest_block": {
+          "start": 5348,
+          "end": 5351
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "hasLetterFeatures",
+          "start_line": 5335,
+          "end_line": 5363,
+          "ccn": 12,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 28,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5350,
+            5353
+          ]
+        },
+        "historical_function": {
+          "name": "hasLetterFeatures",
+          "start_line": 5333,
+          "end_line": 5361,
+          "ccn": 12,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 28,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5348,
+            5351
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5348,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5359,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5350,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5361,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5333,
+        5361
+      ],
+      "current_span": [
+        5335,
+        5363
+      ],
+      "function_sha256_normalized_lf": "28a640e1aa1d89319aa87adb6ac3920acb31af6873ce990ecdfa87a07c951f2a",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The letter detector combines greeting, closing, signature-after-closing and recipient/email evidence in bounded first/last-line windows, requiring two features. Its loop and short-circuit branches prevent a single salutation or story quote from forcing letter feedback. Merging this with poem/narrative detection would alter precedence and calibration.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5335",
+        "js/app/10-main-app.js:5337",
+        "js/app/10-main-app.js:5344",
+        "js/app/10-main-app.js:5346",
+        "js/app/10-main-app.js:5347",
+        "js/app/10-main-app.js:5349",
+        "js/app/10-main-app.js:5355",
+        "js/app/10-main-app.js:5356",
+        "js/app/10-main-app.js:5362"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5398"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97"
+      ],
+      "regression_recommendation": "Recommend direct positive/negative letter/email examples, closing/signature positions and single-feature controls before changing heuristics. No direct comprehensive detector oracle was found in inspected tests.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_108b576ddc9a4fbc4f04",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "looksLikePoem",
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 14,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 5363,
+        "deepest_block": {
+          "start": 5371,
+          "end": 5376
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "looksLikePoem",
+          "start_line": 5365,
+          "end_line": 5382,
+          "ccn": 13,
+          "cognitive": 14,
+          "max_nesting": 2,
+          "nloc": 18,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5373,
+            5378
+          ]
+        },
+        "historical_function": {
+          "name": "looksLikePoem",
+          "start_line": 5363,
+          "end_line": 5380,
+          "ccn": 13,
+          "cognitive": 14,
+          "max_nesting": 2,
+          "nloc": 18,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5371,
+            5376
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5374,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5376,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5363,
+        5380
+      ],
+      "current_span": [
+        5365,
+        5382
+      ],
+      "function_sha256_normalized_lf": "50ab618582d2669a35cf4ffe0adb35773d398deb5fdef25f242557978c6c2dff",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The18-line poem detector excludes an extracted title, counts short lines/end punctuation and uses two calibrated routes: line-shape evidence or stanza-break evidence. These ratios and alternatives are semantic heuristics, not duplicated mechanics. A stats helper would add a result object for one consumer.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5365",
+        "js/app/10-main-app.js:5366",
+        "js/app/10-main-app.js:5368",
+        "js/app/10-main-app.js:5369",
+        "js/app/10-main-app.js:5373",
+        "js/app/10-main-app.js:5376",
+        "js/app/10-main-app.js:5377",
+        "js/app/10-main-app.js:5379",
+        "js/app/10-main-app.js:5380",
+        "js/app/10-main-app.js:5381"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5433"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:64",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:76",
+        "tests/correction-performance.browser.cjs:86",
+        "tests/correction-performance.browser.cjs:87",
+        "tests/correction-performance.browser.cjs:88",
+        "tests/correction-performance.browser.cjs:90",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92"
+      ],
+      "regression_recommendation": "Add stanza versus prose, four-line boundary, short-line/punctuation thresholds and title removal cases before changing this heuristic. No scoring-only split.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_e0ba9c50da01859bca21",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "sanitizeGenreReferenceInFeedback",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 5494,
+        "deepest_block": {
+          "start": 5496,
+          "end": 5496
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "sanitizeGenreReferenceInFeedback",
+          "start_line": 5496,
+          "end_line": 5512,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 17,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5498,
+            5498
+          ]
+        },
+        "historical_function": {
+          "name": "sanitizeGenreReferenceInFeedback",
+          "start_line": 5494,
+          "end_line": 5510,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 17,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5496,
+            5496
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5508,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5510,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        5494,
+        5510
+      ],
+      "current_span": [
+        5496,
+        5512
+      ],
+      "function_sha256_normalized_lf": "bab605c0116cd0f56b9a94044f265ec356068b4b0a429e40da35b3017a7eea9e",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The17-line sanitizer reuses a local replaceNoun helper for four phrase forms and conditionally replaces letter/story/poem according to the normalized genre/subtype. These guards avoid telling a child to revise the wrong kind of writing; removing them or replacing arbitrary noun occurrences would be a behavior change.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5496",
+        "js/app/10-main-app.js:5499",
+        "js/app/10-main-app.js:5501",
+        "js/app/10-main-app.js:5503",
+        "js/app/10-main-app.js:5504",
+        "js/app/10-main-app.js:5505",
+        "js/app/10-main-app.js:5506",
+        "js/app/10-main-app.js:5508",
+        "js/app/10-main-app.js:5509",
+        "js/app/10-main-app.js:5510"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4684"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120"
+      ],
+      "regression_recommendation": "Test each phrase form and allowed letter/story/poem retention, nonpoem creative pieces and uncertain genres if modified. Preserve safeReference escaping at rendering boundaries.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_6aa8dd9c0ba6b9ece072",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "symbol": "updateGenreReviewBox",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 5525,
+        "deepest_block": {
+          "start": 5530,
+          "end": 5530
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "updateGenreReviewBox",
+          "start_line": 5527,
+          "end_line": 5549,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5532,
+            5532
+          ]
+        },
+        "historical_function": {
+          "name": "updateGenreReviewBox",
+          "start_line": 5525,
+          "end_line": 5547,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5530,
+            5530
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5530,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5546,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5532,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5548,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "historical_span": [
+        5525,
+        5547
+      ],
+      "current_span": [
+        5527,
+        5549
+      ],
+      "function_sha256_normalized_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The UI updater computes autoInfo, then getWritingGenreInfoFromUi immediately detects the same text again when select.value is __auto__. Reuse autoInfo for that automatic branch and keep the existing manual resolver otherwise. One conditional assignment removes duplicate detector work without another helper or any change to confidence/manual precedence.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5527",
+        "js/app/10-main-app.js:5532",
+        "js/app/10-main-app.js:5541",
+        "js/app/10-main-app.js:5542",
+        "js/app/10-main-app.js:5548",
+        "js/app/10-main-app.js:5475",
+        "js/app/10-main-app.js:5478",
+        "js/app/10-main-app.js:5479"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:7838",
+        "js/app/10-main-app.js:8275",
+        "js/app/10-main-app.js:8421"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97"
+      ],
+      "regression_recommendation": "R3: assert auto detector is evaluated once, same visible summary/confidence and currentWritingGenreInfo; preserve manual and invalid-manual fallback outputs, empty text and optional-DOM bypass.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_already_computed_auto_genre",
+      "candidate_id": "049-R3",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_102dbeaf242ff2b1e0f6",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "nloc": 100,
+        "ccn": 5,
+        "dispatch_share": 0.0,
+        "symbol_line": 199,
+        "symbol_index": 7,
+        "deepest_block": {
+          "start": 200,
+          "end": 203
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 199,
+          "end_line": 319,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 100,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            200,
+            203
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 199,
+          "end_line": 319,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 100,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            200,
+            203
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 253,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 253,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        199,
+        319
+      ],
+      "current_span": [
+        199,
+        319
+      ],
+      "function_sha256_normalized_lf": "cc80f39e586bc68147fd88eac0dda428ebc14b97e8654a5281c6a59da35ba3b8",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "chooseStudentToManage",
+          "start_line": 198,
+          "end_line": 320
+        }
+      ],
+      "reason": "The100-NLOC chooser callback is mostly accessible DOM construction: dialog/label/descriptions, roster options and actions, then one idempotent close/keyboard lifecycle. Existing generic text/confirm dialogs do not provide this select field contract. A new DOM builder/schema would add machinery; removing IME, focus or listener cleanup would weaken behavior.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:199",
+        "js/app/10-main-app.js:200",
+        "js/app/10-main-app.js:205",
+        "js/app/10-main-app.js:217",
+        "js/app/10-main-app.js:219",
+        "js/app/10-main-app.js:237",
+        "js/app/10-main-app.js:242",
+        "js/app/10-main-app.js:246",
+        "js/app/10-main-app.js:253",
+        "js/app/10-main-app.js:287",
+        "js/app/10-main-app.js:288",
+        "js/app/10-main-app.js:291",
+        "js/app/10-main-app.js:298",
+        "js/app/10-main-app.js:299",
+        "js/app/10-main-app.js:309",
+        "js/app/10-main-app.js:314",
+        "js/app/10-main-app.js:316"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:328"
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:46",
+        "tests/storage-dialog-keyboard.browser.cjs:52",
+        "tests/storage-dialog-keyboard.browser.cjs:54",
+        "tests/storage-dialog-keyboard.browser.cjs:56",
+        "tests/storage-dialog-keyboard.browser.cjs:57",
+        "tests/storage-dialog-keyboard.browser.cjs:60",
+        "tests/storage-dialog-keyboard.browser.cjs:149",
+        "tests/storage-dialog-keyboard.browser.cjs:151",
+        "tests/storage-dialog-keyboard.browser.cjs:156",
+        "tests/storage-dialog-keyboard.browser.cjs:157"
+      ],
+      "regression_recommendation": "Retain actual focus, native Tab/Enter/Escape/IME, cancel versus rename workflow and retained data. No length-only dialog framework.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_42034da6d555de0625e3",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "symbol": "titleCaseGeneratedWritingTitle",
+      "verified_observation_details": {
+        "nloc": 70,
+        "ccn": 4,
+        "dispatch_share": 0.0,
+        "symbol_line": 5020,
+        "deepest_block": {
+          "start": 5022,
+          "end": 5022
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "titleCaseGeneratedWritingTitle",
+          "start_line": 5022,
+          "end_line": 5097,
+          "ccn": 4,
+          "cognitive": 3,
+          "max_nesting": 1,
+          "nloc": 70,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5024,
+            5024
+          ]
+        },
+        "historical_function": {
+          "name": "titleCaseGeneratedWritingTitle",
+          "start_line": 5020,
+          "end_line": 5095,
+          "ccn": 4,
+          "cognitive": 3,
+          "max_nesting": 1,
+          "nloc": 70,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5022,
+            5022
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        5020,
+        5095
+      ],
+      "current_span": [
+        5022,
+        5097
+      ],
+      "function_sha256_normalized_lf": "133bf85813b4bb383a454ea434144e4ae19771b93da02b411c7799aa439835d3",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The70-NLOC title-case parent contains a23-entry small-word set plus the already separated formatSegment/formatToken helpers. Its own CCN is only4. Moving the vocabulary to another file or splitting it to cross a length bar would not simplify policy and could change acronym/small-word behavior.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5022",
+        "js/app/10-main-app.js:5026",
+        "js/app/10-main-app.js:5050",
+        "js/app/10-main-app.js:5053",
+        "js/app/10-main-app.js:5062",
+        "js/app/10-main-app.js:5093",
+        "js/app/10-main-app.js:5096"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5176"
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.cjs:36",
+        "tests/record-identity.cjs:37"
+      ],
+      "regression_recommendation": "Retain normal and inherited-name calibration; use explicit acronym/hyphen/colon/minor-word cases for any actual title-rule change. No length-only refactor.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_59891f8809ca49ea5883",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "symbol": "buildAuditValidationRows",
+      "verified_observation_details": {
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 4794
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "buildAuditValidationRows",
+          "start_line": 4796,
+          "end_line": 4814,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 19,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4802,
+            4802
+          ]
+        },
+        "historical_function": {
+          "name": "buildAuditValidationRows",
+          "start_line": 4794,
+          "end_line": 4812,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 19,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4800,
+            4800
+          ]
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        4794,
+        4812
+      ],
+      "current_span": [
+        4796,
+        4814
+      ],
+      "function_sha256_normalized_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The six arguments describe one already-computed audit category: key, item, notice rows, teacher comment, growth tip and feedback provenance. Three are structured values; typed/primitive counts are zero. The sole production call passes them from named locals in one rendering loop. A new options object would add indirection rather than solve primitive obsession.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4796",
+        "js/app/10-main-app.js:4884",
+        "js/app/10-main-app.js:4886",
+        "js/app/10-main-app.js:4888",
+        "js/app/10-main-app.js:4889",
+        "js/app/10-main-app.js:4890",
+        "js/app/10-main-app.js:4891",
+        "js/app/10-main-app.js:4892"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4892"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "No signature-only change. Keep raw validation and labelled audit semantics; changing arity would require the sole renderer and any direct tests together.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "semantic_false_positive_cohesive_audit_context",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_116b62f2c6940da9dded",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "symbol": "makeWritingGenreInfo",
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 5273
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "makeWritingGenreInfo",
+          "start_line": 5275,
+          "end_line": 5283,
+          "ccn": 2,
+          "cognitive": 1,
+          "max_nesting": 0,
+          "nloc": 9,
+          "bumps": 0,
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null
+        },
+        "historical_function": {
+          "name": "makeWritingGenreInfo",
+          "start_line": 5273,
+          "end_line": 5281,
+          "ccn": 2,
+          "cognitive": 1,
+          "max_nesting": 0,
+          "nloc": 9,
+          "bumps": 0,
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null
+        },
+        "historical_conditions": [],
+        "current_conditions": []
+      },
+      "historical_span": [
+        5273,
+        5281
+      ],
+      "current_span": [
+        5275,
+        5283
+      ],
+      "function_sha256_normalized_lf": "6121c574130162f0aed5ea20ea1f47f7579393c25200e9f2e4e917571b04d937",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "This9-line factory accepts five named genre attributes and immediately passes a single normalized record to the shared normalizer. Its many detection/manual callsites supply readable literal enum values. An options object at every short call would increase code without removing policy or primitive coercion risk.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5275",
+        "js/app/10-main-app.js:5276",
+        "js/app/10-main-app.js:5281",
+        "js/app/10-main-app.js:5399",
+        "js/app/10-main-app.js:5403",
+        "js/app/10-main-app.js:5407",
+        "js/app/10-main-app.js:5426",
+        "js/app/10-main-app.js:5434",
+        "js/app/10-main-app.js:5455",
+        "js/app/10-main-app.js:5472"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:5396",
+        "js/app/10-main-app.js:5399",
+        "js/app/10-main-app.js:5403",
+        "js/app/10-main-app.js:5407",
+        "js/app/10-main-app.js:5411",
+        "js/app/10-main-app.js:5426",
+        "js/app/10-main-app.js:5430",
+        "js/app/10-main-app.js:5434",
+        "js/app/10-main-app.js:5455",
+        "js/app/10-main-app.js:5459",
+        "js/app/10-main-app.js:5463",
+        "js/app/10-main-app.js:5466",
+        "js/app/10-main-app.js:5472"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97"
+      ],
+      "regression_recommendation": "Retain default source, normalization and detection/manual callsites. No five-argument-count-driven wrapper.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "semantic_false_positive_small_record_factory",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_14c98c45fd927d16130a",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "ternary",
+        "dispatch_share": 0.0,
+        "symbol_line": 1018,
+        "symbol_index": 30
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        1018,
+        1038
+      ],
+      "current_span": [
+        1018,
+        1038
+      ],
+      "function_sha256_normalized_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "buildLowSampleAnalysis",
+          "start_line": 985,
+          "end_line": 1059
+        }
+      ],
+      "reason": "The three operators at1020 are the first of three identical scoring-policy copies. R1 should evaluate that condition once inside the category callback and reuse its boolean or score. Keep all eligibility/status/category exclusions; no new helper is needed.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1020",
+        "js/app/10-main-app.js:1021",
+        "js/app/10-main-app.js:1025"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:985",
+        "js/app/10-main-app.js:8279"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:43",
+        "tests/analysis-pipeline.browser.cjs:44",
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:219",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120"
+      ],
+      "regression_recommendation": "R1 category matrix: Organization/Flow remain null, other eligible limited categories use RUBRIC_MIN, insufficient/ineligible remain null.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_scoring_predicate_first_use",
+      "candidate_id": "049-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_f61b81e17239b007f947",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "ternary",
+        "dispatch_share": 0.0,
+        "symbol_line": 1018,
+        "symbol_index": 30
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        1018,
+        1038
+      ],
+      "current_span": [
+        1018,
+        1038
+      ],
+      "function_sha256_normalized_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "buildLowSampleAnalysis",
+          "start_line": 985,
+          "end_line": 1059
+        }
+      ],
+      "reason": "The rubric-reason ternary repeats the exact scoring eligibility from1020 and1025. Sharing the callback-local decision prevents a reason from describing a scored category when the score map uses a different rule. Preserve reasonMap versus getEvidenceNote wording; this is policy reuse, not moving the condition to dodge a metric.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1021",
+        "js/app/10-main-app.js:1022",
+        "js/app/10-main-app.js:1023",
+        "js/app/10-main-app.js:1020",
+        "js/app/10-main-app.js:1025"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:985",
+        "js/app/10-main-app.js:8279"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:43",
+        "tests/analysis-pipeline.browser.cjs:44",
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:219",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120"
+      ],
+      "regression_recommendation": "R1: assert exact quick-rubric reasons together with scores and detailed scores for every category/status combination.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_scoring_predicate_reason_use",
+      "candidate_id": "049-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_cf938a3cb775f4a9762b",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 1018,
+        "symbol_index": 30
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 1018,
+          "end_line": 1038,
+          "ccn": 16,
+          "cognitive": 15,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1020,
+            1020
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 1020,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1021,
+            "operator_count": 3,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 1025,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        1018,
+        1038
+      ],
+      "current_span": [
+        1018,
+        1038
+      ],
+      "function_sha256_normalized_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381",
+      "function_body_identical": true,
+      "enclosing_functions_current": [
+        {
+          "name": "buildLowSampleAnalysis",
+          "start_line": 985,
+          "end_line": 1059
+        }
+      ],
+      "reason": "The categoryScores if is the third identical scoring predicate and can use the same local decision/value as quickRubric. Removing the repeated expression and if/else copies is useful because detailedCategories reads categoryScores at1031; all three outputs should share one result.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1025",
+        "js/app/10-main-app.js:1026",
+        "js/app/10-main-app.js:1028",
+        "js/app/10-main-app.js:1031"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:985",
+        "js/app/10-main-app.js:8279"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:43",
+        "tests/analysis-pipeline.browser.cjs:44",
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:219",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120"
+      ],
+      "regression_recommendation": "R1: compare all three score surfaces and existing null-versus-minimum semantics; do not broaden Organization/Flow eligibility.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "duplicate_scoring_predicate_score_map_use",
+      "candidate_id": "049-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_422849494d832f75eae6",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "addNoticeRowIfNew",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 4538
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "addNoticeRowIfNew",
+          "start_line": 4540,
+          "end_line": 4548,
+          "ccn": 9,
+          "cognitive": 9,
+          "max_nesting": 2,
+          "nloc": 9,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4545,
+            4545
+          ]
+        },
+        "historical_function": {
+          "name": "addNoticeRowIfNew",
+          "start_line": 4538,
+          "end_line": 4546,
+          "ccn": 9,
+          "cognitive": 9,
+          "max_nesting": 2,
+          "nloc": 9,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4543,
+            4543
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 4543,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 4545,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        4538,
+        4546
+      ],
+      "current_span": [
+        4540,
+        4548
+      ],
+      "function_sha256_normalized_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The three operators in the duplicate-row equality expression count two value defaults and pair conjunction. Exact area and exact comment jointly define a duplicate; both fields are needed to retain different comments in one area and reused comments under different evidence areas. Extracting one-use equality would not clarify this tiny loop.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4540",
+        "js/app/10-main-app.js:4545"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4555",
+        "js/app/10-main-app.js:4568",
+        "js/app/10-main-app.js:4587",
+        "js/app/10-main-app.js:4602"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "Retain empty comment suppression and exact pair/insertion order. No conditional-only helper.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_8438b285c6cd5ae740c2",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "getTeacherAuditOrder",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 4857
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getTeacherAuditOrder",
+          "start_line": 4859,
+          "end_line": 4872,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4868,
+            4870
+          ]
+        },
+        "historical_function": {
+          "name": "getTeacherAuditOrder",
+          "start_line": 4857,
+          "end_line": 4870,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4866,
+            4868
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 4866,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 4868,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "historical_span": [
+        4857,
+        4870
+      ],
+      "current_span": [
+        4859,
+        4872
+      ],
+      "function_sha256_normalized_lf": "3a33796bb9369d7268665c0fefbad10023e2189485da3eed3e9fe23b933e4520",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The three guarded property checks permit teacher audit data to be absent at any level and add Neatness only when it exists. This is the canonical order helper R2 can reuse in renderDetailedAssessment; its null-safe Neatness guard should remain intact rather than be weakened to shorten the expression.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4859",
+        "js/app/10-main-app.js:4868",
+        "js/app/10-main-app.js:4869"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:4881",
+        "js/app/10-main-app.js:4650"
+      ],
+      "test_assertion_references": [
+        "tests/missing-feedback.browser.cjs:27",
+        "tests/missing-feedback.browser.cjs:28",
+        "tests/missing-feedback.browser.cjs:29",
+        "tests/missing-feedback.browser.cjs:31",
+        "tests/missing-feedback.browser.cjs:43",
+        "tests/missing-feedback.browser.cjs:44",
+        "tests/missing-feedback.browser.cjs:45",
+        "tests/missing-feedback.browser.cjs:46",
+        "tests/missing-feedback.browser.cjs:48",
+        "tests/missing-feedback.browser.cjs:79",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97",
+        "tests/missing-feedback.browser.cjs:116",
+        "tests/missing-feedback.browser.cjs:120",
+        "tests/feedback-compatibility.browser.cjs:30",
+        "tests/feedback-compatibility.browser.cjs:31",
+        "tests/feedback-compatibility.browser.cjs:34",
+        "tests/feedback-compatibility.browser.cjs:38",
+        "tests/feedback-compatibility.browser.cjs:50",
+        "tests/feedback-compatibility.browser.cjs:52",
+        "tests/feedback-compatibility.browser.cjs:53",
+        "tests/feedback-compatibility.browser.cjs:54",
+        "tests/feedback-compatibility.browser.cjs:55",
+        "tests/feedback-compatibility.browser.cjs:56",
+        "tests/feedback-compatibility.browser.cjs:57",
+        "tests/feedback-compatibility.browser.cjs:58",
+        "tests/feedback-compatibility.browser.cjs:65",
+        "tests/feedback-compatibility.browser.cjs:66"
+      ],
+      "regression_recommendation": "R2: cover absent data/detailed/categories, six core entries and a seventh Neatness entry. No separate guard rewrite.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_29f0311595e8d8ff7770",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "symbol": "updateGenreReviewBox",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 5525
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "updateGenreReviewBox",
+          "start_line": 5527,
+          "end_line": 5549,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5532,
+            5532
+          ]
+        },
+        "historical_function": {
+          "name": "updateGenreReviewBox",
+          "start_line": 5525,
+          "end_line": 5547,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5530,
+            5530
+          ]
+        },
+        "historical_conditions": [
+          {
+            "line": 5530,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5546,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ],
+        "current_conditions": [
+          {
+            "line": 5532,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 5548,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "historical_span": [
+        5525,
+        5547
+      ],
+      "current_span": [
+        5527,
+        5549
+      ],
+      "function_sha256_normalized_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a",
+      "function_body_identical": true,
+      "enclosing_functions_current": [],
+      "reason": "The three OR operators protect four independently optional DOM elements before any read/write. Those elements can be absent in optional views and isolated browser fixtures. R3 should remove duplicate automatic detection after the guard, not delete this defensive boundary or turn it into a one-use DOM wrapper.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:5528",
+        "js/app/10-main-app.js:5529",
+        "js/app/10-main-app.js:5530",
+        "js/app/10-main-app.js:5531",
+        "js/app/10-main-app.js:5532",
+        "js/app/10-main-app.js:5541"
+      ],
+      "callers": [
+        "js/app/10-main-app.js:7838",
+        "js/app/10-main-app.js:8275",
+        "js/app/10-main-app.js:8421"
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:60",
+        "tests/analysis-pipeline.browser.cjs:62",
+        "tests/analysis-pipeline.browser.cjs:230",
+        "tests/analysis-pipeline.browser.cjs:264",
+        "tests/missing-feedback.browser.cjs:95",
+        "tests/missing-feedback.browser.cjs:96",
+        "tests/missing-feedback.browser.cjs:97"
+      ],
+      "regression_recommendation": "Keep each missing-element no-op and empty text deactivation; apply only the separate R3 reuse if adopted.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_policy",
+      "additional_lead_ids": []
+    }
+  ],
+  "candidate_interventions": [
+    {
+      "id": "049-R1",
+      "status": "confirmed_repair_candidate",
+      "smallest_change": "Compute the eligibility/status/non-Organization/non-Flow condition once inside the category callback1018 and reuse the boolean or computed score for quick rubric/reason and categoryScores. No new helper.",
+      "preserve": "Null-versus-RUBRIC_MIN semantics, exact reason fallback, all eligibility exclusions and detailed-score consistency.",
+      "regressions": "Insufficient/limited by category/eligibility matrix plus native low-sample parity."
+    },
+    {
+      "id": "049-R2",
+      "status": "confirmed_repair_candidate",
+      "smallest_change": "Replace detailed renderer duplicate category-order literal and Neatness guard4651-4661 with getTeacherAuditOrder({detailed:detailed}).",
+      "preserve": "Fresh array order/headings and optional Neatness, independent student/audit content/escaping.",
+      "regressions": "Exact headings/order with/without Neatness and absent category content; both student and audit rendering."
+    },
+    {
+      "id": "049-R3",
+      "status": "confirmed_repair_candidate",
+      "smallest_change": "Use already computed autoInfo as activeInfo when select.value===__auto__; use existing getWritingGenreInfoFromUi otherwise.",
+      "preserve": "Manual choice/fallback, confidence summary, empty text and missing-element guards.",
+      "regressions": "One detector evaluation for automatic mode and exact auto/manual/invalid-manual outputs."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "049-L1",
+      "file": "js/app/10-main-app.js",
+      "function": "getEvidenceTokens / commentOverlapsEvidence",
+      "reason": "The evidence bag and stop-word set are ordinary objects. commentOverlapsEvidence uses bag[word] without an own-key check, so constructor is truthy through Object.prototype even when no evidence row contains it. The stop-word lookup also suppresses an actual constructor token through inheritance. This can mark an unsupported teacher comment as evidence-supported; no runtime reproduction was performed.",
+      "classification": "inherited_key_false_evidence_match",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4135",
+        "js/app/10-main-app.js:4136",
+        "js/app/10-main-app.js:4148",
+        "js/app/10-main-app.js:4156",
+        "js/app/10-main-app.js:4160",
+        "js/app/10-main-app.js:4173",
+        "js/app/10-main-app.js:4803"
+      ],
+      "smallest_change": "Use null-prototype dictionaries for both bag and stop, or exact own-key checks at both lookups. Retain the current substantive-word/stop-word policy.",
+      "tests_needed": "Direct negative overlap with unrelated evidence and constructor comment, positive literal constructor evidence, ordinary supported words, and neutral stop words; then native teacher-comment/audit outputs."
+    },
+    {
+      "id": "049-L2",
+      "file": "js/app/10-main-app.js",
+      "function": "renderCorrected",
+      "reason": "For unmarked corrected text with a detected title, buildStoryHtmlWithTitle separates the title into its own span. The later replacement searches for the escaped complete plain title+body string, which is no longer contiguous in storyHtml. The rendered title/body can therefore be returned without the previously built corrected-highlight spans. parseStep1 often supplies already-marked text, so affected production reachability needs confirmation. Existing parity includes a title input but compares the same renderer on both sides; the explicit DOM highlight oracle is untitled.",
+      "classification": "titled_plain_correction_highlights_may_be_lost",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        "js/app/10-main-app.js:1242",
+        "js/app/10-main-app.js:1246",
+        "js/app/10-main-app.js:1325",
+        "js/app/10-main-app.js:1348",
+        "js/app/10-main-app.js:1355",
+        "js/app/10-main-app.js:1358",
+        "js/app/10-main-app.js:2164",
+        "js/app/10-main-app.js:8046",
+        "tests/correction-performance.browser.cjs:47",
+        "tests/correction-performance.browser.cjs:65",
+        "tests/correction-performance.browser.cjs:70",
+        "tests/correction-performance.browser.cjs:91",
+        "tests/correction-performance.browser.cjs:92"
+      ],
+      "smallest_change": "First add an expected-output DOM test for a plain titled correction. Then choose a narrowly scoped title/body rendering fix or proven reuse of existing correction-markup rendering; preserve escaping, punctuation and line-break semantics.",
+      "tests_needed": "Explicit Title:, inferred title, title unchanged/body changed, title changed, model-marked input and no-title controls. This is not a reproduced production bug or an approved one-line renderer replacement."
+    },
+    {
+      "id": "049-L3",
+      "file": "js/app/10-main-app.js",
+      "function": "getAuditRawRows",
+      "reason": "Numeric rows call isFinite(Number(value)) before formatting. null, empty string and whitespace coerce to0, unlike addAuditRawRow which deliberately omits null/undefined/empty values. Missing errorDensity, Flow average/varietyScore or Ideas multiplier supplied as null can therefore become a displayed measured zero in the teacher audit. Whether current producers emit each form was not established.",
+      "classification": "missing_audit_metric_coerced_to_zero",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "evidence_anchors": [
+        "js/app/10-main-app.js:4713",
+        "js/app/10-main-app.js:4714",
+        "js/app/10-main-app.js:4726",
+        "js/app/10-main-app.js:4731",
+        "js/app/10-main-app.js:4732",
+        "js/app/10-main-app.js:4733",
+        "js/app/10-main-app.js:4756"
+      ],
+      "smallest_change": "Reject missing numeric values before Number conversion while preserving real numeric/string zero. Avoid changing all numeric acceptance policy without fixtures.",
+      "tests_needed": "Direct Grammar/Flow/Ideas audit rows for null, undefined, empty/whitespace, NaN, numeric0, string0 and ordinary numbers, plus inspect actual producer schemas. Existing missing-score-band tests do not establish raw-statistics behavior."
+    }
+  ],
+  "test_source_hashes_normalized_lf": {
+    "tests/analysis-pipeline.browser.cjs": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+    "tests/analysis-identity.browser.cjs": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+    "tests/correction-performance.browser.cjs": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+    "tests/missing-feedback.browser.cjs": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+    "tests/feedback-compatibility.browser.cjs": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+    "tests/record-identity.cjs": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d",
+    "tests/notebook-guide.browser.cjs": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/storage-dialog-keyboard.browser.cjs": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+    "tests/crop-ownership.browser.cjs": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608"
+  },
+  "verification": {
+    "records": 36,
+    "unique_function_bodies": 29,
+    "historical_and_current_metric_receipts": 72,
+    "every_binding_hash_and_body_identity_matched": true,
+    "all_stored_walker_numeric_and_deepest_block_facts_matched": true,
+    "every_stored_complex_condition_operator_count_construct_and_shifted_line_matched": true,
+    "anonymous_ordinals": "Copied stored identity metadata; not regenerated or asserted as current ordinals.",
+    "hash_convention": "SHA256 of inclusive source line slices with finalLF; packet hashes matched both versions.",
+    "pure_walker": "Installed reviewed RepoWise walker, Python-B; no health/index/CLI/import/cache pipeline.",
+    "app_tests_run": 0
+  },
+  "summary": {
+    "records": 36,
+    "status_counts": {
+      "reviewed_no_change": 30,
+      "confirmed_repair_candidate": 6
+    },
+    "unique_minimal_repair_candidates": 3,
+    "new_unconfirmed_leads": 3,
+    "scanner_closures": 0,
+    "application_tests_run": 0,
+    "source_edits": 0
+  },
+  "limits": [
+    "Read-only independent review; no application/browser/test runs, runtime/dependency changes, Git writes, index/import/tracker/docs/chat mutations or new agents. Only own scratch and this output were written.",
+    "Current main raw/LF and all assigned function hashes were rechecked at report creation. Other app/test context came from pinned Gitd9; no all-current-app freeze claim.",
+    "Heuristic genre/title and raw-audit behavior lacks comprehensive independent expected-output tests in the inspected corpus. Native pipeline/LCS parity proves compatibility to its baseline, not correctness of every shared baseline helper.",
+    "New leads are source-supported and unreproduced; producer reachability, concrete affected UI paths and candidate regressions remain to be established. No severity, passed-suite, fixed or scanner-closure claim.",
+    "Coordinator must recheck known046 changes outside these scopes before adopting findings or assigning repairs."
+  ],
+  "coordinator_acceptance": {
+    "each_reason_read": true,
+    "all_assigned_historical_current_metrics_and_function_bodies_verified": true,
+    "raw_main_and_git_normalized_source_verified": true,
+    "historical_context_hashes_verified": true,
+    "scope": "Current main raw immutable;62assigned functions exact historical/current body mappings. Historical other-app/test contexts only; current046 storage/navigation edits excluded. No anonymous ordinal regeneration, runtime pass or closure.",
+    "no_runtime_or_clearance_claims": true,
+    "shared_candidate": "049-R1 is the same existing local scoring-predicate reuse as028; grouped extra callback/conditional warnings, not a second repair."
+  }
+}

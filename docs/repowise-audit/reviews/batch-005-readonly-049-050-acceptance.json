@@ -1,0 +1,317 @@
+{
+  "basis": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "stored_analysis_basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "scope": "Current main raw immutable;62assigned functions exact historical/current body mappings. Historical other-app/test contexts only; current046 storage/navigation edits excluded. No anonymous ordinal regeneration, runtime pass or closure.",
+  "records": [
+    {
+      "id": "code_health:finding_355f2c8c145443a2c91f",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df"
+    },
+    {
+      "id": "code_health:finding_1cec729b60c0910038a8",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381"
+    },
+    {
+      "id": "code_health:finding_91b9a8251ba0cff648ab",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "216759dfe8d3022ffcb1cae862c735c7ea5826a9af383ce5017160eaea4fff88"
+    },
+    {
+      "id": "code_health:finding_71b8c35d5c1cce2bdb4e",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "469c9b0b5a9e09f4dc11f11378b1367dd5e5d9cd56498ec2e1a78e1edb6e9be5"
+    },
+    {
+      "id": "code_health:finding_612b7a712640a912fac4",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "7908c7e2ad16b88bfbbb6851ce0cb235b2a1b66150771bba002c025b864638e1"
+    },
+    {
+      "id": "code_health:finding_fa1d91a12c1ab82ba63e",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "9e53e28880dbcb1dddfa6e653bd7e8f18dfb853b00aded20bb82bac4e8da429c"
+    },
+    {
+      "id": "code_health:finding_c265a3a523c583f74560",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df"
+    },
+    {
+      "id": "code_health:finding_5d620393555ff50afc4c",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "97e9b237b35ee6048b18df5aa299fc8a5e72e7f5b81263adf110ac7b27ff8e92"
+    },
+    {
+      "id": "code_health:finding_a12d8ec9390f76b1aaad",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "1d3cb435aae248aa0ff36f92c432251ec0e6ab4a2772b78bff40dfafd9f31033"
+    },
+    {
+      "id": "code_health:finding_5954cec915712fef2661",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "f04e93fb5d08a15479f12d478c8059b55234adc0b064d62e6002e495433db780"
+    },
+    {
+      "id": "code_health:finding_5656ce3ea2f986ff0085",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "7b0acf2fc9379b7d414531aafa9933926dd1cf209692686596e542436082d268"
+    },
+    {
+      "id": "code_health:finding_ac0528d81066bb73b342",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da"
+    },
+    {
+      "id": "code_health:finding_fc2d511f3416246213eb",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "638388057c6f7f891942f7f5487062200b16a3926e5a4ac21d6b516029a41675"
+    },
+    {
+      "id": "code_health:finding_029e6991171b7c743b8d",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "ce0eac8a8b1436cdd44e8fa4ce84a6d20e0acff33c72035a859a18948e182d9b"
+    },
+    {
+      "id": "code_health:finding_d97607b9caf7c718fee8",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981"
+    },
+    {
+      "id": "code_health:finding_3fe12dd27aa07dcffadb",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "4921d93a1ebd0db4a8bad064f770a79d17bee2bf2d19452f3a1f76ce76fba1a5"
+    },
+    {
+      "id": "code_health:finding_797243d7fc1eee66e607",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "398b96864274cf978b81d3dc9cef53f6ce438b7c1a9ee85119a2b7d7ca7857a3"
+    },
+    {
+      "id": "code_health:finding_30c5b963c3cbba9327b0",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "9de84b6fe62158c69bf4cb0ea065c4399ceab65f3ef5a4d857622ef9f1914545"
+    },
+    {
+      "id": "code_health:finding_cee752fc5633ce157f49",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "8c6acb1f955a5cf790fd80c37835463b80cf2b836f3408e7a8c79bd78ef0b686"
+    },
+    {
+      "id": "code_health:finding_1c0079bb97b26cbf34ea",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "1e020afc1e841e6408901c27e83508d637fb3b8bd232eb166edffd70ada5d913"
+    },
+    {
+      "id": "code_health:finding_6cc23b99db537ad525a4",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "2448d5c603d1dea89ca5bf2048b90757cdcb08ca61071650a4f9f5ccd1b172d0"
+    },
+    {
+      "id": "code_health:finding_af328843a23eda60d8e8",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "c1e8e46fffaeaefcc830ae4f3911620e11b3efb7930b988298afab53243d5313"
+    },
+    {
+      "id": "code_health:finding_be7169774d0b3e171f27",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "28a640e1aa1d89319aa87adb6ac3920acb31af6873ce990ecdfa87a07c951f2a"
+    },
+    {
+      "id": "code_health:finding_108b576ddc9a4fbc4f04",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "50ab618582d2669a35cf4ffe0adb35773d398deb5fdef25f242557978c6c2dff"
+    },
+    {
+      "id": "code_health:finding_e0ba9c50da01859bca21",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "bab605c0116cd0f56b9a94044f265ec356068b4b0a429e40da35b3017a7eea9e"
+    },
+    {
+      "id": "code_health:finding_6aa8dd9c0ba6b9ece072",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a"
+    },
+    {
+      "id": "code_health:finding_102dbeaf242ff2b1e0f6",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "cc80f39e586bc68147fd88eac0dda428ebc14b97e8654a5281c6a59da35ba3b8"
+    },
+    {
+      "id": "code_health:finding_42034da6d555de0625e3",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "133bf85813b4bb383a454ea434144e4ae19771b93da02b411c7799aa439835d3"
+    },
+    {
+      "id": "code_health:finding_59891f8809ca49ea5883",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981"
+    },
+    {
+      "id": "code_health:finding_116b62f2c6940da9dded",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "6121c574130162f0aed5ea20ea1f47f7579393c25200e9f2e4e917571b04d937"
+    },
+    {
+      "id": "code_health:finding_14c98c45fd927d16130a",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381"
+    },
+    {
+      "id": "code_health:finding_f61b81e17239b007f947",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381"
+    },
+    {
+      "id": "code_health:finding_cf938a3cb775f4a9762b",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "9d40f8ae759b2442327a9fc85b818dd86b5c5279fe37f401e89b51f7eff62381"
+    },
+    {
+      "id": "code_health:finding_422849494d832f75eae6",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da"
+    },
+    {
+      "id": "code_health:finding_8438b285c6cd5ae740c2",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "3a33796bb9369d7268665c0fefbad10023e2189485da3eed3e9fe23b933e4520"
+    },
+    {
+      "id": "code_health:finding_29f0311595e8d8ff7770",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a"
+    },
+    {
+      "id": "code_health:finding_c10a692a806495a7c968",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "0153b71fd38cbbe2a8bbe65687e624d954396dfc1fadaad58c04fa48166e16a7"
+    },
+    {
+      "id": "code_health:finding_94f366547c7c0bde19f4",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "f6e78e5b640d5de1d0f95be307e0b37e9b27d2c05627475b8fdb56c5af2b1c23"
+    },
+    {
+      "id": "code_health:finding_7a4eb428dcd144100e52",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "8f9f98412d36cda1d1f3d66c21032cae47598e0c5fb6b572196a0bda36679fee"
+    },
+    {
+      "id": "code_health:finding_63e6a4380bc461fc83e1",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "e3580d4bab86b8393c5a6c39c5220f2ace8603eb62ab4041a8adfefd6e275159"
+    },
+    {
+      "id": "code_health:finding_e733e20899c9ec8001a8",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "fe6d7a9bbe0be9780cced01f88a5722150767e9cc8790d93c9e32e3eed698192"
+    },
+    {
+      "id": "code_health:finding_076f946c496a4a85483d",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "e0ecc99c5fe797f0f77892819b6d6278a982c9bec5210a05a45a97b7127a1d98"
+    },
+    {
+      "id": "code_health:finding_08b13adf7c4b98cebed0",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "b3456955269a9301d5b89a6108f7ff85cedb0a875a7bba60ca5928245178885d"
+    },
+    {
+      "id": "code_health:finding_88d56b7b2769df774320",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "11173585916a689c5cdcc751371101c7fbc4f924cd89bc8333acf5ee008509b2"
+    },
+    {
+      "id": "code_health:finding_b6db1589f4e852efbdf4",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "4aebc779fb0dfc9897742a00ba201c55d2aa16088883fb0f5467c9ac3efeffca"
+    },
+    {
+      "id": "code_health:finding_f88d29b4ba219e82b036",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "2d7d446f1075df4a5ef081d9e2899c5b558da7a61df0fbb642f780acd897129d"
+    },
+    {
+      "id": "code_health:finding_1c5b8851a55d1dda3282",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a"
+    },
+    {
+      "id": "code_health:finding_906c639a49387285cfa4",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "68155fb64ce5db05276f5345fd3d738a48816bce76f5f79bef8d0be550d6c867"
+    },
+    {
+      "id": "code_health:finding_954463e2c9a968745031",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "931eca79d57bed88763c38a19ef99d68f7c430ec9a7be1eb91a7e9a9dbbe15df"
+    },
+    {
+      "id": "code_health:finding_864bef6e21e94b0d1bbf",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "e968939863621fde282f0d1f0e9cb9bf760292f7672c85447dc1d05c1f29197d"
+    },
+    {
+      "id": "code_health:finding_a0bc5269056689b0f926",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "081d57bcf8e14f9a04b07fe7671626180e2ef41fd1726b0984e54232ab1e69c1"
+    },
+    {
+      "id": "code_health:finding_388125686d54705ffbee",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "2864bb7907359c703193ea2bb56d7c7eaf1f0d16b07262ef2e55c27b7b6d366d"
+    },
+    {
+      "id": "code_health:finding_e890cbbd9e7f4daf0522",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "1d4a185761162357e84e255cd90ea173bd180c759806772f93e834875f8fd32b"
+    },
+    {
+      "id": "code_health:finding_46523b22d5ed554a99ea",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "95572f980d25c3153b8b1f4e244c9045d6b9185175ec953fedb8e309cd9eeaba"
+    },
+    {
+      "id": "code_health:finding_c27d53fe6a0a339c37c2",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "d03b6146e7bab3d3c40952905107cc2b178378624475ff5a5d893af5f5feed17"
+    },
+    {
+      "id": "code_health:finding_fa1b31a336377742bafa",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "73b69c3adce18a801958f865cef8db494305b0e0ca14f62776032dd0690e49d3"
+    },
+    {
+      "id": "code_health:finding_5d743917e463897a3133",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "10d829827e5c4841a69c7615384637ef0e67416ebe9a64d2c9ac968be26ab8a6"
+    },
+    {
+      "id": "code_health:finding_f06389d3d183b5b7fa65",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "3542f49c080e5a00a4c7b3c2862b8f4ed63d46cfee0a02eac9a5e24da5a768c7"
+    },
+    {
+      "id": "code_health:finding_a868a94954804e2bff54",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a"
+    },
+    {
+      "id": "code_health:finding_845f971e196e18607fe6",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "f21a70815abda2b7e0adb726345ffc3bf934a85a577641a6aa8a07c0f60990f4"
+    },
+    {
+      "id": "code_health:finding_1cdab62e523ba3c26976",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "6716e29a17a5d6bd58b760aab957455e0e6c39202443f5490f5a51bbf16f52ba"
+    },
+    {
+      "id": "code_health:finding_cb75b06f17c7ca01125c",
+      "historical_and_current_metrics_replayed": true,
+      "same_body_sha256_lf": "e0a7b4fe48ebc22b6ffdc4413b71485dcb750efb79fedfc5ee8c2634b30db114"
+    }
+  ]
+}

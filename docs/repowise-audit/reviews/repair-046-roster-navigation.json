@@ -1,0 +1,354 @@
+{
+  "repair_id": "repair-046",
+  "lead_id": "review044-roster-portfolio-panel",
+  "source_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "status": "reproduced_and_locally_repaired_pending_parent_review",
+  "published_or_committed_by_worker": false,
+  "generated_at": "2026-10-16T01:18:35.588Z",
+  "timezone": "Asia/Bangkok",
+  "summary": "The actual roster student-name button selected and rendered the requested saved student but left Portfolio hidden and Teacher Admin active. openStudentPortfolio now prepares the target selection before switching to Portfolio, where the existing tab helper performs one correct render. Only the assigned source function and existing portfolio-html native suite changed.",
+  "changed_files": [
+    "js/app/00-storage-sync-patches.js",
+    "tests/portfolio-html.browser.cjs"
+  ],
+  "source_before_sha256": "ca88093125284d2b7cb9efb9e10f5cbcfea0728c683e70bc570be831a4af6a6f",
+  "source_after_sha256": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+  "test_sha256": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+  "exact_diffs": {
+    "application": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\open-student-portfolio.diff",
+      "sha256": "53711471467ae8e5d232975d8a7565aece65334d8251dbc0778b4f6dc8cd49f4"
+    },
+    "native_suite": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\portfolio-navigation-test.diff",
+      "sha256": "cc50d4e1323a0a05043b9238e52e3c1d80e0bf7187a87468d68c0eef46116fdf"
+    }
+  },
+  "actual_user_path": [
+    "Load the complete shipped app with synthetic Alice/Bob roster, saved sessions and current Alice writing/photo/report/pending result.",
+    "Click the real Teacher Admin tab and Show Class Roster control.",
+    "Click the real Bob or Alice .student-name-btn through its rendered accessible button.",
+    "Observe actual panel visibility, active tab, selected student/options, saved cards, render count, crop-close call and responsive scroll; do not invoke a replacement navigation handler."
+  ],
+  "negative_control": {
+    "exit": 1,
+    "cases": 58,
+    "passed": 49,
+    "failed_assertions": 9,
+    "old_security_and_export_checks_passed": 26,
+    "native_navigation_scenarios": 8,
+    "operational_errors": 0,
+    "page_errors": 0,
+    "failing_checks": [
+      "roster desktop: real name click opens visible Portfolio tab/panel",
+      "roster mobile: real name click opens visible Portfolio tab/panel",
+      "roster same-student: real name click opens visible Portfolio tab/panel",
+      "roster stale-dropdown: real name click opens visible Portfolio tab/panel",
+      "roster stale-dropdown: target and dropdown populate with one correct render",
+      "roster missing-tool-select: real name click opens visible Portfolio tab/panel",
+      "roster missing-portfolio-select: real name click opens visible Portfolio tab/panel",
+      "roster missing-scroll-section: real name click opens visible Portfolio tab/panel",
+      "roster selection-write-failure: real name click opens visible Portfolio tab/panel"
+    ],
+    "observed_navigation": [
+      {
+        "name": "desktop",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "mobile",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "same-student",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "Alice",
+        "renders": [
+          "Alice"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "stale-dropdown",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "",
+        "renders": [
+          null
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "missing-tool-select",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "missing-portfolio-select",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": null,
+        "renders": [],
+        "protected_work_kept": true
+      },
+      {
+        "name": "missing-scroll-section",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "selection-write-failure",
+        "portfolio_visible": false,
+        "admin_visible": true,
+        "portfolio_tab_active": false,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      }
+    ],
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\negative\\receipt.json",
+      "sha256": "39c132d6d4dff7e8b5001608b1c6675fffecfa4e432b9305820463673a0bfa62"
+    },
+    "case_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\negative\\cases.json",
+      "sha256": "a2dc767a9334b639d3ad4286fdb6ae2339ec9752eb3be630579b8f9812d06680"
+    },
+    "stderr": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\negative\\stderr.txt",
+      "sha256": "b9d86c067cf8a7b7fd3d70b67b8c887a2f5b54346db17969ae1f78d8bc5bdc7c"
+    }
+  },
+  "after": {
+    "html_checks_passed": 58,
+    "original_html_checks_passed": 26,
+    "new_navigation_contract_checks_passed": 32,
+    "native_navigation_scenarios_passed": 8,
+    "crop_checks_passed": 51,
+    "reassessment_cases_passed": 16,
+    "reassessment_checks_passed": 79,
+    "syntax_passed": 91,
+    "navigation": [
+      {
+        "name": "desktop",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "mobile",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "same-student",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Alice",
+        "renders": [
+          "Alice"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "stale-dropdown",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "missing-tool-select",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "missing-portfolio-select",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": null,
+        "renders": [
+          null
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "missing-scroll-section",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      },
+      {
+        "name": "selection-write-failure",
+        "portfolio_visible": true,
+        "admin_visible": false,
+        "portfolio_tab_active": true,
+        "selected": "Bob",
+        "renders": [
+          "Bob"
+        ],
+        "protected_work_kept": true
+      }
+    ],
+    "all_content_references_preserved": true,
+    "operational_and_page_errors": 0,
+    "selected_runner": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\suite-results.json",
+      "sha256": "023781a0ad96e341ef412e54cd85c5f31858d489d7af80e1481e454925bb285b"
+    },
+    "case_reports": [
+      {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\portfolio-html.browser.json",
+        "sha256": "d2d841874fd69acd49f2cb5b39cec8572cbc51265936e0afda46cba4e308b538"
+      },
+      {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\crop-ownership.browser.json",
+        "sha256": "55baa9328444e84389e514705aec3c640801d7a53e741959c803a002e24fad17"
+      },
+      {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\portfolio-reassessment.browser.json",
+        "sha256": "3262c767330bcb7461b5b55f29c79054fc6e6becbc28c958d64d8cbf7312afb3"
+      }
+    ],
+    "suite_logs": [
+      {
+        "suite": "tests/crop-ownership.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\crop-ownership.browser.log",
+          "sha256": "32b0d366db2df650d85656f42ad0c8412d3d152bb241c2b63b5148af8f62a108"
+        }
+      },
+      {
+        "suite": "tests/portfolio-html.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\portfolio-html.browser.log",
+          "sha256": "ad719b04c30841fadbbbd97eb45a3a2d12858ace7d195e03aba87041c1b8f02d"
+        }
+      },
+      {
+        "suite": "tests/portfolio-reassessment.browser.cjs",
+        "exit": 0,
+        "error": null,
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after\\portfolio-reassessment.browser.log",
+          "sha256": "a633c9ffdae3fcaf7236e60efdb96594ba7ad072bb0311aa8676a149861b7065"
+        }
+      }
+    ]
+  },
+  "implementation": [
+    "Existing crop close, runtime/tool student selection and best-effort local persistence remain before navigation. No writing/photo/OCR/pending/source clearing is added.",
+    "Refresh options and set the target before switchTab(portfolio); its existing refresh retains that value and its existing renderer runs once for the requested student. This intentionally repeats the cheap dropdown refresh to handle stale options without creating a wrong-student render or changing switchTab.",
+    "Remove the old explicit renderStudentPortfolio/updateExportSelectedStudentButton calls; the tab helper already performs these updates. Keep the optional selector return and desktop-only smooth section scroll.",
+    "Preserved all old26 HTML/export/security checks and performance code byte-for-byte. Added eight real roster-click scenarios: desktop, mobile, same student, stale dropdown, missing tool select, missing portfolio select, missing scroll-section ID and failed selection storage.",
+    "Instrumentation delegates to the real renderer, crop-close and native scroll implementations. Controlled stale/missing DOM and storage failure states are explicit compatibility seams; core desktop/mobile paths use the actual shipped UI."
+  ],
+  "scope_pins": {
+    "before_manifest": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\repair-046-before-source-pins.json",
+      "sha256": "0ef4caaa36a929ffdbdf7826b78f5c2ae2644feb6af465318f85aa5e6b724b73"
+    },
+    "before_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\before-integrity.json",
+      "sha256": "2aee63aa6a452c77f35c66004e445c0114af981e9fc9690fb4e4541c87295513"
+    },
+    "after_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-046\\after-integrity.json",
+      "sha256": "64b67bd4090e3c214d9b377f1f017598cf3f7c601ae3e21e12ec9731bd6c2436"
+    },
+    "preexisting_source_files": 91,
+    "other89_raw_source_files_unchanged": true,
+    "reserved_tests_unchanged": [
+      "tests/auth-integrity.browser.cjs",
+      "tests/optional-storage.browser.cjs",
+      "tests/media-ownership.browser.cjs",
+      "tests/preference-integrity-scenarios.js",
+      "tests/drive-lifecycle.browser.cjs"
+    ],
+    "app_bytes_outside_openStudentPortfolio_unchanged": true,
+    "main_app039_045_guards_unchanged": true,
+    "configuration_html_and_coverage_tools_unchanged": true,
+    "inventory_unchanged": "77 normal suites /91 syntax files /60 native suites /45 case-report entries"
+  },
+  "limits_and_boundary": [
+    "No Git/index writes, commit/publication, tracker/docs edits, dependencies, coverage import, health/index refresh, full gate or another repair. Stop for parent review.",
+    "The after run is three selected suites and all91 syntax checks. Existing accepted045/039 receipts remain baseline evidence for unchanged paths; no repeated full baseline.",
+    "Required tab-shell elements are present in the shipped app; explicitly tested optional tool/portfolio selects and scroll-section absence. Experimental asynchronous portfolio loading and live Drive/AI/OAuth were not exercised.",
+    "Current writing/media/source/pending/report content and references stay exact; runtime/tool selection intentionally changes to the clicked student. Failed local selection storage is tolerated, retaining its prior bytes as before.",
+    "All records are synthetic and all external origins are blocked. No live student data or accounts were accessed."
+  ],
+  "coordinator_acceptance": {
+    "full_source_and_native_test_diff_read": true,
+    "all_referenced_artifact_hashes_verified": 15,
+    "all89other_raw_source_files_and_config_unchanged": true,
+    "app_outside_openStudentPortfolio_exact": true,
+    "original26htmlchecks_source_preserved_insertions_only": true,
+    "selected3suite91syntax_receipt_verified": true,
+    "actual_roster_click_before_fail_after_pass_reviewed": true,
+    "full_batch_gate_independent_reviews_refresh_publication": "pending"
+  }
+}

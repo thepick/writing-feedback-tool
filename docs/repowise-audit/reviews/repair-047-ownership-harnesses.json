@@ -1,0 +1,3012 @@
+{
+  "repair_id": "repair-047",
+  "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "inspected_git_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "assigned_source_hashes_verified": {
+    "tests/auth-integrity.browser.cjs": {
+      "raw_sha256": "79b4b1ae8b0778ae7de4c81f8ef11c44c7a75c33e6e4fedde7290321af5951da",
+      "normalized_lf_sha256": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+      "matches_assignment_and_immutable_git": true
+    },
+    "tests/optional-storage.browser.cjs": {
+      "raw_sha256": "483bb01e62c94effe1d89dd26c3c903bd9d64fd3be1c606fe01543e8d84849b8",
+      "normalized_lf_sha256": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe",
+      "matches_assignment_and_immutable_git": true
+    },
+    "tests/media-ownership.browser.cjs": {
+      "raw_sha256": "ac2bbc54d727e69525ef318d9b4404515b4691b0e96b5de0c00b294e114b93ab",
+      "normalized_lf_sha256": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "matches_assignment_and_immutable_git": true
+    }
+  },
+  "source_hashes_normalized_lf": {
+    "tests/auth-integrity.browser.cjs": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+    "tests/optional-storage.browser.cjs": "7ef36d22cd72d3621a9eb8ed03fff6a17e4c08996dc65d38aa8819fdca5735fe",
+    "tests/media-ownership.browser.cjs": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+    "tests/support/local-app-route.js": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "tests/media-upload-boundary.browser.cjs": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+    "scripts/run-tests.cjs": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "scripts/check-test-runner.cjs": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "google-drive-migration.js": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+    "js/app/00-storage-sync-patches.js": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js": "4f28f69d7cc04a91a2bd7a88c66cd85909e46afc0a37558d5dfd5e0f00a2aac1",
+    "js/app/99-lightbox.js": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+    "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+    "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+  },
+  "historical_configuration_reference": {
+    "file": "scripts/case-report-suites.json",
+    "sha256_normalized_lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+    "assigned_suites_require_reports": true
+  },
+  "source_policy": "Assigned three current test files checked raw/LF at start and report creation against immutablebc72. All app/helper/other-test/runner context and the duplication corpus were read via historical Gitbc72 objects. No all-current-app freeze claim; concurrent045/046 changes outside these tests are excluded.",
+  "inspected_scopes": [
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "scope": "Complete472-line harness, pageFor/run/reset helpers, every scenario exercise and all report assertions."
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "scope": "Complete313-line harness,52-name inventory, browser evaluation helpers, case dispatch, oracles and aggregate."
+    },
+    {
+      "file": "tests/optional-storage.browser.cjs",
+      "scope": "Complete253-line harness, native-IDB/async/dropdown/lazy groups, run route/exercise/verify and aggregate."
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "scope": "Historical3419-3474 redirect recoverability/capture;7833-7868 pending upload owner check;7930-7995 manual completion callbacks;8218-8263 pending persistence/get/clear. Application code was not executed."
+    },
+    {
+      "file": "tests/support/local-app-route.js",
+      "scope": "Complete13-line helper; runner helper assertions51-59 and report validation48-76; assigned suite membership in historical case-report manifest."
+    },
+    {
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "scope": "Related held compression/folder ownership fixture12-45 and cloned local route104-114."
+    }
+  ],
+  "grouped_functions": [
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkRedirectRecovery",
+      "span": [
+        257,
+        313
+      ],
+      "sha256_normalized_lf": "fb9a52654be847060e71038574aebc59cbb0d52b291f0d227409a1ceea328b2c",
+      "record_ids": [
+        "code_health:finding_73792a574b42e8236c19",
+        "code_health:finding_97506bb4c786936411e9",
+        "code_health:finding_5306a999694aea8b140a"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkDraftRestoration",
+      "span": [
+        47,
+        63
+      ],
+      "sha256_normalized_lf": "82da8b92979815a4f79aec144e91ceaeb423e9ec13898c2f04262804ba47d6ab",
+      "record_ids": [
+        "code_health:finding_e673407f389e26d90ad5"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkDraftStorageFailures",
+      "span": [
+        65,
+        80
+      ],
+      "sha256_normalized_lf": "65597f5357f0ea88ace97fef78f7c7270764af9fc86fc629e3792f58cd96fb75",
+      "record_ids": [
+        "code_health:finding_d70b311c8cef34ed959d"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkDraftOccupancy",
+      "span": [
+        82,
+        106
+      ],
+      "sha256_normalized_lf": "65712600c8931f50e458706c4c849bbe577ad87454527117ffa4a2af1e301ac1",
+      "record_ids": [
+        "code_health:finding_9ed9ee996a2e3ba97e2e"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkDraftPreservation",
+      "span": [
+        108,
+        129
+      ],
+      "sha256_normalized_lf": "853f31eb01e1eb0db0868842b57b70adab8b4cba0a644f8e013da1e1c2b91a59",
+      "record_ids": [
+        "code_health:finding_bf74a4880d990f5c83c7"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkFragmentCleanupFailures",
+      "span": [
+        164,
+        220
+      ],
+      "sha256_normalized_lf": "c0bd2c3fe14f6f5a6557da5e3c47f221e8e4a61a4abd84115df30148585a16f0",
+      "record_ids": [
+        "code_health:finding_a4fcf0b1e3303769475c"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkTokenValidation",
+      "span": [
+        323,
+        332
+      ],
+      "sha256_normalized_lf": "5071bd6691a378853970452b37d99c84df44e4d400775665f41b0b2a72a58912",
+      "record_ids": [
+        "code_health:finding_fa1e3f3fce82ffa1cfd4"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkSignOutRetention",
+      "span": [
+        339,
+        369
+      ],
+      "sha256_normalized_lf": "31c1dab948a4b82df516b039d481383756b5400438c50c2ac7330bb2c58eba5a",
+      "record_ids": [
+        "code_health:finding_0870c25d4075e0357488"
+      ]
+    },
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "observeOwnership",
+      "span": [
+        414,
+        456
+      ],
+      "sha256_normalized_lf": "6f946211feb264945fddf2cf0700ac9c64f4fb17cd1aada644c6772855e8c40d",
+      "record_ids": [
+        "code_health:finding_a0776e0bdddefccee43d"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "runSavedMediaScenario",
+      "span": [
+        52,
+        82
+      ],
+      "sha256_normalized_lf": "590ae77a4b0b546bd153c1dbe46802be183822c83af7cc33e91e876186f67116",
+      "record_ids": [
+        "code_health:finding_6b4d070b6bd4a357369e"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "runPendingMediaScenario",
+      "span": [
+        97,
+        146
+      ],
+      "sha256_normalized_lf": "fd4e3b11ebda0b49aa3cc62e90464f0232f4f1b242b30dd5268e2919a1d060f2",
+      "record_ids": [
+        "code_health:finding_d56e623610c171ece3bd"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "runPhotoScenario",
+      "span": [
+        147,
+        191
+      ],
+      "sha256_normalized_lf": "4e673bf2c6fd050b99bc0fa5bc07306e411c9bfe70e2bde58978391120665d5a",
+      "record_ids": [
+        "code_health:finding_50998bdcd4425c8109be"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "assertPendingMediaScenario",
+      "span": [
+        208,
+        221
+      ],
+      "sha256_normalized_lf": "40e30e7c72f9403a745c502f7785ce31a170c4c32531ffa4cf0b9f8607bc4297",
+      "record_ids": [
+        "code_health:finding_f1363ca369412b5bc505",
+        "code_health:finding_9c5c31a2ca73143c40fc"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "runMediaOwnershipCase",
+      "span": [
+        273,
+        300
+      ],
+      "sha256_normalized_lf": "4a812ecd805787119fa7a3cbfb0bda67502140399060e28ce954881968267058",
+      "record_ids": [
+        "code_health:finding_5434c3357e16481b0da7",
+        "code_health:finding_8b0f5d04e40a276ec8b4"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "evaluateMediaOwnershipScenario",
+      "span": [
+        17,
+        195
+      ],
+      "sha256_normalized_lf": "9dd54243a60778b7094508ac85e1ad8daa70aad2f344b3b0bfcd515013604bd8",
+      "record_ids": [
+        "code_health:finding_b1b9f4fbf4ed7111bf83"
+      ]
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "module scenario loop",
+      "span": [
+        302,
+        313
+      ],
+      "sha256_normalized_lf": "9179957df7506bc8d29761f766108277a81a79cddeebadf77671b4847be01cb1",
+      "record_ids": [
+        "code_health:finding_90441d787da9c922c417",
+        "performance:perf3_769dc30b84623e2d7139"
+      ]
+    },
+    {
+      "file": "tests/optional-storage.browser.cjs",
+      "function": "runLazyPortfolioScenarios",
+      "span": [
+        131,
+        193
+      ],
+      "sha256_normalized_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef",
+      "record_ids": [
+        "code_health:finding_6e1080aa83faa6dfdfaf",
+        "code_health:finding_a9aec3d32ff745fb44e3",
+        "code_health:finding_cdb8be83656852c7ab1c",
+        "code_health:finding_1e0a39c50c6ccb76ba44"
+      ]
+    },
+    {
+      "file": "tests/optional-storage.browser.cjs",
+      "function": "runNativeStorageScenarios",
+      "span": [
+        5,
+        74
+      ],
+      "sha256_normalized_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1",
+      "record_ids": [
+        "code_health:finding_cd72665a4e7d4b713d24",
+        "code_health:finding_d3a20ba993962aa7d807",
+        "code_health:finding_213d9f8b3e19418bec05"
+      ]
+    },
+    {
+      "file": "tests/optional-storage.browser.cjs",
+      "function": "runAsyncPortfolioScenarios",
+      "span": [
+        76,
+        102
+      ],
+      "sha256_normalized_lf": "fd3bb7827e0282dfb9077e668850cb6cd58f62bfd7ee9e371273454109198b66",
+      "record_ids": [
+        "code_health:finding_1532a4324157c282bf5e"
+      ]
+    },
+    {
+      "file": "tests/optional-storage.browser.cjs",
+      "function": "run",
+      "span": [
+        198,
+        244
+      ],
+      "sha256_normalized_lf": "bcb6e4202e7b2b9f7e32f651cdfd409a9e34268dd227d1d7f6692b82f73f9a60",
+      "record_ids": [
+        "code_health:finding_a610c7bc1c616cfe053f",
+        "code_health:finding_96c00aeeb88b86b3a25d"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "record_id": "code_health:finding_73792a574b42e8236c19",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "checkRedirectRecovery",
+      "grouped_function": "checkRedirectRecovery",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 22,
+        "cognitive": 44,
+        "dispatch_share": 0.0,
+        "symbol_line": 257,
+        "deepest_block": {
+          "start": 259,
+          "end": 312
+        }
+      },
+      "verified_metrics": {
+        "name": "checkRedirectRecovery",
+        "start_line": 257,
+        "end_line": 313,
+        "ccn": 22,
+        "cognitive": 44,
+        "max_nesting": 4,
+        "nloc": 56,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          259,
+          312
+        ],
+        "complex_conditions": [
+          {
+            "line": 269,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 291,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        257,
+        313
+      ],
+      "function_sha256_normalized_lf": "fb9a52654be847060e71038574aebc59cbb0d52b291f0d227409a1ceea328b2c",
+      "enclosing_functions": [
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "Depth4 is the intentional mode matrix: each fresh page installs a quota/provider fault, invokes one native entry point, then checks redirect versus retained-tab policy. The test already has a page factory and case runner. Another stage/helper would just move closures across the page boundary. The success-path assertion gap is separate047-L1, not a reason to flatten this matrix.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:257",
+        "tests/auth-integrity.browser.cjs:258",
+        "tests/auth-integrity.browser.cjs:259",
+        "tests/auth-integrity.browser.cjs:274",
+        "tests/auth-integrity.browser.cjs:290",
+        "tests/auth-integrity.browser.cjs:296",
+        "tests/auth-integrity.browser.cjs:298"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:314",
+        "tests/auth-integrity.browser.cjs:26"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:297",
+        "tests/auth-integrity.browser.cjs:306",
+        "tests/auth-integrity.browser.cjs:307",
+        "tests/auth-integrity.browser.cjs:308",
+        "tests/auth-integrity.browser.cjs:309",
+        "tests/auth-integrity.browser.cjs:471"
+      ],
+      "regression_recommendation": "Retain all12 modes, exact navigation counts and refused-redirect writing/photo/owner checks. Strengthen allowed redirects per047-L1 without restructuring.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": [
+        "047-L1"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_e673407f389e26d90ad5",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkDraftRestoration",
+      "grouped_function": "checkDraftRestoration",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 47,
+        "deepest_block": {
+          "start": 49,
+          "end": 54
+        }
+      },
+      "verified_metrics": {
+        "name": "checkDraftRestoration",
+        "start_line": 47,
+        "end_line": 63,
+        "ccn": 11,
+        "cognitive": 10,
+        "max_nesting": 1,
+        "nloc": 17,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          49,
+          54
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        47,
+        63
+      ],
+      "function_sha256_normalized_lf": "82da8b92979815a4f79aec144e91ceaeb423e9ec13898c2f04262804ba47d6ab",
+      "enclosing_functions": [
+        {
+          "name": "draftScenarioCases",
+          "start_line": 35,
+          "end_line": 132
+        },
+        {
+          "name": "checkDraftRecovery",
+          "start_line": 33,
+          "end_line": 136
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The17-line helper tests malformed draft shapes and one complete valid restoration. Its CCN11 includes assertions combining writing/student/genre invariants, not eleven alternative implementation paths. run resets storage prototypes before and after every case and failures reach the top-level report.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:47",
+        "tests/auth-integrity.browser.cjs:49",
+        "tests/auth-integrity.browser.cjs:55"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:64",
+        "tests/auth-integrity.browser.cjs:133",
+        "tests/auth-integrity.browser.cjs:134"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:51",
+        "tests/auth-integrity.browser.cjs:52",
+        "tests/auth-integrity.browser.cjs:53",
+        "tests/auth-integrity.browser.cjs:57",
+        "tests/auth-integrity.browser.cjs:58",
+        "tests/auth-integrity.browser.cjs:59",
+        "tests/auth-integrity.browser.cjs:60",
+        "tests/auth-integrity.browser.cjs:61",
+        "tests/auth-integrity.browser.cjs:471"
+      ],
+      "regression_recommendation": "Keep malformed text/student/genre, exact recovered fields and consume-once assertions; no new wrapper or test table required.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_d70b311c8cef34ed959d",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkDraftStorageFailures",
+      "grouped_function": "checkDraftStorageFailures",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 65,
+        "deepest_block": {
+          "start": 72,
+          "end": 78
+        }
+      },
+      "verified_metrics": {
+        "name": "checkDraftStorageFailures",
+        "start_line": 65,
+        "end_line": 80,
+        "ccn": 9,
+        "cognitive": 11,
+        "max_nesting": 3,
+        "nloc": 16,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          72,
+          78
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        65,
+        80
+      ],
+      "function_sha256_normalized_lf": "65597f5357f0ea88ace97fef78f7c7270764af9fc86fc629e3792f58cd96fb75",
+      "enclosing_functions": [
+        {
+          "name": "draftScenarioCases",
+          "start_line": 35,
+          "end_line": 132
+        },
+        {
+          "name": "checkDraftRecovery",
+          "start_line": 33,
+          "end_line": 136
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "Read failure, required removal failure and optional selection-hint failure have deliberately different outcomes. The remove case confirms the writing was restored before cleanup failed, then verifies a bounded retry. Those branches cannot be merged into one expected-success boolean without losing the recovery contract.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:65",
+        "tests/auth-integrity.browser.cjs:66",
+        "tests/auth-integrity.browser.cjs:68",
+        "tests/auth-integrity.browser.cjs:69",
+        "tests/auth-integrity.browser.cjs:70",
+        "tests/auth-integrity.browser.cjs:72"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:81",
+        "tests/auth-integrity.browser.cjs:133"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:72",
+        "tests/auth-integrity.browser.cjs:74",
+        "tests/auth-integrity.browser.cjs:75",
+        "tests/auth-integrity.browser.cjs:77",
+        "tests/auth-integrity.browser.cjs:471"
+      ],
+      "regression_recommendation": "Preserve each fault and retry, including optional-hint success and required draft bytes retained. No shape repair.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_9ed9ee996a2e3ba97e2e",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkDraftOccupancy",
+      "grouped_function": "checkDraftOccupancy",
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 17,
+        "nloc": 25,
+        "dispatch_share": 0.0,
+        "symbol_line": 82,
+        "deepest_block": {
+          "start": 83,
+          "end": 90
+        }
+      },
+      "verified_metrics": {
+        "name": "checkDraftOccupancy",
+        "start_line": 82,
+        "end_line": 106,
+        "ccn": 18,
+        "cognitive": 17,
+        "max_nesting": 1,
+        "nloc": 25,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          83,
+          90
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        82,
+        106
+      ],
+      "function_sha256_normalized_lf": "65712600c8931f50e458706c4c849bbe577ad87454527117ffa4a2af1e301ac1",
+      "enclosing_functions": [
+        {
+          "name": "draftScenarioCases",
+          "start_line": 35,
+          "end_line": 132
+        },
+        {
+          "name": "checkDraftRecovery",
+          "start_line": 33,
+          "end_line": 136
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The occupancy cases distinguish current whitespace from empty input, empty/whitespace recovered bytes, missing roster entry and same text under another owner/genre. Combined field assertions prove coherence. Parameterizing these cases further would hide why superficially identical text must sometimes block restoration.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:82",
+        "tests/auth-integrity.browser.cjs:83",
+        "tests/auth-integrity.browser.cjs:91",
+        "tests/auth-integrity.browser.cjs:97",
+        "tests/auth-integrity.browser.cjs:102"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:107",
+        "tests/auth-integrity.browser.cjs:133"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:85",
+        "tests/auth-integrity.browser.cjs:86",
+        "tests/auth-integrity.browser.cjs:87",
+        "tests/auth-integrity.browser.cjs:88",
+        "tests/auth-integrity.browser.cjs:89",
+        "tests/auth-integrity.browser.cjs:93",
+        "tests/auth-integrity.browser.cjs:94",
+        "tests/auth-integrity.browser.cjs:100",
+        "tests/auth-integrity.browser.cjs:104"
+      ],
+      "regression_recommendation": "Keep exact whitespace and owner/genre assertions. No extraction solely for CCN18.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_bf74a4880d990f5c83c7",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkDraftPreservation",
+      "grouped_function": "checkDraftPreservation",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 108,
+        "deepest_block": {
+          "start": 109,
+          "end": 114
+        }
+      },
+      "verified_metrics": {
+        "name": "checkDraftPreservation",
+        "start_line": 108,
+        "end_line": 129,
+        "ccn": 12,
+        "cognitive": 11,
+        "max_nesting": 1,
+        "nloc": 22,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          109,
+          114
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        108,
+        129
+      ],
+      "function_sha256_normalized_lf": "853f31eb01e1eb0db0868842b57b70adab8b4cba0a644f8e013da1e1c2b91a59",
+      "enclosing_functions": [
+        {
+          "name": "draftScenarioCases",
+          "start_line": 35,
+          "end_line": 132
+        },
+        {
+          "name": "checkDraftRecovery",
+          "start_line": 33,
+          "end_line": 136
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "This22-line helper checks exact draft bytes, failed writes, incompatible previous drafts and failed reads before redirect. Data seeding and failure expectations intentionally remain adjacent. Sharing it with restoration tests would conflate creating a recovery record with consuming one.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:108",
+        "tests/auth-integrity.browser.cjs:109",
+        "tests/auth-integrity.browser.cjs:115",
+        "tests/auth-integrity.browser.cjs:120",
+        "tests/auth-integrity.browser.cjs:124"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:130",
+        "tests/auth-integrity.browser.cjs:133"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:111",
+        "tests/auth-integrity.browser.cjs:113",
+        "tests/auth-integrity.browser.cjs:118",
+        "tests/auth-integrity.browser.cjs:122",
+        "tests/auth-integrity.browser.cjs:127"
+      ],
+      "regression_recommendation": "Retain three text values, prior valid/unreadable draft bytes and required-read/write refusal. No repair needed.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_a4fcf0b1e3303769475c",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkFragmentCleanupFailures",
+      "grouped_function": "checkFragmentCleanupFailures",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 21,
+        "nloc": 57,
+        "dispatch_share": 0.0,
+        "symbol_line": 164,
+        "deepest_block": {
+          "start": 165,
+          "end": 209
+        }
+      },
+      "verified_metrics": {
+        "name": "checkFragmentCleanupFailures",
+        "start_line": 164,
+        "end_line": 220,
+        "ccn": 14,
+        "cognitive": 21,
+        "max_nesting": 2,
+        "nloc": 57,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          165,
+          209
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        164,
+        220
+      ],
+      "function_sha256_normalized_lf": "c0bd2c3fe14f6f5a6557da5e3c47f221e8e4a61a4abd84115df30148585a16f0",
+      "enclosing_functions": [
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The57-line function exercises the real OAuth-fragment handler when history cleanup, visible status or alert is unavailable, and checks an ordinary fragment separately. It asserts same document, pending object/bytes, draft, query, callback count and URL redaction. Those checks are the security/data-preservation oracle, not removable diagnostic setup.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:164",
+        "tests/auth-integrity.browser.cjs:165",
+        "tests/auth-integrity.browser.cjs:168",
+        "tests/auth-integrity.browser.cjs:181",
+        "tests/auth-integrity.browser.cjs:184",
+        "tests/auth-integrity.browser.cjs:190",
+        "tests/auth-integrity.browser.cjs:210"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:221",
+        "tests/auth-integrity.browser.cjs:26"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:200",
+        "tests/auth-integrity.browser.cjs:201",
+        "tests/auth-integrity.browser.cjs:202",
+        "tests/auth-integrity.browser.cjs:204",
+        "tests/auth-integrity.browser.cjs:205",
+        "tests/auth-integrity.browser.cjs:206",
+        "tests/auth-integrity.browser.cjs:207",
+        "tests/auth-integrity.browser.cjs:217"
+      ],
+      "regression_recommendation": "Keep all four failure modes and ordinary-fragment control. Do not replace native history/dialog behavior with a generic mocked auth result.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_97506bb4c786936411e9",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkRedirectRecovery",
+      "grouped_function": "checkRedirectRecovery",
+      "verified_observation_details": {
+        "ccn": 22,
+        "cognitive": 44,
+        "nloc": 56,
+        "dispatch_share": 0.0,
+        "symbol_line": 257,
+        "deepest_block": {
+          "start": 259,
+          "end": 312
+        }
+      },
+      "verified_metrics": {
+        "name": "checkRedirectRecovery",
+        "start_line": 257,
+        "end_line": 313,
+        "ccn": 22,
+        "cognitive": 44,
+        "max_nesting": 4,
+        "nloc": 56,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          259,
+          312
+        ],
+        "complex_conditions": [
+          {
+            "line": 269,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 291,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        257,
+        313
+      ],
+      "function_sha256_normalized_lf": "fb9a52654be847060e71038574aebc59cbb0d52b291f0d227409a1ceea328b2c",
+      "enclosing_functions": [
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The complexity is justified, but allowedRedirect modes currently stop after navigation-count assertion297 and skip every storage/content assertion under298. A redirect that occurs after storing an incomplete pending record could therefore satisfy this scenario.047-L1 proposes narrow durable-state assertions for full/retry/drive-backed, preserving the12-mode matrix.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:257",
+        "tests/auth-integrity.browser.cjs:267",
+        "tests/auth-integrity.browser.cjs:273",
+        "tests/auth-integrity.browser.cjs:278",
+        "tests/auth-integrity.browser.cjs:296",
+        "tests/auth-integrity.browser.cjs:297",
+        "tests/auth-integrity.browser.cjs:298",
+        "tests/auth-integrity.browser.cjs:310"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:314",
+        "tests/auth-integrity.browser.cjs:26"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:297",
+        "tests/auth-integrity.browser.cjs:306",
+        "tests/auth-integrity.browser.cjs:308",
+        "js/app/00-storage-sync-patches.js:3431",
+        "js/app/00-storage-sync-patches.js:3441",
+        "js/app/00-storage-sync-patches.js:3445",
+        "js/app/00-storage-sync-patches.js:8236",
+        "js/app/00-storage-sync-patches.js:8247"
+      ],
+      "regression_recommendation": "047-L1: assert allowed redirects retain exact draft text/student and pending session identity; full/retry retain embedded photo bytes, drive-backed retains durable Drive reference. Prove the new oracle rejects omitted/stripped pending data before navigation.",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "allowed_redirect_durable_state_assertion_gap",
+      "candidate_id": "047-R2",
+      "additional_lead_ids": [
+        "047-L1"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_fa1e3f3fce82ffa1cfd4",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkTokenValidation",
+      "grouped_function": "checkTokenValidation",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 323,
+        "deepest_block": {
+          "start": 325,
+          "end": 328
+        }
+      },
+      "verified_metrics": {
+        "name": "checkTokenValidation",
+        "start_line": 323,
+        "end_line": 332,
+        "ccn": 10,
+        "cognitive": 9,
+        "max_nesting": 1,
+        "nloc": 10,
+        "bumps": 0,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          325,
+          328
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        323,
+        332
+      ],
+      "function_sha256_normalized_lf": "5071bd6691a378853970452b37d99c84df44e4d400775665f41b0b2a72a58912",
+      "enclosing_functions": [
+        {
+          "name": "tokenScenarioCases",
+          "start_line": 317,
+          "end_line": 387
+        },
+        {
+          "name": "checkTokenStorage",
+          "start_line": 315,
+          "end_line": 390
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The invalid-token table intentionally covers absent/object/scalar tokens and invalid/expired expiry values, then checks every exposed validity boundary. CCN10 largely counts the five simultaneous rejected-state checks in327. The positive restore and runtime-expiry controls prevent a blanket always-false implementation from passing.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:323",
+        "tests/auth-integrity.browser.cjs:324",
+        "tests/auth-integrity.browser.cjs:325"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:333",
+        "tests/auth-integrity.browser.cjs:388"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:327",
+        "tests/auth-integrity.browser.cjs:329",
+        "tests/auth-integrity.browser.cjs:330",
+        "tests/auth-integrity.browser.cjs:331",
+        "tests/auth-integrity.browser.cjs:471"
+      ],
+      "regression_recommendation": "Keep valid-session control and every invalid shape/expiry. No one-use valid-token assertion wrapper.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_0870c25d4075e0357488",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkSignOutRetention",
+      "grouped_function": "checkSignOutRetention",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 14,
+        "nloc": 31,
+        "dispatch_share": 0.0,
+        "symbol_line": 339,
+        "deepest_block": {
+          "start": 340,
+          "end": 368
+        }
+      },
+      "verified_metrics": {
+        "name": "checkSignOutRetention",
+        "start_line": 339,
+        "end_line": 369,
+        "ccn": 12,
+        "cognitive": 14,
+        "max_nesting": 2,
+        "nloc": 31,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          340,
+          368
+        ],
+        "complex_conditions": [
+          {
+            "line": 365,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        339,
+        369
+      ],
+      "function_sha256_normalized_lf": "31c1dab948a4b82df516b039d481383756b5400438c50c2ac7330bb2c58eba5a",
+      "enclosing_functions": [
+        {
+          "name": "tokenScenarioCases",
+          "start_line": 317,
+          "end_line": 387
+        },
+        {
+          "name": "checkTokenStorage",
+          "start_line": 315,
+          "end_line": 390
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The sign-out matrix injects failures in required token removals versus advisory profile/folder removals. It checks runtime disconnect, exact retained writing keys, truthful status, same-page restore suppression and retry cleanup. The unusual raw retained strings are byte-preservation fixtures, not malformed-data parser tests.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:339",
+        "tests/auth-integrity.browser.cjs:340",
+        "tests/auth-integrity.browser.cjs:342",
+        "tests/auth-integrity.browser.cjs:346",
+        "tests/auth-integrity.browser.cjs:348",
+        "tests/auth-integrity.browser.cjs:362"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:370",
+        "tests/auth-integrity.browser.cjs:388"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:359",
+        "tests/auth-integrity.browser.cjs:360",
+        "tests/auth-integrity.browser.cjs:361",
+        "tests/auth-integrity.browser.cjs:364",
+        "tests/auth-integrity.browser.cjs:365",
+        "tests/auth-integrity.browser.cjs:367",
+        "tests/auth-integrity.browser.cjs:471"
+      ],
+      "regression_recommendation": "Retain all six removal modes, key bytes and retry assertions. No generalized failure-options object needed.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_a0776e0bdddefccee43d",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "observeOwnership",
+      "grouped_function": "observeOwnership",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 43,
+        "dispatch_share": 0.5,
+        "symbol_line": 414,
+        "deepest_block": {
+          "start": 454,
+          "end": 454
+        }
+      },
+      "verified_metrics": {
+        "name": "observeOwnership",
+        "start_line": 414,
+        "end_line": 456,
+        "ccn": 11,
+        "cognitive": 11,
+        "max_nesting": 2,
+        "nloc": 43,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.5,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          454,
+          454
+        ],
+        "complex_conditions": [
+          {
+            "line": 424,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        414,
+        456
+      ],
+      "function_sha256_normalized_lf": "6f946211feb264945fddf2cf0700ac9c64f4fb17cd1aada644c6772855e8c40d",
+      "enclosing_functions": [
+        {
+          "name": "checkCallbackOwnership",
+          "start_line": 411,
+          "end_line": 465
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "observeOwnership must install different held boundaries for profile stream/error, migration, IDB open, queued callback, popup and sign-out sync, then apply a later auth transition. The caller separately asserts obsolete work cannot publish or remap and that current credentials still restore. Existing holdProfileResponse/holdMigrationResult already separate the meaningful setup; another dispatcher would obscure it.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:414",
+        "tests/auth-integrity.browser.cjs:418",
+        "tests/auth-integrity.browser.cjs:424",
+        "tests/auth-integrity.browser.cjs:438",
+        "tests/auth-integrity.browser.cjs:440",
+        "tests/auth-integrity.browser.cjs:445",
+        "tests/auth-integrity.browser.cjs:447",
+        "tests/auth-integrity.browser.cjs:451"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:412",
+        "tests/auth-integrity.browser.cjs:457"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:459",
+        "tests/auth-integrity.browser.cjs:460",
+        "tests/auth-integrity.browser.cjs:461",
+        "tests/auth-integrity.browser.cjs:462",
+        "tests/auth-integrity.browser.cjs:471"
+      ],
+      "regression_recommendation": "Retain all7 boundaries times3 auth transitions and current-session restore control. Fixed80ms post-release observation remains a timing limit; this review did not run or prove settle latency.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_5306a999694aea8b140a",
+      "file": "tests/auth-integrity.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "grouped_function": "checkRedirectRecovery",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 274,
+        "symbol_index": 6
+      },
+      "verified_metrics": {
+        "name": "<anonymous>",
+        "start_line": 274,
+        "end_line": 277,
+        "ccn": 5,
+        "cognitive": 4,
+        "max_nesting": 1,
+        "nloc": 4,
+        "bumps": 0,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          275,
+          275
+        ],
+        "complex_conditions": [
+          {
+            "line": 275,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        274,
+        277
+      ],
+      "function_sha256_normalized_lf": "59acfa3ecad11d3437dfccb70a9df1d07f0cae97af8e5b24dbfdd191389b8b82",
+      "enclosing_functions": [
+        {
+          "name": "checkRedirectRecovery",
+          "start_line": 257,
+          "end_line": 313
+        },
+        {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 472
+        }
+      ],
+      "reason": "The three operators at275 select one exact storage key, require the failure switch and distinguish all-write failure from photo-containing writes. This is a controlled fault predicate; broadening it would also break draft storage and test a different path. No need for a separately named predicate used once.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:274",
+        "tests/auth-integrity.browser.cjs:275",
+        "tests/auth-integrity.browser.cjs:276",
+        "tests/auth-integrity.browser.cjs:278"
+      ],
+      "callers": [
+        "tests/auth-integrity.browser.cjs:262",
+        "tests/auth-integrity.browser.cjs:288"
+      ],
+      "test_assertion_references": [
+        "tests/auth-integrity.browser.cjs:297",
+        "tests/auth-integrity.browser.cjs:306",
+        "tests/auth-integrity.browser.cjs:308"
+      ],
+      "regression_recommendation": "If changing the fault harness, preserve key selectivity and full/retry/drive-backed controls;047-L1 strengthens successful persistence rather than changing this condition.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_6b4d070b6bd4a357369e",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runSavedMediaScenario",
+      "grouped_function": "runSavedMediaScenario",
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 23,
+        "nloc": 31,
+        "dispatch_share": 0.2,
+        "symbol_line": 52,
+        "deepest_block": {
+          "start": 70,
+          "end": 73
+        }
+      },
+      "verified_metrics": {
+        "name": "runSavedMediaScenario",
+        "start_line": 52,
+        "end_line": 82,
+        "ccn": 21,
+        "cognitive": 23,
+        "max_nesting": 2,
+        "nloc": 31,
+        "bumps": 2,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.2,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          70,
+          73
+        ],
+        "complex_conditions": [
+          {
+            "line": 54,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 69,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          },
+          {
+            "line": 70,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        52,
+        82
+      ],
+      "function_sha256_normalized_lf": "590ae77a4b0b546bd153c1dbe46802be183822c83af7cc33e91e876186f67116",
+      "enclosing_functions": [
+        {
+          "name": "evaluateMediaOwnershipScenario",
+          "start_line": 17,
+          "end_line": 195
+        }
+      ],
+      "reason": "This31-line scenario holds real upload completion while applying edits/deletions, then injects required-write/corruption/recovery failures or retries. applySavedMediaChanges is already shared. Replacing branch cases with a handler table would scatter the timing boundary and make it harder to see which changes happen before release.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:52",
+        "tests/media-ownership.browser.cjs:54",
+        "tests/media-ownership.browser.cjs:61",
+        "tests/media-ownership.browser.cjs:62",
+        "tests/media-ownership.browser.cjs:63",
+        "tests/media-ownership.browser.cjs:64",
+        "tests/media-ownership.browser.cjs:66",
+        "tests/media-ownership.browser.cjs:69",
+        "tests/media-ownership.browser.cjs:70",
+        "tests/media-ownership.browser.cjs:76"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:192",
+        "tests/media-ownership.browser.cjs:286"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:196",
+        "tests/media-ownership.browser.cjs:198",
+        "tests/media-ownership.browser.cjs:199",
+        "tests/media-ownership.browser.cjs:202",
+        "tests/media-ownership.browser.cjs:203",
+        "tests/media-ownership.browser.cjs:204",
+        "tests/media-ownership.browser.cjs:205",
+        "tests/media-ownership.browser.cjs:241",
+        "tests/media-ownership.browser.cjs:312"
+      ],
+      "regression_recommendation": "Retain first-error/retry checks, zero uploads for entry guards, both-photo completion and edit/delete/reorder assertions. No score-driven extraction.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_d56e623610c171ece3bd",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runPendingMediaScenario",
+      "grouped_function": "runPendingMediaScenario",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 15,
+        "nloc": 50,
+        "dispatch_share": 0.0,
+        "symbol_line": 97,
+        "deepest_block": {
+          "start": 127,
+          "end": 127
+        }
+      },
+      "verified_metrics": {
+        "name": "runPendingMediaScenario",
+        "start_line": 97,
+        "end_line": 146,
+        "ccn": 14,
+        "cognitive": 15,
+        "max_nesting": 2,
+        "nloc": 50,
+        "bumps": 2,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          127,
+          127
+        ],
+        "complex_conditions": [
+          {
+            "line": 127,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 134,
+            "operator_count": 1,
+            "enclosing_construct": "ternary"
+          }
+        ]
+      },
+      "verified_function_span": [
+        97,
+        146
+      ],
+      "function_sha256_normalized_lf": "fd4e3b11ebda0b49aa3cc62e90464f0232f4f1b242b30dd5268e2919a1d060f2",
+      "enclosing_functions": [
+        {
+          "name": "evaluateMediaOwnershipScenario",
+          "start_line": 17,
+          "end_line": 195
+        }
+      ],
+      "reason": "The pending scenario captures its actual owner, delays the media callback, invokes native changes including analysis/delete/reset/sign-out, injects persistence/rollback failures, then checks retry or flush races. Its nested changePendingOwner helper already owns action differences. The snapshots intentionally include beforeRetry and final state; they are not a pure data table.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:97",
+        "tests/media-ownership.browser.cjs:98",
+        "tests/media-ownership.browser.cjs:124",
+        "tests/media-ownership.browser.cjs:125",
+        "tests/media-ownership.browser.cjs:127",
+        "tests/media-ownership.browser.cjs:128",
+        "tests/media-ownership.browser.cjs:129",
+        "tests/media-ownership.browser.cjs:131",
+        "tests/media-ownership.browser.cjs:134",
+        "tests/media-ownership.browser.cjs:135",
+        "tests/media-ownership.browser.cjs:140",
+        "tests/media-ownership.browser.cjs:142"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:193",
+        "tests/media-ownership.browser.cjs:286"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:208",
+        "tests/media-ownership.browser.cjs:213",
+        "tests/media-ownership.browser.cjs:219",
+        "tests/media-ownership.browser.cjs:220",
+        "tests/media-ownership.browser.cjs:253",
+        "tests/media-ownership.browser.cjs:254",
+        "tests/media-ownership.browser.cjs:257",
+        "tests/media-ownership.browser.cjs:259"
+      ],
+      "regression_recommendation": "Keep held pending-owner changes, rollback recovery, retry and flush completion.047-L2 separately strengthens pending-clear absence; no scenario restructuring.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": [
+        "047-L2"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_50998bdcd4425c8109be",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runPhotoScenario",
+      "grouped_function": "runPhotoScenario",
+      "verified_observation_details": {
+        "ccn": 22,
+        "cognitive": 22,
+        "nloc": 45,
+        "dispatch_share": 0.24,
+        "symbol_line": 147,
+        "deepest_block": {
+          "start": 151,
+          "end": 154
+        }
+      },
+      "verified_metrics": {
+        "name": "runPhotoScenario",
+        "start_line": 147,
+        "end_line": 191,
+        "ccn": 22,
+        "cognitive": 22,
+        "max_nesting": 2,
+        "nloc": 45,
+        "bumps": 1,
+        "param_count": 0,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.24,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          151,
+          154
+        ],
+        "complex_conditions": [
+          {
+            "line": 156,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 167,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        147,
+        191
+      ],
+      "function_sha256_normalized_lf": "4e673bf2c6fd050b99bc0fa5bc07306e411c9bfe70e2bde58978391120665d5a",
+      "enclosing_functions": [
+        {
+          "name": "evaluateMediaOwnershipScenario",
+          "start_line": 17,
+          "end_line": 195
+        }
+      ],
+      "reason": "The45-line photo scenario chains crop/reset, merge, upload, save, lightweight fallback, reassessment restoration and archive export using the same real pixels/reference. Capturing expectedData after crop is essential. Existing local crop/dimensions helpers avoid repeated mechanics. Further decomposition would pass a large mutable fixture between stages and weaken traceability.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:147",
+        "tests/media-ownership.browser.cjs:151",
+        "tests/media-ownership.browser.cjs:155",
+        "tests/media-ownership.browser.cjs:161",
+        "tests/media-ownership.browser.cjs:166",
+        "tests/media-ownership.browser.cjs:168",
+        "tests/media-ownership.browser.cjs:172",
+        "tests/media-ownership.browser.cjs:175",
+        "tests/media-ownership.browser.cjs:177",
+        "tests/media-ownership.browser.cjs:178",
+        "tests/media-ownership.browser.cjs:181",
+        "tests/media-ownership.browser.cjs:184",
+        "tests/media-ownership.browser.cjs:187"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:194",
+        "tests/media-ownership.browser.cjs:286"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:223",
+        "tests/media-ownership.browser.cjs:224",
+        "tests/media-ownership.browser.cjs:226",
+        "tests/media-ownership.browser.cjs:228",
+        "tests/media-ownership.browser.cjs:229",
+        "tests/media-ownership.browser.cjs:230",
+        "tests/media-ownership.browser.cjs:231",
+        "tests/media-ownership.browser.cjs:232",
+        "tests/media-ownership.browser.cjs:233",
+        "tests/media-ownership.browser.cjs:234",
+        "tests/media-ownership.browser.cjs:235",
+        "tests/media-ownership.browser.cjs:236",
+        "tests/media-ownership.browser.cjs:237"
+      ],
+      "regression_recommendation": "Preserve byte equality for uncompressed uploads/export, MIME/nonempty compressed output, imageId/revision and restored dimensions. photo-quota-metadata directly calls the lightweight projection; it does not itself inject a quota failure.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_f1363ca369412b5bc505",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "assertPendingMediaScenario",
+      "grouped_function": "assertPendingMediaScenario",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 208,
+        "deepest_block": {
+          "start": 212,
+          "end": 218
+        }
+      },
+      "verified_metrics": {
+        "name": "assertPendingMediaScenario",
+        "start_line": 208,
+        "end_line": 221,
+        "ccn": 9,
+        "cognitive": 9,
+        "max_nesting": 2,
+        "nloc": 14,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          212,
+          218
+        ],
+        "complex_conditions": [
+          {
+            "line": 212,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        208,
+        221
+      ],
+      "function_sha256_normalized_lf": "40e30e7c72f9403a745c502f7785ce31a170c4c32531ffa4cf0b9f8607bc4297",
+      "enclosing_functions": [],
+      "reason": "The pending oracle distinguishes sign-out-during-flush, four successful save/retry modes, and stale/failed completion. Those policies need different assertions, including beforeRetry failure and rollback recovery. Factoring them into booleans would hide which outcome is permitted. The delegated retained-pending helper has a separate pending-clear absence gap047-L2.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:208",
+        "tests/media-ownership.browser.cjs:209",
+        "tests/media-ownership.browser.cjs:212",
+        "tests/media-ownership.browser.cjs:216",
+        "tests/media-ownership.browser.cjs:219",
+        "tests/media-ownership.browser.cjs:220"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:292"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:210",
+        "tests/media-ownership.browser.cjs:211",
+        "tests/media-ownership.browser.cjs:213",
+        "tests/media-ownership.browser.cjs:214",
+        "tests/media-ownership.browser.cjs:215",
+        "tests/media-ownership.browser.cjs:219",
+        "tests/media-ownership.browser.cjs:220",
+        "tests/media-ownership.browser.cjs:253"
+      ],
+      "regression_recommendation": "Keep success versus retained-work expectations. Add the narrow pending-clear absence check per047-L2 without moving this oracle.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": [
+        "047-L2"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_5434c3357e16481b0da7",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runMediaOwnershipCase",
+      "grouped_function": "runMediaOwnershipCase",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.04,
+        "symbol_line": 273,
+        "deepest_block": {
+          "start": 281,
+          "end": 281
+        },
+        "extract_method_stage_refused": [
+          "exception_state"
+        ]
+      },
+      "verified_metrics": {
+        "name": "runMediaOwnershipCase",
+        "start_line": 273,
+        "end_line": 300,
+        "ccn": 10,
+        "cognitive": 13,
+        "max_nesting": 2,
+        "nloc": 28,
+        "bumps": 2,
+        "param_count": 3,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.04,
+        "deepest_block": [
+          281,
+          281
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        273,
+        300
+      ],
+      "function_sha256_normalized_lf": "4a812ecd805787119fa7a3cbfb0bda67502140399060e28ce954881968267058",
+      "enclosing_functions": [],
+      "reason": "The case runner repeats the local asset route already provided by local-app-route.js. Replace only277-282 with that existing helper and remove now-unused fs import if no longer needed for reports (fs still writes the optional report310). Keep fresh pages, observed-before-assert capture, try/catch failure records and close order intact. Replayed extract-method refusal exception_state supports retaining the catch boundary.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:273",
+        "tests/media-ownership.browser.cjs:274",
+        "tests/media-ownership.browser.cjs:277",
+        "tests/media-ownership.browser.cjs:281",
+        "tests/media-ownership.browser.cjs:285",
+        "tests/media-ownership.browser.cjs:287",
+        "tests/media-ownership.browser.cjs:288",
+        "tests/media-ownership.browser.cjs:296",
+        "tests/media-ownership.browser.cjs:297",
+        "tests/media-ownership.browser.cjs:299",
+        "tests/support/local-app-route.js:5",
+        "tests/support/local-app-route.js:7",
+        "tests/support/local-app-route.js:10",
+        "tests/support/local-app-route.js:12",
+        "scripts/check-test-runner.cjs:51",
+        "scripts/check-test-runner.cjs:53",
+        "scripts/check-test-runner.cjs:55",
+        "scripts/check-test-runner.cjs:57"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:307"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:288",
+        "tests/media-ownership.browser.cjs:290",
+        "tests/media-ownership.browser.cjs:292",
+        "tests/media-ownership.browser.cjs:294",
+        "tests/media-ownership.browser.cjs:296",
+        "tests/media-ownership.browser.cjs:297",
+        "tests/media-ownership.browser.cjs:312"
+      ],
+      "regression_recommendation": "R1: compare native case names/order, failure propagation, observations and request/byte outcomes before/after; retain runner helper checks for local JS/HTML/default MIME, 404/path containment and external abort. No new execution performed.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_local_asset_helper",
+      "candidate_id": "047-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_b1b9f4fbf4ed7111bf83",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "large_method",
+      "symbol": "evaluateMediaOwnershipScenario",
+      "grouped_function": "evaluateMediaOwnershipScenario",
+      "verified_observation_details": {
+        "nloc": 179,
+        "ccn": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 17,
+        "deepest_block": {
+          "start": 45,
+          "end": 45
+        }
+      },
+      "verified_metrics": {
+        "name": "evaluateMediaOwnershipScenario",
+        "start_line": 17,
+        "end_line": 195,
+        "ccn": 7,
+        "cognitive": 7,
+        "max_nesting": 2,
+        "nloc": 179,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          45,
+          45
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        17,
+        195
+      ],
+      "function_sha256_normalized_lf": "9dd54243a60778b7094508ac85e1ad8daa70aad2f344b3b0bfcd515013604bd8",
+      "enclosing_functions": [],
+      "reason": "The179-line browser-evaluated root is deliberately a serialization boundary: raster/session/pending fixtures, held upload callbacks, wait and state helpers must exist inside the page. It already delegates the three semantic scenario families to named local functions. Moving them outside would require fixture plumbing or browser globals and would only redistribute the same logic.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:17",
+        "tests/media-ownership.browser.cjs:25",
+        "tests/media-ownership.browser.cjs:31",
+        "tests/media-ownership.browser.cjs:34",
+        "tests/media-ownership.browser.cjs:35",
+        "tests/media-ownership.browser.cjs:44",
+        "tests/media-ownership.browser.cjs:48",
+        "tests/media-ownership.browser.cjs:52",
+        "tests/media-ownership.browser.cjs:97",
+        "tests/media-ownership.browser.cjs:147",
+        "tests/media-ownership.browser.cjs:192"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:286"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:196",
+        "tests/media-ownership.browser.cjs:208",
+        "tests/media-ownership.browser.cjs:222",
+        "tests/media-ownership.browser.cjs:241",
+        "tests/media-ownership.browser.cjs:253",
+        "tests/media-ownership.browser.cjs:288",
+        "tests/media-ownership.browser.cjs:312"
+      ],
+      "regression_recommendation": "Retain52 scenarios and all failure/pixel/owner oracles. No external helper or context object solely for nloc179.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_8b0f5d04e40a276ec8b4",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "grouped_function": "runMediaOwnershipCase",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.03,
+        "clone_pair_count": 25,
+        "worst_clone_lines": 11,
+        "worst_clone_partner": "tests/media-upload-boundary.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 273,
+        "symbol": "runMediaOwnershipCase"
+      },
+      "verified_duplication_details": {
+        "source_scope": 91,
+        "source_scope_policy": "All tracked js/cjs at immutable source_commit; no cache, no Git co-change inputs.",
+        "diagnostics": {
+          "files_considered": 91,
+          "files_tokenized": 90,
+          "skipped_unreadable": 0,
+          "skipped_minified": 1,
+          "skipped_token_cap": 0,
+          "total_windows": 284753,
+          "window_budget_hit": false,
+          "degenerate_buckets": 0,
+          "timed_out": false
+        },
+        "cross_file_duplication_pct": 10.03,
+        "clone_pair_count": 26,
+        "worst_clone_lines": 11,
+        "worst_clone_partner": "tests/media-upload-boundary.browser.cjs",
+        "worst_clone_co_change_without_history_input": 0
+      },
+      "stored_fact_difference": {
+        "clone_pair_count": {
+          "stored": 25,
+          "pinned_full_source_replay": 26,
+          "without_new_039_test": 25
+        }
+      },
+      "historical_cochange_limit": "The stored zero is retained as an assignment fact. Pure replay used no Git co-change map and does not independently establish historical co-change support.",
+      "reason": "The11-line worst clone contains repeated errors/local-asset setup and enters the case try block. R1 can remove the asset route using the existing helper; do not share scenario-specific fixtures or assertion dispatch with media-upload-boundary. Fullbc72 replay finds26 cross-file pairs versus stored25 because portfolio-reassessment adds one import/header clone;10.03%, worst11-line partner/span remain unchanged.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:275",
+        "tests/media-ownership.browser.cjs:277",
+        "tests/media-ownership.browser.cjs:281",
+        "tests/media-ownership.browser.cjs:285",
+        "tests/support/local-app-route.js:5",
+        "tests/support/local-app-route.js:7",
+        "tests/support/local-app-route.js:10",
+        "tests/support/local-app-route.js:12",
+        "scripts/check-test-runner.cjs:51",
+        "scripts/check-test-runner.cjs:53",
+        "scripts/check-test-runner.cjs:55",
+        "scripts/check-test-runner.cjs:57"
+      ],
+      "callers": [
+        "tests/media-upload-boundary.browser.cjs:104",
+        "tests/media-ownership.browser.cjs:307"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:288",
+        "tests/media-ownership.browser.cjs:296",
+        "tests/media-ownership.browser.cjs:297",
+        "tests/media-ownership.browser.cjs:312"
+      ],
+      "regression_recommendation": "Use R1 regression recommendations. Treat stored25 as historical aggregate metadata; do not close/relabel the record solely because a new source added a clone.",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "real_route_duplication_with_stale_global_pair_count",
+      "candidate_id": "047-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_9c5c31a2ca73143c40fc",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "assertPendingMediaScenario",
+      "grouped_function": "assertPendingMediaScenario",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 208
+      },
+      "verified_metrics": {
+        "name": "assertPendingMediaScenario",
+        "start_line": 208,
+        "end_line": 221,
+        "ccn": 9,
+        "cognitive": 9,
+        "max_nesting": 2,
+        "nloc": 14,
+        "bumps": 1,
+        "param_count": 2,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          212,
+          218
+        ],
+        "complex_conditions": [
+          {
+            "line": 212,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ]
+      },
+      "verified_function_span": [
+        208,
+        221
+      ],
+      "function_sha256_normalized_lf": "40e30e7c72f9403a745c502f7785ce31a170c4c32531ffa4cf0b9f8607bc4297",
+      "enclosing_functions": [],
+      "reason": "The three OR operators enumerate four modes whose final contract is identical: no pending work, one cloud flush, one saved portfolio session and a successful current indicator. The retry-file ID differs explicitly at214, while sign-out and retained-work outcomes stay separate. A Set/helper would only relocate this short oracle.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:212",
+        "tests/media-ownership.browser.cjs:213",
+        "tests/media-ownership.browser.cjs:214",
+        "tests/media-ownership.browser.cjs:215"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:292"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:213",
+        "tests/media-ownership.browser.cjs:214",
+        "tests/media-ownership.browser.cjs:215",
+        "tests/media-ownership.browser.cjs:219"
+      ],
+      "regression_recommendation": "Retain all four allowed modes and retry-beforeRetry checks;047-L2 is in the retained branch and does not justify rewriting this condition.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": [
+        "047-L2"
+      ]
+    },
+    {
+      "record_id": "code_health:finding_90441d787da9c922c417",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": null,
+      "grouped_function": "module scenario loop",
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/media-ownership.browser.cjs::__module__",
+          "tests/media-ownership.browser.cjs::runMediaOwnershipCase"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 306,
+        "symbol_line": 302,
+        "symbol": "<anonymous@302>",
+        "role_owner": "tests/media-ownership.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_769dc30b84623e2d7139"
+      },
+      "verified_boundary_details": {
+        "scenario_count": 52,
+        "loop_line": 306,
+        "call_line": 307,
+        "callee": "runMediaOwnershipCase",
+        "fs_exists_line": 281,
+        "fs_read_line": 281,
+        "caller_file": "tests/media-ownership.browser.cjs",
+        "actual_boundary": "filesystem",
+        "new_page_per_iteration_line": 274,
+        "scenario_specific_evaluate_line": 286
+      },
+      "rule_metadata_limit": "Boundary/call/loop/test-role facts verified in source; no graph/index/ranking pipeline was rerun. Promotion metadata copied exactly below.",
+      "reason": "The static path is real: the52-case loop invokes runMediaOwnershipCase, which creates a new page and serves pinned local assets using fs.existsSync/readFileSync. This IO is part of each isolated native app load. There is no evidence that local reads dominate runtime; caching or sharing page state would add policy and risk cross-case fault leakage. R1 removes duplicate handler code, not the IO boundary.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:274",
+        "tests/media-ownership.browser.cjs:277",
+        "tests/media-ownership.browser.cjs:281",
+        "tests/media-ownership.browser.cjs:283",
+        "tests/media-ownership.browser.cjs:306",
+        "tests/media-ownership.browser.cjs:307"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:302",
+        "tests/media-ownership.browser.cjs:306"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:288",
+        "tests/media-ownership.browser.cjs:296",
+        "tests/media-ownership.browser.cjs:297",
+        "tests/media-ownership.browser.cjs:312"
+      ],
+      "regression_recommendation": "Keep fresh-page isolation and full native script loading; profile before proposing a cache or concurrency change.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_inherent_test_boundary_low_value_optimization",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_6e1080aa83faa6dfdfaf",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "runLazyPortfolioScenarios",
+      "grouped_function": "runLazyPortfolioScenarios",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 19,
+        "cognitive": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 131,
+        "deepest_block": {
+          "start": 173,
+          "end": 186
+        }
+      },
+      "verified_metrics": {
+        "name": "runLazyPortfolioScenarios",
+        "start_line": 131,
+        "end_line": 193,
+        "ccn": 19,
+        "cognitive": 30,
+        "max_nesting": 4,
+        "nloc": 63,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          173,
+          186
+        ],
+        "complex_conditions": [
+          {
+            "line": 145,
+            "operator_count": 1,
+            "enclosing_construct": "for"
+          }
+        ]
+      },
+      "verified_function_span": [
+        131,
+        193
+      ],
+      "function_sha256_normalized_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef",
+      "enclosing_functions": [],
+      "reason": "Depth4 comes from the7 remote outcomes times2 local-presence combinations and each actual browser exercise/verification callback. This is a meaningful cross-product: failed cloud reads may use valid local data, but missing local writing must remain an error. Splitting loops into extra wrappers would leave the same policy and obscure matrix coverage.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:131",
+        "tests/optional-storage.browser.cjs:132",
+        "tests/optional-storage.browser.cjs:138",
+        "tests/optional-storage.browser.cjs:153",
+        "tests/optional-storage.browser.cjs:161",
+        "tests/optional-storage.browser.cjs:173",
+        "tests/optional-storage.browser.cjs:182"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:248",
+        "tests/optional-storage.browser.cjs:198"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:137",
+        "tests/optional-storage.browser.cjs:148",
+        "tests/optional-storage.browser.cjs:149",
+        "tests/optional-storage.browser.cjs:150",
+        "tests/optional-storage.browser.cjs:151",
+        "tests/optional-storage.browser.cjs:160",
+        "tests/optional-storage.browser.cjs:172",
+        "tests/optional-storage.browser.cjs:183",
+        "tests/optional-storage.browser.cjs:184",
+        "tests/optional-storage.browser.cjs:185",
+        "tests/optional-storage.browser.cjs:192",
+        "tests/optional-storage.browser.cjs:252"
+      ],
+      "regression_recommendation": "Retain14 remote/local combinations, cache identity checks, safe-mode bypass and actual refresh assertions. No nesting-only repair.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_cd72665a4e7d4b713d24",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runNativeStorageScenarios",
+      "grouped_function": "runNativeStorageScenarios",
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 29,
+        "nloc": 69,
+        "dispatch_share": 0.25,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 7,
+          "end": 22
+        }
+      },
+      "verified_metrics": {
+        "name": "runNativeStorageScenarios",
+        "start_line": 5,
+        "end_line": 74,
+        "ccn": 13,
+        "cognitive": 29,
+        "max_nesting": 3,
+        "nloc": 69,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.25,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          7,
+          22
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        5,
+        74
+      ],
+      "function_sha256_normalized_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1",
+      "enclosing_functions": [],
+      "reason": "The native-IDB scenario group intentionally differentiates request success from transaction completion, then tests constraint abort, reopen, ordinary error modes, unavailable IDB and primary/cache ordering. The five-method loop already reuses the same fault installation. A shared mock transaction helper would defeat the native abort behavior under test.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:5",
+        "tests/optional-storage.browser.cjs:7",
+        "tests/optional-storage.browser.cjs:10",
+        "tests/optional-storage.browser.cjs:13",
+        "tests/optional-storage.browser.cjs:17",
+        "tests/optional-storage.browser.cjs:19",
+        "tests/optional-storage.browser.cjs:23",
+        "tests/optional-storage.browser.cjs:28",
+        "tests/optional-storage.browser.cjs:35",
+        "tests/optional-storage.browser.cjs:45",
+        "tests/optional-storage.browser.cjs:56",
+        "tests/optional-storage.browser.cjs:61",
+        "tests/optional-storage.browser.cjs:68"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:245",
+        "tests/optional-storage.browser.cjs:198"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:22",
+        "tests/optional-storage.browser.cjs:34",
+        "tests/optional-storage.browser.cjs:44",
+        "tests/optional-storage.browser.cjs:55",
+        "tests/optional-storage.browser.cjs:60",
+        "tests/optional-storage.browser.cjs:67",
+        "tests/optional-storage.browser.cjs:73"
+      ],
+      "regression_recommendation": "Keep requestSucceeded+aborted+rejected+unchanged records together, plus primary bytes and cache-publication assertions. No test abstraction beyond existing run.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_1532a4324157c282bf5e",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runAsyncPortfolioScenarios",
+      "grouped_function": "runAsyncPortfolioScenarios",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 19,
+        "nloc": 27,
+        "dispatch_share": 0.0,
+        "symbol_line": 76,
+        "deepest_block": {
+          "start": 90,
+          "end": 101
+        }
+      },
+      "verified_metrics": {
+        "name": "runAsyncPortfolioScenarios",
+        "start_line": 76,
+        "end_line": 102,
+        "ccn": 9,
+        "cognitive": 19,
+        "max_nesting": 3,
+        "nloc": 27,
+        "bumps": 1,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          90,
+          101
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        76,
+        102
+      ],
+      "function_sha256_normalized_lf": "fd3bb7827e0282dfb9077e668850cb6cd58f62bfd7ee9e371273454109198b66",
+      "enclosing_functions": [],
+      "reason": "The three scenario families verify own special student keys/ID lookup, two concurrent saves and four strict-read failures. Their fault fixtures and assertions must remain distinct: a generic expected-error flag would lose byte preservation and no-overwrite checks. run already provides fresh-page isolation.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:76",
+        "tests/optional-storage.browser.cjs:77",
+        "tests/optional-storage.browser.cjs:86",
+        "tests/optional-storage.browser.cjs:90",
+        "tests/optional-storage.browser.cjs:97",
+        "tests/optional-storage.browser.cjs:98"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:246",
+        "tests/optional-storage.browser.cjs:198"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:85",
+        "tests/optional-storage.browser.cjs:89",
+        "tests/optional-storage.browser.cjs:101",
+        "tests/optional-storage.browser.cjs:252"
+      ],
+      "regression_recommendation": "Retain special names, both concurrent writes and failed portfolio/settings reads. No unnecessary scenario-object conversion.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_a9aec3d32ff745fb44e3",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runLazyPortfolioScenarios",
+      "grouped_function": "runLazyPortfolioScenarios",
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 30,
+        "nloc": 63,
+        "dispatch_share": 0.0,
+        "symbol_line": 131,
+        "deepest_block": {
+          "start": 173,
+          "end": 186
+        }
+      },
+      "verified_metrics": {
+        "name": "runLazyPortfolioScenarios",
+        "start_line": 131,
+        "end_line": 193,
+        "ccn": 19,
+        "cognitive": 30,
+        "max_nesting": 4,
+        "nloc": 63,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          173,
+          186
+        ],
+        "complex_conditions": [
+          {
+            "line": 145,
+            "operator_count": 1,
+            "enclosing_construct": "for"
+          }
+        ]
+      },
+      "verified_function_span": [
+        131,
+        193
+      ],
+      "function_sha256_normalized_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef",
+      "enclosing_functions": [],
+      "reason": "CCN19 covers several independent cache/lazy contracts, not a single tangled algorithm: immediate identity-checked cache hit, real background refresh, disabled/safe bypass, remote/local matrix and corrupt-primary refusal. Callbacks assert service counts and data as well as successful return. Keeping those stages in one scenario-group function makes the coverage inventory explicit.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:131",
+        "tests/optional-storage.browser.cjs:138",
+        "tests/optional-storage.browser.cjs:153",
+        "tests/optional-storage.browser.cjs:161",
+        "tests/optional-storage.browser.cjs:173",
+        "tests/optional-storage.browser.cjs:187"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:248",
+        "tests/optional-storage.browser.cjs:198"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:148",
+        "tests/optional-storage.browser.cjs:149",
+        "tests/optional-storage.browser.cjs:150",
+        "tests/optional-storage.browser.cjs:151",
+        "tests/optional-storage.browser.cjs:160",
+        "tests/optional-storage.browser.cjs:172",
+        "tests/optional-storage.browser.cjs:183",
+        "tests/optional-storage.browser.cjs:185",
+        "tests/optional-storage.browser.cjs:192"
+      ],
+      "regression_recommendation": "Keep cache callbacks once, actual two downloads/one upload, wrong/missing IDs and no successful empty fallback. No helper to meet a complexity threshold.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_a610c7bc1c616cfe053f",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "run",
+      "grouped_function": "run",
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 29,
+        "nloc": 47,
+        "dispatch_share": 0.0,
+        "symbol_line": 198,
+        "deepest_block": {
+          "start": 204,
+          "end": 207
+        }
+      },
+      "verified_metrics": {
+        "name": "run",
+        "start_line": 198,
+        "end_line": 244,
+        "ccn": 19,
+        "cognitive": 29,
+        "max_nesting": 3,
+        "nloc": 47,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          204,
+          207
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        198,
+        244
+      ],
+      "function_sha256_normalized_lf": "bcb6e4202e7b2b9f7e32f651cdfd409a9e34268dd227d1d7f6692b82f73f9a60",
+      "enclosing_functions": [
+        {
+          "name": "<anonymous@195>",
+          "start_line": 195,
+          "end_line": 253
+        }
+      ],
+      "reason": "run mixes a local-asset branch with intentionally specialized Google API mocks. The local branch204-207 duplicates local-app-route.js and could delegate only that branch. Preserve reply CORS/error bodies, request capture and all Google query/identity mocks. The existing local404 currently uses JSON/CORS headers whereas the helper returns a bare404, so compare that behavior explicitly before adopting.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:198",
+        "tests/optional-storage.browser.cjs:201",
+        "tests/optional-storage.browser.cjs:203",
+        "tests/optional-storage.browser.cjs:204",
+        "tests/optional-storage.browser.cjs:206",
+        "tests/optional-storage.browser.cjs:208",
+        "tests/optional-storage.browser.cjs:210",
+        "tests/optional-storage.browser.cjs:218",
+        "tests/optional-storage.browser.cjs:225",
+        "tests/optional-storage.browser.cjs:237",
+        "tests/optional-storage.browser.cjs:240",
+        "tests/optional-storage.browser.cjs:242",
+        "tests/support/local-app-route.js:5",
+        "tests/support/local-app-route.js:7",
+        "tests/support/local-app-route.js:10",
+        "tests/support/local-app-route.js:12",
+        "scripts/check-test-runner.cjs:51",
+        "scripts/check-test-runner.cjs:53",
+        "scripts/check-test-runner.cjs:55",
+        "scripts/check-test-runner.cjs:57"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:245",
+        "tests/optional-storage.browser.cjs:246",
+        "tests/optional-storage.browser.cjs:247",
+        "tests/optional-storage.browser.cjs:248"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:218",
+        "tests/optional-storage.browser.cjs:239",
+        "tests/optional-storage.browser.cjs:240",
+        "tests/optional-storage.browser.cjs:241",
+        "tests/optional-storage.browser.cjs:242",
+        "tests/optional-storage.browser.cjs:252"
+      ],
+      "regression_recommendation": "R1 optional branch: compare local successful assets and missing-asset response semantics; keep specialized Google traffic/body/count assertions exact. Accept any local404 header change only as an explicit reviewed difference.",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "existing_route_helper_reuse_requires_404_contract_check",
+      "candidate_id": "047-R1",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_d3a20ba993962aa7d807",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "bumpy_road",
+      "symbol": "runNativeStorageScenarios",
+      "grouped_function": "runNativeStorageScenarios",
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 13,
+        "max_nesting": 3,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 7,
+          "end": 22
+        }
+      },
+      "verified_metrics": {
+        "name": "runNativeStorageScenarios",
+        "start_line": 5,
+        "end_line": 74,
+        "ccn": 13,
+        "cognitive": 29,
+        "max_nesting": 3,
+        "nloc": 69,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.25,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          7,
+          22
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        5,
+        74
+      ],
+      "function_sha256_normalized_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1",
+      "enclosing_functions": [],
+      "reason": "The four bumps correspond to independent native transaction/cache scenarios. They share the existing run orchestrator and method-loop fixture but test different request/transaction failure semantics. Combining them into a table of actions would make native event ordering less obvious without deleting work.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:7",
+        "tests/optional-storage.browser.cjs:23",
+        "tests/optional-storage.browser.cjs:35",
+        "tests/optional-storage.browser.cjs:45",
+        "tests/optional-storage.browser.cjs:56",
+        "tests/optional-storage.browser.cjs:61",
+        "tests/optional-storage.browser.cjs:68"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:245"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:22",
+        "tests/optional-storage.browser.cjs:34",
+        "tests/optional-storage.browser.cjs:44",
+        "tests/optional-storage.browser.cjs:55",
+        "tests/optional-storage.browser.cjs:60",
+        "tests/optional-storage.browser.cjs:67",
+        "tests/optional-storage.browser.cjs:73"
+      ],
+      "regression_recommendation": "Same native-IDB assertions as the complexity row; no additional bumpy-road repair.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_cdb8be83656852c7ab1c",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "bumpy_road",
+      "symbol": "runLazyPortfolioScenarios",
+      "grouped_function": "runLazyPortfolioScenarios",
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 19,
+        "max_nesting": 4,
+        "symbol_line": 131,
+        "deepest_block": {
+          "start": 173,
+          "end": 186
+        }
+      },
+      "verified_metrics": {
+        "name": "runLazyPortfolioScenarios",
+        "start_line": 131,
+        "end_line": 193,
+        "ccn": 19,
+        "cognitive": 30,
+        "max_nesting": 4,
+        "nloc": 63,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          173,
+          186
+        ],
+        "complex_conditions": [
+          {
+            "line": 145,
+            "operator_count": 1,
+            "enclosing_construct": "for"
+          }
+        ]
+      },
+      "verified_function_span": [
+        131,
+        193
+      ],
+      "function_sha256_normalized_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef",
+      "enclosing_functions": [],
+      "reason": "The three bumps mark cache identity/refresh, bypass policies and the remote/local outcome matrix. Each callback creates a separate fresh page through run, so the phases are isolated already. Extracting another group solely to reduce bump count would not simplify a production policy or remove duplicate fixture code.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:132",
+        "tests/optional-storage.browser.cjs:138",
+        "tests/optional-storage.browser.cjs:153",
+        "tests/optional-storage.browser.cjs:161",
+        "tests/optional-storage.browser.cjs:173"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:248"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:137",
+        "tests/optional-storage.browser.cjs:149",
+        "tests/optional-storage.browser.cjs:160",
+        "tests/optional-storage.browser.cjs:172",
+        "tests/optional-storage.browser.cjs:185"
+      ],
+      "regression_recommendation": "Retain each cache and remote failure group and exact primary-byte assertions; no bump-count-driven split.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_213d9f8b3e19418bec05",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runNativeStorageScenarios",
+      "grouped_function": "runNativeStorageScenarios",
+      "verified_observation_details": {
+        "nloc": 69,
+        "ccn": 13,
+        "dispatch_share": 0.25,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 7,
+          "end": 22
+        }
+      },
+      "verified_metrics": {
+        "name": "runNativeStorageScenarios",
+        "start_line": 5,
+        "end_line": 74,
+        "ccn": 13,
+        "cognitive": 29,
+        "max_nesting": 3,
+        "nloc": 69,
+        "bumps": 4,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.25,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          7,
+          22
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        5,
+        74
+      ],
+      "function_sha256_normalized_lf": "80af756f111c8325c68a29913de026c3f265e003b4c61ab031fd05f364c724c1",
+      "enclosing_functions": [],
+      "reason": "The69-line group is a readable inventory of native IndexedDB scenarios with compact explicit oracles. Reusing a mocked IDB adapter to shorten it would remove the transaction-abort-after-request-success coverage. Existing run plus the five-method loop already provide the useful sharing.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:5",
+        "tests/optional-storage.browser.cjs:7",
+        "tests/optional-storage.browser.cjs:23",
+        "tests/optional-storage.browser.cjs:35",
+        "tests/optional-storage.browser.cjs:45",
+        "tests/optional-storage.browser.cjs:56",
+        "tests/optional-storage.browser.cjs:61",
+        "tests/optional-storage.browser.cjs:68"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:245"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:22",
+        "tests/optional-storage.browser.cjs:34",
+        "tests/optional-storage.browser.cjs:44",
+        "tests/optional-storage.browser.cjs:55",
+        "tests/optional-storage.browser.cjs:60",
+        "tests/optional-storage.browser.cjs:67",
+        "tests/optional-storage.browser.cjs:73"
+      ],
+      "regression_recommendation": "No separate length repair; preserve failure injection and restoration in finally.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_1e0a39c50c6ccb76ba44",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runLazyPortfolioScenarios",
+      "grouped_function": "runLazyPortfolioScenarios",
+      "verified_observation_details": {
+        "nloc": 63,
+        "ccn": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 131,
+        "deepest_block": {
+          "start": 173,
+          "end": 186
+        }
+      },
+      "verified_metrics": {
+        "name": "runLazyPortfolioScenarios",
+        "start_line": 131,
+        "end_line": 193,
+        "ccn": 19,
+        "cognitive": 30,
+        "max_nesting": 4,
+        "nloc": 63,
+        "bumps": 3,
+        "param_count": 1,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          173,
+          186
+        ],
+        "complex_conditions": [
+          {
+            "line": 145,
+            "operator_count": 1,
+            "enclosing_construct": "for"
+          }
+        ]
+      },
+      "verified_function_span": [
+        131,
+        193
+      ],
+      "function_sha256_normalized_lf": "8a0704e1b7a90a1f48a101a536447236306711c9c49dd6bc1a0a74b86bf957ef",
+      "enclosing_functions": [],
+      "reason": "The63-line lazy group includes a real background refresh with captured requests, safe/disabled cache policy and a14-case remote/local matrix. It is not repeatedly implementing the same action. Keeping those assertion closures beside their exercises is less costly than a configurable lazy-cache scenario framework.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:131",
+        "tests/optional-storage.browser.cjs:138",
+        "tests/optional-storage.browser.cjs:147",
+        "tests/optional-storage.browser.cjs:153",
+        "tests/optional-storage.browser.cjs:161",
+        "tests/optional-storage.browser.cjs:173",
+        "tests/optional-storage.browser.cjs:182",
+        "tests/optional-storage.browser.cjs:187"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:248"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:148",
+        "tests/optional-storage.browser.cjs:149",
+        "tests/optional-storage.browser.cjs:150",
+        "tests/optional-storage.browser.cjs:151",
+        "tests/optional-storage.browser.cjs:160",
+        "tests/optional-storage.browser.cjs:172",
+        "tests/optional-storage.browser.cjs:183",
+        "tests/optional-storage.browser.cjs:184",
+        "tests/optional-storage.browser.cjs:185",
+        "tests/optional-storage.browser.cjs:192"
+      ],
+      "regression_recommendation": "No size-only extraction. Retain existing scenarios and explicit matrix-specific assertions.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_coherent_test_policy",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "code_health:finding_96c00aeeb88b86b3a25d",
+      "file": "tests/optional-storage.browser.cjs",
+      "marker": "primitive_obsession",
+      "symbol": "run",
+      "grouped_function": "run",
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 198
+      },
+      "verified_metrics": {
+        "name": "run",
+        "start_line": 198,
+        "end_line": 244,
+        "ccn": 19,
+        "cognitive": 29,
+        "max_nesting": 3,
+        "nloc": 47,
+        "bumps": 2,
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0,
+        "deepest_block": [
+          204,
+          207
+        ],
+        "complex_conditions": []
+      },
+      "verified_function_span": [
+        198,
+        244
+      ],
+      "function_sha256_normalized_lf": "bcb6e4202e7b2b9f7e32f651cdfd409a9e34268dd227d1d7f6692b82f73f9a60",
+      "enclosing_functions": [
+        {
+          "name": "<anonymous@195>",
+          "start_line": 195,
+          "end_line": 253
+        }
+      ],
+      "reason": "The detector accurately counts five parameters, but they are a case name, exercise callback, verify callback, exercise argument and remote fixture selector. Both callbacks are behavior, arg is intentionally polymorphic, and typed/primitive counts are zero. A parameter object would add ceremony to a small private fixture API rather than address primitive obsession.",
+      "evidence_anchors": [
+        "tests/optional-storage.browser.cjs:198",
+        "tests/optional-storage.browser.cjs:238",
+        "tests/optional-storage.browser.cjs:240"
+      ],
+      "callers": [
+        "tests/optional-storage.browser.cjs:7",
+        "tests/optional-storage.browser.cjs:22",
+        "tests/optional-storage.browser.cjs:77",
+        "tests/optional-storage.browser.cjs:85",
+        "tests/optional-storage.browser.cjs:173",
+        "tests/optional-storage.browser.cjs:186",
+        "tests/optional-storage.browser.cjs:245",
+        "tests/optional-storage.browser.cjs:248"
+      ],
+      "test_assertion_references": [
+        "tests/optional-storage.browser.cjs:239",
+        "tests/optional-storage.browser.cjs:240",
+        "tests/optional-storage.browser.cjs:242",
+        "tests/optional-storage.browser.cjs:252"
+      ],
+      "regression_recommendation": "Retain positional run calls and assertion propagation; no new options type/object to satisfy an untyped parameter-count heuristic.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "semantic_false_positive_legitimate_callback_fixture_signature",
+      "additional_lead_ids": []
+    },
+    {
+      "record_id": "performance:perf3_769dc30b84623e2d7139",
+      "file": "tests/media-ownership.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": "tests/media-ownership.browser.cjs::__module__",
+      "grouped_function": "module scenario loop",
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/media-ownership.browser.cjs::runMediaOwnershipCase"
+        ],
+        "shared_path_suffix": [
+          "tests/media-ownership.browser.cjs::__module__",
+          "tests/media-ownership.browser.cjs::runMediaOwnershipCase"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "verified_boundary_details": {
+        "scenario_count": 52,
+        "loop_line": 306,
+        "call_line": 307,
+        "callee": "runMediaOwnershipCase",
+        "fs_exists_line": 281,
+        "fs_read_line": 281,
+        "caller_file": "tests/media-ownership.browser.cjs",
+        "actual_boundary": "filesystem",
+        "new_page_per_iteration_line": 274,
+        "scenario_specific_evaluate_line": 286
+      },
+      "rule_metadata_limit": "Boundary/call/loop/test-role facts verified in source; no graph/index/ranking pipeline was rerun. Promotion metadata copied exactly below.",
+      "reason": "This performance record is the promoted view of the same module-to-case filesystem path as finding90441d787da9c922c417. Its own facets say test role, low confidence, unknown magnitude and inherent_to_boundary. Fresh page/app loading is essential here; no separate intervention or application performance bug follows from this record.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:302",
+        "tests/media-ownership.browser.cjs:306",
+        "tests/media-ownership.browser.cjs:307",
+        "tests/media-ownership.browser.cjs:274",
+        "tests/media-ownership.browser.cjs:281"
+      ],
+      "callers": [
+        "tests/media-ownership.browser.cjs:306"
+      ],
+      "test_assertion_references": [
+        "tests/media-ownership.browser.cjs:288",
+        "tests/media-ownership.browser.cjs:312"
+      ],
+      "regression_recommendation": "Same IO-row disposition; no benchmark or cache change without a measured bottleneck.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_promoted_view_of_inherent_test_io",
+      "additional_lead_ids": []
+    }
+  ],
+  "candidate_interventions": [
+    {
+      "id": "047-R1",
+      "classification": "reuse_existing_local_asset_helper",
+      "primary_status": "confirmed_repair_candidate",
+      "targets": [
+        "tests/media-ownership.browser.cjs:277-282"
+      ],
+      "secondary_requires_regression": [
+        "tests/optional-storage.browser.cjs:204-207"
+      ],
+      "smallest_change": "Reuse tests/support/local-app-route.js for the media local-only route. Optional runner may delegate only its local-origin branch after comparing local404 headers/body; retain all specialized Google mocks, request captures, assertions and page lifecycle. Existing auth pageFor10-15 has a similar unassigned reuse opportunity; do not expand this candidate silently.",
+      "tests_needed": "Existing helper contract checks plus before/after native52-case media evidence and selected optional lazy request/body/count cases. No test was run."
+    },
+    {
+      "id": "047-R2",
+      "classification": "allowed_redirect_assertion_strengthening",
+      "status": "candidate_needs_regression",
+      "lead_id": "047-L1",
+      "smallest_change": "Add durable draft/pending content assertions to the three already-allowed redirect modes; keep all mode setup/entry points intact.",
+      "tests_needed": "Demonstrate an incomplete persisted pending record is rejected before accepting this oracle improvement."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "047-L1",
+      "file": "tests/auth-integrity.browser.cjs",
+      "function": "checkRedirectRecovery",
+      "classification": "unconfirmed_false_green_durable_redirect_state_gap",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "For full/retry/drive-backed,297 checks exactly one intercepted navigation and298 skips the rest of the state oracle. The production redirect guard relies on full recoverability of pending work before leaving the tab. Current assertions do not directly prove those allowed cases stored the draft and complete/recoverable pending content.",
+      "evidence_anchors": [
+        "tests/auth-integrity.browser.cjs:267",
+        "tests/auth-integrity.browser.cjs:268",
+        "tests/auth-integrity.browser.cjs:273",
+        "tests/auth-integrity.browser.cjs:278",
+        "tests/auth-integrity.browser.cjs:296",
+        "tests/auth-integrity.browser.cjs:297",
+        "tests/auth-integrity.browser.cjs:298",
+        "tests/auth-integrity.browser.cjs:310",
+        "js/app/00-storage-sync-patches.js:3431",
+        "js/app/00-storage-sync-patches.js:3441",
+        "js/app/00-storage-sync-patches.js:3445",
+        "js/app/00-storage-sync-patches.js:8236",
+        "js/app/00-storage-sync-patches.js:8237",
+        "js/app/00-storage-sync-patches.js:8247"
+      ],
+      "smallest_change": "After allowed redirect, inspect durable draft and pending record. Check text/student/session ID; check embedded photo bytes for full/retry and exact durable Drive ID for drive-backed. Keep the existing native entry points and navigation assertion.",
+      "regression_recommendation": "Add a controlled held/pre-navigation omission or truncation fault and confirm the new assertions reject it; retain all existing12 cases. No such mutation or test was executed here."
+    },
+    {
+      "id": "047-L2",
+      "file": "tests/media-ownership.browser.cjs",
+      "function": "assertRetainedPendingMedia (called by assertPendingMediaScenario)",
+      "classification": "unconfirmed_false_green_cleared_pending_resurrection_gap",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "pending-clear invokes clearPendingPortfolioSync before releasing the old upload. The retained-work oracle explicitly skips pending existence at255 for this case but does not require null; it also never checks storedPending. Restoring old pending in memory/storage while keeping portfolio empty and synced false is not rejected by this scenario oracle.",
+      "evidence_anchors": [
+        "tests/media-ownership.browser.cjs:117",
+        "tests/media-ownership.browser.cjs:134",
+        "tests/media-ownership.browser.cjs:145",
+        "tests/media-ownership.browser.cjs:216",
+        "tests/media-ownership.browser.cjs:217",
+        "tests/media-ownership.browser.cjs:253",
+        "tests/media-ownership.browser.cjs:254",
+        "tests/media-ownership.browser.cjs:255",
+        "tests/media-ownership.browser.cjs:256",
+        "tests/media-ownership.browser.cjs:260",
+        "js/app/00-storage-sync-patches.js:7859",
+        "js/app/00-storage-sync-patches.js:7860",
+        "js/app/00-storage-sync-patches.js:8257",
+        "js/app/00-storage-sync-patches.js:8258",
+        "js/app/00-storage-sync-patches.js:8259"
+      ],
+      "smallest_change": "For pending-clear, assert result.pending===null and result.storedPending===null, alongside the existing empty-portfolio, no-sync and flush assertions.",
+      "regression_recommendation": "Use a narrow old-upload completion fault that resurrects cleared pending memory and/or durable record, and verify the new oracle fails. Native production guard behavior has not been reproduced or changed here."
+    }
+  ],
+  "verified_rule_facts": {
+    "walker_records": 28,
+    "all_stored_walker_numeric_fields_conditions_deepest_blocks_and_given_symbol_indices_match": true,
+    "installed_walker_runtime": "C:/Users/Michael/AppData/Roaming/uv/tools/repowise/Scripts/python.exe -B",
+    "extract_method_rule_replay": {
+      "stage_refused": [
+        "exception_state"
+      ],
+      "stage_reason": "fewer_than_two_stages",
+      "stage_count": 0,
+      "extraction_count": 11,
+      "duplication_without_new_039_test": {
+        "source_count": 90,
+        "cross_file_duplication_pct": 10.03,
+        "cross_file_clone_pair_count": 25
+      },
+      "io_loop_source_facts": {
+        "scenario_count": 52,
+        "loop_line": 306,
+        "call_line": 307,
+        "callee": "runMediaOwnershipCase",
+        "fs_exists_line": 281,
+        "fs_read_line": 281,
+        "caller_file": "tests/media-ownership.browser.cjs",
+        "actual_boundary": "filesystem",
+        "new_page_per_iteration_line": 274,
+        "scenario_specific_evaluate_line": 286
+      }
+    },
+    "duplication_replay": {
+      "source_scope": 91,
+      "source_scope_policy": "All tracked js/cjs at immutable source_commit; no cache, no Git co-change inputs.",
+      "diagnostics": {
+        "files_considered": 91,
+        "files_tokenized": 90,
+        "skipped_unreadable": 0,
+        "skipped_minified": 1,
+        "skipped_token_cap": 0,
+        "total_windows": 284753,
+        "window_budget_hit": false,
+        "degenerate_buckets": 0,
+        "timed_out": false
+      },
+      "cross_file_duplication_pct": 10.03,
+      "clone_pair_count": 26,
+      "worst_clone_lines": 11,
+      "worst_clone_partner": "tests/media-upload-boundary.browser.cjs",
+      "worst_clone_co_change_without_history_input": 0
+    },
+    "clone_source_manifest_sha256": "e74e0fa26db4c083e7903962b6446fc01bc02f48fb00674c69bd578606f5ce64",
+    "clone_scope": "91 tracked js/cjs atbc72; pure detector with cache_dir=None and immutable source_reader;90 tokenized, one minified skipped. A second90-source replay excluding039 portfolio-reassessment recovers stored25 pairs.",
+    "no_scanner_or_index_pipeline_run": true
+  },
+  "summary": {
+    "records": 31,
+    "grouped_functions": 20,
+    "status_counts": {
+      "reviewed_no_change": 27,
+      "candidate_needs_regression": 2,
+      "confirmed_repair_candidate": 2
+    },
+    "unique_structural_reuse_candidate": 1,
+    "unconfirmed_assertion_leads": 2,
+    "stored_clone_pair_count_difference_explained": true,
+    "source_changes": 0,
+    "application_tests_run": 0,
+    "scanner_closures": 0
+  },
+  "limits": [
+    "No application/test execution, live provider access, new third-party code execution, source/test/runner/helper edits, Git writes, index/import/tracker/docs/dependency/runtime changes or new agents/chats.",
+    "Only own scratch analysis files and this compact report were written. Installed reviewed pure walker/duplication/dataflow routines were used without persistent caches.",
+    "Historical Git co-change support was not recomputed; the current pure-detector zero is an empty-history-input result, not an independent verification of stored co-change metadata.",
+    "IO path and promoted-record roles were checked from source; graph reachability/ranking/queue state was not regenerated. Stored observation details are copied exactly and remain scanner-open.",
+    "The two new assertion leads are source-supported possibilities, not reproduced false-green runs or production bugs. Fixed sleeps and unbounded IDB-open release waiting remain test-harness timing limits; no latency/profile claims.",
+    "Concurrent045/046 main/navigation and other-test work is outside these current-source facts. Parent must recheck scopes before adoption."
+  ],
+  "coordinator_acceptance": {
+    "each_individual_reason_read": true,
+    "assigned_test_files_raw_lf_and_git_exact": true,
+    "actual_function_metrics_replayed": 28,
+    "historical_context_hashes_verified": true,
+    "scope": "Five immutable assigned test files; historical app/helper/runner references only. Concurrent045 and046 changes excluded. Root replays60 shape/conditional records; DRY and I/O retain documented graph/history limitations. No new runtime pass or scanner closure claim.",
+    "no_runtime_or_scanner_closure_claimed": true
+  }
+}

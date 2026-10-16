@@ -1,0 +1,3002 @@
+{
+  "repair_id": "repair-048",
+  "source_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "inspected_git_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "walker_inspection_git_commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+  "source_hashes_normalized_lf": {
+    "tests/preference-integrity-scenarios.js": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+    "tests/drive-lifecycle.browser.cjs": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+    "tests/preference-integrity.browser.cjs@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+    "tests/support/local-app-route.js@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "scripts/check-test-runner.cjs@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/case-report-suites.json@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+    "js/app/00-storage-sync-patches.js@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "4f28f69d7cc04a91a2bd7a88c66cd85909e46afc0a37558d5dfd5e0f00a2aac1",
+    "scripts/run-tests.cjs@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf"
+  },
+  "source_hashes_raw": {
+    "tests/preference-integrity-scenarios.js": "f24c3c803930b595fefc0c252180ad4abafbb31ba32039f4932338b5bf12513d",
+    "tests/drive-lifecycle.browser.cjs": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+    "tests/preference-integrity.browser.cjs@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+    "tests/support/local-app-route.js@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "scripts/check-test-runner.cjs@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/case-report-suites.json@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+    "js/app/00-storage-sync-patches.js@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "js/app/10-main-app.js@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "4f28f69d7cc04a91a2bd7a88c66cd85909e46afc0a37558d5dfd5e0f00a2aac1",
+    "scripts/run-tests.cjs@bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf"
+  },
+  "scope": {
+    "assigned_files": [
+      "tests/preference-integrity-scenarios.js",
+      "tests/drive-lifecycle.browser.cjs"
+    ],
+    "source_scope": "Both assigned current files match exact raw/LF assignment hashes and historical Gitbc72; main/storage/helper/driver/runner references use historical Gitbc72 only.",
+    "runtime_callers": "Drive .cjs is a standalone native Edge suite. Preference .js is an evaluated in-browser fixture whose completion promise is awaited by its .browser.cjs driver; .js itself is not independently discovered as a runtime suite. Historical runner inventories .cjs and validates required nonempty passing reports.",
+    "drive_static_scenario_count": 53,
+    "preference_static_fixture_cases": 103,
+    "preference_static_driver_extra_rows": 2,
+    "case_count_note": "Static inventory only, not newly observed runtime counts. Preference group inventory: defaults1, required12, reassessment2, successful6, metadata8, apply7, nullable9, cloud5, identity7, migration9, key-persistence16, recovery6, legacy-reads9, outgoing6."
+  },
+  "metric_verification": {
+    "shape_condition_records_replayed": 32,
+    "io_raw_records_replayed": 1,
+    "io_aggregate_records_replayed": 1,
+    "method": "Installed walker and five shape/condition detectors, plus read-only stored graph slice -> cross-function I/O detector -> fresh performance opportunity aggregation; Python -B, no cache/index writes.",
+    "rules": {
+      "complex_method": "judged CCN>=9; dispatch correction applies at share>=0.6",
+      "large_method": "NLOC>=60 and raw CCN>=3, even when judged CCN is below9",
+      "primitive_obsession": "untyped parameter count>=5; all assigned parameters untyped and no exemption",
+      "bumpy_road": "bumps>=3 and judged CCN>=5",
+      "complex_conditional": "boolean operators>=3",
+      "io_in_loop": "loop-body call reaches classified bare sink through reliable indexed call-site edges; source path and actual graph symbol scopes verified"
+    },
+    "stored_graph_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+    "stored_graph_limit": "Uses stored read-only graph spans/edges, not regenerated graph. Indexed HEAD00c9454 differs from assignmentbc72; assigned drive file bytes match both historical commits, so the exact local spans/call remain applicable. The runDriveScenario sink includes nested replyToLocalFile through nearest enclosing indexed symbol mapping.",
+    "receipts": [
+      "work/repowise-review-048/metrics.json",
+      "work/repowise-review-048/perf.json"
+    ]
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_0031d0f63452bdba310b",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "checkFetchScenario",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_failure_oracle",
+      "reason": "Seven lines cover native fetch rejection, scenario-specific auth/quota/not-found/permission classification, no API calls for offline/expired/blocked URLs and log redaction. The nested conditional expresses the actual response matrix; replacing it with dispatch helpers would obscure this compact oracle, not remove setup work.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "35-41",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "154-159",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 7,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkFetchScenario",
+          "start_line": 35,
+          "end_line": 41,
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 7,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 5,
+          "deepest_block": [
+            36,
+            36
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 35,
+        "deepest_block": {
+          "start": 36,
+          "end": 36
+        }
+      },
+      "callers": [
+        "runDriveScenario:272-291 dispatches the scenario, always checks retained state, then aggregates checks at292; module298-310 iterates fixed scenarios and asserts no failed rows."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "35-41",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "154-159",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Keep every classification and no-request/redaction assertion if routing changes."
+    },
+    {
+      "record_id": "code_health:finding_e98a1eb74db943150fcb",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "checkRetainedState",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_shared_invariants",
+      "reason": "The seven-line final oracle intentionally combines preserved saved writing, byte-exact read/split preservation for applicable scenarios, shipped optional defaults and no uncaught errors. The manual/poll/broadcast exclusions allow legitimate writes; removing them makes a false failure, while splitting each boolean only changes the score. defaultFlags is captured before per-scenario debug changes.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "10-33",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "129-135",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-292",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 7,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkRetainedState",
+          "start_line": 129,
+          "end_line": 135,
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 7,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 4,
+          "deepest_block": [
+            132,
+            132
+          ]
+        },
+        "judged_ccn": 12,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 129,
+        "deepest_block": {
+          "start": 132,
+          "end": 132
+        }
+      },
+      "callers": [
+        "runDriveScenario:272-291 dispatches the scenario, always checks retained state, then aggregates checks at292; module298-310 iterates fixed scenarios and asserts no failed rows."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "10-33",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "129-135",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-292",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Keep scenario exclusions and exact originalBytes comparison, not only a saved-text substring."
+    },
+    {
+      "record_id": "code_health:finding_500c4166d1ca157a5541",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "installDriveRoute",
+      "marker": "complex_method",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "reuse_existing_local_route_candidate",
+      "reason": "The Google dispatcher is specialized and should remain intact. Only replyToLocalFile:149-152 duplicates tests/support/local-app-route.js. Import that helper, delete the local helper and call it only inside the existing localhost branch:201-203; leave Google origin gating, OPTIONS, request recording, token changes and every service response unchanged. This removes duplicated asset lookup/serving code and adds existing path/file guards. Local missing-file 404 MIME differs, so adoption needs protocol/parity validation; no flag-clear claim.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "145-230",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "1-14",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "source"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "50-59",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "helper assertions"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 23,
+          "cognitive": 22,
+          "nloc": 80,
+          "dispatch_share": 0.55
+        },
+        "function": {
+          "name": "installDriveRoute",
+          "start_line": 145,
+          "end_line": 230,
+          "ccn": 23,
+          "cognitive": 22,
+          "nloc": 80,
+          "dispatch_share": 0.55,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            148,
+            148
+          ]
+        },
+        "judged_ccn": 23,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 22,
+        "nloc": 80,
+        "dispatch_share": 0.55,
+        "symbol_line": 145,
+        "deepest_block": {
+          "start": 148,
+          "end": 148
+        }
+      },
+      "callers": [
+        "runDriveScenario:231 installs once before clock/navigation; all service responders close over scenario/failing/changed/request."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "145-230",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Run the complete Drive suite and helper checks when adopted. Preserve ordered scenario/check names, Google methods/URLs/payloads/status/reasons and semantic request transcripts, defaults/errors/downloads, plus local JS/HTML and missing-asset behavior. Do not route Google through the local helper.",
+      "candidate_group": "reuse-drive-local-assets"
+    },
+    {
+      "record_id": "code_health:finding_96910a3a1fb70bb0a175",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "replyToProbe",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_response_matrix",
+      "reason": "replyToProbe is six lines specifying network abort, HTTP401/404/500/403, malformed JSON, quota/rate reasons and a synthetic token-bearing error. Each branch drives a different real wftDriveFetch error path and classification/redaction oracle. A status table would still need the unique malformed/network bodies and would hide the corresponding check matrix.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "154-159",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "35-41",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 6,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "replyToProbe",
+          "start_line": 154,
+          "end_line": 159,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 6,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            155,
+            155
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 6,
+        "dispatch_share": 0.0,
+        "symbol_line": 154,
+        "deepest_block": {
+          "start": 155,
+          "end": 155
+        }
+      },
+      "callers": [
+        "installDriveRoute:207-209 for /probe"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "154-159",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "35-41",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Preserve real route abort versus HTTP refusal and exact synthetic secret exposure used by the redaction check."
+    },
+    {
+      "record_id": "code_health:finding_e7d9bc21d5bd55cdff4b",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "replyToUpload",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_held_upload_scenarios",
+      "reason": "replyToUpload injects a newer pending result during the real upload, then distinguishes network refusal, quota/auth/permission errors, absent upload ID and stale-folder404 before success. Those are intentional transaction boundaries. Keep the changed/failing shared state and response distinctions visible rather than replacing them with a generic mock response factory.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "166-178",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "244-259",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 15,
+          "cognitive": 18,
+          "nloc": 13,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "replyToUpload",
+          "start_line": 166,
+          "end_line": 178,
+          "ccn": 15,
+          "cognitive": 18,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            171,
+            174
+          ]
+        },
+        "judged_ccn": 15,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 18,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 166,
+        "deepest_block": {
+          "start": 171,
+          "end": 174
+        }
+      },
+      "callers": [
+        "installDriveRoute:218-220 upload branch",
+        "checkManualScenario retry changes failing:false at253",
+        "checkSplitScenario retry changes failing:false at268"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "166-178",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "244-259",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Keep pending mutation before the response, first-attempt failures, actual retry, and missing-ID response paths."
+    },
+    {
+      "record_id": "code_health:finding_0f425b4b82357b6157a1",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "replyToFolderMetadata",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_folder_validation_matrix",
+      "reason": "Seven lines deliberately vary valid root metadata, stale folder404, cached permission403 and a real wrong-parent folder document. This tests metadata validation, not just HTTP success. The final usable parent has name/MIME/trashed/parents fields that the production folder checker consumes; a broad success mock would weaken the split scenarios.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "194-200",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-271",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 7,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "replyToFolderMetadata",
+          "start_line": 194,
+          "end_line": 200,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 7,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            195,
+            195
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 194,
+        "deepest_block": {
+          "start": 195,
+          "end": 195
+        }
+      },
+      "callers": [
+        "installDriveRoute final return:228"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "194-200",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-271",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Preserve wrong-root and permission bodies, cache refusal, retry and invalid-parent upload assertions."
+    },
+    {
+      "record_id": "code_health:finding_a342a0ef30b71cae9eb3",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "checkManualScenario",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_manual_native_oracle",
+      "reason": "The function clicks the shipped sync button and waits for production completion, then distinguishes newer edit, successful acknowledgment and failed-save retry UI. It validates durable saved+pending text, real retry clearing dirty state, token redaction and multipart content. The branches are the test requirements, not duplicated application logic to hide.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "235-259",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "166-178",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 13,
+          "cognitive": 14,
+          "nloc": 16,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkManualScenario",
+          "start_line": 244,
+          "end_line": 259,
+          "ccn": 13,
+          "cognitive": 14,
+          "nloc": 16,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            250,
+            257
+          ]
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 14,
+        "nloc": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 244,
+        "deepest_block": {
+          "start": 250,
+          "end": 257
+        }
+      },
+      "callers": [
+        "runDriveScenario manual dispatch:279-280"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "235-259",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "166-178",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Keep actual button clicks and bounded finishManual failure; swallowed short waits are followed by a final busy-state check and timeout throw, so they do not create a green result."
+    },
+    {
+      "record_id": "code_health:finding_998220186c13aa82abd3",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "checkSplitScenario",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_split_native_oracle",
+      "reason": "The eleven-line split check distinguishes account replacement before folder/upload acknowledgment, cached permission refusal and recoverable stale/poisoned folder success, followed by an actual retry and forbidden-parent body check. These are different safety outcomes; merging them into one generic boolean or asserting only no-error would erase coverage.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-271",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "194-200",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "214-217",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 13,
+          "cognitive": 14,
+          "nloc": 11,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkSplitScenario",
+          "start_line": 261,
+          "end_line": 271,
+          "ccn": 13,
+          "cognitive": 14,
+          "nloc": 11,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            264,
+            270
+          ]
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 14,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 261,
+        "deepest_block": {
+          "start": 264,
+          "end": 270
+        }
+      },
+      "callers": [
+        "runDriveScenario split dispatch:281-282"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-271",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "194-200",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "214-217",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Preserve callback settlement, no cached acknowledgment on account change, no upload before folder ownership, and exact invalid-parent checks."
+    },
+    {
+      "record_id": "code_health:finding_a50e80e97edcd6e6becf",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "runDriveScenario",
+      "marker": "large_method",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "reuse_existing_local_route_candidate",
+      "reason": "This size signal covers the encompassing native scenario transaction, including its service responders and oracles. Keep context isolation, listeners, fake clock, dispatch, error aggregation and close. The one useful deletion inside it is the same local asset route reuse proposed for installDriveRoute; do not split or parallelize the scenario transaction merely to reduce 153 NLOC. Dispatch-corrected CCN is5, despite raw15.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "137-296",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "149-152",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "1-14",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "source"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "nloc": 153,
+          "ccn": 15,
+          "dispatch_share": 0.71,
+          "terminal_share": 0.01
+        },
+        "function": {
+          "name": "runDriveScenario",
+          "start_line": 137,
+          "end_line": 296,
+          "ccn": 15,
+          "cognitive": 15,
+          "nloc": 153,
+          "dispatch_share": 0.71,
+          "terminal_share": 0.01,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 3,
+          "deepest_block": [
+            237,
+            241
+          ]
+        },
+        "judged_ccn": 5,
+        "judged_nesting": 0
+      },
+      "verified_observation_details": {
+        "nloc": 153,
+        "ccn": 15,
+        "dispatch_share": 0.71,
+        "terminal_share": 0.01,
+        "symbol_line": 137,
+        "deepest_block": {
+          "start": 237,
+          "end": 241
+        }
+      },
+      "callers": [
+        "Module loop:301-303 invokes each scenario serially"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "137-296",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "149-152",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Same single route-reuse validation as its complex/large dispatcher records; three records describe one candidate, not three fixes.",
+      "candidate_group": "reuse-drive-local-assets"
+    },
+    {
+      "record_id": "code_health:finding_b5d688594926455874d4",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "installDriveRoute",
+      "marker": "large_method",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "reuse_existing_local_route_candidate",
+      "reason": "At80 NLOC the route setup crosses the large-method threshold, but its separated probe/XHR/upload/media/query/folder responders already keep service-specific behavior local. Reuse only the existing local asset helper; preserve the specialized dispatcher. That removes a real duplicate without adding another mock framework, and may leave both size and CCN warnings.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "145-230",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "1-14",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "source"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "nloc": 80,
+          "ccn": 23,
+          "dispatch_share": 0.55
+        },
+        "function": {
+          "name": "installDriveRoute",
+          "start_line": 145,
+          "end_line": 230,
+          "ccn": 23,
+          "cognitive": 22,
+          "nloc": 80,
+          "dispatch_share": 0.55,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            148,
+            148
+          ]
+        },
+        "judged_ccn": 23,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "nloc": 80,
+        "ccn": 23,
+        "dispatch_share": 0.55,
+        "symbol_line": 145,
+        "deepest_block": {
+          "start": 148,
+          "end": 148
+        }
+      },
+      "callers": [
+        "runDriveScenario:231"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "145-230",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Same route candidate and protocol limitation as the complex-method row; no extra responder extraction.",
+      "candidate_group": "reuse-drive-local-assets"
+    },
+    {
+      "record_id": "code_health:finding_21a0bbf20192af2be592",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "checkFetchScenario",
+      "marker": "primitive_obsession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_meaningful_parameters",
+      "reason": "All five parameters are used: scenario selects expected failures, page crosses the browser boundary, check records named results, requests proves no network calls, and logs proves redaction. These are distinct harness resources and a single caller passes them explicitly. An options object would rename, not simplify, the state.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "35-41",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "273-274",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "function": {
+          "name": "checkFetchScenario",
+          "start_line": 35,
+          "end_line": 41,
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 7,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 5,
+          "deepest_block": [
+            36,
+            36
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 35
+      },
+      "callers": [
+        "runDriveScenario fetch branch:274"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "35-41",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "273-274",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "No parameter wrapper. Preserve logs/request access and named checks if the actual route reuse is adopted."
+    },
+    {
+      "record_id": "code_health:finding_5be9ea529bf82cdfbbf3",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "checkPollingScenario",
+      "marker": "primitive_obsession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_meaningful_parameters",
+      "reason": "All five inputs are needed for scenario selection, offline context changes, real page/clock events, result collection and request evidence. checkPollingScenario already owns the related polling/visibility matrix; a parameter bag would not reduce its obligations. Dispatch correction gives judged CCN4 rather than raw14; the assigned warning is solely parameter count.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "98-127",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "289-290",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "function": {
+          "name": "checkPollingScenario",
+          "start_line": 98,
+          "end_line": 127,
+          "ccn": 14,
+          "cognitive": 19,
+          "nloc": 30,
+          "dispatch_share": 0.85,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 5,
+          "deepest_block": [
+            115,
+            125
+          ]
+        },
+        "judged_ccn": 4,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 98
+      },
+      "callers": [
+        "runDriveScenario polling fallback:290"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "98-127",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "289-290",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Keep repeated-start/timer stop, hidden eligibility, visible/online sync and writer/media/block/signed-out gates; do not merge contexts across scenarios."
+    },
+    {
+      "record_id": "code_health:finding_34d155a11ae12094772a",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "installDriveRoute",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_precise_fault_trigger",
+      "reason": "The five-operator condition changes the account only once and at one of two different native request boundaries: folder POST excluding uploads, or an upload request. Parentheses and changed guard are significant. A broad POST match would move the race and invalidate split-token-folder/upload expectations.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "214-217",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-265",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 5,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.55
+        },
+        "function": {
+          "name": "installDriveRoute",
+          "start_line": 145,
+          "end_line": 230,
+          "ccn": 23,
+          "cognitive": 22,
+          "nloc": 80,
+          "dispatch_share": 0.55,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            148,
+            148
+          ]
+        },
+        "judged_ccn": 23,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 5,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.55,
+        "symbol_line": 145
+      },
+      "callers": [
+        "installDriveRoute dispatch before upload/media handling"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "214-217",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-265",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Retain the exact predicate and mutation timing; both token scenarios must keep distinct no-ack/no-upload assertions."
+    },
+    {
+      "record_id": "code_health:finding_61ea1e71eb770a77989a",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "replyToUpload",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_precise_fault_trigger",
+      "reason": "The three-operator condition returns404 only on the failing split-stale upload whose multipart references stale-students. Other uploads and the repaired retry must succeed. Converting it into a generic scenario-error table would lose request-body dependence and the one-shot failing state.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "176",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-271",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "replyToUpload",
+          "start_line": 166,
+          "end_line": 178,
+          "ccn": 15,
+          "cognitive": 18,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            171,
+            174
+          ]
+        },
+        "judged_ccn": 15,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 166
+      },
+      "callers": [
+        "replyToUpload via installDriveRoute:218-220"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "176",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "261-271",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Keep stale-parent body predicate and usable-parent retry; do not make every split-stale upload fail."
+    },
+    {
+      "record_id": "code_health:finding_248573c51c1521f8340e",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": null,
+      "marker": "io_in_loop",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_test_boundary_io",
+      "reason": "The indexed module loop calls runDriveScenario once per named scenario, and the graph maps nested local-file serving to its enclosing indexed symbol. Native page loads then read snapshot assets; legacy fallback scenarios also inspect downloaded bytes. This is bounded test setup/oracle work, not a product N+1. Keep isolated contexts and actual files; caching or batching solely to clear the marker would weaken the boundary.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "4-8",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "49-60",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "137-152",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "298-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "biomarker_type": "io_in_loop",
+        "severity": "medium",
+        "function_name": null,
+        "line_start": 302,
+        "line_end": 302,
+        "details": {
+          "boundary_kind": "filesystem",
+          "cross_function": true,
+          "path": [
+            "tests/drive-lifecycle.browser.cjs::__module__",
+            "tests/drive-lifecycle.browser.cjs::runDriveScenario"
+          ],
+          "resolution_basis": "call-site",
+          "loop_line": 301
+        },
+        "reason": "a filesystem call is reached once per loop iteration through __module__ -> runDriveScenario (cross-function I/O call inside a loop)",
+        "deduction": null
+      },
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/drive-lifecycle.browser.cjs::__module__",
+          "tests/drive-lifecycle.browser.cjs::runDriveScenario"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 301,
+        "symbol_line": 298,
+        "symbol": "<anonymous@298>",
+        "role_owner": "tests/drive-lifecycle.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_68900cb25de5c2f8b778"
+      },
+      "callers": [
+        "Module IIFE loop301 calls runDriveScenario at302"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "4-8",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "49-60",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "137-152",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "298-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "No performance rewrite. The route-helper candidate still reads each served file and does not imply this I/O record disappears."
+    },
+    {
+      "record_id": "code_health:finding_d0e737c875554facd17c",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkRequiredPreferenceSaves",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_required_save_matrix",
+      "reason": "The44-line group tests required save rejection across ordinary form changes, seven actual native handlers, grade/neatness reassessment helpers, corrupt roster preflight and page-hide suppression. Each handler mutates and dispatches its real event; replacing the visible action cases with a registry would add indirection while retaining the same branches. Exact bytes, restored form/policy and one visible failure are independent oracles.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "58-101",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "42-57",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "550-599",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 14,
+          "cognitive": 21,
+          "nloc": 44,
+          "dispatch_share": 0.54
+        },
+        "function": {
+          "name": "checkRequiredPreferenceSaves",
+          "start_line": 58,
+          "end_line": 101,
+          "ccn": 14,
+          "cognitive": 21,
+          "nloc": 44,
+          "dispatch_share": 0.54,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 0,
+          "deepest_block": [
+            70,
+            84
+          ]
+        },
+        "judged_ccn": 14,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 21,
+        "nloc": 44,
+        "dispatch_share": 0.54,
+        "symbol_line": 58,
+        "deepest_block": {
+          "start": 70,
+          "end": 84
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "58-101",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "42-57",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Retain all seven events, the drawer-stays-open check, grade range/grammar label and no false dirty/schedule checks."
+    },
+    {
+      "record_id": "code_health:finding_a740bcc836201e83c5ce",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkSuccessfulPreferenceSaves",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_success_matrix",
+      "reason": "The28-line group distinguishes ordinary/class/student/default/suppressed saves, checking one durable mark/schedule unless suppressed and grade-specific defaults versus custom values. The final hostile own-property metadata/input-immutability case is distinct. Keeping these branches makes the expected policy explicit; no wrapper or generic writer adapter is warranted.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "131-158",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "550-590",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 17,
+          "cognitive": 22,
+          "nloc": 28,
+          "dispatch_share": 0.19
+        },
+        "function": {
+          "name": "checkSuccessfulPreferenceSaves",
+          "start_line": 131,
+          "end_line": 158,
+          "ccn": 17,
+          "cognitive": 22,
+          "nloc": 28,
+          "dispatch_share": 0.19,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            132,
+            150
+          ]
+        },
+        "judged_ccn": 17,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 22,
+        "nloc": 28,
+        "dispatch_share": 0.19,
+        "symbol_line": 131,
+        "deepest_block": {
+          "start": 132,
+          "end": 150
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "131-158",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Preserve override/class grade distinctions, exact counts, metadata/key exclusion and own __proto__/constructor data."
+    },
+    {
+      "record_id": "code_health:finding_0936878f9d4d502c6b66",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkMetadataMerge",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_metadata_precedence_oracle",
+      "reason": "The nested thirteen-line helper is called for both preference directions and four source combinations. It verifies immutable inputs, excluded credentials, own dangerous-looking keys that remain ordinary data, empty roots and ordered roster union. The conditional expected value expresses local/cloud precedence directly; replacing it with a fixture abstraction would make the oracle harder to compare with inputs.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "159-173",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 10,
+          "cognitive": 13,
+          "nloc": 13,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkMetadataMerge",
+          "start_line": 161,
+          "end_line": 173,
+          "ccn": 10,
+          "cognitive": 13,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            167,
+            172
+          ]
+        },
+        "judged_ccn": 10,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 161,
+        "deepest_block": {
+          "start": 167,
+          "end": 172
+        }
+      },
+      "callers": [
+        "checkMetadataMerges:160 invokes checkMetadataMerge(preferLocal,source) for8 combinations",
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "159-173",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep both source preference directions and absent/empty/both cases, serialized own-property checks and exact sorted union."
+    },
+    {
+      "record_id": "code_health:finding_cd2035047a3147bd9357",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkSettingsApply",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_atomic_apply_matrix",
+      "reason": "The45-line group tests both localOnly/loaded writers at settings, roster and rollback failures, then successful metadata/roster/form publication and invalid input. The nested writer helper already factors the meaningful shared case setup. It must retain distinct primary bytes, recovery reads, blocked saves/sync and bounded retry oracles; another wrapper would hide the transaction boundary.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "175-219",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "5265-5270",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6293-6329",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 45,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkSettingsApply",
+          "start_line": 175,
+          "end_line": 219,
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 45,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            176,
+            176
+          ]
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 45,
+        "dispatch_share": 0.0,
+        "symbol_line": 175,
+        "deepest_block": {
+          "start": 176,
+          "end": 176
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "175-219",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Retain settings-first versus rollback failure, no unpublished form/roster, recovery retry and suppressed dirty marks."
+    },
+    {
+      "record_id": "code_health:finding_2444ef38d170f9e459d0",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_phase_sensitive_storage_fault",
+      "reason": "The8-line Storage.setItem replacement deliberately counts settings writes so rollback fails only after the first durable write; the roster write is rejected except in the settings-first stage. These instance/key/stage conditions must not be weakened. Its near-copy in delayed cloud transport is small and has separate timing/counters/messages; a configurable injector would add parameters and hide when the fault becomes active.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "177-203",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "180-187",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 8,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 180,
+          "end_line": 187,
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 8,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            181,
+            184
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 180,
+        "symbol_index": 1,
+        "deepest_block": {
+          "start": 181,
+          "end": 184
+        }
+      },
+      "callers": [
+        "checkSettingsApplyFailure installs replacement after before-image capture at178"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "177-203",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "180-187",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Preserve set.call forwarding, first-write success in rollback stage and later roster/rollback failure ordering."
+    },
+    {
+      "record_id": "code_health:finding_43881671adf95bb4b43c",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkCloudSettingsTransport",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_held_transport_oracle",
+      "reason": "The47-line group holds a real Response body stream after headers, then injects apply failures or a local roster addition before releasing it. It checks that headers neither apply nor acknowledge, failures publish/upload nothing, and additions survive a single acknowledged push. cloudSetup stubs unrelated services but settings sync/apply remains real. The separate legacy callback case asserts visible failure after its polling wait.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "268-322",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "5273-5360",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 17,
+          "cognitive": 21,
+          "nloc": 47,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkCloudSettingsTransport",
+          "start_line": 276,
+          "end_line": 322,
+          "ccn": 17,
+          "cognitive": 21,
+          "nloc": 47,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            300,
+            311
+          ]
+        },
+        "judged_ccn": 17,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 21,
+        "nloc": 47,
+        "dispatch_share": 0.0,
+        "symbol_line": 276,
+        "deepest_block": {
+          "start": 300,
+          "end": 311
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "268-322",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep ready/release ordering, native stream body, previous hash/counter, no-upload failure and exact one-upload success; no timer-only substitute."
+    },
+    {
+      "record_id": "code_health:finding_a0a176f446cbb821d487",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_phase_sensitive_storage_fault",
+      "reason": "This8-line replacement is activated only after the held cloud response headers have been observed; it counts subsequent settings writes and rejects roster/rollback at the selected phase. Reusing the earlier apply hook would still need new shared configuration and could move activation before the crucial header-only checks. Retain its explicit local stage and forwarding.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "277-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "291-298",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 8,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 291,
+          "end_line": 298,
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 8,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            292,
+            295
+          ]
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 291,
+        "symbol_index": 2,
+        "deepest_block": {
+          "start": 292,
+          "end": 295
+        }
+      },
+      "callers": [
+        "checkCloudSettingsTransport callback after await ready and assertions287-288"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "277-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "291-298",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep activation after headers and before release, including before-image recovery and zero-upload expectations."
+    },
+    {
+      "record_id": "code_health:finding_d71333b5f8e26e1a7718",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkKeyPersistenceAndHandlers",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_key_storage_matrix",
+      "reason": "The50-line group covers four credential modes, nine instance/key/operation failure points, native input/change handlers and failed legacy cleanup with a durable retry. The failure matrix already removes useful duplication while keeping each exact intercepted operation. Do not turn native events or full original-store byte checks into a generic happy/failure wrapper.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "381-435",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "478-548",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "8401-8412",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical event callers"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 15,
+          "cognitive": 21,
+          "nloc": 50,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkKeyPersistenceAndHandlers",
+          "start_line": 386,
+          "end_line": 435,
+          "ccn": 15,
+          "cognitive": 21,
+          "nloc": 50,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 0,
+          "deepest_block": [
+            387,
+            395
+          ]
+        },
+        "judged_ccn": 15,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 21,
+        "nloc": 50,
+        "dispatch_share": 0.0,
+        "symbol_line": 386,
+        "deepest_block": {
+          "start": 387,
+          "end": 395
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "381-435",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep mode policy, exact rollback bytes, restored form/runtime, visible single error, retry and input immutability."
+    },
+    {
+      "record_id": "code_health:finding_d5756f8057e6210e77d4",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkKeyRecovery",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_private_recovery_scenarios",
+      "reason": "Six native fixture cases cover failed rollback removal in either destination, private before-images blocking runtime, later durable preference/class edits surviving key retry, verification-read failure and settings-recovery blocking credential changes. These are different before-image obligations, not variants to collapse into one state predicate.69 NLOC stays readable as named runs, with depth1.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "436-504",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "491-548",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 69,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkKeyRecovery",
+          "start_line": 436,
+          "end_line": 504,
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 69,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            437,
+            454
+          ]
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 69,
+        "dispatch_share": 0.0,
+        "symbol_line": 436,
+        "deepest_block": {
+          "start": 437,
+          "end": 454
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "436-504",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Retain private-key backup redaction, exact later settings bytes, unresolved destination retry and no new destination while settings recovery is pending."
+    },
+    {
+      "record_id": "code_health:finding_50f759c7ce8caf72ba0f",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkKeyReadsAndRetainedLegacy",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_legacy_survival_oracles",
+      "reason": "This37-line group distinguishes three storage read failures, startup migration failure without blocking other preferences, four unrelated writers preserving the only legacy key, and rollback before-image export redaction. The writer dispatch is useful test coverage across real entry points; a generic save wrapper could accidentally bypass their credential exclusion paths.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "505-541",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "442-488",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical target context"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "601-608",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical startup context"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 13,
+          "cognitive": 15,
+          "nloc": 37,
+          "dispatch_share": 0.25
+        },
+        "function": {
+          "name": "checkKeyReadsAndRetainedLegacy",
+          "start_line": 505,
+          "end_line": 541,
+          "ccn": 13,
+          "cognitive": 15,
+          "nloc": 37,
+          "dispatch_share": 0.25,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 0,
+          "deepest_block": [
+            506,
+            512
+          ]
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 15,
+        "nloc": 37,
+        "dispatch_share": 0.25,
+        "symbol_line": 505,
+        "deepest_block": {
+          "start": 506,
+          "end": 512
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "505-541",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep strict getter rejection and empty runtime with alert, load of unrelated preferences, unchanged retained key and public backup redaction."
+    },
+    {
+      "record_id": "code_health:finding_532b474a093fc3ebb820",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkOutgoingCredentialRedaction",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_actual_outgoing_redaction_matrix",
+      "reason": "The28-line group invokes six real settings-upload entry paths, including migration-copy/cleanup failures and a first-attempt network retry. It inspects every intercepted final multipart body for both field and synthetic value, retains caller immutability and checks sanitized acknowledgment. expectKeyMigrationFailure validates the expected storage error, so the precondition is not an ignored catch. Keep the actual outgoing boundary.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "542-577",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "5273-5314",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical sync caller"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "6332-6336",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "historical legacy caller"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "ccn": 16,
+          "cognitive": 24,
+          "nloc": 28,
+          "dispatch_share": 0.4
+        },
+        "function": {
+          "name": "checkOutgoingCredentialRedaction",
+          "start_line": 542,
+          "end_line": 569,
+          "ccn": 16,
+          "cognitive": 24,
+          "nloc": 28,
+          "dispatch_share": 0.4,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            560,
+            563
+          ]
+        },
+        "judged_ccn": 16,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 24,
+        "nloc": 28,
+        "dispatch_share": 0.4,
+        "symbol_line": 542,
+        "deepest_block": {
+          "start": 560,
+          "end": 563
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "542-577",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Preserve six entry points, uploader retry count2 versus1, every-body credential exclusion and expected migration-error message; do not inspect only an earlier sanitized object."
+    },
+    {
+      "record_id": "code_health:finding_7d7006df9ec6314480bd",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkKeyPersistenceAndHandlers",
+      "marker": "bumpy_road",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_named_test_sections",
+      "reason": "The three bumps are the same key mode, operation-failure, native-event and cleanup sections assessed by the complex-method row. They remain explicit named runs with local setup and rollback assertions. Extracting these blocks into score-sized functions would only relocate the checks and make the important native event distinctions less visible.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "386-435",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "bumps": 3,
+          "ccn": 15,
+          "max_nesting": 2
+        },
+        "function": {
+          "name": "checkKeyPersistenceAndHandlers",
+          "start_line": 386,
+          "end_line": 435,
+          "ccn": 15,
+          "cognitive": 21,
+          "nloc": 50,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 0,
+          "deepest_block": [
+            387,
+            395
+          ]
+        },
+        "judged_ccn": 15,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 15,
+        "max_nesting": 2,
+        "symbol_line": 386,
+        "deepest_block": {
+          "start": 387,
+          "end": 395
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "386-435",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Same existing per-mode/failure/event/cleanup oracles; no second repair should be counted."
+    },
+    {
+      "record_id": "code_health:finding_d85646f671cd92e5433a",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "checkKeyRecovery",
+      "marker": "large_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_named_recovery_suite",
+      "reason": "The large-method signal is the same69-line recovery group as the complex row. Each named run owns its before-image fixture, injected storage phase and recovery assertion, so size alone does not warrant splitting. Keep private data, runtime blocking and independent preference changes visible in one suite.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "436-504",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "nloc": 69,
+          "ccn": 13,
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "checkKeyRecovery",
+          "start_line": 436,
+          "end_line": 504,
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 69,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            437,
+            454
+          ]
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "nloc": 69,
+        "ccn": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 436,
+        "deepest_block": {
+          "start": 437,
+          "end": 454
+        }
+      },
+      "callers": [
+        "preferenceCases:578-594 calls the group and returns cases; run:52-57 resets state, records thrown failures and restores Storage prototypes.",
+        "Historical tests/preference-integrity.browser.cjs:20 evaluates fixture text and awaits its completion; 21-42 adds native error/startup rows, aggregates and asserts failed=0."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "436-504",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Retain all six cases and their byte/privacy assertions; no case deletion or shorter generic recovery oracle."
+    },
+    {
+      "record_id": "code_health:finding_f2a785c9259d4530ddc5",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_two_store_read_trigger",
+      "reason": "The five-operator condition selects either the session credential read or the settings read according to stage and exact Storage instance/key. This makes the migration fail at two distinct required reads, with all other reads forwarded. A helper for this single boolean would hide the precondition and not reduce test complexity.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "350-369",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "354-358",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 5,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 354,
+          "end_line": 358,
+          "ccn": 7,
+          "cognitive": 6,
+          "nloc": 5,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "deepest_block": [
+            355,
+            356
+          ]
+        },
+        "judged_ccn": 7,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 5,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 354,
+        "symbol_index": 3
+      },
+      "callers": [
+        "checkLegacyKeyMigration stage loop351 installs Storage.getItem"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "350-369",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "354-358",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep session-read and settings-read cases separate; prove original settings bytes survive and retry migrates/removes only after a safe copy."
+    },
+    {
+      "record_id": "code_health:finding_c70d17d30550958c4d95",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_copy_cleanup_write_trigger",
+      "reason": "The four-operator condition differentiates destination session-copy failure from local settings-cleanup failure. That distinction is the only-copy durability contract; broadening either store or key match could make the wrong phase fail and leave a misleading green rollback assertion.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "350-369",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "359-362",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 359,
+          "end_line": 362,
+          "ccn": 6,
+          "cognitive": 5,
+          "nloc": 4,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            360,
+            360
+          ]
+        },
+        "judged_ccn": 6,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 359,
+        "symbol_index": 4
+      },
+      "callers": [
+        "checkLegacyKeyMigration stage loop351 installs Storage.setItem"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "350-369",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "359-362",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep copied-key/readability and original settings byte/retry assertions for both exact fault stages."
+    },
+    {
+      "record_id": "code_health:finding_541a0914ff6d42267451",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_exact_rollback_destination_trigger",
+      "reason": "The five-operator predicate rejects rollback removal of either the session key or remembered local key, selected by the two-case store loop, while allowing ordinary removes. It is intentionally precise about both Storage instance and key. Keep it explicit so the private before-image and no-key policy tests continue to target the intended unresolved destination.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "436-454",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "443-447",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 5,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 443,
+          "end_line": 447,
+          "ccn": 7,
+          "cognitive": 6,
+          "nloc": 5,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "deepest_block": [
+            444,
+            445
+          ]
+        },
+        "judged_ccn": 7,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 5,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 443,
+        "symbol_index": 9
+      },
+      "callers": [
+        "checkKeyRecovery store loop437 installs Storage.removeItem"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "436-454",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "443-447",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Preserve previous empty form/policy, unexported new key, retained recovery and retry completion for both stores."
+    },
+    {
+      "record_id": "code_health:finding_7abfbf4a2f826653796d",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_write_order_fault_trigger",
+      "reason": "The three-operator conditional counts only wft_settings writes and rejects its rollback after the first write, or rejects the roster write. The ++writes placement and short-circuiting are the test mechanism, not noise: moving the increment or broadening the local store match changes which before-image becomes unresolved.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "533-540",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "536",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 536,
+          "end_line": 536,
+          "ccn": 5,
+          "cognitive": 4,
+          "nloc": 1,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            536,
+            536
+          ]
+        },
+        "judged_ccn": 5,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 536,
+        "symbol_index": 17
+      },
+      "callers": [
+        "checkKeyReadsAndRetainedLegacy settings failed rollback case533"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "533-540",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "536",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep initial write/failed roster/failed rollback sequencing and verify the legacy key stays private in recovery while emergency export removes it."
+    },
+    {
+      "record_id": "code_health:finding_f91d9ed74c28e5ef0ee7",
+      "file": "tests/preference-integrity-scenarios.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_migration_fault_precondition",
+      "reason": "The four-operator condition deliberately blocks either session destination copy or local settings cleanup, depending on the two outgoing sync cases. Later fetch interception then proves credential redaction even with retained legacy bytes. Preserve exact store/key conditions and the validated migration error; a broad throw would no longer prove the intended precondition.",
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "543-551",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "570-577",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "detector": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 547,
+          "end_line": 550,
+          "ccn": 6,
+          "cognitive": 5,
+          "nloc": 4,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            548,
+            548
+          ]
+        },
+        "judged_ccn": 6,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 547,
+        "symbol_index": 18
+      },
+      "callers": [
+        "checkOutgoingCredentialRedaction installs Storage.setItem only for sync-after cases"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "543-551",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "570-577",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "20-42",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "aggregation oracle"
+        }
+      ],
+      "regression_recommendation": "Keep expected migration failure validation, actual multipart interception, retry counts and sanitized acknowledgment."
+    },
+    {
+      "record_id": "performance:perf3_68900cb25de5c2f8b778",
+      "file": "tests/drive-lifecycle.browser.cjs",
+      "symbol": "tests/drive-lifecycle.browser.cjs::__module__",
+      "marker": "io_in_loop",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_same_test_io_cause",
+      "reason": "This performance opportunity aggregates the same line302 raw io_in_loop observation. Replay gives filesystem boundary, module intervention, one affected call site, test role, low actionability, unknown exposure/magnitude, inherent_to_boundary and may_lead=false. The rank factor named affected_call_sites has value2 as a weight; it does not mean two sites. No separate batching/caching change is justified.",
+      "evidence_anchors": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "298-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "137-152",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "49-60",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "verified_metrics": {
+        "opportunity_id": "perf3_68900cb25de5c2f8b778",
+        "boundary_kind": "filesystem",
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/drive-lifecycle.browser.cjs::runDriveScenario"
+        ],
+        "shared_path_suffix": [
+          "tests/drive-lifecycle.browser.cjs::__module__",
+          "tests/drive-lifecycle.browser.cjs::runDriveScenario"
+        ],
+        "affected_call_sites_total": 1,
+        "observations_total": 1,
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "rank_score": 12,
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "may_lead": false
+      },
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/drive-lifecycle.browser.cjs::runDriveScenario"
+        ],
+        "shared_path_suffix": [
+          "tests/drive-lifecycle.browser.cjs::__module__",
+          "tests/drive-lifecycle.browser.cjs::runDriveScenario"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "callers": [
+        "Same module loop and nested local serving as raw code-health I/O row"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "298-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "137-152",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "49-60",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        },
+        {
+          "file": "tests/drive-lifecycle.browser.cjs",
+          "lines": "291-310",
+          "commit": "bc72ee8b8b8c4c5a595cc04c87795fa9d4e6c10a",
+          "role": "scenario/assertion"
+        }
+      ],
+      "regression_recommendation": "Retain scenario isolation and file/download checks; do not count the aggregate and raw observation as two repairs or claim route reuse clears them."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "records": 34,
+    "reviewed_no_change": 31,
+    "candidate_needs_regression_records": 3,
+    "distinct_minimal_candidate_groups": 1,
+    "candidate": "Reuse existing local asset helper only in the Drive localhost branch; retain every Google mock and all test oracles. Local404 MIME difference must be assessed during adoption. No new abstraction proposed.",
+    "disposition": "Parent reviews/adopts each reason. No scanner closures or test pass claims."
+  },
+  "limits": [
+    "All assigned numerical shape/condition facts, detector spans, judged metrics and I/O hit/aggregate facts replayed. Anonymous symbol_index values are copied source-binding metadata, not independently regenerated graph ordinals; exact callback start/body binding verified.",
+    "The stored repository index is00c9454, not assignmentbc72. Exact Drive bytes are equal at both commits, and its local stored graph spans/call line match; graph was read with SQLite mode=ro&immutable=1 and not regenerated. Fresh walker maps the nested local file sink through the enclosing indexed runDriveScenario range; do not interpret this as a direct synchronous read written on line302.",
+    "Main/storage context was read from Gitbc72 and hash-receipted; concurrent045/046 source/test work is outside assigned files and is not certified frozen here. No whole-current-app source or behavior claim.",
+    "No app/browser/syntax test execution, dependency change, Git write, index/cache change, docs/tracker/chat mutation or new agents. Only own scratch and this UTF-8 output written.",
+    "Existing helper adoption would intentionally add local traversal/directory guards. Successful local JS/HTML MIME matches; missing local404 MIME differs from the old reply(empty,404) JSON response. Google protocol remains in its existing branch; no unqualified full-output identity prediction.",
+    "No new behavioral leads asserted. Retaining harness structure does not prove application correctness or validate concurrent production fixes."
+  ],
+  "coordinator_acceptance": {
+    "each_individual_reason_read": true,
+    "assigned_test_files_raw_lf_and_git_exact": true,
+    "actual_function_metrics_replayed": 32,
+    "historical_context_hashes_verified": true,
+    "scope": "Five immutable assigned test files; historical app/helper/runner references only. Concurrent045 and046 changes excluded. Root replays60 shape/conditional records; DRY and I/O retain documented graph/history limitations. No new runtime pass or scanner closure claim.",
+    "no_runtime_or_scanner_closure_claimed": true
+  }
+}

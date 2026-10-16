@@ -1,0 +1,3245 @@
+{
+  "repair_id": "repair-050",
+  "source_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "walker_inspection_git_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "source_hashes_normalized_lf": {
+    "js/app/10-main-app.js@00c9454e6c89f258cb3afc938201a10feda16087": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/10-main-app.js@d9bc81b9855ae736e84c931de5963fbaa785ca37": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "js/app/00-storage-sync-patches.js@d9bc81b9855ae736e84c931de5963fbaa785ca37": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "tests/notebook-guide.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/notebook-guidance-repair.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "e118756b4b61c4ef2b3d740cb398192f231cbfc24db3d09caa08c09358d96c03",
+    "tests/notebook-print-failure.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "be324437f3240b221d4de279e4a0349e4eb479eed471819df23bd8161d41498b",
+    "tests/feedback-compatibility.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+    "tests/missing-feedback.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+    "tests/neatness-boundaries.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "70b0721d739989dddde3fe060b3dbf143e9533bda4f510998ac9866a48be029f",
+    "tests/portfolio-reassessment.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+    "tests/portfolio-html.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "2589050e344520270160db5a89f99a71f438785a71be20f808689e2032697c5f",
+    "index.html@d9bc81b9855ae736e84c931de5963fbaa785ca37": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "tests/preference-integrity-scenarios.js@d9bc81b9855ae736e84c931de5963fbaa785ca37": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646"
+  },
+  "source_hashes_raw": {
+    "js/app/10-main-app.js@00c9454e6c89f258cb3afc938201a10feda16087": "9a116eecfc35ea455b00b8691ab780fc647c0999200a2ee8cc35ec5fc8848be7",
+    "js/app/10-main-app.js@d9bc81b9855ae736e84c931de5963fbaa785ca37": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+    "js/app/00-storage-sync-patches.js@d9bc81b9855ae736e84c931de5963fbaa785ca37": "18f0b32277c9d005e54c2817e16d44628a995b199328c6fd3d6a4cfe31931ee2",
+    "tests/notebook-guide.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/notebook-guidance-repair.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "e118756b4b61c4ef2b3d740cb398192f231cbfc24db3d09caa08c09358d96c03",
+    "tests/notebook-print-failure.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "be324437f3240b221d4de279e4a0349e4eb479eed471819df23bd8161d41498b",
+    "tests/feedback-compatibility.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+    "tests/missing-feedback.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+    "tests/neatness-boundaries.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "70b0721d739989dddde3fe060b3dbf143e9533bda4f510998ac9866a48be029f",
+    "tests/portfolio-reassessment.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+    "tests/portfolio-html.browser.cjs@d9bc81b9855ae736e84c931de5963fbaa785ca37": "2589050e344520270160db5a89f99a71f438785a71be20f808689e2032697c5f",
+    "index.html@d9bc81b9855ae736e84c931de5963fbaa785ca37": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "tests/preference-integrity-scenarios.js@d9bc81b9855ae736e84c931de5963fbaa785ca37": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646"
+  },
+  "verification": {
+    "records": 26,
+    "distinct_function_bodies": 25,
+    "historical_and_current_detector_replays_match": true,
+    "all_function_hashes_match_packet_and_each_other": true,
+    "function_hash_algorithm": "UTF-8 normalized LF full function line span with trailing LF, verified against packet for every row.",
+    "method": "Read-only installed RepoWise walker, complex_method/primitive_obsession/complex_conditional detectors on immutable Git00c and assigned current main. Exact mapped metrics including deepest blocks compared with packet; current marker lines translated by function shift and detector-replayed. Python -B; no app/test execution.",
+    "rules": {
+      "complex_method": "judged CCN>=9; all assigned complex rows have dispatch_share0 so judged CCN equals raw",
+      "primitive_obsession": "untyped parameter count>=5 in eligible files; both assigned factories have6, typed/primitive count0",
+      "complex_conditional": "boolean operators>=3; assigned counts3,4,3"
+    },
+    "receipt": "work/repowise-review-050/metrics.json",
+    "scope": "Main current raw/LF hashes rechecked against assignment and Gitd9. Other app/test/HTML caller and assertion context is historical Gitd9, hash-receipted. No all-current-app freeze claim."
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_c10a692a806495a7c968",
+      "file": "js/app/10-main-app.js",
+      "symbol": "pickTeacherComment",
+      "marker": "complex_method",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "remove_redundant_postguard_checks",
+      "reason": "The opening return guarantees data, data.detailed and categories before genre lookup. At5705 remove only the repeated data && / data.detailed && checks, using data.writingGenre || data.detailed.writingGenre || currentWritingGenreInfo || detectWritingGenreInfo(text). Preserve genre precedence, low-sample messages, missing-evidence neutrality,90/75 openings, grounded praise and existing coaching helper. This is a local deletion, not another teacher-comment extraction.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "5696-5737",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7187",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 22,
+        "cognitive": 22,
+        "nloc": 37,
+        "dispatch_share": 0.0,
+        "symbol_line": 5694,
+        "deepest_block": {
+          "start": 5696,
+          "end": 5700
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "pickTeacherComment",
+          "start_line": 5696,
+          "end_line": 5737,
+          "ccn": 22,
+          "cognitive": 22,
+          "max_nesting": 2,
+          "nloc": 37,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5698,
+            5702
+          ]
+        },
+        "historical_function": {
+          "name": "pickTeacherComment",
+          "start_line": 5694,
+          "end_line": 5735,
+          "ccn": 22,
+          "cognitive": 22,
+          "max_nesting": 2,
+          "nloc": 37,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5696,
+            5700
+          ]
+        },
+        "detector_details": {
+          "ccn": 22,
+          "cognitive": 22,
+          "nloc": 37,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 22,
+          "cognitive": 22,
+          "nloc": 37,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 22,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        5694,
+        5735
+      ],
+      "current_function_span": [
+        5696,
+        5737
+      ],
+      "historical_marker_span": [
+        5694,
+        5735
+      ],
+      "current_marker_span": [
+        5696,
+        5737
+      ],
+      "function_sha256_normalized_lf": "0153b71fd38cbbe2a8bbe65687e624d954396dfc1fadaad58c04fa48166e16a7",
+      "same_function_body_verified": true,
+      "callers": [
+        "fillNotebookSummary:7187 is the production caller; saved portfolio reconstruction has a different persisted-feedback path."
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": "25-37,90-99",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Missing/known category and low-sample teacher comments"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "43-75",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Native summary generation with concrete category evidence"
+        }
+      ],
+      "regression_recommendation": "On adoption compare exact missing/low/scorable comments, genre precedence and output text; existing missing-feedback and guide cases are relevant."
+    },
+    {
+      "record_id": "code_health:finding_94f366547c7c0bde19f4",
+      "file": "js/app/10-main-app.js",
+      "symbol": "extractNotebookActionItems",
+      "marker": "complex_method",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "remove_redundant_result_copy",
+      "reason": "items starts empty; each loop iteration can push once and breaks immediately at length2, and fallback pushes at most one only when the array is empty. No other reference escapes. Return items directly instead of items.slice(0,2) at5784, removing an unnecessary allocation while retaining normalization, deduplication, order and the two-action cap.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "5750-5785",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "5793-5802",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 14,
+        "nloc": 32,
+        "dispatch_share": 0.0,
+        "symbol_line": 5748,
+        "deepest_block": {
+          "start": 5767,
+          "end": 5775
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "extractNotebookActionItems",
+          "start_line": 5750,
+          "end_line": 5785,
+          "ccn": 11,
+          "cognitive": 14,
+          "max_nesting": 2,
+          "nloc": 32,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5769,
+            5777
+          ]
+        },
+        "historical_function": {
+          "name": "extractNotebookActionItems",
+          "start_line": 5748,
+          "end_line": 5783,
+          "ccn": 11,
+          "cognitive": 14,
+          "max_nesting": 2,
+          "nloc": 32,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5767,
+            5775
+          ]
+        },
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 14,
+          "nloc": 32,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 11,
+          "cognitive": 14,
+          "nloc": 32,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        5748,
+        5783
+      ],
+      "current_function_span": [
+        5750,
+        5785
+      ],
+      "historical_marker_span": [
+        5748,
+        5783
+      ],
+      "current_marker_span": [
+        5750,
+        5785
+      ],
+      "function_sha256_normalized_lf": "f6e78e5b640d5de1d0f95be307e0b37e9b27d2c05627475b8fdb56c5af2b1c23",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookActionChecklist.pushItemsFromText:5795"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "160-196",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Exact newline/CRLF/number/bullet/semicolon actions, dedup/order, first person and two-item/160-character limits"
+        }
+      ],
+      "regression_recommendation": "Run existing exact action-array assertions if adopted; no new parsing or helper needed."
+    },
+    {
+      "record_id": "code_health:finding_7a4eb428dcd144100e52",
+      "file": "js/app/10-main-app.js",
+      "symbol": "renderNotebookDetailedAssessment",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_live_print_contract",
+      "reason": "The live renderer has an intentional ordered rubric, conditional Neatness, Word Choice display alias, numeric-zero versus missing handling, escaped text, bounded percentage bars and odd-card grid padding. Its printData helper already shares feedback interpretation. The saved renderer has different omission and legacy-note behavior, so combining their loops into a generic renderer would create policy parameters.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "5974-6013",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7183-7185",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 39,
+        "dispatch_share": 0.0,
+        "symbol_line": 5972,
+        "deepest_block": {
+          "start": 5990,
+          "end": 6008
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "renderNotebookDetailedAssessment",
+          "start_line": 5974,
+          "end_line": 6013,
+          "ccn": 9,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 39,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5992,
+            6010
+          ]
+        },
+        "historical_function": {
+          "name": "renderNotebookDetailedAssessment",
+          "start_line": 5972,
+          "end_line": 6011,
+          "ccn": 9,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 39,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            5990,
+            6008
+          ]
+        },
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 39,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 39,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        5972,
+        6011
+      ],
+      "current_function_span": [
+        5974,
+        6013
+      ],
+      "historical_marker_span": [
+        5972,
+        6011
+      ],
+      "current_marker_span": [
+        5974,
+        6013
+      ],
+      "function_sha256_normalized_lf": "8f9f98412d36cda1d1f3d66c21032cae47598e0c5fb6b572196a0bda36679fee",
+      "same_function_body_verified": true,
+      "callers": [
+        "fillNotebookSummary:7185"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": "49,61-69,121",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Unknown score display versus genuine zero and actual saved notebook snapshot"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "77-102,106-145",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Notebook content, saved snapshots, colors and two-page fit"
+        }
+      ],
+      "regression_recommendation": "Retain Missing versus0, optional Neatness, rubric order, escaping and layout padding; do not alter educational content for CCN9."
+    },
+    {
+      "record_id": "code_health:finding_63e6a4380bc461fc83e1",
+      "file": "js/app/10-main-app.js",
+      "symbol": "normalizeNotebookGuideCategoryName",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ordered_category_classifier",
+      "reason": "The18-line classifier has an existing containsAnyCategoryTerm helper and seven ordered canonical outcomes. Keyword sets and order are educational classification behavior: spelling/capitals and ideas take precedence over later flow/grammar terms. NOTEBOOK_GUIDE_CATEGORY_ALIASES is not an identical ordered replacement. A new table/framework would relocate this small policy and risk changing overlap precedence.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6046-6075",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 6054,
+        "deepest_block": {
+          "start": 6056,
+          "end": 6056
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "normalizeNotebookGuideCategoryName",
+          "start_line": 6056,
+          "end_line": 6075,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 18,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6058,
+            6058
+          ]
+        },
+        "historical_function": {
+          "name": "normalizeNotebookGuideCategoryName",
+          "start_line": 6054,
+          "end_line": 6073,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 18,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6056,
+            6056
+          ]
+        },
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 18,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 18,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 10,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        6054,
+        6073
+      ],
+      "current_function_span": [
+        6056,
+        6075
+      ],
+      "historical_marker_span": [
+        6054,
+        6073
+      ],
+      "current_marker_span": [
+        6056,
+        6075
+      ],
+      "function_sha256_normalized_lf": "e3580d4bab86b8393c5a6c39c5220f2ace8603eb62ab4041a8adfefd6e275159",
+      "same_function_body_verified": true,
+      "callers": [
+        "inferNotebookGuideCategoryFromText:6227-6231",
+        "priority builder addPriority:6287",
+        "candidate sanitizer:6362-6365",
+        "getNotebookGuideExampleCategory:6496-6503"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "16-37,198-228",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Convention categories, rubric tie order, saved goal precedence and score-eight/minimum priorities"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "77-102",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Expected Flow/Word Choice/Grammar guide coverage"
+        }
+      ],
+      "regression_recommendation": "Retain canonical labels and first-match order; if changing aliases later, add explicit overlapping-label expectations."
+    },
+    {
+      "record_id": "code_health:finding_e733e20899c9ec8001a8",
+      "file": "js/app/10-main-app.js",
+      "symbol": "isGenericNotebookNextTimeExample",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_generic_advice_filter",
+      "reason": "The15-line predicate rejects empty or instructional next-time text before examples are accepted as concrete revisions. Its regex families and literal phrases form a visible bounded policy; replacing the OR list with a pattern table just to reduce CCN would obscure which advice is rejected without removing duplicate work.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6154-6168",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6192-6198",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 10,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 6152,
+        "deepest_block": {
+          "start": 6154,
+          "end": 6154
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "isGenericNotebookNextTimeExample",
+          "start_line": 6154,
+          "end_line": 6168,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 15,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6156,
+            6156
+          ]
+        },
+        "historical_function": {
+          "name": "isGenericNotebookNextTimeExample",
+          "start_line": 6152,
+          "end_line": 6166,
+          "ccn": 11,
+          "cognitive": 10,
+          "max_nesting": 1,
+          "nloc": 15,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6154,
+            6154
+          ]
+        },
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 11,
+          "cognitive": 10,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        6152,
+        6166
+      ],
+      "current_function_span": [
+        6154,
+        6168
+      ],
+      "historical_marker_span": [
+        6152,
+        6166
+      ],
+      "current_marker_span": [
+        6154,
+        6168
+      ],
+      "function_sha256_normalized_lf": "fe6d7a9bbe0be9780cced01f88a5722150767e9cc8790d93c9e32e3eed698192",
+      "same_function_body_verified": true,
+      "callers": [
+        "isValidNotebookGuideExample:6194; used by sanitizer, factory and both acceptance paths"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "55-58,88-95",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Generic instruction rejected and malformed model fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "107-112,233",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Generic/unchanged/unrelated revision rejection"
+        }
+      ],
+      "regression_recommendation": "Retain actual revision acceptance controls and generic-advice rejection; no regex consolidation without meaning-preserving cases."
+    },
+    {
+      "record_id": "code_health:finding_076f946c496a4a85483d",
+      "file": "js/app/10-main-app.js",
+      "symbol": "getNotebookGuideCategoryFocusSource",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_legacy_source_precedence",
+      "reason": "The14-line collector combines six existing category fields into cleaned focus text and supports detailedFeedback before detailed for saved/live data. Its Boolean CCN mainly measures defaults in a flat expression (depth0). Those fields and precedence are meaningful compatibility behavior, not branches worth wrapping or collapsing into an opaque accessor.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6257-6271",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6313-6328",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 6255
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getNotebookGuideCategoryFocusSource",
+          "start_line": 6257,
+          "end_line": 6271,
+          "ccn": 12,
+          "cognitive": 11,
+          "max_nesting": 0,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null
+        },
+        "historical_function": {
+          "name": "getNotebookGuideCategoryFocusSource",
+          "start_line": 6255,
+          "end_line": 6269,
+          "ccn": 12,
+          "cognitive": 11,
+          "max_nesting": 0,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null
+        },
+        "detector_details": {
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 12,
+        "judged_nesting": 0
+      },
+      "historical_function_span": [
+        6255,
+        6269
+      ],
+      "current_function_span": [
+        6257,
+        6271
+      ],
+      "historical_marker_span": [
+        6255,
+        6269
+      ],
+      "current_marker_span": [
+        6257,
+        6271
+      ],
+      "function_sha256_normalized_lf": "e0ecc99c5fe797f0f77892819b6d6278a982c9bec5210a05a45a97b7127a1d98",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookGuidePrioritiesFromRawInput:6314,6322,6328"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "198-228",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Tied rubric priorities, legacy saved goal precedence, zero/missing and score-eight priority behavior"
+        }
+      ],
+      "regression_recommendation": "Retain field order and saved/live source precedence. If touched, compare focus text for each legacy field and mixed detailedFeedback/detailed input."
+    },
+    {
+      "record_id": "code_health:finding_08b13adf7c4b98cebed0",
+      "file": "js/app/10-main-app.js",
+      "symbol": "addPriority",
+      "marker": "complex_method",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "remove_unreachable_priority_upgrade",
+      "reason": "Only this closure writes its private priorities array. Every pushed priority is getNotebookGuideDefaultFocus(category,text), which returns a nonempty fixed/default string for every allowed canonical category; Neatness and unknown categories return before insertion. Thus the duplicate-category branch at6291 can never find an empty priority. Delete that one conditional assignment; retain the duplicate return, first source/priority wins, ranking and four-item limit.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6233-6255",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6277-6335",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 11,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 6284,
+        "deepest_block": {
+          "start": 6288,
+          "end": 6291
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "addPriority",
+          "start_line": 6286,
+          "end_line": 6300,
+          "ccn": 9,
+          "cognitive": 11,
+          "max_nesting": 3,
+          "nloc": 15,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6290,
+            6293
+          ]
+        },
+        "historical_function": {
+          "name": "addPriority",
+          "start_line": 6284,
+          "end_line": 6298,
+          "ccn": 9,
+          "cognitive": 11,
+          "max_nesting": 3,
+          "nloc": 15,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6288,
+            6291
+          ]
+        },
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 9,
+          "cognitive": 11,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 3
+      },
+      "historical_function_span": [
+        6284,
+        6298
+      ],
+      "current_function_span": [
+        6286,
+        6300
+      ],
+      "historical_marker_span": [
+        6284,
+        6298
+      ],
+      "current_marker_span": [
+        6286,
+        6300
+      ],
+      "function_sha256_normalized_lf": "b3456955269a9301d5b89a6108f7ff85cedb0a875a7bba60ca5928245178885d",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookGuidePrioritiesFromRawInput:6314,6317-6318,6322,6328,6332-6333"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "198-228",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Tie order, legacy goal precedence, zero/missing and score-eight/minimum policy"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "59-60,94-95",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Missing-score priority fallback"
+        }
+      ],
+      "regression_recommendation": "Compare duplicate-category inputs from score/growGoal/nextTime and exact priority/source ordering. No general dedup helper or threshold change."
+    },
+    {
+      "record_id": "code_health:finding_88d56b7b2769df774320",
+      "file": "js/app/10-main-app.js",
+      "symbol": "notebookGuideExampleMatchesPriority",
+      "marker": "complex_method",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "reuse_existing_category_accessor",
+      "reason": "The category expression at6414 exactly duplicates getNotebookGuideExampleCategory:6496-6503, including page1Connection -> area -> skill precedence and normalization. Replace that expression with getNotebookGuideExampleCategory(example). Keep no-priorities permissiveness, unknown-category rejection and the normalized priority loop. This gives the existing category accessor one owner, rather than adding a score-only wrapper.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6412-6420",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6496-6503",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 12,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 6410,
+        "deepest_block": {
+          "start": 6415,
+          "end": 6415
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "notebookGuideExampleMatchesPriority",
+          "start_line": 6412,
+          "end_line": 6420,
+          "ccn": 12,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 9,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6417,
+            6417
+          ]
+        },
+        "historical_function": {
+          "name": "notebookGuideExampleMatchesPriority",
+          "start_line": 6410,
+          "end_line": 6418,
+          "ccn": 12,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 9,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6415,
+            6415
+          ]
+        },
+        "detector_details": {
+          "ccn": 12,
+          "cognitive": 12,
+          "nloc": 9,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 12,
+          "cognitive": 12,
+          "nloc": 9,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 12,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        6410,
+        6418
+      ],
+      "current_function_span": [
+        6412,
+        6420
+      ],
+      "historical_marker_span": [
+        6410,
+        6418
+      ],
+      "current_marker_span": [
+        6412,
+        6420
+      ],
+      "function_sha256_normalized_lf": "11173585916a689c5cdcc751371101c7fbc4f924cd89bc8333acf5ee008509b2",
+      "same_function_body_verified": true,
+      "callers": [
+        "sanitizeNotebookGuideCandidate:6365",
+        "assembleNotebookGuideFromCandidates.addExample:6934"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "77-95",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Required categories and invalid/generic candidate rejection"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "77-96,132-148",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Grounded prototype-like quotes, deduplication and two-priority maximum"
+        }
+      ],
+      "regression_recommendation": "On adoption compare page1Connection/area/skill precedence, null example, empty priorities, unknown category and alias priorities; preserve all existing candidate cases."
+    },
+    {
+      "record_id": "code_health:finding_b6db1589f4e852efbdf4",
+      "file": "js/app/10-main-app.js",
+      "symbol": "getNotebookGuideRequiredCategories",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_bounded_required_categories",
+      "reason": "The14-line helper accepts optional priority arrays and a parsed/default example count, preserves priority order, excludes unknown/Neatness and deduplicates canonical categories while respecting a bound. Each guard changes the required coverage contract. Keep this small helper and its explicit conditions; a Set/table or validating wrapper would not remove useful work.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6505-6523",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6535-6554",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 6503,
+        "deepest_block": {
+          "start": 6510,
+          "end": 6515
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "getNotebookGuideRequiredCategories",
+          "start_line": 6505,
+          "end_line": 6520,
+          "ccn": 9,
+          "cognitive": 9,
+          "max_nesting": 2,
+          "nloc": 14,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6512,
+            6517
+          ]
+        },
+        "historical_function": {
+          "name": "getNotebookGuideRequiredCategories",
+          "start_line": 6503,
+          "end_line": 6518,
+          "ccn": 9,
+          "cognitive": 9,
+          "max_nesting": 2,
+          "nloc": 14,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6510,
+            6515
+          ]
+        },
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        6503,
+        6518
+      ],
+      "current_function_span": [
+        6505,
+        6520
+      ],
+      "historical_marker_span": [
+        6503,
+        6518
+      ],
+      "current_marker_span": [
+        6505,
+        6520
+      ],
+      "function_sha256_normalized_lf": "4aebc779fb0dfc9897742a00ba201c55d2aa16088883fb0f5467c9ac3efeffca",
+      "same_function_body_verified": true,
+      "callers": [
+        "getNotebookGuideMaxExamples:6523",
+        "notebookGuideHasRequiredCoverage:6541",
+        "buildNotebookGuideFallback:6876",
+        "assembleNotebookGuideFromCandidates:6912"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "77-102",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Three required category coverage and insufficient-sample fallback"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "137-148,198-228",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Dedup, two-priority maximum and rubric-priority ordering"
+        }
+      ],
+      "regression_recommendation": "Retain invalid/default max behavior, exclusion of Neatness, first order and3/4 example policy."
+    },
+    {
+      "record_id": "code_health:finding_f88d29b4ba219e82b036",
+      "file": "js/app/10-main-app.js",
+      "symbol": "inferConventionSkill",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_convention_label_calibration",
+      "reason": "The19-line classifier intentionally separates corrected plural/complete-verb evidence from punctuation-only changes and generic conventions. Capitalization is not mislabeled as punctuation because original/changed lowercase forms become equal; exact tests assert that contract. The specialized bunny/playing-catch cases and punctuation normalization are teaching labels, not interchangeable formatting branches.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6647-6665",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6791-6824",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 6645,
+        "deepest_block": {
+          "start": 6648,
+          "end": 6653
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "inferConventionSkill",
+          "start_line": 6647,
+          "end_line": 6665,
+          "ccn": 11,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 19,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6650,
+            6655
+          ]
+        },
+        "historical_function": {
+          "name": "inferConventionSkill",
+          "start_line": 6645,
+          "end_line": 6663,
+          "ccn": 11,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 19,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6648,
+            6653
+          ]
+        },
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 19,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 19,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        6645,
+        6663
+      ],
+      "current_function_span": [
+        6647,
+        6665
+      ],
+      "historical_marker_span": [
+        6645,
+        6663
+      ],
+      "current_marker_span": [
+        6647,
+        6665
+      ],
+      "function_sha256_normalized_lf": "2d7d446f1075df4a5ef081d9e2899c5b558da7a61df0fbb642f780acd897129d",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildFallbackExampleForPriority conventions branches:6801,6816"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "16-37",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Exact punctuation/spelling/mixed/capitalization/plural/complete-verb labels and both fallback callers"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "38-53",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "No guessed plural, grounded possessive/plural and capitalization fallback"
+        }
+      ],
+      "regression_recommendation": "Retain exact labels and corrected-text evidence, including unchanged inputs and mixed spelling+punctuation. No regex/label rewrite for CCN."
+    },
+    {
+      "record_id": "code_health:finding_1c5b8851a55d1dda3282",
+      "file": "js/app/10-main-app.js",
+      "symbol": "addNotebookGuideFallbackExample",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_grounding_and_duplicate_policy",
+      "reason": "This small fallback acceptance boundary validates a concrete revision, normalizes its source quote, permits same quote only for a different category when explicitly allowed, verifies exact original-text grounding, and updates both maps only after success. It differs from assembler.addExample, which also enforces total size, required priorities and category duplication. Combining them would add policy switches.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6830-6848",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6884-6895",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 6828,
+        "deepest_block": {
+          "start": 6832,
+          "end": 6832
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "addNotebookGuideFallbackExample",
+          "start_line": 6830,
+          "end_line": 6848,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 15,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6834,
+            6834
+          ]
+        },
+        "historical_function": {
+          "name": "addNotebookGuideFallbackExample",
+          "start_line": 6828,
+          "end_line": 6846,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 15,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6832,
+            6832
+          ]
+        },
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 15,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 10,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        6828,
+        6846
+      ],
+      "current_function_span": [
+        6830,
+        6848
+      ],
+      "historical_marker_span": [
+        6828,
+        6846
+      ],
+      "current_marker_span": [
+        6830,
+        6848
+      ],
+      "function_sha256_normalized_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookGuideFallback required-category pass:6888 allowDuplicateQuote=true",
+        "fallback fill pass:6894 false"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "38-72,98-128",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Grounded quotations, word boundaries, paragraph fallback and no invented convention revision"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "137-148",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Deduplicated examples and priority maximum"
+        }
+      ],
+      "regression_recommendation": "Retain first validation, no map mutation on rejection and same-quote/different-category allowance; no shared acceptance framework."
+    },
+    {
+      "record_id": "code_health:finding_906c639a49387285cfa4",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookGuideFocusItemsFromExamples",
+      "marker": "complex_method",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "remove_unreachable_label_fallback",
+      "reason": "getNotebookGuideDefaultFocus(category,\"\") always returns a nonempty string, including unknown category fallback. Therefore the final || categoryDisplayLabel(category || \"Writing\") at6859 is unreachable. Delete that suffix only; keep ex.skill precedence,90-character truncation, focus deduplication and fallbackPriorities when no examples exist.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6233-6255",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6850-6868",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 6848,
+        "deepest_block": {
+          "start": 6854,
+          "end": 6862
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "buildNotebookGuideFocusItemsFromExamples",
+          "start_line": 6850,
+          "end_line": 6868,
+          "ccn": 11,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 17,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6856,
+            6864
+          ]
+        },
+        "historical_function": {
+          "name": "buildNotebookGuideFocusItemsFromExamples",
+          "start_line": 6848,
+          "end_line": 6866,
+          "ccn": 11,
+          "cognitive": 11,
+          "max_nesting": 2,
+          "nloc": 17,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6854,
+            6862
+          ]
+        },
+        "detector_details": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 17,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 17,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        6848,
+        6866
+      ],
+      "current_function_span": [
+        6850,
+        6868
+      ],
+      "historical_marker_span": [
+        6848,
+        6866
+      ],
+      "current_marker_span": [
+        6850,
+        6868
+      ],
+      "function_sha256_normalized_lf": "68155fb64ce5db05276f5345fd3d738a48816bce76f5f79bef8d0be550d6c867",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookGuideFallback result:6901",
+        "assembleNotebookGuideFromCandidates result:6988"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "77-102",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Rendered guide categories and low/no-example focus"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "137-148,198-228",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Assembly bounds and priority/focus policy"
+        }
+      ],
+      "regression_recommendation": "Compare explicit/empty skill, known/unknown category, duplicate/long focus and empty examples. No focus text or educational fallback changes."
+    },
+    {
+      "record_id": "code_health:finding_954463e2c9a968745031",
+      "file": "js/app/10-main-app.js",
+      "symbol": "addExample",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_layered_candidate_acceptance",
+      "reason": "The18-line closure enforces a maximum, valid concrete grounded quote, priority alignment, canonical category and two separate duplicate allowances before mutating selected/maps. Required coverage and optional filling intentionally call it with different allowances. These are the evidence boundary and educational diversity contract; hiding them in a shared fallback acceptor would need extra policy flags.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6925-6945",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6947-6981",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 6923,
+        "deepest_block": {
+          "start": 6927,
+          "end": 6927
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "addExample",
+          "start_line": 6925,
+          "end_line": 6945,
+          "ccn": 13,
+          "cognitive": 12,
+          "max_nesting": 1,
+          "nloc": 18,
+          "bumps": 0,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6929,
+            6929
+          ]
+        },
+        "historical_function": {
+          "name": "addExample",
+          "start_line": 6923,
+          "end_line": 6943,
+          "ccn": 13,
+          "cognitive": 12,
+          "max_nesting": 1,
+          "nloc": 18,
+          "bumps": 0,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6927,
+            6927
+          ]
+        },
+        "detector_details": {
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 18,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 18,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        6923,
+        6943
+      ],
+      "current_function_span": [
+        6925,
+        6945
+      ],
+      "historical_marker_span": [
+        6923,
+        6943
+      ],
+      "current_marker_span": [
+        6925,
+        6945
+      ],
+      "function_sha256_normalized_lf": "931eca79d57bed88763c38a19ef99d68f7c430ec9a7be1eb91a7e9a9dbbe15df",
+      "same_function_body_verified": true,
+      "callers": [
+        "assembleNotebookGuideFromCandidates required candidate:6953",
+        "required fallback:6965",
+        "diverse fill:6971",
+        "duplicate-category fill:6975",
+        "fallback merge:6980"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "55-96,132-148",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Invented/source-fragment rejection, prototype-key dedup and exact candidate maximum"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "77-95",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Three expected categories and invalid/generic rejection"
+        }
+      ],
+      "regression_recommendation": "Retain max checks before mutation, source grounding and exact duplicate category/quote combinations. Do not remove revalidation merely because candidates were sanitized earlier."
+    },
+    {
+      "record_id": "code_health:finding_864bef6e21e94b0d1bbf",
+      "file": "js/app/10-main-app.js",
+      "symbol": "renderNotebookGuideExamples",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_safe_bounded_renderer",
+      "reason": "The22-line example renderer bounds item count and every displayed field, escapes all model/student text, and restores only normalized double-newline paragraph breaks after escaping. It also gives a useful no-example message conditional on quick-check visibility. These local defaults and security/layout boundaries should remain visible; no field-definition rendering framework is needed.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7030-7051",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7071-7079",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 13,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 7028,
+        "deepest_block": {
+          "start": 7046,
+          "end": 7046
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "renderNotebookGuideExamples",
+          "start_line": 7030,
+          "end_line": 7051,
+          "ccn": 13,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 22,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7048,
+            7048
+          ]
+        },
+        "historical_function": {
+          "name": "renderNotebookGuideExamples",
+          "start_line": 7028,
+          "end_line": 7049,
+          "ccn": 13,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 22,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7046,
+            7046
+          ]
+        },
+        "detector_details": {
+          "ccn": 13,
+          "cognitive": 13,
+          "nloc": 22,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 13,
+          "cognitive": 13,
+          "nloc": 22,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        7028,
+        7049
+      ],
+      "current_function_span": [
+        7030,
+        7051
+      ],
+      "historical_marker_span": [
+        7028,
+        7049
+      ],
+      "current_marker_span": [
+        7030,
+        7051
+      ],
+      "function_sha256_normalized_lf": "e968939863621fde282f0d1f0e9cb9bf760292f7672c85447dc1d05c1f29197d",
+      "same_function_body_verified": true,
+      "callers": [
+        "renderNotebookGuideHtml:7077; used by current/saved summary and legacy refresh"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "150-158,243-249,267-275",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Sanitized paragraph markup, hostile text nonexecution, current/saved breaks and two-page fit"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "106-145",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Print colors, dimensions and saved fit"
+        }
+      ],
+      "regression_recommendation": "Retain escape-before-br conversion, paragraph limits, field lengths and configured item cap; run layout oracles only when changes are adopted."
+    },
+    {
+      "record_id": "code_health:finding_a0bc5269056689b0f926",
+      "file": "js/app/10-main-app.js",
+      "symbol": "ensureNotebookGuide",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_version_and_sample_contract",
+      "reason": "The23-line coordinator first preserves a saved guide at the current/newer version, emits no examples for insufficient/limited samples, otherwise builds priorities and assembles grounded candidates/fallbacks before stamping the version. These are deliberate history and low-sample contracts. Moving branches to helpers would not remove repeated work and could unexpectedly rewrite stored guides.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7082-7110",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 14,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 7080,
+        "deepest_block": {
+          "start": 7082,
+          "end": 7082
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "ensureNotebookGuide",
+          "start_line": 7082,
+          "end_line": 7104,
+          "ccn": 15,
+          "cognitive": 14,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7084,
+            7084
+          ]
+        },
+        "historical_function": {
+          "name": "ensureNotebookGuide",
+          "start_line": 7080,
+          "end_line": 7102,
+          "ccn": 15,
+          "cognitive": 14,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7082,
+            7082
+          ]
+        },
+        "detector_details": {
+          "ccn": 15,
+          "cognitive": 14,
+          "nloc": 23,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 15,
+          "cognitive": 14,
+          "nloc": 23,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 15,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        7080,
+        7102
+      ],
+      "current_function_span": [
+        7082,
+        7104
+      ],
+      "historical_marker_span": [
+        7080,
+        7102
+      ],
+      "current_marker_span": [
+        7082,
+        7104
+      ],
+      "function_sha256_normalized_lf": "081d57bcf8e14f9a04b07fe7671626180e2ef41fd1726b0984e54232ab1e69c1",
+      "same_function_body_verified": true,
+      "callers": [
+        "presentAnalysisResult:8044",
+        "fillNotebookSummary:7188",
+        "getNotebookGuideFromPortfolioSession:7110",
+        "historical storage saveCurrentSessionToPortfolio:7736"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "55-75,88-102",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Low-sample coaching, saved guide and snapshot preservation"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "132-148,243-249",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Candidate/fallback generation and native current/saved snapshots"
+        }
+      ],
+      "regression_recommendation": "Retain version reuse, no-example low-sample behavior, saved-guide identity and source field precedence; do not regenerate all historical guides."
+    },
+    {
+      "record_id": "code_health:finding_388125686d54705ffbee",
+      "file": "js/app/10-main-app.js",
+      "symbol": "fillNotebookSummary",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_current_context_summary_transaction",
+      "reason": "The41-line function refuses stale analysis before publishing the printable DOM, retains zero versus unknown overall, chooses strength consistent with the highest assessed category, and uses shared detail/comment/guide helpers at sanitized boundaries. Optional second-page elements coexist with required notebook DOM. Splitting the ordered summary transaction only to lower CCN would obscure when publication is allowed.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7145-7190",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7383-7414",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 19,
+        "nloc": 41,
+        "dispatch_share": 0.0,
+        "symbol_line": 7143,
+        "deepest_block": {
+          "start": 7158,
+          "end": 7158
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "fillNotebookSummary",
+          "start_line": 7145,
+          "end_line": 7190,
+          "ccn": 19,
+          "cognitive": 19,
+          "max_nesting": 2,
+          "nloc": 41,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7160,
+            7160
+          ]
+        },
+        "historical_function": {
+          "name": "fillNotebookSummary",
+          "start_line": 7143,
+          "end_line": 7188,
+          "ccn": 19,
+          "cognitive": 19,
+          "max_nesting": 2,
+          "nloc": 41,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7158,
+            7158
+          ]
+        },
+        "detector_details": {
+          "ccn": 19,
+          "cognitive": 19,
+          "nloc": 41,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 19,
+          "cognitive": 19,
+          "nloc": 41,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 19,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        7143,
+        7188
+      ],
+      "current_function_span": [
+        7145,
+        7190
+      ],
+      "historical_marker_span": [
+        7143,
+        7188
+      ],
+      "current_marker_span": [
+        7145,
+        7190
+      ],
+      "function_sha256_normalized_lf": "2864bb7907359c703193ea2bb56d7c7eaf1f0d16b07262ef2e55c27b7b6d366d",
+      "same_function_body_verified": true,
+      "callers": [
+        "printNotebookSummary:7384",
+        "captureNotebookPrintSnapshotForCurrentAnalysis:7408"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "236-249",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Full summary, actual native save and current/legacy portfolio snapshots"
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": "114-121",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Actual analyzed/saved unknown-score notebook snapshot"
+        },
+        {
+          "file": "tests/notebook-print-failure.browser.cjs",
+          "lines": "13-56",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Current and saved real popup isolation, protected writing/pending/analysis state"
+        }
+      ],
+      "regression_recommendation": "Retain isCurrentWritingContext rejection, strength/category agreement, sanitized renderers and state preservation; no teaching text/threshold changes."
+    },
+    {
+      "record_id": "code_health:finding_e890cbbd9e7f4daf0522",
+      "file": "js/app/10-main-app.js",
+      "symbol": "renderNotebookDetailedAssessmentFromSavedSession",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_distinct_legacy_print_renderer",
+      "reason": "The saved renderer uses the same rubric ordering but deliberately omits null/empty absent scores, shows malformed nonempty scores as Missing, keeps genuine zero and gives legacy snapshot-era notes. It also supplies an all-missing placeholder and grid padding. Those differ from live detail feedback, so a shared renderer would need condition flags and alter compatibility risk.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7441-7477",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7499",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 37,
+        "dispatch_share": 0.0,
+        "symbol_line": 7439,
+        "deepest_block": {
+          "start": 7453,
+          "end": 7468
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "renderNotebookDetailedAssessmentFromSavedSession",
+          "start_line": 7441,
+          "end_line": 7477,
+          "ccn": 10,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 37,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7455,
+            7470
+          ]
+        },
+        "historical_function": {
+          "name": "renderNotebookDetailedAssessmentFromSavedSession",
+          "start_line": 7439,
+          "end_line": 7475,
+          "ccn": 10,
+          "cognitive": 12,
+          "max_nesting": 2,
+          "nloc": 37,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7453,
+            7468
+          ]
+        },
+        "detector_details": {
+          "ccn": 10,
+          "cognitive": 12,
+          "nloc": 37,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 10,
+          "cognitive": 12,
+          "nloc": 37,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 10,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        7439,
+        7475
+      ],
+      "current_function_span": [
+        7441,
+        7477
+      ],
+      "historical_marker_span": [
+        7439,
+        7475
+      ],
+      "current_marker_span": [
+        7441,
+        7477
+      ],
+      "function_sha256_normalized_lf": "1d4a185761162357e84e255cd90ea173bd180c759806772f93e834875f8fd32b",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookPrintHtmlFromPortfolioSession:7499"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": "49-53,61-69",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Live/legacy unknown and zero/numeric scores"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "65-75,98-102,138-145",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Saved notebook reconstruction, historical page-one preservation and print fit"
+        }
+      ],
+      "regression_recommendation": "Retain omitted absent scores versus malformed values, zero, escaped raw labels/scores, legacy notes and odd-grid padding."
+    },
+    {
+      "record_id": "code_health:finding_46523b22d5ed554a99ea",
+      "file": "js/app/10-main-app.js",
+      "symbol": "buildNotebookPrintHtmlFromPortfolioSession",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_saved_snapshot_composition",
+      "reason": "The24-line builder reconstructs a saved two-page notebook from persisted text, safe corrected HTML, genre-sanitized feedback, saved date/title and zero-aware overall. Its fallbacks support entries predating snapshots. It is intentionally separate from live pickTeacherComment/current-analysis state; a generic summary model would risk changing archived feedback or history.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7479-7503",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7763-7795",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 17,
+        "cognitive": 16,
+        "nloc": 24,
+        "dispatch_share": 0.0,
+        "symbol_line": 7477,
+        "deepest_block": {
+          "start": 7480,
+          "end": 7480
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "buildNotebookPrintHtmlFromPortfolioSession",
+          "start_line": 7479,
+          "end_line": 7503,
+          "ccn": 17,
+          "cognitive": 16,
+          "max_nesting": 1,
+          "nloc": 24,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7482,
+            7482
+          ]
+        },
+        "historical_function": {
+          "name": "buildNotebookPrintHtmlFromPortfolioSession",
+          "start_line": 7477,
+          "end_line": 7501,
+          "ccn": 17,
+          "cognitive": 16,
+          "max_nesting": 1,
+          "nloc": 24,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7480,
+            7480
+          ]
+        },
+        "detector_details": {
+          "ccn": 17,
+          "cognitive": 16,
+          "nloc": 24,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 17,
+          "cognitive": 16,
+          "nloc": 24,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 17,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        7477,
+        7501
+      ],
+      "current_function_span": [
+        7479,
+        7503
+      ],
+      "historical_marker_span": [
+        7477,
+        7501
+      ],
+      "current_marker_span": [
+        7479,
+        7503
+      ],
+      "function_sha256_normalized_lf": "95572f980d25c3153b8b1f4e244c9045d6b9185175ec953fedb8e309cd9eeaba",
+      "same_function_body_verified": true,
+      "callers": [
+        "refreshNotebookPage2Guide fallback:7769",
+        "printPortfolioNotebookSummary missing snapshot:7785"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "248-249",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Current structured and legacy saved paragraph guide HTML"
+        },
+        {
+          "file": "tests/notebook-guide.browser.cjs",
+          "lines": "98-102,138-145",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Historical page-one preservation and saved printable guide"
+        },
+        {
+          "file": "tests/portfolio-html.browser.cjs",
+          "lines": "133-151",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Served export nonexecution and valid formatting/media"
+        }
+      ],
+      "regression_recommendation": "Retain saved-versus-current sources, HTML escaping/safe corrected markup, unknown-versus-zero score and snapshot preference. Existing invalid date lead review029 is separate, not duplicated here."
+    },
+    {
+      "record_id": "code_health:finding_c27d53fe6a0a339c37c2",
+      "file": "js/app/10-main-app.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_restored_image_metadata",
+      "reason": "The14-line promise callback ignores unavailable/unsafe data URLs and appends a fresh reassessment image with original bytes, name/MIME fallback, cleared extraction state and retained Drive/image identity/revision. These defaults support historical photos and later ownership checks. No useful deletion follows from CCN9; do not drop metadata to shorten it.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7563-7575",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7597-7610",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7617-7623",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 14,
+        "dispatch_share": 0.0,
+        "symbol_line": 7595,
+        "symbol_index": 101,
+        "deepest_block": {
+          "start": 7596,
+          "end": 7596
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 7597,
+          "end_line": 7610,
+          "ccn": 9,
+          "cognitive": 8,
+          "max_nesting": 1,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7598,
+            7598
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 7595,
+          "end_line": 7608,
+          "ccn": 9,
+          "cognitive": 8,
+          "max_nesting": 1,
+          "nloc": 14,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7596,
+            7596
+          ]
+        },
+        "detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 14,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        7595,
+        7608
+      ],
+      "current_function_span": [
+        7597,
+        7610
+      ],
+      "historical_marker_span": [
+        7595,
+        7608
+      ],
+      "current_marker_span": [
+        7597,
+        7610
+      ],
+      "function_sha256_normalized_lf": "d03b6146e7bab3d3c40952905107cc2b178378624475ff5a5d893af5f5feed17",
+      "same_function_body_verified": true,
+      "callers": [
+        "restorePortfolioSessionImagesForReassessment serial chain:7593-7613; final current-context gate:7618"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-html.browser.cjs",
+          "lines": "146-152",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Actual safe/unsafe saved/local/Drive restoration and original-data fallback"
+        },
+        {
+          "file": "tests/portfolio-reassessment.browser.cjs",
+          "lines": "212-219",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Ordinary confirmation loads expected saved photo/owner/grade/source"
+        }
+      ],
+      "regression_recommendation": "Preserve unavailable skip, safe image validation, imageId/revision and final stale-context return null. Keep no-source/partial/Drive failures visible."
+    },
+    {
+      "record_id": "code_health:finding_fa1b31a336377742bafa",
+      "file": "js/app/10-main-app.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_method",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "remove_redundant_result_checks",
+      "reason": "The callback returns at7734 whenever result is falsy. Its four later result && prefixes at7735,7743,7746 and7748 therefore add no protection. Delete only those repeated prefixes; keep restored/total conditions, saved source/neatness flags, required preference save and actionable failure/partial/full/no-photo notices unchanged. Retain the early null return used for stale image contexts.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7733-7754",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7577-7623",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 16,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 7677,
+        "symbol_index": 104,
+        "deepest_block": {
+          "start": 7681,
+          "end": 7686
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 7733,
+          "end_line": 7754,
+          "ccn": 15,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 22,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7737,
+            7742
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 7677,
+          "end_line": 7698,
+          "ccn": 15,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 22,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7681,
+            7686
+          ]
+        },
+        "detector_details": {
+          "ccn": 15,
+          "cognitive": 16,
+          "nloc": 22,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 15,
+          "cognitive": 16,
+          "nloc": 22,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 15,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        7677,
+        7698
+      ],
+      "current_function_span": [
+        7733,
+        7754
+      ],
+      "historical_marker_span": [
+        7677,
+        7698
+      ],
+      "current_marker_span": [
+        7733,
+        7754
+      ],
+      "function_sha256_normalized_lf": "73b69c3adce18a801958f865cef8db494305b0e0ca14f62776032dd0690e49d3",
+      "same_function_body_verified": true,
+      "callers": [
+        "reassessPortfolioSession after photo restoration resolves; setNeatnessForPortfolioReassessment:7545-7549"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-reassessment.browser.cjs",
+          "lines": "203-239",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Native ordinary/cancel/failed-grade and held confirmation preservation"
+        },
+        {
+          "file": "tests/preference-integrity-scenarios.js",
+          "lines": "117-128",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Late neatness preference save failure retains loaded writing, saved policy and Check Settings status"
+        },
+        {
+          "file": "tests/portfolio-html.browser.cjs",
+          "lines": "146-151",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Actual image restore boundaries"
+        }
+      ],
+      "regression_recommendation": "If adopted, cover result null,0/0,no restored photos,partial/full restoration and failed preference persistence. Existing ordinary/late failure assertions do not alone establish every notice branch."
+    },
+    {
+      "record_id": "code_health:finding_5d743917e463897a3133",
+      "file": "js/app/10-main-app.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_method",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_meter_calibration_separate_behavior_lead",
+      "reason": "The31-line wrapper mirrors the existing meter into the visible status bar with explicit target-off, zero,75%/95%/105% bands,100% visual fill cap and exact-target override. Keep thresholds and color semantics visible; an options/calibration framework would not help. The exact-target override may ignore the disabled target policy; that source-supported unconfirmed behavior is recorded separately, not silently changed as a shape repair.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "8576-8610",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "4929-5009",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 13,
+        "nloc": 31,
+        "dispatch_share": 0.0,
+        "symbol_line": 8521,
+        "symbol_index": 128,
+        "deepest_block": {
+          "start": 8537,
+          "end": 8549
+        }
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 8577,
+          "end_line": 8610,
+          "ccn": 13,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 31,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            8593,
+            8605
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 8521,
+          "end_line": 8554,
+          "ccn": 13,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 31,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            8537,
+            8549
+          ]
+        },
+        "detector_details": {
+          "ccn": 13,
+          "cognitive": 13,
+          "nloc": 31,
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "ccn": 13,
+          "cognitive": 13,
+          "nloc": 31,
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 13,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        8521,
+        8554
+      ],
+      "current_function_span": [
+        8577,
+        8610
+      ],
+      "historical_marker_span": [
+        8521,
+        8554
+      ],
+      "current_marker_span": [
+        8577,
+        8610
+      ],
+      "function_sha256_normalized_lf": "10d829827e5c4841a69c7615384637ef0e67416ebe9a64d2c9ac968be26ab8a6",
+      "same_function_body_verified": true,
+      "callers": [
+        "updateMeter replaces original while retaining _originalUpdateMeter call; target input listener:8387; syncUiState and preference changes also invoke meter updates"
+      ],
+      "test_assertion_references": [],
+      "regression_recommendation": "No direct status-bar assertion found by historical Gitd9 test search. Any later change needs native off/zero/below/near/exact/above threshold and DOM-output checks. Existing042 original-meter dead-badge/cap candidate and044 status-bar unused-argument candidate are separate and not duplicated."
+    },
+    {
+      "record_id": "code_health:finding_f06389d3d183b5b7fa65",
+      "file": "js/app/10-main-app.js",
+      "symbol": "makeNotebookGuideExample",
+      "marker": "primitive_obsession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_explicit_example_factory_parameters",
+      "reason": "The six inputs are exactly the six saved/rendered example fields. The tiny constructor centralizes quote/revision/explanation length limits, paragraph preservation and concrete-revision validation for seven content-specific fallback call sites. An object parameter would repeat field names at each long teaching-string call without reducing state or validation.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6683-6693",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6730-6788",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6799-6821",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 6681
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "makeNotebookGuideExample",
+          "start_line": 6683,
+          "end_line": 6693,
+          "ccn": 2,
+          "cognitive": 1,
+          "max_nesting": 1,
+          "nloc": 11,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6692,
+            6692
+          ]
+        },
+        "historical_function": {
+          "name": "makeNotebookGuideExample",
+          "start_line": 6681,
+          "end_line": 6691,
+          "ccn": 2,
+          "cognitive": 1,
+          "max_nesting": 1,
+          "nloc": 11,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6690,
+            6690
+          ]
+        },
+        "detector_details": {
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "historical_detector_details": {
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "judged_ccn": 2,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        6681,
+        6691
+      ],
+      "current_function_span": [
+        6683,
+        6693
+      ],
+      "historical_marker_span": [
+        6681,
+        6691
+      ],
+      "current_marker_span": [
+        6683,
+        6693
+      ],
+      "function_sha256_normalized_lf": "3542f49c080e5a00a4c7b3c2862b8f4ed63d46cfee0a02eac9a5e24da5a768c7",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildFallbackExampleForPriority:6730,6741,6756,6768,6779,6799,6814"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "116-128",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Factory paragraph retention, grounded fallback and truncation limits"
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "16-53",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Convention labels and grounded corrections"
+        }
+      ],
+      "regression_recommendation": "Retain180/220/130 limits, paragraph-aware quote/revision and null on invalid concrete examples. No positional-to-object migration for a parameter warning."
+    },
+    {
+      "record_id": "code_health:finding_a868a94954804e2bff54",
+      "file": "js/app/10-main-app.js",
+      "symbol": "addNotebookGuideFallbackExample",
+      "marker": "primitive_obsession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_explicit_acceptance_state_parameters",
+      "reason": "The six parameters explicitly distinguish proposed example, original source text, destination list, quote/category maps and duplicate-quote policy. Both production calls belong to one bounded fallback builder. Capturing them in a closure or object would mainly hide the acceptance state and clear a parameter count; keep the current boundary and distinct Boolean policy.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6830-6848",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6871-6905",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "param_count": 6,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 6828
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "addNotebookGuideFallbackExample",
+          "start_line": 6830,
+          "end_line": 6848,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 15,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6834,
+            6834
+          ]
+        },
+        "historical_function": {
+          "name": "addNotebookGuideFallbackExample",
+          "start_line": 6828,
+          "end_line": 6846,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 15,
+          "bumps": 0,
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6832,
+            6832
+          ]
+        },
+        "detector_details": {
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "historical_detector_details": {
+          "param_count": 6,
+          "typed_param_count": 0,
+          "primitive_param_count": 0
+        },
+        "judged_ccn": 10,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        6828,
+        6846
+      ],
+      "current_function_span": [
+        6830,
+        6848
+      ],
+      "historical_marker_span": [
+        6828,
+        6846
+      ],
+      "current_marker_span": [
+        6830,
+        6848
+      ],
+      "function_sha256_normalized_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a",
+      "same_function_body_verified": true,
+      "callers": [
+        "buildNotebookGuideFallback required pass:6888; fill pass:6894"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "38-72,98-128,137-148",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Source grounding, paragraph fallback, dedup and priority cap"
+        }
+      ],
+      "regression_recommendation": "Same guarded acceptance obligations as the complex row; no second repair counted and no shared mutable-state framework."
+    },
+    {
+      "record_id": "code_health:finding_845f971e196e18607fe6",
+      "file": "js/app/10-main-app.js",
+      "symbol": "originalTextContainsNotebookQuote",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_unicode_word_boundaries",
+      "reason": "The three-operator conditional proves the quote begins and ends on a real word boundary while preserving exact case and normalized apostrophe/whitespace forms. A substring alone would accept fragments such as cats inside wildcats, dog inside dog's, hyphen fragments or partial Unicode words. The loop must search later occurrences after an earlier invalid fragment.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "6208-6225",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 6210
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "originalTextContainsNotebookQuote",
+          "start_line": 6212,
+          "end_line": 6225,
+          "ccn": 7,
+          "cognitive": 7,
+          "max_nesting": 2,
+          "nloc": 14,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6218,
+            6223
+          ]
+        },
+        "historical_function": {
+          "name": "originalTextContainsNotebookQuote",
+          "start_line": 6210,
+          "end_line": 6223,
+          "ccn": 7,
+          "cognitive": 7,
+          "max_nesting": 2,
+          "nloc": 14,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6216,
+            6221
+          ]
+        },
+        "detector_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 7,
+        "judged_nesting": 2
+      },
+      "historical_function_span": [
+        6210,
+        6223
+      ],
+      "current_function_span": [
+        6212,
+        6225
+      ],
+      "historical_marker_span": [
+        6218,
+        6218
+      ],
+      "current_marker_span": [
+        6220,
+        6220
+      ],
+      "function_sha256_normalized_lf": "f21a70815abda2b7e0adb726345ffc3bf934a85a577641a6aa8a07c0f60990f4",
+      "same_function_body_verified": true,
+      "callers": [
+        "sanitizeNotebookGuideCandidate:6359",
+        "addNotebookGuideFallbackExample:6841",
+        "assembleNotebookGuideFromCandidates.addExample:6933"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": "55-72",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Fabricated case/plural/fragments rejected; exact later occurrence, Unicode, contractions/hyphens, typography/paragraph whitespace controls"
+        }
+      ],
+      "regression_recommendation": "Retain Unicode property regex, both boundaries and repeated occurrence scan; no predicate extraction just to hide three operators."
+    },
+    {
+      "record_id": "code_health:finding_1cdab62e523ba3c26976",
+      "file": "js/app/10-main-app.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_precise_drive_unavailable_notice",
+      "reason": "The four-operator guard counts a skipped Drive photo only when the image exists, has a Drive ID, lacks a token and has neither local data URL nor original-data backup. Every term matters: locally recoverable photos must not count as sign-in-required. Keep the explicit predicate alongside the actual restore request and per-photo failure catch.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7593-7613",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7563-7575",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "operator_count": 4,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 7591,
+        "symbol_index": 100
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 7593,
+          "end_line": 7613,
+          "ccn": 6,
+          "cognitive": 5,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7594,
+            7596
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 7591,
+          "end_line": 7611,
+          "ccn": 6,
+          "cognitive": 5,
+          "max_nesting": 1,
+          "nloc": 21,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            7592,
+            7594
+          ]
+        },
+        "detector_details": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "operator_count": 4,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 6,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        7591,
+        7611
+      ],
+      "current_function_span": [
+        7593,
+        7613
+      ],
+      "historical_marker_span": [
+        7592,
+        7592
+      ],
+      "current_marker_span": [
+        7594,
+        7594
+      ],
+      "function_sha256_normalized_lf": "6716e29a17a5d6bd58b760aab957455e0e6c39202443f5490f5a51bbf16f52ba",
+      "same_function_body_verified": true,
+      "callers": [
+        "restorePortfolioSessionImagesForReassessment image/index closure in serial chain"
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/portfolio-html.browser.cjs",
+          "lines": "146-151",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Unsafe/local/Drive restoration and safe original-data fallback"
+        },
+        {
+          "file": "tests/portfolio-reassessment.browser.cjs",
+          "lines": "212-219",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Ordinary saved photo restoration"
+        }
+      ],
+      "regression_recommendation": "Retain no-token with/without local/original fallback distinctions; no-token skip count has no direct exact count assertion in inspected tests, so add one only if changing it."
+    },
+    {
+      "record_id": "code_health:finding_cb75b06f17c7ca01125c",
+      "file": "js/app/10-main-app.js",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_keyboard_activation_guard",
+      "reason": "The five-line keyboard listener allows Ctrl or Meta plus Enter only when the actual Analyze button is enabled, then clicks that existing button. Modifier alternatives, key match and disabled guard are useful visible activation rules. Do not split this into a helper or bypass the button to lower a three-operator metric.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "8379-8386",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 8326,
+        "symbol_index": 108
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 8382,
+          "end_line": 8386,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 5,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            8383,
+            8385
+          ]
+        },
+        "historical_function": {
+          "name": "<anonymous>",
+          "start_line": 8326,
+          "end_line": 8330,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 5,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            8327,
+            8329
+          ]
+        },
+        "detector_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "historical_detector_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0
+        },
+        "judged_ccn": 5,
+        "judged_nesting": 1
+      },
+      "historical_function_span": [
+        8326,
+        8330
+      ],
+      "current_function_span": [
+        8382,
+        8386
+      ],
+      "historical_marker_span": [
+        8327,
+        8327
+      ],
+      "current_marker_span": [
+        8383,
+        8383
+      ],
+      "function_sha256_normalized_lf": "e0a7b4fe48ebc22b6ffdc4413b71485dcb750efb79fedfc5ee8c2634b30db114",
+      "same_function_body_verified": true,
+      "callers": [
+        "studentWriting keydown listener; delegates to analyzeBtn click handler"
+      ],
+      "test_assertion_references": [],
+      "regression_recommendation": "Historical Gitd9 test search found dialog Enter tests but no direct Ctrl/Meta+Enter analysis shortcut assertion. Retain unchanged; if altered, exercise Ctrl/Meta+Enter, plain Enter and disabled button through actual key events."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "review050-disabled-target-status-badge",
+      "file": "js/app/10-main-app.js",
+      "function": "updateMeter wrapper",
+      "classification": "possible_disabled_target_display_override",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "getTargetWordCountValue retains a positive configured target even when its checkbox is off. The wrapper first chooses Target off, but the unconditional words===target override at8606 then assigns On target. updateStatusBar publishes that badge to visible #statusBarStatus. Thus an off target with exactly the stored word count appears able to display an enabled-target success message. Original updateMeter returns early for target-off, so its own meter text does not prevent the wrapper override. Source supported only; no application run here.",
+      "evidence_anchors": [
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "4929-4975",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "8576-8610",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "8026-8036",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        },
+        {
+          "file": "index.html",
+          "lines": "3448-3452",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37"
+        }
+      ],
+      "test_assertion_references": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": "108-121",
+          "commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+          "assertion": "Target is switched off for actual analysis, but the case does not assert statusBarStatus; no direct badge oracle found by historical test search"
+        }
+      ],
+      "regression_recommendation": "Using real inputs/events, configure a positive target, switch target off and enter exactly that many words; assert statusBarStatus remains Target off and fill stays0%. Add enabled/exact -> On target and disabled/nonexact controls. If confirmed, gate only the exact-target override with targetEnabled; preserve thresholds, text and normal enabled behavior. No reproduction or fix claimed."
+    }
+  ],
+  "related_existing_work": [
+    {
+      "id": "review029-invalid-dateiso-display",
+      "note": "Saved date formatting issue referenced, not duplicated."
+    },
+    {
+      "id": "repair-042 original updateMeter cleanup",
+      "note": "Dead unused badge assignments/cap simplification concern a different function; not re-proposed here."
+    },
+    {
+      "id": "repair-044 unused updateStatusBar parameters",
+      "note": "Separate interface cleanup retained for parent; not duplicated in wrapper row."
+    }
+  ],
+  "summary": {
+    "assigned_records": 26,
+    "confirmed_minimal_candidates": 6,
+    "reviewed_no_change": 20,
+    "additional_unreproduced_behavior_leads": 1,
+    "candidate_scope": "Six local opportunities: redundant postguard data checks; redundant final action-array copy; unreachable empty-priority upgrade; existing category accessor reuse; unreachable display-label fallback; redundant result checks after early return. No new helpers/frameworks, string/calibration rewrites or flag-clear predictions.",
+    "adoption": "Parent must read/adopt each reason; no source edits or scanner closures."
+  },
+  "limits": [
+    "Anonymous symbol_index values remain copied stored metadata, not regenerated ordinals. Exact historical/current callback spans, body hashes and walker facts establish binding instead.",
+    "Historical observation detail lines remain original00c; evidence anchors/callers/tests use explicit Gitd9 and mapped current spans. Main full bytes match assignmentd9, while concurrent046 storage/navigation work is outside this certified source scope.",
+    "No browser/app/syntax tests or dynamic reproductions performed. Existing tests were read and cited as assertions, not newly passing evidence; no full-current behavior or live-service claim.",
+    "All proposed deletions rely on the inspected standard helper implementations and private local-array/result control flow. Preserve guard/error/grounding boundaries and run relevant native checks only during a separately authorized edit.",
+    "No source/test/fixture/Git/index/cache/tracker/docs/dependency/chat mutations or agents. Only own scratch and this UTF-8 output written."
+  ],
+  "coordinator_acceptance": {
+    "each_reason_read": true,
+    "all_assigned_historical_current_metrics_and_function_bodies_verified": true,
+    "raw_main_and_git_normalized_source_verified": true,
+    "historical_context_hashes_verified": true,
+    "scope": "Current main raw immutable;62assigned functions exact historical/current body mappings. Historical other-app/test contexts only; current046 storage/navigation edits excluded. No anonymous ordinal regeneration, runtime pass or closure.",
+    "no_runtime_or_clearance_claims": true
+  }
+}

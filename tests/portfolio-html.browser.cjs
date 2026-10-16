@@ -152,6 +152,95 @@ function checkLivePortfolio(live, generated, check) {
     check('archive media rejects unsafe sources before fetching', () => { assert.equal(live.invalidMediaRequests, 0); assert.equal(live.invalidMediaRejections, 4); });
     check('student/year export handlers complete through tested generators', () => { assert.equal(live.downloads.length, 2); assert.equal(live.saved, 1); assert.equal(live.cleared, 1); });
 }
+function setupRosterNavigation(spec) {
+    stopWftSyncPolling(); stopDriveAutoSync(); scheduleWftCloudSync = () => {}; window.alert = () => {};
+    localStorage.clear(); students = ['Alice', 'Bob']; selectedStudent = 'Alice';
+    localStorage.setItem('wft_students', JSON.stringify(students)); localStorage.setItem('wft_selectedStudent', 'Alice');
+    localStorage.setItem('wft_settings', JSON.stringify({ students, gradeLevel: 5, classGradeLevel: 5, unknown: 'keep' }));
+    localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, JSON.stringify(getEmptyDeletionsData()));
+    const saved = name => ({ sessions: [{ id: name + '-saved', title: name + ' saved essay', originalText: name + ' saved writing.', images: [] }] });
+    localStorage.setItem('wft_portfolio', JSON.stringify({ Alice: saved('Alice'), Bob: saved('Bob') }));
+    populateStudentDropdown(); document.getElementById('studentSelect').value = 'Alice'; renderStudentList();
+    const canvas = document.createElement('canvas'); canvas.width = canvas.height = 8; canvas.getContext('2d').fillRect(0, 0, 8, 8);
+    selectedImages = [{ name: 'Alice current photo', imageId: 'alice-current', imageRevision: 'keep-revision', dataUrl: canvas.toDataURL(), originalDataUrl: canvas.toDataURL(), extractedText: 'Keep OCR', extractionPromise: Promise.resolve('Keep OCR') }];
+    document.getElementById('studentWriting').value = 'Alice current writing.  Exact spaces.\nSecond line.';
+    syncSelectedImageState(); updateSelectedImagePreview();
+    activePortfolioReassessmentSource = { sourceStudentName: 'Alice', sourceSessionId: 'keep-source' };
+    latestAnalysisData = { inputContext: captureCurrentWritingContext(), overall: 80, categoryScores: { Grammar: 8 }, correctedStory: 'Keep previous report.' };
+    document.getElementById('correctedStory').innerHTML = '<p>Keep previous report.</p>';
+    pendingPortfolioSync = { studentName: 'Alice', signature: 'keep-pending', sessionData: { id: 'keep-pending', originalText: 'Alice earlier pending writing.', images: getSessionImagePayloads() } };
+    persistPendingPortfolioSync();
+    const portfolioSelect = document.getElementById('portfolioStudentSelect'); portfolioSelect.value = 'Alice'; renderStudentPortfolio();
+    const photo = selectedImages[0], promise = photo.extractionPromise, pending = pendingPortfolioSync, source = activePortfolioReassessmentSource, latest = latestAnalysisData;
+    const snapshot = () => ({ writing: document.getElementById('studentWriting').value,
+        photos: selectedImages.map(image => ({ ...image, extractionPromise: !!image.extractionPromise })),
+        primary: [selectedImageDataUrl, selectedImageName, selectedImageExtractedText, !!selectedImageExtractionPromise],
+        source: JSON.parse(JSON.stringify(activePortfolioReassessmentSource)), pending: JSON.parse(JSON.stringify(pendingPortfolioSync)), latest: JSON.parse(JSON.stringify(latestAnalysisData)),
+        grade: document.getElementById('gradeLevelSelect').value, neatness: document.getElementById('assessScriptQuality').checked,
+        corrected: document.getElementById('correctedStory').innerHTML,
+        stored: Object.fromEntries(['wft_students', 'wft_settings', 'wft_portfolio', WFT_DELETIONS_STORAGE_KEY, PENDING_PORTFOLIO_SYNC_KEY].map(key => [key, localStorage.getItem(key)])) });
+    globalThis.rosterBefore = snapshot(); globalThis.rosterRenders = []; globalThis.rosterCropCloses = 0; globalThis.rosterScrolls = [];
+    const realRender = renderStudentPortfolio;
+    renderStudentPortfolio = Object.assign(function() { rosterRenders.push((document.getElementById('portfolioStudentSelect') || {}).value || null); return realRender.apply(this, arguments); }, realRender);
+    const realClose = closeCropModal; closeCropModal = function() { rosterCropCloses++; return realClose.apply(this, arguments); };
+    const section = document.getElementById('portfolioSection'), realScroll = section.scrollIntoView;
+    section.scrollIntoView = function(options) { rosterScrolls.push(options); return realScroll.call(this, options); };
+    if (spec.staleDropdown) [...portfolioSelect.options].find(option => option.value === 'Bob').remove();
+    if (spec.missingToolSelect) document.getElementById('studentSelect').remove();
+    if (spec.missingPortfolioSelect) portfolioSelect.remove();
+    if (spec.missingSection) section.removeAttribute('id');
+    const nativeSet = Storage.prototype.setItem;
+    if (spec.storageFailure) Storage.prototype.setItem = function(key, value) { if (key === 'wft_selectedStudent') throw new Error('Synthetic selection write failure'); return nativeSet.call(this, key, value); };
+    globalThis.restoreRosterStorage = () => { Storage.prototype.setItem = nativeSet; };
+    globalThis.captureRosterNavigation = () => ({ before: rosterBefore, after: snapshot(), owner: selectedStudent,
+        toolSelection: document.getElementById('studentSelect')?.value ?? null, portfolioSelection: document.getElementById('portfolioStudentSelect')?.value ?? null,
+        options: [...(document.getElementById('portfolioStudentSelect')?.options || [])].map(option => option.value),
+        titles: [...document.querySelectorAll('#portfolioContent .session-title')].map(node => node.textContent),
+        storedSelection: localStorage.getItem('wft_selectedStudent'), renders: rosterRenders.slice(), cropCloses: rosterCropCloses, scrolls: rosterScrolls.slice(),
+        tabActive: document.getElementById('portfolioTabBtn').classList.contains('active'), adminActive: document.getElementById('adminTabBtn').classList.contains('active'),
+        exportDisabled: document.getElementById('exportSelectedStudentBtn').disabled,
+        sameReferences: selectedImages[0] === photo && selectedImages[0].extractionPromise === promise && pendingPortfolioSync === pending && activePortfolioReassessmentSource === source && latestAnalysisData === latest });
+}
+
+async function checkRosterNavigation(browser, check, serve) {
+    const specs = [{ name: 'desktop', target: 'Bob' }, { name: 'mobile', target: 'Bob', mobile: true },
+        { name: 'same-student', target: 'Alice' }, { name: 'stale-dropdown', target: 'Bob', staleDropdown: true },
+        { name: 'missing-tool-select', target: 'Bob', missingToolSelect: true },
+        { name: 'missing-portfolio-select', target: 'Bob', missingPortfolioSelect: true },
+        { name: 'missing-scroll-section', target: 'Bob', missingSection: true },
+        { name: 'selection-write-failure', target: 'Bob', storageFailure: true }];
+    const observations = [];
+    for (const spec of specs) {
+        const page = await browser.newPage({ viewport: spec.mobile ? { width: 390, height: 844 } : { width: 1200, height: 900 } });
+        const errors = []; page.on('pageerror', error => errors.push(error.message)); await page.route('**/*', serve);
+        try {
+            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' }); await page.evaluate(setupRosterNavigation, spec);
+            await page.locator('#adminTabBtn').click();
+            if (!(await page.locator('#rosterSection').isVisible())) await page.locator('#toggleRosterBtn').click();
+            await page.locator('#studentList').getByRole('button', { name: spec.target, exact: true }).click();
+            const result = await page.evaluate(() => captureRosterNavigation());
+            const visible = { portfolio: await page.locator('#portfolioPanel').isVisible(), admin: await page.locator('#adminPanel').isVisible() };
+            const label = 'roster ' + spec.name + ': ';
+            check(label + 'real name click opens visible Portfolio tab/panel', () => { assert.equal(result.tabActive, true); assert.equal(result.adminActive, false); assert.equal(visible.portfolio, true); assert.equal(visible.admin, false); });
+            check(label + 'target and dropdown populate with one correct render', () => {
+                assert.equal(result.owner, spec.target); if (!spec.missingToolSelect) assert.equal(result.toolSelection, spec.target);
+                if (!spec.missingPortfolioSelect) { assert.equal(result.portfolioSelection, spec.target); assert.deepEqual(result.options, ['', 'Alice', 'Bob']); assert.deepEqual(result.titles, [spec.target + ' saved essay']); assert.deepEqual(result.renders, [spec.target]); assert.equal(result.exportDisabled, false); }
+                else assert.ok(result.renders.length <= 1);
+            });
+            check(label + 'writing media pending and crop ownership stay safe', () => { assert.deepEqual(errors, []); assert.deepEqual(result.after, result.before); assert.equal(result.sameReferences, true); assert.equal(result.cropCloses, spec.target === 'Alice' ? 0 : 1); });
+            check(label + 'optional storage and responsive scroll contracts survive', () => {
+                assert.equal(result.storedSelection, spec.storageFailure ? 'Alice' : spec.target);
+                assert.deepEqual(result.scrolls, spec.mobile || spec.missingSection || spec.missingPortfolioSelect ? [] : [{ behavior: 'smooth', block: 'start' }]);
+            });
+            observations.push({ name: spec.name, target: spec.target, ...visible, tabActive: result.tabActive, owner: result.owner, selection: result.portfolioSelection,
+                renders: result.renders, protectedStateKept: JSON.stringify(result.before) === JSON.stringify(result.after), sameReferences: result.sameReferences,
+                cropCloses: result.cropCloses, scrolls: result.scrolls.length, pageErrors: errors });
+        } catch (error) { check('roster ' + spec.name + ': completes without operational error', () => { throw error; }); observations.push({ name: spec.name, operationalError: error.message, pageErrors: errors }); }
+        finally { await page.evaluate(() => globalThis.restoreRosterStorage?.()).catch(() => {}); await page.close(); }
+    }
+    return observations;
+}
+
 
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
@@ -199,7 +288,9 @@ function checkLivePortfolio(live, generated, check) {
             }
             return samples;
         });
+        const rosterNavigation = await checkRosterNavigation(browser, check, servePortfolioDocument);
         const evidence = { cases, performance, scope: 'Synthetic Edge browser; actual served scripts and generated HTML; all external requests blocked; ZIP/media/Drive writes stubbed' };
+        evidence.rosterNavigation = rosterNavigation;
         if (process.env.WFT_TEST_EVIDENCE) fs.writeFileSync(process.env.WFT_TEST_EVIDENCE, JSON.stringify(evidence, null, 2));
         console.log(JSON.stringify(evidence, null, 2));
         assert.deepEqual(failures, [], 'Portfolio HTML security regressions');
