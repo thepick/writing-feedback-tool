@@ -3,6 +3,33 @@ const {chromium}=require('playwright');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(process.env.WFT_TEST_ROOT||path.join(__dirname,'..'));
 const scenarios=['current','legacy-current','retry-late-success','retry-late-error','newer-during-upload','signout-current','signout-timeout-reconnect','reconnect-during-upload'];
+const acknowledgementPayloads=[
+ {kind:'settings',filename:'wft-settings.json',data:{students:['Synthetic'],targetWordCount:'240'},matching:{targetWordCount:'240',students:['Synthetic'],updatedAt:'2026-10-16T00:03:00Z'},different:{students:['Synthetic'],targetWordCount:'333'},invalid:{students:{}}},
+ {kind:'deletions',filename:'wft-deletions.json',data:{records:[],deletedStudents:{Synthetic:{deletedAt:'2026-10-16T00:00:00Z'}}},matching:{records:[],deletedStudents:{Synthetic:{deletedAt:'2026-10-16T00:00:00Z'}},updatedAt:'2026-10-16T00:03:00Z'},different:{records:[],deletedStudents:{Other:{deletedAt:'2026-10-16T00:00:00Z'}}},invalid:{records:{}}},
+ {kind:'portfolio',filename:'wft-portfolio.json',data:{Synthetic:{sessions:[{id:'ack-writing',originalText:'Intended synthetic writing',images:[]}]}},matching:{Synthetic:{sessions:[{id:'ack-writing',originalText:'Intended synthetic writing',images:[]}]},__syncMeta:{updatedAt:'2026-10-16T00:03:00Z'}},different:{Synthetic:{sessions:[{id:'ack-writing',originalText:'Different synthetic writing',images:[]}]}},invalid:{Synthetic:{sessions:{}}}},
+ {kind:'index',filename:'portfolio-index.json',data:{format:'portfolio-index-v1',students:{Synthetic:{fileId:'student-intended'}}},different:{format:'portfolio-index-v1',students:{Synthetic:{fileId:'student-other'}}}}
+];
+const acknowledgementCases=acknowledgementPayloads.flatMap(payload=>['matching','different',...(payload.invalid?['invalid']:[])].map(mode=>({...payload,mode,scenario:'ack-'+payload.kind+'-'+mode})));
+for(const mode of ['missing','non-timeout'])acknowledgementCases.push({...acknowledgementPayloads[0],mode,scenario:'ack-settings-'+mode});
+scenarios.push(...acknowledgementCases.map(c=>c.scenario));
+
+function initializeAcknowledgement(contract){
+ document.getElementById('studentWriting').value='Unsaved synthetic DOM draft.\nKeep exact spacing.  ';
+ pendingPortfolioSync={studentName:'Synthetic',signature:'ack-pending',sessionData:{id:'ack-pending',originalText:'Pending exact writing',images:[]}};persistPendingPortfolioSync();
+ wftSyncState.pendingSettingsPush=wftSyncState.pendingDeletionsPush=true;
+ window.ackInput=structuredClone(contract.data);if(contract.kind==='settings')window.ackInput.apiKey='synthetic-private-key';
+ window.ackInputBefore=JSON.stringify(window.ackInput);window.ackEvents=[];window.ackSaveError=null;window.ackReadback=false;window.ackOutcome=null;
+ // Observe identity and publication while delegating every save, parse and cache operation unchanged.
+ const save=saveFileToDrivePromise,download=downloadWftJsonFilePromise,cache=setCachedWftDriveFileId;
+ saveFileToDrivePromise=function(...args){return save.apply(this,args).catch(error=>{window.ackSaveError=error;window.ackEvents.push({type:'save-error',message:error.message,status:error.status});throw error;});};
+ downloadWftJsonFilePromise=function(...args){window.ackEvents.push({type:'download',id:args[0],shape:args[1]});return download.apply(this,args).then(data=>{window.ackReadback=true;window.ackEvents.push({type:'parsed',data});return data;});};
+ setCachedWftDriveFileId=function(filename,id){window.ackEvents.push({type:'cache',filename,id,afterReadback:window.ackReadback});return cache.apply(this,arguments);};
+}
+
+function captureAcknowledgement(){
+ return {writing:document.getElementById('studentWriting').value,bytes:['wft_settings','wft_students','wft_deletions','wft_portfolio'].map(key=>[key,localStorage.getItem(key)]),pending:getPendingPortfolioSync(),pendingBytes:localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY),
+ dirty:[wftSyncState.pendingSettingsPush,wftSyncState.pendingDeletionsPush,wftSyncState.pendingPortfolioPush],counters:[wftSyncState.localSettingsCounter,wftSyncState.localDeletionsCounter,wftSyncState.localPortfolioCounter,wftSyncState.lastSyncedSettingsCounter,wftSyncState.lastSyncedDeletionsCounter,wftSyncState.lastSyncedPortfolioCounter]};
+}
 function initializeOwnershipState(){
  stopWftSyncPolling();stopDriveAutoSync();localStorage.clear();sessionStorage.clear();
  localStorage.setItem('wft_settings','{}');localStorage.setItem('wft_students','["Synthetic"]');localStorage.setItem('wft_deletions','{"records":[]}');
@@ -26,8 +53,9 @@ function checkFinalOwnership(scenario,snapshots,check,errors){
 (async()=>{
  const browser=await chromium.launch({channel:'msedge',headless:true}),cases=[];
  try{for(const scenario of scenarios){
+  const acknowledgement=acknowledgementCases.find(c=>c.scenario===scenario);
   const context=await browser.newContext(),page=await context.newPage(),held=[],requests=[],errors=[],checks=[],snapshots={},files=new Map(),uploads=new Map();
-  let hold=true;
+  let hold=true,healthyAcknowledgementRetry=false;
   page.on('pageerror',e=>errors.push(e.message));
   await context.route('**/*',handleServiceRequest);
   async function handleServiceRequest(route){
@@ -42,6 +70,20 @@ function checkFinalOwnership(scenario,snapshots,check,errors){
     const parts=req.postData().split('\r\n\r\n'),meta=JSON.parse(parts[1].split('\r\n')[0]);
     const prior=files.get(url.pathname.split('/').pop()),name=meta.name||prior.name;
     uploads.set(route,{name,token:req.headers().authorization,data:JSON.parse(parts[2].slice(0,parts[2].lastIndexOf('\r\n--')))});
+    if(acknowledgement){
+     if(healthyAcknowledgementRetry)return accept(route);
+     if(acknowledgement.mode==='non-timeout')return reply({error:{message:'Synthetic permission denied'}},403);
+     const file={...uploads.get(route),id:'ack-canonical',modifiedTime:'2026-10-16T00:02:00Z'};
+     if(!files.size)files.set('ack-older',{...file,id:'ack-older',modifiedTime:'2026-10-16T00:01:00Z',data:acknowledgement.different});
+     files.set(file.id,file);held.push(route);
+     if(held.length===3){
+      if(acknowledgement.mode==='matching')file.data=acknowledgement.matching||acknowledgement.data;
+      if(acknowledgement.mode==='different')file.data=acknowledgement.different;
+      if(acknowledgement.mode==='invalid')file.data=acknowledgement.invalid;
+      if(acknowledgement.mode==='missing')files.clear();
+     }
+     return;
+    }
     if(hold&&(name==='wft-portfolio.json'||name==='wft-deletions.json')){held.push(route);return;}
     return accept(route);
    }
@@ -50,7 +92,7 @@ function checkFinalOwnership(scenario,snapshots,check,errors){
    if(query.includes('.google-migration-v1.json'))return reply({files:[{id:'migration-marker'}]});
    if(url.searchParams.get('alt')==='media'&&url.pathname.endsWith('/migration-marker'))return reply({userId:'synthetic-account',oldClient:'546695859117-18drps6vl0l8u6pcp9mgfhcc972rebl0.apps.googleusercontent.com',newClient:await page.evaluate(()=>GOOGLE_CLIENT_ID)});
    if(query.includes("name='WritingFeedbackTool'"))return reply({files:[{id:'root-folder'}]});
-   if(query){const name=query.match(/name='([^']+)'/)?.[1];return reply({files:Array.from(files.values()).filter(f=>f.name===name&&f.token===req.headers().authorization).map(({id,name,modifiedTime})=>({id,name,modifiedTime}))});}
+   if(query){const name=query.match(/name='([^']+)'/)?.[1],found=Array.from(files.values()).filter(f=>f.name===name&&f.token===req.headers().authorization);if(acknowledgement)found.sort((a,b)=>b.modifiedTime.localeCompare(a.modifiedTime));return reply({files:found.map(({id,name,modifiedTime})=>({id,name,modifiedTime}))});}
    if(url.pathname.endsWith('/root-folder'))return reply({id:'root-folder',name:'WritingFeedbackTool',mimeType:'application/vnd.google-apps.folder',trashed:false});
    const saved=files.get(url.pathname.split('/').pop());
    if(saved)return reply(url.searchParams.get('alt')==='media'?saved.data:{id:saved.id,name:saved.name,parents:['root-folder'],mimeType:'application/json',trashed:false,modifiedTime:saved.modifiedTime});
@@ -68,6 +110,53 @@ function checkFinalOwnership(scenario,snapshots,check,errors){
    await page.evaluate(()=>finishWftGoogleSignInWithAccessToken('synthetic-token-B',3600,'synthetic-scope','gis-popup'));
    await page.waitForFunction(()=>driveAccessToken==='synthetic-token-B');
   };
+  async function finishAcknowledgement(){
+   await page.evaluate(initializeAcknowledgement,acknowledgement);
+   snapshots.before=await page.evaluate(captureAcknowledgement);
+   await page.evaluate(filename=>{window.ackRun=uploadWftJsonFilePromise(filename,window.ackInput).then(id=>{window.ackOutcome={id};},error=>{window.ackOutcome={message:error.message,name:error.name,status:error.status,sameError:error===window.ackSaveError};});},acknowledgement.filename);
+   if(acknowledgement.mode!=='non-timeout'){
+    await waitHeld(1);
+    for(let attempt=1;attempt<=3;attempt++){await page.clock.runFor(30001);if(attempt<3){await page.clock.runFor(attempt===1?500:1000);await waitHeld(attempt+1);}}
+   }
+   await page.waitForFunction(()=>window.ackOutcome!==null);
+   snapshots.after=await page.evaluate(captureAcknowledgement);
+   snapshots.ack=await page.evaluate(filename=>({outcome:window.ackOutcome,events:window.ackEvents,input:window.ackInput,inputBefore:window.ackInputBefore,cache:getCachedWftDriveFileId(filename),inputUnchanged:JSON.stringify(window.ackInput)===window.ackInputBefore}),acknowledgement.filename);
+   const {outcome,events}=snapshots.ack,uploadRequests=requests.filter(r=>r.url.includes('/upload/')),downloads=events.filter(e=>e.type==='download'),parsed=events.find(e=>e.type==='parsed'),recoveryCaches=events.filter(e=>e.type==='cache'&&e.afterReadback);
+   check('Pre-operation DOM draft, local required bytes, pending writing, dirty flags and counters remain exact',snapshots.before.writing==='Unsaved synthetic DOM draft.\nKeep exact spacing.  '&&JSON.stringify(snapshots.before)===JSON.stringify(snapshots.after));
+   check('Caller payload remains unchanged',snapshots.ack.inputUnchanged);
+   if(acknowledgement.mode==='non-timeout'){
+    check('Actual non-timeout save error propagates by identity without recovery lookup, readback or publication',outcome.sameError&&outcome.status===403&&outcome.message==='Synthetic permission denied'&&downloads.length===0&&recoveryCaches.length===0&&uploadRequests.length===1&&events.filter(e=>e.type==='cache').length===0&&requests.at(-1)===uploadRequests[0]);
+   }else{
+    check('Three real multipart attempts commit literal intended server bytes while replies remain held',held.length===3&&uploadRequests.length===3&&held.every(route=>JSON.stringify(uploads.get(route).data)===JSON.stringify(acknowledgement.data)));
+    const saveError=events.findIndex(e=>e.type==='save-error'),download=events.findIndex(e=>e.type==='download');
+    check('Real final save timeout precedes canonical readback',saveError>=0&&events[saveError].message==='SAVE_FILE_TIMEOUT:'+acknowledgement.filename&&(acknowledgement.mode==='missing'?download===-1:download>saveError));
+    if(acknowledgement.mode==='matching'){
+     check('Only literal matching canonical readback acknowledges and publishes recovery cache',outcome.id==='ack-canonical'&&downloads.length===1&&downloads[0].id==='ack-canonical'&&JSON.stringify(parsed?.data)===JSON.stringify(acknowledgement.matching||acknowledgement.data)&&recoveryCaches.length===1&&recoveryCaches[0].id==='ack-canonical'&&snapshots.ack.cache==='ack-canonical');
+    }else if(acknowledgement.mode==='invalid'){
+     const message=acknowledgement.kind==='portfolio'?'Invalid portfolio student: Synthetic':'Saved wft_'+acknowledgement.kind+' data could not be read. Download Emergency Backup and repair the saved data before retrying.';
+     check('Malformed required cloud shape keeps actual validation error and never acknowledges',outcome.message===message&&outcome.name===(acknowledgement.kind==='portfolio'?'TypeError':'Error')&&!outcome.sameError&&!outcome.id&&downloads.length===1&&!parsed&&recoveryCaches.length===0);
+    }else{
+     check('Different or missing canonical retains exact original timeout without recovery publication',outcome.sameError&&outcome.message==='SAVE_FILE_TIMEOUT:'+acknowledgement.filename&&!outcome.id&&recoveryCaches.length===0&&(acknowledgement.mode==='missing'?downloads.length===0:downloads.length===1&&JSON.stringify(parsed?.data)===JSON.stringify(acknowledgement.different)));
+     if(acknowledgement.mode==='missing')check('Missing canonical clears the invalid lower-level lookup cache',snapshots.ack.cache==='');
+    }
+    check('Canonical lookup cache is allowed before equality but cannot substitute for acknowledgement',events.some(e=>e.type==='cache'&&!e.afterReadback&&e.id==='ack-canonical'));
+   }
+   if(acknowledgement.kind==='settings')check('Every actual settings multipart excludes private credential and field',uploadRequests.every(r=>!r.body.includes('synthetic-private-key')&&!r.body.includes('"apiKey"'))&&snapshots.ack.input.apiKey==='synthetic-private-key');
+   if(acknowledgement.mode==='non-timeout'){
+    healthyAcknowledgementRetry=true;
+    snapshots.retry=await page.evaluate(async filename=>{clearWftSyncBlockState();const id=await uploadWftJsonFilePromise(filename,window.ackInput);return {id,cache:getCachedWftDriveFileId(filename)};},acknowledgement.filename);
+    snapshots.retry.state=await page.evaluate(captureAcknowledgement);
+    const retryUploads=Array.from(uploads.values());
+    check('Healthy retry uses actual sanitized multipart and canonical acknowledgement without clearing local work',snapshots.retry.id==='accepted-1'&&snapshots.retry.cache==='accepted-1'&&retryUploads.length===2&&retryUploads.every(upload=>JSON.stringify(upload.data)===JSON.stringify(acknowledgement.data))&&JSON.stringify(snapshots.retry.state)===JSON.stringify(snapshots.before));
+   }
+   check('No browser script errors',errors.length===0);
+  }
+  if(acknowledgement){
+   await finishAcknowledgement();
+   cases.push({scenario,passed:checks.length>0&&checks.every(x=>x.passed),checks,snapshots,requests,errors});
+   for(const route of held)await route.abort().catch(()=>{});
+   await context.close();console.log(JSON.stringify({scenario,checks}));continue;
+  }
   async function startScenario(){
   if(scenario==='legacy-current'){
    await page.evaluate(()=>saveFileToDrive(WFT_PORTFOLIO_FILENAME,localStorage.getItem('wft_portfolio'),'application/json',(err,id)=>{window.legacyResult={error:err&&err.message,id};}));
@@ -121,6 +210,6 @@ function checkFinalOwnership(scenario,snapshots,check,errors){
   cases.push({scenario,passed:checks.length>0&&checks.every(x=>x.passed),checks,snapshots,requests,errors});
   for(const route of held)await route.abort().catch(()=>{});
   await context.close();console.log(JSON.stringify({scenario,checks}));
- }}finally{await browser.close();if(process.env.WFT_TEST_REPORT)fs.writeFileSync(process.env.WFT_TEST_REPORT,JSON.stringify({cases,sourceRoot:root,browser:browser.version(),productionMethodsReplaced:[],defaultsUnchanged:true},null,2));}
+ }}finally{await browser.close();if(process.env.WFT_TEST_REPORT)fs.writeFileSync(process.env.WFT_TEST_REPORT,JSON.stringify({cases,sourceRoot:root,browser:browser.version(),productionMethodsReplaced:['saveFileToDrivePromise','downloadWftJsonFilePromise','setCachedWftDriveFileId'],replacementScope:'Acknowledgement cases only: delegating observers retain real save, typed parsing, validation, fingerprint and cache behavior; original eight ownership cases have no replacements.',defaultsUnchanged:true},null,2));}
  assert.equal(cases.length,scenarios.length);assert.ok(cases.every(c=>c.checks.every(x=>x.passed)),'Upload ownership invariant failed; see native evidence');
 })().catch(e=>{console.error(e);process.exitCode=1;});

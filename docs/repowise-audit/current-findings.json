@@ -4,7 +4,7 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T14:08:15.418416+07:00",
+  "updated_at": "2026-10-16T15:02:20.130709+07:00",
   "timezone": "Asia/Bangkok",
   "status": "risk_prioritized_code_health_active",
   "active_repair": null,
@@ -1721,7 +1721,7 @@
       "native_cases_after": 219,
       "old_pass_new_fail_fault_pairs": 8,
       "shape_observations": "reviews/repair-065-local-shape-observations.json",
-      "scanner_tradeoff": "Added explicit test oracles increase test-only branch/size metrics; checkRedirectRecovery CCN22→26. Preserve necessary data-recovery assertions; no production bug inferred or metric-only extraction admitted.",
+      "scanner_tradeoff": "Added explicit test oracles increase test-only branch/size metrics; checkRedirectRecovery CCN22â†’26. Preserve necessary data-recovery assertions; no production bug inferred or metric-only extraction admitted.",
       "publication_status": "published_verified",
       "merge_commit": "d52fdcb059def5f7f4f1d41679de8947131bb6d1"
     },
@@ -1880,6 +1880,68 @@
       "thread_id": "01a140bb-d411-7a52-9f82-de537714d5e0",
       "status": "reviewed_complete",
       "outcome": "Ten initial test-only signals verified. Changed test files require a current context/hash review before retaining their outcomes."
+    },
+    {
+      "id": "repair-072",
+      "title": "Verify timeout recovery acknowledges only the intended Drive content",
+      "status": "validated_pending_merge",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "thread_id": "01a1438c-80f9-7333-bb0c-8b7b45b23d56",
+      "scope": "P10 test-only native upload timeout/canonical readback contracts; no production refactor",
+      "base_commit": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+      "admission_reports": [
+        "reviews/post009-next-benefit-independent.json",
+        "reviews/post009-next-benefit-admission.json",
+        "reviews/batch-009-postrefresh-production-review.json"
+      ],
+      "behavior_fix_verified": false,
+      "report": "reviews/repair-072-timeout-acknowledgement-contracts.json",
+      "native_scenarios_before": 8,
+      "native_checks_before": 23,
+      "native_scenarios_after": 21,
+      "native_checks_after": 118,
+      "production_unchanged": true,
+      "preoperation_snapshot_correction_verified": true,
+      "commit": "5b238405e2e68eebe75ad90d9ce15897ffc1e612",
+      "independent_reviews": [
+        "reviews/repair-072-safety-review.json",
+        "reviews/repair-072-regression-review.json"
+      ],
+      "batch": "batch-010",
+      "validation_report": "reviews/batch-010-validation.json"
+    },
+    {
+      "id": "repair-073",
+      "title": "Skip unused grammar diff when no reason is generated",
+      "status": "validated_pending_merge",
+      "files": [
+        "js/app/10-main-app.js",
+        "tests/correction-performance.browser.cjs"
+      ],
+      "thread_id": "01a1438c-80f9-7333-bb0c-8b7b45b23d56",
+      "base_commit": "5b238405e2e68eebe75ad90d9ce15897ffc1e612",
+      "scope": "P31 one reason-builder early return above normalized score8; unchanged lower-band output and separate grammar consumers",
+      "admission_reports": [
+        "reviews/post009-next-benefit-independent.json"
+      ],
+      "pre_edit_report": "C:/Users/Michael/Documents/Codex/2026-10-16/repowise-batch-010-save-feedback/outputs/repair-073-p31-pre-edit-investigation.json",
+      "pre_edit_original_native_cases": 85,
+      "pre_edit_probe_limit": "Raw data captured75direct+10caller rows; script stopped on a mistaken raw-vs-prepolished caller expectation. Offline correction documented; not an all-passing baseline probe.",
+      "performance_claim": "Original29 high-score rows returned empty after real analyzer/LCS work; candidate zero-work and output parity pending. No latency/memory benchmark.",
+      "report": "reviews/repair-073-high-score-grammar-guard.json",
+      "performance_checks_before": 133,
+      "performance_checks_after": 304,
+      "compatibility_checks_before_after": 30,
+      "native_work_output_observations": 57,
+      "production_diff_lines": 1,
+      "performance_benefit_verified": "19high-score native rows skip real analyzer/LCS; output parity at57supported cases; no time/memory measurement",
+      "commit": "d952cd7a319b8a46da140be8c043bccd48731114",
+      "independent_reviews": [
+        "reviews/repair-073-safety-review.json",
+        "reviews/repair-073-regression-review.json"
+      ],
+      "batch": "batch-010",
+      "validation_report": "reviews/batch-010-validation.json"
     }
   ],
   "findings": [
@@ -14935,7 +14997,7 @@
         "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
         "source_sha256_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
         "report": "reviews/batch-007-postrefresh-dispositions.json",
-        "reason": "P11 shared merge loops have verified own-key/winner/order/roster/credential parity and105native+14VM focused checks, plus full77suite gate. PersistedCCN16→13/NLOC34→23 improves High→Medium; remaining branches preserve required policy. Keep warning open; no further metric-only extraction.",
+        "reason": "P11 shared merge loops have verified own-key/winner/order/roster/credential parity and105native+14VM focused checks, plus full77suite gate. PersistedCCN16â†’13/NLOC34â†’23 improves Highâ†’Medium; remaining branches preserve required policy. Keep warning open; no further metric-only extraction.",
         "independent_review": "reviews/batch-007-postrefresh-review.json",
         "unchanged_function_revalidation": {
           "id": "code_health:finding_4db26584b9741348c94f",
@@ -30212,7 +30274,7 @@
       "severity": "high",
       "line_start": null,
       "line_end": null,
-      "reason": "co-changes with 43 distinct files (top 2% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+      "reason": "co-changes with 43 distinct files (top 2% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
       "scanner_id": "50ef1c1d64ba4957bb4c4e38ba5ecf7f",
       "scanner_status": "open",
       "present": true,
@@ -30250,7 +30312,7 @@
           "commit_count_90d": 70
         },
         "health_impact": 1.053,
-        "reason": "co-changes with 43 distinct files (top 2% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+        "reason": "co-changes with 43 distinct files (top 2% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
         "dimension": "defect",
         "public_id": "finding_b820d2d24da772091e34",
         "opportunity_id": null,
@@ -67653,7 +67715,7 @@
       "severity": "high",
       "line_start": null,
       "line_end": null,
-      "reason": "co-changes with 32 distinct files (top 3.9% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+      "reason": "co-changes with 32 distinct files (top 3.9% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
       "scanner_id": "30008fc7ef9f4d2bafbf43816e89e304",
       "scanner_status": "open",
       "present": true,
@@ -67691,7 +67753,7 @@
           "commit_count_90d": 56
         },
         "health_impact": 1.053,
-        "reason": "co-changes with 32 distinct files (top 3.9% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+        "reason": "co-changes with 32 distinct files (top 3.9% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
         "dimension": "defect",
         "public_id": "finding_2ddd6e095fd9837509d1",
         "opportunity_id": null,
@@ -84210,7 +84272,7 @@
       "severity": "medium",
       "line_start": null,
       "line_end": null,
-      "reason": "co-changes with 4 distinct files (top 5.9% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+      "reason": "co-changes with 4 distinct files (top 5.9% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
       "scanner_id": "622f1479ec2541ab9fe76ed0e4fe1d52",
       "scanner_status": "open",
       "present": true,
@@ -84248,7 +84310,7 @@
           "commit_count_90d": 6
         },
         "health_impact": 0.41,
-        "reason": "co-changes with 4 distinct files (top 5.9% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+        "reason": "co-changes with 4 distinct files (top 5.9% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
         "dimension": "defect",
         "public_id": "finding_c488fbf48a69c6dcaa4b",
         "opportunity_id": null,
@@ -84496,7 +84558,7 @@
       "severity": "medium",
       "line_start": null,
       "line_end": null,
-      "reason": "co-changes with 2 distinct files (top 7.8% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+      "reason": "co-changes with 2 distinct files (top 7.8% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
       "scanner_id": "13dc7997411a46f8983f8abcdba55952",
       "scanner_status": "open",
       "present": true,
@@ -84534,7 +84596,7 @@
           "commit_count_90d": 6
         },
         "health_impact": 0.41,
-        "reason": "co-changes with 2 distinct files (top 7.8% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+        "reason": "co-changes with 2 distinct files (top 7.8% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
         "dimension": "defect",
         "public_id": "finding_b2267d45e0c328b33cd3",
         "opportunity_id": null,
@@ -87858,7 +87920,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "Changed CCN10→19 is reviewed070 fixture growth: nonempty media/pending/analysis state, nine reference snapshots before retry, precise refusal responses and restored healthy paths. Required guards and real download/clear delegates remain; no score-only phase extraction is admitted.",
+        "reason": "Changed CCN10â†’19 is reviewed070 fixture growth: nonempty media/pending/analysis state, nine reference snapshots before retry, precise refusal responses and restored healthy paths. Required guards and real download/clear delegates remain; no score-only phase extraction is admitted.",
         "verified_metrics": {
           "ccn": 19,
           "cognitive": 18,
@@ -87961,7 +88023,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "Changed CCN10→19 adds actual request receipts and exact missing archive-folder acknowledgement behavior to a15-line transport seam. Multipart and metadata/root paths deliberately differ.070 verified the new folder cause is reached rather than swallowed by a generic failure.",
+        "reason": "Changed CCN10â†’19 adds actual request receipts and exact missing archive-folder acknowledgement behavior to a15-line transport seam. Multipart and metadata/root paths deliberately differ.070 verified the new folder cause is reached rather than swallowed by a generic failure.",
         "verified_metrics": {
           "ccn": 19,
           "cognitive": 24,
@@ -88064,7 +88126,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "Changed CCN9→12 comes from exact new folder, invalid resolved archive and initial sign-out cause alternatives. The five-line check also distinguishes retained downloaded-Drive archive from complete failure and verifies upload counts. Replacing it with an any-error predicate risks false greens.",
+        "reason": "Changed CCN9â†’12 comes from exact new folder, invalid resolved archive and initial sign-out cause alternatives. The five-line check also distinguishes retained downloaded-Drive archive from complete failure and verifies upload counts. Replacing it with an any-error predicate risks false greens.",
         "verified_metrics": {
           "ccn": 12,
           "cognitive": 11,
@@ -88306,7 +88368,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "NLOC62→98 adds nonempty current work, exact before/after projections, delegating counters and immutable Blob capture to the existing browser exercise. These support data-loss refusal oracles and retry bytes; neither source wrapping nor a new fixture framework is warranted.",
+        "reason": "NLOC62â†’98 adds nonempty current work, exact before/after projections, delegating counters and immutable Blob capture to the existing browser exercise. These support data-loss refusal oracles and retry bytes; neither source wrapping nor a new fixture framework is warranted.",
         "verified_metrics": {
           "ccn": 19,
           "cognitive": 18,
@@ -88477,7 +88539,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "The continuing worst13-line clone spans scenario cleanup and the adjacent IIFE loop/report/failure protocol, shared with openrouter-failures. Replayed5pairs/19union lines remain despite17.12%→10.44% after growth. The older optional asset-helper suggestion targets a different branch; do not carry it forward as a fix for this driver clone or create a new runner abstraction.",
+        "reason": "The continuing worst13-line clone spans scenario cleanup and the adjacent IIFE loop/report/failure protocol, shared with openrouter-failures. Replayed5pairs/19union lines remain despite17.12%â†’10.44% after growth. The older optional asset-helper suggestion targets a different branch; do not carry it forward as a fix for this driver clone or create a new runner abstraction.",
         "verified_metrics": null,
         "detector_replay_match": true,
         "scanner_finding_remains_open": true,
@@ -93288,7 +93350,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "CCN15→38 reflects two new genuine input modes, independent100x60/JPEG pixel oracles and ownership/storage assertions while preserving all four old outcomes.071 accepted native evidence and non-false-green aggregation; splitting callbacks only to hide recursive CCN offers no real benefit.",
+        "reason": "CCN15â†’38 reflects two new genuine input modes, independent100x60/JPEG pixel oracles and ownership/storage assertions while preserving all four old outcomes.071 accepted native evidence and non-false-green aggregation; splitting callbacks only to hide recursive CCN offers no real benefit.",
         "verified_metrics": {
           "ccn": 38,
           "cognitive": 81,
@@ -118568,7 +118630,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "CCN24→40 includes068 literal five-consumer results, distinct legacy _meta behavior, getter/read-order sentinels and exact no-write rejection.065 also strengthened local-newer upload existence. These are independent oracles with deliberate branch distinctions, not production business logic to deduplicate.",
+        "reason": "CCN24â†’40 includes068 literal five-consumer results, distinct legacy _meta behavior, getter/read-order sentinels and exact no-write rejection.065 also strengthened local-newer upload existence. These are independent oracles with deliberate branch distinctions, not production business logic to deduplicate.",
         "verified_metrics": {
           "ccn": 40,
           "cognitive": 121,
@@ -118842,7 +118904,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "NLOC60→168 is four adjacent portfolio-root contracts plus retained identity/import/recovery scenarios and their cleanup/reporting. Current bytes match the accepted068 test; every added check has a policy/data-safety role. Avoid an additional test framework merely to shorten the driver.",
+        "reason": "NLOC60â†’168 is four adjacent portfolio-root contracts plus retained identity/import/recovery scenarios and their cleanup/reporting. Current bytes match the accepted068 test; every added check has a policy/data-safety role. Avoid an additional test framework merely to shorten the driver.",
         "verified_metrics": {
           "ccn": 40,
           "cognitive": 121,
@@ -133043,7 +133105,7 @@
         "evidence": [
           "in_degree=0 (no files import this)",
           "Package uses dynamic imports or runtime-resolved edges",
-          "Runtime-load risk (database/schema): files of this kind are often referenced outside static imports — review before deleting"
+          "Runtime-load risk (database/schema): files of this kind are often referenced outside static imports â€” review before deleting"
         ],
         "safe_to_delete": 0,
         "primary_owner": "thepick",
@@ -141530,7 +141592,7 @@
         "coordinator_reviewed": true,
         "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
         "report": "reviews/batch-009-postrefresh-test-review.json",
-        "reason": "This performance entry is the same module→runScenario filesystem path as code_health faecf1, not a second defect. Fresh details label execution_role=test, actionability=inherent_to_boundary and queue_eligible0. Native downloaded ZIP reads independently validate protected writing; do not cache or hoist them across distinct scenarios.",
+        "reason": "This performance entry is the same moduleâ†’runScenario filesystem path as code_health faecf1, not a second defect. Fresh details label execution_role=test, actionability=inherent_to_boundary and queue_eligible0. Native downloaded ZIP reads independently validate protected writing; do not cache or hoist them across distinct scenarios.",
         "verified_metrics": null,
         "detector_replay_match": null,
         "scanner_finding_remains_open": true,
@@ -141919,7 +141981,7 @@
       "severity": "medium",
       "line_start": null,
       "line_end": null,
-      "reason": "co-changes with 6 distinct files (top 20% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+      "reason": "co-changes with 6 distinct files (top 20% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
       "scanner_id": "7c8f1729bdf64fc0bdf35f423c760a49",
       "scanner_status": "open",
       "present": false,
@@ -141951,7 +142013,7 @@
           "commit_count_90d": 6
         },
         "health_impact": 1.26,
-        "reason": "co-changes with 6 distinct files (top 20% among files with any co-change history) — editing this file tends to ripple across the codebase (shotgun surgery)",
+        "reason": "co-changes with 6 distinct files (top 20% among files with any co-change history) â€” editing this file tends to ripple across the codebase (shotgun surgery)",
         "dimension": "defect",
         "public_id": "finding_109a87742e8c5d101e06",
         "opportunity_id": null,
@@ -147192,6 +147254,23 @@
         "reviews/batch-009-postrefresh-test-review.json"
       ],
       "unchanged_shape_revalidation": "reviews/batch-009-unchanged-shape-revalidation.json"
+    },
+    {
+      "id": "batch-010",
+      "status": "validated_pending_merge",
+      "pull_request": null,
+      "source_commit": "ad1203b7916a13bee88c23e695b20804ccc54ed9",
+      "validation_report": "reviews/batch-010-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "all_source_pins_unchanged": true,
+      "repairs": [
+        "repair-072",
+        "repair-073"
+      ],
+      "supplemental_html_and_coverage_tools_unchanged": true,
+      "supplemental_pins": "work/repowise-coordinator/batch-010-supplemental-pins.json"
     }
   ],
   "workflow_policy": {
@@ -147425,7 +147504,7 @@
       "file": "js/app/10-main-app.js",
       "function": "buildNotebookActionChecklist -> extractNotebookActionItems -> compressChecklistItem -> toFirstPersonChecklist",
       "relation_to_assigned_findings": "Observed along the assigned checklist text-admission route. Root cause is a read dependency outside the two-function edit scope; no independent source edit or broader audit was undertaken. This does not invalidate the three shape metrics.",
-      "reason": "toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or Iâ€™re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.",
+      "reason": "toFirstPersonChecklist converts the full phrase you are to I am, then replaces remaining whole-word you with I. A valid supplied action beginning with straight- or typographic-apostrophe You are contraction is not handled by the full-phrase rule; the later whole-word replacement can leave the grammatically invalid first-person forms I're or IÃ¢â‚¬â„¢re. Upstream strategy normalization and checklist compression do not normalize those contractions before this helper. This is a source-supported text transformation lead, not an executed or observed student failure.",
       "evidence_anchors": [
         {
           "file": "js/app/10-main-app.js",
@@ -148307,7 +148386,7 @@
       "js/app/storage-recovery.js": true,
       "js/app/00-storage-sync-patches.js": true,
       "js/app/portfolio-export.js": true,
-      "js/app/10-main-app.js": true,
+      "js/app/10-main-app.js": false,
       "js/app/photo-crop.js": true,
       "js/app/99-lightbox.js": true
     },
@@ -152512,7 +152591,7 @@
           "new_text": "const remaining = wftSyncV2ImageIdempotency(sessionData);"
         },
         "anchors": {
-          "first": "    // ── WFT Sync V2 image idempotency ──",
+          "first": "    // â”€â”€ WFT Sync V2 image idempotency â”€â”€",
           "last": "            !(WFT_IMAGE_IDEMPOTENCY_V2 && image.driveFileId);\r\n    });",
           "unique_in": "file"
         }

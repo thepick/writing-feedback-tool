@@ -1,0 +1,328 @@
+{
+  "repair": "073 / P31 high-score Grammar reason guard",
+  "status": "candidate_frozen_awaiting_two_independent_reviews",
+  "created_at": "2026-10-16T14:32:56.324477+07:00",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "coordinator_reported_parent_commit": "5b238405e2e68eebe75ad90d9ce15897ffc1e612",
+  "parent_provenance": "Coordinator reports accepted072 committed; no Git command used by writer to reverify commit.",
+  "change": {
+    "production_file": "js/app/10-main-app.js",
+    "test_file": "tests/correction-performance.browser.cjs",
+    "production_diff": "Only if (n == null) return \"\" becomes if (n == null || n > 8) return \"\" in buildGrammarReasonFromData.",
+    "benefit": "For normalized scores above8, reason is still empty while its unused analyzer and full LCS matrix work are skipped.",
+    "preserved": "Finite score normalization, null/invalid behavior, zero/negative and <=8 outputs, caller pre-polished reason retention, other Grammar consumers, complete original133 performance checks and unchanged30 compatibility checks.",
+    "no_other_production_change_proof": "LF-normalized candidate main equals original main after exactly one context-bound guard replacement."
+  },
+  "function_pins": {
+    "file": "js/app/10-main-app.js",
+    "function": "buildGrammarReasonFromData",
+    "span_original_and_candidate": [
+      1887,
+      1912
+    ],
+    "original_lf_sha256": "0643fe6e71d4c59402520f245ad4ac485a58ca43fc608aa6c5b9f351fd0bed46",
+    "candidate_lf_sha256": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa"
+  },
+  "source_test_pins": {
+    "before": {
+      "main": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-before-main.js",
+        "raw_sha256": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+        "lf_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "bytes": 435666
+      },
+      "performance_test": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-before-performance.cjs",
+        "raw_sha256": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+        "lf_sha256": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+        "bytes": 8164
+      },
+      "captured_source_paths": {
+        "js/app/10-main-app.js": {
+          "raw_sha256": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+          "lf_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b"
+        },
+        "tests/correction-performance.browser.cjs": {
+          "raw_sha256": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+          "lf_sha256": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449"
+        },
+        "tests/feedback-compatibility.browser.cjs": {
+          "raw_sha256": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+          "lf_sha256": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa"
+        },
+        "tests/storage-upload-ownership.browser.cjs": {
+          "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+          "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+        },
+        "index.html": {
+          "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+          "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898"
+        }
+      },
+      "capture": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-before-pins.json",
+        "raw_sha256": "fcef6a19daedbd7e31292648f1e7f3b34a396298e4589d00a2e8b2fc1be5ceee",
+        "lf_sha256": "bd54a2441d4648718bcdb139f315aa489b32bb67bc158af62f7ba5e5f74ef5de",
+        "bytes": 1278
+      }
+    },
+    "candidate": {
+      "main": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\10-main-app.js",
+        "raw_sha256": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+        "lf_sha256": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f",
+        "bytes": 435675
+      },
+      "performance_test": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\correction-performance.browser.cjs",
+        "raw_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+        "lf_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+        "bytes": 14019
+      },
+      "pretest_capture": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-pretest-pins.json",
+        "raw_sha256": "5ca0b958d649e092dd7c2220f7aba025656d2c7367099edc12a069ebf522972e",
+        "lf_sha256": "285d8a6862b562bb6164e22e8f0fa23a3b033b5fef2ca2834951b080d5ff0046",
+        "bytes": 216
+      },
+      "tested_bytes_equal_frozen": true,
+      "frozen_copies": [
+        {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-frozen-main.js",
+          "raw_sha256": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+          "lf_sha256": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f",
+          "bytes": 435675
+        },
+        {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-frozen-correction-performance.cjs",
+          "raw_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+          "lf_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+          "bytes": 14019
+        }
+      ]
+    },
+    "unchanged_affected": {
+      "google-drive-migration.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\google-drive-migration.js",
+        "raw_sha256": "df073e0d0288afa22e56673974ab155cf3a3dbec00b3bcb2decfa531e6469c13",
+        "lf_sha256": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+        "bytes": 13369
+      },
+      "js/app/00-storage-sync-patches.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\00-storage-sync-patches.js",
+        "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+        "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+        "bytes": 404610
+      },
+      "js/app/99-lightbox.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\99-lightbox.js",
+        "raw_sha256": "0ca315422d1850cb7a35c5a3a9ff04440789c91eab84ffb9dc5bba4a17c6d453",
+        "lf_sha256": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+        "bytes": 1149
+      },
+      "js/app/dialogs.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\dialogs.js",
+        "raw_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+        "lf_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+        "bytes": 9431
+      },
+      "js/app/photo-crop.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\photo-crop.js",
+        "raw_sha256": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+        "lf_sha256": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+        "bytes": 10781
+      },
+      "js/app/portfolio-export.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\portfolio-export.js",
+        "raw_sha256": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+        "lf_sha256": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+        "bytes": 50327
+      },
+      "js/app/storage-recovery.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\storage-recovery.js",
+        "raw_sha256": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+        "lf_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+        "bytes": 15618
+      },
+      "tests/feedback-compatibility.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\feedback-compatibility.browser.cjs",
+        "raw_sha256": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+        "lf_sha256": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+        "bytes": 11274
+      },
+      "tests/storage-upload-ownership.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\storage-upload-ownership.browser.cjs",
+        "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+        "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+        "bytes": 24430
+      },
+      "index.html": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\index.html",
+        "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+        "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+        "bytes": 212502
+      }
+    }
+  },
+  "baseline_reuse": {
+    "receipt009": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-009-validation.json",
+      "raw_sha256": "0540f38d4e97b09b51bd0d8e0476aaa7f27668378c4eb9953d949432c26a3497",
+      "lf_sha256": "3cef8f206b34669606fff35c07912600ad36d692da59c655acbed4982045bb7b",
+      "bytes": 60563
+    },
+    "suites": [
+      {
+        "suite": "tests/correction-performance.browser.cjs",
+        "exit_code": 0,
+        "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-009\\full\\correction-performance.browser.json",
+          "raw_sha256": "4c97dedf4db916a48d0dce3a6054754b5022f2dfde9bb4930acb4756124681a1",
+          "lf_sha256": "4c97dedf4db916a48d0dce3a6054754b5022f2dfde9bb4930acb4756124681a1",
+          "bytes": 11277
+        },
+        "passed": 133,
+        "reused_not_rerun": true
+      },
+      {
+        "suite": "tests/feedback-compatibility.browser.cjs",
+        "exit_code": 0,
+        "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-009\\full\\feedback-compatibility.browser.json",
+          "raw_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "lf_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "bytes": 1444
+        },
+        "passed": 30,
+        "reused_not_rerun": true
+      }
+    ],
+    "binding": "Original main raw/LF and original performance test match009 exactly. Current compatibility test, other seven app scripts and HTML match original pins.072 changed an unrelated test only.",
+    "fixtures": "Both suites use inline synthetic fixtures in exact pinned test files, with no external fixture imports. Entire original performance prefix and runner suffix retained byte-for-byte after LF normalization; compatibility source unchanged."
+  },
+  "candidate_validation": {
+    "runs": 1,
+    "suites": [
+      {
+        "suite": "tests/correction-performance.browser.cjs",
+        "exit_code": 0,
+        "passed": 304,
+        "failed": 0,
+        "original_checks": 133,
+        "added_checks": 171,
+        "added_native_observations": 57,
+        "groups": {
+          "grammar score": 26,
+          "grammar branch": 7,
+          "grammar primitive": 14,
+          "grammar actual caller": 10
+        },
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-correction-performance-candidate.json",
+          "raw_sha256": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca",
+          "lf_sha256": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca",
+          "bytes": 38840
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-correction-performance-candidate.log",
+          "raw_sha256": "06e7274106af82f31b6bb07db00f2b5a6fe796cc1e9cf01d948b4b2a307ce83b",
+          "lf_sha256": "8b090da1281e9dc7f394c3a27ba0b1e96c884d0880076b008149a78d4c7458aa",
+          "bytes": 111
+        }
+      },
+      {
+        "suite": "tests/feedback-compatibility.browser.cjs",
+        "exit_code": 0,
+        "passed": 30,
+        "failed": 0,
+        "complete_report_equals009": true,
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-feedback-compatibility-candidate.json",
+          "raw_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "lf_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "bytes": 1444
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-feedback-compatibility-candidate.log",
+          "raw_sha256": "d70e5459e2e7daa94f3e24c0578f2405620bf132a902782939f18c84243c9117",
+          "lf_sha256": "4f955bccd5c622bdf70671ba5f08d263d2a9685b7c29d90d798f96ec58f19b79",
+          "bytes": 70
+        }
+      }
+    ],
+    "syntax_checks": [
+      "node --check js/app/10-main-app.js: pass",
+      "node --check tests/correction-performance.browser.cjs: pass"
+    ],
+    "original133_check_names_order_results_equal009": true,
+    "normalization_work_control": 161,
+    "native_observation_summary": {
+      "literal_original_output_parity_rows": 57,
+      "actual_high_score_zero_analyzer_and_LCS_rows": 19,
+      "null_invalid_zero_analyzer_and_LCS_rows": 11,
+      "supported_lower_mid_one_analyzer_and_LCS_rows": 27,
+      "checks_per_observation": 3,
+      "observers": "analyzeGrammarChanges and buildLcsMatrix count calls then delegate real implementation; restored in finally. No fake summaries, matrices or parsers.",
+      "caller": "10 actual polishFeedback cases isolate reason path. Four high-score caller cases retain literal pre-polished teacher wording with zero reason analyzer/LCS calls."
+    },
+    "raw_observations_location": "grammarGuardObservations in pinned work candidate performance report; no85-row narrative duplication."
+  },
+  "pre_edit_evidence": {
+    "proposal": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\outputs\\repair-073-p31-pre-edit-investigation.json",
+      "raw_sha256": "131db32b79756cf6762070e3f291c4a38c2126ab242b0c8277ca4a9cc6bf1866",
+      "lf_sha256": "aa07d702b1cb6cb152b7ebd9b4ee13954e125ec0ba7f5b0ba88bed2af1a023fa",
+      "bytes": 57258
+    },
+    "raw_native_probe": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-original-native-probe.json",
+      "raw_sha256": "6d3113ebe1121afdc425bebcd6f349956e3cbcbd57a0d149f7874a63f51f031a",
+      "lf_sha256": "6d3113ebe1121afdc425bebcd6f349956e3cbcbd57a0d149f7874a63f51f031a",
+      "bytes": 66356
+    },
+    "raw_probe_script": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\probe073-original.cjs",
+      "raw_sha256": "d9267f3e2999872f2a3995d348dd7e2ff9533956ce9bf41a9fd95a310fd2daae",
+      "lf_sha256": "024454ad33b5be135d501b4b21677292ee865e669d6e31b0e05a04b5b31cc8a2",
+      "bytes": 7928
+    },
+    "raw_probe_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-original-native-probe.log",
+      "raw_sha256": "40c4032de8e3c66be7c64c5898ddbbf3fd14c6846de851167d033ea942ff16c0",
+      "lf_sha256": "827428864f9e531b65aff9724f45b7eaff43944e0037178af777554fd4c23063",
+      "bytes": 709
+    },
+    "raw_probe_exit": 1,
+    "explanation": "One original-source native run captured75 direct and10 caller rows before assertions. Direct band/count and seven literal branch checks passed. Final assertion incorrectly expected raw short caller reason to survive polishFeedback prepass; actual teacherizeWording rewrites it first. Nonzero exit retained; correct pre-polished caller output verified offline. Candidate suite now asserts that corrected literal behavior.",
+    "separate_offline_verification_script": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\verify073-saved-evidence.py",
+      "raw_sha256": "c62db6a86fcfcfa15c8bab6eac9cc52e4578723e01b2267b66fa2591a75d9418",
+      "lf_sha256": "d8d4874e187122a628b82a765077334dfbe2034bdeb3f2a96e5e3af20da5a168",
+      "bytes": 12710
+    },
+    "original_high_direct_observations": "29 rows returned empty after one real analyzer and one real LCS call; candidate57-row subset matches corresponding original literal outputs and changes only admitted high-score reason work."
+  },
+  "attempts": [
+    {
+      "attempt": "pre-edit native probe",
+      "exit_code": 1,
+      "classification": "Wrong probe caller expectation, not production defect; raw failure retained and explained."
+    },
+    {
+      "attempt": "candidate implementation validation",
+      "exit_code": 0,
+      "result": "304 performance/30 compatibility; syntax pass; no failing candidate run or further production edits."
+    }
+  ],
+  "limits": [
+    "Synthetic native Edge inputs and routed local app; no live account, AI/Drive service or real student data.",
+    "No latency, memory-size, throughput or whole-app speed claim. Observed benefit is elimination of one reason-specific analyzer/LCS invocation for admitted high scores.",
+    "Unsupported objects with custom text coercion and resource-exhaustion exception parity not claimed; guard intentionally avoids unused high-score coercion/allocation. Actual production writing is primitive string.",
+    "Evidence builder and pattern notes remain unchanged and may still perform their own Grammar analysis.",
+    "Only main and existing performance test changed; accepted072 target unchanged.",
+    "No Git, index, tracker, coverage, full-gate, deploy, new dependency or integration operation.",
+    "Candidate frozen; two independent reviews and coordinator integration remain pending."
+  ]
+}
