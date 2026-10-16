@@ -11,6 +11,7 @@ Stage 3 follows accepted source `4fc43d8e4df08feb6d63de579adc1ea6ba5085dc` (13 O
 | `10-main-app.js`, Text metrics cluster, `countWords` through `computeOverallScore` | `js/app/20-text-metrics.js` | Word count, sentence variety, grammar density band, overall score; global names unchanged |
 | `10-main-app.js`, Diff/correction engine, `renderMarkdownBold` through `renderCorrected` | `js/app/21-diff-engine.js` | Tokenization, LCS diff, markdown helpers, corrected-writing render; global names unchanged |
 | `10-main-app.js`, OpenRouter client, `sleepMs` through `callOpenRouterImage` | `js/app/22-openrouter-client.js` | Model fallback chain, retry/timeout, response parsing, text/image request wrappers; global names unchanged |
+| `10-main-app.js`, Feedback wording/polish, `softenOverclaim` through `softFallback` | `js/app/23-feedback-wording.js` | Convention detection, grammar/flow phrasing, notice tables, diff-driven grammar analysis; global names unchanged |
 
 The four crop-state declarations and assignments remain at the original main-tail execution point. Main startup can read its hoisted state before crop functions load; interactive crop callbacks execute after the next blocking script loads. Recovery definitions load before storage PATCH 14 performs its original metadata update. Export declarations load before main; they use main collaborators only when invoked. `escapeHtml`, configuration/flags and the coupled auth/sync engine retain their existing homes.
 
