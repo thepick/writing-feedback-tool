@@ -1,0 +1,248 @@
+{
+  "repair_id": "repair-072-regression-review",
+  "verdict": "accepted",
+  "blockers": [],
+  "base_commit": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+  "inspected_git_commit": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+  "summary": "Test-only timeout acknowledgement contracts are substantive and consistent with unchanged production. Candidate03 closes the pre-operation snapshot gap; original8 scenarios/23 checks remain exact, final21 scenarios/118 checks pass in supplied native evidence. No production bug, refactor, scanner closure or fresh full-gate claim.",
+  "source_pins": {
+    "tests/storage-upload-ownership.browser.cjs": {
+      "raw": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+      "base_lf": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "base_lf_equal": true
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "base_lf_equal": true
+    },
+    "scripts/run-tests.cjs": {
+      "raw": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca",
+      "lf": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+      "base_lf_equal": true
+    },
+    "scripts/case-report-suites.json": {
+      "raw": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+      "lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+      "base_lf_equal": true
+    },
+    "index.html": {
+      "raw": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+      "lf": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+      "base_lf_equal": true
+    },
+    "tests/drive-lifecycle.browser.cjs": {
+      "raw": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+      "lf": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+      "base_lf_equal": true
+    },
+    "tests/portfolio-index.browser.cjs": {
+      "raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+      "lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+      "base_lf_equal": true
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "base_lf_equal": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "base_lf_equal": true
+    }
+  },
+  "uploader_function": {
+    "file": "js/app/00-storage-sync-patches.js",
+    "lines": [
+      5051,
+      5119
+    ],
+    "lf_sha256": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+    "unchanged": true
+  },
+  "original_function_bindings": {
+    "initializeOwnershipState": {
+      "before_span": [
+        6,
+        15
+      ],
+      "current_span": [
+        33,
+        42
+      ],
+      "full_lines_lf_sha256": "d8130667ccb9dec73edb657cd92c5b06b9515fa8b7ce162939e2347f98fe7819",
+      "exact_equal": true
+    },
+    "checkFinalOwnership": {
+      "before_span": [
+        17,
+        24
+      ],
+      "current_span": [
+        44,
+        51
+      ],
+      "full_lines_lf_sha256": "e10767c4b64751e881d4a89e6388281bf8f83dd52d4b18f4d8c5af60c5b337e4",
+      "exact_equal": true
+    },
+    "startScenario": {
+      "before_span": [
+        71,
+        78
+      ],
+      "current_span": [
+        160,
+        167
+      ],
+      "full_lines_lf_sha256": "a9f544d6c6f3e381285220eb34bc9e3299caebf3f4b4537ecdd9a124da945727",
+      "exact_equal": true
+    },
+    "finishScenario": {
+      "before_span": [
+        81,
+        117
+      ],
+      "current_span": [
+        170,
+        206
+      ],
+      "full_lines_lf_sha256": "7f93e40ff7dc6431828768af20ca68c35e68964e222c9ea83ff6d1549de8ad7d",
+      "exact_equal": true
+    }
+  },
+  "checks": [
+    {
+      "anchors": "tests/storage-upload-ownership.browser.cjs:5-31,53-101,113-159,213-215",
+      "result": "Removing only acknowledgement additions and reversing guarded route/query/report edits reconstructs base test exactly after LF normalization. Four original named functions and all original case names/order/check names/results match. Original cases never enter the three delegating observers; added service sorting is acknowledgement-only. No original path/oracle removed."
+    },
+    {
+      "anchors": "test:70-86,113-124; storage:4144-4205,4302-4365",
+      "result": "Actual multipart bodies are parsed at the synthetic Drive HTTP boundary. Twelve timeout cases issue POST,PATCH,PATCH with literal intended sanitized bytes; replies stay held while server state is committed. Real30000ms timers and500/1000ms backoffs are advanced by native browser clock. Final SAVE_FILE_TIMEOUT precedes actual canonical readback; no injected timeout exception or replacement uploader/timeout/fingerprint/validator."
+    },
+    {
+      "anchors": "test:6-13,128-143; storage:4387-4460,4945-5119",
+      "result": "Four filenames have independent literal matching/different decisions: settings target count, deletion identity, portfolio writing, index file ID. Matching settings changes key order and updatedAt; deletions ignores updatedAt; portfolio ignores __syncMeta. Existing server-ordered lookup/first-result canonical policy and real cached metadata validation are used, with older decoy retained. Real download parses settings/deletions/portfolio required shapes; index uses requiredShape=false and full-data equality, without inventing index-schema validation."
+    },
+    {
+      "anchors": "test:21-26,127-143; storage:5080-5107",
+      "result": "Observers invoke real methods and propagate identical data/errors. Mismatch and missing canonical return the identical terminal save error; actual HTTP403 returns that original non-timeout error with no recovery request/readback/cache publication. Invalid settings/deletions produce actual required-storage Error; invalid portfolio produces TypeError, no parsed success/returned ID. Native events show legitimate cache writes before timeout/readback, only matching cases add a post-parse recovery write. Missing canonical clears the real lower-level invalid cache."
+    },
+    {
+      "anchors": "test:16-31,113-126,144-151",
+      "result": "Candidate03 initialization seeds a nonempty DOM draft and observers, then captures before calling uploader. All13 new cases preserve exact draft newline/trailing spaces, four durable storage bytes, pending values/persisted bytes, three dirty flags, six local/synced counters and caller payload. Settings multipart excludes apiKey while caller retains it. After403, healthy real retry uploads sanitized literal data, returns/persists accepted-1 and preserves the same state projection. Candidate01/02 retention evidence is explicitly superseded."
+    },
+    {
+      "anchors": "test:153-159,210-215; scripts/run-tests.cjs:33-88",
+      "result": "Every check row contributes to case and final aggregate; expected21 cases are enforced, rejected operations propagate to outer nonzero exit, and report is saved in finally. Existing runner WFT_TEST_REPORT alias reads nonempty case pass flags and child status. Held routes are aborted only after operation result and snapshots; abort catch is teardown, not an oracle bypass. Final report/log agree on all scenario/check outcomes."
+    }
+  ],
+  "validation": {
+    "baseline": {
+      "scenarios": 8,
+      "checks": 23,
+      "failed": 0
+    },
+    "candidate03": {
+      "scenarios": 21,
+      "checks": 118,
+      "added_scenarios": 13,
+      "added_checks": 95,
+      "failed": 0
+    },
+    "companions": [
+      {
+        "suite": "tests/drive-lifecycle.browser.cjs",
+        "reported_cases": 53,
+        "reported_assertions": 348,
+        "rows": 53,
+        "source_unchanged_since_previous_freeze": true,
+        "revision3_rerun": false
+      },
+      {
+        "suite": "tests/portfolio-index.browser.cjs",
+        "reported_cases": 189,
+        "reported_assertions": null,
+        "rows": 189,
+        "source_unchanged_since_previous_freeze": true,
+        "revision3_rerun": false
+      },
+      {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "reported_cases": 137,
+        "reported_assertions": null,
+        "rows": 137,
+        "source_unchanged_since_previous_freeze": true,
+        "revision3_rerun": false
+      }
+    ],
+    "companion_reuse": "Passing Drive53 scenarios/348 nested checks, index189 case rows and preference137 case rows were produced for prior candidate freeze. Candidate03 reran only changed target; companion/app source raw hashes remain identical. No claim of candidate03 companion reruns.",
+    "prior009_equivalence": {
+      "unchanged_source_test_runner_lf_pins": 90,
+      "exact_raw": 87,
+      "eol_only": [
+        "tests/portfolio-sync.cjs",
+        "tests/record-identity.cjs",
+        "tests/session-retention.cjs"
+      ],
+      "scope": "Independently checked90 normalized pins and base Git bindings; configuration/HTML also match base. Only target differs in source/test/config/HTML diff; coordinator audit-document edits excluded."
+    }
+  },
+  "evidence": {
+    "worker_root": "C:/Users/Michael/Documents/Codex/2026-10-16/repowise-batch-010-save-feedback/work",
+    "coordinator_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-072-timeout-acknowledgement-contracts.json",
+      "raw_sha256": "6c13ad85ce189e8ec39cb9e0e359298bd58c4d20f7ea622c0c3ef74ae98ae9d6"
+    },
+    "artifacts": {
+      "repair072-baseline.json": {
+        "raw": "9d252a04dafb735e13f7bffbc83a84cdc1d992961b97a0cfbc0772d6cd029583",
+        "lf": "9d252a04dafb735e13f7bffbc83a84cdc1d992961b97a0cfbc0772d6cd029583"
+      },
+      "repair072-candidate-03.json": {
+        "raw": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12",
+        "lf": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12"
+      },
+      "repair072-candidate-03.log": {
+        "raw": "09038e9d1e74d9521c8ebb5859ab20afb7b0875aff5e32e772bb872f7a32ce92",
+        "lf": "502a57469e0c35aedc917693100f3a56c93d79a7f557786e6e5594f017afa4c1"
+      },
+      "repair072-frozen-target-03.cjs": {
+        "raw": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+        "lf": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+      },
+      "repair072-baseline-runtime.log": {
+        "raw": "e81c59d03b2d38ead266b9a64c7cb9b32a0c268736000cb04f528532e8cb793e",
+        "lf": "4cb0730b9b89d5c2826291cbfd6595f0e6e636f16ca4fae42c37b69ddf7803a2"
+      },
+      "repair072-drive-lifecycle.json": {
+        "raw": "4f21fba1de57875a922d3858bb9977c63cf20939941c338cc7d3b0fccfa9b11d",
+        "lf": "4f21fba1de57875a922d3858bb9977c63cf20939941c338cc7d3b0fccfa9b11d"
+      },
+      "repair072-portfolio-index.json": {
+        "raw": "f4abbb7759e516bca06d32ba87093e2306f1115292f2f4c3d14258485b660294",
+        "lf": "f4abbb7759e516bca06d32ba87093e2306f1115292f2f4c3d14258485b660294"
+      },
+      "repair072-preference-integrity.json": {
+        "raw": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d",
+        "lf": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d"
+      }
+    },
+    "all_receipt_path_pins_verified": 34,
+    "compact_review_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-072\\static-receipt.json",
+      "raw_sha256": "e7819f24e9e398b0869944b0e3aac9ea867c0d6367d2adda5aa766d0e7147862"
+    }
+  },
+  "limits": [
+    "Read-only source and saved native evidence review; no app/test/browser execution, source/Git/index/tracker changes or073 work. Saved logs/hashes bind reviewed artifacts, not independent execution attestation.",
+    "Controlled synthetic Drive/identity and initial state; real upload/retry/parser/cache logic with three acknowledgement-only promise observers. Browser clock skips wall time. Not live Drive/account/network testing or exhaustive malformed data/canonical-order testing.",
+    "Pre/post comparisons cover the named value/byte/counter projection, not every global or pending object reference identity. afterReadback cache phase specifically means successful parsed readback; invalid native traces were also inspected directly.",
+    "Original23 checks are exact; complete old asynchronous request traces and clock observations are not asserted identical. Companion receipts are reused on unchanged sources. No new full gate, coverage percentage, production defect reproduction or scanner clearance."
+  ]
+}

@@ -1,0 +1,1174 @@
+{
+  "repair": "repair072 / P10 timeout acknowledgement contracts",
+  "status": "candidate_frozen_awaiting_two_independent_coordinator_reviews",
+  "created_at": "2026-10-16T14:22:20.137691+07:00",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "branch": "codex/repowise-batch-010-20261016",
+  "base_commit": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+  "head_at_freeze": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+  "scope": {
+    "changed_files": [
+      "tests/storage-upload-ownership.browser.cjs"
+    ],
+    "test_only": true,
+    "production_changed": false,
+    "no_production_bug_found": true,
+    "other_worktree_changes": "Coordinator tracker edits coexist in docs/repowise-audit/current-findings.json and .md; writer did not modify or validate their adoption.",
+    "no_git_mutation_index_refresh_publication_or_coverage_export": true
+  },
+  "pins": {
+    "before": {
+      "test_git_blob": "1d478aa5ce5a94389f36ba39df0fe4ecda1a5c00",
+      "test_lf_sha256": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97",
+      "prior009_raw_sha256": "63d86ad3bbe41ec9cbe98fbeecf554a7887f953ac62a24f400151524c3d1ff89",
+      "before_raw_pin_provenance": "Raw value carried from009, not independently measured before this baseline; initial checkout Git-clean, before normalized source pinned by exact base blob.",
+      "baseline_report": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-baseline.json",
+        "raw_sha256": "9d252a04dafb735e13f7bffbc83a84cdc1d992961b97a0cfbc0772d6cd029583",
+        "lf_sha256": "9d252a04dafb735e13f7bffbc83a84cdc1d992961b97a0cfbc0772d6cd029583",
+        "bytes": 68526
+      }
+    },
+    "after": {
+      "test": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\storage-upload-ownership.browser.cjs",
+        "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+        "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+        "bytes": 24430
+      },
+      "final_report": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-candidate-03.json",
+        "raw_sha256": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12",
+        "lf_sha256": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12",
+        "bytes": 196272
+      },
+      "final_log": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-candidate-03.log",
+        "raw_sha256": "09038e9d1e74d9521c8ebb5859ab20afb7b0875aff5e32e772bb872f7a32ce92",
+        "lf_sha256": "502a57469e0c35aedc917693100f3a56c93d79a7f557786e6e5594f017afa4c1",
+        "bytes": 11774
+      },
+      "frozen_test_copy": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-frozen-target-03.cjs",
+        "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+        "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+        "bytes": 24430
+      }
+    },
+    "production_function": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        5051,
+        5119
+      ],
+      "sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "unchanged": true
+    },
+    "newline_only_raw_differences": [
+      "tests/portfolio-sync.cjs",
+      "tests/record-identity.cjs",
+      "tests/session-retention.cjs"
+    ],
+    "review_inputs": {
+      "post009-next-benefit-independent.json": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\post009-next-benefit-independent.json",
+        "raw_sha256": "00c42dacbfac9b51d290ba26fd7ec3a65f55a55687b57bcdbfd7961cd1f6fca4",
+        "lf_sha256": "c035da36da3f98317f15c6d58999fb996c8b1398b4e09e082c4d03b1554bf76f",
+        "bytes": 12446
+      },
+      "post009-next-benefit-admission.json": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\post009-next-benefit-admission.json",
+        "raw_sha256": "13555909302f6899ea01c277ed7dd2805b284559d44f4ae61548d30bcfd66ef4",
+        "lf_sha256": "cfdf9021c825db75674b8eecf31f5c27e4456175c065ef948e8b0d9c0e937cb0",
+        "bytes": 17825
+      },
+      "batch-009-postrefresh-production-review.json": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-009-postrefresh-production-review.json",
+        "raw_sha256": "51e194464a81460d5627d1a9dea1982b36d8da468319867e54526bbf7cfc448a",
+        "lf_sha256": "c34d2b2eea811cf396ce236ce55c10235e8ea9df10a419b1fc19dcb766e3d5b2",
+        "bytes": 121672
+      }
+    },
+    "source_equivalence": {
+      "reference009_receipt": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-009-validation.json",
+        "raw_sha256": "0540f38d4e97b09b51bd0d8e0476aaa7f27668378c4eb9953d949432c26a3497",
+        "lf_sha256": "3cef8f206b34669606fff35c07912600ad36d692da59c655acbed4982045bb7b",
+        "bytes": 60563
+      },
+      "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+      "unchanged_source_test_runner_lf_pins": 90,
+      "matches009_raw": 87,
+      "known_newline_only_differences": {
+        "tests/portfolio-sync.cjs": {
+          "observed": {
+            "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\portfolio-sync.cjs",
+            "raw_sha256": "59b009210f7b02d9ec509c17d9158fd9e6f4299b70c6322ebd1509eb395a79e6",
+            "lf_sha256": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+            "bytes": 9786
+          },
+          "reference009_raw_sha256": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6"
+        },
+        "tests/record-identity.cjs": {
+          "observed": {
+            "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\record-identity.cjs",
+            "raw_sha256": "216d1031f8511f4fa001d84fa6391323a8983230041485fb5a484efa3b36e7a3",
+            "lf_sha256": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+            "bytes": 12262
+          },
+          "reference009_raw_sha256": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59"
+        },
+        "tests/session-retention.cjs": {
+          "observed": {
+            "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\session-retention.cjs",
+            "raw_sha256": "9fa7f4ef7dd415543332de169095d1bf8ed5afa53eb31264c1864446762523b9",
+            "lf_sha256": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+            "bytes": 4213
+          },
+          "reference009_raw_sha256": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8"
+        }
+      },
+      "all_previous_freeze_non_target_file_bytes_unchanged": true,
+      "previous_inventory": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-receipt-candidate02.json",
+      "scope": "Read-only byte hashes rechecked; previous Git tree-equivalence evidence retained without rerunning Git."
+    },
+    "affected_unchanged": {
+      "js/app/00-storage-sync-patches.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\00-storage-sync-patches.js",
+        "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+        "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+        "bytes": 404610
+      },
+      "js/app/storage-recovery.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\storage-recovery.js",
+        "raw_sha256": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+        "lf_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+        "bytes": 15618
+      },
+      "index.html": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\index.html",
+        "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+        "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+        "bytes": 212502
+      },
+      "scripts/case-report-suites.json": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\scripts\\case-report-suites.json",
+        "raw_sha256": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+        "lf_sha256": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+        "bytes": 1933
+      },
+      "tests/drive-lifecycle.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\drive-lifecycle.browser.cjs",
+        "raw_sha256": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+        "lf_sha256": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+        "bytes": 27327
+      },
+      "tests/portfolio-index.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\portfolio-index.browser.cjs",
+        "raw_sha256": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+        "lf_sha256": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "bytes": 38661
+      },
+      "tests/preference-integrity.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\preference-integrity.browser.cjs",
+        "raw_sha256": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+        "lf_sha256": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+        "bytes": 3940
+      },
+      "tests/preference-integrity-scenarios.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\preference-integrity-scenarios.js",
+        "raw_sha256": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+        "lf_sha256": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+        "bytes": 66322
+      }
+    }
+  },
+  "baseline": {
+    "exit_code": 0,
+    "scenarios": 8,
+    "checks": 23,
+    "log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-baseline-runtime.log",
+      "raw_sha256": "e81c59d03b2d38ead266b9a64c7cb9b32a0c268736000cb04f528532e8cb793e",
+      "lf_sha256": "4cb0730b9b89d5c2826291cbfd6595f0e6e636f16ca4fae42c37b69ddf7803a2",
+      "bytes": 2178
+    }
+  },
+  "final": {
+    "exit_code": 0,
+    "scenarios": 21,
+    "checks": 118,
+    "added_scenarios": 13,
+    "added_checks": 95,
+    "browser": "155.0.4283.45",
+    "node": "v24.12.0",
+    "syntax_check": "node --check target: pass",
+    "revision_execution_scope": "Target suite only; no full gate, companion reruns, coverage, index or Git operations."
+  },
+  "original_oracle_retention": {
+    "original_eight_case_names_order_checks_results_exact": true,
+    "original_cases_have_no_delegating_wrappers": true,
+    "retained_bodies": {
+      "function initializeOwnershipState()": {
+        "exact_lf_body_retained": true,
+        "sha256_lf": "b26a262c80ebf3e91bbc0a162639d8bb29d634788ac212f26c52d2244bce6781"
+      },
+      "function checkFinalOwnership(": {
+        "exact_lf_body_retained": true,
+        "sha256_lf": "76cb6bf4c91c24ec3151c7e0d71706bd83784a97ab34479852fb1573856a7530"
+      },
+      "  async function startScenario(){": {
+        "exact_lf_body_retained": true,
+        "sha256_lf": "a9f544d6c6f3e381285220eb34bc9e3299caebf3f4b4537ecdd9a124da945727"
+      },
+      "  async function finishScenario(){": {
+        "exact_lf_body_retained": true,
+        "sha256_lf": "7f93e40ff7dc6431828768af20ca68c35e68964e222c9ea83ff6d1549de8ad7d"
+      }
+    },
+    "original23_checks_retained": true,
+    "trace_parity_limit": "No complete trace parity claim; original asynchronous background request counts/clock observations remain subject to documented timing variation."
+  },
+  "contract": {
+    "matrix": "Four filenames each matching and meaningfully different; malformed required settings/deletions/portfolio; missing canonical and actual403 non-timeout settings controls.",
+    "real_boundary": "Real uploadWftJsonFilePromise -> saveFileToDrivePromise -> three real saveFileToDriveOncePromise deadlines and saveFileToDrive multipart requests -> existing routed synthetic Drive map. Replies held while intended bytes stored; after third write model metadata change, competing content, malformed shape or disappearance. page.clock advances30001ms per deadline and real500/1000ms retry backoffs; no real deadline waiting.",
+    "canonical_and_readback": "Real findWftFilesByNamePromise/validateCachedDriveFilePromise/chooseCanonicalWftFile. Service list sorts canonical ahead of older decoy; real downloadWftJsonFilePromise parses and validates before real fingerprint calculation.",
+    "independent_oracles": "Literal expected input/readback comparisons use no expected fingerprint calculation. Meaningful differences: settings target count, deletion identity, portfolio writing, index student file ID. Matching settings/deletions/portfolio include policy-ignored metadata changes; settings also changes property order.",
+    "cache_contract": "Legitimate lookup caches occur before equality, including mismatch/missing/invalid. Success requires exactly one additional cache publication after parsed readback and persisted ack-canonical. Rejection forbids recovery publication/returned ID, but permits lower-level lookup caching. Missing-canonical now separately requires actual empty cache after real invalid-cache validation clears memory/persisted ID; mismatch/invalid may retain legitimate lookup cache.",
+    "identity_contract": "Save observer delegates real save and catches its final error, then rethrows the same object. Mismatch/missing and actual403 preserve identity. Required malformed payloads preserve actual Error/TypeError messages instead of being forced into timeout identity.",
+    "healthy_retry": "After actual403, real clearWftSyncBlockState and uploader/save/multipart/canonical path succeed with accepted-1, preserve local work and strip credential. Original eight cases retain their real retry/late-response controls.",
+    "state_preserved": "Exact studentWriting DOM value including newline/trailing spaces, four required local-storage bytes, pending object and persisted pending bytes, three dirty flags, six local/synced counters, caller payload. Capture precedes uploader invocation; includes healthy retry.",
+    "delegating_observers": {
+      "saveFileToDrivePromise": "record final error, rethrow same object",
+      "downloadWftJsonFilePromise": "record requested ID/shape and actual parsed data; return unchanged data or propagate rejection",
+      "setCachedWftDriveFileId": "record phase then delegate actual persistence"
+    },
+    "not_stubbed": [
+      "uploadWftJsonFilePromise",
+      "saveFileToDrive",
+      "saveFileToDriveOncePromise",
+      "fingerprints",
+      "validators",
+      "canonical lookup and selection",
+      "download parsing",
+      "clock timeout/retry policy"
+    ],
+    "snapshot_order": "initializeAcknowledgement seeds nonempty literal studentWriting draft, durable/pending/dirty state and delegating observers only; captureAcknowledgement runs before any uploader invocation; then real upload is launched with unchanged success/error observation. Literal expected draft and complete projection must match after completion and healthy retry."
+  },
+  "boundary_evidence": [
+    {
+      "scenario": "ack-settings-matching",
+      "passed": true,
+      "checks": 8,
+      "outcome": {
+        "id": "ack-canonical"
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-settings.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": "settings"
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "targetWordCount": "240",
+          "students": [
+            "Synthetic"
+          ],
+          "updatedAt": "2026-10-16T00:03:00Z"
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-settings.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-settings.json",
+          "id": "ack-canonical",
+          "afterReadback": true
+        }
+      ],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-settings-different",
+      "passed": true,
+      "checks": 8,
+      "outcome": {
+        "message": "SAVE_FILE_TIMEOUT:wft-settings.json",
+        "name": "Error",
+        "sameError": true
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-settings.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": "settings"
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "students": [
+            "Synthetic"
+          ],
+          "targetWordCount": "333"
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-settings.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-settings-invalid",
+      "passed": true,
+      "checks": 8,
+      "outcome": {
+        "message": "Saved wft_settings data could not be read. Download Emergency Backup and repair the saved data before retrying.",
+        "name": "Error",
+        "sameError": false
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-settings.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": "settings"
+        }
+      ],
+      "literal_parsed_readback": [],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-settings.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-deletions-matching",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "id": "ack-canonical"
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-deletions.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": "deletions"
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "records": [],
+          "deletedStudents": {
+            "Synthetic": {
+              "deletedAt": "2026-10-16T00:00:00Z"
+            }
+          },
+          "updatedAt": "2026-10-16T00:03:00Z"
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-deletions.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-deletions.json",
+          "id": "ack-canonical",
+          "afterReadback": true
+        }
+      ],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-deletions-different",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "message": "SAVE_FILE_TIMEOUT:wft-deletions.json",
+        "name": "Error",
+        "sameError": true
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-deletions.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": "deletions"
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "records": [],
+          "deletedStudents": {
+            "Other": {
+              "deletedAt": "2026-10-16T00:00:00Z"
+            }
+          }
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-deletions.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-deletions-invalid",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "message": "Saved wft_deletions data could not be read. Download Emergency Backup and repair the saved data before retrying.",
+        "name": "Error",
+        "sameError": false
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-deletions.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": "deletions"
+        }
+      ],
+      "literal_parsed_readback": [],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-deletions.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-portfolio-matching",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "id": "ack-canonical"
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-portfolio.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": true
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "Synthetic": {
+            "sessions": [
+              {
+                "id": "ack-writing",
+                "originalText": "Intended synthetic writing",
+                "images": []
+              }
+            ]
+          },
+          "__syncMeta": {
+            "updatedAt": "2026-10-16T00:03:00Z"
+          }
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-portfolio.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-portfolio.json",
+          "id": "ack-canonical",
+          "afterReadback": true
+        }
+      ],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-portfolio-different",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "message": "SAVE_FILE_TIMEOUT:wft-portfolio.json",
+        "name": "Error",
+        "sameError": true
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-portfolio.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": true
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "Synthetic": {
+            "sessions": [
+              {
+                "id": "ack-writing",
+                "originalText": "Different synthetic writing",
+                "images": []
+              }
+            ]
+          }
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-portfolio.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-portfolio-invalid",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "message": "Invalid portfolio student: Synthetic",
+        "name": "TypeError",
+        "sameError": false
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-portfolio.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": true
+        }
+      ],
+      "literal_parsed_readback": [],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-portfolio.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-index-matching",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "id": "ack-canonical"
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:portfolio-index.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": false
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "format": "portfolio-index-v1",
+          "students": {
+            "Synthetic": {
+              "fileId": "student-intended"
+            }
+          }
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "portfolio-index.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "portfolio-index.json",
+          "id": "ack-canonical",
+          "afterReadback": true
+        }
+      ],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-index-different",
+      "passed": true,
+      "checks": 7,
+      "outcome": {
+        "message": "SAVE_FILE_TIMEOUT:portfolio-index.json",
+        "name": "Error",
+        "sameError": true
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:portfolio-index.json"
+        }
+      ],
+      "download_events": [
+        {
+          "type": "download",
+          "id": "ack-canonical",
+          "shape": false
+        }
+      ],
+      "literal_parsed_readback": [
+        {
+          "format": "portfolio-index-v1",
+          "students": {
+            "Synthetic": {
+              "fileId": "student-other"
+            }
+          }
+        }
+      ],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "portfolio-index.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "ack-canonical",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-settings-missing",
+      "passed": true,
+      "checks": 9,
+      "outcome": {
+        "message": "SAVE_FILE_TIMEOUT:wft-settings.json",
+        "name": "Error",
+        "sameError": true
+      },
+      "upload_methods": [
+        "POST",
+        "PATCH",
+        "PATCH"
+      ],
+      "upload_count": 3,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "SAVE_FILE_TIMEOUT:wft-settings.json"
+        }
+      ],
+      "download_events": [],
+      "literal_parsed_readback": [],
+      "lookup_cache_calls": [
+        {
+          "type": "cache",
+          "filename": "wft-settings.json",
+          "id": "ack-canonical",
+          "afterReadback": false
+        }
+      ],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": null
+    },
+    {
+      "scenario": "ack-settings-non-timeout",
+      "passed": true,
+      "checks": 6,
+      "outcome": {
+        "message": "Synthetic permission denied",
+        "name": "Error",
+        "status": 403,
+        "sameError": true
+      },
+      "upload_methods": [
+        "POST",
+        "POST"
+      ],
+      "upload_count": 2,
+      "save_error_events": [
+        {
+          "type": "save-error",
+          "message": "Synthetic permission denied",
+          "status": 403
+        }
+      ],
+      "download_events": [],
+      "literal_parsed_readback": [],
+      "lookup_cache_calls": [],
+      "recovery_cache_calls": [],
+      "actual_final_cache": "",
+      "pre_operation_dom_draft": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+      "dom_durable_pending_dirty_counter_projection_exact": true,
+      "input_unchanged": true,
+      "healthy_retry": {
+        "id": "accepted-1",
+        "cache": "accepted-1",
+        "state": {
+          "writing": "Unsaved synthetic DOM draft.\nKeep exact spacing.  ",
+          "bytes": [
+            [
+              "wft_settings",
+              "{}"
+            ],
+            [
+              "wft_students",
+              "[\"Synthetic\"]"
+            ],
+            [
+              "wft_deletions",
+              "{\"records\":[]}"
+            ],
+            [
+              "wft_portfolio",
+              "{\"Synthetic\":{\"sessions\":[{\"id\":\"original\",\"createdAt\":\"2026-10-12T00:00:00Z\",\"originalText\":\"Original synthetic writing\",\"images\":[]}]}}"
+            ]
+          ],
+          "pending": {
+            "studentName": "Synthetic",
+            "signature": "ack-pending",
+            "sessionData": {
+              "id": "ack-pending",
+              "originalText": "Pending exact writing",
+              "images": []
+            }
+          },
+          "pendingBytes": "{\"studentName\":\"Synthetic\",\"signature\":\"ack-pending\",\"sessionData\":{\"id\":\"ack-pending\",\"originalText\":\"Pending exact writing\",\"images\":[]}}",
+          "dirty": [
+            true,
+            true,
+            true
+          ],
+          "counters": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  ],
+  "companion_tests": [
+    {
+      "suite": "tests/drive-lifecycle.browser.cjs",
+      "before_source_equivalent009": {
+        "receipt": {
+          "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-009-validation.json",
+          "raw_sha256": "0540f38d4e97b09b51bd0d8e0476aaa7f27668378c4eb9953d949432c26a3497",
+          "lf_sha256": "3cef8f206b34669606fff35c07912600ad36d692da59c655acbed4982045bb7b",
+          "bytes": 60563
+        },
+        "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-009\\full\\drive-lifecycle.browser.json",
+          "raw_sha256": "821e74e0a3a42dd60db6d011e7731da6a5ba71aea8f4973d89e32454a81abc94",
+          "lf_sha256": "821e74e0a3a42dd60db6d011e7731da6a5ba71aea8f4973d89e32454a81abc94",
+          "bytes": 222841
+        },
+        "cases": 53,
+        "assertions": 348,
+        "status": 0,
+        "reuse_basis": "Exact relevant companion raw pins; all other90 source/test/runner LF pins, configuration and HTML match009. Three unrelated tests differ only in line endings. Git source/test/config/HTML tree21713101 equals base37e7b8e."
+      },
+      "after": {
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-drive-lifecycle.json",
+          "raw_sha256": "4f21fba1de57875a922d3858bb9977c63cf20939941c338cc7d3b0fccfa9b11d",
+          "lf_sha256": "4f21fba1de57875a922d3858bb9977c63cf20939941c338cc7d3b0fccfa9b11d",
+          "bytes": 220237
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-drive-lifecycle.log",
+          "raw_sha256": "f4cae6f144886d84589d92dece3e416e3563ded5a20c5883a02296a3b2ab4111",
+          "lf_sha256": "59ee55bc6f374bd16c42dc904a34e83476c0b6d01619c097656dd82ae70ba04b",
+          "bytes": 1203
+        },
+        "exit_code": 0,
+        "cases": 53,
+        "assertions": 348,
+        "failed": 0
+      }
+    },
+    {
+      "suite": "tests/portfolio-index.browser.cjs",
+      "before_source_equivalent009": {
+        "receipt": {
+          "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-009-validation.json",
+          "raw_sha256": "0540f38d4e97b09b51bd0d8e0476aaa7f27668378c4eb9953d949432c26a3497",
+          "lf_sha256": "3cef8f206b34669606fff35c07912600ad36d692da59c655acbed4982045bb7b",
+          "bytes": 60563
+        },
+        "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-009\\full\\portfolio-index.browser.json",
+          "raw_sha256": "edc0eae18a02cadf59d012a07a9fedba7a4dc29d7b0a39e6f4abe7e6c57db99e",
+          "lf_sha256": "edc0eae18a02cadf59d012a07a9fedba7a4dc29d7b0a39e6f4abe7e6c57db99e",
+          "bytes": 53526
+        },
+        "cases": 189,
+        "assertions": null,
+        "status": 0,
+        "reuse_basis": "Exact relevant companion raw pins; all other90 source/test/runner LF pins, configuration and HTML match009. Three unrelated tests differ only in line endings. Git source/test/config/HTML tree21713101 equals base37e7b8e."
+      },
+      "after": {
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-portfolio-index.json",
+          "raw_sha256": "f4abbb7759e516bca06d32ba87093e2306f1115292f2f4c3d14258485b660294",
+          "lf_sha256": "f4abbb7759e516bca06d32ba87093e2306f1115292f2f4c3d14258485b660294",
+          "bytes": 53526
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-portfolio-index.log",
+          "raw_sha256": "57bf7d2a7d75d1cace623901b6ff8c405ff0bf9851edcdae88fbe84fba4f665f",
+          "lf_sha256": "ff4348604348effbbb40014753298980a5c14e92e1769675d2641842465be618",
+          "bytes": 55306
+        },
+        "exit_code": 0,
+        "cases": 189,
+        "assertions": null,
+        "failed": 0
+      }
+    },
+    {
+      "suite": "tests/preference-integrity.browser.cjs",
+      "before_source_equivalent009": {
+        "receipt": {
+          "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-009-validation.json",
+          "raw_sha256": "0540f38d4e97b09b51bd0d8e0476aaa7f27668378c4eb9953d949432c26a3497",
+          "lf_sha256": "3cef8f206b34669606fff35c07912600ad36d692da59c655acbed4982045bb7b",
+          "bytes": 60563
+        },
+        "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-009\\full\\preference-integrity.browser.json",
+          "raw_sha256": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d",
+          "lf_sha256": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d",
+          "bytes": 28493
+        },
+        "cases": 137,
+        "assertions": null,
+        "status": 0,
+        "reuse_basis": "Exact relevant companion raw pins; all other90 source/test/runner LF pins, configuration and HTML match009. Three unrelated tests differ only in line endings. Git source/test/config/HTML tree21713101 equals base37e7b8e."
+      },
+      "after": {
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-preference-integrity.json",
+          "raw_sha256": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d",
+          "lf_sha256": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d",
+          "bytes": 28493
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-preference-integrity.log",
+          "raw_sha256": "dcdf0b11a7fbf86e6fd13c74f98b47f04562c0a642143f259dc387e2468c62d0",
+          "lf_sha256": "f486df1a88e757e3d12ba5fa2221ea8dfde0663269c43bc783f21d5f747f5e36",
+          "bytes": 49
+        },
+        "exit_code": 0,
+        "cases": 137,
+        "assertions": null,
+        "failed": 0
+      }
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": "initial baseline launch",
+      "result": "failed before browser/test execution: Cannot find module playwright",
+      "evidence": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-baseline.log",
+        "raw_sha256": "4546f4f7f05b9849b8c6ae023b3adff369d85a806ab15905ee32cd626c234879",
+        "lf_sha256": "5e30b2128b26d8e1a9fa598689e396dd77aaace30b7ea5a1a660ca030bde9437",
+        "bytes": 1173
+      },
+      "diagnosis": "Default Node module resolution excludes installed bundled packages. Set existing bundled NODE_PATH; no install/dependency change."
+    },
+    {
+      "attempt": "baseline with existing runtime packages",
+      "result": "pass8 scenarios/23 checks"
+    },
+    {
+      "attempt": "candidate01 exploratory",
+      "result": "pass21 scenarios/116 checks",
+      "report": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-candidate-01.json",
+        "raw_sha256": "d9eb78bf5a598c5e066041c00a9952da5e6c5e55a5b4e90224fc9fa881772794",
+        "lf_sha256": "d9eb78bf5a598c5e066041c00a9952da5e6c5e55a5b4e90224fc9fa881772794",
+        "bytes": 190956
+      },
+      "diagnosis": "Added metadata-policy, persisted-cache, no-lookup403 and healthy-retry oracles before final freeze. Exploratory source not separately frozen.",
+      "retention_oracle_limit": "snapshots.before followed initial uploader invocation; omitted DOM draft. Passing exploratory evidence only, superseded by candidate03."
+    },
+    {
+      "attempt": "candidate02 previous freeze, superseded",
+      "result": "pass21 scenarios/117 checks",
+      "diagnosis": "No assertion failures or production regression found.",
+      "retention_oracle_limit": "snapshots.before followed initial uploader invocation; omitted DOM draft. Passing exploratory evidence only, superseded by candidate03."
+    },
+    {
+      "attempt": "initial receipt pin audit",
+      "result": "stopped before writing receipt on portfolio-sync raw SHA mismatch",
+      "diagnosis": "Read all90 pins: portfolio-sync.cjs, record-identity.cjs and session-retention.cjs differ in CRLF/LF only; all90 normalized hashes match009 and relevant companions match raw. Corrected receipt to distinguish raw and normalized equality; no source changes or redundant gate."
+    },
+    {
+      "attempt": "candidate03 coordinator bounded oracle correction",
+      "result": "pass21 scenarios/118 checks; node syntax pass",
+      "report": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-candidate-03.json",
+        "raw_sha256": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12",
+        "lf_sha256": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12",
+        "bytes": 196272
+      },
+      "diagnosis": "Initialization no longer invokes uploader. Snapshot precedes operation; exact nonempty DOM draft preserved. Missing-canonical cache cleanup explicitly asserted. Production and original eight code paths unchanged; no failed rerun."
+    }
+  ],
+  "limitations": [
+    "Synthetic identity/Drive replies; no live service, real account, actual credentials or student data.",
+    "Test-only contract checks, not a production refactor, exhaustive cloud-shape matrix, branch-coverage measurement or new full gate.",
+    "Index timeout path uses optional requiredShape=false, not index schema validation. Equality/mismatch follows actual existing contract; no new index validity policy imposed.",
+    "Three delegation observers add promise observation boundaries only in new cases; real results/errors/validation/cache retained.",
+    "No complete request-trace parity or stable background-read-count guarantee.",
+    "No P31, tracker/index adoption, branch/worktree creation, commit/push, publication or coverage export.",
+    "Two independent coordinator reviews pending; coordinator owns acceptance and next operation."
+  ],
+  "previous_freeze": {
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-receipt-candidate02.json",
+      "raw_sha256": "81427e6f889ec175c89b37cba3ff978dbe8863b5aa9da337ca545c42a65b60fb",
+      "lf_sha256": "a43bf4eed2128b3298992eb59a86989511864eb6846f4219683364e8b26ac9e9",
+      "bytes": 78779
+    },
+    "target": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-frozen-target.cjs",
+      "raw_sha256": "73e57b434793aacb81e168b3de8273284cec89d5f49501cbcf2966583b24cb24",
+      "lf_sha256": "55ce157df509612203ae4d6fc685ff00a5ee68aa052aa7f0c9f7bef86534dda8",
+      "bytes": 23971
+    },
+    "status": "superseded exploratory candidate02; no independent reviews started",
+    "snapshot_limit": "Candidate01/02 captured snapshots.before only after starting the uploader, and omitted DOM draft; their passing retention checks cannot exclude synchronous initial mutation. Candidate03 corrects this before reviewer admission."
+  },
+  "revision": 3,
+  "reviews": {
+    "independent_started": 0,
+    "independent_required": 2,
+    "awaiting_coordinator": true
+  },
+  "cache_cleanup_source_evidence": {
+    "file": "js/app/00-storage-sync-patches.js",
+    "validateCachedDriveFilePromise": "An invalid metadata record calls clearCachedWftDriveFileId before returning false; findWftFilesByNamePromise then lists names and receives no canonical in this control.",
+    "clearCachedWftDriveFileId": "Clears matching settings/portfolio/deletions memory ID and removes persisted cache key.",
+    "prior_observation": {
+      "candidate02_missing_actual_cache": ""
+    },
+    "final_asserted_empty": true
+  },
+  "companion_reuse_after_revision3": "No companion reruns: previous passing53 scenarios/348 checks Drive lifecycle,189 index cases and137 preference cases retained; all affected app/companion raw bytes reverified against previous freeze."
+}

@@ -1,0 +1,155 @@
+{
+  "repair_id": "repair-073",
+  "verdict": "accepted",
+  "blockers": [],
+  "inspected_git_commit": "5b238405e2e68eebe75ad90d9ce15897ffc1e612",
+  "finding_id": "code_health:finding_d101f599d7efdce35b73",
+  "stored_observation_binding": "Stored review036 skip_unused_high_score_diff_summary describes the same original no-output range; original whole function is Git-identical at the current shifted1887-1912 span. This review makes no new scanner metric or closure claim.",
+  "source_pins": {
+    "main": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\10-main-app.js",
+      "raw_sha256": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+      "lf_sha256": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f"
+    },
+    "performance_test": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\correction-performance.browser.cjs",
+      "raw_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+      "lf_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5"
+    },
+    "tests/feedback-compatibility.browser.cjs": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\feedback-compatibility.browser.cjs",
+      "raw_sha256": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+      "lf_sha256": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa"
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\storage-upload-ownership.browser.cjs",
+      "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\00-storage-sync-patches.js",
+      "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677"
+    },
+    "index.html": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\index.html",
+      "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+      "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898"
+    }
+  },
+  "function_pins": {
+    "file": "js/app/10-main-app.js",
+    "function": "buildGrammarReasonFromData",
+    "span_original_and_candidate": [
+      1887,
+      1912
+    ],
+    "original_lf_sha256": "0643fe6e71d4c59402520f245ad4ac485a58ca43fc608aa6c5b9f351fd0bed46",
+    "candidate_lf_sha256": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa"
+  },
+  "exact_scope": "Only the context-bound high-score guard in10-main-app.js and appended checks in correction-performance.browser.cjs differ from the parent within application/test/HTML/runner paths. Main equals the parent after that single guard replacement; accepted072 target retains its exact raw/LF hashes.",
+  "observations": [
+    {
+      "anchors": [
+        "js/app/10-main-app.js:552-557",
+        "js/app/10-main-app.js:1887-1912"
+      ],
+      "reason": "Numeric normalization still runs first and accepts only finite primitive number/string scores. Null/invalid and every <=8 path are unchanged. Above8 the original unconditionally fell through to empty after unused summary construction, so returning empty earlier preserves its supported result. This includes8.5, numeric strings, trimmed high values and finite above-rubric scores; no rounding/clamping or score policy changes."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:1151-1185",
+        "js/app/10-main-app.js:1375-1382",
+        "js/app/10-main-app.js:1810-1885"
+      ],
+      "reason": "The skipped dependency chain creates local tokens, LCS arrays, edit operations and summary counters; for primitive writing strings it has no persistence, UI or other state publication. Eliminating one otherwise unused analyzer/LCS call is a concrete bounded benefit without an added helper or shared-state cache. Actual scoring, normalization and separately invoked consumers are untouched."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:1696-1742",
+        "js/app/10-main-app.js:2065-2120",
+        "js/app/10-main-app.js:7939",
+        "js/app/10-main-app.js:2147-2167",
+        "js/app/10-main-app.js:8267-8283"
+      ],
+      "reason": "The actual polishFeedback caller first polishes existing quick wording and replaces it only when the reason builder returns a nonempty string. High-score calls retain that already-polished reason in both versions. The original probe expected raw short wording incorrectly; saved actual output and candidate assertion correctly retain the teacherized wording. Shipped analysis obtains primitive strings from textarea/OCR and corrected-story parsing."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:1914-1931",
+        "js/app/10-main-app.js:2021-2037",
+        "js/app/10-main-app.js:2085-2092",
+        "js/app/10-main-app.js:7894-7923"
+      ],
+      "reason": "Detailed grammar evidence and pattern notes still call the real analyzer separately. They and score/density computation are byte-identical. The zero-work claim applies to this reason path, including the isolated quick-only polishFeedback fixture, not to the entire assessment."
+    },
+    {
+      "anchors": [
+        "tests/correction-performance.browser.cjs:93-139",
+        "tests/correction-performance.browser.cjs:142-149"
+      ],
+      "reason": "Added observers count then delegate the actual analyzer and LCS functions, and restore both in finally. Literal branch outputs and saved original observations provide result oracles independent of the new guard. All133 pre-existing named check objects remain identical and the original test prefix/runner suffix are exactly retained after removing the added block. Failed check or browser error still causes nonzero process exit."
+    }
+  ],
+  "evidence": {
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-073-high-score-grammar-guard.json",
+      "raw_sha256": "9c026071778f5d30970bce5d2f4e770f8e1e6f4e6840bbc57318adb0aedca17f",
+      "lf_sha256": "df66af9999259160e377878139fa88119fa037a88853816a4dd0a19891a31881"
+    },
+    "original_probe": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-original-native-probe.json",
+      "raw_sha256": "6d3113ebe1121afdc425bebcd6f349956e3cbcbd57a0d149f7874a63f51f031a",
+      "lf_sha256": "6d3113ebe1121afdc425bebcd6f349956e3cbcbd57a0d149f7874a63f51f031a"
+    },
+    "original_probe_script": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\probe073-original.cjs",
+      "raw_sha256": "d9267f3e2999872f2a3995d348dd7e2ff9533956ce9bf41a9fd95a310fd2daae",
+      "lf_sha256": "024454ad33b5be135d501b4b21677292ee865e669d6e31b0e05a04b5b31cc8a2"
+    },
+    "original_probe_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-original-native-probe.log",
+      "raw_sha256": "40c4032de8e3c66be7c64c5898ddbbf3fd14c6846de851167d033ea942ff16c0",
+      "lf_sha256": "827428864f9e531b65aff9724f45b7eaff43944e0037178af777554fd4c23063"
+    },
+    "candidate_performance": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-correction-performance-candidate.json",
+      "raw_sha256": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca",
+      "lf_sha256": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca"
+    },
+    "candidate_compatibility": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair073-feedback-compatibility-candidate.json",
+      "raw_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+      "lf_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0"
+    }
+  },
+  "independently_checked_recorded_results": {
+    "candidate_performance": {
+      "checks": 304,
+      "original_checks": 133,
+      "added_checks": 171,
+      "failures": 0,
+      "normalization_control": 161
+    },
+    "compatibility": {
+      "checks": 30,
+      "report_byte_identical_to009": true
+    },
+    "paired_saved_original_output_observations": 57,
+    "high_score_zero_analyzer_and_LCS": 19,
+    "null_invalid_zero_analyzer_and_LCS": 11,
+    "lower_mid_one_analyzer_and_LCS": 27,
+    "original_direct_rows": 75,
+    "original_caller_rows": 10,
+    "original_direct_high_rows_each_previously_one_analyzer_and_LCS": 29,
+    "original_probe_exit": 1,
+    "original_probe_caveat": "Raw data were saved before its incorrect final caller-wording assertion failed. This is observational baseline evidence with explicit offline correction, not an all-pass original probe."
+  },
+  "limits": [
+    "Read-only code, Git blob, JSON and hash inspection; this reviewer ran no app, browser, test, syntax check or third-party verifier. Candidate304+30 pass claims are supplied execution records, independently inspected.",
+    "No latency, memory-size, throughput or whole-app speed measurement. Benefit is the recorded removal of one reason-specific analyzer/LCS invocation for admitted high scores.",
+    "No parity claim for unsupported custom text coercion side effects or resource-exhaustion exceptions; the guard intentionally avoids unused high-score coercion/allocation. Primitive supported text outputs and unchanged lower-score work are covered.",
+    "No full-gate, coverage, index, scanner closure, tracker adoption, Git/source/test change or next-task work."
+  ],
+  "end_recheck": "Changed target and accepted072 test raw/LF hashes remain exact immediately before report write."
+}

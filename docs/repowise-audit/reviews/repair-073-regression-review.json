@@ -1,0 +1,153 @@
+{
+  "repair_id": "repair-073-regression-review",
+  "verdict": "accepted",
+  "blockers": [],
+  "base_commit": "5b238405e2e68eebe75ad90d9ce15897ffc1e612",
+  "inspected_git_commit": "5b238405e2e68eebe75ad90d9ce15897ffc1e612",
+  "summary": "One early return removes unused high-score reason analysis while preserving supported outputs, normalization and caller behavior. Saved candidate304/304 checks and unchanged30 compatibility checks support acceptance. Original probe exit1 is retained and is not represented as85 passing probe assertions.",
+  "reviewed_source_pins": {
+    "js/app/10-main-app.js": {
+      "raw": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+      "lf": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f",
+      "base_lf_equal": false
+    },
+    "tests/correction-performance.browser.cjs": {
+      "raw": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+      "lf": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+      "base_lf_equal": false
+    },
+    "tests/feedback-compatibility.browser.cjs": {
+      "raw": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+      "lf": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+      "base_lf_equal": true
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "raw": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+      "base_lf_equal": true
+    },
+    "scripts/run-tests.cjs": {
+      "raw": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca",
+      "lf": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+      "base_lf_equal": true
+    },
+    "scripts/case-report-suites.json": {
+      "raw": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+      "lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+      "base_lf_equal": true
+    },
+    "index.html": {
+      "raw": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+      "lf": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+      "base_lf_equal": true
+    }
+  },
+  "function_binding": {
+    "buildGrammarReasonFromData": {
+      "span": [
+        1887,
+        1912
+      ],
+      "before_lf": "0643fe6e71d4c59402520f245ad4ac485a58ca43fc608aa6c5b9f351fd0bed46",
+      "after_lf": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa"
+    }
+  },
+  "checks": [
+    {
+      "anchors": "js/app/10-main-app.js:552-557,1847-1912",
+      "evidence": "Original backup binds exact base Git main. Full-file reconstruction changes only n==null to n==null||n>8 in this function. Numeric normalization stays first; zero/negative and <=8 paths/strings are intact. Previously every nonempty return required n<=6 or n<=8, so finite n>8 discarded its locally computed analyzer summary and returned empty. No calibration/score/parser/caller/evidence function changed."
+    },
+    {
+      "anchors": "tests/correction-performance.browser.cjs:1-92,93-140,141-149",
+      "evidence": "Deleting only the added guard-test block and reversing the extra observation return field reconstructs the original test exactly. All133 original check names/order/pass results equal reused009 report, normalization control remains161. Full candidate reports304 passed/0 failed/no browser errors;57 observations each produce three literal-output/analyzer-count/LCS-count checks (171 additions). Throws escape to outer nonzero exit, false check rows aggregate into failed count, and existing report alias/runner handling remains."
+    },
+    {
+      "anchors": "test:109-138; work/repair073-original-native-probe.json",
+      "evidence": "Independently mapped all57 candidate observations to corresponding original native direct/caller observations. Literal outputs agree for26 score forms, seven low/mid branches,14 primitive-text/Unicode rows and10 real polishFeedback callers. Scores include null/undefined/zero/negative, numeric strings,6/7/8/8.5/9/10/11, blank/invalid/NaN/infinities/boolean. Expectations are literal text and0/1 counts; they do not recompute expected results using the candidate."
+    },
+    {
+      "anchors": "test:93-104,139; main:1810-1884",
+      "evidence": "Analyzer/LCS observers increment counters then delegate captured real implementations and restore globals in finally; no fabricated summaries or matrices.19 admitted high-score observations change actual analyzer/LCS calls from1/1 to0/0.27 supported lower/mid observations retain1/1,11 null/invalid observations retain0/0. This proves eliminated reason-specific work, with no wall-time or memory-size claim."
+    },
+    {
+      "anchors": "main:1696-1740,2065-2122; test:132-138",
+      "evidence": "Actual polishFeedback first teacherizes category wording; its short numeric Grammar reason becomes the literal teacher-style sentence before buildGrammarReasonFromData runs. Truthy low/mid reason replaces it; high empty reason retains that already-polished sentence. All10 original/candidate caller outputs match, including four high caller cases with zero candidate reason analyzer calls. Detailed Grammar evidence/pattern-note consumers remain byte-identical and may still analyze independently."
+    },
+    {
+      "anchors": "work/probe073-original.cjs:60-75; repair073-original-native-probe.log",
+      "evidence": "Original source native probe captured and wrote75 direct plus10 caller rows before assertions. Direct count/band loop and seven literal branch checks precede the failing caller assertion. Exit1 correctly records the mistaken raw-reason expectation at the first high caller; later caller assertions were not all reached. Independently reading all saved rows confirms no captured errors and the prepass-aware literals, including the57 candidate subset. Offline verification is evidence comparison, not a second native run or85 passing runtime assertions."
+    },
+    {
+      "anchors": "candidate compatibility report; source pins; Git diff vs5b238405",
+      "evidence": "Compatibility source unchanged and complete30-check native result equals009 baseline report. Baseline133/30 receipts were reused on original exact source; candidate304/30 were actually run once per supplied receipts. Other seven app sources/HTML and runner/config match base; accepted072 test retains its exact raw/LF hashes. Only main guard and performance-test additions differ in production/test/runner/HTML scope; coordinator audit-document edits are outside scope."
+    }
+  ],
+  "counts": {
+    "baseline": 133,
+    "candidate": 304,
+    "added": 171,
+    "observations": 57,
+    "high_eliminated": 19,
+    "null_invalid_unchanged": 11,
+    "low_mid_unchanged": 27,
+    "compatibility": 30
+  },
+  "probe_provenance": {
+    "captured_direct": 75,
+    "captured_callers": 10,
+    "runtime_exit": 1,
+    "offline_57_mapped_parity": true
+  },
+  "evidence": {
+    "coordinator_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-073-high-score-grammar-guard.json",
+      "raw_sha256": "9c026071778f5d30970bce5d2f4e770f8e1e6f4e6840bbc57318adb0aedca17f"
+    },
+    "worker_root": "C:/Users/Michael/Documents/Codex/2026-10-16/repowise-batch-010-save-feedback",
+    "artifact_pins": {
+      "correction-performance.browser.json": {
+        "raw": "4c97dedf4db916a48d0dce3a6054754b5022f2dfde9bb4930acb4756124681a1",
+        "lf": "4c97dedf4db916a48d0dce3a6054754b5022f2dfde9bb4930acb4756124681a1"
+      },
+      "feedback-compatibility.browser.json": {
+        "raw": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+        "lf": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0"
+      },
+      "repair073-correction-performance-candidate.json": {
+        "raw": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca",
+        "lf": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca"
+      },
+      "repair073-feedback-compatibility-candidate.json": {
+        "raw": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+        "lf": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0"
+      },
+      "repair073-original-native-probe.json": {
+        "raw": "6d3113ebe1121afdc425bebcd6f349956e3cbcbd57a0d149f7874a63f51f031a",
+        "lf": "6d3113ebe1121afdc425bebcd6f349956e3cbcbd57a0d149f7874a63f51f031a"
+      },
+      "probe073-original.cjs": {
+        "raw": "d9267f3e2999872f2a3995d348dd7e2ff9533956ce9bf41a9fd95a310fd2daae",
+        "lf": "024454ad33b5be135d501b4b21677292ee865e669d6e31b0e05a04b5b31cc8a2"
+      },
+      "repair073-original-native-probe.log": {
+        "raw": "40c4032de8e3c66be7c64c5898ddbbf3fd14c6846de851167d033ea942ff16c0",
+        "lf": "827428864f9e531b65aff9724f45b7eaff43944e0037178af777554fd4c23063"
+      },
+      "verify073-saved-evidence.py": {
+        "raw": "c62db6a86fcfcfa15c8bab6eac9cc52e4578723e01b2267b66fa2591a75d9418",
+        "lf": "d8d4874e187122a628b82a765077334dfbe2034bdeb3f2a96e5e3af20da5a168"
+      }
+    },
+    "all_referenced_path_pins_verified": 30,
+    "static_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-073\\static-receipt.json",
+      "raw_sha256": "ada13f74af1efea2a3e3f491ecee9b29ace5c7fea9161414e60382983f4dd7fa"
+    }
+  },
+  "limits": [
+    "Read-only source/saved-evidence review; no app/test/browser execution, source/Git/index/tracker changes, integration or further repair work. Artifact hashes bind inspected files, not independent process attestation.",
+    "Actual caller tests isolate quick Grammar reason using detailed categories empty. Existing133 parity and30 compatibility cover adjacent behavior; this is not an end-to-end AI, scoring-calibration, live-service or whole-repository gate claim.",
+    "Supported writing primitives match; exceptions/side effects of unsupported custom text-coercion objects or resource exhaustion are outside parity claims. High-score unused coercion/allocation is intentionally skipped.",
+    "19 zero-call observations establish removal of one reason-specific analyzer/LCS invocation; other Grammar consumers still compute their own evidence. No general whole-app speed, latency, memory-size, coverage or scanner-closure claim."
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "repair_id": "repair-072",
+  "review": "independent safety and data-preservation, candidate03 only",
+  "verdict": "accepted",
+  "blockers": [],
+  "inspected_git_commit": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+  "base_commit": "37e7b8e704d803fd88e22449604239a236ee7fd9",
+  "branch": "codex/repowise-batch-010-20261016",
+  "scope": "Test-only acknowledgement contracts; no production change or production bug claim. Earlier candidate01/02 timing premises are superseded.",
+  "source_pins": {
+    "tests/storage-upload-ownership.browser.cjs": {
+      "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "base_git_blob": "92b0112c2dde1f348e535caa1c98b89dc48ab7a5"
+    },
+    "js/app/storage-recovery.js": {
+      "raw_sha256": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "base_git_blob": "26ea30755abd441468625d072aaadb574e0515e4"
+    },
+    "index.html": {
+      "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+      "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+      "base_git_blob": "fac82d03088ba1d602b83da8354735c4fb4f1822"
+    },
+    "scripts/case-report-suites.json": {
+      "raw_sha256": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+      "lf_sha256": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+      "base_git_blob": "041123fc6f8c8712d428684a3e0f01e82f4aff75"
+    }
+  },
+  "uploadWftJsonFilePromise": {
+    "file": "js/app/00-storage-sync-patches.js",
+    "lines": [
+      5051,
+      5119
+    ],
+    "lf_sha256": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+    "unchanged_from_base": true
+  },
+  "evidence": {
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-072-timeout-acknowledgement-contracts.json",
+      "raw_sha256": "6c13ad85ce189e8ec39cb9e0e359298bd58c4d20f7ea622c0c3ef74ae98ae9d6",
+      "lf_sha256": "d6f8c1c34436a9fac60b38175232f0edb3924f5da18cc3dc4fa117114a7f74e7"
+    },
+    "baseline": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-baseline.json",
+      "raw_sha256": "9d252a04dafb735e13f7bffbc83a84cdc1d992961b97a0cfbc0772d6cd029583",
+      "lf_sha256": "9d252a04dafb735e13f7bffbc83a84cdc1d992961b97a0cfbc0772d6cd029583"
+    },
+    "candidate03": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-candidate-03.json",
+      "raw_sha256": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12",
+      "lf_sha256": "be121f328bf25d6faf257cd5999056e642d9c5bbbe58abde7ab92c66fc0eda12"
+    },
+    "candidate03_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-candidate-03.log",
+      "raw_sha256": "09038e9d1e74d9521c8ebb5859ab20afb7b0875aff5e32e772bb872f7a32ce92",
+      "lf_sha256": "502a57469e0c35aedc917693100f3a56c93d79a7f557786e6e5594f017afa4c1"
+    },
+    "frozen_target03": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair072-frozen-target-03.cjs",
+      "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+    }
+  },
+  "observations": [
+    {
+      "topic": "Pre-operation preservation premise",
+      "anchors": [
+        "tests/storage-upload-ownership.browser.cjs:16-31",
+        "tests/storage-upload-ownership.browser.cjs:113-125"
+      ],
+      "reason": "Candidate03 captures state on line115 before invoking the actual uploader on116. The recorded before state contains the exact nonempty two-line DOM draft including trailing spaces, nonempty required storage bytes, pending memory and durable pending writing, all three true dirty flags, and six counters. Every new case records exact equality after settlement; the real403 healthy retry also preserves that same before state. This repairs the earlier after-uploader snapshot premise."
+    },
+    {
+      "topic": "Real timeout and literal payloads",
+      "anchors": [
+        "tests/storage-upload-ownership.browser.cjs:69-85",
+        "tests/storage-upload-ownership.browser.cjs:117-144",
+        "js/app/00-storage-sync-patches.js:4144-4211",
+        "js/app/00-storage-sync-patches.js:4302-4366"
+      ],
+      "reason": "Each of the12 timeout cases records three real multipart requests (POST/PATCH/PATCH), held responses and actual30000ms timeouts with500/1000ms retry delays. Independent parsing of all recorded multipart bodies matches the intended caller input with only apiKey removed. The controlled service changes the final canonical bytes; it never fulfills a success response to manufacture timeout recovery. All settings attempts omit credential field/value while caller input retains it unchanged."
+    },
+    {
+      "topic": "Acknowledgement, canonical choice and cache",
+      "anchors": [
+        "tests/storage-upload-ownership.browser.cjs:76-98",
+        "tests/storage-upload-ownership.browser.cjs:124-142",
+        "js/app/00-storage-sync-patches.js:4945-5119"
+      ],
+      "reason": "All four payload types exercise matching and meaningful mismatch. Matching settings/deletions/portfolio fixtures include permitted metadata variation; index uses actual generic hash semantics. A canonical newer file and older decoy traverse the real ordered finder and chooseCanonicalWftFile. Recorded pre-readback caching is legitimate lower-level lookup, distinct from the one post-readback cache publication and returned canonical ID only on equality. Mismatch preserves original timeout identity and has no recovery publication. Missing settings canonical validates stale cached metadata, clears cache to empty, performs no download, and retains original timeout."
+    },
+    {
+      "topic": "Typed failures and healthy retry",
+      "anchors": [
+        "tests/storage-upload-ownership.browser.cjs:127-150",
+        "js/app/00-storage-sync-patches.js:5020-5107",
+        "js/app/storage-recovery.js:160-186"
+      ],
+      "reason": "Actual malformed settings, deletion and portfolio readbacks reject with the exact required-storage Error or portfolio TypeError, distinct from the save timeout, without parsed-success event or recovery cache publication. Index is deliberately not assigned a new required-shape policy. The real HTTP403 path propagates the same error object/status/message after one attempt with no recovery lookup; clearing the actual block permits a real sanitized multipart healthy retry, returned accepted-1 ID and actual cache write."
+    },
+    {
+      "topic": "Observers and failure aggregation",
+      "anchors": [
+        "tests/storage-upload-ownership.browser.cjs:22-26",
+        "tests/storage-upload-ownership.browser.cjs:154-158",
+        "tests/storage-upload-ownership.browser.cjs:210-215"
+      ],
+      "reason": "The three acknowledgement-only observers call their captured real functions with the original arguments and return actual results or rethrow the same error. Fingerprints, canonical selection, JSON parsing and validators are not replaced. All recorded cases have nonempty check lists and no browser errors. A false check fails final aggregation; missing scenario or operational exception exits nonzero. Held requests are aborted only after outcome and assertions are captured."
+    },
+    {
+      "topic": "Original ownership contracts and production callers",
+      "anchors": [
+        "tests/storage-upload-ownership.browser.cjs:33-51",
+        "tests/storage-upload-ownership.browser.cjs:160-212",
+        "js/app/00-storage-sync-patches.js:1654-1692",
+        "js/app/00-storage-sync-patches.js:5292-5332",
+        "js/app/00-storage-sync-patches.js:5384-5414",
+        "js/app/00-storage-sync-patches.js:5640-5671"
+      ],
+      "reason": "Independent source comparison retains initializeOwnershipState/checkFinalOwnership/startScenario/finishScenario exactly; original eight names, order and all23 named check results match baseline JSON. Old cases get fresh contexts and never install the observers or acknowledgement route branch. Real sync callers record settings/deletions/portfolio publication only after uploader resolution; the optional index caller also guards current connection and dirty snapshot. Those production bodies and HTML/recovery/config remain base-identical."
+    }
+  ],
+  "recorded_results_checked": {
+    "baseline_scenarios": 8,
+    "baseline_checks": 23,
+    "candidate03_scenarios": 21,
+    "candidate03_checks": 118,
+    "new_scenarios": 13,
+    "new_checks": 95,
+    "all_recorded_checks_true": true,
+    "original_check_objects_order_exact": true,
+    "companion_records": [
+      {
+        "suite": "tests/drive-lifecycle.browser.cjs",
+        "report_raw_sha256": "4f21fba1de57875a922d3858bb9977c63cf20939941c338cc7d3b0fccfa9b11d",
+        "cases": 53,
+        "checks": 348,
+        "reuse_limit": "Supplied earlier companion result; unchanged pinned app/companion bytes; no candidate03 companion rerun."
+      },
+      {
+        "suite": "tests/portfolio-index.browser.cjs",
+        "report_raw_sha256": "f4abbb7759e516bca06d32ba87093e2306f1115292f2f4c3d14258485b660294",
+        "cases": 189,
+        "checks": null,
+        "reuse_limit": "Supplied earlier companion result; unchanged pinned app/companion bytes; no candidate03 companion rerun."
+      },
+      {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "report_raw_sha256": "616eab3275b12099cb5eb1ce09f3d54b253a6aa225bc0881ea61dece5a93808d",
+        "cases": 137,
+        "checks": null,
+        "reuse_limit": "Supplied earlier companion result; unchanged pinned app/companion bytes; no candidate03 companion rerun."
+      }
+    ]
+  },
+  "limits": [
+    "Read-only inspection and independent JSON/hash/source comparisons only; no app, browser, syntax check or test rerun performed by this reviewer. Results describe supplied execution evidence.",
+    "Synthetic identity and routed Drive service; no live Google operation or user data. Equality/mismatch cover four types; required malformed shapes cover three, while missing and HTTP403/retry controls cover settings only.",
+    "Projection protects the DOM draft, four required durable keys, pending memory/raw bytes, three dirty flags and six counters. It does not establish complete application state, image-byte or all UI-status preservation. Lookup file-ID cache changes are intentionally outside that exact-state projection.",
+    "Delegating promise observers add observation callbacks in new cases. No full asynchronous request-trace parity claim for original cases. Companion receipts predate the snapshot-only candidate03 revision and were reused, not rerun for03.",
+    "No full-gate, coverage import, index refresh, scanner closure, tracker adoption, integration or repair073 work."
+  ],
+  "end_recheck": "Reviewed target and inspected protected production/HTML/config raw and LF hashes rechecked unchanged immediately before report write."
+}
