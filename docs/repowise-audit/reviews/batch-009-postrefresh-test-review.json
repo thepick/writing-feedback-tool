@@ -1,0 +1,1272 @@
+{
+  "review_id": "batch-009-postrefresh-test-review",
+  "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
+  "inspected_git_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
+  "verdict": "Bounded retain recommendations; no production repair or scanner closure admitted. Correct two preference conditional identity bindings before adoption.",
+  "blockers": [],
+  "adoption_requirements": [
+    "Use exact24 directly reviewed current IDs below, not whole-file approval.027 owns the173 unchanged-shape dry run; it was not reproduced or adopted here.",
+    "Current541 must receive the migration-read classification, not its old rollback-removal rationale; new75 receives old541 rollback rationale. An absent old f2 is relocated, not fixed.",
+    "Do not describe the two history numerical observations as independently reproduced from current git_metadata; exact discrepancy is retained below."
+  ],
+  "scope": {
+    "new_unreviewed_rows": 15,
+    "changed_existing_shapes": 7,
+    "continuing_dry": 1,
+    "semantic_id_remap_extra": 1,
+    "directly_reviewed_current_total": 24,
+    "exact_shape_conditional_replays": 19,
+    "exact_dry_replays": 1,
+    "history_rule_replays_with_numerical_limit": 2,
+    "paired_test_io_source_reviews": 2,
+    "exclusions": "Two production saveSettings conditions and two coverage rows belong027; other unchanged-function173-set, existing security eval marker and all other files/records are outside direct adoption scope."
+  },
+  "source_pins": {
+    "tests/archive-failures.browser.cjs": {
+      "raw": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "lf": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "matches_commit_lf": true,
+      "walker_nloc": 181,
+      "clone_denominator_nonblank": 182
+    },
+    "tests/crop-transparency.browser.cjs": {
+      "raw": "23c93f2d069fef6ed3eb873760b1381cd62fca5caf1222ae990c96c3bae723f3",
+      "lf": "1dc14ce79d9de3cd3b35b2dc7cfbb8075f431f9671c555a1c9009b8e47ca690c",
+      "matches_commit_lf": true,
+      "walker_nloc": 140,
+      "clone_denominator_nonblank": 141
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "matches_commit_lf": true,
+      "walker_nloc": 704,
+      "clone_denominator_nonblank": 704
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "matches_commit_lf": true,
+      "walker_nloc": 299,
+      "clone_denominator_nonblank": 302
+    },
+    "tests/record-identity.cjs": {
+      "raw": "216d1031f8511f4fa001d84fa6391323a8983230041485fb5a484efa3b36e7a3",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "matches_commit_lf": true,
+      "walker_nloc": 139,
+      "clone_denominator_nonblank": 140
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "matches_commit_lf": true
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "matches_commit_lf": true
+    },
+    "js/app/photo-crop.js": {
+      "raw": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+      "lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "matches_commit_lf": true
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "matches_commit_lf": true
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "matches_commit_lf": true
+    },
+    "scripts/run-tests.cjs": {
+      "raw": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca",
+      "lf": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+      "matches_commit_lf": true
+    }
+  },
+  "tracker_raw_sha256_at_read": "09a7e0a13cf3c4149d56f7ee7c8159b30ad97c48abb4b48186db37a2ab92e2bc",
+  "before_snapshot": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\before-batch-009-refresh.json",
+    "raw_sha256": "365fcacc088714820e2052e398160749e4652a9eaf05a4d3f9fc5b171d20a319",
+    "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a"
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_1ec53be6b9357c8cb379",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "span": [
+        117,
+        176
+      ],
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 21,
+        "cognitive": 45,
+        "dispatch_share": 0.0,
+        "symbol_line": 117,
+        "deepest_block": {
+          "start": 145,
+          "end": 154
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        117,
+        176
+      ],
+      "function_sha256_lf": "a9d4abb2d0131e22df5d50907e796941c9f88d50861960c0803c854af4820bb7",
+      "verified_metrics": {
+        "ccn": 21,
+        "cognitive": 45,
+        "nloc": 60,
+        "max_nesting": 5,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_refusal_specific_native_oracles",
+      "reason": "The depth5 block is the refusal-only request/cause/ZIP validation inside real page lifecycle cleanup. Folder-create, tiny resolved Blob and initial sign-out must reach different boundaries; flattening these conditions into generic expected failures would weaken the oracle. Accepted070 independently checked them.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:117-176;145-154"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_845a81c24bb25fdf5436",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        17,
+        115
+      ],
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 18,
+        "nloc": 98,
+        "dispatch_share": 0.28,
+        "symbol_line": 17,
+        "deepest_block": {
+          "start": 26,
+          "end": 35
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        17,
+        115
+      ],
+      "function_sha256_lf": "556a305ce6fb552f4b5e0780f76113468d5e309cbff36c9d344e882f4816c5ee",
+      "verified_metrics": {
+        "ccn": 19,
+        "cognitive": 18,
+        "nloc": 98,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 0.28,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_failure_and_retry_phases",
+      "reason": "Changed CCN10\u219219 is reviewed070 fixture growth: nonempty media/pending/analysis state, nine reference snapshots before retry, precise refusal responses and restored healthy paths. Required guards and real download/clear delegates remain; no score-only phase extraction is admitted.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:17-115"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_02a68868618be3f1e02c",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        65,
+        79
+      ],
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 24,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 65,
+        "deepest_block": {
+          "start": 76,
+          "end": 76
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        65,
+        79
+      ],
+      "function_sha256_lf": "77cff857b961f2933e875c7cf62ce54b8d31908d8ab861cd3dd4db1081a5707f",
+      "verified_metrics": {
+        "ccn": 19,
+        "cognitive": 24,
+        "nloc": 15,
+        "max_nesting": 3,
+        "bumps": 3,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_exact_synthetic_drive_protocol",
+      "reason": "Changed CCN10\u219219 adds actual request receipts and exact missing archive-folder acknowledgement behavior to a15-line transport seam. Multipart and metadata/root paths deliberately differ.070 verified the new folder cause is reached rather than swallowed by a generic failure.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:65-79"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_a313e6a0b2a02488bdd8",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        96,
+        100
+      ],
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 5,
+        "dispatch_share": 0.0,
+        "symbol_line": 96,
+        "deepest_block": {
+          "start": 97,
+          "end": 97
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        96,
+        100
+      ],
+      "function_sha256_lf": "ad9bf370284886c6afe75a4321aa3022bd59a871871f71073929e6d208a4d8f5",
+      "verified_metrics": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 5,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_failure_cause_oracle",
+      "reason": "Changed CCN9\u219212 comes from exact new folder, invalid resolved archive and initial sign-out cause alternatives. The five-line check also distinguishes retained downloaded-Drive archive from complete failure and verifies upload counts. Replacing it with an any-error predicate risks false greens.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:96-100"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_068dd207e6069b9feffe",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "unreviewed",
+      "span": [
+        117,
+        176
+      ],
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 45,
+        "nloc": 60,
+        "dispatch_share": 0.0,
+        "symbol_line": 117,
+        "deepest_block": {
+          "start": 145,
+          "end": 154
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        117,
+        176
+      ],
+      "function_sha256_lf": "a9d4abb2d0131e22df5d50907e796941c9f88d50861960c0803c854af4820bb7",
+      "verified_metrics": {
+        "ccn": 21,
+        "cognitive": 45,
+        "nloc": 60,
+        "max_nesting": 5,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_refusal_specific_native_oracles",
+      "reason": "CCN21 includes distinct failure-side zero-effect checks and healthy download/multipart ZIP assertions for single versus year exports. These are meaningful discriminators, not duplicate production branching. Retain the explicit contract rather than hide it behind a score-only helper.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:136-172"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_d432eaaac83d10a45117",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "bumpy_road",
+      "status_at_review": "unreviewed",
+      "span": [
+        65,
+        79
+      ],
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 19,
+        "max_nesting": 3,
+        "symbol_line": 65,
+        "deepest_block": {
+          "start": 76,
+          "end": 76
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        65,
+        79
+      ],
+      "function_sha256_lf": "77cff857b961f2933e875c7cf62ce54b8d31908d8ab861cd3dd4db1081a5707f",
+      "verified_metrics": {
+        "ccn": 19,
+        "cognitive": 24,
+        "nloc": 15,
+        "max_nesting": 3,
+        "bumps": 3,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_exact_synthetic_drive_protocol",
+      "reason": "Three humps separate multipart uploads, archive-folder search/create acknowledgements and root validation. Each forwards a concrete native archive path to the intended controlled response; combining these short branches would obscure why malformed folder acknowledgements fail before upload.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:65-79"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_eba234f172007837bb09",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        17,
+        115
+      ],
+      "verified_observation_details": {
+        "nloc": 98,
+        "ccn": 19,
+        "dispatch_share": 0.28,
+        "symbol_line": 17,
+        "deepest_block": {
+          "start": 26,
+          "end": 35
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        17,
+        115
+      ],
+      "function_sha256_lf": "556a305ce6fb552f4b5e0780f76113468d5e309cbff36c9d344e882f4816c5ee",
+      "verified_metrics": {
+        "ccn": 19,
+        "cognitive": 18,
+        "nloc": 98,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 0.28,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_complete_archive_state_fixture",
+      "reason": "NLOC62\u219298 adds nonempty current work, exact before/after projections, delegating counters and immutable Blob capture to the existing browser exercise. These support data-loss refusal oracles and retry bytes; neither source wrapping nor a new fixture framework is warranted.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:17-115"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_17cb0aaf0aa2535fbf67",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "unreviewed",
+      "span": [
+        117,
+        176
+      ],
+      "verified_observation_details": {
+        "nloc": 60,
+        "ccn": 21,
+        "dispatch_share": 0.0,
+        "symbol_line": 117,
+        "deepest_block": {
+          "start": 145,
+          "end": 154
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        117,
+        176
+      ],
+      "function_sha256_lf": "a9d4abb2d0131e22df5d50907e796941c9f88d50861960c0803c854af4820bb7",
+      "verified_metrics": {
+        "ccn": 21,
+        "cognitive": 45,
+        "nloc": 60,
+        "max_nesting": 5,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_adjacent_download_and_state_assertions",
+      "reason": "The60-line scenario driver captures native download timing, runs seven ordered browser checks, then verifies exact retained values/references and actual ZIP writing before cleanup. Moving assertions apart offers no demonstrated correctness benefit; failure aggregation and page finally remain visible.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:117-176"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_a3e6b3a5c6fa0e0e9a5c",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "dry_violation",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        174,
+        185
+      ],
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.44,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/openrouter-failures.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 117,
+        "symbol": "runScenario"
+      },
+      "detector_replay_match": true,
+      "replay_basis": "Existing HMAC-authenticated current raw pair cache; only assigned-target pairs merged/finalized, every target/partner source hash checked; current stored co-change metadata consumed, not independently reindexed.",
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_common_test_driver_protocol",
+      "reason": "The continuing worst13-line clone spans scenario cleanup and the adjacent IIFE loop/report/failure protocol, shared with openrouter-failures. Replayed5pairs/19union lines remain despite17.12%\u219210.44% after growth. The older optional asset-helper suggestion targets a different branch; do not carry it forward as a fix for this driver clone or create a new runner abstraction.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:174-185",
+        "tests/openrouter-failures.browser.cjs:driver"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_faecf1b06b27c0d6ba7e",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "io_in_loop",
+      "status_at_review": "unreviewed",
+      "span": [
+        181,
+        181
+      ],
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/archive-failures.browser.cjs::__module__",
+          "tests/archive-failures.browser.cjs::runScenario"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 181,
+        "symbol_line": 178,
+        "symbol": "<anonymous@178>",
+        "role_owner": "tests/archive-failures.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_a7c9c2b002e5fe61d6e4"
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_bounded_test_filesystem_io",
+      "reason": "The module loops over12 synthetic scenarios and calls runScenario, whose refusal branch reads its actual successful native retry download for JSZip validation. That I/O must use the newly generated file in each relevant scenario. The static path is conditional, not proof of a filesystem call in every iteration or a production N+1 defect.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:157-168,178-182"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false,
+      "verification_basis": "Fresh persisted cross-function/performance details plus direct module loop\u2192runScenario\u2192conditional fs.readFileSync(download.path()) source inspection; graph/rank engine not regenerated."
+    },
+    {
+      "record_id": "code_health:finding_e865be0d56de8355ecc3",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "span": [
+        6,
+        142
+      ],
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 38,
+        "cognitive": 81,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 54,
+          "end": 135
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        6,
+        142
+      ],
+      "function_sha256_lf": "622ff76f6c232220ad46d8896c2a68fc21387a1046a8d76d1fc656e43bb6e8a3",
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 81,
+        "nloc": 136,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_gesture_lifecycle",
+      "reason": "Depth4 is per-input try/finally inside the two native gesture cases. It guarantees errors become failed rows and pages close while keeping actual mouse/touch input, release, apply and observed pixels together. Both event modes have concrete independent outcomes.",
+      "evidence_anchors": [
+        "tests/crop-transparency.browser.cjs:49-135"
+      ],
+      "prior_oracle_review": "repair-071",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_c67b19acce629039408a",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        6,
+        142
+      ],
+      "verified_observation_details": {
+        "ccn": 38,
+        "cognitive": 81,
+        "nloc": 136,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 54,
+          "end": 135
+        },
+        "extract_method_stage_refused": [
+          "exception_state"
+        ]
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        6,
+        142
+      ],
+      "function_sha256_lf": "622ff76f6c232220ad46d8896c2a68fc21387a1046a8d76d1fc656e43bb6e8a3",
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 81,
+        "nloc": 136,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_real_input_pixel_and_reset_oracles",
+      "reason": "CCN15\u219238 reflects two new genuine input modes, independent100x60/JPEG pixel oracles and ownership/storage assertions while preserving all four old outcomes.071 accepted native evidence and non-false-green aggregation; splitting callbacks only to hide recursive CCN offers no real benefit.",
+      "evidence_anchors": [
+        "tests/crop-transparency.browser.cjs:6-142"
+      ],
+      "prior_oracle_review": "repair-071",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_b9430af1f10bcade9709",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "unreviewed",
+      "span": [
+        6,
+        142
+      ],
+      "verified_observation_details": {
+        "nloc": 136,
+        "ccn": 38,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 54,
+          "end": 135
+        },
+        "extract_method_stage_refused": [
+          "exception_state"
+        ]
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        6,
+        142
+      ],
+      "function_sha256_lf": "622ff76f6c232220ad46d8896c2a68fc21387a1046a8d76d1fc656e43bb6e8a3",
+      "verified_metrics": {
+        "ccn": 38,
+        "cognitive": 81,
+        "nloc": 136,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_event_to_pixel_contract",
+      "reason": "NLOC136 grows from the preserved four original transparency/reset outcomes plus two event-to-pixel contracts and non-target state protection. The extra code creates asymmetric image bytes and checks literal geometry/pixels; extracting fixture and assertion wrappers solely to reduce length would obscure this small self-contained suite.",
+      "evidence_anchors": [
+        "tests/crop-transparency.browser.cjs:6-142"
+      ],
+      "prior_oracle_review": "repair-071",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_0dbd53d26a3eb9e8afd1",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "span": [
+        159,
+        258
+      ],
+      "verified_observation_details": {
+        "max_nesting": 6,
+        "ccn": 35,
+        "cognitive": 111,
+        "dispatch_share": 0.0,
+        "symbol_line": 159,
+        "deepest_block": {
+          "start": 213,
+          "end": 221
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        159,
+        258
+      ],
+      "function_sha256_lf": "011c7e464ae317cacc99de2936cce86e10b4c03a33805e0f68064b78eca1e065",
+      "verified_metrics": {
+        "ccn": 35,
+        "cognitive": 111,
+        "nloc": 100,
+        "max_nesting": 6,
+        "bumps": 2,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_order_sensitive_overlay_fault_matrix",
+      "reason": "The depth6 region is the one-shot getElementById fault nested under caller/stage/roster cases. The exact read trace and finally restoration distinguish writer rollback/rethrow from a soft partial snapshot. That ordering is the refactor contract and should stay explicit.",
+      "evidence_anchors": [
+        "tests/preference-integrity-scenarios.js:198-238;213-221"
+      ],
+      "prior_oracle_review": "repair-069",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_a5a313dee04b808e1d3c",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "complex_method",
+      "status_at_review": "unreviewed",
+      "span": [
+        159,
+        258
+      ],
+      "verified_observation_details": {
+        "ccn": 35,
+        "cognitive": 111,
+        "nloc": 100,
+        "dispatch_share": 0.0,
+        "symbol_line": 159,
+        "deepest_block": {
+          "start": 213,
+          "end": 221
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        159,
+        258
+      ],
+      "function_sha256_lf": "011c7e464ae317cacc99de2936cce86e10b4c03a33805e0f68064b78eca1e065",
+      "verified_metrics": {
+        "ccn": 35,
+        "cognitive": 111,
+        "nloc": 100,
+        "max_nesting": 6,
+        "bumps": 2,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_independent_overlay_contracts",
+      "reason": "CCN35 covers32 literal contracts: seven missing controls/helpers per caller, strict boolean/blank values, lookup versus later grammar faults, roster fallback/redaction and required reads escaping before overlay. All105 prior cases remain. A generic matrix interpreter would conceal substantive distinctions rather than delete duplicate work.",
+      "evidence_anchors": [
+        "tests/preference-integrity-scenarios.js:159-258"
+      ],
+      "prior_oracle_review": "repair-069",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_36d1c2df18489eb46b8c",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "large_method",
+      "status_at_review": "unreviewed",
+      "span": [
+        159,
+        258
+      ],
+      "verified_observation_details": {
+        "nloc": 100,
+        "ccn": 35,
+        "dispatch_share": 0.0,
+        "symbol_line": 159,
+        "deepest_block": {
+          "start": 213,
+          "end": 221
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        159,
+        258
+      ],
+      "function_sha256_lf": "011c7e464ae317cacc99de2936cce86e10b4c03a33805e0f68064b78eca1e065",
+      "verified_metrics": {
+        "ccn": 35,
+        "cognitive": 111,
+        "nloc": 100,
+        "max_nesting": 6,
+        "bumps": 2,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_complete_overlay_oracle_group",
+      "reason": "The100-line function groups setup,32 exact result/state/error/side-effect observations and per-injection restoration next to both real callers. Native original and candidate runs agree completely. There is no proven bug or useful production simplification implied by its size.",
+      "evidence_anchors": [
+        "tests/preference-integrity-scenarios.js:159-258"
+      ],
+      "prior_oracle_review": "repair-069",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_541a0914ff6d42267451",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "complex_conditional",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        463,
+        463
+      ],
+      "verified_observation_details": {
+        "operator_count": 5,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 462,
+        "symbol_index": 9
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        462,
+        466
+      ],
+      "function_sha256_lf": "8e1165b01ea278f724b1a1fd368a54fe3d66c6be4096adc1998882a54b9230ac",
+      "verified_metrics": {
+        "ccn": 7,
+        "cognitive": 6,
+        "nloc": 5,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_two_store_read_trigger",
+      "reason": "Current463 selects session credential read versus local settings read by exact stage/store/key, forwarding all others. Whole function462-466 equals old f2 at362-366. The prior541 rollback-removal classification is wrong for this current ID because inserted anonymous callbacks changed ordinals; use this individually reviewed migration-read rationale.",
+      "evidence_anchors": [
+        "tests/preference-integrity-scenarios.js:458-477;462-466"
+      ],
+      "prior_oracle_review": "repair-048",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_75bd34bb70efb9e2c7b6",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "complex_conditional",
+      "status_at_review": "unreviewed",
+      "span": [
+        552,
+        552
+      ],
+      "verified_observation_details": {
+        "operator_count": 5,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 551,
+        "symbol_index": 15
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        551,
+        555
+      ],
+      "function_sha256_lf": "79163be9f9842ed3da90a90d4f70dc086657e679def8ea704ea7d889d6b3ad5b",
+      "verified_metrics": {
+        "ccn": 7,
+        "cognitive": 6,
+        "nloc": 5,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_exact_rollback_destination_trigger",
+      "reason": "Five operators select the exact session/local key whose rollback removal must fail; every other remove delegates. The surrounding oracle requires bounded private recovery, restored no-key UI, exclusion from emergency export and successful retry. This is byte-identical old541, not a newly introduced condition or defect.",
+      "evidence_anchors": [
+        "tests/preference-integrity-scenarios.js:544-562;551-555"
+      ],
+      "prior_oracle_review": "repair-048",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_48c252fe878571a96463",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "change_entropy",
+      "status_at_review": "unreviewed",
+      "span": [
+        null,
+        null
+      ],
+      "verified_observation_details": {
+        "change_entropy": 1.8592,
+        "change_entropy_pct": 86.2,
+        "commit_count_90d": 5
+      },
+      "history_replay_on_current_stored_metadata": {
+        "details": {
+          "change_entropy": 2.3487,
+          "change_entropy_pct": 86.5,
+          "commit_count_90d": 5
+        },
+        "severity": "medium",
+        "metadata_updated_at": "2026-10-16 06:52:38.750783",
+        "exact_persisted_details_match": false
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "historical_risk_signal_retained",
+      "reason": "Five indexed90-day commits and a top-entropy rank satisfy the history consumer. This measures dispersion of earlier changes, not an erroneous preference branch. Keep focused independently checked changes; moving test functions would add churn without erasing history. Persisted and current metadata values differ as explicitly recorded.",
+      "evidence_anchors": [
+        "tests/preference-integrity-scenarios.js:file",
+        "installed biomarkers/change_entropy.py:55-104"
+      ],
+      "prior_oracle_review": "repair-069",
+      "scanner_closure_claim": false,
+      "history_verification_limit": "Observation copied exactly from current canonical tracker; installed rule reproduced on separately read current git_metadata with same severity but different entropy/rank. No independent Git-history/window recomputation or explanation of numerical discrepancy claimed."
+    },
+    {
+      "record_id": "code_health:finding_3b2f7824575f2aced106",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "span": [
+        135,
+        304
+      ],
+      "verified_observation_details": {
+        "max_nesting": 6,
+        "ccn": 40,
+        "cognitive": 121,
+        "dispatch_share": 0.0,
+        "symbol_line": 135,
+        "deepest_block": {
+          "start": 219,
+          "end": 222
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        135,
+        304
+      ],
+      "function_sha256_lf": "fec33c5f9ce408328c7413116cbe802caf3bfb9609a422bd0494d232797ef32d",
+      "verified_metrics": {
+        "ccn": 40,
+        "cognitive": 121,
+        "nloc": 168,
+        "max_nesting": 6,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_literal_portfolio_root_contracts",
+      "reason": "Depth6 is the assertion loop checking exact TypeError messages for invalid case-near-match students/sessions. It is needed to prove rejection before any write, alongside six reserved-key controls and five separate consumer policies. Generic truthy-error checking would lose the068 contract.",
+      "evidence_anchors": [
+        "tests/record-identity.browser.cjs:208-235;219-222"
+      ],
+      "prior_oracle_review": "repair-068",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_78862c658763199794b0",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        135,
+        304
+      ],
+      "verified_observation_details": {
+        "ccn": 40,
+        "cognitive": 121,
+        "nloc": 168,
+        "dispatch_share": 0.0,
+        "symbol_line": 135,
+        "deepest_block": {
+          "start": 219,
+          "end": 222
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        135,
+        304
+      ],
+      "function_sha256_lf": "fec33c5f9ce408328c7413116cbe802caf3bfb9609a422bd0494d232797ef32d",
+      "verified_metrics": {
+        "ccn": 40,
+        "cognitive": 121,
+        "nloc": 168,
+        "max_nesting": 6,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_literal_multi_consumer_identity_oracles",
+      "reason": "CCN24\u219240 includes068 literal five-consumer results, distinct legacy _meta behavior, getter/read-order sentinels and exact no-write rejection.065 also strengthened local-newer upload existence. These are independent oracles with deliberate branch distinctions, not production business logic to deduplicate.",
+      "evidence_anchors": [
+        "tests/record-identity.browser.cjs:135-304;174-260;285-290"
+      ],
+      "prior_oracle_review": "repair-068",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_9dfe63deb01f1eb80636",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "needs_revalidation",
+      "span": [
+        135,
+        304
+      ],
+      "verified_observation_details": {
+        "nloc": 168,
+        "ccn": 40,
+        "dispatch_share": 0.0,
+        "symbol_line": 135,
+        "deepest_block": {
+          "start": 219,
+          "end": 222
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        135,
+        304
+      ],
+      "function_sha256_lf": "fec33c5f9ce408328c7413116cbe802caf3bfb9609a422bd0494d232797ef32d",
+      "verified_metrics": {
+        "ccn": 40,
+        "cognitive": 121,
+        "nloc": 168,
+        "max_nesting": 6,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_bounded_native_identity_suite",
+      "reason": "NLOC60\u2192168 is four adjacent portfolio-root contracts plus retained identity/import/recovery scenarios and their cleanup/reporting. Current bytes match the accepted068 test; every added check has a policy/data-safety role. Avoid an additional test framework merely to shorten the driver.",
+      "evidence_anchors": [
+        "tests/record-identity.browser.cjs:135-304"
+      ],
+      "prior_oracle_review": "repair-068",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_fb228dc4c6e6091ca885",
+      "file": "tests/record-identity.cjs",
+      "marker": "change_entropy",
+      "status_at_review": "unreviewed",
+      "span": [
+        null,
+        null
+      ],
+      "verified_observation_details": {
+        "change_entropy": 1.7969,
+        "change_entropy_pct": 85.1,
+        "commit_count_90d": 5
+      },
+      "history_replay_on_current_stored_metadata": {
+        "details": {
+          "change_entropy": 1.9079,
+          "change_entropy_pct": 83.1,
+          "commit_count_90d": 5
+        },
+        "severity": "medium",
+        "metadata_updated_at": "2026-10-16 06:52:38.750963",
+        "exact_persisted_details_match": false
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "historical_risk_signal_retained",
+      "reason": "The VM identity file has five indexed90-day commits and entropy above the80th-percentile gate.068 changed its loader to include the real portfolio policy helper, preserving its existing VM assertions. The history warning does not establish a runtime bug or justify editing the unchanged test body; exact history reproduction is limited below.",
+      "evidence_anchors": [
+        "tests/record-identity.cjs:file",
+        "installed biomarkers/change_entropy.py:55-104"
+      ],
+      "prior_oracle_review": "repair-068",
+      "scanner_closure_claim": false,
+      "history_verification_limit": "Observation copied exactly from current canonical tracker; installed rule reproduced on separately read current git_metadata with same severity but different entropy/rank. No independent Git-history/window recomputation or explanation of numerical discrepancy claimed."
+    },
+    {
+      "record_id": "performance:perf3_a7c9c2b002e5fe61d6e4",
+      "file": "tests/archive-failures.browser.cjs",
+      "marker": "io_in_loop",
+      "status_at_review": "unreviewed",
+      "span": [
+        null,
+        null
+      ],
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/archive-failures.browser.cjs::runScenario"
+        ],
+        "shared_path_suffix": [
+          "tests/archive-failures.browser.cjs::__module__",
+          "tests/archive-failures.browser.cjs::runScenario"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "same_intentional_test_io_opportunity",
+      "reason": "This performance entry is the same module\u2192runScenario filesystem path as code_health faecf1, not a second defect. Fresh details label execution_role=test, actionability=inherent_to_boundary and queue_eligible0. Native downloaded ZIP reads independently validate protected writing; do not cache or hoist them across distinct scenarios.",
+      "evidence_anchors": [
+        "tests/archive-failures.browser.cjs:157-168,178-182"
+      ],
+      "prior_oracle_review": "repair-070",
+      "scanner_closure_claim": false,
+      "verification_basis": "Fresh persisted cross-function/performance details plus direct module loop\u2192runScenario\u2192conditional fs.readFileSync(download.path()) source inspection; graph/rank engine not regenerated."
+    }
+  ],
+  "conditional_identity_mapping": [
+    {
+      "old_record_id": "code_health:finding_f2a785c9259d4530ddc5",
+      "current_record_id": "code_health:finding_541a0914ff6d42267451",
+      "old_span": [
+        362,
+        366
+      ],
+      "current_span": [
+        462,
+        466
+      ],
+      "function_sha256_lf": "8e1165b01ea278f724b1a1fd368a54fe3d66c6be4096adc1998882a54b9230ac",
+      "whole_function_byte_equal": true
+    },
+    {
+      "old_record_id": "code_health:finding_541a0914ff6d42267451",
+      "current_record_id": "code_health:finding_75bd34bb70efb9e2c7b6",
+      "old_span": [
+        451,
+        455
+      ],
+      "current_span": [
+        551,
+        555
+      ],
+      "function_sha256_lf": "79163be9f9842ed3da90a90d4f70dc086657e679def8ea704ea7d889d6b3ad5b",
+      "whole_function_byte_equal": true
+    }
+  ],
+  "disappeared_and_continuing_signals": [
+    {
+      "record_id": "code_health:finding_4a4191a6c326f518d7f9",
+      "file": "tests/crop-transparency.browser.cjs",
+      "observation": "DRY no longer emitted;3 cross-file pairs and11 union lines remain. Current141 nonblank-line denominator yields7.8%, below8% rule; previous23.53%. Original core and shared setup remain. This is threshold dilution with a minor clone geometry change, not clone removal.",
+      "current_replay": {
+        "total_duplication_pct": 7.8,
+        "stored_total_duplication_pct": 7.8,
+        "denominator_nonblank": 141,
+        "cross_union_lines": 11,
+        "cross_pair_count": 3,
+        "detector": []
+      }
+    },
+    {
+      "record_id": "code_health:finding_e1cab3eb1c1950913fb5",
+      "file": "tests/record-identity.browser.cjs",
+      "observation": "DRY no longer emitted; same29 cross-file pairs/22 union lines remain.302 nonblank lines produce7.28% below8%, versus prior11.34%. No helper was reused; enlarged test denominator explains disappearance, not a solved duplication cause.",
+      "current_replay": {
+        "total_duplication_pct": 7.28,
+        "stored_total_duplication_pct": 7.28,
+        "denominator_nonblank": 302,
+        "cross_union_lines": 22,
+        "cross_pair_count": 29,
+        "detector": []
+      }
+    },
+    {
+      "record_id": "code_health:finding_f2a785c9259d4530ddc5",
+      "observation": "Absent old migration-read conditional is exact-body current541; old541 rollback callback is exact-body new75. Both five-operator conditions still emit and are retained individually. No closure."
+    },
+    {
+      "record_id": "code_health:finding_1a6100f7f36b934266e6",
+      "observation": "Identity prior_defect row was already absent in the before009 snapshot and remains historical. Do not count it as a new009 disappearance or unresolved bug repaired; history classification/ranking is separate from native behavior."
+    },
+    {
+      "record_id": "code_health:finding_a3e6b3a5c6fa0e0e9a5c",
+      "observation": "Archive DRY still emits10.44%/5pairs/19union lines/worst13 lines. Current replay matches exact scanner details. Lower percentage after growth does not remove the clone.",
+      "current_replay": {
+        "total_duplication_pct": 10.44,
+        "stored_total_duplication_pct": 10.44,
+        "denominator_nonblank": 182,
+        "cross_union_lines": 19,
+        "cross_pair_count": 5,
+        "detector": [
+          {
+            "biomarker_type": "dry_violation",
+            "severity": "low",
+            "function_name": null,
+            "line_start": 174,
+            "line_end": 185,
+            "details": {
+              "cross_file_duplication_pct": 10.44,
+              "clone_pair_count": 5,
+              "worst_clone_lines": 13,
+              "worst_clone_partner": "tests/openrouter-failures.browser.cjs",
+              "worst_clone_co_change": 0
+            },
+            "reason": "10% of file duplicated in other files; worst clone shares 13 lines with tests/openrouter-failures.browser.cjs",
+            "deduction": null
+          }
+        ]
+      }
+    }
+  ],
+  "clone_evidence": {
+    "method": "Read-only existing HMAC-authenticated raw pair cache; merge/finalize only pairs involving the four assigned test files. All target and partner hashes matched the cache; stored current co-change metadata consumed, not independently rebuilt. No tokenization/corpus detection or cache save.",
+    "cache_sha256_before_and_after": "dd8e9317330271eff9d42e8877947d554cdeff79247f66f889a8895ee745c3e5",
+    "bound_source_path_count": 62,
+    "thresholds": {
+      "minimum_cross_duplication_pct": 8,
+      "minimum_worst_clone_lines": 6
+    }
+  },
+  "reused_regression_receipts": {
+    "068": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-068-regression-review.json",
+      "raw_sha256": "ea37463497a588d624138640cff4aa0457780fd502ba88ad4401b0a08f453fef",
+      "reuse_scope": "Accepted source/oracle review only; current exact file pins separately verified, no native rerun."
+    },
+    "069": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-069-regression-review.json",
+      "raw_sha256": "b76dfdfc6d243796216f0cb0d964421837fda6cb2dcc3aca260ecf26b949d8eb",
+      "reuse_scope": "Accepted source/oracle review only; current exact file pins separately verified, no native rerun."
+    },
+    "070": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-070-regression-review.json",
+      "raw_sha256": "4a7ea6a8793bf849d3b0e78ea60d913026d378b1de072cd17025f9927dde9de3",
+      "reuse_scope": "Accepted source/oracle review only; current exact file pins separately verified, no native rerun."
+    },
+    "071": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-071-regression-review.json",
+      "raw_sha256": "cc44b745fb7bc717051736052a025dd7b77c8897bf96b95a719472b7ffe8bd3d",
+      "reuse_scope": "Accepted source/oracle review only; current exact file pins separately verified, no native rerun."
+    }
+  },
+  "limits": [
+    "No app/browser/native test execution or source/test/config/Git/index/tracker/cache mutation. Only own scratch/output written. Fresh global gate/publication/480contexts386maps are coordinator evidence; this report does not rerun them or establish new coverage.",
+    "Prior068 native contracts used preserved original00 through one controlled route substitution after candidate editing;06932 contracts ran on original checkout before production edit.070 retains its original8 complete observations;071 retains original4 complete observations. These are contract/refactor and test-coverage evidence, not newly reproduced production defects.",
+    "Stored cross-function I/O/rank facts were inspected against the real test path, not regenerated; filesystem work is guarded and bounded synthetic test validation. Paired health/performance records describe one path.",
+    "The two current git_metadata history values differ from persisted health observations despite matching repository. Both installed-rule replays remain Medium with5commits; cause and full history reconstruction are unverified.",
+    "CLI4.58 and displayed UI4.5 are rounded health summaries, not proof that findings vanished or bugs were repaired. Recommendations retain scanner warnings; parent owns tracker adoption."
+  ]
+}

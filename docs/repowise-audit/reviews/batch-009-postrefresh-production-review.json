@@ -1,0 +1,3536 @@
+{
+  "review_id": "batch-009-postrefresh-production-review",
+  "decision": "accept173bounded_proofs;retain13changed_target_shapes;one_specific_snapshot_closure",
+  "reviewed_at_utc": "2026-10-16T07:05:49.540541+00:00",
+  "before_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
+  "tracker_sha256_at_read": "18d4b2a5af1283bb9fb543cf2d178bd19709f3d225c528b3b831e9f9ab667140",
+  "source_pins": {
+    "js/app/00-storage-sync-patches.js": {
+      "git_blob": "92b0112c2dde1f348e535caa1c98b89dc48ab7a5",
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "checkout_matches_immutable_lf": true,
+      "raw_unchanged_at_report_end": true
+    },
+    "js/app/10-main-app.js": {
+      "git_blob": "fa822ac74b08552c316de5049f13f6af73788bc3",
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "checkout_matches_immutable_lf": true,
+      "raw_unchanged_at_report_end": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "git_blob": "578fc1e12b08ab6427722586a10155ec86af9518",
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "checkout_matches_immutable_lf": true,
+      "raw_unchanged_at_report_end": true
+    }
+  },
+  "reference_sha256_raw": {
+    "work/repowise-coordinator/batch-009-unchanged-shape-revalidation.json": "2d6998636cc3e9432ffa662889ed817524e6c2481752c8d02cb58797321b6f8d",
+    "work/repowise-coordinator/before-batch-009-refresh.json": "365fcacc088714820e2052e398160749e4652a9eaf05a4d3f9fc5b171d20a319",
+    "outputs/repowise-repairs/batch-009-validation.json": "0540f38d4e97b09b51bd0d8e0476aaa7f27668378c4eb9953d949432c26a3497",
+    "work/repowise-batch-009/current.lcov.summary.json": "8ad498be4535f15729c8005468aa5e8b209ef51e5d12f61853b34a4979c0fd39",
+    "work/repowise-coordinator/batch009-postmerge-ingestion-verification.json": "9e39ce22671b390cdda0ad510be013f379b5a7903628e71630018adca4d140af",
+    "work/repowise-batch-009/current.lcov": "8da5be5ac9df0806cd0830035f9dc653297d4b516f667bfcde32326f4dd34608",
+    "work/repowise-coordinator/revalidate_unchanged_shapes.py": "47bfc9596ce791158b5465d2eb9421a8556f8fd34304c42a6dd56815b41b9b84",
+    "work/repowise-coordinator/save_batch_validation.py": "b3de9366c0fedee92e7960034ecc68a4fa3dd82c96c686e04e798755e0a2a7db",
+    "outputs/repowise-repairs/repair-068-safety-review.json": "94626dd1086d42f57a86c012707a687a8582cecfcec201b1a6d4aa4b8ad3d1a6",
+    "outputs/repowise-repairs/repair-069-safety-review.json": "cce96a33bd0395d3ec1abb6479ef6fb042133270b14a9ca1fdd7b8909a4aad7f",
+    "outputs/repowise-repairs/repair-070-safety-review.json": "c755907a7dd27b14515a3b4d70994800f21ecd7f6254ecff9f9be6c7000d5093",
+    "outputs/repowise-repairs/repair-071-safety-review.json": "58ac2d5820998ac77038f6d0f0e8c83f55e7785677c3617c5e77da44d9a9c521",
+    "outputs/repowise-repairs/post009-next-benefit-admission.json": "13555909302f6899ea01c277ed7dd2805b284559d44f4ae61548d30bcfd66ef4"
+  },
+  "unchanged_shape_proof": {
+    "decision": "accept_exact173record_set",
+    "input_report_sha256": "2d6998636cc3e9432ffa662889ed817524e6c2481752c8d02cb58797321b6f8d",
+    "counts": {
+      "records": 173,
+      "00_records": 158,
+      "preference_test_records": 15,
+      "restore_reviewed_no_change": 154,
+      "restore_confirmed_repair_candidate": 13,
+      "restore_candidate_needs_regression": 6
+    },
+    "verification": "Independently loaded actual immutable Git files, parsed installed RepoWise whole-function boundaries, required one binding by stored symbol_line/enclosing span and one occurrence of exact body in EACH version. Verified body/hash/spans, stored stable ID/file/marker/severity/reason, source-relative finding spans/details after removing only symbol_index and rebasing coordinates, and actual before/current walker numerical facts/conditions/deepest blocks. All173 pass. Did not invoke helper adoption or import/write scanner state.",
+    "helper_source_review": "Read full helper; its default mode is dry and --adopt mutates tracker. Neither mode was run. Independent implementation verifies its proposed records, not a blanket endorsement of every eligible row.",
+    "context_exception": "Only summarizeSessions record46dab has a changed enclosing body. Its own18-line function is unique/identical and only consumes sessions plus local/global utilities; parent change is068filter reuse. Accepted getter/date/score native contracts support carryforward. No automatic closure-environment equivalence assumed.",
+    "completeness": {
+      "expected_ids": 173,
+      "reported_ids": 173,
+      "unique_ids": 173,
+      "exact_id_set": true
+    },
+    "decisions": [
+      {
+        "record_id": "code_health:finding_55691a30eadb5aba5f9f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1476,
+          1509
+        ],
+        "new_span": [
+          1481,
+          1514
+        ],
+        "function_sha256_lf": "46d8299da47310ee78d0b591621beca016e50e0a8027283359c154162db19240"
+      },
+      {
+        "record_id": "code_health:finding_1d84979baa4895e8b298",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1749,
+          1757
+        ],
+        "new_span": [
+          1754,
+          1762
+        ],
+        "function_sha256_lf": "c76abf2fadb3e8f082de7466b4ac518a1fa682c71a85d19203bfe8d5a9f13b65"
+      },
+      {
+        "record_id": "code_health:finding_d6fe9a1e2d9c86e011a9",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1989,
+          2005
+        ],
+        "new_span": [
+          1994,
+          2010
+        ],
+        "function_sha256_lf": "16d278a01bde60859c8463e8abd8dfa3db31f604c1e84a35abe774d35da70bd0"
+      },
+      {
+        "record_id": "code_health:finding_2063be3138b94708785b",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2009,
+          2027
+        ],
+        "new_span": [
+          2014,
+          2032
+        ],
+        "function_sha256_lf": "8bedcd696f6ef3a14f2a61f821596f0287e8e2c45893e73333e8e883418fcd56"
+      },
+      {
+        "record_id": "code_health:finding_0ff88595b09107caf0b3",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2377,
+          2393
+        ],
+        "new_span": [
+          2382,
+          2398
+        ],
+        "function_sha256_lf": "607add9d0a197fe1ee969aae093926bc692a2a56e30560466d4620d2bb9e000c"
+      },
+      {
+        "record_id": "code_health:finding_73631653667bec4679f6",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3705,
+          3752
+        ],
+        "new_span": [
+          3710,
+          3757
+        ],
+        "function_sha256_lf": "ffe8317df8f57c7d0e37b420077c06f9fa6c6b8b4cc269b77acfbb143f1fe3a5"
+      },
+      {
+        "record_id": "code_health:finding_dda353f9f59e6a52421c",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4513,
+          4559
+        ],
+        "new_span": [
+          4506,
+          4552
+        ],
+        "function_sha256_lf": "9764464881f61524dbda2e586322b4fd640b7c372e9682b194031d34e453039e"
+      },
+      {
+        "record_id": "code_health:finding_c07b722b69fa2e172071",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6447,
+          6480
+        ],
+        "new_span": [
+          6440,
+          6473
+        ],
+        "function_sha256_lf": "c2d27213c891349ed65e2045aa9816b52079fabb5ae7c98f0fb7856575174802"
+      },
+      {
+        "record_id": "code_health:finding_2d208e4c30ee82fb58d1",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6800,
+          6831
+        ],
+        "new_span": [
+          6793,
+          6824
+        ],
+        "function_sha256_lf": "7c00810eb621f32517eb78683910bb521fc3ddd82fa56e7c829678224203941d"
+      },
+      {
+        "record_id": "code_health:finding_add44f6ffde542978602",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7008,
+          7086
+        ],
+        "new_span": [
+          7001,
+          7079
+        ],
+        "function_sha256_lf": "13d9a3683257394ce50dea6d80df395aba426d4865a56a030206d77dbb671779"
+      },
+      {
+        "record_id": "code_health:finding_cecbe8636e3d91233515",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7109,
+          7129
+        ],
+        "new_span": [
+          7102,
+          7122
+        ],
+        "function_sha256_lf": "c8c1a0d4b3aa0e63bf90ccfc8572ae113a1ceac08171d7a7abc1053915a2e6ca"
+      },
+      {
+        "record_id": "code_health:finding_2869a3657f251ae42502",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7425,
+          7434
+        ],
+        "new_span": [
+          7418,
+          7427
+        ],
+        "function_sha256_lf": "68237e72d6efdd59540a2ef347f7fafc0bff84b445bc1c59ed77b83e0fa45ff1"
+      },
+      {
+        "record_id": "code_health:finding_086b03609864337ff67d",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          687,
+          701
+        ],
+        "new_span": [
+          688,
+          702
+        ],
+        "function_sha256_lf": "b4cd767ace122b767ce2ca1d1c235adba229d83126433f5879381c4792cc910f"
+      },
+      {
+        "record_id": "code_health:finding_eff9d54f723d8d0e218d",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1256,
+          1311
+        ],
+        "new_span": [
+          1257,
+          1312
+        ],
+        "function_sha256_lf": "0172c46f6032ea5080b7675bb3421c129747d56fa289867f64410dbd71e67f90"
+      },
+      {
+        "record_id": "code_health:finding_39ca4412539ee0ed0e83",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1424,
+          1446
+        ],
+        "new_span": [
+          1429,
+          1451
+        ],
+        "function_sha256_lf": "4b6da072732563e7d7b160a19fd7edbf813e0544052d4ebe3c547a18e3336c4e"
+      },
+      {
+        "record_id": "code_health:finding_8689bb25c6ac23adebbc",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1559,
+          1577
+        ],
+        "new_span": [
+          1564,
+          1582
+        ],
+        "function_sha256_lf": "1d35fbd54bfbc27fc25f58f636142e166be2de8551d0d706db09063e8d9bc78d"
+      },
+      {
+        "record_id": "code_health:finding_46dab514cb3065e4b42f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1629,
+          1646
+        ],
+        "new_span": [
+          1634,
+          1651
+        ],
+        "function_sha256_lf": "9e2f8e08ae2dc6b978a1af96984d75d19cf877a3c604d5a962f10728203f4003",
+        "context_review": "summarizeSessions body is unchanged, parameter/local/global-only. Its parent buildPortfolioIndex changes only filter reuse under accepted068; getter/score/date semantics retained. Parent byte identity not claimed."
+      },
+      {
+        "record_id": "code_health:finding_f2b8ca75bb4ed5364679",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1649,
+          1687
+        ],
+        "new_span": [
+          1654,
+          1692
+        ],
+        "function_sha256_lf": "a4d2ac5da1d5e431867509e8e9b731caef56fb46bc1d8f6937f9f78642c80bf2"
+      },
+      {
+        "record_id": "code_health:finding_d3a504b4c70a26a0deb0",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1689,
+          1747
+        ],
+        "new_span": [
+          1694,
+          1752
+        ],
+        "function_sha256_lf": "07a1ef87352692100390ee1be3011bd2439a80336fa7d9d45b783343ac7893ad"
+      },
+      {
+        "record_id": "code_health:finding_8b2aec4428c8aeb31578",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1719,
+          1732
+        ],
+        "new_span": [
+          1724,
+          1737
+        ],
+        "function_sha256_lf": "b307054d8b5d6ad406374c089d0a18ba3400e1ac9ece6089da04f94f5ac58302"
+      },
+      {
+        "record_id": "code_health:finding_b68bf41e40df886f4980",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1759,
+          1793
+        ],
+        "new_span": [
+          1764,
+          1798
+        ],
+        "function_sha256_lf": "2d58375fb492c116edb752e2beedc9771665fdc6086d70ffc87f6d289897acef"
+      },
+      {
+        "record_id": "code_health:finding_41f1c98f03d5ab70b068",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1932,
+          1969
+        ],
+        "new_span": [
+          1937,
+          1974
+        ],
+        "function_sha256_lf": "17b317c69d6c5120bca68249d71dbf0987b84ebdc27f265d5a0028786a491848"
+      },
+      {
+        "record_id": "code_health:finding_4acf83c3283ca556effe",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2302,
+          2313
+        ],
+        "new_span": [
+          2307,
+          2318
+        ],
+        "function_sha256_lf": "9ab4d85a01d54b7c790a1d450ab6eb674a4ef477e2c3a92d24bd15b2c4243206"
+      },
+      {
+        "record_id": "code_health:finding_91f79ffa71c58cd99db3",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2395,
+          2425
+        ],
+        "new_span": [
+          2400,
+          2430
+        ],
+        "function_sha256_lf": "1e17a3ab23bfe0ef5d62b6c69b1fe92a7033a8ab5aea596f4e2ed4e84dd26dfa"
+      },
+      {
+        "record_id": "code_health:finding_f6e9e73c6aeca2e2f8a4",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2644,
+          2657
+        ],
+        "new_span": [
+          2649,
+          2662
+        ],
+        "function_sha256_lf": "61cbdb6e1ad9667f5b4d4fe52676f7684556491d6e8362a2773c57735aeaf1cc"
+      },
+      {
+        "record_id": "code_health:finding_e8fe607851364edb4a90",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2659,
+          2687
+        ],
+        "new_span": [
+          2664,
+          2692
+        ],
+        "function_sha256_lf": "5f5af98f6f007b2ea34a2d8536cb337aff24da0e7673bb0537533f4950b6c27c"
+      },
+      {
+        "record_id": "code_health:finding_bec451339b56de3055de",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2689,
+          2710
+        ],
+        "new_span": [
+          2694,
+          2715
+        ],
+        "function_sha256_lf": "b87f1ff01328b693ed40fb6fd8b1eb890740404fd5353f5a6afa81c66394f22d"
+      },
+      {
+        "record_id": "code_health:finding_c5754b3008cce04a947d",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2712,
+          2763
+        ],
+        "new_span": [
+          2717,
+          2768
+        ],
+        "function_sha256_lf": "d031df22a43461a52046f0ea8f1eca78d2014ba61ed8a036d9c98a39205bdb13"
+      },
+      {
+        "record_id": "code_health:finding_3e59867d333d8fc36c2e",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2736,
+          2749
+        ],
+        "new_span": [
+          2741,
+          2754
+        ],
+        "function_sha256_lf": "14c276ee45ab44fcc701247b25ee71396679160e116525cfa6dbbc387fe3f702"
+      },
+      {
+        "record_id": "code_health:finding_327ffe7802bf5064d920",
+        "decision": "accept",
+        "restore_status": "candidate_needs_regression",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2799,
+          2821
+        ],
+        "new_span": [
+          2804,
+          2826
+        ],
+        "function_sha256_lf": "ecaf65c06d8572f0b33aeef2c641710701c76c985bb15021b93f8f8fea90a5ae"
+      },
+      {
+        "record_id": "code_health:finding_8daa013c7519c2c2d6a5",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2953,
+          2999
+        ],
+        "new_span": [
+          2958,
+          3004
+        ],
+        "function_sha256_lf": "db448130a27040b8e7fe1c21702cf011e9e42b55f8929c5c6fd5a434c443d878"
+      },
+      {
+        "record_id": "code_health:finding_e6a8dcdcd8e8e8e77ae3",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3041,
+          3064
+        ],
+        "new_span": [
+          3046,
+          3069
+        ],
+        "function_sha256_lf": "7a647efb2e945ac6dc7671e079ee371feba4560ea910c15eb7b723c027870019"
+      },
+      {
+        "record_id": "code_health:finding_f2f5fc196d1368f6353f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3210,
+          3251
+        ],
+        "new_span": [
+          3215,
+          3256
+        ],
+        "function_sha256_lf": "6da074ccf9fdcf385c33b1b3fb3f1982b743078978d676509d94c2dafc5bb1f4"
+      },
+      {
+        "record_id": "code_health:finding_f0ffb4d38fa5294004d9",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3255,
+          3303
+        ],
+        "new_span": [
+          3260,
+          3308
+        ],
+        "function_sha256_lf": "1f47a2a32ea5829a639277327c51ec76057d5960ecc6afda711fe61989722ce8"
+      },
+      {
+        "record_id": "code_health:finding_dc5417fc9d643005862c",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3376,
+          3415
+        ],
+        "new_span": [
+          3381,
+          3420
+        ],
+        "function_sha256_lf": "482dc394cc0079ee131a5279a2c5102fc48f3a38a978abb90c553c50b554458e"
+      },
+      {
+        "record_id": "code_health:finding_d3be814e187dbe8a1464",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3466,
+          3473
+        ],
+        "new_span": [
+          3471,
+          3478
+        ],
+        "function_sha256_lf": "4cfa1dd6c347f17d807dd5dea989cc0149f34cfe70cf6ce1010933f7e27dfc4c"
+      },
+      {
+        "record_id": "code_health:finding_4ff0c4251265ee529750",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3476,
+          3522
+        ],
+        "new_span": [
+          3481,
+          3527
+        ],
+        "function_sha256_lf": "32d29a095ac3ac02085dea9e9e9afa5dac2b3a88ccc6096dd5ff75e8cfcd9ab8"
+      },
+      {
+        "record_id": "code_health:finding_31894d13c79e9cd5f5de",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3524,
+          3576
+        ],
+        "new_span": [
+          3529,
+          3581
+        ],
+        "function_sha256_lf": "c217fd7254e53157643e00043f6deffffb51f040690c6bc8364e55d093c46887"
+      },
+      {
+        "record_id": "code_health:finding_1f4b2c0b0071ee3639a2",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3541,
+          3549
+        ],
+        "new_span": [
+          3546,
+          3554
+        ],
+        "function_sha256_lf": "a084a1d1dda4f8013797dcaf6e8b59f7670099a9e2cb611a0cd2d81a7dc5905c"
+      },
+      {
+        "record_id": "code_health:finding_8c30481081ed05ba172a",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3642,
+          3662
+        ],
+        "new_span": [
+          3647,
+          3667
+        ],
+        "function_sha256_lf": "5be08461d0f9d4d30e3e4377f2ff9c641753b7b671c07a9533dc4ae1519607cf"
+      },
+      {
+        "record_id": "code_health:finding_dd8fb02464ca2f8542d6",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3705,
+          3752
+        ],
+        "new_span": [
+          3710,
+          3757
+        ],
+        "function_sha256_lf": "ffe8317df8f57c7d0e37b420077c06f9fa6c6b8b4cc269b77acfbb143f1fe3a5"
+      },
+      {
+        "record_id": "code_health:finding_f5063b8834d488cbffac",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3789,
+          3801
+        ],
+        "new_span": [
+          3794,
+          3806
+        ],
+        "function_sha256_lf": "766917942a24bfed85f844fe95dfe9c842c39f3fce4a6be8a7cc5a0e13c1440d"
+      },
+      {
+        "record_id": "code_health:finding_68f7ee0e0b913e2c6dca",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3804,
+          3828
+        ],
+        "new_span": [
+          3809,
+          3833
+        ],
+        "function_sha256_lf": "61c215289fce74824c0eb9119b772d48c80745697a23d725e09b3db60989cae1"
+      },
+      {
+        "record_id": "code_health:finding_f947131d17a6a38f1ee7",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3841,
+          3899
+        ],
+        "new_span": [
+          3846,
+          3904
+        ],
+        "function_sha256_lf": "56a3e13aeae654fe5c340fe07f7b687e28b8ae840eff45e6033c3e50a8443502"
+      },
+      {
+        "record_id": "code_health:finding_0968a631eb7c5f5e1d95",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4021,
+          4059
+        ],
+        "new_span": [
+          4026,
+          4064
+        ],
+        "function_sha256_lf": "d411e62c65944ae25c7ab60db4c2e63d059cb28f48ffeb541dc49c3af985a2fd"
+      },
+      {
+        "record_id": "code_health:finding_d3148a775cf7154fe106",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4083,
+          4124
+        ],
+        "new_span": [
+          4088,
+          4129
+        ],
+        "function_sha256_lf": "0e9615bf65f154ea0b3730759d3f8264f15835a93bd9379c95438631edc92105"
+      },
+      {
+        "record_id": "code_health:finding_463c90fd2de6356ae2db",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4194,
+          4204
+        ],
+        "new_span": [
+          4199,
+          4209
+        ],
+        "function_sha256_lf": "296eebcb72e589e7e947438d89e6d029cdcb45a14980f88dbe87d32b8961947c"
+      },
+      {
+        "record_id": "code_health:finding_368b80509a8e9d4eae46",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4209,
+          4295
+        ],
+        "new_span": [
+          4214,
+          4300
+        ],
+        "function_sha256_lf": "b3f9e0e552150a87b46c88e8bcf5c08267b32ced36451597a7e368bb983baf03"
+      },
+      {
+        "record_id": "code_health:finding_3c7e058b65c8ca9a24a2",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4342,
+          4358
+        ],
+        "new_span": [
+          4347,
+          4363
+        ],
+        "function_sha256_lf": "e9a0e34d8ec2fd5ae4a0212665f44bda00e662530a320d42110fc7df2f437301"
+      },
+      {
+        "record_id": "code_health:finding_5b9479addfbfe7efc78a",
+        "decision": "accept",
+        "restore_status": "candidate_needs_regression",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4513,
+          4559
+        ],
+        "new_span": [
+          4506,
+          4552
+        ],
+        "function_sha256_lf": "9764464881f61524dbda2e586322b4fd640b7c372e9682b194031d34e453039e"
+      },
+      {
+        "record_id": "code_health:finding_a5802959d4da1cf79531",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4561,
+          4577
+        ],
+        "new_span": [
+          4554,
+          4570
+        ],
+        "function_sha256_lf": "e6482ea8d01c9cfc1094246683b8598316ea6d8bb7369488a5734aea573198f8"
+      },
+      {
+        "record_id": "code_health:finding_4bf6ae89b4dd80f1f147",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4641,
+          4668
+        ],
+        "new_span": [
+          4634,
+          4661
+        ],
+        "function_sha256_lf": "5e181d098f6b4f03d64aa4ff34c27139d63051852607c82a4e78d4d1956b94ae"
+      },
+      {
+        "record_id": "code_health:finding_b1942152e23eceee7be9",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4670,
+          4697
+        ],
+        "new_span": [
+          4663,
+          4690
+        ],
+        "function_sha256_lf": "8019d7d18d396a5293e931db0e05d7b0c8bcc8d036129ded0f622c2d72c0994c"
+      },
+      {
+        "record_id": "code_health:finding_2152c2f19d3ffe71e9c4",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4703,
+          4733
+        ],
+        "new_span": [
+          4696,
+          4726
+        ],
+        "function_sha256_lf": "cb48c0fbd26756bbf5654161f05d5a9477c9064806ca8b1d409ee4388246654f"
+      },
+      {
+        "record_id": "code_health:finding_b7d345bc52fe3457ba20",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4735,
+          4793
+        ],
+        "new_span": [
+          4728,
+          4786
+        ],
+        "function_sha256_lf": "799e15b34b53f7016d9e2797dffe090a54dc4f32be7baf53c5b1568c8080f99d"
+      },
+      {
+        "record_id": "code_health:finding_57bf7e0e594ad2aeb062",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4812,
+          4846
+        ],
+        "new_span": [
+          4805,
+          4839
+        ],
+        "function_sha256_lf": "4e29ca2708eaeb84a89244d863abdfb6b9123ddb0fcb92f502f890421062a048"
+      },
+      {
+        "record_id": "code_health:finding_990e0395dd7d82aaac43",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4968,
+          4974
+        ],
+        "new_span": [
+          4961,
+          4967
+        ],
+        "function_sha256_lf": "33d9ec88864969cc5f90b42230a987f6dff24b57a6f1c5e4b80823acbb09ce1d"
+      },
+      {
+        "record_id": "code_health:finding_ea31773c37d0074f31d2",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5035,
+          5055
+        ],
+        "new_span": [
+          5028,
+          5048
+        ],
+        "function_sha256_lf": "86b820af5e179ab9ac12fe1a11ba3ee9c8ac14b553939cc06bf409026d2d45dd"
+      },
+      {
+        "record_id": "code_health:finding_ca33c20e174a2bfda950",
+        "decision": "accept",
+        "restore_status": "candidate_needs_regression",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5058,
+          5126
+        ],
+        "new_span": [
+          5051,
+          5119
+        ],
+        "function_sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb"
+      },
+      {
+        "record_id": "code_health:finding_7cf232b061699f0ff1c4",
+        "decision": "accept",
+        "restore_status": "candidate_needs_regression",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5099,
+          5113
+        ],
+        "new_span": [
+          5092,
+          5106
+        ],
+        "function_sha256_lf": "8e1efb63ed6461ca55e399003496637f1878be47c8136fa20cba1293b31746a7"
+      },
+      {
+        "record_id": "code_health:finding_671540889fa536be2e31",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5192,
+          5224
+        ],
+        "new_span": [
+          5185,
+          5217
+        ],
+        "function_sha256_lf": "3599a2cee3877b50fe0e6e1830c665db0f3fab3b03a3d81d6aac836a59ca5f6b"
+      },
+      {
+        "record_id": "code_health:finding_4db26584b9741348c94f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5226,
+          5252
+        ],
+        "new_span": [
+          5219,
+          5245
+        ],
+        "function_sha256_lf": "e64dfbfa1c02d995c3597c4bb470ac62a08ae00238fc487fd0cbfd1882862c64"
+      },
+      {
+        "record_id": "code_health:finding_2ff46a2378726dc81a97",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5311,
+          5346
+        ],
+        "new_span": [
+          5304,
+          5339
+        ],
+        "function_sha256_lf": "9512ca4bfa3e24b5e554a92eb5aabed693734fd71af38405fe3935b97df42979"
+      },
+      {
+        "record_id": "code_health:finding_2f138c7deab593679403",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5398,
+          5428
+        ],
+        "new_span": [
+          5391,
+          5421
+        ],
+        "function_sha256_lf": "947ddbbd666160c3b3d65681bc732d763ab9e1606a0f7494095b10d363055823"
+      },
+      {
+        "record_id": "code_health:finding_ad0ca082ca47da651418",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5450,
+          5494
+        ],
+        "new_span": [
+          5443,
+          5487
+        ],
+        "function_sha256_lf": "965566ad0cb735007647032267e9cc6167b3d823c31ac2da9fe6d1278e9de099"
+      },
+      {
+        "record_id": "code_health:finding_02c704b94cb1a85a55ef",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5458,
+          5485
+        ],
+        "new_span": [
+          5451,
+          5478
+        ],
+        "function_sha256_lf": "eab1e4dd552f88105caecd5ff87a36fc3c39afe3bf35d0268bece3a838b69b9d"
+      },
+      {
+        "record_id": "code_health:finding_cbe86c69e41718143128",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5509,
+          5574
+        ],
+        "new_span": [
+          5502,
+          5567
+        ],
+        "function_sha256_lf": "6e4d03ad182fbb1c285447c17e96e0dee486aa595a5ee095edae8fb5bf408ea5"
+      },
+      {
+        "record_id": "code_health:finding_c3f2f127bb0b956fafd1",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5717,
+          5754
+        ],
+        "new_span": [
+          5710,
+          5747
+        ],
+        "function_sha256_lf": "8384808067919a060a6193619db4e2607e7a0c96e143194d55b7fdf8d4459527"
+      },
+      {
+        "record_id": "code_health:finding_ead34325951527c35fd0",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5756,
+          5892
+        ],
+        "new_span": [
+          5749,
+          5885
+        ],
+        "function_sha256_lf": "f82a10eea8d987a2b516a7da1814c2bc76405b9d0d42b5a8f2af3cacb7780286"
+      },
+      {
+        "record_id": "code_health:finding_1a34a0bbf46ddefab5e7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5844,
+          5858
+        ],
+        "new_span": [
+          5837,
+          5851
+        ],
+        "function_sha256_lf": "99700d0f7e1b19e85dc47321e1fc28e41927d7d40bba2422ab1f8e79f9988a84"
+      },
+      {
+        "record_id": "code_health:finding_ab0a8010627d9e203fec",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5895,
+          5919
+        ],
+        "new_span": [
+          5888,
+          5912
+        ],
+        "function_sha256_lf": "842ba7ef88f86bae73b6b8416a75f8fff57f8e76b68d6c60f6624da1491cfc72"
+      },
+      {
+        "record_id": "code_health:finding_193eef374799108f654b",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5926,
+          5951
+        ],
+        "new_span": [
+          5919,
+          5944
+        ],
+        "function_sha256_lf": "29e518f0a3191f29381241604e82f5373f5d03ac20ae44328a7169066eeefb27"
+      },
+      {
+        "record_id": "code_health:finding_ab36eacc023d669202f4",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6244,
+          6280
+        ],
+        "new_span": [
+          6237,
+          6273
+        ],
+        "function_sha256_lf": "ff9ab0e22db54be49d8573c72536f0c85c1086eca2871997b8c1106ecb2c075d"
+      },
+      {
+        "record_id": "code_health:finding_d8efee12893b85aa3963",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6282,
+          6319
+        ],
+        "new_span": [
+          6275,
+          6312
+        ],
+        "function_sha256_lf": "7346091c10416c0fef7fb12591a31ad11a8d85ddc7ab3eb3302733cdb714a67e"
+      },
+      {
+        "record_id": "code_health:finding_659258563fb64c05b01b",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6355,
+          6371
+        ],
+        "new_span": [
+          6348,
+          6364
+        ],
+        "function_sha256_lf": "50c3d268888b8c3a937053bea510b44f52b303c4ba68ecfe31e7d73148a6d53e"
+      },
+      {
+        "record_id": "code_health:finding_9fbb8c985399646392b7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6403,
+          6437
+        ],
+        "new_span": [
+          6396,
+          6430
+        ],
+        "function_sha256_lf": "9d4898ba8530b26b866a99a8b43713586f80195c6ca1fb27f5ee0e888fb5c2d3"
+      },
+      {
+        "record_id": "code_health:finding_aa72763e7f980e196e85",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6409,
+          6421
+        ],
+        "new_span": [
+          6402,
+          6414
+        ],
+        "function_sha256_lf": "1403e5e3e65eb3e53ddd6dbbb244a4c7e93acd7d7769c26da5aa8c9a32f5d16a"
+      },
+      {
+        "record_id": "code_health:finding_316c9c90c39eb353ff7e",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6447,
+          6480
+        ],
+        "new_span": [
+          6440,
+          6473
+        ],
+        "function_sha256_lf": "c2d27213c891349ed65e2045aa9816b52079fabb5ae7c98f0fb7856575174802"
+      },
+      {
+        "record_id": "code_health:finding_70c2709f24f09b856658",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6728,
+          6738
+        ],
+        "new_span": [
+          6721,
+          6731
+        ],
+        "function_sha256_lf": "5d537c4adae377552f5f76383bc90bc2d3feeeadff52fd3862f9086ced4262de"
+      },
+      {
+        "record_id": "code_health:finding_d2e17a6f2a3c946cdf22",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6740,
+          6793
+        ],
+        "new_span": [
+          6733,
+          6786
+        ],
+        "function_sha256_lf": "f0ad92cb4a48173532ae55ce2eb5fc7d5905ccf57429ded50175a5aa6b3a045c"
+      },
+      {
+        "record_id": "code_health:finding_5b685ceb1955a261c1eb",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6765,
+          6790
+        ],
+        "new_span": [
+          6758,
+          6783
+        ],
+        "function_sha256_lf": "c7f95fe11187f0f2d6cb6b8b063b899e04819ffb223759364ef71af0ac2cac27"
+      },
+      {
+        "record_id": "code_health:finding_92d392954c103b46d657",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6800,
+          6831
+        ],
+        "new_span": [
+          6793,
+          6824
+        ],
+        "function_sha256_lf": "7c00810eb621f32517eb78683910bb521fc3ddd82fa56e7c829678224203941d"
+      },
+      {
+        "record_id": "code_health:finding_c1810fefa912af17bacb",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6833,
+          6849
+        ],
+        "new_span": [
+          6826,
+          6842
+        ],
+        "function_sha256_lf": "0b61be249c4c07f7e4809c7fae963f103406baca188d6849347ff8de720f943f"
+      },
+      {
+        "record_id": "code_health:finding_c10259400e5c0857bbc5",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6957,
+          7088
+        ],
+        "new_span": [
+          6950,
+          7081
+        ],
+        "function_sha256_lf": "038c21fd477f6fc89270f078bd5db0c82c45f50128717b563c81638ed8bb21f1"
+      },
+      {
+        "record_id": "code_health:finding_b355d7e617534febc944",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6987,
+          7007
+        ],
+        "new_span": [
+          6980,
+          7000
+        ],
+        "function_sha256_lf": "7fd7499b34ffca97c95bc4b5a4689e86dbf733d13178cf2b9433c3e9dee6aa97"
+      },
+      {
+        "record_id": "code_health:finding_208c5411ec68f45b4ab0",
+        "decision": "accept",
+        "restore_status": "candidate_needs_regression",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7008,
+          7086
+        ],
+        "new_span": [
+          7001,
+          7079
+        ],
+        "function_sha256_lf": "13d9a3683257394ce50dea6d80df395aba426d4865a56a030206d77dbb671779"
+      },
+      {
+        "record_id": "code_health:finding_db81152159f3182b6759",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7041,
+          7052
+        ],
+        "new_span": [
+          7034,
+          7045
+        ],
+        "function_sha256_lf": "9a478980e7811b613b001cc73b338ba21e7a0e67e85425b3cd96ff4e9943733d"
+      },
+      {
+        "record_id": "code_health:finding_73bec908e177949698d7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7057,
+          7084
+        ],
+        "new_span": [
+          7050,
+          7077
+        ],
+        "function_sha256_lf": "e6d237fea98c9a843221720c96c1f4a911c4c11198380b0a570c30247a2898c3"
+      },
+      {
+        "record_id": "code_health:finding_c7032b60a83d25295aed",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7329,
+          7343
+        ],
+        "new_span": [
+          7322,
+          7336
+        ],
+        "function_sha256_lf": "7fd780e365198c8ad20670aa6198133c9ab362cafb5607acf3d12da8c4a4f70f"
+      },
+      {
+        "record_id": "code_health:finding_1eb81af14115d6558a96",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7383,
+          7406
+        ],
+        "new_span": [
+          7376,
+          7399
+        ],
+        "function_sha256_lf": "a1c983c034c6f9b31f5bddcb56b50b12f4cf0054efcd58bdb1ee7600a7a6b665"
+      },
+      {
+        "record_id": "code_health:finding_c99e888f784b0bc76750",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7408,
+          7421
+        ],
+        "new_span": [
+          7401,
+          7414
+        ],
+        "function_sha256_lf": "21bdf573459bf1042e42498e78411a8e4ee4ad11e3ffa046fbfe3fecca846408"
+      },
+      {
+        "record_id": "code_health:finding_08148a5fbe3130655bba",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7604,
+          7682
+        ],
+        "new_span": [
+          7597,
+          7675
+        ],
+        "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a"
+      },
+      {
+        "record_id": "code_health:finding_e877852414106a9c7183",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7684,
+          7745
+        ],
+        "new_span": [
+          7677,
+          7738
+        ],
+        "function_sha256_lf": "8321af0416b45adb7a782c4f43e2423015802656de01db73240ccf68ac6258b8"
+      },
+      {
+        "record_id": "code_health:finding_d4954938b0245dea0b84",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7749,
+          7776
+        ],
+        "new_span": [
+          7742,
+          7769
+        ],
+        "function_sha256_lf": "50ee93e0e1bd945c6274b04688aa139ec4e795a4009fa241615dacc5d66e37a3"
+      },
+      {
+        "record_id": "code_health:finding_3a1b9b63082ed59d733c",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7778,
+          7801
+        ],
+        "new_span": [
+          7771,
+          7794
+        ],
+        "function_sha256_lf": "c7e9e67578766b66a3c73f25d87262bc2a8256a48ab15947dc0469b1dbb79a73"
+      },
+      {
+        "record_id": "code_health:finding_b2a0b905ca7c2f210685",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7804,
+          7811
+        ],
+        "new_span": [
+          7797,
+          7804
+        ],
+        "function_sha256_lf": "7b46f907fdf3be1f5115055967938f75cb53b71fa6da687ef16f0b7386b75a38"
+      },
+      {
+        "record_id": "code_health:finding_6ab7dd261477cb43f4e7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7824,
+          7859
+        ],
+        "new_span": [
+          7817,
+          7852
+        ],
+        "function_sha256_lf": "94e6b0b66c686738615f4e9f15704530cabb27b4d4a5a59131ebb0b4352242c0"
+      },
+      {
+        "record_id": "code_health:finding_d6815d339003e60e0a6b",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7896,
+          7971
+        ],
+        "new_span": [
+          7889,
+          7964
+        ],
+        "function_sha256_lf": "73ea814b5596e54d8a3231e7e061150df9219bb2ed79e3e2ff029a8f51e6fe3c"
+      },
+      {
+        "record_id": "code_health:finding_7e5e160a165282d1b84f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7940,
+          7951
+        ],
+        "new_span": [
+          7933,
+          7944
+        ],
+        "function_sha256_lf": "13bb0ddf06b8218f0d752931849b1dfa25fd5544794a6fec442bceeefa98ef99"
+      },
+      {
+        "record_id": "code_health:finding_6c622b0a80727a851775",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8036,
+          8055
+        ],
+        "new_span": [
+          8029,
+          8048
+        ],
+        "function_sha256_lf": "bd07b59d31320ab0f1684c822ed46f5dd762ceeebaca69ea52da2ebdc33ffd7c"
+      },
+      {
+        "record_id": "code_health:finding_419468d595b912adfb7d",
+        "decision": "accept",
+        "restore_status": "candidate_needs_regression",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8256,
+          8297
+        ],
+        "new_span": [
+          8249,
+          8290
+        ],
+        "function_sha256_lf": "983cc2d8dc360f71e9cb8f42cdd4e497aff97055a7923e0c1d817f185f43df1d"
+      },
+      {
+        "record_id": "code_health:finding_4f159d3281c1bca6dd40",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8299,
+          8332
+        ],
+        "new_span": [
+          8292,
+          8325
+        ],
+        "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62"
+      },
+      {
+        "record_id": "code_health:finding_96179f2cb386a54e873f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8334,
+          8372
+        ],
+        "new_span": [
+          8327,
+          8365
+        ],
+        "function_sha256_lf": "22cfaa5d424df9a313480c903d7afd27cb843b4c4d37aed0f3066f582426dffa"
+      },
+      {
+        "record_id": "code_health:finding_144a97f8282d9b7f029e",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1256,
+          1311
+        ],
+        "new_span": [
+          1257,
+          1312
+        ],
+        "function_sha256_lf": "0172c46f6032ea5080b7675bb3421c129747d56fa289867f64410dbd71e67f90"
+      },
+      {
+        "record_id": "code_health:finding_12a6c35ba840a7b4a46a",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1689,
+          1747
+        ],
+        "new_span": [
+          1694,
+          1752
+        ],
+        "function_sha256_lf": "07a1ef87352692100390ee1be3011bd2439a80336fa7d9d45b783343ac7893ad"
+      },
+      {
+        "record_id": "code_health:finding_bc84d26d5eac20ff69b6",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1759,
+          1793
+        ],
+        "new_span": [
+          1764,
+          1798
+        ],
+        "function_sha256_lf": "2d58375fb492c116edb752e2beedc9771665fdc6086d70ffc87f6d289897acef"
+      },
+      {
+        "record_id": "code_health:finding_066e0fdf8ed72188e4bb",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3326,
+          3344
+        ],
+        "new_span": [
+          3331,
+          3349
+        ],
+        "function_sha256_lf": "a1fa34bb33c3d0329d0792142d853d2828913e08e681916169557fe1fc943762"
+      },
+      {
+        "record_id": "code_health:finding_a8a87935472a58468993",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3524,
+          3576
+        ],
+        "new_span": [
+          3529,
+          3581
+        ],
+        "function_sha256_lf": "c217fd7254e53157643e00043f6deffffb51f040690c6bc8364e55d093c46887"
+      },
+      {
+        "record_id": "code_health:finding_8f9b29415e86e102be0c",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3705,
+          3752
+        ],
+        "new_span": [
+          3710,
+          3757
+        ],
+        "function_sha256_lf": "ffe8317df8f57c7d0e37b420077c06f9fa6c6b8b4cc269b77acfbb143f1fe3a5"
+      },
+      {
+        "record_id": "code_health:finding_0438f4d267deb61d65f1",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4735,
+          4793
+        ],
+        "new_span": [
+          4728,
+          4786
+        ],
+        "function_sha256_lf": "799e15b34b53f7016d9e2797dffe090a54dc4f32be7baf53c5b1568c8080f99d"
+      },
+      {
+        "record_id": "code_health:finding_d523b84a45d044f4c0f5",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5970,
+          5988
+        ],
+        "new_span": [
+          5963,
+          5981
+        ],
+        "function_sha256_lf": "99e44a2eb594223bcb95f68e502ad1d8e9a87c5c6808d65286f06d0c4de95565"
+      },
+      {
+        "record_id": "code_health:finding_8a315c9bf2d55c9f63de",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6244,
+          6280
+        ],
+        "new_span": [
+          6237,
+          6273
+        ],
+        "function_sha256_lf": "ff9ab0e22db54be49d8573c72536f0c85c1086eca2871997b8c1106ecb2c075d"
+      },
+      {
+        "record_id": "code_health:finding_b772cb0e474a867c6a0b",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6800,
+          6831
+        ],
+        "new_span": [
+          6793,
+          6824
+        ],
+        "function_sha256_lf": "7c00810eb621f32517eb78683910bb521fc3ddd82fa56e7c829678224203941d"
+      },
+      {
+        "record_id": "code_health:finding_44a8d8bf9c9caf35a45e",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6893,
+          6939
+        ],
+        "new_span": [
+          6886,
+          6932
+        ],
+        "function_sha256_lf": "01aac3425add5df39b7ec89706faafacdaeb0a038288c6ab1f296117acc5a5d4"
+      },
+      {
+        "record_id": "code_health:finding_20894b7df80971e6e886",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6957,
+          7088
+        ],
+        "new_span": [
+          6950,
+          7081
+        ],
+        "function_sha256_lf": "038c21fd477f6fc89270f078bd5db0c82c45f50128717b563c81638ed8bb21f1"
+      },
+      {
+        "record_id": "code_health:finding_b9ce9226d15ad39d7611",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7008,
+          7086
+        ],
+        "new_span": [
+          7001,
+          7079
+        ],
+        "function_sha256_lf": "13d9a3683257394ce50dea6d80df395aba426d4865a56a030206d77dbb671779"
+      },
+      {
+        "record_id": "code_health:finding_a785a09dfafbeb9573d0",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7057,
+          7084
+        ],
+        "new_span": [
+          7050,
+          7077
+        ],
+        "function_sha256_lf": "e6d237fea98c9a843221720c96c1f4a911c4c11198380b0a570c30247a2898c3"
+      },
+      {
+        "record_id": "code_health:finding_011d338cf5eaa80b7fbe",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7824,
+          7859
+        ],
+        "new_span": [
+          7817,
+          7852
+        ],
+        "function_sha256_lf": "94e6b0b66c686738615f4e9f15704530cabb27b4d4a5a59131ebb0b4352242c0"
+      },
+      {
+        "record_id": "code_health:finding_e7551d61caac0aa4e1e6",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4139,
+          4206
+        ],
+        "new_span": [
+          4144,
+          4211
+        ],
+        "function_sha256_lf": "562977a7afda9c034b0854e6ff4b6151839aa66d060f8f8c0a62465a11238f19"
+      },
+      {
+        "record_id": "code_health:finding_b7be92ac9d86ce17b33e",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4209,
+          4295
+        ],
+        "new_span": [
+          4214,
+          4300
+        ],
+        "function_sha256_lf": "b3f9e0e552150a87b46c88e8bcf5c08267b32ced36451597a7e368bb983baf03"
+      },
+      {
+        "record_id": "code_health:finding_a1d3edb67f1235db4b52",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5058,
+          5126
+        ],
+        "new_span": [
+          5051,
+          5119
+        ],
+        "function_sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb"
+      },
+      {
+        "record_id": "code_health:finding_dffec2060f1195e595db",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5262,
+          5349
+        ],
+        "new_span": [
+          5255,
+          5342
+        ],
+        "function_sha256_lf": "9be520d177e661b929886f9fe2d55ccbc3e95ddfc84a436f1981579b4e76e0f8"
+      },
+      {
+        "record_id": "code_health:finding_c7eaf07e563a1b77b630",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5352,
+          5430
+        ],
+        "new_span": [
+          5345,
+          5423
+        ],
+        "function_sha256_lf": "feee1b0fcad0dfc73b5a1a2092af75bac8b06347c608b22b93e6a4f71ccc08f9"
+      },
+      {
+        "record_id": "code_health:finding_83aadb338a812a5c1310",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5599,
+          5688
+        ],
+        "new_span": [
+          5592,
+          5681
+        ],
+        "function_sha256_lf": "703a7f0817ecca875bc23e8f65259cde248913ab147220733d0df6d0a1793cc1"
+      },
+      {
+        "record_id": "code_health:finding_450dd0c9bb941a47e1a7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5756,
+          5892
+        ],
+        "new_span": [
+          5749,
+          5885
+        ],
+        "function_sha256_lf": "f82a10eea8d987a2b516a7da1814c2bc76405b9d0d42b5a8f2af3cacb7780286"
+      },
+      {
+        "record_id": "code_health:finding_38c0855f7dc3861622c9",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5990,
+          6064
+        ],
+        "new_span": [
+          5983,
+          6057
+        ],
+        "function_sha256_lf": "7fa7982a7c5b041da3ba2e20b2407a11a26be11cf8eefaf75eda6ce65c5e8d04"
+      },
+      {
+        "record_id": "code_health:finding_302dbc0b60d9c7879a9d",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6957,
+          7088
+        ],
+        "new_span": [
+          6950,
+          7081
+        ],
+        "function_sha256_lf": "038c21fd477f6fc89270f078bd5db0c82c45f50128717b563c81638ed8bb21f1"
+      },
+      {
+        "record_id": "code_health:finding_0dd0b44ef3cf9a917f4b",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7008,
+          7086
+        ],
+        "new_span": [
+          7001,
+          7079
+        ],
+        "function_sha256_lf": "13d9a3683257394ce50dea6d80df395aba426d4865a56a030206d77dbb671779"
+      },
+      {
+        "record_id": "code_health:finding_bd262137e5d6d346dc75",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7604,
+          7682
+        ],
+        "new_span": [
+          7597,
+          7675
+        ],
+        "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a"
+      },
+      {
+        "record_id": "code_health:finding_4cc8d496bdb9e7a9baaf",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7684,
+          7745
+        ],
+        "new_span": [
+          7677,
+          7738
+        ],
+        "function_sha256_lf": "8321af0416b45adb7a782c4f43e2423015802656de01db73240ccf68ac6258b8"
+      },
+      {
+        "record_id": "code_health:finding_c41bba6fd11258d23e87",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7861,
+          7986
+        ],
+        "new_span": [
+          7854,
+          7979
+        ],
+        "function_sha256_lf": "065be61cd617bbba1e3e855874d95ea798ffb1a0e44fcf5389ddb2930eef90fb"
+      },
+      {
+        "record_id": "code_health:finding_dda7cb8583c1ac2b8c1b",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7896,
+          7971
+        ],
+        "new_span": [
+          7889,
+          7964
+        ],
+        "function_sha256_lf": "73ea814b5596e54d8a3231e7e061150df9219bb2ed79e3e2ff029a8f51e6fe3c"
+      },
+      {
+        "record_id": "code_health:finding_d1472251b3841d77f04e",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2659,
+          2687
+        ],
+        "new_span": [
+          2664,
+          2692
+        ],
+        "function_sha256_lf": "5f5af98f6f007b2ea34a2d8536cb337aff24da0e7673bb0537533f4950b6c27c"
+      },
+      {
+        "record_id": "code_health:finding_11fe6a9227d4a69bd361",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2712,
+          2763
+        ],
+        "new_span": [
+          2717,
+          2768
+        ],
+        "function_sha256_lf": "d031df22a43461a52046f0ea8f1eca78d2014ba61ed8a036d9c98a39205bdb13"
+      },
+      {
+        "record_id": "code_health:finding_44bdc87f8713f0fe0b34",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3197,
+          3253
+        ],
+        "new_span": [
+          3202,
+          3258
+        ],
+        "function_sha256_lf": "9e9c4e5036fe7ca70479d48febc9c77afe62b4af4f8b51e3b67c792b51278b2b"
+      },
+      {
+        "record_id": "code_health:finding_879a20d0d0bc9e7a59ac",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          3255,
+          3303
+        ],
+        "new_span": [
+          3260,
+          3308
+        ],
+        "function_sha256_lf": "1f47a2a32ea5829a639277327c51ec76057d5960ecc6afda711fe61989722ce8"
+      },
+      {
+        "record_id": "code_health:finding_a84beffd019dbbae5cda",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          4139,
+          4206
+        ],
+        "new_span": [
+          4144,
+          4211
+        ],
+        "function_sha256_lf": "562977a7afda9c034b0854e6ff4b6151839aa66d060f8f8c0a62465a11238f19"
+      },
+      {
+        "record_id": "code_health:finding_8c1e5a2b0423614dea4b",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6188,
+          6219
+        ],
+        "new_span": [
+          6181,
+          6212
+        ],
+        "function_sha256_lf": "95d1c492b1526bb66de06fa97d5f8fe08204d182500a975e18f8d3297e888dfb"
+      },
+      {
+        "record_id": "code_health:finding_8db10553c83e85be9dd7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6957,
+          7088
+        ],
+        "new_span": [
+          6950,
+          7081
+        ],
+        "function_sha256_lf": "038c21fd477f6fc89270f078bd5db0c82c45f50128717b563c81638ed8bb21f1"
+      },
+      {
+        "record_id": "code_health:finding_7e9e3bd687e666b878c1",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7551,
+          7602
+        ],
+        "new_span": [
+          7544,
+          7595
+        ],
+        "function_sha256_lf": "56985ede4c0814cc5c3ff07a027de90077b588385074772e9e4043b101da2be9"
+      },
+      {
+        "record_id": "code_health:finding_0956f3c90bb76c36955b",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8017,
+          8027
+        ],
+        "new_span": [
+          8010,
+          8020
+        ],
+        "function_sha256_lf": "5a47cbdc4c7bf5abee0aaa549f82a9f3713cbb1dc3f66615b23dfbf3785f2e1e"
+      },
+      {
+        "record_id": "code_health:finding_f9de7f79d6d6f74e74ae",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1113,
+          1117
+        ],
+        "new_span": [
+          1114,
+          1118
+        ],
+        "function_sha256_lf": "f8b515a86f4c8688ed1857d87a4769defcb7fcf1fe0fc6b8628bd8a8831675f4"
+      },
+      {
+        "record_id": "code_health:finding_0ae3fcd2fb53acfcaad0",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          1649,
+          1687
+        ],
+        "new_span": [
+          1654,
+          1692
+        ],
+        "function_sha256_lf": "a4d2ac5da1d5e431867509e8e9b731caef56fb46bc1d8f6937f9f78642c80bf2"
+      },
+      {
+        "record_id": "code_health:finding_e8d941d37700f399ba87",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2712,
+          2763
+        ],
+        "new_span": [
+          2717,
+          2768
+        ],
+        "function_sha256_lf": "d031df22a43461a52046f0ea8f1eca78d2014ba61ed8a036d9c98a39205bdb13"
+      },
+      {
+        "record_id": "code_health:finding_7df1adb8c891ab2a8721",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          2859,
+          2889
+        ],
+        "new_span": [
+          2864,
+          2894
+        ],
+        "function_sha256_lf": "47bf4838a866ce9bd9d27e79e681fdca04567d041518b2820db0d25757d1dd20"
+      },
+      {
+        "record_id": "code_health:finding_95da106900a2c477e281",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5035,
+          5055
+        ],
+        "new_span": [
+          5028,
+          5048
+        ],
+        "function_sha256_lf": "86b820af5e179ab9ac12fe1a11ba3ee9c8ac14b553939cc06bf409026d2d45dd"
+      },
+      {
+        "record_id": "code_health:finding_f68f0f8e1f2e30f76ee5",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5226,
+          5252
+        ],
+        "new_span": [
+          5219,
+          5245
+        ],
+        "function_sha256_lf": "e64dfbfa1c02d995c3597c4bb470ac62a08ae00238fc487fd0cbfd1882862c64"
+      },
+      {
+        "record_id": "code_health:finding_9ae6fddb1587d38c6426",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5374,
+          5429
+        ],
+        "new_span": [
+          5367,
+          5422
+        ],
+        "function_sha256_lf": "970c9a8d477a026e7694c3e8baa3272cf50f6a9fe9bbe50be64e94c2b829d912"
+      },
+      {
+        "record_id": "code_health:finding_72bb568aecd724a691c3",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          5717,
+          5754
+        ],
+        "new_span": [
+          5710,
+          5747
+        ],
+        "function_sha256_lf": "8384808067919a060a6193619db4e2607e7a0c96e143194d55b7fdf8d4459527"
+      },
+      {
+        "record_id": "code_health:finding_750d0054ac70a8565c25",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6346,
+          6372
+        ],
+        "new_span": [
+          6339,
+          6365
+        ],
+        "function_sha256_lf": "1e87ef5d4fe5636357bd552888ac9a70929313527f06d7a6376166064f55664b"
+      },
+      {
+        "record_id": "code_health:finding_9594f4eb52ffbcf09db0",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6670,
+          6678
+        ],
+        "new_span": [
+          6663,
+          6671
+        ],
+        "function_sha256_lf": "4fe477011c7c78ef2e512c1844d1cc4f1f4526c7ae88c7172f8b7990e8563fa3"
+      },
+      {
+        "record_id": "code_health:finding_a1105537f3efefcc76dc",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          6957,
+          7088
+        ],
+        "new_span": [
+          6950,
+          7081
+        ],
+        "function_sha256_lf": "038c21fd477f6fc89270f078bd5db0c82c45f50128717b563c81638ed8bb21f1"
+      },
+      {
+        "record_id": "code_health:finding_0ebf1243a621949a6e83",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7041,
+          7052
+        ],
+        "new_span": [
+          7034,
+          7045
+        ],
+        "function_sha256_lf": "9a478980e7811b613b001cc73b338ba21e7a0e67e85425b3cd96ff4e9943733d"
+      },
+      {
+        "record_id": "code_health:finding_07c825055cecc7b49cbc",
+        "decision": "accept",
+        "restore_status": "confirmed_repair_candidate",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          7189,
+          7199
+        ],
+        "new_span": [
+          7182,
+          7192
+        ],
+        "function_sha256_lf": "d4314c0cfbe877bfc304120a9ca5b7e237d89bd8791519e9f81a8c68e3c348a0"
+      },
+      {
+        "record_id": "code_health:finding_a2f159e8a65910389542",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8256,
+          8297
+        ],
+        "new_span": [
+          8249,
+          8290
+        ],
+        "function_sha256_lf": "983cc2d8dc360f71e9cb8f42cdd4e497aff97055a7923e0c1d817f185f43df1d"
+      },
+      {
+        "record_id": "code_health:finding_ce0ef519180cad77d766",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8299,
+          8332
+        ],
+        "new_span": [
+          8292,
+          8325
+        ],
+        "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62"
+      },
+      {
+        "record_id": "code_health:finding_f761b8085338ef63b4df",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8299,
+          8332
+        ],
+        "new_span": [
+          8292,
+          8325
+        ],
+        "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62"
+      },
+      {
+        "record_id": "code_health:finding_f61621b5ff2044276dae",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "js/app/00-storage-sync-patches.js",
+        "old_span": [
+          8299,
+          8332
+        ],
+        "new_span": [
+          8292,
+          8325
+        ],
+        "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62"
+      },
+      {
+        "record_id": "code_health:finding_0936878f9d4d502c6b66",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          161,
+          181
+        ],
+        "new_span": [
+          261,
+          281
+        ],
+        "function_sha256_lf": "3df2fa7d7d263ffa97d8f150f318865be9e23118a392126d0485d65506a863a4"
+      },
+      {
+        "record_id": "code_health:finding_cd2035047a3147bd9357",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          183,
+          227
+        ],
+        "new_span": [
+          283,
+          327
+        ],
+        "function_sha256_lf": "d2909980d89eeeb760cf5109e3e728db54b84777873cd28b09c04a4637326580"
+      },
+      {
+        "record_id": "code_health:finding_2444ef38d170f9e459d0",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          188,
+          195
+        ],
+        "new_span": [
+          288,
+          295
+        ],
+        "function_sha256_lf": "2a627f297e994faa809419ee08470ee0fb350d667d03c0bb9791173dea9cea57"
+      },
+      {
+        "record_id": "code_health:finding_069477ffb241b2be8345",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          228,
+          275
+        ],
+        "new_span": [
+          328,
+          375
+        ],
+        "function_sha256_lf": "f3f1cefbe53ceeddebf97a302bc3fcfee3d8845ced71c2b2b2915be9d036777f"
+      },
+      {
+        "record_id": "code_health:finding_43881671adf95bb4b43c",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          284,
+          330
+        ],
+        "new_span": [
+          384,
+          430
+        ],
+        "function_sha256_lf": "d3f9ec88ffb0738362754487191303a0e88c9334441df3dd4ff060aad4867d77"
+      },
+      {
+        "record_id": "code_health:finding_a0a176f446cbb821d487",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          299,
+          306
+        ],
+        "new_span": [
+          399,
+          406
+        ],
+        "function_sha256_lf": "33e348ee66a66e823aae233f99e05f794791c4f29529cce35e1bc1573e9b5ef9"
+      },
+      {
+        "record_id": "code_health:finding_d71333b5f8e26e1a7718",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          394,
+          443
+        ],
+        "new_span": [
+          494,
+          543
+        ],
+        "function_sha256_lf": "d7205513a95f6c10304fc57e397bc10b33337189ab60a3b5385638a1b29c56eb"
+      },
+      {
+        "record_id": "code_health:finding_d5756f8057e6210e77d4",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          444,
+          512
+        ],
+        "new_span": [
+          544,
+          612
+        ],
+        "function_sha256_lf": "ac8a6c18a197bf31c5f97578655cdd5dcf1ceabdfd520626abf1d35660679bac"
+      },
+      {
+        "record_id": "code_health:finding_50f759c7ce8caf72ba0f",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          513,
+          549
+        ],
+        "new_span": [
+          613,
+          649
+        ],
+        "function_sha256_lf": "107acf4f10e565e00bcf8151cab471b21d7482b31f2ffd49463422640798b5ce"
+      },
+      {
+        "record_id": "code_health:finding_532b474a093fc3ebb820",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          550,
+          577
+        ],
+        "new_span": [
+          650,
+          677
+        ],
+        "function_sha256_lf": "33defa8b54c342d48346703e7d0d8583209ddf1afeaa1d15d5492a4bdf4637bd"
+      },
+      {
+        "record_id": "code_health:finding_7d7006df9ec6314480bd",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          394,
+          443
+        ],
+        "new_span": [
+          494,
+          543
+        ],
+        "function_sha256_lf": "d7205513a95f6c10304fc57e397bc10b33337189ab60a3b5385638a1b29c56eb"
+      },
+      {
+        "record_id": "code_health:finding_d85646f671cd92e5433a",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          444,
+          512
+        ],
+        "new_span": [
+          544,
+          612
+        ],
+        "function_sha256_lf": "ac8a6c18a197bf31c5f97578655cdd5dcf1ceabdfd520626abf1d35660679bac"
+      },
+      {
+        "record_id": "code_health:finding_c70d17d30550958c4d95",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          367,
+          370
+        ],
+        "new_span": [
+          467,
+          470
+        ],
+        "function_sha256_lf": "7236ccb2a31e2123edca5309e64d8c28fdb178ed6053c5685372aa065b0b09a9"
+      },
+      {
+        "record_id": "code_health:finding_7abfbf4a2f826653796d",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          544,
+          544
+        ],
+        "new_span": [
+          644,
+          644
+        ],
+        "function_sha256_lf": "b521b72d88e72015a1dbd0b7b37c91b2fd197676cccfdbeb78d89e73f0218450"
+      },
+      {
+        "record_id": "code_health:finding_f91d9ed74c28e5ef0ee7",
+        "decision": "accept",
+        "restore_status": "reviewed_no_change",
+        "file": "tests/preference-integrity-scenarios.js",
+        "old_span": [
+          555,
+          558
+        ],
+        "new_span": [
+          655,
+          658
+        ],
+        "function_sha256_lf": "e6f4645b480f0a1f769bd36a262c9ca4509c4d1277fe4e152989b19bbbc5327f"
+      }
+    ]
+  },
+  "direct_changed_production_revalidation": {
+    "target_functions": {
+      "validateWftPortfolioShape": {
+        "function": {
+          "name": "validateWftPortfolioShape",
+          "start_line": 6369,
+          "end_line": 6379,
+          "ccn": 4,
+          "cognitive": 3,
+          "nloc": 11,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            6370,
+            6370
+          ]
+        },
+        "conditions": [
+          {
+            "line": 6370,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "467431eb0354aecb01df6a45bfa15821150fd483ea010b141178a7d7de39290d"
+      },
+      "getLocalSettingsSnapshot": {
+        "function": {
+          "name": "getLocalSettingsSnapshot",
+          "start_line": 4464,
+          "end_line": 4481,
+          "ccn": 7,
+          "cognitive": 11,
+          "nloc": 16,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4473,
+            4477
+          ]
+        },
+        "conditions": [
+          {
+            "line": 4470,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 4474,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "199195b461192b13472813a473fd6dde0d5addcf66d9b3992549b142f7b3d3cf"
+      },
+      "ensureStudentRecordsForRoster": {
+        "function": {
+          "name": "ensureStudentRecordsForRoster",
+          "start_line": 2331,
+          "end_line": 2381,
+          "ccn": 18,
+          "cognitive": 43,
+          "nloc": 46,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            2350,
+            2356
+          ]
+        },
+        "conditions": [
+          {
+            "line": 2333,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 2343,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "04b39a6edfea8996d78875b1129563b597304d6a41194b16536098ff4668e5ee"
+      },
+      "refreshStorageHealthUI": {
+        "function": {
+          "name": "refreshStorageHealthUI",
+          "start_line": 1828,
+          "end_line": 1892,
+          "ccn": 21,
+          "cognitive": 29,
+          "nloc": 50,
+          "max_nesting": 3,
+          "bumps": 6,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1858,
+            1861
+          ]
+        },
+        "conditions": [
+          {
+            "line": 1860,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1866,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "fa07f6c6a74f3cc0606035a05b237edad5e73addd9534860d7c347fffbe5f26c"
+      },
+      "buildPortfolioIndexFromPortfolio": {
+        "function": {
+          "name": "buildPortfolioIndexFromPortfolio",
+          "start_line": 1584,
+          "end_line": 1652,
+          "ccn": 18,
+          "cognitive": 36,
+          "nloc": 60,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1605,
+            1610
+          ]
+        },
+        "conditions": [
+          {
+            "line": 1599,
+            "operator_count": 2,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1607,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "c1d637284e9859369bd509a45a7742d8d1e82f9dc492650efa3e93a88d5012ef"
+      },
+      "normalizeWftPortfolioForSchemaV1": {
+        "function": {
+          "name": "normalizeWftPortfolioForSchemaV1",
+          "start_line": 1338,
+          "end_line": 1367,
+          "ccn": 14,
+          "cognitive": 22,
+          "nloc": 25,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            1346,
+            1363
+          ]
+        },
+        "conditions": [
+          {
+            "line": 1340,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1349,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1352,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 1360,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "81827f785b87832d08b1b70bca6190a5a8db73f9a12ae382570768cb7dba62eb"
+      },
+      "isWftPortfolioStudentKey": {
+        "function": {
+          "name": "isWftPortfolioStudentKey",
+          "start_line": 1334,
+          "end_line": 1336,
+          "ccn": 6,
+          "cognitive": 5,
+          "nloc": 3,
+          "max_nesting": 0,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null
+        },
+        "conditions": [],
+        "sha256_lf": "e21e04508df4b57a54fb1fa063ba5b07eb469a07f8f69116c79c1f91d07bd9e3"
+      },
+      "saveSettingsToLocalStorage": {
+        "function": {
+          "name": "saveSettingsToLocalStorage",
+          "start_line": 565,
+          "end_line": 592,
+          "ccn": 16,
+          "cognitive": 19,
+          "nloc": 28,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            573,
+            583
+          ]
+        },
+        "conditions": [
+          {
+            "line": 568,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 574,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 577,
+            "operator_count": 1,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 584,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          },
+          {
+            "line": 587,
+            "operator_count": 3,
+            "enclosing_construct": "if"
+          }
+        ],
+        "sha256_lf": "8551698f789a5de8f25e372cf445d62f932299b405ae3e89c822d63853cde362"
+      },
+      "updateSettingsFromForm": {
+        "function": {
+          "name": "updateSettingsFromForm",
+          "start_line": 550,
+          "end_line": 563,
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 14,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            555,
+            555
+          ]
+        },
+        "conditions": [],
+        "sha256_lf": "eb65e8716b3587594d446fe932fecd0ab26160b0f419eea890d1500d13d4bc9e"
+      }
+    },
+    "explicit_record_ids": [
+      "code_health:finding_e12eb3ad598aa6782566",
+      "code_health:finding_1395e7bc92e44d166e50",
+      "code_health:finding_0d58c6763761293e9a6e",
+      "code_health:finding_2d394d4a42f8699016a8",
+      "code_health:finding_bce2bd1af6dae6674398",
+      "code_health:finding_9599830c23cff6c9eeab",
+      "code_health:finding_73853e063ab1f2054c82",
+      "code_health:finding_d0ca54c8b8826e302a40",
+      "code_health:finding_e07c780e97aad39804ee",
+      "code_health:finding_ba1ecff48ab5d7bc7fe4",
+      "code_health:finding_5b7863fdcbef269b3b17",
+      "code_health:finding_0efbe93dd6013265e4e8",
+      "code_health:finding_afc16d3cd5eea800fe0b"
+    ],
+    "decisions": [
+      {
+        "record_id": "code_health:finding_e12eb3ad598aa6782566",
+        "symbol": "normalizeWftPortfolioForSchemaV1",
+        "marker": "nested_complexity",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Depth4 remains per-student normalization plus optional per-student ID persistence inside its own catch.068 changes only the shared exact six-name policy; removing/hoisting ID failure isolation would alter partial progress. Retain.",
+        "verified_observation_details": {
+          "max_nesting": 4,
+          "ccn": 14,
+          "cognitive": 22,
+          "dispatch_share": 0.0,
+          "symbol_line": 1338,
+          "deepest_block": {
+            "start": 1346,
+            "end": 1363
+          }
+        },
+        "function_pin_reference": "normalizeWftPortfolioForSchemaV1",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_1395e7bc92e44d166e50",
+        "symbol": "buildPortfolioIndexFromPortfolio",
+        "marker": "nested_complexity",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Depth4 is optional per-student live settings/map lookup with local failure isolation.068 preserves read timing and own-key lookup; no hoisting or metric extraction justified.",
+        "verified_observation_details": {
+          "max_nesting": 4,
+          "ccn": 18,
+          "cognitive": 36,
+          "dispatch_share": 0.0,
+          "symbol_line": 1584,
+          "deepest_block": {
+            "start": 1605,
+            "end": 1610
+          }
+        },
+        "function_pin_reference": "buildPortfolioIndexFromPortfolio",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_0d58c6763761293e9a6e",
+        "symbol": "ensureStudentRecordsForRoster",
+        "marker": "nested_complexity",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Depth4 isolates optional roster input and optional portfolio-name enrichment from the required settings read/save. Single shared settings snapshot and inner portfolio catch remain necessary.",
+        "verified_observation_details": {
+          "max_nesting": 4,
+          "ccn": 18,
+          "cognitive": 43,
+          "dispatch_share": 0.0,
+          "symbol_line": 2331,
+          "deepest_block": {
+            "start": 2350,
+            "end": 2356
+          }
+        },
+        "function_pin_reference": "ensureStudentRecordsForRoster",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_2d394d4a42f8699016a8",
+        "symbol": "updateSettingsFromForm",
+        "marker": "complex_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "P03 is implemented: the promoted helper is now reused by strict writer and soft snapshot. Its remaining flat CCN10/14NLOC is four ordered DOM lookups and eight assignments/defaults/optional getter guards. Retain the warning; do not re-admit sharing or table-driven reshaping.",
+        "verified_observation_details": {
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 14,
+          "dispatch_share": 0.0,
+          "symbol_line": 550,
+          "deepest_block": {
+            "start": 555,
+            "end": 555
+          },
+          "extract_method_refused": "declarative_flat"
+        },
+        "function_pin_reference": "updateSettingsFromForm",
+        "prior_report": "repair-069-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_bce2bd1af6dae6674398",
+        "symbol": "saveSettingsToLocalStorage",
+        "marker": "complex_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Remaining CCN16/28NLOC handles clone/own override metadata, strict storage preflight/validation/write, saved-form restoration and rethrow, then distinct publication routes and sanitized return.069 removed copied form work while preserving each boundary; no further extraction needed.",
+        "verified_observation_details": {
+          "ccn": 16,
+          "cognitive": 19,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "symbol_line": 565,
+          "deepest_block": {
+            "start": 573,
+            "end": 583
+          }
+        },
+        "function_pin_reference": "saveSettingsToLocalStorage",
+        "prior_report": "repair-069-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_9599830c23cff6c9eeab",
+        "symbol": "normalizeWftPortfolioForSchemaV1",
+        "marker": "complex_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "P04 is implemented across five consumers. Remaining CCN14/25NLOC governs safe-mode bypass, own ordered student traversal, legacy arrays/session normalization, optional ID allocation and explicit _meta attachment.068 exact key/getter/error parity supports retaining these policies, not another filter edit.",
+        "verified_observation_details": {
+          "ccn": 14,
+          "cognitive": 22,
+          "nloc": 25,
+          "dispatch_share": 0.0,
+          "symbol_line": 1338,
+          "deepest_block": {
+            "start": 1346,
+            "end": 1363
+          }
+        },
+        "function_pin_reference": "normalizeWftPortfolioForSchemaV1",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_73853e063ab1f2054c82",
+        "symbol": "buildPortfolioIndexFromPortfolio",
+        "marker": "complex_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "CCN18 index builder retains per-student optional ID/cache reads and separately named summarization. Own overall precedence, numeric-string/zero handling and chronology/read order remain. Shared filtering is complete; no one-use summary wrapper.",
+        "verified_observation_details": {
+          "ccn": 18,
+          "cognitive": 36,
+          "nloc": 60,
+          "dispatch_share": 0.0,
+          "symbol_line": 1584,
+          "deepest_block": {
+            "start": 1605,
+            "end": 1610
+          }
+        },
+        "function_pin_reference": "buildPortfolioIndexFromPortfolio",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_d0ca54c8b8826e302a40",
+        "symbol": "refreshStorageHealthUI",
+        "marker": "complex_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "CCN21 reads optional health/portfolio/sync metadata and updates independently optional nodes through existing safe renderer. Shared root policy is complete; display sections are coherent remaining branches.",
+        "verified_observation_details": {
+          "ccn": 21,
+          "cognitive": 29,
+          "nloc": 50,
+          "dispatch_share": 0.0,
+          "symbol_line": 1828,
+          "deepest_block": {
+            "start": 1858,
+            "end": 1861
+          }
+        },
+        "function_pin_reference": "refreshStorageHealthUI",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_e07c780e97aad39804ee",
+        "symbol": "ensureStudentRecordsForRoster",
+        "marker": "complex_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "CCN18/cognitive43 preserves separate optional input catches, own null-prototype ID map, ID/record creation and one final required save from a single settings snapshot. Repeated getOrCreateStudentId calls would add reads/writes and change failure timing.",
+        "verified_observation_details": {
+          "ccn": 18,
+          "cognitive": 43,
+          "nloc": 46,
+          "dispatch_share": 0.0,
+          "symbol_line": 2331,
+          "deepest_block": {
+            "start": 2350,
+            "end": 2356
+          }
+        },
+        "function_pin_reference": "ensureStudentRecordsForRoster",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_ba1ecff48ab5d7bc7fe4",
+        "symbol": "refreshStorageHealthUI",
+        "marker": "bumpy_road",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Six health-display bumps correspond to feature visibility, optional cached counts, sync/rebuild metadata and optional summary/button elements.068 touched only the name filter; no interacting new failure state or extraction benefit found.",
+        "verified_observation_details": {
+          "bumps": 6,
+          "ccn": 21,
+          "max_nesting": 3,
+          "symbol_line": 1828,
+          "deepest_block": {
+            "start": 1858,
+            "end": 1861
+          }
+        },
+        "function_pin_reference": "refreshStorageHealthUI",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_5b7863fdcbef269b3b17",
+        "symbol": "buildPortfolioIndexFromPortfolio",
+        "marker": "large_method",
+        "proposed_status": "reviewed_no_change",
+        "reason": "60NLOC includes metadata population and an existing named18NLOC summarizeSessions helper. Its size does not justify splitting the builder after shared policy is complete; retain exact entry fields/order and live optional reads.",
+        "verified_observation_details": {
+          "nloc": 60,
+          "ccn": 18,
+          "dispatch_share": 0.0,
+          "symbol_line": 1584,
+          "deepest_block": {
+            "start": 1605,
+            "end": 1610
+          }
+        },
+        "function_pin_reference": "buildPortfolioIndexFromPortfolio",
+        "prior_report": "repair-068-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_0efbe93dd6013265e4e8",
+        "symbol": "saveSettingsToLocalStorage",
+        "marker": "complex_conditional",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Exact old50d9 condition and complete publication tail are unchanged: V2 enabled, no dirty suppression, and safe mode inactive gate scheduling. Every term prevents inappropriate publication. Named owner/context and full source tail bind this relocation; no ID/count-only match.",
+        "verified_observation_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 565
+        },
+        "function_pin_reference": "saveSettingsToLocalStorage",
+        "prior_report": "repair-069-safety-review.json"
+      },
+      {
+        "record_id": "code_health:finding_afc16d3cd5eea800fe0b",
+        "symbol": "saveSettingsToLocalStorage",
+        "marker": "complex_conditional",
+        "proposed_status": "reviewed_no_change",
+        "reason": "Exact oldb77 condition and complete publication tail are unchanged: callable active safe-mode function, Drive token and legacy writer availability guard that route. It is not merely the negation of the V2 gate because engine/suppression conditions differ. Retain live read order.",
+        "verified_observation_details": {
+          "operator_count": 3,
+          "enclosing_construct": "if",
+          "dispatch_share": 0.0,
+          "symbol_line": 565
+        },
+        "function_pin_reference": "saveSettingsToLocalStorage",
+        "prior_report": "repair-069-safety-review.json"
+      }
+    ],
+    "no_current_shape_record_targets": [
+      "validateWftPortfolioShape CCN4",
+      "getLocalSettingsSnapshot CCN7",
+      "isWftPortfolioStudentKey CCN6"
+    ],
+    "parity_reuse": "068 accepted exact six-string own-key/order/null-prototype/_meta double-read/error/getter/strict-writer contracts;069 accepted same12 ordered statements, missing-control/getter and writer-versus-soft-snapshot failure contracts, redaction and full32case parity. Current00 LF equals accepted069after hash. No materially new concern found. Remaining warnings stay open; obsolete P03/P04 candidate work is implemented.",
+    "planner_annotation_limit": "Helper extract_method_refused=declarative_flat copied as fresh metadata; numerical shape/guard structure verified, planner annotation not independently regenerated."
+  },
+  "condition_identity_rebinding": {
+    "mappings": [
+      {
+        "old_id": "code_health:finding_50d9e7d39f28106a6a3f",
+        "new_id": "code_health:finding_0efbe93dd6013265e4e8",
+        "old_line": 583,
+        "new_line": 584,
+        "condition_line_sha256_lf": "012625b8ac1383a35e8f1d61b1fc60e3625cb6c5204130b6d7cf87db57a295d0",
+        "condition_line": "if (WFT_SYNC_ENGINE_V2 && !wftSuppressDirtyMarks && !(typeof isWftStorageSafeMode === 'function' && isWftStorageSafeMode())) {",
+        "unique_exact_line_match": true
+      },
+      {
+        "old_id": "code_health:finding_b77d5a59154a4da066cc",
+        "new_id": "code_health:finding_afc16d3cd5eea800fe0b",
+        "old_line": 586,
+        "new_line": 587,
+        "condition_line_sha256_lf": "7c687c48fa81df1d378743c49eac032c4fade0fec167d154d656392615e67a2f",
+        "condition_line": "} else if ((typeof isWftStorageSafeMode === 'function' && isWftStorageSafeMode()) && driveAccessToken && typeof saveSettingsToDrive === 'function') {",
+        "unique_exact_line_match": true
+      }
+    ],
+    "whole_publication_tail_sha256_lf": "01080ebfdeab38f3b5a069f3f85885a383ea97e51bc9aaa830452df9a8097b50",
+    "old_owner_span": [
+      550,
+      591
+    ],
+    "new_owner_span": [
+      565,
+      592
+    ],
+    "semantic_collision_found": false,
+    "reason": "New0ef/afc are precisely the two old50d9/b77guards. Unique exact line AND complete publication tail and named owner/context were inspected; no anonymous ordinal matching used. Preserve old IDs as lineage/aliases without fixed counts."
+  },
+  "newly_absent_record_dispositions": [
+    {
+      "record_id": "code_health:finding_cb937b1294bc411abc3f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "scanner_absent_now": true,
+      "suggested_status": "fixed_verified",
+      "classification": "verified_specific_complex_method_threshold_closure_from_069",
+      "reason": "Actual installed ComplexMethodDetector returns one old CCN16High result and no result for current CCN7, threshold9. Current snapshot4459->4464 uses accepted shared overlay; strict read/catch/roster/redaction contracts preserved by069 original/candidate32 native parity. This is the single verified production closure; promoted helper remains CCN10 and other writer guards remain warnings.",
+      "old_function": {
+        "function": {
+          "name": "getLocalSettingsSnapshot",
+          "start_line": 4459,
+          "end_line": 4488,
+          "ccn": 16,
+          "cognitive": 27,
+          "nloc": 27,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4480,
+            4484
+          ]
+        },
+        "detector_findings": [
+          {
+            "biomarker_type": "complex_method",
+            "severity": "high",
+            "function_name": "getLocalSettingsSnapshot",
+            "line_start": 4459,
+            "line_end": 4488,
+            "details": {
+              "ccn": 16,
+              "cognitive": 27,
+              "nloc": 27,
+              "dispatch_share": 0.0
+            },
+            "reason": "getLocalSettingsSnapshot has cyclomatic complexity 16",
+            "deduction": null
+          }
+        ],
+        "sha256_lf": "6f5aacda98cab65a62522fb6799a559fd9252cffa6f11a5abd47c49bf7bf0f98"
+      },
+      "new_function": {
+        "function": {
+          "name": "getLocalSettingsSnapshot",
+          "start_line": 4464,
+          "end_line": 4481,
+          "ccn": 7,
+          "cognitive": 11,
+          "nloc": 16,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            4473,
+            4477
+          ]
+        },
+        "detector_findings": [],
+        "sha256_lf": "199195b461192b13472813a473fd6dde0d5addcf66d9b3992549b142f7b3d3cf"
+      }
+    },
+    {
+      "record_id": "code_health:finding_50d9e7d39f28106a6a3f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "scanner_absent_now": true,
+      "suggested_status": "reviewed_no_change",
+      "classification": "condition_reidentified_not_fixed",
+      "current_record_id": "code_health:finding_0efbe93dd6013265e4e8",
+      "reason": "Same unique condition source line and entire publication tail remain in changed writer;3operators persist. Do not count the old ID disappearance as fixed."
+    },
+    {
+      "record_id": "code_health:finding_b77d5a59154a4da066cc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "scanner_absent_now": true,
+      "suggested_status": "reviewed_no_change",
+      "classification": "condition_reidentified_not_fixed",
+      "current_record_id": "code_health:finding_afc16d3cd5eea800fe0b",
+      "reason": "Same unique condition source line and entire publication tail remain in changed writer;3operators persist. Do not count the old ID disappearance as fixed."
+    },
+    {
+      "record_id": "code_health:finding_109a87742e8c5d101e06",
+      "file": "js/app/storage-recovery.js",
+      "marker": "co_change_scatter",
+      "scanner_absent_now": true,
+      "suggested_status": "not_detected_unverified",
+      "classification": "history_or_module_duplication_absence_not_bug_closure",
+      "reason": "History/DRY observations depend on rolling history/corpus/relative size. This review does not rebuild them and finds no corresponding repaired behavior. Preserve history and do not call disappearance fixed."
+    },
+    {
+      "record_id": "code_health:finding_4a4191a6c326f518d7f9",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "dry_violation",
+      "scanner_absent_now": true,
+      "suggested_status": "not_detected_unverified",
+      "classification": "history_or_module_duplication_absence_not_bug_closure",
+      "reason": "History/DRY observations depend on rolling history/corpus/relative size. This review does not rebuild them and finds no corresponding repaired behavior. Preserve history and do not call disappearance fixed."
+    },
+    {
+      "record_id": "code_health:finding_e43a7acacea5728367d2",
+      "file": "tests/openrouter-request.cjs",
+      "marker": "change_entropy",
+      "scanner_absent_now": true,
+      "suggested_status": "not_detected_unverified",
+      "classification": "history_or_module_duplication_absence_not_bug_closure",
+      "reason": "History/DRY observations depend on rolling history/corpus/relative size. This review does not rebuild them and finds no corresponding repaired behavior. Preserve history and do not call disappearance fixed."
+    },
+    {
+      "record_id": "code_health:finding_f2a785c9259d4530ddc5",
+      "file": "tests/preference-integrity-scenarios.js",
+      "marker": "complex_conditional",
+      "scanner_absent_now": true,
+      "suggested_status": "needs_revalidation",
+      "classification": "test_callback_identity_rebind_owned_by_review028",
+      "reason": "Do not count ordinal-based ID disappearance as fixed. Parent reports oldf2->current541a and old541a rollback->current75bd; other independent reviewer owns exact callback rebind.173proof excludes mismatched bodies."
+    },
+    {
+      "record_id": "code_health:finding_e1cab3eb1c1950913fb5",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "dry_violation",
+      "scanner_absent_now": true,
+      "suggested_status": "not_detected_unverified",
+      "classification": "history_or_module_duplication_absence_not_bug_closure",
+      "reason": "History/DRY observations depend on rolling history/corpus/relative size. This review does not rebuild them and finds no corresponding repaired behavior. Preserve history and do not call disappearance fixed."
+    },
+    {
+      "record_id": "code_health:finding_92d6531aeae640c31cf2",
+      "file": "tests/recovery-cache.browser.cjs",
+      "marker": "change_entropy",
+      "scanner_absent_now": true,
+      "suggested_status": "not_detected_unverified",
+      "classification": "history_or_module_duplication_absence_not_bug_closure",
+      "reason": "History/DRY observations depend on rolling history/corpus/relative size. This review does not rebuild them and finds no corresponding repaired behavior. Preserve history and do not call disappearance fixed."
+    }
+  ],
+  "coverage_dispositions": [
+    {
+      "record_id": "code_health:finding_a47a0eb3889a392c07a4",
+      "file": "js/app/00-storage-sync-patches.js",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_fresh_continuous_coverage_warning_keep_open",
+      "verified_observation_details": {
+        "line_coverage_pct": 91.39,
+        "branch_coverage_pct": null,
+        "uncovered_fraction": 0.0861,
+        "deduction": 0.3444
+      },
+      "fresh_native_counts": {
+        "covered": 4328,
+        "executable": 4736,
+        "percent": 91.38513513513513
+      },
+      "uncovered_count": 408,
+      "source_sha256_lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "actual_coverage_gradient_detector_details_match": true,
+      "terminal_eof_excluded": {
+        "file": "js/app/00-storage-sync-patches.js",
+        "source_hash": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+        "line": 8366,
+        "column": 0,
+        "type": "return"
+      },
+      "branch_coverage": null,
+      "reason": "4328/4736 current executable lines covered;408 real interior uncovered lines remain. Source hashes and exact LCOV union match fresh009, not stale007ledger.069form helper/writer/snapshot550-591/4464-4481 have no uncovered executable lines in capture; this is line coverage, not all guard combinations. Do not add repetition to raise percentage.",
+      "bounded_substantive_followup": {
+        "existing_operation": "P10 / repair043 timeout-readback contract",
+        "uncovered_lines": [
+          5093,
+          5094,
+          5095,
+          5097,
+          5098,
+          5099,
+          5100,
+          5102,
+          5105
+        ],
+        "reason": "Actual timeout recovery fingerprint calculation and equality/mismatch/cache publication lines are unhit. This newly binds the previously identified regression gap to current coverage; it does not establish a product bug.",
+        "smallest_next_admission": "Test-first existing native Drive/upload suite only: held actual upload commits server bytes but response times out, real canonical readback equality accepts and differing/invalid/missing readback rejects while pending/dirty/local writing persist. Cover settings/deletions/portfolio/index as043 already requests; keep source unchanged initially. No broad hash framework or metric-only test batch.",
+        "source_change_authorized": false
+      },
+      "other_gaps": "Unhit optional/legacy paths, folder-choice alternatives and guarded error/UI fallbacks remain. Individual source/tests determine value; no blanket promotion of every uncovered line."
+    },
+    {
+      "record_id": "code_health:finding_ed8d28d0b9704fee151c",
+      "file": "js/app/10-main-app.js",
+      "proposed_status": "reviewed_no_change",
+      "classification": "valid_fresh_continuous_coverage_warning_keep_open",
+      "verified_observation_details": {
+        "line_coverage_pct": 93.8,
+        "branch_coverage_pct": null,
+        "uncovered_fraction": 0.062,
+        "deduction": 0.248
+      },
+      "fresh_native_counts": {
+        "covered": 4733,
+        "executable": 5046,
+        "percent": 93.7970669837495
+      },
+      "uncovered_count": 313,
+      "source_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "actual_coverage_gradient_detector_details_match": true,
+      "terminal_eof_excluded": {
+        "file": "js/app/10-main-app.js",
+        "source_hash": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+        "line": 8689,
+        "column": 0,
+        "type": "return"
+      },
+      "branch_coverage": null,
+      "reason": "4733/5046 current executable lines covered;313 interior lines remain. Already accepted062busy-image,063grounded fallback,064recorded Grammar label and071native gesture contracts address concrete behavior; no further scoring-policy or UI extraction follows from93.8%.",
+      "disposition_detail": "Retain warning and defer new tests absent a demonstrated product contract gap. Optional DOM, low-evidence message alternatives, startup/picker and error/ownership exits can remain unhit without becoming confirmed bugs. Existing independent main58a8 invalid-index guard review is outside173 and remains a valid safety policy.",
+      "scoring_tests_not_admitted": true
+    }
+  ],
+  "coverage_binding": {
+    "capture_source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+    "merged_source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
+    "source_hashes_all8_match_actual_merged_git": true,
+    "raw_lcov_sha256": "8da5be5ac9df0806cd0830035f9dc653297d4b516f667bfcde32326f4dd34608",
+    "summary_sha256": "8ad498be4535f15729c8005468aa5e8b209ef51e5d12f61853b34a4979c0fd39",
+    "report_hash_field_binds_lcov_not_json_receipt": "Verified save_batch_validation.py implementation and actual LCOV digest; different summary digest is expected.",
+    "independent_lcov_replay": "480TN/SFcontexts,60test names,8files; covered/coverable hit-wins unions and all exact uncovered sets match summary for all8files. Module percentages and both actual CoverageGradientDetector results match fresh stored facts.",
+    "mapping_receipt": "Root postmerge ingestion receipt verifies386test-file mapping line sets and strict completeness; DB mappings were not independently reread in this review.",
+    "totals": {
+      "covered": 10315,
+      "executable": 11100,
+      "percent": 92.92792792792793
+    },
+    "stale_tracker_metadata": "Canonical coverage_evidence still refers to007/ed578 with00current_source_matches:false. Use bound009validation/currentLCOV/postmerge ingestion for these decisions; coordinator should refresh that metadata during adoption. This is not a failure of fresh009coverage."
+  },
+  "summary": {
+    "unchanged_shape_records_accepted": 173,
+    "changed_target_present_shapes_retained": 13,
+    "condition_ids_rebound_not_fixed": 2,
+    "verified_production_closures": 1,
+    "other_absences_not_counted_fixed": 8,
+    "coverage_rows_retained": 2,
+    "new_confirmed_behavior_bugs": 0,
+    "new_source_repair_authorized": false
+  },
+  "limits": [
+    "Read-only analysis with trusted installed parser/detectors and artifact parsing only; no app/test/browser reruns or source/Git/index/tracker changes. Only own scratch and this report written; coordinator owns adoption.",
+    "173proof is limited to unique unchanged whole functions and shape facts. No changed bodies, anonymous semantic collisions, broad DRY/history/I/O/coverage or whole-file automatic reapproval.13changed-target dispositions are separately justified and keyed explicitly.",
+    "Single closure is actual getLocalSettingsSnapshot complex_method threshold disappearance after accepted069 behavior parity. Test growth, history/corpus changes and shifted IDs are not repairs.",
+    "Coverage is native executable-line evidence with final empty EOF return exclusions; branch coverage remains unknown. No scoring-only tests, broader prototype/security guarantee, all-bug-free or new full-gate/publication claim.",
+    "The externally supplied main58a8guard carryforward is outside173targets. Other reviewer owns preference callback ordinal collision/rebinding; this review does not silently adopt it."
+  ]
+}

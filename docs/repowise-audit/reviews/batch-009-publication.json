@@ -1,0 +1,48 @@
+{
+  "batch": "batch-009",
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/190",
+  "merge_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
+  "verified_at": "2026-10-16T06:50:57.695224+00:00",
+  "pages_build": "built",
+  "pages_build_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
+  "tested_source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+  "all_committed_source_blobs_identical": true,
+  "all_normalized_lf_pins_match": true,
+  "source_pin_count": 91,
+  "configuration_pin_count": 1,
+  "configuration_checkout_newline_only_changes": [],
+  "raw_source_pins_match": 88,
+  "checkout_newline_only_changes": [
+    "tests/portfolio-sync.cjs",
+    "tests/record-identity.cjs",
+    "tests/session-retention.cjs"
+  ],
+  "files": [
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "http_status": 200,
+      "bytes": 396245,
+      "git_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "live_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static deployment and exact source equivalence; no real accounts, writing, Google, Drive or model calls.",
+  "html_verification": {
+    "git_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+    "public_raw_sha256": "fe7d69ad3cd36dbae15c3692c16277da0f131e2758af25bf305a3657123fab3d",
+    "public_raw_bytes": 209071,
+    "raw_bytes_identical": false,
+    "only_one_hosting_added_cloudflare_beacon_line": true,
+    "excluded_line_sha256": "700e4af549e1df82a2068823d99721dfb1a601f44aa92f7be51c561bdc257b01",
+    "excluded_line_prefix": "<script type=\"module\" src=\"https://static.cloudflareinsights.com/beacon.min.js/",
+    "removing_only_exact_additional_beacon_line_yields_git_bytes": true,
+    "mobile_header_html_remains_tested008": true
+  },
+  "coverage_helpers_still_match": {
+    "work/do-next-05/coverage-preload.cjs": true,
+    "work/do-next-05/export-coverage.cjs": true,
+    "work/summarize-coverage.cjs": true
+  }
+}
