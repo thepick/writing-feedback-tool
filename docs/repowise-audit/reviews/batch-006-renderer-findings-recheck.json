@@ -1,0 +1,88 @@
+{
+  "source_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+  "scope": "One changed diagnostic renderer and three local shape detectors; no graph/history or unrelated coordinate revalidation.",
+  "method": "Installed0.56 AST walker plus actual pure detectors on immutable before/after Git bytes; fresh persisted scan agrees. Current checkout normalized hash matches merged/live source.",
+  "results": [
+    {
+      "stage": "before",
+      "commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+      "source_sha256_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+      "function": "renderScoredAnalysisDebug",
+      "start": 8067,
+      "end": 8129,
+      "ccn": 12,
+      "nloc": 61,
+      "detectors": {
+        "complex_method": [
+          {
+            "reason": "renderScoredAnalysisDebug has cyclomatic complexity 12",
+            "details": {
+              "ccn": 12,
+              "cognitive": 12,
+              "nloc": 61,
+              "dispatch_share": 0.55
+            },
+            "severity": "medium"
+          }
+        ],
+        "large_method": [
+          {
+            "reason": "renderScoredAnalysisDebug is 61 lines long",
+            "details": {
+              "nloc": 61,
+              "ccn": 12,
+              "dispatch_share": 0.55
+            },
+            "severity": "low"
+          }
+        ],
+        "primitive_obsession": [
+          {
+            "reason": "long parameter list: renderScoredAnalysisDebug takes 5 parameters",
+            "details": {
+              "param_count": 5,
+              "typed_param_count": 0,
+              "primitive_param_count": 0
+            },
+            "severity": "low"
+          }
+        ]
+      }
+    },
+    {
+      "stage": "after",
+      "commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+      "source_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "function": "renderScoredAnalysisDebug",
+      "start": 8090,
+      "end": 8144,
+      "ccn": 6,
+      "nloc": 53,
+      "detectors": {
+        "complex_method": [],
+        "large_method": [],
+        "primitive_obsession": [
+          {
+            "reason": "long parameter list: renderScoredAnalysisDebug takes 5 parameters",
+            "details": {
+              "param_count": 5,
+              "typed_param_count": 0,
+              "primitive_param_count": 0
+            },
+            "severity": "low"
+          }
+        ]
+      }
+    }
+  ],
+  "cleared_ids": [
+    "code_health:finding_64d289cb54e8a515f0f4",
+    "code_health:finding_7c122b322da6ef3fb555"
+  ],
+  "retained_id": "code_health:finding_eb37461abdf66043fb60",
+  "retained_reason": "Five named internal debug inputs keep captured analysis and raw provider stages explicit. All callers audited; source64changes only explanation, not signature. A parameter bundle would be optional maintenance, with no demonstrated user bug.",
+  "limits": [
+    "Two static findings cleared, distinct from six reproduced behavior repairs.",
+    "No general bug-free, branch-coverage or live-service claim."
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "batch": "batch-006",
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/187",
+  "merge_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+  "verified_at": "2026-10-16T03:31:06.323052+00:00",
+  "pages_build": "built",
+  "pages_build_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+  "tested_source_commit": "758526603018bde7cb193d23e03ec7531d4d083b",
+  "all_committed_source_blobs_identical": true,
+  "all_normalized_lf_pins_match": true,
+  "source_pin_count": 91,
+  "configuration_pin_count": 1,
+  "configuration_checkout_newline_only_changes": [],
+  "raw_source_pins_match": 90,
+  "checkout_newline_only_changes": [
+    "tests/detailed-parser.browser.cjs"
+  ],
+  "files": [
+    {
+      "file": "js/app/10-main-app.js",
+      "http_status": 200,
+      "bytes": 426978,
+      "git_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "live_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static deployment and exact source equivalence; no real accounts, writing, Google, Drive or model calls.",
+  "status": "published_live_index_coverage_dashboard_verified",
+  "repairs": [
+    "repair-059",
+    "repair-060",
+    "repair-061",
+    "repair-062",
+    "repair-063",
+    "repair-064"
+  ],
+  "full_validation": "reviews/batch-006-validation.json",
+  "post_merge_index_verification": {
+    "head": "69a996eb4463d9734030b8439b0d1851776cd86b",
+    "state_repository_all_metrics_agree": true,
+    "health_metric_count": 89,
+    "all8coverage_counts_percent_sourcehashes_match": true,
+    "lcov_contexts": 480,
+    "test_file_maps": 386,
+    "strict_mapping_complete": true,
+    "totals": {
+      "covered": 10291,
+      "executable": 11115,
+      "percent": 92.58659469185785
+    }
+  },
+  "dashboard": {
+    "source_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+    "health": 4.5,
+    "health_cli_precise": 4.57,
+    "maintainability": 4.5,
+    "static_performance": 9.3,
+    "method": "Actual IAB overview reload/AX:main69a996e,28.9Klines,UI4.5,maintainability4.5,static9.3,22/249hotspots avg3.2;Do next12serious4files/1critical. Full CLI --scope all --counts everything4.57 vs prior same-scope4.55; record UI separately without assuming a rounding relationship."
+  },
+  "scanner_recheck": "reviews/batch-006-renderer-findings-recheck.json",
+  "additional_confirmed_scanner_clearances": 2,
+  "total_confirmed_scanner_clearances": 32,
+  "required_work_summary": {
+    "confirmed_unresolved_bugs": 0,
+    "unconfirmed_application_leads": 0,
+    "test_oracle_leads": 4,
+    "optional_historical_maintenance_edits": 96,
+    "note": "All9 current application leads examined:6native bug repairs published/verified;3no active shipped defect established.4test-oracle leads and historical maintenance remain optional;this is not a general bug-free guarantee.",
+    "confirmed_fixes_awaiting_publication": 0
+  },
+  "limits": [
+    "Static warnings and coordinate/history revalidation are optional maintenance, separate from verified bugs.",
+    "Four additional test-assertion leads remain unconfirmed product defects; no forced cleanup.",
+    "No live Google/Drive/OAuth/model, physical camera or general bug-free guarantee.",
+    "Any later audit-only checkpoint preserves all91 source/test blobs and test configuration; this index provenance remains tied to the actual analyzed code commit."
+  ]
+}
