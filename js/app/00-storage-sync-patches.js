@@ -547,6 +547,21 @@ function refreshApiKeyRuntimeValue() {
     }
 }
 
+function updateSettingsFromForm(settings) {
+    var modelSelect = document.getElementById('modelSelect');
+    var targetWordCountEl = document.getElementById('targetWordCount');
+    var useWordCountTargetEl = document.getElementById('useWordCountTarget');
+    var assessScriptQualityEl = document.getElementById('assessScriptQuality');
+    if (modelSelect) settings.model = modelSelect.value || '';
+    if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
+    if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
+    if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
+    if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
+    if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
+    if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
+    settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+}
+
 function saveSettingsToLocalStorage(settingsOverride) {
     var existing = readWftRequiredStorage('wft_settings');
     var settings = Object.assign(Object.create(null), cloneWftJson(existing));
@@ -555,24 +570,10 @@ function saveSettingsToLocalStorage(settingsOverride) {
             if (key !== 'apiKey') settings[key] = cloneWftJson(settingsOverride[key]);
         });
     }
-    function updateSettingsFromForm() {
-        var modelSelect = document.getElementById('modelSelect');
-        var targetWordCountEl = document.getElementById('targetWordCount');
-        var useWordCountTargetEl = document.getElementById('useWordCountTarget');
-        var assessScriptQualityEl = document.getElementById('assessScriptQuality');
-        if (modelSelect) settings.model = modelSelect.value || '';
-        if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
-        if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
-        if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
-        if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
-    }
     try {
         if (typeof wftStudentChangeRecovery !== 'undefined' && wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
         preflightWftRequiredStorage();
-        updateSettingsFromForm();
+        updateSettingsFromForm(settings);
         if (typeof students !== 'undefined' && Array.isArray(students)) settings.students = applyDeletionsToStudents(students, getDeletionsData());
         validateWftRequiredStorage('wft_settings', settings);
         localStorage.setItem('wft_settings', JSON.stringify(settings));
@@ -1330,13 +1331,17 @@ function normalizeWftStudentRecord(studentName, sessions) {
     return sessions;
 }
 
+function isWftPortfolioStudentKey(name) {
+    return name !== "_meta" && name !== "updatedAt" && name !== "__syncMeta" && name !== "syncMeta" && name !== "lastSyncedAt" && name !== "lastSyncStatus";
+}
+
 function normalizeWftPortfolioForSchemaV1(portfolio, skipStudentIds) {
     if (!portfolio) { return {}; }
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) {
         return portfolio;
     }
     var normalized = Object.create(null);
-    var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
+    var names = Object.keys(portfolio).filter(isWftPortfolioStudentKey);
 
     for (var npi = 0; npi < names.length; npi++) {
         var name = names[npi];
@@ -1586,7 +1591,7 @@ function buildPortfolioIndexFromPortfolio(portfolio) {
     };
 
     if (!portfolio) { return index; }
-    var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
+    var names = Object.keys(portfolio).filter(isWftPortfolioStudentKey);
 
     for (var pi = 0; pi < names.length; pi++) {
         var name = names[pi];
@@ -1848,7 +1853,7 @@ function refreshStorageHealthUI() {
     var portfolio = null;
     try { portfolio = getPortfolioData(); } catch (e) {}
     if (portfolio) {
-        var names = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
+        var names = Object.keys(portfolio).filter(isWftPortfolioStudentKey);
         var totalSessions = 0;
         for (var hi = 0; hi < names.length; hi++) {
             var sd = portfolio[names[hi]];
@@ -2344,7 +2349,7 @@ function ensureStudentRecordsForRoster() {
 
         try {
             var portfolio = getPortfolioData();
-            var pNames = Object.keys(portfolio).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
+            var pNames = Object.keys(portfolio).filter(isWftPortfolioStudentKey);
             for (var pni = 0; pni < pNames.length; pni++) {
                 if (rosterStudents.indexOf(pNames[pni]) === -1) { rosterStudents.push(pNames[pni]); }
             }
@@ -4461,19 +4466,7 @@ function getLocalSettingsSnapshot() {
     var settings = readWftRequiredStorage('wft_settings');
 
     try {
-        var modelSelect = document.getElementById('modelSelect');
-        var targetWordCountEl = document.getElementById('targetWordCount');
-        var useWordCountTargetEl = document.getElementById('useWordCountTarget');
-        var assessScriptQualityEl = document.getElementById('assessScriptQuality');
-
-        if (modelSelect) settings.model = modelSelect.value || '';
-        if (targetWordCountEl) settings.targetWordCount = targetWordCountEl.value || '200';
-        if (useWordCountTargetEl) settings.useWordCountTarget = useWordCountTargetEl.checked;
-        if (typeof getGrammarStrictness === 'function') settings.grammarStrictness = getGrammarStrictness();
-        if (assessScriptQualityEl) settings.assessScriptQuality = assessScriptQualityEl.checked;
-        if (typeof getSelectedGradeLevel === 'function') settings.gradeLevel = getSelectedGradeLevel();
-        if (typeof getClassGradeLevel === 'function') settings.classGradeLevel = getClassGradeLevel();
-        settings.studentGradeLevelOverride = wftStudentGradeLevelOverride === true;
+        updateSettingsFromForm(settings);
         if (typeof students !== "undefined" && Array.isArray(students)) {
             settings.students = applyDeletionsToStudents(students, getDeletionsData());
         }
@@ -6376,7 +6369,7 @@ function normalizePortfolioData(portfolio) {
 function validateWftPortfolioShape(portfolio) {
     if (!portfolio || typeof portfolio !== 'object' || Array.isArray(portfolio)) throw new TypeError('Portfolio data is unreadable. Download Emergency Backup before repairing browser storage.');
     Object.keys(portfolio).forEach(function(studentName) {
-        if (['_meta', 'updatedAt', '__syncMeta', 'syncMeta', 'lastSyncedAt', 'lastSyncStatus'].indexOf(studentName) !== -1) return;
+        if (!isWftPortfolioStudentKey(studentName)) return;
         var student = portfolio[studentName];
         if (!student || typeof student !== 'object' || Array.isArray(student) || !Array.isArray(student.sessions)) throw new TypeError('Invalid portfolio student: ' + studentName);
         student.sessions.forEach(function(session) {

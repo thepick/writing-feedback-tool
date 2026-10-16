@@ -1,0 +1,136 @@
+{
+  "repair_id": "repair-069-regression-review",
+  "verdict": "accepted",
+  "blockers": [],
+  "base_commit": "2f1dcba5c848bad3ee2944503b22c16c0c367e65",
+  "inspected_git_commit": "2f1dcba5c848bad3ee2944503b22c16c0c367e65",
+  "summary": "The refactor shares the exact existing12-statement form overlay without moving either caller error boundary. The32 new contracts and all105 original cases pass in supplied original/candidate137-case reports, with identical complete new-case observations. No runtime defect or scanner closure claimed.",
+  "reviewed_source_test_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "base_git_lf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184"
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "base_git_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b"
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "base_git_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5"
+    },
+    "tests/settings-deletions-sync.cjs": {
+      "raw": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "lf": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "base_git_lf": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b"
+    },
+    "tests/settings-deletions-sync.browser.cjs": {
+      "raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "base_git_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "base_git_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b"
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "base_git_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94"
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "base_git_lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+    }
+  },
+  "helper_body_sha256_lf": "b49ede46cbb8a3aea8998944e3f2889e3a7aca6a7cbdf02c9d29db1122fec423",
+  "checks": [
+    {
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:550-590",
+        "js/app/00-storage-sync-patches.js:4464-4483"
+      ],
+      "result": "Full production reconstruction against immutable2f1d matches exactly: promote the existing nested body by indentation/explicit settings parameter, remove the duplicate snapshot overlay, replace both calls. All four lookups precede all eight assignments. Optional typeof checks, blank model/200-target defaults, checked booleans and strict override===true are unchanged. Required save/read/preflight/validation, rollback form restoration, dirty scheduling, snapshot soft catch/fallback and API-key redaction remain in their original callers."
+    },
+    {
+      "anchors": [
+        "tests/preference-integrity-scenarios.js:158-189",
+        "tests/preference-integrity-scenarios.js:190-205"
+      ],
+      "result": "Fourteen missing-control/helper cases cover every one of seven independent omissions for both writer and snapshot; expected fields come from independent fixture literals and pre-call DOM selection, never the new helper. Eight blank/flag cases force saved target444 then blank\u2192200, model blank, both checkbox states, and override true/false/1/stringtrue. The missing field alone retains its prior value. Successful writer publication is checked against snapshot no-write/no-schedule behavior, and credentials remain disk-only. Grammar5 versus saved3/missing-helper behavior is covered; this is not an exhaustive calibration matrix."
+    },
+    {
+      "anchors": [
+        "tests/preference-integrity-scenarios.js:206-240"
+      ],
+      "result": "Eight one-shot fault cases exercise both callers at third DOM lookup or grammar evaluation, with/without saved roster. Each asserts the fault was reached, exact3/4 lookup trace, zero writes/counters/pending dirty/schedules and exact durable bytes. Writer restores saved form and rethrows the same object; snapshot catches only the overlay fault, preserves exact early/partial fields, retains stored roster or uses Live fallback, and redacts the credential. Injected faults do not bypass the target helper or replace its output."
+    },
+    {
+      "anchors": [
+        "tests/preference-integrity-scenarios.js:241-258",
+        "js/app/storage-recovery.js:181-186"
+      ],
+      "result": "Two required snapshot failures remain outside the soft overlay try. Explicit preflight failure and the second settings read (first occurs in real preflight) rethrow the identical sentinel with zero DOM lookups/writes/publication. Actual observed read counts0/2 verify the intended boundaries rather than an unrelated earlier failure."
+    },
+    {
+      "anchors": [
+        "tests/preference-integrity-scenarios.js:17-56",
+        "tests/preference-integrity.browser.cjs:16-22",
+        "tests/preference-integrity-scenarios.js:684-706"
+      ],
+      "result": "Removing the100-line new contract block and one invocation restores all old scenario bytes after LF normalization. Original105 case names/order remain exactly in both137 reports; all cases pass. Per-case reset restores storage/state/form/counters, and every new hook is restored in finally. These are real full-page native helper calls under controlled faults; they reuse one page/JS realm with explicit reset, not137 browser contexts."
+    },
+    {
+      "anchors": [
+        "work/repair069-original/00-storage-sync-patches.js (worker snapshot)",
+        "outputs/repair069-original-contract/preference-integrity.json (worker artifact)"
+      ],
+      "result": "Preserved original source/settings-test snapshots match immutable2f1d LF bytes. Reused068 baseline pins match original production/raw scenario pins exactly. New scenarios were written05:42:40 UTC, original137 report05:42:46, production refactor05:43:15, candidate report05:43:21. The original contract run is described and chronologically supported as a pre-production-edit full checkout run; unlike068 it uses no route substitution. File mtimes/receipts support provenance but are not a cryptographic runner-input attestation."
+    }
+  ],
+  "caller_and_loader_review": "Promoted helper has only its two intended calls and no name collision. Native writer callers include preference wrapper, ID/roster persistence, page-hide save, required grade and neatness handlers. Snapshot feeds initial/newer settings sync, saveSettingsToDrive and archive freshness capture. Existing VM record-identity loader stubs writer; VM settings/deletions loader stubs snapshot. No new VM loader dependency or fixture change is required. Full-file reconstruction also leaves all068 policy changes intact.",
+  "validation": {
+    "original_cases_retained": 105,
+    "new_cases": 32,
+    "new_category_counts": {
+      "missing_both_callers": 14,
+      "blank_flags_both_callers": 8,
+      "fault_stage_roster_both_callers": 8,
+      "snapshot_required_reads": 2
+    },
+    "original_contract_cases": 137,
+    "candidate_contract_cases": 137,
+    "failed_in_supplied_reports": 0,
+    "complete_new_case_records_equal": true,
+    "additional_success_transcripts": {
+      "native_settings_deletions": 8,
+      "vm_settings_deletions": 14
+    },
+    "after_total": 159,
+    "after_native_total": 145,
+    "after_vm_total": 14,
+    "structured_case_json_count": 137,
+    "fixtures_match_base_lf_current_raw_hashes": {
+      "tests/fixtures/analysis-pipeline-baseline.js": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+      "tests/fixtures/portfolio-renderer-baseline.js": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe"
+    }
+  },
+  "evidence_receipt": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-069\\static-evidence.json",
+    "sha256_raw": "e6c826569283685dc2e2d16f23940d89c69a4eec9b24b6c8389bdcfe07b5a1a8",
+    "worker_report_sha256": "d380dede279846442f76cadd2625bff8c7374f8294c015b655cc3b8d794fb811",
+    "original137_json_sha256": "491e970b790363e51b3bf1b02b2b2ab717df4fb4ef22685c29bc3d7764ee1c80",
+    "candidate137_json_sha256": "491e970b790363e51b3bf1b02b2b2ab717df4fb4ef22685c29bc3d7764ee1c80",
+    "receipt_builder_sha256": "bac1d06c09dcbad8c8494d0992395f426cfc1533a306e1f6f106b6028a2a4aa9"
+  },
+  "limits": [
+    "Independent source/oracle/receipt inspection and Python-only text/hash comparisons; no app, test, browser, VM or worker script execution, source/Git/index/tracker mutation. Only own scratch/output written.",
+    "The14 VM sync cases stub the snapshot and therefore do not directly exercise the promoted overlay; the137 preference cases and8 native sync cases load actual production helpers.8/14 sync results and2 syntax checks are supplied success transcripts, not an invented structured JSON total.",
+    "No new before-failing bug demonstration is expected for this parity refactor. Controlled missing DOM/function and throwing-read seams establish contract behavior; no live cloud/account/model services or every user journey tested. Full combined gate/publication and scanner status remain coordinator-owned.",
+    "Exact source/test/receipt hashes are stable at review end. Only two production/test paths differ from2f1d outside concurrent coordinator audit documents. Original009/006 findings are not reopened or closed here."
+  ]
+}

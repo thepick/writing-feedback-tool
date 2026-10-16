@@ -42,7 +42,7 @@ for (const file of ['js/app/00-storage-sync-patches.js']) {
     });
 }
 for (const file of ['js/app/00-storage-sync-patches.js']) run(file + ': index latest uses chronology with legacy dates', () => {
-    const app = load(file, ['buildPortfolioIndexFromPortfolio'], { WFT_STUDENT_ID_MAP_V1: false, sanitizeStudentIdPart: value => value, localStorage: { getItem: () => null } });
+    const app = load(file, ['isWftPortfolioStudentKey', 'buildPortfolioIndexFromPortfolio'], { WFT_STUDENT_ID_MAP_V1: false, sanitizeStudentIdPart: value => value, localStorage: { getItem: () => null } });
     const result = app.buildPortfolioIndexFromPortfolio({ Alice: { sessions: [{ createdAt: 'Sun, 01 Feb 2026 00:00:00 GMT' }, { createdAt: '2026-03-01T00:00:00Z' }] } });
     assert.equal(result.students.Alice.latestSessionAt, '2026-03-01T00:00:00Z');
 });

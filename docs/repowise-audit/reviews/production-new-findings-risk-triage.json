@@ -1,0 +1,503 @@
+{
+  "scope": "Eight exact remaining unreviewed main-app records; excludes coverage-gradient and active068 source work.",
+  "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "inspected_git_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "tracker_source_commit_at_capture": "ed5783675bd334b165798eabaaeb01288afb339a",
+  "tracker_sha256_raw_at_capture": "970d2691449b1b40d4450073c87cf21365ac120c1509fa1e9dc16650a14aa360",
+  "source_pins": {
+    "js/app/10-main-app.js": {
+      "immutable_git_raw": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "immutable_git_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "checkout_raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "checkout_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "checkout_lf_matches": true
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "immutable_git_raw": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "immutable_git_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "checkout_raw": "8767b5a0b4354a851e5555a52d92e246b5a7f90fd3fa088f76abf3eabb057547",
+      "checkout_lf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184",
+      "checkout_lf_matches": false
+    },
+    "tests/crop-ownership.browser.cjs": {
+      "immutable_git_raw": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "immutable_git_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "checkout_raw": "ecfd9eb55e0771b5121a3f8ee56cde87c3e621a6d2f74b1bd98d57d4d9774507",
+      "checkout_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "checkout_lf_matches": true
+    },
+    "tests/portfolio-reassessment.browser.cjs": {
+      "immutable_git_raw": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "immutable_git_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "checkout_raw": "734117b34ead8d9ffedc261ceab125122280d1faec10adb59c17604be434157b",
+      "checkout_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+      "checkout_lf_matches": true
+    },
+    "tests/analysis-identity.browser.cjs": {
+      "immutable_git_raw": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+      "immutable_git_lf": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+      "checkout_raw": "f0ee4d47417a09edac1f2cceefb59fe19ce757792e086c7b5e7fbcff7668a952",
+      "checkout_lf": "c139964a25a044e6c1d133d835222d0a2a1de86ec1852d49e8ae0635b095e0c0",
+      "checkout_lf_matches": true
+    },
+    "tests/main-app-health.browser.cjs": {
+      "immutable_git_raw": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "immutable_git_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "checkout_raw": "5017cfc1cceaf2ef5696c4667e7659d1b547fe402b0617809ab03ac5463bcfe0",
+      "checkout_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "checkout_lf_matches": true
+    },
+    "tests/corrupt-portfolio.browser.cjs": {
+      "immutable_git_raw": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "immutable_git_lf": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "checkout_raw": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "checkout_lf": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "checkout_lf_matches": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "immutable_git_raw": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+      "immutable_git_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+      "checkout_raw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+      "checkout_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+      "checkout_lf_matches": true
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_ad7c01937836a1871672",
+      "marker": "complex_method",
+      "severity": "high",
+      "line_start": 3537,
+      "line_end": 3591,
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 20,
+        "nloc": 55,
+        "dispatch_share": 0.0,
+        "symbol_line": 3537,
+        "symbol_index": 72,
+        "deepest_block": {
+          "start": 3538,
+          "end": 3538
+        }
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        3537,
+        3591
+      ],
+      "function_sha256_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237",
+      "metrics": {
+        "ccn": 21,
+        "cognitive": 20,
+        "nloc": 55,
+        "max_nesting": 1,
+        "bumps": 0,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "preview reorder drop callback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_state_mutation_with_bounds",
+      "reason": "Retain the55-line operation. MIME/text fallback, NaN/equality/range rejection and terminal drag cleanup prevent undefined photo insertion; desktop/mobile insertion geometry, photo object identity, primary state and OCR invalidation form one mutation. Removing guards reintroduces045; sharing a cleanup helper only to reduce CCN adds little benefit. Existing parseInt prefix behavior is explicitly tested. In-range stale drag identity remains the documented045 limit, not a new reproduced bug.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:3435-3592",
+        "js/app/10-main-app.js:3211-3231"
+      ],
+      "test_assertion_references": [
+        "tests/crop-ownership.browser.cjs:206-219 (13 explicit drop scenarios)",
+        "tests/crop-ownership.browser.cjs:222-280 (real bound events; exact photo/reference/owner/storage preservation and valid order/OCR assertions)"
+      ],
+      "regression_recommendation": "Retain existing valid desktop/mobile, malformed/stale-range and no-op controls. If changing this code, require those exact state and OCR invariants; no cleanup admitted.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_1951a20d00b3e70a4c87",
+      "marker": "complex_method",
+      "severity": "high",
+      "line_start": 7756,
+      "line_end": 7777,
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 16,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 7756,
+        "symbol_index": 105,
+        "deepest_block": {
+          "start": 7760,
+          "end": 7765
+        }
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        7756,
+        7777
+      ],
+      "function_sha256_lf": "73b69c3adce18a801958f865cef8db494305b0e0ca14f62776032dd0690e49d3",
+      "metrics": {
+        "ccn": 15,
+        "cognitive": 16,
+        "nloc": 22,
+        "max_nesting": 2,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "reassessment image-restoration completion callback",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_partial_failure_and_preference_contract",
+      "reason": "Retain the22-line completion handler. Null result means the restore was superseded; subsequent branches distinguish no images, all missing, partial and complete restoration. Neatness is enabled only with restored pixels and saved session intent. Required preference-save failure reports the saved policy and ends loading with actionable status rather than claiming success. Repeated result&& tests after the null guard are redundant but too small to justify a separate source edit; no change admitted merely to lower CCN15.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7600-7646 (restore context guard)",
+        "js/app/10-main-app.js:7756-7783",
+        "js/app/10-main-app.js:7570-7575"
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity-scenarios.js:117-128 (late neatness save failure preserves loaded writing and saved policy)",
+        "tests/analysis-identity.browser.cjs:66-79,226-231 (held restore cannot replace Bob images/writing)",
+        "tests/portfolio-reassessment.browser.cjs:217-225 (ordinary real photo restoration)"
+      ],
+      "regression_recommendation": "Keep success/zero/partial restoration statuses and late-neatness-failure controls if this handler changes; no additional test admission required by this shape warning.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_e9b9e167c0cfe58a5dca",
+      "marker": "bumpy_road",
+      "severity": "medium",
+      "line_start": 7649,
+      "line_end": 7784,
+      "verified_observation_details": {
+        "bumps": 4,
+        "ccn": 17,
+        "max_nesting": 2,
+        "symbol_line": 7649,
+        "deepest_block": {
+          "start": 7651,
+          "end": 7660
+        }
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        7649,
+        7784
+      ],
+      "function_sha256_lf": "b620d25c36d59e71cbf9efceba0581fda86c01dd2ac05ba81706c1c8eee850d7",
+      "metrics": {
+        "ccn": 17,
+        "cognitive": 28,
+        "nloc": 124,
+        "max_nesting": 2,
+        "bumps": 4,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "reassessPortfolioSession",
+      "proposed_status": "reviewed_no_change",
+      "classification": "required_confirm_revalidation_transaction",
+      "reason": "Retain the four independent error/guard regions. Initial strict source read, current-work snapshot, post-dialog freshness recheck and grade persistence each stop before destructive owner/text/pending changes. The raw portfolio/deletion bytes and full current-work comparison deliberately demand retry when saved or current work changes. The full function is byte-identical to reviewed039v2. Flattening this bumpy-road warning would hide which failure preserves current work; extracting wrappers offers no cause-level improvement.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7649-7784",
+        "js/app/00-storage-sync-patches.js:7513@ed578367 (public Reassess Writing button)"
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-reassessment.browser.cjs:76-237 (16 named cases: actual dialogs, second-tab deletion, delayed analysis, raw-source/current-work preservation)",
+        "tests/preference-integrity-scenarios.js:103-116 (grade failure keeps current writing/pending/owner)"
+      ],
+      "regression_recommendation": "Preserve existing held-dialog source/current-work, legacy/no-date, cancel/ordinary and grade-write controls. No simplification admission.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_ed8b27684e0a7efb7dfa",
+      "marker": "complex_conditional",
+      "severity": "high",
+      "line_start": 7677,
+      "line_end": 7677,
+      "verified_observation_details": {
+        "operator_count": 5,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 7673,
+        "symbol_index": 104
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        7673,
+        7692
+      ],
+      "function_sha256_lf": "ada29a57d4ca3f9e03fbae7184872d99bdb85127a0c0acf28afc73a945889708",
+      "metrics": {
+        "ccn": 12,
+        "cognitive": 12,
+        "nloc": 20,
+        "max_nesting": 2,
+        "bumps": 1,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "reassessment readCurrentWork pending validation",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_stored_data_trust_boundary",
+      "reason": "Retain the five-operator condition as one visible stored-pending validity rule. It rejects missing/blank/non-string owner and missing/non-object/array sessionData before serializing the confirmation snapshot. null storage is deliberately distinct from malformed stored JSON. Splitting it into truthy defaults or a generic schema helper could collapse those distinctions; one use does not justify another abstraction. Snapshot storage-only pending bytes remain separate from cached pending identity.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:7673-7692",
+        "js/app/10-main-app.js:7694-7702,7717-7731"
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-reassessment.browser.cjs:146-162,180-201,209-216 (corrupt/read-failed/storage-only pending and exact preservation)",
+        "tests/portfolio-reassessment.browser.cjs:74-77,250-254 (fixed16-case/79-check completeness)"
+      ],
+      "regression_recommendation": "Existing malformed JSON/read/storage-only-change controls ground the rule. The suite does not enumerate every malformed owner/sessionData type, so no exhaustive schema-test claim; no bug or extra admission established.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_c25d0e7c6711f996d0ec",
+      "marker": "error_handling",
+      "severity": "low",
+      "line_start": 8556,
+      "line_end": 8556,
+      "verified_observation_details": {
+        "kind": "swallowed_catch",
+        "symbol_line": 8553,
+        "symbol": "<anonymous>",
+        "symbol_index": 127
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        8553,
+        8565
+      ],
+      "function_sha256_lf": "59942b6825e815d40e5feab39fe43f669878d5e801c3993383e7bc8dffe7646e",
+      "metrics": {
+        "ccn": 5,
+        "cognitive": 11,
+        "nloc": 12,
+        "max_nesting": 3,
+        "bumps": 2,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "pagehide V2 catch",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_last_chance_lifecycle_guard",
+      "reason": "Retain: shipped V2 invokes the guarded local snapshot helper, then returns before legacy Drive work. The helper checks unresolved recovery, preflights required storage, restores dirty suppression in finally and uses a strict portfolio snapshot/write boundary. This outer catch neither clears pending work nor acknowledges successful sync. Throwing out of pagehide supplies no durable recovery. Exact callback bytes match prior009; current immutable lower-level protections were re-read.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:8553-8558",
+        "js/app/00-storage-sync-patches.js:5974-5993@ed578367",
+        "js/app/00-storage-sync-patches.js:5576-5587@ed578367"
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:43-55,64-85 (both lifecycle flags preserve corrupt bytes and page usability)",
+        "tests/preference-integrity-scenarios.js:97-100 (failed page-hide preferences preserve dirty suppression)"
+      ],
+      "regression_recommendation": "Keep corruption/required-save failure oracles. No new production defect follows from this empty catch.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_3f19bbf58ac3a6254f7c",
+      "marker": "error_handling",
+      "severity": "low",
+      "line_start": 8564,
+      "line_end": 8564,
+      "verified_observation_details": {
+        "kind": "swallowed_catch",
+        "symbol_line": 8553,
+        "symbol": "<anonymous>",
+        "symbol_index": 127
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        8553,
+        8565
+      ],
+      "function_sha256_lf": "59942b6825e815d40e5feab39fe43f669878d5e801c3993383e7bc8dffe7646e",
+      "metrics": {
+        "ccn": 5,
+        "cognitive": 11,
+        "nloc": 12,
+        "max_nesting": 3,
+        "bumps": 2,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "pagehide legacy catch",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_disabled_compatibility_lifecycle_guard",
+      "reason": "Retain: shipped WFT_SYNC_ENGINE_V2=true bypasses this compatibility branch. With V2 deliberately disabled, savePortfolioData rechecks strict stored bytes before validating/writing, so getPortfolioData display fallback cannot overwrite corruption; a synchronous save failure skips syncAllToDrive. The catch makes no successful-save claim. Removing the legacy path or changing async upload policy is outside a warning-only cleanup and lacks a demonstrated benefit here.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:8559-8565",
+        "js/app/00-storage-sync-patches.js:1061,6388-6395,6447-6480@ed578367"
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:43-55,64-85 (actual pagehide with V2=false; preserved bytes/no writes/no page errors)"
+      ],
+      "regression_recommendation": "Retain legacy corruption controls. These tests do not establish reliable network completion while a browser unloads; no such claim is made.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_d0a29fc7d94027468ce3",
+      "marker": "error_handling",
+      "severity": "low",
+      "line_start": 8571,
+      "line_end": 8571,
+      "verified_observation_details": {
+        "kind": "swallowed_catch",
+        "symbol_line": 8567,
+        "symbol": "<anonymous>",
+        "symbol_index": 128
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        8567,
+        8581
+      ],
+      "function_sha256_lf": "50e586081fd78a776f78bf2271e196fd126f221a36702d454f6cfd7a0268f343",
+      "metrics": {
+        "ccn": 7,
+        "cognitive": 14,
+        "nloc": 14,
+        "max_nesting": 3,
+        "bumps": 2,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "visibilitychange V2 catch",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_hidden_page_local_retry_guard",
+      "reason": "Retain separately from pagehide: visible events return; hidden events call only the guarded local saver and return before legacy cloud work. Its outer catch avoids an unhandled lifecycle exception without changing durable state or claiming completion. Exact full visibility callback matches prior009. The additional00 lifecycle listener is existing behavior; deduplicating listeners without an observed failure would expand this review into a separate lifecycle redesign.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:8567-8573",
+        "js/app/00-storage-sync-patches.js:5974-5993,6010-6019@ed578367"
+      ],
+      "test_assertion_references": [
+        "tests/main-app-health.browser.cjs:102-123 (captured actual handler, visible/hidden and sync/read/save failures)",
+        "tests/corrupt-portfolio.browser.cjs:43-55,64-85 (real hidden event preserves damaged storage)"
+      ],
+      "regression_recommendation": "Keep call-order and real corrupted-byte checks. No new admission from advisory empty-catch syntax.",
+      "scanner_finding_remains_open": true
+    },
+    {
+      "record_id": "code_health:finding_69d1bc385dda23bbfa08",
+      "marker": "error_handling",
+      "severity": "low",
+      "line_start": 8580,
+      "line_end": 8580,
+      "verified_observation_details": {
+        "kind": "swallowed_catch",
+        "symbol_line": 8567,
+        "symbol": "<anonymous>",
+        "symbol_index": 128
+      },
+      "detector_replay_match": true,
+      "owner_span": [
+        8567,
+        8581
+      ],
+      "function_sha256_lf": "50e586081fd78a776f78bf2271e196fd126f221a36702d454f6cfd7a0268f343",
+      "metrics": {
+        "ccn": 7,
+        "cognitive": 14,
+        "nloc": 14,
+        "max_nesting": 3,
+        "bumps": 2,
+        "dispatch_share": 0.0
+      },
+      "file": "js/app/10-main-app.js",
+      "symbol": "visibilitychange legacy catch",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_hidden_legacy_compatibility_guard",
+      "reason": "Retain: the non-V2 path is hidden-only and disabled by the shipped true flag. Its strict save precedes optional sync; read/save exceptions stop later work, and async helpers own their own failure reporting. The captured-handler tests explicitly assert visible no-op, signed-in branching and failure short-circuiting. Propagating from a hidden-page event would not preserve more data; no useful cause-level edit identified.",
+      "evidence_anchors": [
+        "js/app/10-main-app.js:8574-8581",
+        "js/app/00-storage-sync-patches.js:1061,6388-6395,6447-6480@ed578367"
+      ],
+      "test_assertion_references": [
+        "tests/main-app-health.browser.cjs:102-123 (all flag/visibility/token/failure combinations)",
+        "tests/corrupt-portfolio.browser.cjs:43-55,64-85 (legacy hidden corruption preservation)"
+      ],
+      "regression_recommendation": "Maintain existing compatibility and corruption oracles; no change admitted.",
+      "scanner_finding_remains_open": true
+    }
+  ],
+  "prior_source_reuse": [
+    {
+      "current_span": [
+        8553,
+        8565
+      ],
+      "prior_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+      "matching_prior_spans": [
+        [
+          8469,
+          8481
+        ]
+      ],
+      "full_body_equal": true
+    },
+    {
+      "current_span": [
+        8567,
+        8581
+      ],
+      "prior_commit": "0ef4475a8c240d11d1fc888f6197c2f61bde980f",
+      "matching_prior_spans": [
+        [
+          8483,
+          8497
+        ]
+      ],
+      "full_body_equal": true
+    },
+    {
+      "review": "repair-041-reassessment-v2-review.json",
+      "current_span": [
+        7649,
+        7784
+      ],
+      "preview_span": [
+        7624,
+        7759
+      ],
+      "full_body_equal": true
+    }
+  ],
+  "prior_reviews": [
+    {
+      "path": "outputs/repowise-repairs/repair-009-failure-guards.json",
+      "sha256_raw": "41993443c16fbdeb50b03bd642fff78a7c8ff846365476c4d6bc688be2ac2395"
+    },
+    {
+      "path": "outputs/repowise-repairs/repair-041-reassessment-v2-review.json",
+      "sha256_raw": "bb630a681ae5e67cb5e02f3f1eee04c2bf134915157462956458f2a090ae9078"
+    },
+    {
+      "path": "outputs/repowise-repairs/repair-045-photo-reorder.json",
+      "sha256_raw": "57609c114007b35783cfd2c48194dadddc01ea2e23f926f594a94b07ae4d51b1"
+    },
+    {
+      "path": "outputs/repowise-repairs/batch-005-regression-review.json",
+      "sha256_raw": "09299e54f94f2c4b4464a65ec2f45f682833db25caa66cbedce4e85716a98461"
+    }
+  ],
+  "summary": {
+    "records": 8,
+    "reviewed_no_change": 8,
+    "meaningful_source_admissions": 0,
+    "new_behavior_leads": 0,
+    "detector_replays_matched": 8,
+    "scanner_closures_claimed": 0,
+    "tests_run": 0
+  },
+  "additional_leads": [],
+  "blockers": [],
+  "evidence_receipt": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-production-new\\static-receipt.json",
+    "sha256_raw": "5f1eafa759c0ed330bbd34205295759937214c0ff0881a549d47ea37dc1546e1"
+  },
+  "limits": [
+    "Read complete target functions and relevant callers/guards/test assertion contracts. Replayed installed pure walker and four local biomarker classes with Python -B; reason/severity/details plus current owner/ordinal/deepest metadata match. No app/test/browser execution, fresh scan/index changes or tracker adoption.",
+    "Main source ated578367 and inspected HEAD remains normalized-LF2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b. All six inspected test files match immutableed source normalized bytes. Current00 checkout is being edited by sole068 writer and differs fromed; application context here is read only from Git ed, not a current whole-app freeze claim. Any068 caller/policy changes require coordinator reconciliation.",
+    "Prior039 and045 evidence is reused with documented seams; no new pass counts asserted. Native drag payloads and some storage faults are controlled inputs; genuine in-range stale drag reachability remains unproven. Advisory shape/swallowed-catch findings alone do not demonstrate a user-visible bug.",
+    "Review statuses are recommendations for the eight stable tracker IDs only; no automatic scanner closure or optional cleanup admission."
+  ]
+}

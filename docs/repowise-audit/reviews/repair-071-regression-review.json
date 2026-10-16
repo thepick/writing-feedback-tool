@@ -1,0 +1,169 @@
+{
+  "review_id": "repair-071-regression-review",
+  "verdict": "accepted",
+  "blockers": [],
+  "base_commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "inspected_git_commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "scope": "Only crop-transparency test and report-output seam changed; production and named prior068-070 source/test pins independently matched base. Coordinator audit documents may differ. No application/test execution by reviewer.",
+  "source_pins": {
+    "tests/crop-transparency.browser.cjs": {
+      "raw_sha256": "23c93f2d069fef6ed3eb873760b1381cd62fca5caf1222ae990c96c3bae723f3",
+      "lf_sha256": "1dc14ce79d9de3cd3b35b2dc7cfbb8075f431f9671c555a1c9009b8e47ca690c",
+      "base_lf_equal": false
+    },
+    "js/app/photo-crop.js": {
+      "raw_sha256": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+      "lf_sha256": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "base_lf_equal": true
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "base_lf_equal": true
+    },
+    "js/app/10-main-app.js": {
+      "raw_sha256": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf_sha256": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "base_lf_equal": true
+    },
+    "js/app/portfolio-export.js": {
+      "raw_sha256": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf_sha256": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "base_lf_equal": true
+    },
+    "js/app/storage-recovery.js": {
+      "raw_sha256": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "base_lf_equal": true
+    },
+    "tests/support/local-app-route.js": {
+      "raw_sha256": "c2a198f3d2cd2be8716d02d6ce74e8863ba2a166f369378631f2f247948b7037",
+      "lf_sha256": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+      "base_lf_equal": true
+    },
+    "tests/crop-ownership.browser.cjs": {
+      "raw_sha256": "ecfd9eb55e0771b5121a3f8ee56cde87c3e621a6d2f74b1bd98d57d4d9774507",
+      "lf_sha256": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "base_lf_equal": true
+    },
+    "tests/script-loading.browser.cjs": {
+      "raw_sha256": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "lf_sha256": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "base_lf_equal": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw_sha256": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf_sha256": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "base_lf_equal": true
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw_sha256": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf_sha256": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "base_lf_equal": true
+    },
+    "tests/record-identity.cjs": {
+      "raw_sha256": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf_sha256": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "base_lf_equal": true
+    },
+    "tests/session-retention.cjs": {
+      "raw_sha256": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf_sha256": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "base_lf_equal": true
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw_sha256": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf_sha256": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "base_lf_equal": true
+    },
+    "tests/archive-failures.browser.cjs": {
+      "raw_sha256": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "lf_sha256": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "base_lf_equal": true
+    },
+    "index.html": {
+      "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+      "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+      "base_lf_equal": true
+    },
+    "scripts/run-tests.cjs": {
+      "raw_sha256": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca",
+      "lf_sha256": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+      "base_lf_equal": true
+    },
+    "scripts/case-report-suites.json": {
+      "raw_sha256": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+      "lf_sha256": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+      "base_lf_equal": true
+    }
+  },
+  "artifact_root": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-007-storage-safety",
+  "artifact_sha256": {
+    "work/repair071-original/crop-transparency.browser.cjs": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+    "work/repair071-mouse-diagnostic.cjs": "a759c0c2daab6282386efc573afa8b9816f600da2384e0bf0cb9133a68cbceea",
+    "work/make-repair071-receipt.cjs": "18b49b79c2a5a2ccd751c5fb7f4ee3da23c14e677a60a8590b15578caee561d3",
+    "outputs/repair071-baseline/crop-transparency.log": "a5261d30f15697626aa417b7a1f4124ac54e85dd5bc475d4a31130f686e7b459",
+    "outputs/repair071-fixed/attempt-1.json": "edc72490ffbbaabd91d95a3f0428c7b38542e623516701d3fd0ec9fab13a4683",
+    "outputs/repair071-fixed/attempt-1.log": "a3909984f7dce0a76fdf620922f3f5fd4fdf9fabcb7d860f577ed93449e7e004",
+    "outputs/repair071-fixed/diagnostic.json": "545086a809e939463e88034e824166662d83d9a8479c15d771eaec8bf3495c39",
+    "outputs/repair071-fixed/diagnostic.log": "80cf7478db2ca32607fca636c85259479d8e73141ef3f61575f86e5633fb542e",
+    "outputs/repair071-fixed/crop-transparency.json": "7446455637c2324b22dae33878e7f28681099c68324ce7a91570fc4a5772fbf1",
+    "outputs/repair071-fixed/crop-transparency.log": "49249f298f212a7d9b84b548769d4e315b5617b1e703a1b40241a3f6128a790b",
+    "outputs/repair071-fixed/crop-ownership.json": "55baa9328444e84389e514705aec3c640801d7a53e741959c803a002e24fad17",
+    "outputs/repair071-fixed/script-loading.json": "7c96cb2effe48f8bc1f5fc8262b1c5ed87dc89a4755bd55d8a06634ba88cc2d7",
+    "coordinator_receipt": "08bd5354da57ff40d538ea79bc1757e0231ee050e0418bd19eca62c2cc1f88bf"
+  },
+  "evidence": [
+    {
+      "anchors": "tests/crop-transparency.browser.cjs:1-48,138-142",
+      "assessment": "Removing exactly the new loop and reversing only fs import/report-output additions reconstructs original Git test byte-for-byte after LF normalization. Original four complete native observations/reset rows equal baseline exactly; no original oracle removed."
+    },
+    {
+      "anchors": "tests/crop-transparency.browser.cjs:49-134; js/app/10-main-app.js:3202-3351,3450-3456; js/app/photo-crop.js:96-116,129-181,214-254",
+      "assessment": "Real optimize/acquisition and preview listener, visible Crop/Apply buttons, Playwright mouse and Chromium CDP touch-reverse reach unchanged document listeners. New loop contains no rectangle assignment, synthetic DOM dispatch or direct getCropPos/open/apply call. Literal bitmap200x100/render100x50 produces independent region10,10,100,60; native released rects match forward/reverse literals. Trusted overlay release and subsequent movement/title touch preserve stopped drag and region."
+    },
+    {
+      "anchors": "tests/crop-transparency.browser.cjs:59-77,112-134",
+      "assessment": "Independent asymmetric transparent PNG black/red/blue geometry; native JPEG decoded with canvas, dimensions100x60 and five literal source-relative white/black/red samples checked channel delta<15 and alpha255. Exact original PNG retained. Target identity stable/revision advanced, Drive/OCR cleared and pending upload set; other photo bytes/metadata/promise, image queue/object identities, writing/owner, six storage values, pending/source values and identities preserved."
+    },
+    {
+      "anchors": "repair071-fixed/attempt-1.json; diagnostic.log first mouse row; fixture alignment test:85-87",
+      "assessment": "Initial six-case run has exactly one mouse failure y8 versus literal y10, touch passes. Diagnostic records overlay top273.90625 and actual clientY278: round((278-273.90625)*2)=8. Aligning both fixture canvas origins to whole pixels preserves original dimensions,100x60 expected crop and pixel literals; no production bug established."
+    },
+    {
+      "anchors": "test:136-144; scripts/run-tests.cjs:34-45,53-88",
+      "assessment": "Every new per-case exception becomes failed row; final assertion rejects any failure and outer rejection sets nonzero exit. Report is written through existing WFT_TEST_REPORT runner alias; malformed/failed report and nonzero child independently fail runner. Existing suite auto-discovery includes this file; no full-runner rerun claimed."
+    }
+  ],
+  "counts": {
+    "crop-transparency": {
+      "cases": 6,
+      "failed": 0
+    },
+    "crop-ownership": {
+      "cases": 51,
+      "failed": 0
+    },
+    "script-loading": {
+      "cases": 2,
+      "failed": 0
+    }
+  },
+  "baseline": {
+    "cases": 4,
+    "failed": 0,
+    "original_four_complete_observations_equal": true
+  },
+  "initial_exploratory_attempt": {
+    "cases": 6,
+    "failed": 1,
+    "cause": "test fixture fractional mouse coordinate alignment"
+  },
+  "new_block_lf_sha256": "01070fa2a847c867718bc6d1bf70ac399332c0863207c31eaf21833a0264e7f0",
+  "limits": [
+    "Saved native receipts were inspected, not rerun; hashes bind current frozen files and artifacts, not independent process attestation. Intermediate failing full test source is not separately immutable; diagnostic wrapper/log plus final source and before/after receipt support the narrow fixture diagnosis.",
+    "Touch is trusted Chromium browser-dispatched input on headless Edge, not physical touchscreen validation. Fixed1000x800 viewport and2:1CSS scale; fixture origin alignment intentionally does not test fractional-origin calibration.",
+    "Five interior pixel samples provide substantive asymmetric region checks but do not reject every one-pixel shift or exhaustively compare pixels/formats. Synthetic files and controlled initial globals/metadata; acquisition and crop callbacks remain real.",
+    "No production defect, fresh coverage, whole-repository gate, scanner closure, real accounts, AI or network behavior claimed."
+  ]
+}

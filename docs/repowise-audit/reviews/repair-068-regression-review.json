@@ -1,0 +1,170 @@
+{
+  "repair_id": "repair-068-regression-review",
+  "verdict": "accepted",
+  "blockers": [],
+  "summary": "Exact source change preserves the six-name portfolio-root policy across five consumers. Four new native contracts pass against actual preserved original00 bytes and candidate bytes; original1255 structured cases remain, yielding1259 after. This is refactor contract evidence, not an old-failure bug reproduction or scanner closure.",
+  "base_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "inspected_git_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+  "reviewed_source_test_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "8767b5a0b4354a851e5555a52d92e246b5a7f90fd3fa088f76abf3eabb057547",
+      "lf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184",
+      "base_git_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84"
+    },
+    "tests/record-identity.cjs": {
+      "raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "base_git_lf": "4c83735efe9842509eb351749c59bc2de6aa2c5de73c2923e0e4cbefd70c4b0d"
+    },
+    "tests/session-retention.cjs": {
+      "raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "base_git_lf": "7ae6c307b585bd4412d9520456cc2fffe9e1b30f76278e17589ed5d7c1adfa1f"
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "base_git_lf": "a90a478d841753ddabb657153dcd5cca887b69d8106f5bc831c8bb297c3f70c4"
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "base_git_lf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499"
+    }
+  },
+  "evidence": [
+    {
+      "anchor": "js/app/00-storage-sync-patches.js:1333-1335,1343,1593,1855,2351,6383",
+      "finding": "Full-file reconstruction from immutablee8 confirms only one six-comparison positive predicate, four filter substitutions and one validator skip changed. Object.keys supplies string names, so exact case-sensitive comparison preserves the old array.indexOf and inline-filter meanings, key order and getter suppression. Separate five-name normalizePortfolioData policy, including _meta eligibility, is untouched."
+    },
+    {
+      "anchor": "tests/record-identity.browser.cjs:174-207",
+      "finding": "First contract calls real schema/index/health/roster consumers and separately normalizePortfolioData. Literal expected five eligible names plus retained _meta attachment, null prototypes, exact session/summary outputs and roster key/name order are independent of the new helper. Health/roster receive a controlled portfolio-provider seam; actual native ID generation/settings persistence remain. Generated IDs are checked for uniqueness/type/prefix rather than frozen random values."
+    },
+    {
+      "anchor": "tests/record-identity.browser.cjs:208-235",
+      "finding": "Six reserved-name payload variants remain valid while malformed near-match/case-variant students/sessions are passed through actual savePortfolioLocalOnly. Exact TypeError messages distinguish the intended validation from unrelated preflight failures; all Storage.setItem calls are counted and must be zero, with portfolio bytes unchanged. Five invalid roots reject separately. No catch can silently turn an unexpected successful save into a passing expected rejection."
+    },
+    {
+      "anchor": "tests/record-identity.browser.cjs:236-262",
+      "finding": "Throwing reserved getters are excluded by index/validator/health and untouched by roster enumeration. Schema explicitly preserves Alice then_meta twice. Validator checks Alice/sessions/sessions/Bob read order and exact sentinel identity. These literal trace expectations preserve evaluation behavior rather than recomputing expectations through the helper."
+    },
+    {
+      "anchor": "tests/record-identity.browser.cjs:263-281",
+      "finding": "Fourth contract preserves legacy array conversion, invalid-student skipping, safe-mode object identity, zero real-ID allocations under skipStudentIds and unchanged source/settings. It exercises the actual normalizer/index plus safe-mode roster early return."
+    },
+    {
+      "anchor": "work/repair068-original-policy.cjs:1-11 (worker folder)",
+      "finding": "Wrapper changes exactly one existing route response body expression in memory. A resolved-path comparison substitutes only00 with the preserved original file; every other local asset stays native and external origins remain blocked. Original raw0ddb92... equals the preserved pre-edit snapshot and immutablee8 normalized bytes. First log line records that same hash. The new original-policy run occurs after candidate edits; it is not presented as an unmodified pre-edit checkout."
+    },
+    {
+      "anchor": "tests/record-identity.browser.cjs:135-155; three VM loader diffs",
+      "finding": "Each native case reloads the complete app into a fresh document/JS realm and clears/seeds local storage. It reuses one page/browser context, not54 separate browser contexts. Removing the108 inserted lines restores every old native source byte after LF normalization; loader changes only add the real predicate at five extraction sites. Incidental portfolio-replacement extraction includes the harmless declaration; portfolio-save already stubs its normalizer/validator and needs no loader change."
+    }
+  ],
+  "case_receipts": {
+    "structured_suites": [
+      {
+        "suite": "record-identity.cjs",
+        "before": 34,
+        "after": 34,
+        "original_names_order_retained": true
+      },
+      {
+        "suite": "session-retention.cjs",
+        "before": 4,
+        "after": 4,
+        "original_names_order_retained": true
+      },
+      {
+        "suite": "record-identity.browser.cjs",
+        "before": 50,
+        "after": 54,
+        "original_names_order_retained": true
+      },
+      {
+        "suite": "preference-integrity.browser.cjs",
+        "before": 105,
+        "after": 105,
+        "original_names_order_retained": true
+      },
+      {
+        "suite": "portfolio-index.browser.cjs",
+        "before": 189,
+        "after": 189,
+        "original_names_order_retained": true
+      },
+      {
+        "suite": "session-retention.browser.cjs",
+        "before": 89,
+        "after": 89,
+        "original_names_order_retained": true
+      },
+      {
+        "suite": "storage-integrity.browser.cjs",
+        "before": 784,
+        "after": 784,
+        "original_names_order_retained": true
+      }
+    ],
+    "before_total": 1255,
+    "after_total": 1259,
+    "after_vm": 38,
+    "after_native": 1221,
+    "original_case_names_order_retained": true,
+    "all_supplied_structured_cases_pass": true,
+    "four_contract_original_candidate_observation_comparison": [
+      {
+        "name": "portfolio-root-policy/schema-index-health-roster",
+        "original_pass": true,
+        "candidate_pass": true,
+        "observations_equal_except": [
+          "ids (fresh generated values; native assertions check uniqueness/type/roster ownership)"
+        ]
+      },
+      {
+        "name": "portfolio-root-policy/strict-validation-before-writes",
+        "original_pass": true,
+        "candidate_pass": true,
+        "observations_equal_except": []
+      },
+      {
+        "name": "portfolio-root-policy/ignored-getters-and-error-order",
+        "original_pass": true,
+        "candidate_pass": true,
+        "observations_equal_except": []
+      },
+      {
+        "name": "portfolio-root-policy/legacy-safe-mode-skip-identities",
+        "original_pass": true,
+        "candidate_pass": true,
+        "observations_equal_except": []
+      }
+    ],
+    "portfolio_sync": "Unstructured successful transcript before/after; excluded from structured totals.",
+    "frozen_fixtures_unchanged": {
+      "tests/fixtures/analysis-pipeline-baseline.js": {
+        "raw": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+        "lf": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36"
+      },
+      "tests/fixtures/portfolio-renderer-baseline.js": {
+        "raw": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe",
+        "lf": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe"
+      }
+    }
+  },
+  "receipt_pins": {
+    "worker_report": "ac93e2fb18977f48780213bc4f72b7e192447e4cec07d2fc9f2e254a238824db",
+    "original_route_wrapper": "e70fdbbd92f3d4e1c644aef5635926ab5e25882976d29254298ca5d1c9c1e906",
+    "original_policy_result": "96195579b8faabac572b7b1a4b7d0ae9a410a5e143e884096d09a7cfdc753740",
+    "candidate_identity_result": "98f6032dfe01ccfbdbc8a66feeddb85278ac1877bd0c27e108de3a8e0f26bd7c",
+    "all_artifacts_full_hash_receipt": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-068\\static-evidence.json",
+    "full_hash_receipt_sha256": "6ff9ca3abd763ef401b366c0b14a02ae753f99c58a5abf49151260fe1f6b20e6"
+  },
+  "limits": [
+    "Read-only review of source/diffs, actual oracles, preserved original bytes and supplied logs/results; no tests/app/browser/probes, source/Git/index/tracker writes or execution of worker scripts. Only reviewer scratch/output written.",
+    "All1255 prior cases and source assertions remain; no independent assertion-count total or cryptographic runner attestation inferred. Worker exit/syntax success comes from supplied report/transcripts; reviewer did not rerun. Full repository gate, integration/publication and fresh scanner disposition remain coordinator-owned.",
+    "Mixed metadata/portfolio objects and getter/storage failures are controlled synthetic seams. Native local consumers and persistence are real; no live Google/AI/account traffic, no proof for arbitrary future metadata keys or every UI path.",
+    "Exact tested source/test/receipt hashes remain stable at review end. Concurrent coordinator tracker documents differ frome8; production/test diff outside audit metadata is exactly the five reviewed files."
+  ]
+}

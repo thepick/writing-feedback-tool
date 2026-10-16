@@ -171,6 +171,114 @@ async function runStudentIdentityCases(run) {
             for (const name of r.stored) assert.ok(r.dropdown.includes(name));
         });
         await runStudentIdentityCases(run);
+        await run('portfolio-root-policy/schema-index-health-roster', () => {
+            const entry = name => ({ id: 'saved-' + name, originalText: 'Synthetic ' + name, images: [], overall: 80,
+                createdAt: '2026-10-01T00:00:00Z', updatedAt: '2026-10-01T00:00:00Z', normalizedAt: '2026-10-01T00:00:00Z', dateIso: '2026-10-01', displayDate: 'Oct 1, 2026' });
+            const portfolio = Object.fromEntries(['_meta', 'updatedAt', '__syncMeta', 'syncMeta', 'lastSyncedAt', 'lastSyncStatus', '__proto__', 'constructor', 'Alice', '_Meta', 'lastSyncStatusExtra'].map(name => [name, { sessions: [entry(name)] }]));
+            const before = JSON.stringify(portfolio);
+            localStorage.setItem('wft_portfolio', before); localStorage.setItem('wft_students', '[]');
+            WFT_STUDENT_ID_MAP_V1 = false;
+            const normalized = normalizeWftPortfolioForSchemaV1(portfolio), index = buildPortfolioIndexFromPortfolio(portfolio);
+            const legacyKeys = Object.keys(normalizePortfolioData(portfolio));
+            const get = getPortfolioData;
+            let health;
+            try {
+                getPortfolioData = () => portfolio;
+                WFT_STORAGE_HEALTH_UI_V1 = true; refreshStorageHealthUI();
+                health = document.getElementById('storageHealthSummary').textContent;
+                WFT_STUDENT_ID_MAP_V1 = true; ensureStudentRecordsForRoster();
+            } finally { getPortfolioData = get; }
+            const settings = getRawSettings();
+            return { normalizedKeys: Object.keys(normalized), nullPrototypes: [Object.getPrototypeOf(normalized) === null, Object.getPrototypeOf(index.students) === null],
+                normalized: Object.entries(normalized).map(([name, data]) => [name, data.sessions.map(s => [s.id, s.originalText])]), metadataSame: normalized._meta === portfolio._meta,
+                index: Object.values(index.students).map(s => [s.displayName, s.studentId, s.sessionCount, s.averageScore, s.latestSessionAt]), health, legacyKeys,
+                rosterKeys: Object.keys(settings.studentIdMap), rosterNames: settings.studentRecords.map(r => r.displayName), ids: Object.values(settings.studentIdMap),
+                unchanged: JSON.stringify(portfolio) === before && localStorage.getItem('wft_portfolio') === before };
+        }, r => {
+            const names = ['__proto__', 'constructor', 'Alice', '_Meta', 'lastSyncStatusExtra'];
+            assert.deepEqual(r.normalizedKeys, [...names, '_meta']); assert.deepEqual(r.nullPrototypes, [true, true]);
+            assert.deepEqual(r.normalized, [...names, '_meta'].map(name => [name, [['saved-' + name, 'Synthetic ' + name]]]));
+            assert.equal(r.metadataSame, true); assert.equal(r.unchanged, true);
+            assert.deepEqual(r.index, names.map(name => [name, '', 1, 80, '2026-10-01T00:00:00Z']));
+            assert.match(r.health, /Cached students: 5, sessions: 5/);
+            assert.deepEqual(r.rosterKeys, names); assert.deepEqual(r.rosterNames, names);
+            assert.equal(new Set(r.ids).size, 5); assert.ok(r.ids.every(id => typeof id === 'string' && id.startsWith('stu_')));
+            assert.deepEqual(r.legacyKeys, ['_meta', ...names], 'The separate five-name normalization policy keeps _meta eligible');
+        });
+        await run('portfolio-root-policy/strict-validation-before-writes', () => {
+            const reserved = ['_meta', 'updatedAt', '__syncMeta', 'syncMeta', 'lastSyncedAt', 'lastSyncStatus'];
+            let accepted = 0, writes = 0;
+            const rejected = [], before = localStorage.getItem('wft_portfolio'), set = Storage.prototype.setItem;
+            for (const payload of [null, [], 0, 'invalid', { sessions: null }, { sessions: [null] }]) {
+                const portfolio = Object.fromEntries(reserved.map(name => [name, payload]));
+                for (const name of ['__proto__', 'constructor', 'Alice']) Object.defineProperty(portfolio, name, { enumerable: true, value: { sessions: [{}] } });
+                validateWftPortfolioShape(portfolio); accepted++;
+            }
+            Storage.prototype.setItem = function(key, value) { writes++; return set.call(this, key, value); };
+            try {
+                for (const name of ['_Meta', 'UpdatedAt', 'lastSyncStatusExtra']) for (const payload of [null, { sessions: [null] }]) {
+                    try { savePortfolioLocalOnly(Object.fromEntries([[name, payload]]), 'synthetic-invalid-policy'); }
+                    catch (error) { rejected.push({ name, session: !!payload, type: error.name, message: error.message }); }
+                }
+                for (const portfolio of [null, [], 0, 'invalid', true]) {
+                    try { validateWftPortfolioShape(portfolio); }
+                    catch (error) { rejected.push({ root: true, type: error.name, message: error.message }); }
+                }
+            } finally { Storage.prototype.setItem = set; }
+            return { accepted, rejected, writes, unchanged: localStorage.getItem('wft_portfolio') === before };
+        }, r => {
+            assert.equal(r.accepted, 6); assert.equal(r.writes, 0); assert.equal(r.unchanged, true); assert.equal(r.rejected.length, 11);
+            for (const item of r.rejected) {
+                assert.equal(item.type, 'TypeError');
+                assert.equal(item.message, item.root ? 'Portfolio data is unreadable. Download Emergency Backup before repairing browser storage.' : (item.session ? 'Invalid portfolio session for: ' : 'Invalid portfolio student: ') + item.name);
+            }
+        });
+        await run('portfolio-root-policy/ignored-getters-and-error-order', () => {
+            const reads = [], traces = {}, sentinel = { reason: 'Synthetic portfolio getter failure' };
+            const sample = allowMeta => {
+                const portfolio = {};
+                for (const name of ['_meta', 'updatedAt', '__syncMeta', 'syncMeta', 'lastSyncedAt', 'lastSyncStatus']) Object.defineProperty(portfolio, name, { enumerable: true, get() { reads.push(name); if (name === '_meta' && allowMeta) return { keep: true }; throw sentinel; } });
+                Object.defineProperty(portfolio, 'Alice', { enumerable: true, configurable: true, get() { reads.push('Alice'); return { sessions: [] }; } });
+                return portfolio;
+            };
+            normalizeWftPortfolioForSchemaV1(sample(true), true); traces.schema = reads.splice(0);
+            buildPortfolioIndexFromPortfolio(sample(false)); traces.index = reads.splice(0);
+            validateWftPortfolioShape(sample(false)); traces.validator = reads.splice(0);
+            const get = getPortfolioData;
+            try {
+                getPortfolioData = () => sample(false);
+                WFT_STORAGE_HEALTH_UI_V1 = true; refreshStorageHealthUI(); traces.health = reads.splice(0);
+                WFT_STUDENT_ID_MAP_V1 = true; ensureStudentRecordsForRoster(); traces.roster = reads.splice(0);
+            } finally { getPortfolioData = get; }
+            const portfolio = sample(false);
+            Object.defineProperty(portfolio, 'Alice', { enumerable: true, get() { reads.push('Alice'); return { get sessions() { reads.push('sessions'); return []; } }; } });
+            Object.defineProperty(portfolio, 'Bob', { enumerable: true, get() { reads.push('Bob'); throw sentinel; } });
+            let thrown;
+            try { validateWftPortfolioShape(portfolio); } catch (error) { thrown = error; }
+            return { traces, errorOrder: reads, sameError: thrown === sentinel };
+        }, r => {
+            assert.deepEqual(r.traces, { schema: ['Alice', '_meta', '_meta'], index: ['Alice'], validator: ['Alice'], health: ['Alice'], roster: [] });
+            assert.deepEqual(r.errorOrder, ['Alice', 'sessions', 'sessions', 'Bob']); assert.equal(r.sameError, true);
+        });
+        await run('portfolio-root-policy/legacy-safe-mode-skip-identities', () => {
+            WFT_STUDENT_ID_MAP_V1 = true;
+            const portfolio = { Legacy: [], Empty: null, Invalid: 'ignored' }, before = JSON.stringify(portfolio), settings = localStorage.getItem('wft_settings');
+            const getId = getOrCreateStudentId;
+            let allocations = 0;
+            getOrCreateStudentId = function(name) { allocations++; return getId(name); };
+            try {
+                const normalized = normalizeWftPortfolioForSchemaV1(portfolio, true), index = buildPortfolioIndexFromPortfolio(portfolio);
+                const meta = getWftStorageMeta(); meta.safeMode = true;
+                if (!setWftStorageMeta(meta)) throw Error('Synthetic safe mode could not be persisted');
+                const identity = normalizeWftPortfolioForSchemaV1(portfolio) === portfolio;
+                ensureStudentRecordsForRoster();
+                return { normalized, indexKeys: Object.keys(index.students), count: index.students.Legacy.sessionCount, identity, allocations,
+                    unchanged: JSON.stringify(portfolio) === before && localStorage.getItem('wft_settings') === settings };
+            } finally { getOrCreateStudentId = getId; }
+        }, r => {
+            assert.deepEqual(r.normalized, { Legacy: { sessions: [] } }); assert.deepEqual(r.indexKeys, ['Legacy']); assert.equal(r.count, 0);
+            assert.equal(r.identity, true); assert.equal(r.allocations, 0); assert.equal(r.unchanged, true);
+        });
         for (const localNewer of [false, true]) {
             await run('photo-conflict-sync-' + (localNewer ? 'local-newer' : 'cloud-newer'), async localNewer => {
                 const entry = newer => ({ id: 'essay', createdAt: '2026-10-01', updatedAt: newer ? '2026-10-03' : '2026-10-01', originalText: newer ? 'Newer writing' : 'Older writing', images: [{ imageId: 'photo', driveFileId: newer ? 'new-file' : 'old-file', dataUrl: newer ? 'new-bytes' : 'old-bytes', name: newer ? 'new.png' : 'old.png', mimeType: newer ? 'image/png' : 'image/jpeg' }] });

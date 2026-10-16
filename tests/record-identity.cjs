@@ -105,7 +105,7 @@ for (const file of ['js/app/00-storage-sync-patches.js']) {
 }
 check('shipped-schema-normalization-own-student-key', () => {
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: false });
-    load(c, patch, ['normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'normalizeWftPortfolioForSchemaV1']);
+    load(c, patch, ['isWftPortfolioStudentKey', 'normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'normalizeWftPortfolioForSchemaV1']);
     const data = JSON.parse('{"__proto__":{"sessions":[{"id":"constructor","createdAt":"2026-10-01"}]}}');
     assert.deepEqual(plain(c.normalizeWftPortfolioForSchemaV1(data)), data);
 });
@@ -117,7 +117,7 @@ check('shipped-storage-strip-own-student-key', () => {
 check('shipped-portfolio-index-own-student-key', () => {
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: true, getRawSettings: () => ({ studentIdMap: {} }), localStorage: { getItem: () => null } });
     load(c, patch, ['sanitizeStudentIdPart']);
-    load(c, patch, ['buildPortfolioIndexFromPortfolio']);
+    load(c, patch, ['isWftPortfolioStudentKey', 'buildPortfolioIndexFromPortfolio']);
     const result = plain(c.buildPortfolioIndexFromPortfolio(JSON.parse('{"__proto__":{"sessions":[]},"constructor":{"sessions":[]}}')));
     assert.ok(Object.hasOwn(result.students, '__proto__')); assert.equal(result.students.constructor.studentId, '');
 });
@@ -129,7 +129,7 @@ check('shipped-roster-ensure-and-rename-own-student-key', () => {
     let settings = {};
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: true, students: ['constructor', '__proto__'], readWftRequiredStorage: () => plain(settings), getRawSettings: () => plain(settings), saveSettingsToLocalStorage: value => { settings = plain(value); }, getPortfolioData: () => ({}) });
     load(c, patch, ['getWftShortIdPart', 'sanitizeStudentIdPart', 'createStableStudentId', 'getOrCreateStudentId']);
-    load(c, patch, ['getStudentRecordByName', 'ensureStudentRecordsForRoster', 'updateStudentRecordOnRename']);
+    load(c, patch, ['isWftPortfolioStudentKey', 'getStudentRecordByName', 'ensureStudentRecordsForRoster', 'updateStudentRecordOnRename']);
     c.ensureStudentRecordsForRoster();
     assert.equal(typeof settings.studentIdMap.constructor, 'string'); assert.ok(Object.hasOwn(settings.studentIdMap, '__proto__'));
     const first = settings.studentIdMap.constructor; c.updateStudentRecordOnRename('constructor', '__proto__', settings);

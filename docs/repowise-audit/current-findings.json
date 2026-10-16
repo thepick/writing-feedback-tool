@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T12:27:08.413283+07:00",
+  "updated_at": "2026-10-16T13:48:39.714909+07:00",
   "timezone": "Asia/Bangkok",
   "status": "risk_prioritized_code_health_active",
-  "active_repair": "next-risk-prioritized-scope-selection",
+  "active_repair": "batch-009-publication",
   "index_provenance": {
     "last_sync_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
     "repository_metadata_head": "ed5783675bd334b165798eabaaeb01288afb339a",
@@ -34,11 +34,11 @@
       "performance": 30
     },
     "by_status": {
-      "reviewed_no_change": 588,
+      "reviewed_no_change": 622,
       "needs_revalidation": 319,
-      "confirmed_repair_candidate": 49,
-      "candidate_needs_regression": 16,
-      "unreviewed": 33
+      "confirmed_repair_candidate": 47,
+      "candidate_needs_regression": 15,
+      "unreviewed": 2
     },
     "by_severity": {
       "medium": 370,
@@ -48,16 +48,16 @@
       "unrated": 44
     },
     "all_rows_by_status": {
-      "reviewed_no_change": 594,
+      "reviewed_no_change": 628,
       "needs_revalidation": 319,
-      "confirmed_repair_candidate": 50,
-      "candidate_needs_regression": 16,
-      "unreviewed": 33,
+      "confirmed_repair_candidate": 48,
+      "candidate_needs_regression": 15,
+      "unreviewed": 2,
       "fixed_verified": 32,
       "not_detected_unverified": 1
     },
     "verified_fixed": 32,
-    "unresolved_present": 417,
+    "unresolved_present": 383,
     "unresolved_absent": 2,
     "unresolved_behavioral_leads": 0
   },
@@ -1767,7 +1767,7 @@
       ],
       "base_commit": "c814963f9f277920b876eef8f707f9572912ac95",
       "priority": "User-reported concrete usability issue before optional maintenance",
-      "limits": "Primary007source/runtime frozen; isolated candidate only, not merged or deployed.",
+      "limits": "Verified Chromium mobile emulation and desktop; no physical Android/iOS/Safari or live account checks.",
       "candidate_commit": "b0aa0fe36be872b1cb38a118f7a433cc33b8ddef",
       "report": "reviews/repair-067-mobile-header.json",
       "reviews": [
@@ -1792,6 +1792,84 @@
       "thread_id": "01a140bb-d411-7a52-9f82-de537714d5e0",
       "status": "reviewed_complete",
       "outcome": "Ten initial test-only signals verified. Changed test files require a current context/hash review before retaining their outcomes."
+    },
+    {
+      "id": "repair-068",
+      "title": "Share exact portfolio metadata key policy across five consumers",
+      "file": "js/app/00-storage-sync-patches.js",
+      "status": "validated_pending_merge",
+      "scope": "P04 normalization/index/health/roster/strict-validator exact six-name policy; behavior preserved",
+      "behavior_fix_verified": false,
+      "admission_report": "reviews/batch-009-scope-revalidation.json",
+      "report": "reviews/repair-068-portfolio-root-policy.json",
+      "focused_suites_before_after": 8,
+      "structured_cases_after": 1259,
+      "structured_native_cases_after": 1221,
+      "structured_NodeVM_cases_after": 38,
+      "unstructured_portfolio_sync_suite_passed": true,
+      "new_contracts_before_after_passed": 4,
+      "independent_reviews": [
+        "reviews/repair-068-safety-review.json",
+        "reviews/repair-068-regression-review.json"
+      ],
+      "commit": "2f1dcba5c848bad3ee2944503b22c16c0c367e65"
+    },
+    {
+      "id": "repair-069",
+      "title": "Share existing settings form overlay while preserving caller failure contracts",
+      "file": "js/app/00-storage-sync-patches.js",
+      "status": "validated_pending_merge",
+      "report": "reviews/repair-069-settings-form-overlay.json",
+      "behavior_fix_verified": false,
+      "new_contracts_before_after_passed": 32,
+      "focused_native_cases_after": 145,
+      "focused_NodeVM_cases_after": 14,
+      "source_base": "2f1dcba5c848bad3ee2944503b22c16c0c367e65",
+      "independent_reviews": [
+        "reviews/repair-069-safety-review.json",
+        "reviews/repair-069-regression-review.json"
+      ],
+      "commit": "1391fd0b7f1d091b7cb1676b6b4d7353cb897eaa"
+    },
+    {
+      "id": "repair-070",
+      "title": "Assert archive refusals preserve work before unsafe side effects",
+      "file": "tests/archive-failures.browser.cjs",
+      "status": "validated_pending_merge",
+      "scope": "T03four missing folder-ack/tiny-ZIP/signed-out refusal contracts; production unchanged",
+      "behavior_fix_verified": false,
+      "admission_report": "reviews/next-coverage-risk-benefit-admission.json",
+      "report": "reviews/repair-070-archive-refusal-contracts.json",
+      "native_scenarios": 12,
+      "ordered_failure_retry_checks": 84,
+      "connection_checks": 76,
+      "integrity_checks": 366,
+      "production_unchanged": true,
+      "commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+      "independent_reviews": [
+        "reviews/repair-070-safety-review.json",
+        "reviews/repair-070-regression-review.json"
+      ]
+    },
+    {
+      "id": "repair-071",
+      "title": "Test native crop gestures against decoded output pixels",
+      "file": "tests/crop-transparency.browser.cjs",
+      "status": "validated_pending_merge",
+      "scope": "T02 two native input contracts; production unchanged unless separately admitted bug evidence",
+      "admission_report": "reviews/next-coverage-risk-benefit-admission.json",
+      "behavior_fix_verified": false,
+      "report": "reviews/repair-071-native-crop-input-contracts.json",
+      "native_crop_cases_before": 4,
+      "native_crop_cases_after": 6,
+      "native_ownership_cases_after": 51,
+      "native_startup_cases_after": 2,
+      "production_unchanged": true,
+      "commit": "f444492ad81528a851ee083d2b434e55f5b16dfe",
+      "independent_reviews": [
+        "reviews/repair-071-safety-review.json",
+        "reviews/repair-071-regression-review.json"
+      ]
     }
   ],
   "findings": [
@@ -4792,28 +4870,14 @@
       "scanner_id": "5ccc89d6287f43c7ac9a2854b8c07514",
       "scanner_status": "open",
       "present": true,
-      "status": "confirmed_repair_candidate",
-      "classification": "duplicate_existing_resolution_policy",
+      "status": "reviewed_no_change",
+      "classification": "deferred_low_current_benefit_maintenance",
       "review": {
-        "coordinator_reviewed": true,
-        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
-        "reason": "The first-own-ID-map loop repeats the resolution policy in saveStudentPortfolioAsync and resolveStudentPortfolioKey. Extend the existing resolver to accept the already-read portfolio, then return portfolio[resolvedKey] or empty sessions. Keep direct-name priority, flag gating, first alias order and required settings errors. This removes a second policy implementation without another portfolio read.",
-        "report": "reviews/repair-043-storage-callbacks.json",
-        "metrics": {
-          "max_nesting": 4,
-          "ccn": 7,
-          "cognitive": 12,
-          "dispatch_share": 0.0,
-          "symbol_line": 1989,
-          "symbol_index": 24,
-          "deepest_block": {
-            "start": 1997,
-            "end": 2001
-          }
-        },
-        "regression_recommendation": "Retain native special-name/ID and protected-read assertions; add direct-name-versus-ID collision, duplicate map aliases, unknown ID and flag-off cases. Verify the resolver receives the existing snapshot.",
-        "scanner_finding_remains_open": true,
-        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+        "source_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+        "operation": "P01",
+        "report": "reviews/next-storage-risk-benefit-admission.json",
+        "scope_revalidation": "reviews/batch-009-scope-revalidation.json",
+        "reason": "ID-map resolver reuse mainly affects disabled optional paths; read-order and atomic-save risk exceed small duplication savings at present. Source-bound read-only review; warning remains open, no scanner clearance."
       },
       "evidence_fingerprint": "d4696aca759a92b82f87a75ce127eda727106d3c3d45caf7e7e21a0e8a159376",
       "observation": {
@@ -4899,28 +4963,14 @@
       "scanner_id": "f9ebeebfcde54ab1b3d4d6f0c32e3b08",
       "scanner_status": "open",
       "present": true,
-      "status": "confirmed_repair_candidate",
-      "classification": "duplicate_existing_resolution_policy",
+      "status": "reviewed_no_change",
+      "classification": "deferred_low_current_benefit_maintenance",
       "review": {
-        "coordinator_reviewed": true,
-        "source_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
-        "reason": "The write callback must keep its strict read and write in one microtask, but its nested ID-map search is the same policy already implemented by resolveStudentPortfolioKey. Reuse that resolver with this snapshot; do not replace the whole callback with loadPortfolioAsync().then(), which would reintroduce lost concurrent student saves.",
-        "report": "reviews/repair-043-storage-callbacks.json",
-        "metrics": {
-          "max_nesting": 4,
-          "ccn": 6,
-          "cognitive": 11,
-          "dispatch_share": 0.0,
-          "symbol_line": 2009,
-          "symbol_index": 25,
-          "deepest_block": {
-            "start": 2018,
-            "end": 2021
-          }
-        },
-        "regression_recommendation": "R1: retain concurrent Alice/Bob saves, special own keys and failed settings/portfolio reads; add duplicate aliases and direct-name precedence. Confirm a single synchronous read-modify-write section remains.",
-        "scanner_finding_remains_open": true,
-        "validation_limit": "Immutable00 file; historical main callers unchanged outside separately scoped039 reassessment and045 preview drop. No all-current-script freeze claim. Historical test references are read-only; no new app tests."
+        "source_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+        "operation": "P01",
+        "report": "reviews/next-storage-risk-benefit-admission.json",
+        "scope_revalidation": "reviews/batch-009-scope-revalidation.json",
+        "reason": "ID-map resolver reuse mainly affects disabled optional paths; preserve current strict snapshot and synchronous atomic save semantics. Source-bound read-only review; warning remains open, no scanner clearance."
       },
       "evidence_fingerprint": "24729ce28e921fc853cbeeb8cfc90d104e2afc5112df5fa9fdd60c5d08ecbebe",
       "observation": {
@@ -12856,74 +12906,14 @@
       "scanner_id": "c845e877c0fd4865b7a551f3aed6b063",
       "scanner_status": "open",
       "present": true,
-      "status": "candidate_needs_regression",
-      "classification": "shared_expiry_policy_candidate_P3",
+      "status": "reviewed_no_change",
+      "classification": "deferred_low_current_benefit_maintenance",
       "review": {
-        "reason": "The records filter4521-4526 and deletionLog filter4546-4551 repeat the same missing-date/invalid-date/90-day retention decision; legacy-map4535-4538 uses its complement. A local retained-deletion predicate can own this policy for the two arrays and optionally map. This removes real repeated decisions, but exact boundary/read-order parity and feature-off identity need verification.",
-        "evidence_anchors": [
-          "js/app/00-storage-sync-patches.js:4515",
-          "js/app/00-storage-sync-patches.js:4516",
-          "js/app/00-storage-sync-patches.js:4521",
-          "js/app/00-storage-sync-patches.js:4522",
-          "js/app/00-storage-sync-patches.js:4524",
-          "js/app/00-storage-sync-patches.js:4525",
-          "js/app/00-storage-sync-patches.js:4535",
-          "js/app/00-storage-sync-patches.js:4537",
-          "js/app/00-storage-sync-patches.js:4546",
-          "js/app/00-storage-sync-patches.js:4547",
-          "js/app/00-storage-sync-patches.js:4549",
-          "js/app/00-storage-sync-patches.js:4550",
-          "js/app/00-storage-sync-patches.js:4552"
-        ],
-        "verified_metrics": {
-          "name": "compactDeletions",
-          "start_line": 4513,
-          "end_line": 4559,
-          "ccn": 13,
-          "max_nesting": 4,
-          "cognitive": 19,
-          "nloc": 40,
-          "bumps": 2,
-          "param_count": 1,
-          "typed_param_count": 0,
-          "primitive_param_count": 0,
-          "dispatch_share": 0.0,
-          "deepest_block": [
-            4535,
-            4540
-          ],
-          "complex_conditions": [
-            {
-              "line": 4530,
-              "operator_count": 1,
-              "enclosing_construct": "if"
-            },
-            {
-              "line": 4535,
-              "operator_count": 1,
-              "enclosing_construct": "if"
-            },
-            {
-              "line": 4537,
-              "operator_count": 1,
-              "enclosing_construct": "if"
-            }
-          ]
-        },
-        "test_assertion_references": [
-          "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/storage-integrity.browser.cjs:185-202 compaction on/off, actual 90-day boundary, invalid/missing date retention, recent/old legacy map, bounded log, unknown/student metadata, idempotence and unchanged source",
-          "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/deletion-merge.cjs:6-13 VM loader imports compact/normalize; tests/settings-deletions-sync.cjs:6 imports same helpers with settings/deletion sync"
-        ],
-        "callers": [
-          "00-storage-sync-patches.js:4576 normalizeDeletionsData unless skipCompaction; compact calls normalize with true at4515, avoiding recursion"
-        ],
-        "regression_recommendation": "P3 can share the exact keep-recent-or-unknown predicate between records and deletionLog, using its complement for legacy-map deletion only after parity checks. Freeze Date.now; cover exact90-day/future/invalid/missing/null dates in all three collections, feature-off identity, unknown/student metadata, log last200 order and input immutability. Preserve existing property-read order if cloneWftJson returns live fallback objects.",
-        "coordinator_reviewed": true,
-        "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
-        "report": "reviews/repair-029-portfolio-shapes.json",
-        "scanner_finding_remains_open": true,
-        "review_basis_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
-        "validation_limit": "Read-only source/caller/metric review; no application tests run by this review. All eight shipped scripts match the immutable Git review basis and inspected source pins; HTML also matches that Git basis. each current finding detail is rechecked. Test references describe that immutable revision. Unrelated test-only edits may proceed; full publication gate is separate."
+        "source_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+        "operation": "P09",
+        "report": "reviews/next-storage-risk-benefit-admission.json",
+        "scope_revalidation": "reviews/batch-009-scope-revalidation.json",
+        "reason": "Deletion compaction is disabled; five-line predicate savings do not justify cutoff/getter/read-timing risk. Existing collection-specific retention guards remain clear. Source-bound read-only review; warning remains open, no scanner clearance."
       },
       "evidence_fingerprint": "f77b673ca40fb37db7da26e9092122e928321665975bbe02cfa768dddfaf46c9",
       "observation": {
@@ -19819,100 +19809,14 @@
       "scanner_id": "0e413cd5954b45b6b0739c56a5134f84",
       "scanner_status": "open",
       "present": true,
-      "status": "confirmed_repair_candidate",
-      "classification": "duplicated_completion_policy_candidate_M1",
+      "status": "reviewed_no_change",
+      "classification": "deferred_low_current_benefit_maintenance",
       "review": {
-        "reason": "V2 resolved completion7935-7948 and legacy completion7965-7978 repeat unlocking, token/new-pending guards and success/failure UI policy. A local completion function can own that duplicated rule, with callers explicitly passing !!result and success !== false. Leave commit checks, flush-specific logs and rejection handling separate; the different result contracts prevent blind callback substitution.",
-        "evidence_anchors": [
-          "js/app/00-storage-sync-patches.js:7935",
-          "js/app/00-storage-sync-patches.js:7936",
-          "js/app/00-storage-sync-patches.js:7937",
-          "js/app/00-storage-sync-patches.js:7942",
-          "js/app/00-storage-sync-patches.js:7946",
-          "js/app/00-storage-sync-patches.js:7965",
-          "js/app/00-storage-sync-patches.js:7966",
-          "js/app/00-storage-sync-patches.js:7967",
-          "js/app/00-storage-sync-patches.js:7972",
-          "js/app/00-storage-sync-patches.js:7977"
-        ],
-        "verified_metrics": {
-          "name": "finishManualSaveToDrive",
-          "start_line": 7905,
-          "end_line": 7980,
-          "ccn": 13,
-          "max_nesting": 3,
-          "cognitive": 21,
-          "nloc": 72,
-          "bumps": 1,
-          "param_count": 0,
-          "typed_param_count": 0,
-          "primitive_param_count": 0,
-          "dispatch_share": 0.0,
-          "deepest_block": [
-            7910,
-            7921
-          ],
-          "complex_conditions": [
-            {
-              "line": 7907,
-              "operator_count": 1,
-              "enclosing_construct": "if"
-            },
-            {
-              "line": 7913,
-              "operator_count": 1,
-              "enclosing_construct": "ternary"
-            },
-            {
-              "line": 7914,
-              "operator_count": 1,
-              "enclosing_construct": "ternary"
-            },
-            {
-              "line": 7915,
-              "operator_count": 1,
-              "enclosing_construct": "ternary"
-            },
-            {
-              "line": 7923,
-              "operator_count": 1,
-              "enclosing_construct": "if"
-            }
-          ]
-        },
-        "test_assertion_references": [
-          "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/media-ownership.browser.cjs:124-145 held upload/flush setup, new Bob writing and signout during flush; 208-220,253-262 current pending remains retryable and stale completion cannot show synced",
-          "413c1cf35e704b78d05f6172ebc21268688d4c6d:tests/corrupt-portfolio.browser.cjs:73-85 failed commit retains pending and blocks flush; retry succeeds after storage repair"
-        ],
-        "callers": [
-          "00-storage-sync-patches.js:7990 pending-media upload completion",
-          "00-storage-sync-patches.js:7993 direct manual-save branch"
-        ],
-        "regression_recommendation": "For candidate M1, compare V2 resolved true/false/undefined and rejection plus legacy true/false/undefined, including new pending writing/signout during each completion. Preserve V2 !!result versus legacy success !== false, commit-failure notices and rejection-only logging/handling. Existing native pending/flush assertions cover only part of this matrix.",
-        "coordinator_reviewed": true,
-        "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
-        "report": "reviews/repair-027-upload-shapes.json",
-        "scanner_finding_remains_open": true,
-        "review_basis_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
-        "validation_limit": "Read-only source/caller/metric review; no application tests run by this review. All eight shipped scripts match the immutable Git review basis and inspected source pins; HTML also matches that Git basis. each current finding detail is rechecked. Test references describe that immutable revision. Unrelated test-only edits may proceed; full publication gate is separate.",
-        "unchanged_function_revalidation": {
-          "id": "code_health:finding_d6815d339003e60e0a6b",
-          "file": "js/app/00-storage-sync-patches.js",
-          "marker": "complex_method",
-          "old_span": [
-            7907,
-            7982
-          ],
-          "new_span": [
-            7896,
-            7971
-          ],
-          "function_sha256_lf": "73ea814b5596e54d8a3231e7e061150df9219bb2ed79e3e2ff029a8f51e6fe3c",
-          "restored_status": "confirmed_repair_candidate",
-          "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
-          "report": "reviews/batch-007-unchanged-shape-revalidation.json",
-          "reason": "Unique whole-function Git bytes and relative scanner facts match. Only absolute coordinates/ordinal changed. Prior disposition retained; warning remains open."
-        }
+        "source_commit": "e8f2553fd0acb1cfd635028c93fcfebe7601567d",
+        "operation": "P16",
+        "report": "reviews/next-storage-risk-benefit-admission.json",
+        "scope_revalidation": "reviews/batch-009-scope-revalidation.json",
+        "reason": "Resolved-completion sharing primarily unifies active V2 with disabled legacy callbacks. Modest savings do not justify expanding a delicate async completion path without a demonstrated drift/defect; keep current guarded blocks. Source-bound read-only review; warning remains open, no scanner clearance."
       },
       "evidence_fingerprint": "ed14a93bf5779b1f6d0b752770ef0b972a150f070d63c6b3593425d907831197",
       "observation": {
@@ -49662,9 +49566,16 @@
       "scanner_id": "b7b88881d9334c9da050fa7277efa70f",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "coherent_state_mutation_with_bounds",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain the55-line operation. MIME/text fallback, NaN/equality/range rejection and terminal drag cleanup prevent undefined photo insertion; desktop/mobile insertion geometry, photo object identity, primary state and OCR invalidation form one mutation. Removing guards reintroduces045; sharing a cleanup helper only to reduce CCN adds little benefit. Existing parseInt prefix behavior is explicitly tested. In-range stale drag identity remains the documented045 limit, not a new reproduced bug.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "d6a7852510d45d76630775c615c26d6a59668bd312cd04c637a41b3915d6cf4f",
       "observation": {
         "id": "b7b88881d9334c9da050fa7277efa70f",
@@ -57449,9 +57360,16 @@
       "scanner_id": "e117f36afb52422bbba2fa86bb649f95",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "explicit_partial_failure_and_preference_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "73b69c3adce18a801958f865cef8db494305b0e0ca14f62776032dd0690e49d3",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain the22-line completion handler. Null result means the restore was superseded; subsequent branches distinguish no images, all missing, partial and complete restoration. Neatness is enabled only with restored pixels and saved session intent. Required preference-save failure reports the saved policy and ends loading with actionable status rather than claiming success. Repeated result&& tests after the null guard are redundant but too small to justify a separate source edit; no change admitted merely to lower CCN15.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "c35919ce57474011d64bb0a5d1802feb4e1cb636a3014e2fcb22fb94d8935df9",
       "observation": {
         "id": "e117f36afb52422bbba2fa86bb649f95",
@@ -60082,9 +60000,16 @@
       "scanner_id": "83d5cf0648f346c0b7f590cad2e4fd97",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "required_confirm_revalidation_transaction",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "b620d25c36d59e71cbf9efceba0581fda86c01dd2ac05ba81706c1c8eee850d7",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain the four independent error/guard regions. Initial strict source read, current-work snapshot, post-dialog freshness recheck and grade persistence each stop before destructive owner/text/pending changes. The raw portfolio/deletion bytes and full current-work comparison deliberately demand retry when saved or current work changes. The full function is byte-identical to reviewed039v2. Flattening this bumpy-road warning would hide which failure preserves current work; extracting wrappers offers no cause-level improvement.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "7bedb38a8a0e6f5821daf2252080c1358ce793773939633c8f8559a9ff966dab",
       "observation": {
         "id": "83d5cf0648f346c0b7f590cad2e4fd97",
@@ -66436,9 +66361,16 @@
       "scanner_id": "227bab76d5fb4bedb4ed208bd1fe6d61",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_stored_data_trust_boundary",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "ada29a57d4ca3f9e03fbae7184872d99bdb85127a0c0acf28afc73a945889708",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain the five-operator condition as one visible stored-pending validity rule. It rejects missing/blank/non-string owner and missing/non-object/array sessionData before serializing the confirmation snapshot. null storage is deliberately distinct from malformed stored JSON. Splitting it into truthy defaults or a generic schema helper could collapse those distinctions; one use does not justify another abstraction. Snapshot storage-only pending bytes remain separate from cached pending identity.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "946f008c35f12bb6fba329588b825ff392909e4cf2a8bf57e715b93e53c5ad2d",
       "observation": {
         "id": "227bab76d5fb4bedb4ed208bd1fe6d61",
@@ -69701,9 +69633,16 @@
       "scanner_id": "4fd3905bb98241918cd7c7e6c348a5b1",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_last_chance_lifecycle_guard",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "59942b6825e815d40e5feab39fe43f669878d5e801c3993383e7bc8dffe7646e",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain: shipped V2 invokes the guarded local snapshot helper, then returns before legacy Drive work. The helper checks unresolved recovery, preflights required storage, restores dirty suppression in finally and uses a strict portfolio snapshot/write boundary. This outer catch neither clears pending work nor acknowledges successful sync. Throwing out of pagehide supplies no durable recovery. Exact callback bytes match prior009; current immutable lower-level protections were re-read.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "6e03900f0a72ff9dd9c4ce525587359f48d5fa06a2a3d4ff54552492b321d7c4",
       "observation": {
         "id": "4fd3905bb98241918cd7c7e6c348a5b1",
@@ -69791,9 +69730,16 @@
       "scanner_id": "cca2942b64874b91b5da42d2634da58c",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_disabled_compatibility_lifecycle_guard",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "59942b6825e815d40e5feab39fe43f669878d5e801c3993383e7bc8dffe7646e",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain: shipped WFT_SYNC_ENGINE_V2=true bypasses this compatibility branch. With V2 deliberately disabled, savePortfolioData rechecks strict stored bytes before validating/writing, so getPortfolioData display fallback cannot overwrite corruption; a synchronous save failure skips syncAllToDrive. The catch makes no successful-save claim. Removing the legacy path or changing async upload policy is outside a warning-only cleanup and lacks a demonstrated benefit here.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "cca2942b64874b91b5da42d2634da58c",
@@ -69881,9 +69827,16 @@
       "scanner_id": "f43737250194486abc5696eea42899c4",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_hidden_page_local_retry_guard",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "50e586081fd78a776f78bf2271e196fd126f221a36702d454f6cfd7a0268f343",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain separately from pagehide: visible events return; hidden events call only the guarded local saver and return before legacy cloud work. Its outer catch avoids an unhandled lifecycle exception without changing durable state or claiming completion. Exact full visibility callback matches prior009. The additional00 lifecycle listener is existing behavior; deduplicating listeners without an observed failure would expand this review into a separate lifecycle redesign.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "6e03900f0a72ff9dd9c4ce525587359f48d5fa06a2a3d4ff54552492b321d7c4",
       "observation": {
         "id": "f43737250194486abc5696eea42899c4",
@@ -69971,9 +69924,16 @@
       "scanner_id": "65bda9ba662f4af6889bcdf940d03de1",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_hidden_legacy_compatibility_guard",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+        "function_sha256_lf": "50e586081fd78a776f78bf2271e196fd126f221a36702d454f6cfd7a0268f343",
+        "report": "reviews/production-new-findings-risk-triage.json",
+        "reason": "Retain: the non-V2 path is hidden-only and disabled by the shipped true flag. Its strict save precedes optional sync; read/save exceptions stop later work, and async helpers own their own failure reporting. The captured-handler tests explicitly assert visible no-op, signed-in branching and failure short-circuiting. Propagating from a hidden-page event would not preserve more data; no useful cause-level edit identified.",
+        "limits": "Immutableed578367 caller context;068policy change has separate independent review. No production defect or scanner clearance claimed."
+      },
       "evidence_fingerprint": "d1e2539b93b0ad1fa6925dedd21e6f59148dfa1568219910adec7f5d7582bafa",
       "observation": {
         "id": "65bda9ba662f4af6889bcdf940d03de1",
@@ -91242,9 +91202,16 @@
       "scanner_id": "6b139f7fb9614cbda9a44f754900f395",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": "42630637e52504fd7de0120667479c44fd509419d16a340c9faf6648da6dd793",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "Depth4 is the browser/fresh-page/scenario try-catch-finally lifecycle, not a hidden policy. Crop and drop families use different fixture and oracle shapes; independent page cleanup, page-error rejection and final failure aggregation are useful. A generic runner would add callback plumbing without improving the ownership contract.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "bbe8a8e0856425a0a6d290dca75c4b2b9696581f4462cabbd119b704f4f1f27b",
       "observation": {
         "id": "6b139f7fb9614cbda9a44f754900f395",
@@ -91304,9 +91271,16 @@
       "scanner_id": "df27a4116fe7407da4444f4f6f8ae98a",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": "e8dd2da7107b6a7f51e50e68df66575187881be125b64437880a6a39254e8f32",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN20 selects controlled ownership changes around held native image decoding. Existing named local helpers already separate student, queue, writing, crop and class changes. Keeping the setup and before/release/after boundary together makes stale-owner preservation auditable.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "11034dc0c7b83a2c70b1747ef0c9322c74b4054c060d2f492b77634366538c40",
       "observation": {
         "id": "df27a4116fe7407da4444f4f6f8ae98a",
@@ -91387,9 +91361,16 @@
       "scanner_id": "c76cb302313140a39b5693ebc3179b09",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": "f7ef9e29afa196b8a8e51154146250cc6587065354a5086f6ebdc5fa234c4b2e",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "The9 paths distinguish intentionally different results: apply-before-load no-op, secondary crop, current valid crop, reset recovery and exact stale-state equality. Merging these assertions would obscure which media object may change. Both browser and callback errors are required empty.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "b59442988e603ce006c6755dc1654565be63c3fa2db1ba47070ea7410ae97ad6",
       "observation": {
         "id": "c76cb302313140a39b5693ebc3179b09",
@@ -91470,9 +91451,16 @@
       "scanner_id": "88cecad3d7ff4866bc5b090497807cc2",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": "8adb540f7a35739f4e1bb3741a622080edd77bccb241316bfb4c2ee1430b5551",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN18 constructs literal bad-index/parse-prefix/stale-index and desktop-X/mobile-Y cases before dispatching the real DragEvent. The independent oracle checks literal expected order and untouched owner/text/source/pending/raw storage. Replacing variant conditions with a framework would relocate fixture complexity.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "aac6d0a7c4a10c737464519639fdded666cfc0355166b8727efa1a46c1c027e0",
       "observation": {
         "id": "88cecad3d7ff4866bc5b090497807cc2",
@@ -91531,9 +91519,16 @@
       "scanner_id": "aa8f479e95bb4756ae6200ce336f0a70",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": "8adb540f7a35739f4e1bb3741a622080edd77bccb241316bfb4c2ee1430b5551",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "The3 bumps are separated fixture payload mutation, viewport direction and reference/state capture phases of the same real drop. They do not repeat a production decision algorithm. Retain the visible order of those phases and the downstream identity/no-op checks.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "aac6d0a7c4a10c737464519639fdded666cfc0355166b8727efa1a46c1c027e0",
       "observation": {
         "id": "aa8f479e95bb4756ae6200ce336f0a70",
@@ -91591,9 +91586,16 @@
       "scanner_id": "41a6b7df57eb4d2c8451d2694bc27506",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": "e8dd2da7107b6a7f51e50e68df66575187881be125b64437880a6a39254e8f32",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "151 nonblank lines contain native canvases/Image delegation, snapshots and six already bounded setup helpers. Passing browser-only state through more exported helpers would increase closure/serialization dependencies; there is no identified dead work or weaker oracle to remove.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "11034dc0c7b83a2c70b1747ef0c9322c74b4054c060d2f492b77634366538c40",
       "observation": {
         "id": "41a6b7df57eb4d2c8451d2694bc27506",
@@ -91673,9 +91675,16 @@
       "scanner_id": "58ccc6c2ed5749e9a023f3f9017a63e4",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "confirmed_repair_candidate",
+      "classification": "optional_existing_helper_policy_reuse",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "function_sha256_lf": null,
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "A real small shared-policy opportunity exists independently of the aggregate clone score: localCropRoute duplicates the existing plain local asset policy. Delegate only that helper/call sites to tests/support/local-app-route, retaining text/html fallback, JS MIME, root index, empty404 and external abort. The existing helper also checks containment and isFile. Keep fs for evidence output and all matrices unchanged. Optional future bounded admission, not a product bug or automatic18-pair cleanup.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "75a8d8ad3a1905e182b9d6d3b0e6677b38188ce7177805d28da1278e097c963f",
       "observation": {
         "id": "58ccc6c2ed5749e9a023f3f9017a63e4",
@@ -94334,9 +94343,16 @@
       "scanner_id": "dd97190dbf7547ddbc080a4fc2be00ab",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e",
+        "function_sha256_lf": "869ecb18e009f1f0fa6c28dcf25710787f6ed62f5e4586c131d13103cc3055b2",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN30 is largely conjunctions in independent literal audit/display/policy assertions. Native analyses assert0-errors=>10 and density4 at three grade/strictness settings=>10/9/8; recorded result is rerendered after live settings change and exact HTML/audit/scores/pending are preserved. Splitting predicates only to lower CCN could weaken those joint premises; no admission.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "a94639321714fb4ccf595223ab8bf89de2bb28e9d334e910c94ecdc8b12bd240",
       "observation": {
         "id": "dd97190dbf7547ddbc080a4fc2be00ab",
@@ -94394,9 +94410,16 @@
       "scanner_id": "7f7de58af1534e3f963f8daa79991620",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e",
+        "function_sha256_lf": "3be0e0393da8d71bdf85ce491329333d795bc2875a6d0ab38621be1abc191704",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "92 lines bind the parser inheritance matrix to actual analyzeWriting, pending, commit, stored session, summary and safe HTML, then run the nested calculation regression. Shared helpers already separate preparation and persistence checks. Keep the complete real publication chain and explicit missing-category/eligibility controls.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "94706d6208a36a2e024964d17737102172aed08ffa95b06bb970f3ee0baf3181",
       "observation": {
         "id": "7f7de58af1534e3f963f8daa79991620",
@@ -96804,9 +96827,16 @@
       "scanner_id": "01caff34a4cd493aa0d8623965cfcbc1",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "84f56fb39a7237262e81f641d74a3e2ab33c8d97d0bcf99eacc9dcd9d6c20969",
+        "function_sha256_lf": "d58f8582873e8a0e67f0faef8c33b2730360b4f9ba7cde15705da4b17d644ba9",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "Depth5 crosses browser/page.evaluate and the two-input/three-entry held native optimization matrix with try/finally restoration. Gates delegate to the real optimizer before holding; timeout rejects; allSettled is cleanup only. Busy rejection, first completion, retry, stale writing/source and atomic error recovery are distinct contracts worth keeping visible.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "3a538bbbe76f67e903ac794b130dbcda7ea412973deb235a223d75db14b716b7",
       "observation": {
         "id": "01caff34a4cd493aa0d8623965cfcbc1",
@@ -97514,9 +97544,16 @@
       "scanner_id": "32707b77277c40afa7271a72c82e791b",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+        "function_sha256_lf": "e9577cc785efb0ff8ef056468fa1ee696e3134de20e434a1696b762a007a6268",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "Nested LF/CRLF x comma fixture loops exercise raw detector inputs plus real textarea/select UI paths. textarea normalization is correctly captured rather than falsely asserting CR bytes survive. Genuine letters, Diary Club, reflection and manual override controls guard precedence; finally restores UI state.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "cda2b2b4275770f84f17d0e65d094f3f52d8605107f138834da53a03f81c8fbb",
       "observation": {
         "id": "32707b77277c40afa7271a72c82e791b",
@@ -97733,9 +97770,16 @@
       "scanner_id": "63f9a5f9a737448b8c76087c63714ad8",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+        "function_sha256_lf": "7075e7a58fc72f70e3268af71cd6a59c5571d71446696456637f93a0047ecd71",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN12 arises from explicit neutral/stop/short/literal/unsupported controls and parsed feedback/audit/DOM construction checks. Expected teacher comments are literals; target builders are real. Score/rows/pending preservation and DOM restoration remain. Saved-feedback assertion is construction only, not durable persistence proof.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "18ab16fda8fa09d9a00254ed4246816d541981cee154e2e1d866a241b045248b",
       "observation": {
         "id": "63f9a5f9a737448b8c76087c63714ad8",
@@ -97793,9 +97837,16 @@
       "scanner_id": "27a82aa571324282ac5c1e6796751777",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+        "function_sha256_lf": "910e41282ed7e001824e27a86b1956dde2a21baf0227831060a9603202e1efa9",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "expectGenre conjoins independent expected genre/reference/source with current UI state, visibility, summary, prompt and exact entered writing. Those assertions expose classifier/UI disagreement. Extracting each boolean would reduce the metric while making the common expected tuple harder to inspect.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "8f266639964243028eb575eed2f0036267798d0d60acdefc55298c3c60033b99",
       "observation": {
         "id": "27a82aa571324282ac5c1e6796751777",
@@ -97853,9 +97904,16 @@
       "scanner_id": "0a63f5a9f92240799e860547f165a8b9",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+        "function_sha256_lf": "910e41282ed7e001824e27a86b1956dde2a21baf0227831060a9603202e1efa9",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "The five primitive arguments are a small local expectation tuple: case label, genre, safe reference, source and exact entered text. All calls are adjacent in one matrix with fixed literals; introducing an options/class wrapper would add indirection without reducing policy duplication or argument ambiguity.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "8f266639964243028eb575eed2f0036267798d0d60acdefc55298c3c60033b99",
       "observation": {
         "id": "0a63f5a9f92240799e860547f165a8b9",
@@ -98750,9 +98808,16 @@
       "scanner_id": "edacbcd8d37f4cfd9876434988b380f6",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "history_warning_retain",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+        "function_sha256_lf": null,
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "Retain the history warning as a review/coordination signal. This file intentionally changed for separate real saved/pending/photo ownership contracts and065 closed a cleared-pending oracle gap. The52 fixed scenarios, actual helpers, held upload seams and failing final aggregation justify the growth; churn alone gives no safe deletion or current defect.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": null,
       "observation": {
         "id": "edacbcd8d37f4cfd9876434988b380f6",
@@ -101762,9 +101827,16 @@
       "scanner_id": "4173b6a79c85454e9df9d4cdb334bc87",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+        "function_sha256_lf": "dca0d4e38e3b1120af60b7501f1567e1fcc20be73660197ecd040116f112b60f",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN25 is explicit grounded-quote/length/validity/DOM conjunctions across Grammar and both Spelling passes. Real ensure/factory/search/insertion/rendering is exercised; long-only rejects invented truncation, later-only is usable, and global opener priority beats an earlier run-on. No factory stub or result-dependent assertion skip; retain.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "38e60464e82186eb9073db07b97484b1a5bf5f683d00d97ea5f1ef2f4dd7167f",
       "observation": {
         "id": "4173b6a79c85454e9df9d4cdb334bc87",
@@ -107360,9 +107432,16 @@
       "scanner_id": "f12675fac78a4a6e80177af662a3ffd4",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+        "function_sha256_lf": "b21dd9df38dd18cc76fbb2b03b8f2720fd4d4cf32ed46c503f3d908416305f89",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN11 seeds exact current writing/photo/source/pending/report and wraps render/close/scroll by delegating to real functions. Missing DOM, stale options and storage failure are controlled fixtures rather than alternate application policies. Snapshot and reference checks must remain alongside these seams.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "ef1e25cffa45853846f70c06c52d62502f3aa098dd84ca4a198878cb9f840393",
       "observation": {
         "id": "f12675fac78a4a6e80177af662a3ffd4",
@@ -107421,9 +107500,16 @@
       "scanner_id": "1b434b52b67145f4970a7b84785313b6",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+        "function_sha256_lf": "e7746f7b28445b829c0cad19c29fb7f7231016fbdf4487523e5acbf308d307f4",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN12 reflects eight distinct optional DOM/responsive/write-failure cases. Real rendered roster-name clicks must expose Portfolio with one target render while preserving current work and reference identity. Literal expected scroll/storage behavior plus operational/page-error rejection prevent a wrong-tab false green; do not flatten the matrix.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "3caa7c034b56b07a56352f0f3cc1325358c0d765c3dfac03f3ca489f04477562",
       "observation": {
         "id": "1b434b52b67145f4970a7b84785313b6",
@@ -109737,9 +109823,16 @@
       "scanner_id": "5699424d956c446abb633f9a0ac560c7",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+        "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "Depth5 is fresh-context native confirmation cases plus per-case held-source mutation/assertion loops and failure recording. Contexts isolate storage, the second tab remains live where needed, and browserfinally closes. Extraction of async case phases would add cross-phase mutable state and obscure consent timing.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "a5e2088eb653761b712ada58dd73a5b5d524465703eb2f269f0b195d33a4f81a",
       "observation": {
         "id": "5699424d956c446abb633f9a0ac560c7",
@@ -109799,9 +109892,16 @@
       "scanner_id": "aa05f7e795114331b9cf229fb73ef2ab",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+        "function_sha256_lf": "bc4dba79aa2e1ec69adc42e397659353c04722e5579cf29e3c8cc6ada7b4a812",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "seed CCN9 intentionally has normal existing-pending work versus late-analysis work. It creates real canvas bytes, persistent settings/roster/portfolio/pending and a complete snapshot; only synthetic model response timing is held. Sharing a generic seed risks losing distinct acknowledged-existing-pending versus newly-arrived-pending premises.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "b0bd0e7e1f5c60464e62da22f9c849c7ff1f137a0efd05cd7cd4ffd7547ef57d",
       "observation": {
         "id": "aa05f7e795114331b9cf229fb73ef2ab",
@@ -109860,9 +109960,16 @@
       "scanner_id": "3ff8927177a54bcf858232caf2c299dc",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+        "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "CCN56 maps sixteen fixed consent outcomes and negative premises, not one sprawling production algorithm. Exact raw pending/deletion/source/current-work changes and read/save faults must be distinguished from cancellation/ordinary success. Prior039/040 negative controls validated this need; all operational errors and failed checks feed fixed16case/79check final requirements.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "a5e2088eb653761b712ada58dd73a5b5d524465703eb2f269f0b195d33a4f81a",
       "observation": {
         "id": "3ff8927177a54bcf858232caf2c299dc",
@@ -109922,9 +110029,16 @@
       "scanner_id": "e0e7963490f049688430466bfdf8e217",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+        "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "192 nonblank lines keep dialog-open snapshot, controlled competing writer, accepted/cancelled UI action and preservation oracle in time order. Seed and public navigation already have helpers. Splitting this into more callbacks would hide which state changed while consent was held; no meaningful smallest deletion found.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "a5e2088eb653761b712ada58dd73a5b5d524465703eb2f269f0b195d33a4f81a",
       "observation": {
         "id": "e0e7963490f049688430466bfdf8e217",
@@ -109983,9 +110097,16 @@
       "scanner_id": "f765f8b9bd41422786d7bfb50be724a3",
       "scanner_status": "open",
       "present": true,
-      "status": "unreviewed",
-      "classification": null,
-      "review": null,
+      "status": "reviewed_no_change",
+      "classification": "intentional_explicit_test_contract",
+      "review": {
+        "source_commit": "ed5783675bd334b165798eabaaeb01288afb339a",
+        "file_sha256_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+        "function_sha256_lf": "072305934ab57ff5371a5ade60fe59676f9b0d85274381e10d184300c2cc4a3f",
+        "report": "reviews/new-test-findings-risk-triage.json",
+        "reason": "The4 || operators at208 enumerate cancellation and four failure outcomes sharing exact before/after preservation; grade-save failure has its own notice, while failed evidence reads require retry. This is a coherent oracle family. A Set/helper would merely move membership logic, with no new contract benefit.",
+        "limits": "Read-only exact-source test-contract review; prior006/007native evidence reused, no new execution or scannerclosure. DRY corpus/history percentile not recomputed; optional route-policy candidate remains unimplemented."
+      },
       "evidence_fingerprint": "bbe66923ed365dbfebbd4821dcef6aaa43c299b5098157e4ddaa796df12878c9",
       "observation": {
         "id": "f765f8b9bd41422786d7bfb50be724a3",
@@ -144359,6 +144480,17 @@
       "ingestion_report": "reviews/batch-008-ingestion-verification.json",
       "dashboard_score": 4.5,
       "health_cli_precise": 4.56
+    },
+    {
+      "id": "batch-009",
+      "status": "validated_pending_merge",
+      "pull_request": null,
+      "source_commit": "21713101babdb5b548ec7ca77545c73b2c2086b9",
+      "validation_report": "reviews/batch-009-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "all_source_pins_unchanged": true
     }
   ],
   "workflow_policy": {
@@ -145472,7 +145604,7 @@
       "google-drive-migration.js": true,
       "js/app/dialogs.js": true,
       "js/app/storage-recovery.js": true,
-      "js/app/00-storage-sync-patches.js": true,
+      "js/app/00-storage-sync-patches.js": false,
       "js/app/portfolio-export.js": true,
       "js/app/10-main-app.js": true,
       "js/app/photo-crop.js": true,

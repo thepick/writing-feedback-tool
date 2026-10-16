@@ -1,0 +1,222 @@
+{
+  "repair_id": "repair-070-regression-review",
+  "verdict": "accepted",
+  "blockers": [],
+  "base_commit": "1391fd0b7f1d091b7cb1676b6b4d7353cb897eaa",
+  "inspected_git_commit": "1391fd0b7f1d091b7cb1676b6b4d7353cb897eaa",
+  "summary": "The four additional archive refusals reach the named boundaries and preserve the seeded current work before retry. Pass-through real side-effect wrappers and separate native download events prevent a test seam from faking retention. Original eight complete case records match baseline exactly. Production is unchanged; no bug, coverage increase or scanner closure is inferred.",
+  "reviewed_pins": {
+    "tests/archive-failures.browser.cjs": {
+      "raw": "2acaa73526015a2b2668b4c6086033275792f63775f0f04d2ce97e965602686f",
+      "lf": "d99a022788fb4854c05c01e40a09c42deac713d302931ba49e7c2a5042be5f64",
+      "base_git_lf": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "base_git_lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677"
+    },
+    "js/app/10-main-app.js": {
+      "raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "base_git_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b"
+    },
+    "js/app/portfolio-export.js": {
+      "raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "base_git_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94"
+    },
+    "js/app/storage-recovery.js": {
+      "raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "base_git_lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+    },
+    "tests/archive-connection.browser.cjs": {
+      "raw": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "base_git_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9"
+    },
+    "tests/archive-integrity.browser.cjs": {
+      "raw": "11f7807415cea27c165ad2584c37e7d58e81a0649acc9b0927ff243dc808029b",
+      "lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+      "base_git_lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8"
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "base_git_lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c"
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "95ade0991438b52d05ac9c8675a56cfb2ea64170c17e0d95afeeec496ea0fb66",
+      "lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643",
+      "base_git_lf": "583a125fe3be0709213276e0b330f8499144d5c05082210dc02276cc92b6e643"
+    },
+    "tests/record-identity.cjs": {
+      "raw": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+      "base_git_lf": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59"
+    },
+    "tests/session-retention.cjs": {
+      "raw": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8",
+      "base_git_lf": "213cfbb6f807fb1a30204dbdf43bad75c04ee21cc06f71961aa1b4a839d226f8"
+    },
+    "tests/portfolio-sync.cjs": {
+      "raw": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+      "base_git_lf": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6"
+    }
+  },
+  "checks": [
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:6-7,91-106,183-191"
+      ],
+      "result": "Original eight scenario identities/order and all seven ordered check names remain. The cause predicate is extended only for the new modes; original boundary meanings are retained. Baseline/fixed first eight full JSON records, including native filenames and complete multipart payloads, are identical. All12 scenarios have seven passing ordered checks; final scenario count12 plus failures=[] and thrown host assertions make failures non-green.84 is the ordered-check count, not a total including additional host assertions."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:25-60,82-89,138-145"
+      ],
+      "result": "All four new cases seed genuine canvas PNG current media, nonempty pending writing/photo payload, nonempty analysis/context/reassessment objects and current writing. Snapshot captures six storage strings, full selected-image/pending/analysis objects, ownership/selections, signature/counters/dirty flags before retry. Exact value equality and all nine explicitly present reference checks pass in actual records; these are meaningful populated controls, not comparisons of empty state."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:55-57,85-89,120-122,143-145"
+      ],
+      "result": "Both counting wrappers increment first and unconditionally delegate to real downloadBlob/class-clear with the original this/arguments. Failure snapshots retain these counts before any restoration or retry. __markArchiveRetry only reads the Node-side download count; it has no browser-state mutation or success substitution. A failed flow invoking either real side effect is caught even if a native download event arrives later: both failure call counts must be zero. Missing/rejected marker, download or ZIP parsing produces a failed case."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:65-77,146-156",
+        "js/app/portfolio-export.js:851-900,928-936,991-1061,1064-1090"
+      ],
+      "result": "Folder-empty-ack reaches actual root validation, Archives search and real POST with exact folder metadata; HTTP200{} triggers the precise create-folder error and no upload/download/clear. Both tiny cases resolve generateAsync exactly once with30 nonempty bytes and reach real1000/500-byte refusal checks, issuing no requests. Signed-out year case clears both tokens and signed-in/expiry state; it reaches the real saveArchiveZipToDrive guard after real generation, with precise sign-in feedback and zero requests. No earlier guard is bypassed."
+    },
+    {
+      "anchors": [
+        "tests/archive-failures.browser.cjs:103-113,130-179",
+        "js/app/portfolio-export.js:838-849,903-926,959-989"
+      ],
+      "result": "Original JSZip generator and object-URL behavior are restored before retry. Every new retry produces one actual browser download; year retries additionally call real class clear and issue one real captured multipart upload. Node reads native download paths and parses genuine ZIPs, checking year saved text exactly and single HTML protected text presence. Reviewer independently decoded all three stored new year multipart ZIPs with Python zipfile, verified every entry CRC and the full repeated protected essay. The invalid tiny Blob is never accepted as a healthy archive."
+    },
+    {
+      "anchors": [
+        "tests/archive-connection.browser.cjs: final report/failed-count assertion",
+        "tests/archive-integrity.browser.cjs: final report/failed-count assertion"
+      ],
+      "result": "Supplied unchanged companion suites contain76 and366 passing check records with failed=0 and final failure assertions. Their native-stage/ZIP integrity coverage is supplementary; these counts are checks, not76/366 independent browser scenarios. No production, helper, manifest, lockfile or fixture update is needed for this test-only change."
+    }
+  ],
+  "validation": {
+    "baseline_scenarios": 8,
+    "baseline_ordered_checks": 56,
+    "candidate_scenarios": 12,
+    "candidate_ordered_checks": 84,
+    "all_original8_complete_observations_equal": true,
+    "candidate_failures": 0,
+    "new_case_evidence": [
+      {
+        "kind": "year",
+        "mode": "folder-create-empty-ack",
+        "failure_requests": 3,
+        "tiny_resolutions": 0,
+        "saved_bytes_and_runtime_equal": true,
+        "nine_reference_checks": true,
+        "retry_download": {
+          "bytes": 8488,
+          "protectedEntry": "Synthetic year/Complete Portfolio.json"
+        },
+        "independently_decoded_upload_zips": [
+          {
+            "multipart_bytes": 8806,
+            "zip_entry": "Synthetic year/Complete Portfolio.json",
+            "crc_all_entries_valid": true
+          }
+        ]
+      },
+      {
+        "kind": "year",
+        "mode": "tiny-resolved",
+        "failure_requests": 0,
+        "tiny_resolutions": 1,
+        "saved_bytes_and_runtime_equal": true,
+        "nine_reference_checks": true,
+        "retry_download": {
+          "bytes": 8488,
+          "protectedEntry": "Synthetic year/Complete Portfolio.json"
+        },
+        "independently_decoded_upload_zips": [
+          {
+            "multipart_bytes": 8806,
+            "zip_entry": "Synthetic year/Complete Portfolio.json",
+            "crc_all_entries_valid": true
+          }
+        ]
+      },
+      {
+        "kind": "single",
+        "mode": "tiny-resolved",
+        "failure_requests": 0,
+        "tiny_resolutions": 1,
+        "saved_bytes_and_runtime_equal": true,
+        "nine_reference_checks": true,
+        "retry_download": {
+          "bytes": 2078,
+          "protectedEntry": "Synthetic - Portfolio.html"
+        },
+        "independently_decoded_upload_zips": []
+      },
+      {
+        "kind": "year",
+        "mode": "signed-out",
+        "failure_requests": 0,
+        "tiny_resolutions": 0,
+        "saved_bytes_and_runtime_equal": true,
+        "nine_reference_checks": true,
+        "retry_download": {
+          "bytes": 8488,
+          "protectedEntry": "Synthetic year/Complete Portfolio.json"
+        },
+        "independently_decoded_upload_zips": [
+          {
+            "multipart_bytes": 8806,
+            "zip_entry": "Synthetic year/Complete Portfolio.json",
+            "crc_all_entries_valid": true
+          }
+        ]
+      }
+    ],
+    "companion_checks": [
+      {
+        "suite": "archive-connection.browser.cjs",
+        "checks": 76,
+        "failed": 0
+      },
+      {
+        "suite": "archive-integrity.browser.cjs",
+        "checks": 366,
+        "failed": 0
+      }
+    ],
+    "fixtures_match_base_lf_current_raw_hashes": {
+      "tests/fixtures/analysis-pipeline-baseline.js": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+      "tests/fixtures/portfolio-renderer-baseline.js": "c89a135a46be7f6f80574dbd1daab3f80640246879116181470305df79450cfe"
+    }
+  },
+  "receipt_references": {
+    "worker_report_sha256": "79b256c9a34030d3f0a6bcfb2a7a1b9c43da56ceae50dc6b8c607e9e01932f9e",
+    "baseline8_json_sha256": "2829ea6d7c849653b1772754a02769d540a4175c439931ac2b02439aac758f14",
+    "candidate12_json_sha256": "3548bf0ab02e2f2b7e2a9eddcd89e16b6f6ee92bea99f8c66f24ea1b61900a7d",
+    "receipt_builder_sha256": "9d73eb20de62cd2be43ffbb2df2b3d433d1034cbb0870c145e03b7dc6237ea88",
+    "full_evidence_path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-070\\static-evidence.json",
+    "full_evidence_sha256": "251369303ba0b613a901c5425ddaf39e5c2cbdafdedc812d670e5c55c309ead5"
+  },
+  "limits": [
+    "No app/test/browser/worker-code execution or source/Git/index/tracker writes. Reviewer used read-only source/receipt inspection and Python standard-library hashing/ZIP-data decoding; only own scratch/output written.",
+    "Native public functions are called directly in a complete page with synthetic confirmations/Drive responses/compression faults. Each failure scenario gets its own page. No real Google account, cloud upload, physical device, user-click journey or live service claim.",
+    "Native download-file validity is evidenced by supplied test code plus successful receipts; temporary download files were not independently reopened after browser close. Stored multipart ZIP bytes were independently decoded. Single downloaded HTML checks a protected-text marker; year JSON checks the complete essay. Current unsaved writing/photo/pending are retention guards, not claims that archive ZIPs now contain them.",
+    "Snapshots cover the explicit seeded fields and final failure boundary, not every runtime global or transient internal mutation. The installed JSZip browser route already existed; dependency manifests are unchanged, but reviewer did not independently bind its installed module path/hash. No new package execution or dependency adoption occurred.",
+    "All reviewed source/test/receipt hashes remain stable. Outside coordinator audit documents, only the one frozen archive test differs from1391fd0. Full gate, coverage ingestion, integration/publication and scanner disposition remain coordinator-owned."
+  ]
+}

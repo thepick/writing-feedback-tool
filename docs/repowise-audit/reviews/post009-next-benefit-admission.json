@@ -1,0 +1,330 @@
+{
+  "review_id": "post009-next-benefit-admission",
+  "decision": "defer_further_production_edits_on_present_evidence",
+  "high_benefit_operations_admitted": [],
+  "preparation_only": true,
+  "source_commit": "c9b3e8fe3b62dc0e1809296e1671fabb5014c425",
+  "reviewed_at_utc": "2026-10-16T06:04:00.170698+00:00",
+  "tracker_provenance": {
+    "raw_sha256_at_read": "f83841a9eaf07e63a3c8a4e3eef8ab83186b759087d1486d01678aed27131555",
+    "source_commit_field": "ed5783675bd334b165798eabaaeb01288afb339a",
+    "updated_at_field": "2026-10-16T13:01:09.257469+07:00",
+    "warning": "Canonical source_commit still names ed578367; historical candidate rows/operation queue are proposals, not current defects or an implementation ledger. Accepted068/069/070 reports and actual composed source take precedence for this planning decision. No tracker mutation."
+  },
+  "source_pins": {
+    "js/app/00-storage-sync-patches.js": {
+      "git_blob": "92b0112c2dde1f348e535caa1c98b89dc48ab7a5",
+      "raw_at_read": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "checkout_lf_matches_commit": true,
+      "functions": {
+        "uploadWftJsonFilePromise": {
+          "span": [
+            5051,
+            5119
+          ],
+          "sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb"
+        },
+        "restoreGoogleStateFromStorage": {
+          "span": [
+            3381,
+            3420
+          ],
+          "sha256_lf": "482dc394cc0079ee131a5279a2c5102fc48f3a38a978abb90c553c50b554458e"
+        },
+        "migrateOldWftTokenToSessionStorage": {
+          "span": [
+            6137,
+            6140
+          ],
+          "sha256_lf": "e95e3f8211e62f08f6fbc552a512cae32c355ffb5fcadf67d7514c06df29df61"
+        }
+      },
+      "raw_unchanged_at_report_end": true
+    },
+    "js/app/10-main-app.js": {
+      "git_blob": "fa822ac74b08552c316de5049f13f6af73788bc3",
+      "raw_at_read": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "checkout_lf_matches_commit": true,
+      "functions": {
+        "buildLowSampleAnalysis": {
+          "span": [
+            986,
+            1060
+          ],
+          "sha256_lf": "02de02aab71ae4fd216ec7c11e4973a251e7133a09b3a284762dfdff58ab0f8b"
+        },
+        "getCategoryEligibility": {
+          "span": [
+            952,
+            965
+          ],
+          "sha256_lf": "759cbff79e8b2fb12342f7e487fcd87de357e6031f90b07684d31d5ec2d7eeff"
+        },
+        "getEvidenceNote": {
+          "span": [
+            977,
+            984
+          ],
+          "sha256_lf": "f01fbabc371844e3582bdead5967add5ff3f4cd6a19b4e05b8ba6eac67d03f52"
+        }
+      },
+      "raw_unchanged_at_report_end": true
+    }
+  },
+  "test_scope_pins": {
+    "tests/storage-upload-ownership.browser.cjs": {
+      "git_blob": "1d478aa5ce5a94389f36ba39df0fe4ecda1a5c00",
+      "sha256_lf": "58bcf81923f516bb332ea006f10938b6afe81c6feeaeb06d0d67d7f1c1699d97",
+      "inspected_boundary_oracle_span": [
+        5,
+        109
+      ],
+      "checkout_matches_commit_lf": true
+    },
+    "tests/drive-lifecycle.browser.cjs": {
+      "git_blob": "86481c82882daa325b4d5c6430e0c11d8ff6cd49",
+      "sha256_lf": "8d98e58120c6079281a6dfd9b28fdd2cad2b1def6320309e4c51e4341e6623d6",
+      "inspected_boundary_oracle_span": [
+        205,
+        247
+      ],
+      "checkout_matches_commit_lf": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "git_blob": "578fc1e12b08ab6427722586a10155ec86af9518",
+      "sha256_lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "inspected_boundary_oracle_span": [
+        650,
+        675
+      ],
+      "checkout_matches_commit_lf": true
+    },
+    "tests/portfolio-index.browser.cjs": {
+      "git_blob": "9d0758050ec323d5e39619a0bbd463ebe820ec23",
+      "sha256_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+      "inspected_boundary_oracle_span": [
+        323,
+        338
+      ],
+      "checkout_matches_commit_lf": true
+    },
+    "tests/analysis-policy.browser.cjs": {
+      "git_blob": "9356ad0e63d263c398681b606a9c04ed78a3b471",
+      "sha256_lf": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2",
+      "inspected_boundary_oracle_span": [
+        13,
+        45
+      ],
+      "checkout_matches_commit_lf": true
+    },
+    "tests/analysis-pipeline.browser.cjs": {
+      "git_blob": "ce8c74a70a14918f3ba48472bb327042d1052c9a",
+      "sha256_lf": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+      "inspected_boundary_oracle_span": [
+        218,
+        250
+      ],
+      "checkout_matches_commit_lf": true
+    },
+    "tests/missing-feedback.browser.cjs": {
+      "git_blob": "b8c4005ce48b67f92d8f5699642153792b5df501",
+      "sha256_lf": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+      "inspected_boundary_oracle_span": [
+        99,
+        118
+      ],
+      "checkout_matches_commit_lf": true
+    }
+  },
+  "prior_report_sha256_raw": {
+    "remaining-operation-queue.json": "2e08aa2a1d02f06ad6a6ee0675c1c710554e88097bbeaa69ca5add1e1ec07bfd",
+    "repair-043-storage-callbacks.json": "198b6eace97f11852da4dc91e0753f07b5cf51e5fa332e715fba1e114c3c7a19",
+    "repair-028-analysis-shapes.json": "0c1c846d7e8400205e6d1473207143fe0dbf37e20222777040cb04db56e65061",
+    "repair-049-rendering-audit-genre.json": "e2b35b00524ebdf9229b1e53328c818874a965b422ce315380cfeef65a489d5e",
+    "batch-007-feedback-risk-admission.json": "4f6e35420dd4f7b799b2135646bba3f8a94a627df46b0fe490f2941a8da7f00e",
+    "batch-009-scope-revalidation.json": "879ffed5dd6e2804f4fef4e1a48986bb810ce578c00053830f39697647c0fe24",
+    "repair-068-safety-review.json": "94626dd1086d42f57a86c012707a687a8582cecfcec201b1a6d4aa4b8ad3d1a6",
+    "repair-069-safety-review.json": "cce96a33bd0395d3ec1abb6479ef6fb042133270b14a9ca1fdd7b8909a4aad7f",
+    "repair-070-safety-review.json": "c755907a7dd27b14515a3b4d70994800f21ecd7f6254ecff9f9be6c7000d5093"
+  },
+  "screening": "Read current candidate inventory and all60 historical production-operation summaries, then bound actual source/caller/oracle review to the strongest uncompleted data-acknowledgement and score-consistency candidates below. This is not a fresh whole-repository audit. No coverage rows or071moving crop test read.",
+  "highest_risk_operations": [
+    {
+      "operation_id": "P10",
+      "members": [
+        {
+          "id": "code_health:finding_ca33c20e174a2bfda950",
+          "tracker_status_at_read": "candidate_needs_regression",
+          "report": "reviews/repair-043-storage-callbacks.json"
+        },
+        {
+          "id": "code_health:finding_7cf232b061699f0ff1c4",
+          "tracker_status_at_read": "candidate_needs_regression",
+          "report": "reviews/repair-043-storage-callbacks.json"
+        }
+      ],
+      "disposition": "defer_code_change; strongest_future_test_first_boundary",
+      "file": "js/app/00-storage-sync-patches.js",
+      "function": "uploadWftJsonFilePromise",
+      "anchors": [
+        5051,
+        5065,
+        5069,
+        5081,
+        5085,
+        5092,
+        5093,
+        5097,
+        5105
+      ],
+      "current_fact": "Intended and downloaded hashes currently use the same settings/deletions/index/portfolio dispatch. Equality is required before timeout recovery returns/caches the canonical ID; mismatch/missing canonical rethrows the original timeout. Required shape validation and settings apiKey removal precede serialization. No source-supported inconsistent acknowledgement or lost writing is established.",
+      "user_consequence": "This boundary decides whether a timed-out Drive save can be treated as complete. A wrong future hash policy could falsely acknowledge stale cloud content, but no such mismatch exists in current code.",
+      "maintainability_benefit_vs_cost": "Selecting one local fingerprint function would remove two adjacent filename dispatch copies within one function. Benefit is modest without changing behavior; it is insufficient reason alone to disturb acknowledgement/recovery code. No generic dispatcher/framework warranted.",
+      "actual_callers": [
+        "00:1685 index upload",
+        "00:5292/5330 settings create/update",
+        "00:5384/5412 deletions create/update",
+        "00:5640/5669 portfolio create/update"
+      ],
+      "oracle_evidence": "Native ownership suite holds real uploads and advances timeout/retry clocks, checking late success/error/account ownership. Preference cases650-675 inspect actual sanitized multipart on ordinary/network-retry settings uploads; index323-338 proves ordinary native upload/ack. These do not provide the entire intended cloud readback equality/mismatch matrix requested in043. No SAVE_FILE_TIMEOUT literal tests found; this search alone is not absence-of-coverage proof.",
+      "smallest_future_scope_if_reprioritized": "First add bounded cases in existing native storage-upload-ownership or drive-lifecycle suite around actual timeout readback; production may stay unchanged. Only then consider one local function-reference selector, retaining each existing data/cloudData ||{} normalization and all validation/cache/error gates.",
+      "needed_cases": [
+        "For settings/deletions/portfolio/index: server stores intended data while upload response is held past timeout; real canonical readback accepts exact fingerprint and preserves local work.",
+        "For the same four filename policies: genuinely changed readback rejects original timeout without publishing synced/clearing pending or dirty state.",
+        "Missing canonical, malformed required cloud payload, non-timeout rejection and settings credential redaction; preserve current ownership/account guards."
+      ],
+      "admitted_now": false,
+      "defect_reproduced": false
+    },
+    {
+      "operation_id": "P20",
+      "members": [
+        {
+          "id": "code_health:finding_add1570706440ac5d6c3",
+          "tracker_status_at_read": "needs_revalidation",
+          "report": "reviews/repair-028-analysis-shapes.json"
+        },
+        {
+          "id": "code_health:finding_cb53739209c1f71bdb7a",
+          "tracker_status_at_read": "needs_revalidation",
+          "report": "reviews/repair-028-analysis-shapes.json"
+        },
+        {
+          "id": "code_health:finding_1cec729b60c0910038a8",
+          "tracker_status_at_read": "needs_revalidation",
+          "report": "reviews/repair-049-rendering-audit-genre.json"
+        },
+        {
+          "id": "code_health:finding_14c98c45fd927d16130a",
+          "tracker_status_at_read": "needs_revalidation",
+          "report": "reviews/repair-049-rendering-audit-genre.json"
+        },
+        {
+          "id": "code_health:finding_f61b81e17239b007f947",
+          "tracker_status_at_read": "needs_revalidation",
+          "report": "reviews/repair-049-rendering-audit-genre.json"
+        },
+        {
+          "id": "code_health:finding_cf938a3cb775f4a9762b",
+          "tracker_status_at_read": "needs_revalidation",
+          "report": "reviews/repair-049-rendering-audit-genre.json"
+        }
+      ],
+      "disposition": "defer_low_priority_adjacent_policy_reuse",
+      "file": "js/app/10-main-app.js",
+      "function": "buildLowSampleAnalysis",
+      "anchors": [
+        952,
+        986,
+        1019,
+        1021,
+        1022,
+        1026,
+        1031,
+        8291,
+        8294,
+        8298
+      ],
+      "current_fact": "The same eligibility && limited && not Organization && not Flow expression appears three times in one category callback. Every occurrence currently agrees; detailed score is copied from categoryScores. Eligibility is a fresh ordinary object produced by getCategoryEligibility, and shipped analyzeWriting uses this branch only for insufficient/limited samples.",
+      "user_consequence": "Incorrect divergence would make displayed quick/detail/category scores disagree on a short sample. Current source yields the same null/minimum result everywhere; no observed educational scoring defect.",
+      "maintainability_benefit_vs_cost": "One callback-local canScore/score could be useful later, but all copies are adjacent in a single small callback rather than independent policies across five consumers as068 was. Existing repeated expression is clear. This does not meet the requested HIGH actual-benefit bar.",
+      "actual_callers": [
+        "main8294 actual analysis before low-sample return without correction/rubric/detail provider requests; presentation and pending preparation8295-8298",
+        "frozen analysis-pipeline-baseline.js calls shared helper, so old/new parity alone would share this policy"
+      ],
+      "oracle_evidence": "Native analysis-policy checks low-sample overall null/provider0. Pipeline compares full candidate/reference output, while explicit low-sample checks assert no requests/null overall/no grammarAudit. Existing source policy is coherent; no indication these predicates currently disagree.",
+      "smallest_future_scope_if_reprioritized": "Only one local boolean and score inside the existing callback; keep category insertion order, coaching strings and all current null-versus-RUBRIC_MIN semantics. No new helper API or scoring-policy change.",
+      "needed_cases": [
+        "If adopted later, independent literals for all CATEGORY_KEYS under insufficient/limited and eligible/ineligible cases: quick score/reason, detailed score and categoryScores agree; Organization/Flow always null.",
+        "Retain zero scoring-provider calls for typed low-sample cases, null overall, exact labels/coaching and saved pending data. Compare grades4/5/12 and empty-topic fallback; do not rely only on the shared-helper parity fixture."
+      ],
+      "admitted_now": false,
+      "defect_reproduced": false
+    }
+  ],
+  "other_dispositions": [
+    {
+      "operation_id": "P07",
+      "members": [
+        {
+          "id": "code_health:finding_dc5417fc9d643005862c",
+          "tracker_status_at_read": "confirmed_repair_candidate",
+          "report": "reviews/repair-033-settings-auth-shapes.json"
+        }
+      ],
+      "disposition": "defer_low_priority_dead_branch_cleanup",
+      "current_source_proof": "restoreGoogleStateFromStorage3381-3420 contains an always-false migration-success branch3394-3404; migrateOldWftTokenToSessionStorage6137-6140 returns false. Sole production call remains that branch. Valid session restore and legacy cleanup/reconnect behavior already execute; deleting the unreachable branch improves clarity but supplies no current product/data-safety correction. Do not enable migration."
+    },
+    {
+      "operations": [
+        "P03",
+        "P04",
+        "P11"
+      ],
+      "disposition": "already_implemented_do_not_reopen",
+      "reason": "Actual current source/reports069,068,066 implement settings overlay, six-root-name policy and settings copy-loop reuse. Historical warning/candidate labels are not grounds for another edit."
+    },
+    {
+      "operations": [
+        "P01",
+        "P09",
+        "P16",
+        "optional crop route adapter"
+      ],
+      "disposition": "excluded_by_instruction_without_new_evidence",
+      "reason": "No new concrete evidence obtained or investigation reopened."
+    },
+    {
+      "operations": [
+        "P46",
+        "P58"
+      ],
+      "disposition": "no_admission_or_moving_test_review",
+      "reason": "Input filtering/drag cleanup are low-priority existing proposals.071owns native crop-input contracts; this review does not inspect that moving file or combine a source refactor with its oracle work."
+    },
+    {
+      "operations": [
+        "P02",
+        "P05",
+        "P08",
+        "P15",
+        "P18",
+        "P53",
+        "P54",
+        "P60"
+      ],
+      "disposition": "defer_on_existing_low_benefit_rationale",
+      "reason": "Inventory shows tiny redundant checks/branches/arguments, adjacent accessor reuse or a valid async wrapper, rather than established wrong behavior. Existing prior reviews remain available; no claim of a fresh complete source/test re-audit for these leaves. Larger test/API retirement and file-split plans are not admitted."
+    }
+  ],
+  "new_unconfirmed_behavior_leads": [],
+  "summary": "No further HIGH-benefit production operation admitted from current evidence. Preserve071test work, complete composed batch validation/refresh, and wait for concrete bug or stronger boundary evidence before spending a source edit on the optional historical queue. A future timeout-readback contract is the most meaningful bounded investigation, not a current bug claim.",
+  "limits": [
+    "Read-only planning only; no source/test/config/Git/index/tracker mutations or app/tests/browser/third-party execution. Only this requested report written. No proof-script/framework invented.",
+    "Source/test pins bind immutable c9b3e8f; current matching LF checked on inspected files. Moving071crop test excluded. Parent audit documents may change.",
+    "Current tracker required_work_summary reports zero confirmed unresolved bugs; reused as provenance, not proof none exist. This review does not establish bug freedom, full-test pass, coverage completeness or scanner closure.",
+    "No arbitrary new production fix authorized. Existing006/007 and068-070 accepted evidence reused within stated scope; no tests rerun."
+  ]
+}

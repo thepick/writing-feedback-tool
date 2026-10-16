@@ -1,0 +1,169 @@
+{
+  "review_id": "repair-069-safety-review",
+  "decision": "accepted_no_blocker",
+  "blocking_findings": [],
+  "base_commit": "2f1dcba5c848bad3ee2944503b22c16c0c367e65",
+  "inspected_git_head_at_end": "2f1dcba5c848bad3ee2944503b22c16c0c367e65",
+  "completed_utc": "2026-10-16T05:46:38.230926+00:00",
+  "source_pins_sha256": {
+    "js/app/00-storage-sync-patches.js": {
+      "current_raw": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "current_lf": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "baseline_git_blob": "5eb86bd4c446353df1d9b97cfb2f55745ef6ea04",
+      "baseline_lf": "b2ab2089b54171705eabd9250c947e601b4841c00aa367299ac21ea9379db184",
+      "unchanged_dependency": false,
+      "unchanged_at_review_end": true
+    },
+    "tests/preference-integrity-scenarios.js": {
+      "current_raw": "ea5a3f8b27796a3ad9442daf4232bd5939d86b1fb5bc4bab13b3ece8910bfac4",
+      "current_lf": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+      "baseline_git_blob": "bf5939068cf2462d36100a01e06cd94c91b447d1",
+      "baseline_lf": "4f77f691a27c883f117cc5014612e0e55b92da93c8a260dc939469981a1b014b",
+      "unchanged_dependency": false,
+      "unchanged_at_review_end": true
+    },
+    "tests/preference-integrity.browser.cjs": {
+      "current_raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+      "current_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "baseline_git_blob": "067fad254ad4b702704ff5aadac2ae7ad8401f1e",
+      "baseline_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+      "unchanged_dependency": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/settings-deletions-sync.cjs": {
+      "current_raw": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "current_lf": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "baseline_git_blob": "699125f259621917bfc671ed01d7faa9ef060610",
+      "baseline_lf": "edc0c3e85ceaf150f22dbc49470358499d273e6277c68ccf28b35736ab0a455b",
+      "unchanged_dependency": true,
+      "unchanged_at_review_end": true
+    },
+    "tests/settings-deletions-sync.browser.cjs": {
+      "current_raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "current_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "baseline_git_blob": "b66e29931424a32b72f8176cf71443344354d073",
+      "baseline_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "unchanged_dependency": true,
+      "unchanged_at_review_end": true
+    },
+    "js/app/10-main-app.js": {
+      "current_raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+      "current_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "baseline_git_blob": "fa822ac74b08552c316de5049f13f6af73788bc3",
+      "baseline_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+      "unchanged_dependency": true,
+      "unchanged_at_review_end": true
+    },
+    "js/app/portfolio-export.js": {
+      "current_raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "current_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "baseline_git_blob": "b37f52b9efad9ce0cc93d0bbc575d7e5bc76663a",
+      "baseline_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "unchanged_dependency": true,
+      "unchanged_at_review_end": true
+    },
+    "js/app/storage-recovery.js": {
+      "current_raw": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+      "current_lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "baseline_git_blob": "26ea30755abd441468625d072aaadb574e0515e4",
+      "baseline_lf": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "unchanged_dependency": true,
+      "unchanged_at_review_end": true
+    }
+  },
+  "verified_source_scope": {
+    "production": "17added/28removed lines, only existing form-overlay promotion and two call sites. Exact reverse reconstruction restores entire immutable baseline00 LF bytes.",
+    "test": "101added lines, only the100-line checkFormOverlayContracts helper and its invocation. Removing both restores entire immutable scenario file. No former assertion/case/fixture change.",
+    "helper": "updateSettingsFromForm(settings):12 original statements,4DOM lookups,8 conditional/unconditional assignments; whitespace-normalized statement equality independently verified against both old copies.",
+    "lexical_contract": "Original writer-local settings object is passed directly; helper uses no writer-local values beyond that object. DOM/getter/override references continue resolving the same application globals. No this/arguments/return/async dependence. Search found only two callers and no conflicting helper declaration.",
+    "reused068": {
+      "report": "repair-068-safety-review.json",
+      "sha256_raw": "94626dd1086d42f57a86c012707a687a8582cecfcec201b1a6d4aa4b8ad3d1a6",
+      "basis": "069 baseline00 equals accepted068 after LF hash. Whole-file reverse reconstruction leaves that root-policy code and its other consumers unchanged."
+    }
+  },
+  "assessment": [
+    {
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:550-563",
+        "js/app/00-storage-sync-patches.js:565-591"
+      ],
+      "reason": "All four DOM lookups still precede every assignment; fields retain their original model/target defaults, checked booleans, optional getter typeof checks and strict override===true. Writer keeps required initial read, clone/override own-key handling, recovery/preflight, filtered roster, validation and durable write ordering. Existing catch restores saved form and rethrows same error. Dirty/schedule/safe-mode publication stays after successful write; local credential remains on disk and returned object deletes apiKey."
+    },
+    {
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:4464-4481"
+      ],
+      "reason": "Snapshot required preflight and explicit read remain outside soft overlay try. Lookup failure yields saved values; later strictness failure retains only preceding model/target/use assignments. Catch preserves existing stored roster or supplies current filtered roster if absent. Credential deletion remains after catch; no storage/publication added. Extraction does not turn required failures into best-effort results."
+    },
+    {
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:595",
+        "js/app/00-storage-sync-patches.js:1251",
+        "js/app/00-storage-sync-patches.js:2376",
+        "js/app/00-storage-sync-patches.js:5255-5263",
+        "js/app/00-storage-sync-patches.js:5309-5318",
+        "js/app/00-storage-sync-patches.js:5963-5980",
+        "js/app/00-storage-sync-patches.js:6314-6318",
+        "js/app/10-main-app.js:882-890",
+        "js/app/10-main-app.js:7570-7574",
+        "js/app/portfolio-export.js:940-954"
+      ],
+      "reason": "Actual writer callers remain preference events, required grade/reassessment changes, optional student-ID persistence and page-hide saves. Snapshot still serves initial/refreshed sync, legacy Drive save and archive class-state capture. Search found no explicit VM extraction of either real writer/snapshot; existing record-identity writer and settings/deletion snapshot stubs need no helper dependency. Full native script loads the hoisted helper before use."
+    },
+    {
+      "anchors": [
+        "tests/preference-integrity-scenarios.js:18-57",
+        "tests/preference-integrity-scenarios.js:159-258",
+        "tests/preference-integrity-scenarios.js:686-703",
+        "tests/preference-integrity.browser.cjs:13-43"
+      ],
+      "reason": "New32 fixed contracts call real writer/snapshot; literal expectations cover7missing elements/getters x2callers,4blank/flag values x2,2throw stages x2roster states x2 and2required snapshot failures. Fault premises require actual injection, lookup order, zero writes/publication and same sentinel. Writer rollback and snapshot partial values/redaction differ intentionally. Every caught assertion becomes pass:false and final native runner fails; no result-dependent skip or live-service call. Each case resets synthetic storage/state and restores monkeypatches."
+    }
+  ],
+  "supplied_evidence": {
+    "review_method": "Parsed existing receipts and logs; no runtime or test rerun.",
+    "prior_cases": 105,
+    "original_with_new_contracts": {
+      "native_browser_cases": 137,
+      "reported_failed": 0
+    },
+    "candidate": {
+      "native_browser_preference_cases": 137,
+      "native_browser_settings_deletion_cases": 8,
+      "node_vm_settings_deletion_cases": 14,
+      "focused_total": 159,
+      "reported_failed": 0
+    },
+    "parity": "All105 complete prior case records equal both original/candidate results. All32 new complete named contract records exactly equal original/candidate, not merely matching counts.",
+    "original_provenance": "Receipt describes new scenarios on original unmodified production checkout before refactor; preserved original files independently match immutable baseline LF. This review did not witness execution.",
+    "preserved_original_file_pins": {
+      "work/repair069-original/00-storage-sync-patches.js": {
+        "raw": "8767b5a0b4354a851e5555a52d92e246b5a7f90fd3fa088f76abf3eabb057547",
+        "lf_matches_baseline_git": true
+      },
+      "work/repair069-original/preference-integrity-scenarios.js": {
+        "raw": "deabf6596989f31826ced78098abee93d338f9e2ae9e443c4da366066e9b5141",
+        "lf_matches_baseline_git": true
+      }
+    },
+    "syntax": "Supplied two-file syntax log reports2 passed; not rerun.",
+    "references_sha256_raw": {
+      "outputs/repair068-fixed/preference-integrity.browser.json": "30cab144e02982c3656bd2fde09f2c7201e5e9fd02b7ea19f98636ec6a39a1cc",
+      "outputs/repair069-original-contract/preference-integrity.json": "491e970b790363e51b3bf1b02b2b2ab717df4fb4ef22685c29bc3d7764ee1c80",
+      "outputs/repair069-fixed/preference-integrity.json": "491e970b790363e51b3bf1b02b2b2ab717df4fb4ef22685c29bc3d7764ee1c80",
+      "outputs/repair-069-settings-form-overlay.json": "d380dede279846442f76cadd2625bff8c7374f8294c015b655cc3b8d794fb811",
+      "outputs/repair069-original-contract/preference-integrity.log": "dcdf0b11a7fbf86e6fd13c74f98b47f04562c0a642143f259dc387e2468c62d0",
+      "outputs/repair069-fixed/preference-integrity.browser.log": "dcdf0b11a7fbf86e6fd13c74f98b47f04562c0a642143f259dc387e2468c62d0",
+      "outputs/repair069-fixed/syntax.log": "a423543417c2b45b9d2546e93e2960d271492462be8d8911f6bfe238dc5f768b",
+      "outputs/repair069-fixed/settings-deletions-sync.log": "6eed40ec1c0a76ba4439fda25a2d198513fe808da713add38e6f1b3dfa8ad29e",
+      "outputs/repair069-fixed/settings-deletions-sync.browser.log": "151028e032fe664aa2f624cf69e290b5723220ee6721bff6340b5533939057b8"
+    }
+  },
+  "limits": [
+    "Only own scratch and this report written; no app/tests/browser or source/config/Git/index/tracker changes. Exact eight inspected file pins rechecked unchanged at end.",
+    "Read-only source/evidence review; supplied receipt timing is not independent cryptographic execution attestation. Focused159cases are145native browser plus14NodeVM, not159native.",
+    "No full-suite, live Google/Drive, deployment, coverage or scanner-clearance claim. Root owns integration and combined frozen-source gate.",
+    "New faults directly cover early DOM lookup and strictness getter exceptions, not every possible property setter/DOM failure. Exact source reconstruction supports unchanged remaining failure paths; no expanded public helper contract claimed."
+  ]
+}
