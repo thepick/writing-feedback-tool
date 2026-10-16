@@ -1,0 +1,155 @@
+{
+  "repair_id": "repair-059",
+  "lead_id": "review050-disabled-target-status-badge",
+  "status": "confirmed_fixed_focused_native_verified_awaiting_coordinator_review",
+  "generated_at": "2026-10-16T09:19:19.2462909+07:00",
+  "source_commit_assignment": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "branch_assignment": "codex/repowise-batch-006-20261016",
+  "git_checked": false,
+  "problem": "Configured target100 retained after checkbox off. Textarea-input and checkbox-change bindings both showed On target at100words while disabled and both meter fills0%.",
+  "change": "One guard at js/app/10-main-app.js:8606: targetEnabled && words === target. Original meter and all thresholds/colors/text untouched.",
+  "callers_reviewed": [
+    "10-main-app.js:8379 textarea input -> syncUiState:7834 -> wrapped updateMeter",
+    "10-main-app.js:8387 numeric input binds original before wrapper; not used as sole reproduction trigger",
+    "10-main-app.js:8389-8391 checkbox change -> wrapper",
+    "10-main-app.js:8395 model preference change -> wrapper",
+    "00-storage-sync-patches.js:6255-6290 applyWftPreferenceForm -> wrapper",
+    "10-main-app.js:8576-8610 captured original + late wrapper -> updateStatusBar at00-storage-sync-patches.js:8028-8038",
+    "10-main-app.js:8665 initial wrapper call"
+  ],
+  "regression": {
+    "preserved_existing_checks": 85,
+    "controls": "Disabled99/100/101/0; enabled0/74/75/94/95/99/100/105/106/151; off/on checkbox at exact100. All assert configured target, checkbox, disabled input, word count, badge and original/status fill; restore control values afterward.",
+    "method": "Existing native Edge full-app suite, same existing local route, actual DOM control values and dispatched input/change events. No direct updateMeter call or status/meter/scoring mock in added test.",
+    "old_driver_prefix_suffix_unchanged": true,
+    "new_checks": 16,
+    "file": "tests/main-app-health.browser.cjs:129",
+    "report_contract_preserved": true
+  },
+  "before": {
+    "runner_report": "work/repowise-repair-059/before-regression/suite-results.json",
+    "production_matches_assignment": true,
+    "case_report": "work/repowise-repair-059/before-regression/main-app-health.browser.json",
+    "production_raw_sha256": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+    "failed": [
+      {
+        "name": "word-count meter: disabled writing input 100",
+        "passed": false,
+        "observed": {
+          "badge": "On target",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      },
+      {
+        "name": "word-count meter: disabled checkbox change at exact count",
+        "passed": false,
+        "observed": {
+          "badge": "On target",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      }
+    ],
+    "browser_errors": [],
+    "runner_exit": 1,
+    "syntax_failed": 0,
+    "checks": 101,
+    "passed": 99,
+    "failure_classification": "Expected two assertion failures; native app ran, case report produced, no page errors. Runner classifies failed rows as Empty or failed case report.",
+    "syntax_checks": 91
+  },
+  "after": {
+    "syntax_failed": 0,
+    "passed": 101,
+    "case_report": "work/repowise-repair-059/after/main-app-health.browser.json",
+    "runner_report": "work/repowise-repair-059/after/suite-results.json",
+    "failed": 0,
+    "fixed_case_observations": [
+      {
+        "name": "word-count meter: disabled writing input 100",
+        "passed": true,
+        "observed": {
+          "badge": "Target off",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      },
+      {
+        "name": "word-count meter: disabled checkbox change at exact count",
+        "passed": true,
+        "observed": {
+          "badge": "Target off",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      }
+    ],
+    "runner_exit": 0,
+    "syntax_checks": 91,
+    "checks": 101,
+    "browser_errors": [],
+    "runner_passed": true
+  },
+  "execution": {
+    "runtime": "C:/Users/Michael/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+    "touched_code_syntax": "Both touched files covered by91 successful syntax checks in each selected runner invocation. Only1 native suite ran per invocation; no full repository test gate.",
+    "NODE_PATH": "C:/Users/Michael/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules",
+    "initial_operational_failure": "First attempt used system Node without NODE_PATH: installed playwright not found; no app ran/no case report. Preserved work/repowise-repair-059/before separately. Reused coordinator bundled runtime/packages; no install or dependency edits.",
+    "runner": "scripts/run-tests.cjs --suite tests/main-app-health.browser.cjs --out <own scratch before-regression or after>"
+  },
+  "hashes": {
+    "changed_files": [
+      {
+        "path": "js/app/10-main-app.js",
+        "before_raw": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+        "after_raw": "bbd895f089aa123d74634e51d85c830b5b944656ba69c99ccdfa8ffa744dc68e"
+      },
+      {
+        "path": "tests/main-app-health.browser.cjs",
+        "before_raw": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+        "after_raw": "117cf63cd7d94c82245498293a757c3f1ed3d3088b70b02346f36e8575f3645b"
+      }
+    ],
+    "only_allowed2_changed": true,
+    "one_guard_only_verified": true,
+    "test_after_lf": "a2a1e5a8d5dbf91e27dc3f2328c0a46e3fa2b2028d63655aa912cc3b6222c887",
+    "test_before_lf": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f",
+    "main_after_lf": "90364eb999c6e71c0b05dff45a874da532a4f5423c4f9b5f31e54e1381e4091f",
+    "main_before_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "all91_source_and1_manifest_checked": true
+  },
+  "scope": {
+    "repository_edits": [
+      "js/app/10-main-app.js",
+      "tests/main-app-health.browser.cjs"
+    ],
+    "tracker_docs_config_index_dependency_hook_changes": 0,
+    "additional_agents": 0,
+    "next_evidence_bug_released": false,
+    "git_operations": 0,
+    "deployments": 0
+  },
+  "limits": [
+    "Focused native checks only; independent review, coordinator commit and combined full suite/publication are pending.",
+    "No live Google/AI/service tests; external requests blocked by existing harness.",
+    "No original042 meter cleanup, date/metric fixes or evidence-key changes."
+  ],
+  "next": "Stop for coordinator review/commit. No further source edits without separate release."
+}

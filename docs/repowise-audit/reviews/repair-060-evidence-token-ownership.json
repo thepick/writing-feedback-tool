@@ -1,0 +1,71 @@
+{
+  "repair_id": "repair-060",
+  "lead": "049-L1",
+  "status": "confirmed_fixed_focused_native_verified_awaiting_review",
+  "source_commit_assignment": "2538f9d6b8aadd49a9c5e33a55065d6644f7f4bd",
+  "generated_at": "2026-10-16T09:26:53.8401830+07:00",
+  "reproduced": "Parsed Grammar8 comment The constructor belongs in this phrase. with unrelated Birds gather nearby. rows was accepted, rendered in student/audit DOM and saved, with AI teacher comment passed validation. Literal constructor evidence was not stored as an own token.",
+  "fixed": "Two own-key checks in getEvidenceTokens4148(stop) and commentOverlapsEvidence4160(bag). Unsupported candidate now produces Your grammar is mostly clear, and birds gather nearby.; audit source reports fallback. Literal constructor and ordinary grounded candidates still accepted.",
+  "caller_scope": "Parser2257-2318 -> category notice rows4563-4568 -> buildStudentFeedbackForCategory4425 -> buildTeacherComment4282/isValidTeacherComment4165 -> shared overlap. Audit source4770, validation4796, renderDetailedAssessment4650, renderTeacherAuditView4874; notebook print5959 and saved feedback00-storage-sync-patches6751/6786 also reuse builder. Grammar computed patternNotes2020/7898 precede parsed noticeRows; preserved. Long candidate avoids teacherize1730 replacement.",
+  "tests": {
+    "suite": "tests/main-app-health.browser.cjs",
+    "method": "Full native Edge scripts, synthetic parsed model response, actual shared builders and student/audit DOM; no validator/feedback/scoring stubs.",
+    "preserved_old_checks": 101,
+    "added_checks": 36,
+    "controls": "Own literal constructor token, unrelated constructor rejection, ordinary case folding/positive/negative, stop-only rows, short tokens, null/undefined/[] neutrality; parsed rows, validator, builder, audit source/check, rendered and saved feedback, unchanged source score/rows and pending/analysis state.",
+    "before": {
+      "exit": 1,
+      "total": 137,
+      "passed": 129,
+      "failed": 8,
+      "page_errors": 0,
+      "production_matches_before_pin": true,
+      "failure": "Expected assertion failures: unsupported constructor accepted in helpers/validator/builder/audit/rendering/save plus missing own literal token. No operational failure."
+    },
+    "after": {
+      "exit": 0,
+      "total": 137,
+      "passed": 137,
+      "failed": 0,
+      "page_errors": 0,
+      "old101_rows_identical": true
+    },
+    "other_passed": {
+      "missing_feedback": 228,
+      "feedback_compatibility": 30
+    },
+    "syntax": {
+      "before": 91,
+      "after": 91,
+      "failed": 0,
+      "includes_both_touched_files": true
+    }
+  },
+  "receipts": {
+    "before": "work/repowise-repair-060/before/suite-results.json",
+    "before_cases": "work/repowise-repair-060/before/main-app-health.browser.json",
+    "after": "work/repowise-repair-060/after/suite-results.json",
+    "after_cases": "work/repowise-repair-060/after/main-app-health.browser.json",
+    "other_cases": "work/repowise-repair-060/after/{missing-feedback,feedback-compatibility}.browser.json"
+  },
+  "sha256_raw": [
+    {
+      "file": "js/app/10-main-app.js",
+      "before": "bbd895f089aa123d74634e51d85c830b5b944656ba69c99ccdfa8ffa744dc68e",
+      "after": "6f7558a52ddc1d293bb9dda56bf34bb9a1d50f9eeefdbba00b75e9a0d9421540"
+    },
+    {
+      "file": "tests/main-app-health.browser.cjs",
+      "before": "117cf63cd7d94c82245498293a757c3f1ed3d3088b70b02346f36e8575f3645b",
+      "after": "c2f506b114c1716052af81da578f2603ace02debcf506330c26fc601846f2326"
+    }
+  ],
+  "scope": {
+    "all91_source_and_manifest_pins_matched_before": true,
+    "only_allowed2_changed": true,
+    "only2_production_lines_changed": true,
+    "existing_test_body_and_reporting_preserved": true,
+    "git_tracker_docs_config_index_dependencies_hooks_deploy_agents": 0
+  },
+  "limits": "No full suite, independent review, commit, index refresh, deployment or live service checks. Runtime/package bundle reused; no installs. No claim for __proto__/mixed-case prototype names under lowercase ASCII>=4 tokenizer. Stop for coordinator review; no third fix authorized."
+}

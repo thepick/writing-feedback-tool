@@ -1,0 +1,32 @@
+{
+  "repair_id": "repair-060-regression-review",
+  "before": "2538f9d6b8aadd49a9c5e33a55065d6644f7f4bd",
+  "after": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
+  "decision": "No blocker found in the pinned two-line repair or native regression oracles.",
+  "source_sha256": {
+    "js/app/10-main-app.js": {
+      "before_raw": "90364eb999c6e71c0b05dff45a874da532a4f5423c4f9b5f31e54e1381e4091f",
+      "after_raw": "c9ea6897da11d891a257be9c8c567bad2708de166f930801e78483af1932bd7a",
+      "before_lf": "90364eb999c6e71c0b05dff45a874da532a4f5423c4f9b5f31e54e1381e4091f",
+      "after_lf": "c9ea6897da11d891a257be9c8c567bad2708de166f930801e78483af1932bd7a"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "before_raw": "a2a1e5a8d5dbf91e27dc3f2328c0a46e3fa2b2028d63655aa912cc3b6222c887",
+      "after_raw": "507cc4cfea26220bf6ff8d2b0e3bc697f40187f1107c9977b0c2f10ceeb8ad49",
+      "before_lf": "a2a1e5a8d5dbf91e27dc3f2328c0a46e3fa2b2028d63655aa912cc3b6222c887",
+      "after_lf": "507cc4cfea26220bf6ff8d2b0e3bc697f40187f1107c9977b0c2f10ceeb8ad49"
+    }
+  },
+  "verification": [
+    "Immutable Git diff is exactly own-key membership for stop/bag. Before backups LF-match Git2538; Gitf312 with CRLF restored matches writer after hashes. Current classifier edits excluded.",
+    "Removing only checkEvidenceTokens and its invocation reconstructs the complete prior test LF bytes. Original101 receipt rows identical/passing; same137 names/order; exactly8 expected old failures and137 after pass, errors[].",
+    "Independent literals require unsupported constructor rejection/fallback and supported literal/ordinary comments unchanged. Real parseDetailedAssessment, validator, shared builder, student DOM, audit DOM/source/validation and portfolio feedback builder are reached without target/scoring stubs. Empty rows remain neutral; stop/short-token controls and score/rows/pending-state preservation asserted.",
+    "Before runner status1 reflects assertion failures, not startup failure. After runner passes health137, missing-feedback228 and compatibility30 (20renderer+10flow); both recorded91syntax entries succeed. Reviewer did not rerun them."
+  ],
+  "receipt_refs": [
+    "work/repowise-repair-060/before/{suite-results,main-app-health.browser}.json",
+    "work/repowise-repair-060/after/{suite-results,main-app-health.browser,missing-feedback.browser,feedback-compatibility.browser}.json"
+  ],
+  "wording_correction": "Writer report says saved, but the added saved feedback assertion calls buildPortfolioDetailedFeedback only. It proves saved-feedback object construction, not commit/localStorage persistence, full analysis publication or historical-record rewriting. This does not block the shared validator repair.",
+  "limits": "Read-only source/receipt review; no runtime/test/browser, Git/index/tracker changes or agents. No complete-state, live-service, full-gate or closure claim. Evidence token matching remains the existing lowercase ASCII>=4 lexical heuristic; no broader prototype-name/tokenizer claim."
+}

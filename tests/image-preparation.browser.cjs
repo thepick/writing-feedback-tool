@@ -68,6 +68,89 @@ const localAppRoute = require('./support/local-app-route');
             let rejected = false;
             try { await optimizeImageForOcr(new File(['broken'], 'broken.png', { type: 'image/png' })); } catch (error) { rejected = /Could not load/.test(error.message); }
             check('invalid image still rejects without replacing existing queue', rejected && selectedImages.length === 1 && selectedImages[0].dataUrl === raster);
+            const nativeOptimize = optimizeImageForOcr, nativeHandle = handleSelectedImages;
+            const seed = { ...selectedImages[0], name: 'queued.svg' }, a = new File([transparent], 'page-A.png', { type: 'image/png' }), b = new File([transparent], 'page-B.png', { type: 'image/png' });
+            const writing = document.getElementById('studentWriting'), select = document.getElementById('studentSelect');
+            const controls = ['takePhotoBtn', 'uploadImageBtn', 'cameraInput', 'imageUploadInput'].map(id => document.getElementById(id));
+            const same = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+            const within = promise => {
+                let timer;
+                return Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(Error('Image preparation readiness timed out')), 5000); })]).finally(() => clearTimeout(timer));
+            };
+            function reset() {
+                students = ['Alice']; selectedStudent = 'Alice'; populateStudentDropdown(); select.value = 'Alice';
+                writing.value = 'Alice keeps this writing.'; activePortfolioReassessmentSource = { sourceStudentName: 'Alice', sourceSessionId: 'kept' };
+                selectedImages = [{ ...seed }]; syncSelectedImageState(); updateSelectedImagePreview();
+                pendingPortfolioSync = { studentName: 'Alice', signature: 'keep', sessionData: { id: 'keep', originalText: 'Earlier writing.', images: [] } };
+                persistPendingPortfolioSync();
+                return { context: captureCurrentWritingContext(), pending: localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY), memory: JSON.stringify(getPendingPortfolioSync()) };
+            }
+            function hold(files) {
+                const gates = new Map(files.map(file => {
+                    let ready, release;
+                    return [file.name, { started: new Promise(resolve => { ready = resolve; }), waiting: new Promise(resolve => { release = resolve; }), ready: () => ready(), release: () => release() }];
+                })), operations = [], calls = [];
+                optimizeImageForOcr = async file => {
+                    calls.push(file.name);
+                    const result = await nativeOptimize(file), gate = gates.get(file.name);
+                    if (gate) { gate.ready(); await gate.waiting; }
+                    return result;
+                };
+                handleSelectedImages = files => { const running = nativeHandle(files); operations.push(running); return running; };
+                return { gates, operations, calls, async close() {
+                    for (const gate of gates.values()) gate.release();
+                    try { await within(Promise.allSettled(operations)); }
+                    finally { optimizeImageForOcr = nativeOptimize; handleSelectedImages = nativeHandle; }
+                } };
+            }
+            function acquire(id, files) {
+                const transfer = new DataTransfer(); files.forEach(file => transfer.items.add(file));
+                const input = document.getElementById(id); input.files = transfer.files; input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            const pendingKept = before => localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY) === before.pending && JSON.stringify(getPendingPortfolioSync()) === before.memory;
+            for (const firstInput of ['cameraInput', 'imageUploadInput']) {
+                const before = reset(), held = hold([a]);
+                try {
+                    acquire(firstInput, [a]); await within(held.gates.get(a.name).started);
+                    check('pending acquisition disables camera upload buttons and inputs ' + firstInput, controls.every(el => el.disabled));
+                    const otherInput = firstInput === 'cameraInput' ? 'imageUploadInput' : 'cameraInput';
+                    for (const entry of ['picker', 'drop', 'direct']) {
+                        if (entry === 'picker') acquire(otherInput, [b]);
+                        else if (entry === 'drop') {
+                            const transfer = new DataTransfer(); transfer.items.add(b);
+                            document.querySelector('.app').dispatchEvent(new DragEvent('drop', { dataTransfer: transfer, bubbles: true, cancelable: true }));
+                        } else handleSelectedImages([b]);
+                        await within(held.operations[held.operations.length - 1]);
+                        const status = document.getElementById('ocrStatus').textContent;
+                        cases.push({ name: 'busy ' + entry + ' visibly rejected without preparing or changing context ' + firstInput,
+                            passed: held.calls.length === 1 && /wait.*try.*again/i.test(status) && same(captureCurrentWritingContext(), before.context) && pendingKept(before),
+                            observed: { optimizerCalls: held.calls.length, status } });
+                    }
+                    held.gates.get(a.name).release(); await within(held.operations[0]);
+                    check('accepted first image commits and controls recover ' + firstInput, same(selectedImages.map(image => image.name), [seed.name, a.name]) && controls.every(el => !el.disabled));
+                    acquire(otherInput, [b]); await within(held.operations[held.operations.length - 1]);
+                    check('fresh retry adds rejected image exactly once ' + firstInput, same(selectedImages.map(image => image.name), [seed.name, a.name, b.name]) && same(held.calls, [a.name, b.name]));
+                    check('acquisition retains owner text source primary and pending ' + firstInput, selectedImages[0].dataUrl === seed.dataUrl && selectedImageDataUrl === seed.dataUrl && writing.value === before.context.writingText && same(activePortfolioReassessmentSource, before.context.reassessmentSource) && pendingKept(before));
+                } finally { await held.close(); }
+            }
+            for (const change of ['writing', 'source']) {
+                const before = reset(), queue = JSON.stringify(selectedImages), held = hold([a]);
+                try {
+                    acquire('cameraInput', [a]); await within(held.gates.get(a.name).started);
+                    if (change === 'writing') { writing.value = 'Newer writing stays.'; writing.dispatchEvent(new Event('input', { bubbles: true })); }
+                    else activePortfolioReassessmentSource = { sourceStudentName: 'Alice', sourceSessionId: 'newer' };
+                    const context = captureCurrentWritingContext();
+                    held.gates.get(a.name).release(); await within(held.operations[0]);
+                    check('held real image cannot append after ' + change + ' change', JSON.stringify(selectedImages) === queue && same(captureCurrentWritingContext(), context) && pendingKept(before));
+                    check('controls recover after stale ' + change, controls.every(el => !el.disabled));
+                } finally { await held.close(); }
+                await nativeHandle([b]); check('fresh acquisition after stale ' + change, selectedImages.length === 2 && selectedImages[1].name === b.name);
+            }
+            const beforeFailure = reset(), originalQueue = JSON.stringify(selectedImages);
+            await nativeHandle([a, new File(['broken'], 'broken.png', { type: 'image/png' })]);
+            check('failed valid-plus-broken batch is atomic and visibly fails', JSON.stringify(selectedImages) === originalQueue && document.getElementById('ocrStatus').classList.contains('error') && /Could not load/.test(document.getElementById('ocrStatus').textContent) && controls.every(el => !el.disabled) && pendingKept(beforeFailure));
+            await nativeHandle([a]); await nativeHandle([b]);
+            check('retry and sequential page additions preserve readable files', same(selectedImages.map(image => image.name), [seed.name, a.name, b.name]) && selectedImages.every(image => isSafeWftImageDataUrl(image.dataUrl)) && pendingKept(beforeFailure));
             return cases;
         });
         console.log(JSON.stringify({ suite: 'image-preparation', cases, errors }));

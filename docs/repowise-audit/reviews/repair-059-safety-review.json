@@ -1,0 +1,192 @@
+{
+  "repair_id": "repair-059",
+  "review": "independent focused safety review",
+  "decision": "approve_focused_change_no_blocker",
+  "blockers": [],
+  "introduced_regression_findings": [],
+  "immutable_before_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "observed_head": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "observed_branch": "codex/repowise-batch-006-20261016",
+  "changed_source_bindings": {
+    "js/app/10-main-app.js": {
+      "before_saved_raw": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+      "before_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+      "after_raw": "bbd895f089aa123d74634e51d85c830b5b944656ba69c99ccdfa8ffa744dc68e",
+      "after_lf": "90364eb999c6e71c0b05dff45a874da532a4f5423c4f9b5f31e54e1381e4091f"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "before_saved_raw": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+      "before_lf": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f",
+      "after_raw": "117cf63cd7d94c82245498293a757c3f1ed3d3088b70b02346f36e8575f3645b",
+      "after_lf": "a2a1e5a8d5dbf91e27dc3f2328c0a46e3fa2b2028d63655aa912cc3b6222c887"
+    }
+  },
+  "unchanged_context_bindings": {
+    "js/app/00-storage-sync-patches.js": {
+      "raw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+      "normalized_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "same_lf_as_immutable_before": true
+    },
+    "index.html": {
+      "raw": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+      "normalized_lf": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+      "same_lf_as_immutable_before": true
+    }
+  },
+  "worker_report": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-059-disabled-target-badge.json",
+    "sha256_raw": "c751c9c84cc90806871d0adc98fc1af555d9358ea94a23f595b177a8d5d68f4a"
+  },
+  "artifact_receipts": {
+    "before-regression": {
+      "suite-results.json": {
+        "sha256_raw": "8153500196291a822cc09bd8ece303079cebc548999f79dd2795273a6e1c16fb",
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-059\\before-regression\\suite-results.json"
+      },
+      "main-app-health.browser.json": {
+        "sha256_raw": "6257cb55be9980a22fce7afc445485b048a0a6df4bc8fbbeaf6670f8f5530b2b",
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-059\\before-regression\\main-app-health.browser.json"
+      }
+    },
+    "after": {
+      "suite-results.json": {
+        "sha256_raw": "c7090519644a7aca58ffdac1795459b8a38b872d5be5e8e2cd0ce9304c26ebda",
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-059\\after\\suite-results.json"
+      },
+      "main-app-health.browser.json": {
+        "sha256_raw": "4ecaf1eb087fd8b380c4d6dbae3002b72b44aec4f599c39c5ab82727801025a3",
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-repair-059\\after\\main-app-health.browser.json"
+      }
+    }
+  },
+  "receipt_results": {
+    "before-regression": {
+      "runner_passed": false,
+      "suite_status": 1,
+      "syntax_checks": 91,
+      "failed_syntax": 0,
+      "checks": 101,
+      "failed_checks": 2,
+      "browser_errors": []
+    },
+    "after": {
+      "runner_passed": true,
+      "suite_status": 0,
+      "syntax_checks": 91,
+      "failed_syntax": 0,
+      "checks": 101,
+      "failed_checks": 0,
+      "browser_errors": []
+    }
+  },
+  "checks": [
+    {
+      "result": "confirmed_by_source_and_supplied_native_receipts",
+      "topic": "User-visible baseline defect",
+      "reason": "The real textarea input event reaches syncUiState then late updateMeter; the checkbox change resolves the late wrapper. With target100 retained but unchecked, both native paths displayed On target while input disabled and both fills0%. These are the only two failing baseline checks and only two changed after observations; the corrected badge is Target off. The numeric target input was bound before the wrapper, so it is correctly not used as the sole reproduction trigger.",
+      "anchors": [
+        "js/app/10-main-app.js:4929-4938",
+        "js/app/10-main-app.js:7834",
+        "js/app/10-main-app.js:8379-8395",
+        "js/app/10-main-app.js:8576-8610",
+        "js/app/00-storage-sync-patches.js:8028-8038",
+        "index.html:3448-3452,3724"
+      ]
+    },
+    {
+      "result": "accepted",
+      "topic": "Smallest guard and preserved policy",
+      "reason": "Exact normalized-source comparison proves the sole production difference is targetEnabled && added to the final equality override. For enabled targets the expression is identical; for disabled targets it preserves the already-selected Target off or empty Start typing label. Ratio, fill, colors,75/95/105 thresholds, original meter, scoring and preference storage code are unchanged. Enabled positive target fallback is already enforced by getTargetWordCountValue.",
+      "anchors": [
+        "js/app/10-main-app.js:8606",
+        "js/app/10-main-app.js:4929-4938",
+        "js/app/10-main-app.js:4945-4975"
+      ]
+    },
+    {
+      "result": "verified",
+      "topic": "Original85 checks preserved",
+      "reason": "Removing only the new helper and its appended call reconstructs the entire immutable test file exactly after LF normalization. Both supplied101-check runs contain the exact same first85 check objects, all true. New checks are appended after existing tab/merge/score/guide/visibility work; native runner/error/report/final assertion/cleanup code is unchanged.",
+      "anchors": [
+        "tests/main-app-health.browser.cjs:124-153",
+        "tests/main-app-health.browser.cjs:156-177"
+      ]
+    },
+    {
+      "result": "no_false_green_found",
+      "topic": "New16 native oracles",
+      "reason": "Four disabled writing counts, ten literal enabled label/boundary vectors and off/on checkbox controls at exact100 check seven observed DOM/form fields. Inputs dispatch existing native bindings; no meter/status/scoring function is replaced. Both original and visible fills are checked, along with retained target, checkbox, disabled state, word count and literal label. Fixed target100 makes expected fill an independent simple percentage. All16 named checks are present; a thrown/missing DOM path fails suite execution, false results reach the unchanged final assertion, and no data-dependent skip or empty-loop pass was added.",
+      "anchors": [
+        "tests/main-app-health.browser.cjs:125-149",
+        "tests/main-app-health.browser.cjs:171-177"
+      ]
+    }
+  ],
+  "changed_native_observations": [
+    {
+      "name": "word-count meter: disabled writing input 100",
+      "before": {
+        "name": "word-count meter: disabled writing input 100",
+        "passed": false,
+        "observed": {
+          "badge": "On target",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      },
+      "after": {
+        "name": "word-count meter: disabled writing input 100",
+        "passed": true,
+        "observed": {
+          "badge": "Target off",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      }
+    },
+    {
+      "name": "word-count meter: disabled checkbox change at exact count",
+      "before": {
+        "name": "word-count meter: disabled checkbox change at exact count",
+        "passed": false,
+        "observed": {
+          "badge": "On target",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      },
+      "after": {
+        "name": "word-count meter: disabled checkbox change at exact count",
+        "passed": true,
+        "observed": {
+          "badge": "Target off",
+          "words": "100 words",
+          "fill": "0%",
+          "originalFill": "0%",
+          "target": "100",
+          "checked": false,
+          "disabled": true
+        }
+      }
+    }
+  ],
+  "validation_limits": [
+    "Independent reviewer did not execute app/tests/browser or rerun syntax. Results above are parsed, hashed supplied worker receipts plus independent source comparisons.",
+    "This is one focused native suite and91 syntax entries, not a new full-suite gate, publication/live-service or browser-coverage claim.",
+    "The initial system-Node missing-playwright attempt is not regression evidence; only before-regression and after receipts are used.",
+    "Added events are programmatically dispatched through real shipped bindings; no trusted hardware typing claim. The one-guard logic is independent of event trust.",
+    "Only this report written; no source/test/config/tracker/Git/index edits or agents. Other code outside the focused diff/context was not audited."
+  ]
+}

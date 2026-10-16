@@ -520,6 +520,7 @@ var API_KEY = EMBEDDED_API_KEY;
 var DEFAULT_MODEL = "google/gemini-3.1-flash-lite-preview";
 var OCR_MODEL = "google/gemini-3.1-flash-lite-preview";
 var selectedImages = [];
+var isPreparingImages = false;
 var selectedImageDataUrl = "";
 var selectedImageName = "";
 var selectedImageExtractedText = "";
@@ -2911,20 +2912,26 @@ function updateOcrControls() {
     var extractBtn = document.getElementById("extractTextBtn");
     var takePhotoBtn = document.getElementById("takePhotoBtn");
     var uploadImageBtn = document.getElementById("uploadImageBtn");
+    var cameraInput = document.getElementById("cameraInput");
+    var imageUploadInput = document.getElementById("imageUploadInput");
     var studentWriting = document.getElementById("studentWriting");
     if (!extractBtn) return;
     var hasImages = selectedImages && selectedImages.length > 0;
     var hasText = studentWriting && studentWriting.value.trim().length > 0;
+    if (cameraInput) cameraInput.disabled = isPreparingImages;
+    if (imageUploadInput) imageUploadInput.disabled = isPreparingImages;
     extractBtn.disabled = isAnalyzing || !hasImages;
 
     // Keep the photo/upload controls useful after the first page is queued.
     // On mobile, users usually take one page at a time, so the buttons must remain visible.
     if (takePhotoBtn) {
+        takePhotoBtn.disabled = isPreparingImages;
         takePhotoBtn.innerHTML = hasImages
             ? '<span aria-hidden="true" style="font-size:18px;vertical-align:text-bottom;margin-right:6px;">📷</span>Add Another Photo'
             : '<span aria-hidden="true" style="font-size:18px;vertical-align:text-bottom;margin-right:6px;">📷</span>Take Photo';
     }
     if (uploadImageBtn) {
+        uploadImageBtn.disabled = isPreparingImages;
         uploadImageBtn.textContent = hasImages ? '⬆️ Add More Images' : '⬆️ Upload Image';
     }
 
@@ -3282,6 +3289,10 @@ async function optimizeImageForOcr(file) {
 
 async function handleSelectedImages(files) {
     if (!files || !files.length) return;
+    if (isPreparingImages) {
+        setOcrStatus("Please wait for image preparation to finish, then try adding your images again.", "error");
+        return;
+    }
     var imageFiles = [];
     for (var i = 0; i < files.length; i++) {
         if (files[i] && files[i].type && files[i].type.indexOf("image/") === 0) imageFiles.push(files[i]);
@@ -3293,11 +3304,12 @@ async function handleSelectedImages(files) {
 
     var existingCount = selectedImages.length;
     var context = captureCurrentWritingContext();
-    setOcrStatus(imageFiles.length === 1 ? "Preparing image..." : "Preparing " + imageFiles.length + " images...", "");
-    updateOcrControls();
 
     var prepared = [];
+    isPreparingImages = true;
     try {
+        setOcrStatus(imageFiles.length === 1 ? "Preparing image..." : "Preparing " + imageFiles.length + " images...", "");
+        updateOcrControls();
         for (var j = 0; j < imageFiles.length; j++) {
             var optimizedDataUrl = await optimizeImageForOcr(imageFiles[j]);
             prepared.push({
@@ -3326,6 +3338,9 @@ async function handleSelectedImages(files) {
         updateSelectedImagePreview();
         syncUiState();
         setOcrStatus(e.message || "Could not prepare the selected images.", "error");
+    } finally {
+        isPreparingImages = false;
+        updateOcrControls();
     }
 }
 
@@ -4145,7 +4160,7 @@ function getEvidenceTokens(rows) {
         var text = String((row.area || "") + " " + (row.comment || "")).toLowerCase();
         var words = text.match(/[a-z]{4,}/g) || [];
         for (var j = 0; j < words.length; j++) {
-            if (!stop[words[j]]) bag[words[j]] = true;
+            if (!Object.prototype.hasOwnProperty.call(stop, words[j])) bag[words[j]] = true;
         }
     }
     return bag;
@@ -4157,7 +4172,7 @@ function commentOverlapsEvidence(text, rows) {
     var value = String(text || "").toLowerCase();
     var words = value.match(/[a-z]{4,}/g) || [];
     for (var i = 0; i < words.length; i++) {
-        if (bag[words[i]]) return true;
+        if (Object.prototype.hasOwnProperty.call(bag, words[i])) return true;
     }
     return false;
 }
@@ -4914,7 +4929,7 @@ function formatGrammarCalc(calc) {
             '<tr><td>Corrected story word count</td><td>' + calc.wordCount + '</td></tr>' +
             '<tr><td>Error density formula</td><td>(total errors / word count) x 100</td></tr>' +
             '<tr><td>Error density</td><td class="' + densityClass + '">' + calc.errorDensity.toFixed(2) + '</td></tr>' +
-            '<tr><td>Grammar band</td><td>' + calc.bandText + '</td></tr>' +
+            '<tr><td>Grammar band</td><td>' + calc.errorDensity.toFixed(2) + ' per 100 words = ' + calc.grammarScore + '/' + RUBRIC_MAX + '</td></tr>' +
             '<tr><td>Final Grammar rubric score</td><td><strong>' + calc.grammarScore + '/' + RUBRIC_MAX + '</strong></td></tr>' +
             '<tr><td>Overall score conversion check</td><td>10 = 100, 9 = 90, 8 = 80, 7 = 70, 6 = 60, 5 = 50, 4 = 40, then average only scored categories</td></tr>' +
             '<tr><td>Target word count</td><td>' + calc.targetWords + '</td></tr>' +
@@ -5395,7 +5410,7 @@ function detectWritingGenreInfo(text) {
     var value = raw.toLowerCase();
     if (!value) return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
 
-    if (hasLetterFeatures(raw)) {
+    if (!/^dear diary,?[ \t]*(?:\r?\n|$)/i.test(raw) && hasLetterFeatures(raw)) {
         return makeWritingGenreInfo("Letter / Email", "Letter", "letter", "high", "auto");
     }
 
@@ -6698,6 +6713,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
     var originalQuote;
     var correctedMatch;
     var modelSentence;
+    var example;
     var i;
 
     if (!sentences.length) return null;
@@ -6727,7 +6743,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             originalQuote = sentences[i];
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             if (correctedMatch && hasLikelyMissingCommaAfterOpener(originalQuote, correctedMatch)) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Adding Commas After Openers",
                     "Grammar",
@@ -6735,10 +6751,11 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "The comma after the opener helps the sentence read more clearly."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
             modelSentence = buildSimpleOpenerCommaModel(originalQuote);
             if (modelSentence) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Adding Commas After Openers",
                     "Grammar",
@@ -6746,6 +6763,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     modelSentence,
                     "The comma after the opener helps the sentence read more clearly."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
 
@@ -6753,7 +6771,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             originalQuote = sentences[i];
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             if (correctedMatch && isRunOnNotebookGuideCandidate(originalQuote)) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Breaking Long Sentences",
                     "Grammar",
@@ -6761,11 +6779,12 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "Breaking the long idea into clearer sentence parts makes it easier to follow."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
             if (isRunOnNotebookGuideCandidate(originalQuote)) {
                 modelSentence = buildSimpleRunOnSentenceBreakModel(originalQuote);
                 if (modelSentence) {
-                    return makeNotebookGuideExample(
+                    example = makeNotebookGuideExample(
                         "Grammar",
                         "Breaking Long Sentences",
                         "Grammar",
@@ -6773,10 +6792,11 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                         modelSentence,
                         "Breaking the long idea into clearer sentence parts makes it easier to follow."
                     );
+                    if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
                 }
             }
             if (correctedMatch) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Grammar",
                     "Making Sentences Clearer",
                     "Grammar",
@@ -6784,6 +6804,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "This version fixes the grammar in the sentence while keeping your idea."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
         return null;
@@ -6796,7 +6817,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             modelSentence = correctedMatch || buildSimpleConventionModel(originalQuote);
             if (modelSentence) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Spelling and Word Forms",
                     inferConventionSkill(originalQuote, modelSentence),
                     "Spelling & Punctuation",
@@ -6804,6 +6825,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     modelSentence,
                     "Fixing spelling, word forms, and punctuation makes the sentence clearer and more polished."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
 
@@ -6811,7 +6833,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
             originalQuote = sentences[i];
             correctedMatch = findBestCorrectedMatchForQuote(originalQuote, correctedText);
             if (correctedMatch && looksLikeConventionRevision(originalQuote, correctedMatch)) {
-                return makeNotebookGuideExample(
+                example = makeNotebookGuideExample(
                     "Spelling and Word Forms",
                     inferConventionSkill(originalQuote, correctedMatch),
                     "Spelling & Punctuation",
@@ -6819,6 +6841,7 @@ function buildFallbackExampleForPriority(priority, originalText, correctedText) 
                     correctedMatch,
                     "Fixing spelling, word forms, and punctuation makes the sentence clearer and more polished."
                 );
+                if (example && originalTextContainsNotebookQuote(originalText, example.originalQuote)) return example;
             }
         }
         return null;
@@ -8078,13 +8101,6 @@ function renderScoredAnalysisDebug(data, parsed1, step1, step2, step3) {
     var detailed = data.detailed;
     var eligibility = data.categoryEligibility;
     var categoryScores = data.categoryScores;
-    var bandText = "18.1 or higher = 1";
-    if (grammarScore === 7) bandText = "0 - 2 = 7";
-    else if (grammarScore === 6) bandText = "2.1 - 4 = 6";
-    else if (grammarScore === 5) bandText = "4.1 - 6 = 5";
-    else if (grammarScore === 4) bandText = "6.1 - 9 = 4";
-    else if (grammarScore === 3) bandText = "9.1 - 13 = 3";
-    else if (grammarScore === 2) bandText = "13.1 - 18 = 2";
 
     document.getElementById("step1Raw").textContent = step1 + "\n\n--- Step 2 (Quick Rubric) ---\n" + step2;
     document.getElementById("step3Raw").textContent = step3;
@@ -8095,7 +8111,6 @@ function renderScoredAnalysisDebug(data, parsed1, step1, step2, step3) {
         totalErrors: totalErrors,
         wordCount: correctedWordCount,
         errorDensity: errorDensity,
-        bandText: bandText,
         grammarScore: grammarScore,
         targetWords: targetWords,
         actualWords: actualWords,
@@ -8603,7 +8618,7 @@ updateMeter = function() {
     } else {
         badgeText = "Above target";
     }
-    if (words === target) badgeText = "On target";
+    if (targetEnabled && words === target) badgeText = "On target";
 
     updateStatusBar(words, target, targetEnabled, fillWidth, fillBackground, badgeText);
     updateAnalyzeBtnState();

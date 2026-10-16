@@ -1,0 +1,18 @@
+{
+  "source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "lead_id": "049-L2",
+  "decision": "reviewed_no_change",
+  "reason": "Direct plain-title renderer fallback concern remains plausible, but no affected current user-facing producer established. parseStep1 unconditionally calls buildMinimalCorrectionMarkup; changed highlightable tokens are marked and renderCorrected immediately routes markup to renderCorrectionMarkdown. Ordinary scored and pending paths use that correctedStory. Portfolio legacy plain text uses buildStoryHtmlWithTitle directly, not this fallback. Reopen if a supported producer bypassing normalization is found.",
+  "anchors": [
+    "10-main-app.js:1283-1307",
+    "10-main-app.js:1323-1358",
+    "10-main-app.js:2146-2166",
+    "10-main-app.js:8008-8046",
+    "00-storage-sync-patches.js:6728-6736",
+    "00-storage-sync-patches.js:7728-7730"
+  ],
+  "limits": [
+    "Immutable source/caller review; no native reproduction or universal renderer correctness claim.",
+    "No source change warranted under current confirmed-user-bug policy."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "repair_id": "repair-062-regression-review",
+  "before": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
+  "after": "2043847c29760b6e122320a54c319a701ab41c4e",
+  "blockers": [],
+  "decision": "No blocking regression/oracle defect found for single-flight busy/retry policy.",
+  "pins_sha256": {
+    "js/app/10-main-app.js": {
+      "before_git_lf": "dac599dee6ce88e6539ab71f406d493055dc32704bcef4d2cc4ed987fdefde55",
+      "after_git_lf": "3395b10c421bc0b0d8117b33b3beaf5434f093611241cb7e757053a97a8b5443"
+    },
+    "tests/image-preparation.browser.cjs": {
+      "before_git_lf": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81",
+      "after_git_lf": "84f56fb39a7237262e81f641d74a3e2ab33c8d97d0bcf99eacc9dcd9d6c20969"
+    }
+  },
+  "verified": [
+    "LF backups and CRLF-restored Git outputs match writer hashes. Final busy driver LF equals Git2043847. Removing only inserted test block exactly restores original driver; original10 pixel/resize/SVG receipt rows identical/passing. Identity suite/context storage bundle unchanged.",
+    "Old race driver hash verified:24rows/2fail, both real optimizer completions reached; A-first leaves Q+A and B-first Q+B with Image added status. Distinct historical acceptance oracle is not represented as final policy.",
+    "Same final busy driver:32rows/12old failures/32after pass; fixed loops with no result-dependent skipping. Before/after identity logs contain23PASS/noFAIL; selected runner statuses agree; all3 record91 successful syntax checks and no page errors.",
+    "Gates await nativeOptimize before holding real URLs; DataTransfer change/drop handlers call a delegating nativeHandle observer. 5s readiness/operation timeouts reject, not pass. allSettled only cleans up; wrappers restore in finally.",
+    "Controls prove4disabled inputs/buttons, forced picker/drop/direct wait-retry rejection with1optimizer call and unchanged full context+pending, first commit, enabled recovery and fresh retry Q+A+B. Writing/source stale returns keep current state and recover; valid+broken batch is atomic with visible error; sequential retries pass.",
+    "Production retains context equality and optimizer. Busy set before await; try/finally clears flag and refreshes controls on success, caught optimization failure and stale early return. No changed-owner recapture or weakened append guard."
+  ],
+  "receipts": "work/repowise-repair-062/{before,before-busy-policy,after}/{suite-results.json,image-preparation.browser.log}; before/after analysis-identity.browser.log; preserved race-reproduction and busy-policy drivers.",
+  "limits": "Read-only receipts/source inspection; no app/browser/tests run or repository mutations/agents. A/B use different names but identical PNG content: proves separate additions/count/order, not distinct-pixel identity or full uploaded-byte fidelity. Native events are synthetic, not physical camera input. No serialization claim: rejected work needs a fresh retry. No full gate/publication/closure claim."
+}

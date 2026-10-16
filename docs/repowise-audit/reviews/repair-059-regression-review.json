@@ -1,0 +1,157 @@
+{
+  "repair_id": "repair-059-regression-review",
+  "baseline_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "inspected_git_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "source_scope": "Current batch006 working-tree fix, identified by hashes; HEAD is still baseline6542. Before backups normalized-match immutable Git6542. Not a claim the fix is committed.",
+  "conclusion": "No blocking defect found. The narrow guard corrects the two reproduced disabled-target badge failures; authored native-event controls and paired receipts support unchanged enabled/other disabled behavior.",
+  "blockers": [],
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "raw_sha256": "bbd895f089aa123d74634e51d85c830b5b944656ba69c99ccdfa8ffa744dc68e",
+      "normalized_lf_sha256": "90364eb999c6e71c0b05dff45a874da532a4f5423c4f9b5f31e54e1381e4091f"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "raw_sha256": "117cf63cd7d94c82245498293a757c3f1ed3d3088b70b02346f36e8575f3645b",
+      "normalized_lf_sha256": "a2a1e5a8d5dbf91e27dc3f2328c0a46e3fa2b2028d63655aa912cc3b6222c887"
+    },
+    "js/app/00-storage-sync-patches.js": {
+      "raw_sha256": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+      "normalized_lf_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+    },
+    "tests/support/local-app-route.js": {
+      "raw_sha256": "c2a198f3d2cd2be8716d02d6ce74e8863ba2a166f369378631f2f247948b7037",
+      "normalized_lf_sha256": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f"
+    }
+  },
+  "before_source_hashes": {
+    "js/app/10-main-app.js": {
+      "raw_sha256": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+      "normalized_lf_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "raw_sha256": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+      "normalized_lf_sha256": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f"
+    }
+  },
+  "receipt_hashes": {
+    "work\\repowise-repair-059\\10-main-app.before.js": {
+      "raw_sha256": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+      "normalized_lf_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+    },
+    "work\\repowise-repair-059\\main-app-health.before.cjs": {
+      "raw_sha256": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+      "normalized_lf_sha256": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f"
+    },
+    "work\\repowise-repair-059\\before-regression\\main-app-health.browser.json": {
+      "raw_sha256": "6257cb55be9980a22fce7afc445485b048a0a6df4bc8fbbeaf6670f8f5530b2b",
+      "normalized_lf_sha256": "6257cb55be9980a22fce7afc445485b048a0a6df4bc8fbbeaf6670f8f5530b2b"
+    },
+    "work\\repowise-repair-059\\before-regression\\main-app-health.browser.log": {
+      "raw_sha256": "f9cfb6c015938c684dbdfd3fef1af5f0cff343a3f5dec942b435b56a29583fbf",
+      "normalized_lf_sha256": "f9cfb6c015938c684dbdfd3fef1af5f0cff343a3f5dec942b435b56a29583fbf"
+    },
+    "work\\repowise-repair-059\\before-regression\\suite-results.json": {
+      "raw_sha256": "8153500196291a822cc09bd8ece303079cebc548999f79dd2795273a6e1c16fb",
+      "normalized_lf_sha256": "8153500196291a822cc09bd8ece303079cebc548999f79dd2795273a6e1c16fb"
+    },
+    "work\\repowise-repair-059\\after\\main-app-health.browser.json": {
+      "raw_sha256": "4ecaf1eb087fd8b380c4d6dbae3002b72b44aec4f599c39c5ab82727801025a3",
+      "normalized_lf_sha256": "4ecaf1eb087fd8b380c4d6dbae3002b72b44aec4f599c39c5ab82727801025a3"
+    },
+    "work\\repowise-repair-059\\after\\main-app-health.browser.log": {
+      "raw_sha256": "5575f22d777a4270aa9b3e046444b0c1b0ce3a9ffef4133439f784fa1b1ada7c",
+      "normalized_lf_sha256": "5575f22d777a4270aa9b3e046444b0c1b0ce3a9ffef4133439f784fa1b1ada7c"
+    },
+    "work\\repowise-repair-059\\after\\suite-results.json": {
+      "raw_sha256": "c7090519644a7aca58ffdac1795459b8a38b872d5be5e8e2cd0ce9304c26ebda",
+      "normalized_lf_sha256": "c7090519644a7aca58ffdac1795459b8a38b872d5be5e8e2cd0ce9304c26ebda"
+    },
+    "outputs\\repowise-repairs\\repair-059-disabled-target-badge.json": {
+      "raw_sha256": "c751c9c84cc90806871d0adc98fc1af555d9358ea94a23f595b177a8d5d68f4a",
+      "normalized_lf_sha256": "50462122fd5c1bb8b821abbefe87022383bf85d433e90a510bf9495fe9f7d6cb"
+    }
+  },
+  "verification": {
+    "production_change": "Raw-byte exact reconstruction verifies only targetEnabled && was added to the final equality override at main:8606. Original meter, thresholds, fills/colors, counter, updateStatusBar and scoring code unchanged.",
+    "test_preservation": "Removing only the new checkWordCountMeter helper and its invocation reconstructs the entire old test file exactly after LF normalization. First85 receipt rows are identical and passing before/after; all101 case names/order match.",
+    "native_event_path": "Added test:127 dispatches textarea input -> real registered syncUiState at main:8379 -> wrapped updateMeter through syncUiState:7834. Test:128 dispatches checkbox change -> main:8389-8391 -> current wrapper. Native updateStatusBar writes badge/fill at storage:8028-8038. Added checks never call or replace updateMeter/updateStatusBar, countWords or scoring. Existing suite mocks restore their native functions before this check.",
+    "old_listener_caveat": "Numeric target input is bound to the original function before the later wrapper. The reproduction correctly uses textarea input and checkbox change after setting target100; it does not falsely infer wrapper coverage from the numeric input event alone.",
+    "oracle": "All16 new rows independently compare a literal badge expectation, exact words text, configured100, checkbox state, numeric-input disabled flag and both original/status meter widths. Cases cover disabled99/100/101/0; enabled0/74/75/94/95/99/100/105/106/151; and off/on checkbox transitions at100. Values restored in finally.",
+    "paired_result": {
+      "before": {
+        "checks": 101,
+        "passed": 99,
+        "failed": 2,
+        "original85_passed": 85,
+        "new16_passed": 14,
+        "page_errors": [],
+        "suite_status": 1,
+        "runner_passed": false,
+        "runner_error": "Empty or failed case report"
+      },
+      "after": {
+        "checks": 101,
+        "passed": 101,
+        "failed": 0,
+        "original85_passed": 85,
+        "new16_passed": 16,
+        "page_errors": [],
+        "suite_status": 0,
+        "runner_passed": true
+      },
+      "only_changed_rows": [
+        {
+          "name": "word-count meter: disabled writing input 100",
+          "before": {
+            "badge": "On target",
+            "words": "100 words",
+            "fill": "0%",
+            "originalFill": "0%",
+            "target": "100",
+            "checked": false,
+            "disabled": true
+          },
+          "after": {
+            "badge": "Target off",
+            "words": "100 words",
+            "fill": "0%",
+            "originalFill": "0%",
+            "target": "100",
+            "checked": false,
+            "disabled": true
+          }
+        },
+        {
+          "name": "word-count meter: disabled checkbox change at exact count",
+          "before": {
+            "badge": "On target",
+            "words": "100 words",
+            "fill": "0%",
+            "originalFill": "0%",
+            "target": "100",
+            "checked": false,
+            "disabled": true
+          },
+          "after": {
+            "badge": "Target off",
+            "words": "100 words",
+            "fill": "0%",
+            "originalFill": "0%",
+            "target": "100",
+            "checked": false,
+            "disabled": true
+          }
+        }
+      ]
+    },
+    "failure_integrity": "Before log contains the exact two assertion-failure rows at the final checks.filter(!passed) assertion; page errors empty. After log reports101checks. Both runner reports complete, partial=true, only main-app-health selected,91 syntax entries status0. Initial missing-playwright operational attempt is distinct and not used as baseline evidence.",
+    "regression_reasoning": "When enabled, the equality branch is identical to before. When disabled and not exactly target, the guard is irrelevant. For disabled exact target it preserves the already selected Target off label and zero fill. No scoring path changes.",
+    "source_pins_end": "All four inspected current source hashes rechecked unchanged at report creation."
+  },
+  "limits": [
+    "Read-only source/receipt review; no app, browser, test or syntax execution by reviewer, no source/Git/tracker/index mutation or other agents. Only own scratch and this report written.",
+    "The native tests dispatch DOM input/change events and assign control values; no physical keyboard/pointer or live service test is claimed. This is sufficient for the synchronous native listener path under review.",
+    "Receipt parsing verifies authored observations and recorded outcomes, not a new run or an independent reconstruction of the historical processes. Runner reports do not embed per-file execution hashes; reviewed backups/current pins establish the bounded source comparison, not all91 runtime file pins.",
+    "Controls compare badge/count/disabled/configured-target/two fill widths, not all UI state or CSS colors. Unchanged production bytes outside the guard support the narrow preservation claim; no full006 gate, publication or scanner-closure claim."
+  ]
+}

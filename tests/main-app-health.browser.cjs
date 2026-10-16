@@ -121,7 +121,120 @@ function exerciseMainAppHealth() {
             if (descriptor) Object.defineProperty(document, 'visibilityState', descriptor); else delete document.visibilityState;
         }
     }
-    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility();
+    function checkWordCountMeter() {
+        const writing = document.getElementById('studentWriting'), target = document.getElementById('targetWordCount'), toggle = document.getElementById('useWordCountTarget');
+        const before = [writing.value, target.value, toggle.checked];
+        const input = words => { writing.value = Array(words).fill('word').join(' '); writing.dispatchEvent(new Event('input', { bubbles: true })); };
+        const change = enabled => { toggle.checked = enabled; toggle.dispatchEvent(new Event('change', { bubbles: true })); };
+        function expectMeter(name, words, enabled, badge) {
+            const observed = { badge: document.getElementById('statusBarStatus').textContent, words: document.getElementById('statusBarWordCount').textContent,
+                fill: document.getElementById('statusBarMeterFill').style.width, originalFill: document.getElementById('studentPanelMeterFill').style.width,
+                target: target.value, checked: toggle.checked, disabled: target.disabled };
+            const fill = enabled ? Math.min(words, 100) + '%' : '0%';
+            checks.push({ name: 'word-count meter: ' + name, passed: equal(observed, { badge, words: words + ' words', fill, originalFill: fill, target: '100', checked: enabled, disabled: !enabled }), observed });
+        }
+        try {
+            change(true); target.value = '100'; target.dispatchEvent(new Event('input', { bubbles: true }));
+            change(false);
+            for (const words of [99, 100, 101, 0]) {
+                input(words); expectMeter('disabled writing input ' + words, words, false, words ? 'Target off' : 'Start typing...');
+            }
+            change(true);
+            for (const [words, badge] of [[0, 'Start typing...'], [74, 'Need more detail'], [75, 'Getting close'], [94, 'Getting close'], [95, 'Near target'], [99, 'Near target'], [100, 'On target'], [105, 'Near target'], [106, 'Above target'], [151, 'Above target']]) {
+                input(words); expectMeter('enabled writing input ' + words, words, true, badge);
+            }
+            input(100); change(false); expectMeter('disabled checkbox change at exact count', 100, false, 'Target off');
+            change(true); expectMeter('enabled checkbox change at exact count', 100, true, 'On target');
+        } finally {
+            [writing.value, target.value] = before; change(before[2]); writing.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+    function checkEvidenceTokens() {
+        const unrelated = [{ area: 'Details', comment: 'Birds gather nearby.' }], literal = [{ area: 'Details', comment: 'Constructor' }];
+        const candidate = 'The constructor belongs in this phrase.';
+        const own = (bag, key) => Object.prototype.hasOwnProperty.call(bag, key);
+        check('evidence tokens: unrelated constructor rejected', !commentOverlapsEvidence(candidate, unrelated));
+        check('evidence tokens: unrelated bag has no own constructor', !own(getEvidenceTokens(unrelated), 'constructor'));
+        check('evidence tokens: literal constructor is an own token', own(getEvidenceTokens(literal), 'constructor') && getEvidenceTokens(literal).constructor === true);
+        check('evidence tokens: literal constructor supported', commentOverlapsEvidence(candidate, literal));
+        check('evidence tokens: ordinary case-insensitive match', commentOverlapsEvidence('BIRDS gather.', unrelated));
+        check('evidence tokens: ordinary unrelated word rejected', !commentOverlapsEvidence('Lanterns glow.', unrelated));
+        const stopOnly = [{ area: 'Your writing', comment: 'The reader makes this clear.' }];
+        check('evidence tokens: stop-only rows supply no support', Object.keys(getEvidenceTokens(stopOnly)).length === 0 && !commentOverlapsEvidence('Your writing is clear.', stopOnly));
+        check('evidence tokens: short tokens ignored', !commentOverlapsEvidence('Cat', [{ comment: 'Cat' }]));
+        for (const rows of [null, undefined, []]) check('evidence tokens: absent rows neutral ' + String(rows), commentOverlapsEvidence(candidate, rows));
+        const containers = ['detailedAssessment', 'growGoalBox', 'teacherAuditView'].map(id => document.getElementById(id));
+        const html = containers.map(el => el.innerHTML), state = JSON.stringify([latestAnalysisData, pendingPortfolioSync]);
+        try {
+            for (const [name, rows, comment, supported, expected] of [
+                ['unsupported', unrelated, candidate, false, 'Your grammar is mostly clear, and birds gather nearby.'],
+                ['literal', literal, candidate, true, candidate],
+                ['ordinary', unrelated, 'The birds gather nearby in this passage.', true, 'The birds gather nearby in this passage.']
+            ]) {
+                const parsed = parseDetailedAssessment('**2. Grammar:** 8/10\n- Teacher Comment: ' + comment + '\n- What I Noticed:\n  - Area: ' + rows[0].area + '\n    Comment: ' + rows[0].comment + '\n- Growth Tip: Reread each sentence and check the verb tense.', 'Birds gather nearby.');
+                const item = parsed.categories.Grammar, before = JSON.stringify(item), detailed = { categories: { Grammar: item } };
+                const feedback = buildStudentFeedbackForCategory('Grammar', item);
+                check('evidence tokens: parsed rows retained ' + name, equal(item.noticeRows, rows) && equal(feedback.noticeRows, rows));
+                check('evidence tokens: validator ' + name, isValidTeacherComment(comment, 'Grammar', item, rows) === supported);
+                check('evidence tokens: shared builder ' + name, buildTeacherComment('Grammar', item, rows) === expected);
+                const source = supported ? 'AI teacher comment passed validation.' : 'Fallback evidence-based comment used because the AI teacher comment did not pass validation.';
+                check('evidence tokens: audit source ' + name, getAuditTeacherCommentSource('Grammar', item, rows) === source && feedback.audit.teacherCommentSource === source);
+                const validation = buildAuditValidationRows('Grammar', item, rows, comment, feedback.growthTip, feedback);
+                check('evidence tokens: original candidate audit ' + name, validation.find(row => row.label === 'Teacher Comment matches evidence rows').passed === supported);
+                renderDetailedAssessment(detailed); renderTeacherAuditView({ detailed });
+                const auditComment = [...containers[2].querySelectorAll('.teacher-audit-label')].find(el => el.textContent === 'Displayed Teacher Comment').nextElementSibling.textContent;
+                const observed = { feedback: feedback.teacherComment, student: containers[0].querySelector('.assessment-sub').textContent, audit: auditComment, source: feedback.audit.teacherCommentSource };
+                checks.push({ name: 'evidence tokens: native feedback and rendering ' + name, passed: observed.feedback === expected && observed.student === 'Teacher Comment: ' + expected && observed.audit === expected && containers[2].textContent.includes(source), observed });
+                check('evidence tokens: saved feedback ' + name, buildPortfolioDetailedFeedback({ detailed, categoryScores: { Grammar: 8 } }).categories.Grammar.teacherComment === expected);
+                check('evidence tokens: source score and rows unchanged ' + name, JSON.stringify(item) === before && item.score === 8);
+            }
+            check('evidence tokens: analysis and pending state unchanged', JSON.stringify([latestAnalysisData, pendingPortfolioSync]) === state);
+        } finally { containers.forEach((el, i) => { el.innerHTML = html[i]; }); }
+    }
+    function checkDiaryGenre() {
+        const writing = document.getElementById('studentWriting'), select = document.getElementById('writingGenreSelect');
+        const box = document.getElementById('genreReviewBox'), summary = document.getElementById('genreReviewSummary');
+        const before = [writing.value, select.value, manualGenreOverrideValue, currentWritingGenreInfo];
+        const change = value => { select.value = value; select.dispatchEvent(new Event('change', { bubbles: true })); };
+        function expectGenre(name, genre, reference, source, entered) {
+            const info = getWritingGenreInfoFromUi(writing.value), current = currentWritingGenreInfo;
+            const observed = { genre: info.mainGenre, reference: info.safeReference, source: info.source, summary: summary.textContent,
+                visible: box.classList.contains('active') && summary.getClientRects().length > 0 && getComputedStyle(summary).visibility === 'visible' };
+            const label = source === 'manual' ? 'Teacher-selected' : 'Auto-detected';
+            checks.push({ name: 'diary genre: native summary ' + name, passed: observed.genre === genre && observed.reference === reference && observed.source === source && current.mainGenre === genre && current.safeReference === reference && observed.visible && observed.summary.startsWith(label + ': ' + genre) && observed.summary.includes('Feedback will call it: ' + reference + '.'), observed });
+            check('diary genre: prompt reference ' + name, buildWritingGenrePromptText(info).includes('Writing Type: ' + genre + '\n') && buildWritingGenrePromptText(info).includes('Safe reference word: ' + reference + '\n'));
+            check('diary genre: writing preserved ' + name, writing.value === entered);
+        }
+        try {
+            change('__auto__');
+            for (const newline of ['\n', '\r\n']) for (const comma of ['', ',']) {
+                const text = 'Dear Diary' + comma + newline + 'Today I learned that sharing helped me feel calm.';
+                writing.value = text; const entered = writing.value;
+                writing.dispatchEvent(new Event('input', { bubbles: true }));
+                const name = (newline === '\n' ? 'LF' : 'CRLF') + (comma ? ' comma' : ' no comma');
+                const detected = detectWritingGenreInfo(text);
+                check('diary genre: direct detection ' + name, detected.mainGenre === 'Journal / Reflection' && detected.safeReference === 'reflection');
+                expectGenre(name, 'Journal / Reflection', 'reflection', 'auto', entered);
+            }
+            const diary = writing.value;
+            change('letter'); expectGenre('manual letter', 'Letter / Email', 'letter', 'manual', diary);
+            change('__auto__'); expectGenre('return to automatic diary', 'Journal / Reflection', 'reflection', 'auto', diary);
+            for (const [name, text, genre, reference] of [
+                ['letter', 'Dear Maya,\nThank you for visiting our class.\nSincerely,\nSam', 'Letter / Email', 'letter'],
+                ['letter with reflection words', 'Dear Maya,\nI feel happy that you visited our class.\nSincerely,\nSam', 'Letter / Email', 'letter'],
+                ['diary-named recipient', 'Dear Diary Club,\nThank you for inviting our class.\nSincerely,\nSam', 'Letter / Email', 'letter'],
+                ['unsaluted reflection', 'Today I learned that sharing helped me feel calm.', 'Journal / Reflection', 'reflection']
+            ]) {
+                writing.value = text; const entered = writing.value;
+                writing.dispatchEvent(new Event('input', { bubbles: true }));
+                expectGenre(name, genre, reference, 'auto', entered);
+            }
+        } finally {
+            writing.value = before[0]; change(before[1]); writing.dispatchEvent(new Event('input', { bubbles: true }));
+            manualGenreOverrideValue = before[2]; currentWritingGenreInfo = before[3];
+        }
+    }
+    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility(); checkWordCountMeter(); checkEvidenceTokens(); checkDiaryGenre();
     return checks;
 }
 

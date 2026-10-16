@@ -1,0 +1,28 @@
+{
+  "repair_id": "repair-063-regression-review",
+  "before": "2043847c29760b6e122320a54c319a701ab41c4e",
+  "after": "0a812b326d5e4e40139d5a0bba0b69cf6efafbb0",
+  "blockers": [],
+  "decision": "No blockers in pinned fix or four-stage proof.",
+  "pins_sha256": {
+    "js/app/10-main-app.js": {
+      "before_lf": "3395b10c421bc0b0d8117b33b3beaf5434f093611241cb7e757053a97a8b5443",
+      "intermediate_lf": "96a984a3ae3a607c784ce349dd08993ebb153c0138777b92c3a5ebff862a16c3",
+      "final_lf": "d0cb985da14546d89b17f9f20719c4bb1a7351a9b64b55c6b8d1f63bd1436a28"
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "before_lf": "e118756b4b61c4ef2b3d740cb398192f231cbfc24db3d09caa08c09358d96c03",
+      "intermediate_lf": "ccff86a1e59695efd38019df166136d49283cbb19386df731e93a09f7c5f4f8e",
+      "final_lf": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3"
+    }
+  },
+  "verified": [
+    "Git source/test LF and CRLF-restored writer hashes reconciled; both Grammar-intermediate snapshot hashes verified. Final source reverts exactly to baseline when only one local variable and seven guarded factory returns are removed. Factory/insertion/other production bytes unchanged.",
+    "Grammar:108rows/2old failures ->108pass. Unchanged Grammar-only source plus Spelling tests:114rows/4fail ->final114pass. Failures are generation and DOM checks, not startup errors. All4 selected runner receipts complete with91 syntax successes.",
+    "Original103 receipt rows identical/passing across all4 stages. Final114 minus six Spelling checks equals Grammar-after108 exactly. Removing inserted helper/call restores original test LF bytes for both intermediate/final drivers.",
+    "Native ensureNotebookGuide and real search/factory/insertion/rendering run without mocks. Literal later quote/revision, DOM text, valid example, source membership and180/220caps independently asserted for Grammar and both Spelling passes. Long-only no-example, later-only and earlier usable run-on controls preserve safety/global opener priority.",
+    "Case loops fixed; missing examples fail optional-chain checks, not skip assertions. Original source validation, marker-first spelling, corrected/mechanical precedence and180/220/130factory caps retained. Existing print/report driver unchanged; normal runner clears EXPECT_BASELINE, so successful after exits also cover2page fit and paragraph-break print assertions."
+  ],
+  "receipts": "work/repowise-repair-063/{before,after,spelling-before,extended-after}/{suite-results.json,notebook-guidance-repair.browser.json,.log}; grammar-only source/test snapshots and grammar-intermediate-pins.json.",
+  "limits": "Read-only Git/snapshot/receipt inspection; no app/browser/tests run, repository mutations or agents. Intermediate proof is pinned scratch bytes, not a commit. No scoring/full-gate/publication/closure claim. New DOM fixtures prove fallback examples; retained pending/print tests do not establish arbitrary persisted portfolio rewrites."
+}

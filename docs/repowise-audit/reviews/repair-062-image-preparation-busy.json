@@ -1,0 +1,62 @@
+{
+  "repair_id": "repair-062",
+  "lead": "review032-overlapping-image-preparation",
+  "status": "confirmed_fixed_focused_native_verified_awaiting_review",
+  "source_commit_assignment": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
+  "generated_at": "2026-10-16T09:38:18.5143790+07:00",
+  "reproduced": "Both camera/upload events started real optimization against the same owner/text/source/queue. Releasing A then B retained queued.svg+A; B then A retained queued.svg+B. Both optimizations completed, but the other page silently returned stale while status said Image added.",
+  "policy": "Explicit contract change: one accepted preparation at a time. Concurrent actions are rejected visibly with wait/retry, not silently accepted or serialized. After settlement a fresh retry adds the rejected page normally.",
+  "implementation": "isPreparingImages flag alongside image state; updateOcrControls disables camera/upload buttons AND file inputs; shared handleSelectedImages entry guard covers picker/drop/direct; finally clears busy and refreshes controls on success/error/stale return. Existing captured context equality, batch atomicity, ownership checks and optimizer unchanged.",
+  "callers": "takePhoto/upload click and cameraInput/imageUploadInput change8432-8452; desktop drop3602-3618; updateOcrControls via syncUiState and preparation; captureCurrentWritingContext/isCurrentWritingContext in unchanged storage bundle8116-8132. No changed-owner recapture or append relaxation.",
+  "native_evidence": {
+    "original_race": {
+      "cases": 24,
+      "failed": 2,
+      "page_errors": 0,
+      "both_completion_orders_reproduced": true,
+      "production_unmodified": true,
+      "identity_cases_passed": 23
+    },
+    "busy_contract_on_old_production": {
+      "cases": 32,
+      "failed": 12,
+      "page_errors": 0,
+      "production_unmodified": true
+    },
+    "after": {
+      "image_cases": 32,
+      "failed": 0,
+      "page_errors": 0,
+      "identity_cases_passed": 23,
+      "original10_pixel_resize_svg_checks_unchanged": true,
+      "syntax_checks": 91,
+      "syntax_failed": 0
+    },
+    "guards": "Camera-first and upload-first:4controls disabled; forced second picker event/drop/direct each gets wait/retry, optimizer call count remains1, full context/pending unchanged. Accepted A commits; controls recover; fresh B retry runs once and yields Q+A+B. Real held optimizer rejects writing-only and source-only context changes; retries work. Valid+broken batch leaves Q byte-identical, shows error, clears busy; sequential additions still work."
+  },
+  "method": "Existing native Edge suite/canvas Files and optimizer, held only after actual optimization. Native event handlers invoked via DataTransfer/change/drop; thin delegating promise observer.5s readiness bounds and finally restoration; no fabricated optimized URLs or equality mocks. No hardware-camera claim. Existing identity suite unchanged.",
+  "receipts": {
+    "race": "work/repowise-repair-062/before/suite-results.json",
+    "race_cases": "work/repowise-repair-062/before/image-preparation.browser.log",
+    "old_busy": "work/repowise-repair-062/before-busy-policy/suite-results.json",
+    "after": "work/repowise-repair-062/after/suite-results.json",
+    "after_cases": "work/repowise-repair-062/after/image-preparation.browser.log",
+    "identity": "work/repowise-repair-062/{before,after}/analysis-identity.browser.log",
+    "driver_versions": "work/repowise-repair-062/image-preparation.{race-reproduction,busy-policy}.cjs"
+  },
+  "sha256_raw": [
+    {
+      "file": "js/app/10-main-app.js",
+      "before": "b59774c5fd6805145d4ccddad32dbbeb365a92a5f1359281383240143ba485cb",
+      "after": "ee594987cbc59b7612388970e1bfcd6bb8e53a9fcd93646f889b9cffc7306590"
+    },
+    {
+      "file": "tests/image-preparation.browser.cjs",
+      "before": "97c63242cd57bddb7963b2946377b816b645ecb98a57aa5573a1cc3f0f462f19",
+      "after": "b8f94b3da2b5f85e58f31347d6464bcac21376cfa3d4395dc891b8d896266b63"
+    }
+  ],
+  "race_driver_sha256": "735f6461149f0b5bd67322cee3b7303df51392147acb8add3b0bc33946ee5111",
+  "scope": "All91source+manifest pins matched before; only2allowed files changed; app changes confined to2allowed functions+flag. Original image-test body/report unchanged. No Git/tracker/docs/config/index/deps/hooks/chats/agents/deploy writes.",
+  "limits": "Full repository gate, independent review, commit/deployment and live service/hardware checks remain coordinator-owned. Old race driver asserts both formerly accepted pages; final driver intentionally asserts explicit busy rejection+fresh retry. No claim that the two test contracts are identical. Stop for review."
+}

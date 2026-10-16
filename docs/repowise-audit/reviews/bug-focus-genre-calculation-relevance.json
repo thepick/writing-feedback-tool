@@ -1,0 +1,82 @@
+{
+  "scope": "Two existing behavioral leads only; read-only relevance review and native reproduction plan. No structural-cleanup target.",
+  "inspected_source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "published_context_check": "Immutable main app, storage bundle and index.html have no Git diff against published c072476 (exit0). No current-checkout behavior assumed.",
+  "inspected_git_blobs": {
+    "js/app/10-main-app.js": "e42674822ddd14795db4ff2d033a2c7213ef351f",
+    "js/app/00-storage-sync-patches.js": "0507b0746b6996208be49b5fd6e90a0a4299ddd0",
+    "index.html": "a32e5d12804bf140be5653c0c753d89b068fb267",
+    "tests/main-app-health.browser.cjs": "5d6b6951daa3b5eeb1bce1a2fecb5cc9f5060d51",
+    "tests/detailed-parser.browser.cjs": "2cb104a55f47c6c9ca37385cfef164ac0cfa90a9",
+    "tests/analysis-pipeline.browser.cjs": "ce8c74a70a14918f3ba48472bb327042d1052c9a",
+    "tests/analysis-policy.browser.cjs": "9356ad0e63d263c398681b606a9c04ed78a3b471"
+  },
+  "leads": [
+    {
+      "id": "review030-diary-letter-precedence",
+      "disposition": "Credible normal-user automatic genre defect; reproduce before source changes.",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "normal_user_reachable": true,
+      "debug_only": false,
+      "contract": "The classifier explicitly recognizes Dear Diary as Journal / Reflection, and the UI offers a distinct Journal / Reflection choice with safe reference reflection. An ordinary diary with that opening and reflective prose is a sufficiently clear case; arbitrary mixed letter/diary content is not.",
+      "source_reason": "For Dear Diary, on its own first line, hasGreeting and directRecipient both match that same salutation, reaching featureCount2. detectWritingGenreInfo returns high-confidence Letter / Email before its explicit Dear Diary reflection branch. This predicts the visible Auto-detected: Letter / Email and Feedback will call it: letter message for a plain diary. LF/CRLF normalization and the optional comma are present in source.",
+      "user_path": "Paste or type the diary with Auto-detect writing type selected. The real studentWriting input handlers call syncUiState/updateGenreReviewBox; the summary becomes visible immediately, without an API key or analysis. On analysis, getWritingGenreInfoFromUi supplies the same genre to prompt builders, result metadata and genre-specific feedback/reference text. This does not prove a numerical score change.",
+      "anchors_at_inspected_commit": [
+        "js/app/10-main-app.js:5335-5362 letter feature counting",
+        "js/app/10-main-app.js:5393-5412 letter-before-diary ordering",
+        "js/app/10-main-app.js:5258-5259 distinct letter/journal choices",
+        "js/app/10-main-app.js:5475-5493 UI selection and prompt contract",
+        "js/app/10-main-app.js:5527-5548 visible summary",
+        "js/app/10-main-app.js:8379-8380 actual input listeners",
+        "js/app/10-main-app.js:8273-8275 actual analysis genre capture",
+        "js/app/10-main-app.js:3848-3849 prompt consumption",
+        "js/app/10-main-app.js:5598-5605 distinct letter/reflection closing paths",
+        "index.html:3456-3461 normal writing-type UI"
+      ],
+      "existing_test_gap": "No Dear Diary occurrence found in immutable tests. analysis-pipeline:60-62 exercises manual genre choice and parity, not this automatic overlap. main-app-health already loads the full native app and aggregates named assertions, so it is a small suitable host.",
+      "smallest_native_reproduction_plan": [
+        "Extend tests/main-app-health.browser.cjs locally when authorized. In its existing native page, select __auto__, set studentWriting to Dear Diary, followed by a newline and ordinary reflection prose such as Today I learned that sharing helped me feel calm. Dispatch a real bubbling input event; do not stub the classifier or summary renderer.",
+        "Assert actual detectWritingGenreInfo/getWritingGenreInfoFromUi mainGenre Journal / Reflection and safeReference reflection, plus visible genreReviewSummary Auto-detected Journal / Reflection/reflection and unchanged writing bytes. Repeat only the salutation comma/no-comma and LF/CRLF variants; baseline is expected to fail the diary classification/summary assertions.",
+        "Controls: a genuine Dear Maya letter with closing/signature remains Letter / Email; a genuine letter containing I feel in its body remains a letter; unsaluted Today I learned reflection remains Journal / Reflection. Explicit teacher selection letter must still override automatic diary detection, and returning to __auto__ must restore the diary result.",
+        "Restore the page state/settings used by the existing suite and retain errors[] and failed-check aggregation. No service request or full analysis is needed to confirm the visible genre bug; assert the actual genre prompt text only if downstream propagation evidence is desired."
+      ],
+      "boundary": "Do not move every reflection-keyword rule ahead of letters or alter scoring/calibration. Restrict any eventual correction to the unambiguous ordinary diary opening while preserving real letters and manual override. Mixed-feature artistic writing remains a heuristic judgment."
+    },
+    {
+      "id": "review034-grammar-band-debug-label",
+      "disposition": "Credible opt-in diagnostic display bug visible to normal users; not an incorrect-grade claim.",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "normal_user_reachable": true,
+      "debug_only": "Displayed only in the normal collapsed Show debug disclosure; no developer flag or console action is required.",
+      "contract": "The HTML labels the panel Grammar Score Calculation. Its Grammar band and Final Grammar rubric score rows purport to explain the same calculation. grammarDensityBand returns4..10 from the grade/strictness table; renderScoredAnalysisDebug instead formats legacy1..7 labels. A zero-error scored result returning10 cannot truthfully have band 18.1 or higher = 1.",
+      "source_reason": "Every ordinary scored analysis calls renderScoredAnalysisDebug. Scores8/9/10 retain its default 18.1 or higher = 1; scores4..7 receive unrelated old fixed intervals. The displayed final score is separately taken from data.grammarAudit.grammarScore and remains the actual score. The mismatch is in the explanation; no grading correction is established or proposed.",
+      "user_path": "Analyze a scorable writing sample, then open the visible Show debug details summary and read Grammar Score Calculation. teacherReviewDetails exists in shipped HTML, is collapsed by default, and has no WFT_DEBUG gate. WFT_DEBUG=false and WFT_SYNC_DEBUG=false control logging, not this disclosure or calculation rendering.",
+      "anchors_at_inspected_commit": [
+        "js/app/10-main-app.js:1642-1654 grade/strictness-dependent4..10 scorer",
+        "js/app/10-main-app.js:7871-7880 actual error density and computed Grammar",
+        "js/app/10-main-app.js:8067-8105 stale band text beside actual score",
+        "js/app/10-main-app.js:4908-4919 calculation row contract",
+        "js/app/10-main-app.js:8324 unconditional scored-analysis renderer call",
+        "index.html:2336-2337 Show debug/Hide debug label",
+        "index.html:3601-3629 optional technical disclosure and Grammar Score Calculation heading",
+        "js/app/00-storage-sync-patches.js:1062-1078 false debug flags and logging predicate"
+      ],
+      "existing_test_gap": "analysis-pipeline:184 captures grammarCalc and compares against a physical baseline carrying the same legacy text, so parity is not a correctness oracle. detailed-parser:158-161 already performs native analyzeWriting with unchanged corrected text and independently expects actual Grammar10, making it the smallest existing reproduction host.",
+      "smallest_native_reproduction_plan": [
+        "Extend the existing detailed-parser zero-correction analysis at158-161 when authorized. Reuse its full native analyzeWriting path and synthetic provider responses; do not inject grammarAudit, stub grammarDensityBand or call only formatGrammarCalc with invented inputs.",
+        "Check the actual audit has totalErrors0, positive correctedWordCount, errorDensity0 and Grammar10. Read the Grammar band and Final Grammar rubric score rows independently: the band must describe a range containing0 and the same10 outcome, with no legacy = 1 contradiction. Preserve the existing category/pending/commit/export assertions and actual10 score. This needs no extra provider analysis to expose the baseline mismatch.",
+        "At the existing native driver, open teacherReviewDetails through its actual summary and assert the calculation is visible while WFT_DEBUG and WFT_SYNC_DEBUG remain false. This distinguishes a normal optional diagnostic from developer-only output.",
+        "For an eventual label-only repair, add only small targeted controls for one grade-sensitive density boundary and one strictness-sensitive boundary using the existing literal tables, plus change grade/strictness after completion and verify the displayed completed explanation stays with its captured assessmentPolicy. Assert scores/overall stay unchanged. No full calibration matrix, scoring rewrite or provider framework is needed."
+      ],
+      "priority_and_boundary": "Lower user exposure than the automatic genre label because the calculation is optional technical detail. Still a credible user-readable explanation defect, not merely console logging. Keep it distinct from confirmed scoring/data-loss bugs, and do not use it to justify calibration changes."
+    }
+  ],
+  "limits": [
+    "Read-only source inspection and plans only. Neither lead was executed or promoted to a reproduced bug; no app/test/browser run, metric replay, source/tracker/Git/index/chat mutation or additional agent.",
+    "Existing assertion and caller snippets were read at the immutable commit. No new regression, full inventory, elaborate proof tooling or source change was created. Only this concise report was written."
+  ]
+}
