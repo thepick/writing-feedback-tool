@@ -1,0 +1,917 @@
+{
+  "review_id": "batch-010-postrefresh-test-review",
+  "source_commit": "026bbea1acef1dca4263922b03d6f176a647f066",
+  "inspected_git_commit": "026bbea1acef1dca4263922b03d6f176a647f066",
+  "tested_source_commit": "ad1203b7916a13bee88c23e695b20804ccc54ed9",
+  "verdict": "Retain16 exact current test records; no new repair or substantive test gap admitted. Optional route adapter remains deferred.",
+  "blockers": [],
+  "scope": {
+    "new_unreviewed": 7,
+    "changed_or_shifted_storage_callbacks": 3,
+    "changed_performance_shape_dry": 4,
+    "additional_unchanged_critical_test_bindings": 2,
+    "directly_reviewed_current_total": 16,
+    "exact_shape_dry_detector_replays": 15,
+    "stored_function_hotspot_rule_checks": 1,
+    "exclusions": "Production/history deltas belong027; unrelated current test/security records and whole-repository behavior are not adopted by this report."
+  },
+  "source_pins": {
+    "tests/storage-upload-ownership.browser.cjs": {
+      "raw": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+      "accepted_review_raw": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "accepted_raw_equal": true,
+      "accepted_lf_equal": true
+    },
+    "tests/correction-performance.browser.cjs": {
+      "raw": "a4784a6c5c28a74702d67be99a9b97e92f1007a2de03abb3b4a9534116daabe7",
+      "lf": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+      "accepted_review_raw": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+      "accepted_raw_equal": false,
+      "accepted_lf_equal": true
+    },
+    "tests/image-preparation.browser.cjs": {
+      "raw": "b8f94b3da2b5f85e58f31347d6464bcac21376cfa3d4395dc891b8d896266b63",
+      "lf": "84f56fb39a7237262e81f641d74a3e2ab33c8d97d0bcf99eacc9dcd9d6c20969",
+      "accepted_lf_equal": true
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "raw": "19b7c9bcffa37ffea2d26115dbadf99c34111f73d97d5b884589932424c6442b",
+      "lf": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+      "accepted_lf_equal": true
+    },
+    "js/app/10-main-app.js": {
+      "raw": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+      "lf": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f",
+      "accepted073_lf_equal": true,
+      "tested_commit_lf_equal": true,
+      "scope": "Binding only; production disposition belongs027."
+    }
+  },
+  "tracker_raw_sha256_at_read": "3fac4359c4cc0343c7311e29928596b59af6a06fe90fead5e6022a13d2e06dcf",
+  "before_snapshot": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\before-batch-010-refresh.json",
+    "raw_sha256": "4704a708807c3eaeb0befe41b996d3329b9c35f5efce951b28a8e350bbc10278",
+    "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713"
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_3515e0fc6ceb77656ea4",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "needs_revalidation",
+      "severity": "high",
+      "span": [
+        4,
+        149
+      ],
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 25,
+        "cognitive": 64,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 105,
+          "end": 139
+        }
+      },
+      "function_span": [
+        4,
+        149
+      ],
+      "function_lf_sha256": "d68f864bcd8701a0f0c9150d8fb76a5eb273c8256cdec1fd096e086faed57bbe",
+      "metrics": {
+        "ccn": 25,
+        "cognitive": 64,
+        "nloc": 145,
+        "max_nesting": 5,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_delegating_observer_restoration",
+      "reason": "Depth4\u21925 includes the added score/branch/primitive/caller loops under try/finally restoring real analyzer/LCS observers. Observer restoration and distinct expected call counts prevent false-green optimization tests; flattening the matrix for depth alone loses locality.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:4-149"
+      ],
+      "accepted_oracle_review": "073",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_873694a833229c403503",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "critical",
+      "span": [
+        4,
+        149
+      ],
+      "verified_observation_details": {
+        "ccn": 25,
+        "cognitive": 64,
+        "nloc": 145,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 105,
+          "end": 139
+        }
+      },
+      "function_span": [
+        4,
+        149
+      ],
+      "function_lf_sha256": "d68f864bcd8701a0f0c9150d8fb76a5eb273c8256cdec1fd096e086faed57bbe",
+      "metrics": {
+        "ccn": 25,
+        "cognitive": 64,
+        "nloc": 145,
+        "max_nesting": 5,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_literal_output_and_work_contracts",
+      "reason": "CCN18\u219225 arises from57 explicit observations/171 new assertions while all133 old checks remain. Literal output parity maps to captured original native results; delegated counters prove19 high-score calls disappear and27 lower/11 invalid counts stay correct. This Critical test warning is not a production regression.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:4-149"
+      ],
+      "accepted_oracle_review": "073",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_c028bb03063849984a60",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "high",
+      "span": [
+        4,
+        149
+      ],
+      "verified_observation_details": {
+        "nloc": 145,
+        "ccn": 25,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 105,
+          "end": 139
+        }
+      },
+      "function_span": [
+        4,
+        149
+      ],
+      "function_lf_sha256": "d68f864bcd8701a0f0c9150d8fb76a5eb273c8256cdec1fd096e086faed57bbe",
+      "metrics": {
+        "ccn": 25,
+        "cognitive": 64,
+        "nloc": 145,
+        "max_nesting": 5,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_existing_parity_and_guard_cases",
+      "reason": "NLOC98\u2192145 preserves the original matrix/long-input/DOM safety tests and appends the bounded guard checks. Actual polishFeedback prepass and numeric8/8.5 distinctions are substantive; a new test framework or condition-moving helper would only relocate size.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:4-149"
+      ],
+      "accepted_oracle_review": "073",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_e127d96b7167f455505c",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "dry_violation",
+      "status_at_review": "needs_revalidation",
+      "severity": "low",
+      "span": [
+        3,
+        16
+      ],
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.74,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "defer_optional_route_adapter",
+      "reason": "Same22 cross-file pairs/16 union lines/worst15-line native setup clone remain.15.69%\u219210.74% is denominator102\u2192149, not deleted duplication. The old existing-local-route suggestion remains optional and deferred under the real-benefit rule; no new adapter or score-only runner abstraction is admitted.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:3-16"
+      ],
+      "accepted_oracle_review": "073",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_6555f1dd33b0e14ea2a1",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "severity": "medium",
+      "span": [
+        53,
+        215
+      ],
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 13,
+        "cognitive": 24,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 53,
+        "deepest_block": {
+          "start": 154,
+          "end": 159
+        }
+      },
+      "function_span": [
+        53,
+        215
+      ],
+      "function_lf_sha256": "6000f20cd84f1b6ed1902aae9e4ddac4d970c8e20c66111b53eab68a57d1b9e6",
+      "metrics": {
+        "ccn": 13,
+        "cognitive": 24,
+        "nloc": 162,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_native_case_lifecycle",
+      "reason": "Depth4 is the acknowledgement-only case branch inside the existing per-context loop/try/finally. Its explicit append, held-route teardown and continue keep all21 case outcomes independent; moving that protocol into another helper merely hides nesting.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:53-215"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_2e80b49e67e4eca6eade",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "severity": "medium",
+      "span": [
+        61,
+        102
+      ],
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 25,
+        "cognitive": 50,
+        "dispatch_share": 0.29,
+        "symbol_line": 61,
+        "deepest_block": {
+          "start": 79,
+          "end": 84
+        }
+      },
+      "function_span": [
+        61,
+        102
+      ],
+      "function_lf_sha256": "825315fa7171a241516aa46bec676a7035f5633062cd7f7bf7ec9c217070ab7c",
+      "metrics": {
+        "ccn": 25,
+        "cognitive": 50,
+        "nloc": 42,
+        "max_nesting": 4,
+        "bumps": 2,
+        "dispatch_share": 0.29,
+        "terminal_share": 0.0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_controlled_drive_boundaries",
+      "reason": "The new nested block commits each real multipart body into the synthetic server map, then changes readback only on the third held attempt. Separate matching/different/invalid/missing modes are necessary to reach terminal timeout and typed decisions. Flattening this fixture would obscure phase-specific controls.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:61-102"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_8daa5d51b9657d69baff",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "nested_complexity",
+      "status_at_review": "unreviewed",
+      "severity": "medium",
+      "span": [
+        113,
+        153
+      ],
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 54,
+        "cognitive": 69,
+        "dispatch_share": 0.0,
+        "symbol_line": 113,
+        "deepest_block": {
+          "start": 117,
+          "end": 120
+        }
+      },
+      "function_span": [
+        113,
+        153
+      ],
+      "function_lf_sha256": "044040cfaa677c1da24a000c305c016d8ee7a7881ea8431080b82b2046e2ee86",
+      "metrics": {
+        "ccn": 54,
+        "cognitive": 69,
+        "nloc": 41,
+        "max_nesting": 4,
+        "bumps": 2,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_real_timeout_clock_sequence",
+      "reason": "Depth4 includes the three actual30000ms deadline advances and500/1000ms retry backoffs, followed by mode-specific assertions. Held-count and real error/readback checks prevent a timeout test from passing without its boundary being reached. Retain explicit sequencing.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:113-153"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_7c0b335d47fc44624fd3",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "unreviewed",
+      "severity": "medium",
+      "span": [
+        53,
+        215
+      ],
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 24,
+        "nloc": 162,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 53,
+        "deepest_block": {
+          "start": 154,
+          "end": 159
+        }
+      },
+      "function_span": [
+        53,
+        215
+      ],
+      "function_lf_sha256": "6000f20cd84f1b6ed1902aae9e4ddac4d970c8e20c66111b53eab68a57d1b9e6",
+      "metrics": {
+        "ccn": 13,
+        "cognitive": 24,
+        "nloc": 162,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "continuing_native_driver_role",
+      "reason": "Current sole async browser driver has CCN13 versus old10. It still owns the original8 ownership paths plus13 acknowledgement cases, fresh contexts, report and failure aggregation. Old anonymous26 complex-method ID disappearing is role relocation to anonymous53, not complexity removal.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:53-215"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_db0cea056752bd0b5b4c",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "critical",
+      "span": [
+        61,
+        102
+      ],
+      "verified_observation_details": {
+        "ccn": 25,
+        "cognitive": 50,
+        "nloc": 42,
+        "dispatch_share": 0.29,
+        "symbol_line": 61,
+        "deepest_block": {
+          "start": 79,
+          "end": 84
+        }
+      },
+      "function_span": [
+        61,
+        102
+      ],
+      "function_lf_sha256": "825315fa7171a241516aa46bec676a7035f5633062cd7f7bf7ec9c217070ab7c",
+      "metrics": {
+        "ccn": 25,
+        "cognitive": 50,
+        "nloc": 42,
+        "max_nesting": 4,
+        "bumps": 2,
+        "dispatch_share": 0.29,
+        "terminal_share": 0.0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_specialized_synthetic_service_protocol",
+      "reason": "Service CCN15\u219225 adds acknowledgement-specific POST/PATCH commit/hold behavior, actual403 refusal and healthy retry. Real uploader/parser/cache functions remain delegated and original service behavior stays on the non-acknowledgement branch. Prior optional local-route reuse would not remove these necessary protocol decisions; defer adapter cleanup.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:61-102"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_d5e98f1e37090946ce89",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "medium",
+      "span": [
+        90,
+        100
+      ],
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 13,
+        "nloc": 11,
+        "dispatch_share": 0.0,
+        "symbol_line": 90,
+        "deepest_block": {
+          "start": 95,
+          "end": 95
+        }
+      },
+      "function_span": [
+        90,
+        100
+      ],
+      "function_lf_sha256": "923296c9be439b257bba98ab975be8bc8d9eb73f659ea5e50a40b1b8753e056a",
+      "metrics": {
+        "ccn": 12,
+        "cognitive": 13,
+        "nloc": 11,
+        "max_nesting": 2,
+        "bumps": 2,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_ordered_canonical_service_control",
+      "reason": "CCN11\u219212 comes from acknowledgement-only modifiedTime ordering in the synthetic name query. That supplies the real first-result canonical selector with a newer accepted file and older decoy; ordinary ownership replies retain their previous order. Keep the explicit fixture condition.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:90-100"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_9a75c0e0d96bf717bdf8",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "unreviewed",
+      "severity": "critical",
+      "span": [
+        113,
+        153
+      ],
+      "verified_observation_details": {
+        "ccn": 54,
+        "cognitive": 69,
+        "nloc": 41,
+        "dispatch_share": 0.0,
+        "symbol_line": 113,
+        "deepest_block": {
+          "start": 117,
+          "end": 120
+        }
+      },
+      "function_span": [
+        113,
+        153
+      ],
+      "function_lf_sha256": "044040cfaa677c1da24a000c305c016d8ee7a7881ea8431080b82b2046e2ee86",
+      "metrics": {
+        "ccn": 54,
+        "cognitive": 69,
+        "nloc": 41,
+        "max_nesting": 4,
+        "bumps": 2,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_independent_literal_safety_oracles",
+      "reason": "CCN54 in41 lines includes compound assertions, not54 production policies. Checks separately prove intended multipart bytes, literal four-file decisions, original error identity, required-shape failures, lookup versus recovery cache phases, pre-uploader draft/state retention, credential redaction and healthy403 retry. No helper-only score extraction is admitted.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:113-153"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_11407a1d7000887c6dfa",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "medium",
+      "span": [
+        179,
+        188
+      ],
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 179,
+        "deepest_block": {
+          "start": 180,
+          "end": 180
+        }
+      },
+      "function_span": [
+        179,
+        188
+      ],
+      "function_lf_sha256": "28f7e5253a8a32d9b0ef56548585d34db046da1552ef13404b677af1bf554164",
+      "metrics": {
+        "ccn": 10,
+        "cognitive": 12,
+        "nloc": 10,
+        "max_nesting": 3,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.0
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "unchanged_real_reconnect_oracle",
+      "reason": "Whole function is byte-identical old90-99\u2192current179-188; CCN10 remains. Real sign-out failure, saved writing while signed out, reconnection and late old-reply ownership checks retain their accepted072/original boundary. This is coordinate revalidation, not new branching.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:179-188"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_0695c757503bd49f00cd",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "unreviewed",
+      "severity": "high",
+      "span": [
+        53,
+        215
+      ],
+      "verified_observation_details": {
+        "nloc": 162,
+        "ccn": 13,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 53,
+        "deepest_block": {
+          "start": 154,
+          "end": 159
+        }
+      },
+      "function_span": [
+        53,
+        215
+      ],
+      "function_lf_sha256": "6000f20cd84f1b6ed1902aae9e4ddac4d970c8e20c66111b53eab68a57d1b9e6",
+      "metrics": {
+        "ccn": 13,
+        "cognitive": 24,
+        "nloc": 162,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "detector_replay_match": true,
+      "proposed_status": "reviewed_no_change",
+      "classification": "continuing_expanded_test_driver",
+      "reason": "The162-line driver preserves all original statements/oracles and adds the new native contract phase. Length100\u2192162 reflects substantive118 checks and controlled server behavior. Splitting it solely to move this warning would add protocol plumbing without safer behavior.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:53-215"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_e3ad5cfb3c394a1a3758",
+      "file": "tests/storage-upload-ownership.browser.cjs",
+      "marker": "function_hotspot",
+      "status_at_review": "unreviewed",
+      "severity": "medium",
+      "span": [
+        53,
+        215
+      ],
+      "verified_observation_details": {
+        "modification_count": 6,
+        "repo_p80": 1,
+        "ccn": 13,
+        "max_nesting": 4,
+        "symbol_line": 53
+      },
+      "function_span": [
+        53,
+        215
+      ],
+      "function_lf_sha256": "6000f20cd84f1b6ed1902aae9e4ddac4d970c8e20c66111b53eab68a57d1b9e6",
+      "metrics": {
+        "ccn": 13,
+        "cognitive": 24,
+        "nloc": 162,
+        "max_nesting": 4,
+        "bumps": 1,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01
+      },
+      "history_rule_verification": {
+        "stored_function_commit_set_count": 6,
+        "stored_span_equal": true,
+        "bar": 5,
+        "severity_match": true,
+        "limit": "Reads stored function commit set and replays threshold math; no fresh blame/commit classification or global p80 rebuild."
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "history_risk_signal_not_current_defect",
+      "reason": "Current stored function commit set has6 distinct commits and structureCCN13/depth4; bar=max(repo_p80=1,5)=5 gives Medium. Old anonymous26 hotspot with5 commits continues under anonymous53. History is prioritization evidence; rewriting the test cannot erase it. No fresh blame/global percentile claim.",
+      "evidence_anchors": [
+        "tests/storage-upload-ownership.browser.cjs:53-215"
+      ],
+      "accepted_oracle_review": "072",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_1680dfdc2c2903f2af21",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "complex_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "critical",
+      "span": [
+        7,
+        160
+      ],
+      "verified_observation_details": {
+        "ccn": 49,
+        "cognitive": 74,
+        "nloc": 148,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 118,
+          "end": 122
+        }
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        7,
+        160
+      ],
+      "function_lf_sha256": "d58f8582873e8a0e67f0faef8c33b2730360b4f9ba7cde15705da4b17d644ba9",
+      "metrics": {
+        "ccn": 49,
+        "cognitive": 74,
+        "nloc": 148,
+        "max_nesting": 5
+      },
+      "accepted_review": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-062-regression-review.json",
+        "raw_sha256": "d0d630ec8807d02cf75ef777a2c76a03b46bbe179eca7f3b05f35cd3a022e9ac",
+        "whole_test_lf_equal": true
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_busy_context_and_pixel_oracles",
+      "reason": "Current entire test matches accepted062 bytes after LF normalization. CCN49 includes real optimizer gates, busy/retry input paths, atomic mixed-file error and stale writing/source controls plus the retained10 pixel checks. Splitting these independent predicates would obscure the already-reviewed policy contract.",
+      "evidence_anchors": [
+        "tests/image-preparation.browser.cjs:7-160"
+      ],
+      "accepted_oracle_review": "062",
+      "scanner_closure_claim": false
+    },
+    {
+      "record_id": "code_health:finding_b3ea0e675e7c1c2fdb28",
+      "file": "tests/notebook-guidance-repair.browser.cjs",
+      "marker": "large_method",
+      "status_at_review": "needs_revalidation",
+      "severity": "critical",
+      "span": [
+        8,
+        296
+      ],
+      "verified_observation_details": {
+        "nloc": 286,
+        "ccn": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 8
+      },
+      "detector_replay_match": true,
+      "function_span": [
+        8,
+        296
+      ],
+      "function_lf_sha256": "4b221e7a5d73fbeef1793d448ce372257ca39db8de60338c7786e6416d122266",
+      "metrics": {
+        "ccn": 7,
+        "cognitive": 6,
+        "nloc": 286,
+        "max_nesting": 0
+      },
+      "accepted_review": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-063-regression-review.json",
+        "raw_sha256": "fa6ad7ae74349d031d2de6af46e23cdad993dec3cf17100b37e11e7529e04561",
+        "whole_test_lf_equal": true
+      },
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_coherent_notebook_regression_group",
+      "reason": "Current entire test matches accepted063 LF bytes; runNotebookGuidanceCases remains286 NLOC. Its original103 outcomes, generation/render/source/cap controls and retained print/report behavior have accepted native evidence. Length alone supplies no new bug or worthwhile rewrite.",
+      "evidence_anchors": [
+        "tests/notebook-guidance-repair.browser.cjs:8-296"
+      ],
+      "accepted_oracle_review": "063",
+      "scanner_closure_claim": false
+    }
+  ],
+  "disappeared_rows_not_closures": [
+    {
+      "old_record_id": "code_health:finding_230b478afcad973c3531",
+      "continuing_current_record_id": "code_health:finding_7c0b335d47fc44624fd3",
+      "reason": "Same top-level suite driver moved26\u219253; CCN10\u219213. Function changed with admitted cases, so role continuity rather than unchanged-body carry."
+    },
+    {
+      "old_record_id": "code_health:finding_1a90d8292e073ccf9903",
+      "continuing_current_record_id": "code_health:finding_0695c757503bd49f00cd",
+      "reason": "Same driver grewNLOC100\u2192162; large-method warning continues with new anonymous identity."
+    },
+    {
+      "old_record_id": "code_health:finding_5ca6f0b1b222bdb367fd",
+      "continuing_current_record_id": "code_health:finding_e3ad5cfb3c394a1a3758",
+      "reason": "Same driver hotspot now stored6 versus5 commits; anonymous ID change is not historical-risk removal."
+    },
+    {
+      "old_record_id": "code_health:finding_116f23f684db12591de4",
+      "continuing_current_record_id": null,
+      "reason": "DRY genuinely below emission threshold but clone cause remains:3 pairs/15 union lines, denominator124\u2192211,12.10%\u21927.11% (<8%). No source deduplication or scanner closure claimed."
+    }
+  ],
+  "driver_role_binding": {
+    "old_span": [
+      26,
+      126
+    ],
+    "new_span": [
+      53,
+      215
+    ],
+    "old_metrics": {
+      "ccn": 10,
+      "nloc": 100,
+      "max_nesting": 3
+    },
+    "new_metrics": {
+      "ccn": 13,
+      "nloc": 162,
+      "max_nesting": 4
+    },
+    "binding": "Same sole top-level async browser/suite driver;072 exact source reconstruction preserves all old driver statements/paths while adding acknowledgement cases. Full function changed, so this is semantic role continuity, not unchanged-function reuse."
+  },
+  "unchanged_signout_binding": {
+    "old_span": [
+      90,
+      99
+    ],
+    "current_span": [
+      179,
+      188
+    ],
+    "whole_function_equal": true
+  },
+  "duplication": {
+    "current_facts": {
+      "tests/storage-upload-ownership.browser.cjs": {
+        "total_duplication_pct": 7.11,
+        "cross_pairs": 3,
+        "cross_union_lines": 15,
+        "denominator_nonblank": 211,
+        "emitted": []
+      },
+      "tests/correction-performance.browser.cjs": {
+        "total_duplication_pct": 10.74,
+        "cross_pairs": 22,
+        "cross_union_lines": 16,
+        "denominator_nonblank": 149,
+        "emitted": [
+          {
+            "biomarker_type": "dry_violation",
+            "severity": "low",
+            "function_name": null,
+            "line_start": 3,
+            "line_end": 16,
+            "details": {
+              "cross_file_duplication_pct": 10.74,
+              "clone_pair_count": 22,
+              "worst_clone_lines": 15,
+              "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+              "worst_clone_co_change": 0
+            },
+            "reason": "11% of file duplicated in other files; worst clone shares 15 lines with tests/feedback-compatibility.browser.cjs",
+            "deduction": null
+          }
+        ]
+      }
+    },
+    "method": "Existing HMAC-authenticated current raw pair index read only; merge/finalize only pairs involving the two target tests. All target/partner source hashes bound to cache. No corpus tokenization/detection or cache save; current stored co-change metadata consumed, not rebuilt.",
+    "cache_sha256_before_after": "da38af9f74997e69e199c54f8ab1ec6538189039036eb7c8ed7385da3ffbb4b5",
+    "bound_target_partner_paths": 46,
+    "minimum_cross_pct": 8,
+    "minimum_clone_lines": 6
+  },
+  "benefit_assessment": {
+    "admitted_next_operations": [],
+    "new_confirmed_bugs": 0,
+    "new_unconfirmed_behavior_leads": [],
+    "reason": "Current warning growth corresponds to accepted real-service and independent literal/counter assertions. No new false-green path with substantive impact was found in these bounded reviewed contracts. Do not weaken checks or wrap boolean conditions to move metrics. Existing optional asset-route adapter lacks new correctness benefit."
+  },
+  "reused_reviews": {
+    "072": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-072-regression-review.json",
+      "raw_sha256": "8f722ed062e49ff0a813859da3ba9d28eaaa3f3cb588649a69cf06b95125cc71",
+      "reuse": "Source/oracle acceptance reused through exact current source binding; no runtime rerun here."
+    },
+    "073": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-073-regression-review.json",
+      "raw_sha256": "3026b0df95c854d4929a29b4ac0b50c34902fbbf780367be8da65506004d6518",
+      "reuse": "Source/oracle acceptance reused through exact current source binding; no runtime rerun here."
+    },
+    "062": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-062-regression-review.json",
+      "raw_sha256": "d0d630ec8807d02cf75ef777a2c76a03b46bbe179eca7f3b05f35cd3a022e9ac",
+      "reuse": "Source/oracle acceptance reused through exact current source binding; no runtime rerun here."
+    },
+    "063": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-063-regression-review.json",
+      "raw_sha256": "fa6ad7ae74349d031d2de6af46e23cdad993dec3cf17100b37e11e7529e04561",
+      "reuse": "Source/oracle acceptance reused through exact current source binding; no runtime rerun here."
+    }
+  },
+  "coordinator_provenance": {
+    "batch-010-validation.json": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-010-validation.json",
+      "raw_sha256": "3a8f236bcc4d24d65863ed6afb87c1f0305c487ab7d66bdffde7918f27b91b9b",
+      "role": "Coordinator full-gate/ingestion/publication provenance, not rerun or independently repeated in this scoped review."
+    },
+    "batch-010-ingestion-verification.json": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-010-ingestion-verification.json",
+      "raw_sha256": "60e42cd4ffa9cb0b29e8c8d4fecd8de3a05f3184657701d6179114949171626e",
+      "role": "Coordinator full-gate/ingestion/publication provenance, not rerun or independently repeated in this scoped review."
+    },
+    "batch-010-publication.json": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-010-publication.json",
+      "raw_sha256": "6036d02ca82a58417542c121e24e35202da361b51e3eccc56e272b8c27c0a5e2",
+      "role": "Coordinator full-gate/ingestion/publication provenance, not rerun or independently repeated in this scoped review."
+    }
+  },
+  "static_receipt": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-review-batch010\\static-receipt.json",
+    "raw_sha256": "b8ca6c6bb6623455a20b338bb51bbf66325bfeab70478812a3f00e250f7ba1af"
+  },
+  "limits": [
+    "No app/test/browser execution, source/Git/index/tracker/cache changes. Only own scratch/output written. Full77-suite/91-syntax/60-native gate and strict480contexts/386maps remain coordinator provenance; no new gate/coverage/live verification claimed here.",
+    "Current performance checkout raw hash differs accepted073 solely by CRLF; LF equals accepted test and testedad1203 Git. Storage test raw/LF are exact accepted072. Inspected other Critical tests bind accepted062/063 whole-file LF; no automatic whole-file disposition.",
+    "Function hotspot consumes stored6-commit function set and replays threshold math with storedrepo_p80=1. No fresh blame/commit classification or global percentile reconstruction.",
+    "072 controlled Drive/clock contexts prove real multipart/retry/readback and projected draft/storage/pending/counter safety; not live Drive.073 saved original probe exit1 remains explicit, with captured75direct/10caller rows and offline subset parity, not85 passing probe assertions.",
+    "Only the16 named current rows are recommended for parent adoption. Historical missing IDs, lower duplication fractions, and displayed health scores do not prove source bugs or clone causes were removed."
+  ]
+}

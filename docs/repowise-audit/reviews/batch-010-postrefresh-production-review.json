@@ -1,0 +1,452 @@
+{
+  "review_id": "batch-010-postrefresh-production-review",
+  "source_commit": "026bbea1acef1dca4263922b03d6f176a647f066",
+  "verdict": "accept bounded unchanged proof and retain reviewed production/history warnings; no new defect",
+  "preparation_only": true,
+  "source_pins": {
+    "js/app/00-storage-sync-patches.js": {
+      "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+      "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677"
+    },
+    "js/app/10-main-app.js": {
+      "raw_sha256": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+      "lf_sha256": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f"
+    },
+    "js/app/portfolio-export.js": {
+      "raw_sha256": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "lf_sha256": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94"
+    },
+    "js/app/dialogs.js": {
+      "raw_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+      "lf_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c"
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+    }
+  },
+  "function_pins": {
+    "buildGrammarReasonFromData": {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        1887,
+        1912
+      ],
+      "sha256_lf": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa",
+      "ccn": 11,
+      "cognitive": 15,
+      "nloc": 26,
+      "max_nesting": 2
+    },
+    "uploadWftJsonFilePromise": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        5051,
+        5119
+      ],
+      "sha256_lf": "0d293e951e933ee38b52acfde20e85c1e292428150703f7ed3a4f58aa47313fb",
+      "ccn": 10,
+      "cognitive": 9,
+      "nloc": 61
+    },
+    "renderPortfolioFeedbackRows": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        7295,
+        7304
+      ],
+      "sha256_lf": "8941847c61dcad822c30554c5fa291ae895f2466cc8243823f820c9e42a235b3",
+      "ccn": 6,
+      "cognitive": 5,
+      "nloc": 10
+    },
+    "normalizeNoticeRows": {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        2050,
+        2061
+      ],
+      "sha256_lf": "120a8709cf967dced7d6457351fde8bec8bc799491e3b083bdca6a8f6edb539b",
+      "ccn": 19,
+      "cognitive": 20,
+      "nloc": 12
+    },
+    "normalizeWftPortfolioForSchemaV1": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        1338,
+        1367
+      ],
+      "sha256_lf": "81827f785b87832d08b1b70bca6190a5a8db73f9a12ae382570768cb7dba62eb",
+      "ccn": 14,
+      "cognitive": 22,
+      "nloc": 25,
+      "max_nesting": 4
+    },
+    "image_decode_resize_callback": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        1481,
+        1514
+      ],
+      "sha256_lf": "46d8299da47310ee78d0b591621beca016e50e0a8027283359c154162db19240",
+      "ccn": 8,
+      "cognitive": 20,
+      "max_nesting": 4
+    },
+    "preview_drop_callback": {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        3537,
+        3591
+      ],
+      "sha256_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237",
+      "ccn": 21,
+      "cognitive": 20,
+      "invalid_index_guard_boolean_operators": 6
+    },
+    "addImageExport": {
+      "file": "js/app/portfolio-export.js",
+      "span": [
+        629,
+        668
+      ],
+      "sha256_lf": "b438dbc78924d3eace70466865a7db1b58ea70c23ebd831a6e10b0d7b946b06c",
+      "ccn": 12,
+      "cognitive": 11,
+      "nloc": 38
+    },
+    "optional_dialog_focus_callback": {
+      "file": "js/app/dialogs.js",
+      "span": [
+        107,
+        109
+      ],
+      "sha256_lf": "7687b86c89cc83719fce91834c2732615002381e0a2064d9acdd7509f2f92e9b"
+    },
+    "buildGrammarEvidenceFromData": {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        1914,
+        1931
+      ],
+      "sha256_lf": "320e3f62a9c9c476fa91ae289c534fa273c84278565542b8a7e39018a29d502b"
+    }
+  },
+  "input_pins": {
+    "before_snapshot": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\before-batch-010-refresh.json",
+      "raw_sha256": "4704a708807c3eaeb0befe41b996d3329b9c35f5efce951b28a8e350bbc10278",
+      "lf_sha256": "f762fc45aa3c5dd7205572f1e6951924a02677c3fae6df540d8961887c1dd737"
+    },
+    "fact_delta_plan": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-010-fact-deltas.json",
+      "raw_sha256": "95c3979b7f290ac72a60272eb8a76ce98f25793e66a71b6e270ed219620f6125",
+      "lf_sha256": "eb3eaa45a510f5416e87a7156f9f5b0bf0476dc1f0c7a25ed34afbeca93aeece"
+    },
+    "dry_helper_proof": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-010-unchanged-shape-revalidation.json",
+      "raw_sha256": "11d0f9c26258d0b3e08969b1adb75671c767716138d9ea65be1532104805060b",
+      "lf_sha256": "9adb64fb5769b25e73c57c2358da9f7f8e6d4638190e99a688c474f27c2e90d4"
+    },
+    "tracker_read_raw_sha256": "3fac4359c4cc0343c7311e29928596b59af6a06fe90fead5e6022a13d2e06dcf"
+  },
+  "unchanged_shape_proof": {
+    "decision": "accept_for_exact_one_record_only",
+    "records": [
+      {
+        "id": "code_health:finding_11407a1d7000887c6dfa",
+        "file": "tests/storage-upload-ownership.browser.cjs",
+        "marker": "complex_method",
+        "old_span": [
+          90,
+          99
+        ],
+        "new_span": [
+          179,
+          188
+        ],
+        "function_sha256_lf": "28f7e5253a8a32d9b0ef56548585d34db046da1552ef13404b677af1bf554164",
+        "restored_status": "reviewed_no_change"
+      }
+    ],
+    "independent_verification": "Both immutable Git sources walked independently. finishSignoutReconnect binds uniquely at90-99 then179-188; each complete function hash28f7e525… appears once. Marker/severity/reason match, relative row spans0..9 and detailsCCN10/cognitive12/NLOC10/symbol0/deepest1..1 match. Existing signout/reconnect preservation sequence remains explicit. No ID/ordinal-only rebinding.",
+    "proposed_status": "reviewed_no_change",
+    "eligible_ids": [
+      "code_health:finding_11407a1d7000887c6dfa"
+    ],
+    "admissible_record_count": 1,
+    "excluded": "Changed outer handlers, other changed test shapes, history, DRY, I/O and coverage not admitted by this proof."
+  },
+  "production_dispositions": [
+    {
+      "record_id": "code_health:finding_d101f599d7efdce35b73",
+      "proposed_status": "reviewed_no_change",
+      "classification": "supported_early_exit_retained_after073",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 15,
+        "nloc": 26,
+        "dispatch_share": 0.0,
+        "symbol_line": 1887,
+        "deepest_block": {
+          "start": 1891,
+          "end": 1902
+        }
+      },
+      "reason": "Actual walker nowCCN11/cognitive15/26NLOC; rule9-14 remainsMedium. Added || skips a real unused reason-specific analysis while supported outputs/normalization and <=8 words stay identical.073 independent review plus304performance/30compatibility evidence supports retaining guard, not a complexity closure.",
+      "source_anchor": "10-main-app.js:1887-1912;polishFeedback2080-2087",
+      "prior": "repair-073-safety-review.json"
+    },
+    {
+      "record_id": "code_health:finding_ca33c20e174a2bfda950",
+      "proposed_status": "reviewed_no_change",
+      "classification": "timeout_acknowledgement_contract_retained_after072",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 61,
+        "dispatch_share": 0.44,
+        "symbol_line": 5051,
+        "deepest_block": {
+          "start": 5053,
+          "end": 5056
+        }
+      },
+      "reason": "Uploader body stays exact0d293e95…; actualCCN10/cognitive9/61NLOC.072 supplies all four equality/mismatch policies, required malformed readback, missing canonical and403/retry oracles with genuine pre-operation preservation. Repeated filename selection remains small and explicit; selecting a function once adds indirection and no new user safety benefit. Retain now rather than force formerP10 source extraction.",
+      "source_anchor": "00-storage-sync-patches.js:5051-5119",
+      "prior": "repair-072-safety-review.json"
+    },
+    {
+      "record_id": "code_health:finding_a1d3edb67f1235db4b52",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_upload_transaction_retained",
+      "reason": "Same exact61NLOC uploader. Sanitization/preflight, save, canonical resolution, timeout verification and return normalization remain one transaction; no length-only split.",
+      "source_anchor": "00-storage-sync-patches.js:5051-5119"
+    }
+  ],
+  "history_rule_interpretation": "Read installed current change_entropy/co_change_scatter detectors. Entropy requires positive entropy,>=80th percentile and>=3commits; High>=90th, Critical requires>=95th plus hotspot. Scatter uses decayed mass rank>=80th plus>=3commits,High>=95th; true partner count differs from capped25record list. All fresh stored facts fit historical eligibility; critical hotspot metadata and numeric ranking corpus were not independently reconstructed. Preserve current severity as observed, not freshly rebuilt. Past co-editing is a risk hint, not proof of present runtime coupling.",
+  "coverage_disposition": {
+    "record_id": "code_health:finding_a47a0eb3889a392c07a4",
+    "proposed_status": "reviewed_no_change",
+    "classification": "valid_fresh_continuous_coverage_warning_keep_open",
+    "verified_observation_details": {
+      "line_coverage_pct": 91.58,
+      "branch_coverage_pct": null,
+      "uncovered_fraction": 0.0842,
+      "deduction": 0.3368
+    },
+    "before": {
+      "covered": 4328,
+      "executable": 4736,
+      "percent": 91.38513513513513
+    },
+    "fresh": {
+      "covered": 4337,
+      "executable": 4736,
+      "percent": 91.57516891891892
+    },
+    "newly_covered_lines": [
+      3969,
+      5093,
+      5094,
+      5095,
+      5097,
+      5098,
+      5099,
+      5100,
+      5105
+    ],
+    "lost_covered_lines": [],
+    "remaining_uncovered": 399,
+    "remaining_uploader_executable_unhit_lines": [
+      5102
+    ],
+    "reason": "Independent hit-wins LCOV unions reproduce both summaries:4328/4736 to4337/4736; all9 gains are real interior lines.3969 clears stale settings cache; eight lines cover timeout hash/equality/cache/mismatch.072 closes the earlier test-admission gap without changing uploader production.5102 is the existing file-list compatibility fallback if a matching canonical has no usable ID; real valid-ID cases return5100. Retain that defensive shape and remaining continuous warning; no fabricated ID-less success or score-only test.",
+    "rule_check": "Current detector keeps any known non100% coverage warning open; input rounded91.58 gives uncovered0.0842,deduction0.3368,Low. Raw effective percentage91.5751689189. No branch-coverage claim."
+  },
+  "coverage_binding": {
+    "source_hashes_all8_match_immutable_head": true,
+    "independently_recomputed_lcov_contexts": 480,
+    "fresh_totals": {
+      "covered": 10324,
+      "executable": 11100,
+      "percent": 93.009009009009
+    },
+    "old_totals": {
+      "covered": 10315,
+      "executable": 11100,
+      "percent": 92.92792792792793
+    },
+    "fresh_lcov": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-010\\current.lcov",
+      "raw_sha256": "f69d5f4d9bf55cfa6461ee285ba8d5f22cd4dc86e86c1e6f40bfd5507c27a7af",
+      "lf_sha256": "f69d5f4d9bf55cfa6461ee285ba8d5f22cd4dc86e86c1e6f40bfd5507c27a7af"
+    },
+    "fresh_summary": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-010\\current.lcov.summary.json",
+      "raw_sha256": "595872a2015ce293b5bbd35aa0b86bb92942b24e3dd0df2c45f654a8440bb7cc",
+      "lf_sha256": "595872a2015ce293b5bbd35aa0b86bb92942b24e3dd0df2c45f654a8440bb7cc"
+    },
+    "strict386maps": "Parent verified full map binding; this bounded review independently recomputed exact480context line union and8source hashes, not all386map records.",
+    "coverage_metadata_note": "Canonical coverage_evidence still contains older009 provenance fields at inspection. Use fresh010 LCOV/summary/full-gate receipt for this decision; coordinator owns provenance reconciliation."
+  },
+  "performance_disposition": {
+    "record_id": "performance:perf3_49529186b645c93019e8",
+    "proposed_status": "reviewed_no_change",
+    "classification": "uncapped_formatting_cost_unmeasured",
+    "fresh_facts": {
+      "rank_position": 17,
+      "rank_score": 12,
+      "cost_proof": "unproven",
+      "actionability_state": "advisory",
+      "queue_eligible": 0,
+      "queue_reason": "unmeasured_cost",
+      "analyzed_commit": "026bbea1acef1dca4263922b03d6f176a647f066"
+    },
+    "reason": "Actual loop7299 appends one escaped/Markdown-rendered row; html is read only after loop. normalizeNoticeRows2050-2061 preserves all rows with no numeric cap. Fresh measured coverage says feedback-compatibility reaches7300, not that += copies expensively or push/join is faster. Current rule/advisory requires cost validation; no measured runtime benefit supports a rewrite. Retain exact output/fallback/escaping order and prior019 interpretation.",
+    "source_anchors": [
+      "00-storage-sync-patches.js:7295-7318",
+      "10-main-app.js:2050-2061"
+    ],
+    "same_policy_health_id": "code_health:finding_321f99e606cfd1e7915e"
+  },
+  "existing_overview_advice": [
+    {
+      "record_ids": [
+        "code_health:finding_e12eb3ad598aa6782566",
+        "code_health:finding_9599830c23cff6c9eeab"
+      ],
+      "proposed_status": "reviewed_no_change",
+      "reason": "normalize schema helper remainsCCN14/depth4/25NLOC. Safe-mode return, ordered own student keys, legacy arrays, record normalization, caught per-student optional ID persistence and _meta getter attachment are substantive contracts.068 already shared exact five-consumer policy; planning card supplies no new mismatch.",
+      "pin": "normalizeWftPortfolioForSchemaV1"
+    },
+    {
+      "record_ids": [
+        "code_health:finding_58a8b9f1eed6f92f7106"
+      ],
+      "proposed_status": "reviewed_no_change",
+      "reason": "Whole drop callback stillcbc19422…;3557 six ORs reject NaN/equal/out-of-range indices before splicing and OCR invalidation.045 accepted primitive-prefix/fallback semantics remain. No new data-loss defect or reason to hide admission in helpers.",
+      "pin": "preview_drop_callback"
+    },
+    {
+      "record_ids": [
+        "code_health:finding_55691a30eadb5aba5f9f"
+      ],
+      "proposed_status": "reviewed_no_change",
+      "reason": "Decode/resize/null-encoder/original-byte fallback catches cover distinct asynchronous stages; depth4 remains intentional. Unhit fallback lines1483-1512 are known limits; no new failing native contract or redundant catch established.",
+      "pin": "image_decode_resize_callback"
+    },
+    {
+      "record_ids": [
+        "code_health:finding_481a4a617b0134a3a219"
+      ],
+      "proposed_status": "confirmed_repair_candidate",
+      "admission": "defer_source_edit_low_incremental_benefit",
+      "reason": "Keep prior038 optional per-image capture-scope simplification as a maintenance candidate. Actual body stillcaptures each image, export filename/stem and manifest entry before delayed tasks, checks connection on either side of await and uses returned blob MIME. Removing IIFE would require deliberate closure ownership replacement, adding little safety and no measured speed benefit. No new high-priority edit admitted.",
+      "pin": "addImageExport"
+    },
+    {
+      "record_ids": [
+        "code_health:finding_74656979868084cda402"
+      ],
+      "proposed_status": "reviewed_no_change",
+      "reason": "Scheduled cancel-button focus is optional and can fail after dialog lifecycle changes. Catch protects focus enhancement only; swallowing it does not accept storage/archive success. Prior009 failure-guard reason still applies.",
+      "pin": "optional_dialog_focus_callback"
+    }
+  ],
+  "followup": {
+    "decision": "one optional bounded original-source work-count probe, no source authorization",
+    "function": "buildGrammarEvidenceFromData",
+    "source_anchor": "js/app/10-main-app.js:1914-1931;polishFeedback2085-2091;actual reconciliation7939",
+    "provenance": "Adjacent opportunity explicitly noted in prior036 reason;073 now demonstrates useful reason-path zero-work policy. This is not a new bug or scanner closure.",
+    "reason": "For every normalized score>8, evidence helper also builds an LCS summary before invariably returning empty. It is used in the primary detailed-feedback path; preserving pre-polished evidence/teacher comment can allow skipping one additional unused analyzer/LCS invocation. Other pattern analysis must remain untouched.",
+    "smallest_scope_if_probe_supports": "One equivalent high-score guard in this helper and bounded assertions in existing correction-performance/compatibility suites. No shared grammar framework or new cache.",
+    "required_native_probe": "Before edit record literal outputs and delegating analyzer/LCS counts for null/invalid,zero/negative/6/7/8/8.5/9/10/numeric strings and helper/verb/many/small diffs. Isolate actual polishFeedback with quick Grammar absent and detailed Grammar present to prove preserved pre-polished evidence/comment,score and error data; require real original one-call high path and candidate zero with exact same output. Keep original133+171 checks and separate evidence/pattern consumers.",
+    "benefit_limit": "Source-supported avoided local work only; no new native run, latency/memory claim or full-assessment zero-work claim."
+  },
+  "new_concrete_bugs": [],
+  "deferred_operations": [
+    "P01",
+    "P09",
+    "P16",
+    "optional crop route adapter"
+  ],
+  "delta_scope": {
+    "total_rows": 31,
+    "reviewed_history_rows": 21,
+    "explicit_current_delta_ids_reviewed": [
+      "code_health:finding_a47a0eb3889a392c07a4",
+      "code_health:finding_8900a9c008833aefb538",
+      "code_health:finding_b820d2d24da772091e34",
+      "code_health:finding_d101f599d7efdce35b73",
+      "code_health:finding_f505e8ce9087ba531b4a",
+      "code_health:finding_2ddd6e095fd9837509d1",
+      "code_health:finding_52dd694654409f08a520",
+      "code_health:finding_da551e170029b179c512",
+      "code_health:finding_c488fbf48a69c6dcaa4b",
+      "code_health:finding_0f637d1b3003eea4a93c",
+      "code_health:finding_b2267d45e0c328b33cd3",
+      "code_health:finding_615d19856374d52a4a9b",
+      "code_health:finding_07852add7f2c9cf7efbc",
+      "code_health:finding_f9f2c6b5c37b83e8d423",
+      "code_health:finding_782b98d52eb223e30e23",
+      "code_health:finding_243db0fbfb8a96a7c724",
+      "code_health:finding_f6620a424e2963dccb69",
+      "code_health:finding_e6aa12e550a273e0c1d0",
+      "code_health:finding_e3086671fe04a7875905",
+      "code_health:finding_48c252fe878571a96463",
+      "code_health:finding_fb228dc4c6e6091ca885",
+      "code_health:finding_bd2f800fbe50490cc6fb",
+      "code_health:finding_11407a1d7000887c6dfa",
+      "code_health:finding_edf631be2ad1ae7ed2d9",
+      "performance:perf3_49529186b645c93019e8"
+    ],
+    "excluded_changed_test_ids": [
+      "code_health:finding_3515e0fc6ceb77656ea4",
+      "code_health:finding_873694a833229c403503",
+      "code_health:finding_c028bb03063849984a60",
+      "code_health:finding_e127d96b7167f455505c",
+      "code_health:finding_db0cea056752bd0b5b4c",
+      "code_health:finding_d5e98f1e37090946ce89"
+    ],
+    "excluded_reason": "Six changed test shape/DRY rows remain outside this production/history adoption; accepted072/073 behavior evidence can inform the separate test review, not whole-function identity."
+  },
+  "prior_report_pins": {
+    "repair-072-safety-review.json": "5165203895e3bbd72a814517542102755019bd0895a9678829f4d486ff9bed40",
+    "repair-073-safety-review.json": "dec543423a27c1382728dfd11287d01c8445acfb45ba22634b1dd43492d624e3",
+    "batch-010-validation.json": "3a8f236bcc4d24d65863ed6afb87c1f0305c487ab7d66bdffde7918f27b91b9b",
+    "batch-009-postrefresh-production-review.json": "51e194464a81460d5627d1a9dea1982b36d8da468319867e54526bbf7cfc448a",
+    "post009-next-benefit-admission.json": "13555909302f6899ea01c277ed7dd2805b284559d44f4ae61548d30bcfd66ef4",
+    "next-storage-risk-benefit-admission.json": "2271a398411e199417c3d1feec58ca175ce435ab9cb164c06da7b6ab8748d046"
+  },
+  "limits": [
+    "Only trusted installed pure walker executed on bounded source files; no app/browser/tests, full health/clone corpus, Git/index/tracker/source writes or publication operations. Only requested report written.",
+    "Current history numbers copied exactly from fresh indexed observations and compared to saved before facts; Git commit/diff context and current rule semantics checked. Decayed scores/ranking metadata not rebuilt; prior009preference/record-identity numeric provenance caveats remain.",
+    "Fresh line coverage does not establish all branch combinations. No coverage-only test mandate, automatic whole-file approval or false scanner closure. Existing accepted006-010 evidence reused within pinned scope.",
+    "Parent full77suite/91syntax/60native,strict386maps/live/UI/CLI checkpoint reused as provenance; this review does not independently rerun or certify those workflows."
+  ],
+  "history_dispositions": [
+    {"record_id":"code_health:finding_8900a9c008833aefb538","file":"js/app/00-storage-sync-patches.js","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":32.2828,"change_entropy_pct":98.9,"commit_count_90d":70},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_b820d2d24da772091e34","file":"js/app/00-storage-sync-patches.js","marker":"co_change_scatter","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"scatter":43,"recorded_partners":25,"co_change_mass":49.2679,"co_change_scatter_pct":98.1,"commit_count_90d":70},"reason":"True partner/commit counts are unchanged; weighted value/rank shifts do not establish a changed source contract."},
+    {"record_id":"code_health:finding_f505e8ce9087ba531b4a","file":"js/app/10-main-app.js","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":26.7433,"change_entropy_pct":97.7,"commit_count_90d":57},"reason":"Main gained one indexed commit and one true co-change partner alongside073 main/performance-test edit; stored rank remains a historical predictor."},
+    {"record_id":"code_health:finding_2ddd6e095fd9837509d1","file":"js/app/10-main-app.js","marker":"co_change_scatter","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"scatter":33,"recorded_partners":25,"co_change_mass":42.4615,"co_change_scatter_pct":96.2,"commit_count_90d":57},"reason":"Main gained one indexed commit and one true co-change partner alongside073 main/performance-test edit; stored rank remains a historical predictor."},
+    {"record_id":"code_health:finding_52dd694654409f08a520","file":"js/app/storage-recovery.js","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.5485,"change_entropy_pct":80.5,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_da551e170029b179c512","file":"scripts/check-test-runner.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.3025,"change_entropy_pct":93.1,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_c488fbf48a69c6dcaa4b","file":"scripts/check-test-runner.cjs","marker":"co_change_scatter","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"scatter":4,"recorded_partners":4,"co_change_mass":3.7527,"co_change_scatter_pct":94.2,"commit_count_90d":6},"reason":"True partner/commit counts are unchanged; weighted value/rank shifts do not establish a changed source contract."},
+    {"record_id":"code_health:finding_0f637d1b3003eea4a93c","file":"scripts/run-tests.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.7319,"change_entropy_pct":96.6,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_b2267d45e0c328b33cd3","file":"scripts/run-tests.cjs","marker":"co_change_scatter","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"scatter":2,"recorded_partners":2,"co_change_mass":3.3436,"co_change_scatter_pct":92.3,"commit_count_90d":6},"reason":"True partner/commit counts are unchanged; weighted value/rank shifts do not establish a changed source contract."},
+    {"record_id":"code_health:finding_615d19856374d52a4a9b","file":"tests/archive-integrity.browser.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.4309,"change_entropy_pct":94.3,"commit_count_90d":8},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_07852add7f2c9cf7efbc","file":"tests/auth-integrity.browser.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.8615,"change_entropy_pct":87.4,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_f9f2c6b5c37b83e8d423","file":"tests/class-deletion.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.7431,"change_entropy_pct":83.9,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_782b98d52eb223e30e23","file":"tests/notebook-guidance-repair.browser.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.6678,"change_entropy_pct":81.6,"commit_count_90d":7},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_243db0fbfb8a96a7c724","file":"tests/notebook-guide.browser.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.1781,"change_entropy_pct":89.7,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_f6620a424e2963dccb69","file":"tests/portfolio-index.browser.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.6943,"change_entropy_pct":82.8,"commit_count_90d":5},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_e6aa12e550a273e0c1d0","file":"tests/portfolio-replacement.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.2926,"change_entropy_pct":92.0,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_e3086671fe04a7875905","file":"tests/portfolio-sync.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.6359,"change_entropy_pct":95.4,"commit_count_90d":7},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_48c252fe878571a96463","file":"tests/preference-integrity-scenarios.js","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.8586,"change_entropy_pct":86.2,"commit_count_90d":5},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_fb228dc4c6e6091ca885","file":"tests/record-identity.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":1.7964,"change_entropy_pct":85.1,"commit_count_90d":5},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_bd2f800fbe50490cc6fb","file":"tests/storage-health.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.0669,"change_entropy_pct":88.5,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."},
+    {"record_id":"code_health:finding_edf631be2ad1ae7ed2d9","file":"tests/student-rename.cjs","marker":"change_entropy","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","fresh_observation_details":{"change_entropy":2.2305,"change_entropy_pct":90.8,"commit_count_90d":6},"reason":"Commit count and entropy rank are unchanged; small weighted-value decay is historical metadata, not a source defect."}
+  ]
+}
