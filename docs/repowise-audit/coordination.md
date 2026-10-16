@@ -2,6 +2,8 @@
 
 Michael authorized this coordinator campaign on 16 October 2026 (Asia/Bangkok), then explicitly authorized continuing while he is unavailable and pushing/merging tested changes when appropriate. He subsequently approved the efficiency recommendations: small related batches, one source editor, up to two independent read-only reviewers, compact evidence and reusable focused chats. This supersedes the earlier refresh-after-every-fix and strictly sequential chat rules.
 
+Michael then selected **focus on confirmed bugs; replace modules only where worthwhile**. This supersedes exhaustive execution of the maintenance queue. Investigate credible user-facing leads and fix reproduced defects. Keep harmless structural warnings and optional cleanup proposals documented; do not count them as diagnosed bugs or fill a batch with cosmetic work. Propose module replacement only when it has a demonstrated benefit and can preserve the required behavior. No wholesale rebuild is authorized.
+
 Michael also directed that issues requiring his attention be skipped temporarily while independent work continues. Record these as `needs_user_attention`, with the exact decision/access needed and preserved evidence. They remain unresolved and must appear in the morning handoff. A scanner's Critical severity alone does not require user involvement; continue safe authorized repairs at every severity. Never bypass a required approval or dependency merely because Michael is unavailable.
 
 Coordinator chat: `01a13f6f-740b-7b60-8863-d6ca9c58baf0`.
@@ -51,4 +53,4 @@ The coordinator may push and merge reviewed/tested batches under Michael's overn
 
 Each repair brief names the repository and source commit, exact tracker records and code scope, behavior constraints, relevant tests, report path and prohibited coordinator actions. A repair chat's completion is not acceptance: the coordinator checks its diff/evidence and reconciles the tracker first.
 
-Continue until the full inventory has no unreviewed or actionable unresolved findings, including reconciled new observations. Explicitly list retained warnings and limits. An empty overview shortlist or a higher score alone is not completion.
+Continue until credible user-facing leads have a verified outcome and confirmed defects are fixed or explicitly recorded as needing Michael's attention. The historical full-inventory tracker remains evidence, but optional maintenance and coordinate-only scanner revalidation are not completion targets for this bug-focused phase. Revalidate affected source and callers before editing. Explicitly list retained warnings and limits; a higher score alone is not completion.

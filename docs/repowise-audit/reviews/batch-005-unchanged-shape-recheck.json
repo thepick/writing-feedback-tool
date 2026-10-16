@@ -1,0 +1,1927 @@
+{
+  "before": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "after": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+  "records": [
+    {
+      "id": "code_health:finding_2869a3657f251ae42502",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "nested_complexity",
+      "old_span": [
+        7434,
+        7443
+      ],
+      "new_span": [
+        7436,
+        7445
+      ],
+      "function_sha256_lf": "68237e72d6efdd59540a2ef347f7fafc0bff84b445bc1c59ed77b83e0fa45ff1",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c7032b60a83d25295aed",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7338,
+        7352
+      ],
+      "new_span": [
+        7340,
+        7354
+      ],
+      "function_sha256_lf": "7fd780e365198c8ad20670aa6198133c9ab362cafb5607acf3d12da8c4a4f70f",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_1eb81af14115d6558a96",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7392,
+        7415
+      ],
+      "new_span": [
+        7394,
+        7417
+      ],
+      "function_sha256_lf": "a1c983c034c6f9b31f5bddcb56b50b12f4cf0054efcd58bdb1ee7600a7a6b665",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c99e888f784b0bc76750",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7417,
+        7430
+      ],
+      "new_span": [
+        7419,
+        7432
+      ],
+      "function_sha256_lf": "21bdf573459bf1042e42498e78411a8e4ee4ad11e3ffa046fbfe3fecca846408",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_08148a5fbe3130655bba",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7613,
+        7691
+      ],
+      "new_span": [
+        7615,
+        7693
+      ],
+      "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_e877852414106a9c7183",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7693,
+        7754
+      ],
+      "new_span": [
+        7695,
+        7756
+      ],
+      "function_sha256_lf": "8321af0416b45adb7a782c4f43e2423015802656de01db73240ccf68ac6258b8",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_d4954938b0245dea0b84",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7758,
+        7785
+      ],
+      "new_span": [
+        7760,
+        7787
+      ],
+      "function_sha256_lf": "50ee93e0e1bd945c6274b04688aa139ec4e795a4009fa241615dacc5d66e37a3",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_3a1b9b63082ed59d733c",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7787,
+        7810
+      ],
+      "new_span": [
+        7789,
+        7812
+      ],
+      "function_sha256_lf": "c7e9e67578766b66a3c73f25d87262bc2a8256a48ab15947dc0469b1dbb79a73",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_b2a0b905ca7c2f210685",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7813,
+        7820
+      ],
+      "new_span": [
+        7815,
+        7822
+      ],
+      "function_sha256_lf": "7b46f907fdf3be1f5115055967938f75cb53b71fa6da687ef16f0b7386b75a38",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_6ab7dd261477cb43f4e7",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7833,
+        7868
+      ],
+      "new_span": [
+        7835,
+        7870
+      ],
+      "function_sha256_lf": "94e6b0b66c686738615f4e9f15704530cabb27b4d4a5a59131ebb0b4352242c0",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_d6815d339003e60e0a6b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7905,
+        7980
+      ],
+      "new_span": [
+        7907,
+        7982
+      ],
+      "function_sha256_lf": "73ea814b5596e54d8a3231e7e061150df9219bb2ed79e3e2ff029a8f51e6fe3c",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_7e5e160a165282d1b84f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        7949,
+        7960
+      ],
+      "new_span": [
+        7951,
+        7962
+      ],
+      "function_sha256_lf": "13bb0ddf06b8218f0d752931849b1dfa25fd5544794a6fec442bceeefa98ef99",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_6c622b0a80727a851775",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        8045,
+        8064
+      ],
+      "new_span": [
+        8047,
+        8066
+      ],
+      "function_sha256_lf": "bd07b59d31320ab0f1684c822ed46f5dd762ceeebaca69ea52da2ebdc33ffd7c",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_419468d595b912adfb7d",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        8265,
+        8306
+      ],
+      "new_span": [
+        8267,
+        8308
+      ],
+      "function_sha256_lf": "983cc2d8dc360f71e9cb8f42cdd4e497aff97055a7923e0c1d817f185f43df1d",
+      "restored_status": "candidate_needs_regression"
+    },
+    {
+      "id": "code_health:finding_4f159d3281c1bca6dd40",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        8308,
+        8341
+      ],
+      "new_span": [
+        8310,
+        8343
+      ],
+      "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_96179f2cb386a54e873f",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_method",
+      "old_span": [
+        8343,
+        8381
+      ],
+      "new_span": [
+        8345,
+        8383
+      ],
+      "function_sha256_lf": "22cfaa5d424df9a313480c903d7afd27cb843b4c4d37aed0f3066f582426dffa",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_011d338cf5eaa80b7fbe",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        7833,
+        7868
+      ],
+      "new_span": [
+        7835,
+        7870
+      ],
+      "function_sha256_lf": "94e6b0b66c686738615f4e9f15704530cabb27b4d4a5a59131ebb0b4352242c0",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_bd262137e5d6d346dc75",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "old_span": [
+        7613,
+        7691
+      ],
+      "new_span": [
+        7615,
+        7693
+      ],
+      "function_sha256_lf": "fd0c58c42cb8a1192ccb9ff4dbd5c2d34390d8425687b9f29af4939adc698f7a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_4cc8d496bdb9e7a9baaf",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "old_span": [
+        7693,
+        7754
+      ],
+      "new_span": [
+        7695,
+        7756
+      ],
+      "function_sha256_lf": "8321af0416b45adb7a782c4f43e2423015802656de01db73240ccf68ac6258b8",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c41bba6fd11258d23e87",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "old_span": [
+        7870,
+        7995
+      ],
+      "new_span": [
+        7872,
+        7997
+      ],
+      "function_sha256_lf": "065be61cd617bbba1e3e855874d95ea798ffb1a0e44fcf5389ddb2930eef90fb",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_dda7cb8583c1ac2b8c1b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "large_method",
+      "old_span": [
+        7905,
+        7980
+      ],
+      "new_span": [
+        7907,
+        7982
+      ],
+      "function_sha256_lf": "73ea814b5596e54d8a3231e7e061150df9219bb2ed79e3e2ff029a8f51e6fe3c",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_7e9e3bd687e666b878c1",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        7560,
+        7611
+      ],
+      "new_span": [
+        7562,
+        7613
+      ],
+      "function_sha256_lf": "56985ede4c0814cc5c3ff07a027de90077b588385074772e9e4043b101da2be9",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_0956f3c90bb76c36955b",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        8026,
+        8036
+      ],
+      "new_span": [
+        8028,
+        8038
+      ],
+      "function_sha256_lf": "5a47cbdc4c7bf5abee0aaa549f82a9f3713cbb1dc3f66615b23dfbf3785f2e1e",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_07c825055cecc7b49cbc",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        7198,
+        7208
+      ],
+      "new_span": [
+        7200,
+        7210
+      ],
+      "function_sha256_lf": "d4314c0cfbe877bfc304120a9ca5b7e237d89bd8791519e9f81a8c68e3c348a0",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_a2f159e8a65910389542",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        8265,
+        8306
+      ],
+      "new_span": [
+        8267,
+        8308
+      ],
+      "function_sha256_lf": "983cc2d8dc360f71e9cb8f42cdd4e497aff97055a7923e0c1d817f185f43df1d",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_ce0ef519180cad77d766",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        8308,
+        8341
+      ],
+      "new_span": [
+        8310,
+        8343
+      ],
+      "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_f761b8085338ef63b4df",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        8308,
+        8341
+      ],
+      "new_span": [
+        8310,
+        8343
+      ],
+      "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_f61621b5ff2044276dae",
+      "file": "js/app/00-storage-sync-patches.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        8308,
+        8341
+      ],
+      "new_span": [
+        8310,
+        8343
+      ],
+      "function_sha256_lf": "79d77de84806b798b67b4294e3ee6e87914e058ef6d679048bfbebaf791e5d62",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_355f2c8c145443a2c91f",
+      "file": "js/app/10-main-app.js",
+      "marker": "nested_complexity",
+      "old_span": [
+        3669,
+        3726
+      ],
+      "new_span": [
+        3671,
+        3728
+      ],
+      "function_sha256_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_691819b607d0c2ab6370",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        3620,
+        3729
+      ],
+      "new_span": [
+        3622,
+        3731
+      ],
+      "function_sha256_lf": "31e71bcb0962083d67045451f76ca60d57586bccbb20332cffc30fc4f3927e09",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c265a3a523c583f74560",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        3669,
+        3726
+      ],
+      "new_span": [
+        3671,
+        3728
+      ],
+      "function_sha256_lf": "e6777cca5451486a15f73436de434822659374c2f08429e3d36c55dfc86d32df",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_b069b026d6e2c6735605",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        3734,
+        3766
+      ],
+      "new_span": [
+        3736,
+        3768
+      ],
+      "function_sha256_lf": "14a9381de4de8100e4879a9cc7b1fb401d9927dbe2655aea739999286090bba4",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_57b4e6dc07e078be7f9a",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        3889,
+        4058
+      ],
+      "new_span": [
+        3891,
+        4060
+      ],
+      "function_sha256_lf": "6a8c664eadd507a22a511d73c997b0bcb998712a74d13d03f8aab6767cb2019f",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_5d620393555ff50afc4c",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4132,
+        4150
+      ],
+      "new_span": [
+        4134,
+        4152
+      ],
+      "function_sha256_lf": "97e9b237b35ee6048b18df5aa299fc8a5e72e7f5b81263adf110ac7b27ff8e92",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_a12d8ec9390f76b1aaad",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4163,
+        4173
+      ],
+      "new_span": [
+        4165,
+        4175
+      ],
+      "function_sha256_lf": "1d3cb435aae248aa0ff36f92c432251ec0e6ab4a2772b78bff40dfafd9f31033",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_5954cec915712fef2661",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4205,
+        4215
+      ],
+      "new_span": [
+        4207,
+        4217
+      ],
+      "function_sha256_lf": "f04e93fb5d08a15479f12d478c8059b55234adc0b064d62e6002e495433db780",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_8518ceb3be5bf2c125b1",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4231,
+        4258
+      ],
+      "new_span": [
+        4233,
+        4260
+      ],
+      "function_sha256_lf": "03d94bcfda9badae383d6cb3e4aa0921cd28bf8cffbdccdd50d1cd326e17f53c",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_5656ce3ea2f986ff0085",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4291,
+        4299
+      ],
+      "new_span": [
+        4293,
+        4301
+      ],
+      "function_sha256_lf": "7b0acf2fc9379b7d414531aafa9933926dd1cf209692686596e542436082d268",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_ac0528d81066bb73b342",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4538,
+        4546
+      ],
+      "new_span": [
+        4540,
+        4548
+      ],
+      "function_sha256_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_0ca073a7f0bb73202d1b",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4627,
+        4646
+      ],
+      "new_span": [
+        4629,
+        4648
+      ],
+      "function_sha256_lf": "5f95900946ea91638e53ff6e7d6cca374d48da5c45ffa87f3b3653e075917350",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_fc2d511f3416246213eb",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4648,
+        4688
+      ],
+      "new_span": [
+        4650,
+        4690
+      ],
+      "function_sha256_lf": "638388057c6f7f891942f7f5487062200b16a3926e5a4ac21d6b516029a41675",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_029e6991171b7c743b8d",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4716,
+        4766
+      ],
+      "new_span": [
+        4718,
+        4768
+      ],
+      "function_sha256_lf": "ce0eac8a8b1436cdd44e8fa4ce84a6d20e0acff33c72035a859a18948e182d9b",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_d97607b9caf7c718fee8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4794,
+        4812
+      ],
+      "new_span": [
+        4796,
+        4814
+      ],
+      "function_sha256_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_3fe12dd27aa07dcffadb",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4814,
+        4824
+      ],
+      "new_span": [
+        4816,
+        4826
+      ],
+      "function_sha256_lf": "4921d93a1ebd0db4a8bad064f770a79d17bee2bf2d19452f3a1f76ce76fba1a5",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_d0f1ba0563e806953c38",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        4943,
+        5007
+      ],
+      "new_span": [
+        4945,
+        5009
+      ],
+      "function_sha256_lf": "541f41189a9430c5a422834aca44f2f5b35d2dd930caaa3006c1a9bc70c7d22e",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_797243d7fc1eee66e607",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5060,
+        5089
+      ],
+      "new_span": [
+        5062,
+        5091
+      ],
+      "function_sha256_lf": "398b96864274cf978b81d3dc9cef53f6ce438b7c1a9ee85119a2b7d7ca7857a3",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_30c5b963c3cbba9327b0",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5103,
+        5117
+      ],
+      "new_span": [
+        5105,
+        5119
+      ],
+      "function_sha256_lf": "9de84b6fe62158c69bf4cb0ea065c4399ceab65f3ef5a4d857622ef9f1914545",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_cee752fc5633ce157f49",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5119,
+        5128
+      ],
+      "new_span": [
+        5121,
+        5130
+      ],
+      "function_sha256_lf": "8c6acb1f955a5cf790fd80c37835463b80cf2b836f3408e7a8c79bd78ef0b686",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_1c0079bb97b26cbf34ea",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5130,
+        5164
+      ],
+      "new_span": [
+        5132,
+        5166
+      ],
+      "function_sha256_lf": "1e020afc1e841e6408901c27e83508d637fb3b8bd232eb166edffd70ada5d913",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_6cc23b99db537ad525a4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5283,
+        5308
+      ],
+      "new_span": [
+        5285,
+        5310
+      ],
+      "function_sha256_lf": "2448d5c603d1dea89ca5bf2048b90757cdcb08ca61071650a4f9f5ccd1b172d0",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_af328843a23eda60d8e8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5310,
+        5323
+      ],
+      "new_span": [
+        5312,
+        5325
+      ],
+      "function_sha256_lf": "c1e8e46fffaeaefcc830ae4f3911620e11b3efb7930b988298afab53243d5313",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_be7169774d0b3e171f27",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5333,
+        5361
+      ],
+      "new_span": [
+        5335,
+        5363
+      ],
+      "function_sha256_lf": "28a640e1aa1d89319aa87adb6ac3920acb31af6873ce990ecdfa87a07c951f2a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_108b576ddc9a4fbc4f04",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5363,
+        5380
+      ],
+      "new_span": [
+        5365,
+        5382
+      ],
+      "function_sha256_lf": "50ab618582d2669a35cf4ffe0adb35773d398deb5fdef25f242557978c6c2dff",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_7bac15813de051bb7ed9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5391,
+        5465
+      ],
+      "new_span": [
+        5393,
+        5467
+      ],
+      "function_sha256_lf": "27b6f485f7df7cbbe65a56b2585c1cff7df043504121bc810d62e63abc3a0a8e",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_e0ba9c50da01859bca21",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5494,
+        5510
+      ],
+      "new_span": [
+        5496,
+        5512
+      ],
+      "function_sha256_lf": "bab605c0116cd0f56b9a94044f265ec356068b4b0a429e40da35b3017a7eea9e",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_6aa8dd9c0ba6b9ece072",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5525,
+        5547
+      ],
+      "new_span": [
+        5527,
+        5549
+      ],
+      "function_sha256_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_6ab2c53b3fdff625ecb9",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5574,
+        5635
+      ],
+      "new_span": [
+        5576,
+        5637
+      ],
+      "function_sha256_lf": "60a59c5460472e0a7a3e7fa75578d0a3b75259ba241a54f665bcbaeb80fcc878",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c10a692a806495a7c968",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5694,
+        5735
+      ],
+      "new_span": [
+        5696,
+        5737
+      ],
+      "function_sha256_lf": "0153b71fd38cbbe2a8bbe65687e624d954396dfc1fadaad58c04fa48166e16a7",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_94f366547c7c0bde19f4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5748,
+        5783
+      ],
+      "new_span": [
+        5750,
+        5785
+      ],
+      "function_sha256_lf": "f6e78e5b640d5de1d0f95be307e0b37e9b27d2c05627475b8fdb56c5af2b1c23",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_2e009e93a06fee79a31d",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5785,
+        5842
+      ],
+      "new_span": [
+        5787,
+        5844
+      ],
+      "function_sha256_lf": "62376d6d8fd9089a51196c730b2390dc5646b02c5a29f3b1c472610532adf442",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_360e96c0bf7e43661286",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5897,
+        5954
+      ],
+      "new_span": [
+        5899,
+        5956
+      ],
+      "function_sha256_lf": "1649fefca9084687eb10f1bead067049cdbce1f1175c87e9e59070a7dd2cd325",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_7a4eb428dcd144100e52",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        5972,
+        6011
+      ],
+      "new_span": [
+        5974,
+        6013
+      ],
+      "function_sha256_lf": "8f9f98412d36cda1d1f3d66c21032cae47598e0c5fb6b572196a0bda36679fee",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_63e6a4380bc461fc83e1",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6054,
+        6073
+      ],
+      "new_span": [
+        6056,
+        6075
+      ],
+      "function_sha256_lf": "e3580d4bab86b8393c5a6c39c5220f2ace8603eb62ab4041a8adfefd6e275159",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_e733e20899c9ec8001a8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6152,
+        6166
+      ],
+      "new_span": [
+        6154,
+        6168
+      ],
+      "function_sha256_lf": "fe6d7a9bbe0be9780cced01f88a5722150767e9cc8790d93c9e32e3eed698192",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_076f946c496a4a85483d",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6255,
+        6269
+      ],
+      "new_span": [
+        6257,
+        6271
+      ],
+      "function_sha256_lf": "e0ecc99c5fe797f0f77892819b6d6278a982c9bec5210a05a45a97b7127a1d98",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_30846f5c87e3f081cd02",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6275,
+        6334
+      ],
+      "new_span": [
+        6277,
+        6336
+      ],
+      "function_sha256_lf": "ea6e393412e2c5df58dc9a687b4c73002c78485dbf9a54de733c9e8080b933df",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_08b13adf7c4b98cebed0",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6284,
+        6298
+      ],
+      "new_span": [
+        6286,
+        6300
+      ],
+      "function_sha256_lf": "b3456955269a9301d5b89a6108f7ff85cedb0a875a7bba60ca5928245178885d",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_0be1d750101405d79892",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6354,
+        6391
+      ],
+      "new_span": [
+        6356,
+        6393
+      ],
+      "function_sha256_lf": "131c75655f9e39a047e490f4be5072b0266288ef31d077f6eee4c14e9a00a63a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_88d56b7b2769df774320",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6410,
+        6418
+      ],
+      "new_span": [
+        6412,
+        6420
+      ],
+      "function_sha256_lf": "11173585916a689c5cdcc751371101c7fbc4f924cd89bc8333acf5ee008509b2",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_b6db1589f4e852efbdf4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6503,
+        6518
+      ],
+      "new_span": [
+        6505,
+        6520
+      ],
+      "function_sha256_lf": "4aebc779fb0dfc9897742a00ba201c55d2aa16088883fb0f5467c9ac3efeffca",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_f88d29b4ba219e82b036",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6645,
+        6663
+      ],
+      "new_span": [
+        6647,
+        6665
+      ],
+      "function_sha256_lf": "2d7d446f1075df4a5ef081d9e2899c5b558da7a61df0fbb642f780acd897129d",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_d41a46dccd3be770d913",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6693,
+        6826
+      ],
+      "new_span": [
+        6695,
+        6828
+      ],
+      "function_sha256_lf": "8d0ea7834f454f54f5fad61f2de08687ccf499ef809e7bbbfe1704a455ae27d1",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_1c5b8851a55d1dda3282",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6828,
+        6846
+      ],
+      "new_span": [
+        6830,
+        6848
+      ],
+      "function_sha256_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_906c639a49387285cfa4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6848,
+        6866
+      ],
+      "new_span": [
+        6850,
+        6868
+      ],
+      "function_sha256_lf": "68155fb64ce5db05276f5345fd3d738a48816bce76f5f79bef8d0be550d6c867",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_72946e150a8efed522fa",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6869,
+        6903
+      ],
+      "new_span": [
+        6871,
+        6905
+      ],
+      "function_sha256_lf": "11837682376fd69f0d337c4406879a48a1eca70ef380284d2c1cb76e89e34110",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_462e05bcd837b7e85209",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6905,
+        6990
+      ],
+      "new_span": [
+        6907,
+        6992
+      ],
+      "function_sha256_lf": "70bafc596a6a683d5e185d7363bf9957a69709cad5421b35a2fb749a45ba45ad",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_954463e2c9a968745031",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        6923,
+        6943
+      ],
+      "new_span": [
+        6925,
+        6945
+      ],
+      "function_sha256_lf": "931eca79d57bed88763c38a19ef99d68f7c430ec9a7be1eb91a7e9a9dbbe15df",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_864bef6e21e94b0d1bbf",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7028,
+        7049
+      ],
+      "new_span": [
+        7030,
+        7051
+      ],
+      "function_sha256_lf": "e968939863621fde282f0d1f0e9cb9bf760292f7672c85447dc1d05c1f29197d",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_a0bc5269056689b0f926",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7080,
+        7102
+      ],
+      "new_span": [
+        7082,
+        7104
+      ],
+      "function_sha256_lf": "081d57bcf8e14f9a04b07fe7671626180e2ef41fd1726b0984e54232ab1e69c1",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c9cb059592b435e51d58",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7111,
+        7141
+      ],
+      "new_span": [
+        7113,
+        7143
+      ],
+      "function_sha256_lf": "edd0ccc71698d28c9ae6af81d99703e45fc2b447467c7d7d4a546b0e5c784785",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_388125686d54705ffbee",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7143,
+        7188
+      ],
+      "new_span": [
+        7145,
+        7190
+      ],
+      "function_sha256_lf": "2864bb7907359c703193ea2bb56d7c7eaf1f0d16b07262ef2e55c27b7b6d366d",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_37b332334d7b4a4edc50",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7381,
+        7401
+      ],
+      "new_span": [
+        7383,
+        7403
+      ],
+      "function_sha256_lf": "54edf0f73a5a70f5e5d09abddd1a766b52c236f688d1c0608750cb4b6ab19dc3",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_e890cbbd9e7f4daf0522",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7439,
+        7475
+      ],
+      "new_span": [
+        7441,
+        7477
+      ],
+      "function_sha256_lf": "1d4a185761162357e84e255cd90ea173bd180c759806772f93e834875f8fd32b",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_46523b22d5ed554a99ea",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7477,
+        7501
+      ],
+      "new_span": [
+        7479,
+        7503
+      ],
+      "function_sha256_lf": "95572f980d25c3153b8b1f4e244c9045d6b9185175ec953fedb8e309cd9eeaba",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_b3313ac8bbb7938fdc52",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7513,
+        7534
+      ],
+      "new_span": [
+        7515,
+        7536
+      ],
+      "function_sha256_lf": "efaa7d89d4440c9c686af697da44257de033b76dea5f81605ecdd1fce80f0f50",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c27d53fe6a0a339c37c2",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7595,
+        7608
+      ],
+      "new_span": [
+        7597,
+        7610
+      ],
+      "function_sha256_lf": "d03b6146e7bab3d3c40952905107cc2b178378624475ff5a5d893af5f5feed17",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_0f615577a20e82dd9090",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7759,
+        7786
+      ],
+      "new_span": [
+        7815,
+        7842
+      ],
+      "function_sha256_lf": "0b69c6962f45c7005328d233da77e81e5e69ccb023b93584e2d298251b560c7c",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_af12c52b65a991a95ba6",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7815,
+        7845
+      ],
+      "new_span": [
+        7871,
+        7901
+      ],
+      "function_sha256_lf": "24be0ff625b93bcfba5e16c0789d31d55838c6945cd700ba2465effc70739f9c",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_b869cb483502e197316b",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        7915,
+        7934
+      ],
+      "new_span": [
+        7971,
+        7990
+      ],
+      "function_sha256_lf": "165ad6fb87f8b52e1cd6d317156a35f830e99a294fecf20515281c70899a9fb5",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_64d289cb54e8a515f0f4",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        8011,
+        8073
+      ],
+      "new_span": [
+        8067,
+        8129
+      ],
+      "function_sha256_lf": "c4e0800b277889bb61b68e217a8bf45150b9cb351bc1a3f6a0172be24ba15e2c",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_0d7c6ff5f039bc409ce8",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        8196,
+        8277
+      ],
+      "new_span": [
+        8252,
+        8333
+      ],
+      "function_sha256_lf": "f9d67c6bf2fd3f008066db790c218527b9b634bc6be47fcb24fee7f75c6cc840",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_5d743917e463897a3133",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_method",
+      "old_span": [
+        8521,
+        8554
+      ],
+      "new_span": [
+        8577,
+        8610
+      ],
+      "function_sha256_lf": "10d829827e5c4841a69c7615384637ef0e67416ebe9a64d2c9ac968be26ab8a6",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_3d4ce77d3c9108a187ad",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        4231,
+        4258
+      ],
+      "new_span": [
+        4233,
+        4260
+      ],
+      "function_sha256_lf": "03d94bcfda9badae383d6cb3e4aa0921cd28bf8cffbdccdd50d1cd326e17f53c",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_1807aa3acdf28aad29d0",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        4327,
+        4367
+      ],
+      "new_span": [
+        4329,
+        4369
+      ],
+      "function_sha256_lf": "5b70cf6fb0ec549c257ac9fa7b3512c81c4fad67f0eb97e0d90f17a86a1e4176",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_709433cd9c383145550f",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        4461,
+        4507
+      ],
+      "new_span": [
+        4463,
+        4509
+      ],
+      "function_sha256_lf": "2cbaa50003ee0adc311eb0eec73acd26b01461f074200ba003bc1cff38273ac6",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_ab05ea1a9ee32eb3296d",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        5785,
+        5842
+      ],
+      "new_span": [
+        5787,
+        5844
+      ],
+      "function_sha256_lf": "62376d6d8fd9089a51196c730b2390dc5646b02c5a29f3b1c472610532adf442",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_aff95dd9e196478bf792",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        6231,
+        6253
+      ],
+      "new_span": [
+        6233,
+        6255
+      ],
+      "function_sha256_lf": "58aa20b9cc9cc6f8aa220c9c3eef0c1d3add938edacd4329ff3e08d59c007f87",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_600fd69a4a17836d4be1",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        6275,
+        6334
+      ],
+      "new_span": [
+        6277,
+        6336
+      ],
+      "function_sha256_lf": "ea6e393412e2c5df58dc9a687b4c73002c78485dbf9a54de733c9e8080b933df",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_1b54f65228745086620d",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        6693,
+        6826
+      ],
+      "new_span": [
+        6695,
+        6828
+      ],
+      "function_sha256_lf": "8d0ea7834f454f54f5fad61f2de08687ccf499ef809e7bbbfe1704a455ae27d1",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_0e7b44e9f3055d01febe",
+      "file": "js/app/10-main-app.js",
+      "marker": "bumpy_road",
+      "old_span": [
+        6905,
+        6990
+      ],
+      "new_span": [
+        6907,
+        6992
+      ],
+      "function_sha256_lf": "70bafc596a6a683d5e185d7363bf9957a69709cad5421b35a2fb749a45ba45ad",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_1a5454e6e63026044dbb",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        3620,
+        3729
+      ],
+      "new_span": [
+        3622,
+        3731
+      ],
+      "function_sha256_lf": "31e71bcb0962083d67045451f76ca60d57586bccbb20332cffc30fc4f3927e09",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_e80e6459cb0f8eec82fd",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        3889,
+        4058
+      ],
+      "new_span": [
+        3891,
+        4060
+      ],
+      "function_sha256_lf": "6a8c664eadd507a22a511d73c997b0bcb998712a74d13d03f8aab6767cb2019f",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_42034da6d555de0625e3",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        5020,
+        5095
+      ],
+      "new_span": [
+        5022,
+        5097
+      ],
+      "function_sha256_lf": "133bf85813b4bb383a454ea434144e4ae19771b93da02b411c7799aa439835d3",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_860035c4a626f17c5d07",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        5391,
+        5465
+      ],
+      "new_span": [
+        5393,
+        5467
+      ],
+      "function_sha256_lf": "27b6f485f7df7cbbe65a56b2585c1cff7df043504121bc810d62e63abc3a0a8e",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_e6c13bd33f14c45f3bd2",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        6693,
+        6826
+      ],
+      "new_span": [
+        6695,
+        6828
+      ],
+      "function_sha256_lf": "8d0ea7834f454f54f5fad61f2de08687ccf499ef809e7bbbfe1704a455ae27d1",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_19451019efc2d01c7332",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        6905,
+        6990
+      ],
+      "new_span": [
+        6907,
+        6992
+      ],
+      "function_sha256_lf": "70bafc596a6a683d5e185d7363bf9957a69709cad5421b35a2fb749a45ba45ad",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_7c122b322da6ef3fb555",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        8011,
+        8073
+      ],
+      "new_span": [
+        8067,
+        8129
+      ],
+      "function_sha256_lf": "c4e0800b277889bb61b68e217a8bf45150b9cb351bc1a3f6a0172be24ba15e2c",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_a588ab315453a61edf9d",
+      "file": "js/app/10-main-app.js",
+      "marker": "large_method",
+      "old_span": [
+        8196,
+        8277
+      ],
+      "new_span": [
+        8252,
+        8333
+      ],
+      "function_sha256_lf": "f9d67c6bf2fd3f008066db790c218527b9b634bc6be47fcb24fee7f75c6cc840",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_4324376bb7f15d887a99",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        3827,
+        3887
+      ],
+      "new_span": [
+        3829,
+        3889
+      ],
+      "function_sha256_lf": "a3ada663d441141279b34f7b2b1c8ba6d122dc2787136da86600392728b470fe",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c2c09734de489bfe0c43",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        3889,
+        4058
+      ],
+      "new_span": [
+        3891,
+        4060
+      ],
+      "function_sha256_lf": "6a8c664eadd507a22a511d73c997b0bcb998712a74d13d03f8aab6767cb2019f",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_59891f8809ca49ea5883",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        4794,
+        4812
+      ],
+      "new_span": [
+        4796,
+        4814
+      ],
+      "function_sha256_lf": "20935d5a2c0590e62a144bbe105c53405a0bf9ce23a01731473186e2fe20d981",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_116b62f2c6940da9dded",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        5273,
+        5281
+      ],
+      "new_span": [
+        5275,
+        5283
+      ],
+      "function_sha256_lf": "6121c574130162f0aed5ea20ea1f47f7579393c25200e9f2e4e917571b04d937",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_f06389d3d183b5b7fa65",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        6681,
+        6691
+      ],
+      "new_span": [
+        6683,
+        6693
+      ],
+      "function_sha256_lf": "3542f49c080e5a00a4c7b3c2862b8f4ed63d46cfee0a02eac9a5e24da5a768c7",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_a868a94954804e2bff54",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        6828,
+        6846
+      ],
+      "new_span": [
+        6830,
+        6848
+      ],
+      "function_sha256_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_ce819733bea699e05190",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        6869,
+        6903
+      ],
+      "new_span": [
+        6871,
+        6905
+      ],
+      "function_sha256_lf": "11837682376fd69f0d337c4406879a48a1eca70ef380284d2c1cb76e89e34110",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_8533ebb93bfd8fa4850c",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        6905,
+        6990
+      ],
+      "new_span": [
+        6907,
+        6992
+      ],
+      "function_sha256_lf": "70bafc596a6a683d5e185d7363bf9957a69709cad5421b35a2fb749a45ba45ad",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_766147c5eccb9857e907",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        7815,
+        7845
+      ],
+      "new_span": [
+        7871,
+        7901
+      ],
+      "function_sha256_lf": "24be0ff625b93bcfba5e16c0789d31d55838c6945cd700ba2465effc70739f9c",
+      "restored_status": "confirmed_repair_candidate"
+    },
+    {
+      "id": "code_health:finding_f950a77aba91ce1f3c19",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        7847,
+        7913
+      ],
+      "new_span": [
+        7903,
+        7969
+      ],
+      "function_sha256_lf": "34d61e0beb272ba8210c204fcbe943012618dfa5f8a2cb2223d85c60ae1149d2",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_c2c599be4dc619dfd33b",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        7936,
+        7958
+      ],
+      "new_span": [
+        7992,
+        8014
+      ],
+      "function_sha256_lf": "77b2520c4a8a526b914e768c5be3607a8ba2b450d04c9773ed42d08c4751288a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_aa040416ab14e29024fa",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        7960,
+        7985
+      ],
+      "new_span": [
+        8016,
+        8041
+      ],
+      "function_sha256_lf": "de7c0b6a41955c78caa7fc2792fde55c347389bf198fa10120dbc622b5daab5a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_eb37461abdf66043fb60",
+      "file": "js/app/10-main-app.js",
+      "marker": "primitive_obsession",
+      "old_span": [
+        8011,
+        8073
+      ],
+      "new_span": [
+        8067,
+        8129
+      ],
+      "function_sha256_lf": "c4e0800b277889bb61b68e217a8bf45150b9cb351bc1a3f6a0172be24ba15e2c",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_422849494d832f75eae6",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        4538,
+        4546
+      ],
+      "new_span": [
+        4540,
+        4548
+      ],
+      "function_sha256_lf": "f9875adaae7c6de0e5b41497c5393b9db5b5f79a6b653878790d95fc2b0900da",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_8438b285c6cd5ae740c2",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        4857,
+        4870
+      ],
+      "new_span": [
+        4859,
+        4872
+      ],
+      "function_sha256_lf": "3a33796bb9369d7268665c0fefbad10023e2189485da3eed3e9fe23b933e4520",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_29f0311595e8d8ff7770",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        5525,
+        5547
+      ],
+      "new_span": [
+        5527,
+        5549
+      ],
+      "function_sha256_lf": "d28198dfb91ff260fa20683db1f9ffba5fc1f35d618384a06b4775b83e51340a",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_8500ae12a975ea5b7683",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        5574,
+        5635
+      ],
+      "new_span": [
+        5576,
+        5637
+      ],
+      "function_sha256_lf": "60a59c5460472e0a7a3e7fa75578d0a3b75259ba241a54f665bcbaeb80fcc878",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_845f971e196e18607fe6",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        6210,
+        6223
+      ],
+      "new_span": [
+        6212,
+        6225
+      ],
+      "function_sha256_lf": "f21a70815abda2b7e0adb726345ffc3bf934a85a577641a6aa8a07c0f60990f4",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_1cdab62e523ba3c26976",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        7591,
+        7611
+      ],
+      "new_span": [
+        7593,
+        7613
+      ],
+      "function_sha256_lf": "6716e29a17a5d6bd58b760aab957455e0e6c39202443f5490f5a51bbf16f52ba",
+      "restored_status": "reviewed_no_change"
+    },
+    {
+      "id": "code_health:finding_cb75b06f17c7ca01125c",
+      "file": "js/app/10-main-app.js",
+      "marker": "complex_conditional",
+      "old_span": [
+        8326,
+        8330
+      ],
+      "new_span": [
+        8382,
+        8386
+      ],
+      "function_sha256_lf": "e0a7b4fe48ebc22b6ffdc4413b71485dcb750efb79fedfc5ee8c2634b30db114",
+      "restored_status": "reviewed_no_change"
+    }
+  ],
+  "limits": "Whole-function source and fresh stored shape facts only. Changed functions, ambiguous bodies, DRY, history, I/O and coverage are not accepted by this check."
+}
