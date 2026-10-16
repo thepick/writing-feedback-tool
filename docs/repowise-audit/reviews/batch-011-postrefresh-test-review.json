@@ -1,0 +1,223 @@
+{
+  "review_id": "batch-011-postrefresh-test-review",
+  "verdict": "retain_four_test_warnings",
+  "blockers": [],
+  "source_commit": "9c8c9cfb5abeeaaaa1731f44d1d867c67959b844",
+  "test_source": {
+    "file": "tests/correction-performance.browser.cjs",
+    "raw_sha256": "cfe5f23f1f8086b58899e0024b0ca4cb6b1469a7c0f33ee0e57b52fcda999fd3",
+    "lf_sha256": "baef122e88d71a2d234552d3d7c53d152c2f4bbe9411b17424a487f45439c1e9",
+    "matches_accepted074_raw_and_lf": true
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_873694a833229c403503",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "complex_method",
+      "severity": "critical",
+      "span": [
+        4,
+        181
+      ],
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_literal_output_and_work_contracts",
+      "scanner_finding_remains_open": true,
+      "verified_observation_details": {
+        "ccn": 43,
+        "cognitive": 125,
+        "nloc": 177,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 105,
+          "end": 171
+        }
+      },
+      "reason": "CCN25 to43 reflects the added score/type, branch, primitive and detailed-only caller controls. These assert literal evidence and teacher-comment outputs, score/all-other-field integrity, absence of quick Grammar, and real delegated analyzer/LCS counts. Retain explicit decisions; moving assertions into helpers solely to reduce the driver score adds no verified benefit.",
+      "evidence_anchors": "test:93-104,139-171; repair-074-regression-review.json checks3-5",
+      "verified_metrics": {
+        "ccn": 43,
+        "cognitive": 125,
+        "nloc": 177,
+        "max_nesting": 5,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          105,
+          171
+        ],
+        "function_span": [
+          4,
+          181
+        ],
+        "function_lf_sha256": "48da507fa41373279229af0af946d29d44a077db128b59fe763ff5321d858840",
+        "installed_detector_replay_match": true
+      }
+    },
+    {
+      "record_id": "code_health:finding_e127d96b7167f455505c",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "dry_violation",
+      "severity": "low",
+      "span": [
+        3,
+        16
+      ],
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_bounded_native_harness_duplication",
+      "scanner_finding_remains_open": true,
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 8.84,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "reason": "The warning remains:22 cross-file pairs,16 union lines over181 nonblank lines=8.84%, worst15 lines with feedback-compatibility. Prior010 was16/149=10.74%; denominator growth explains the percentage fall, with no clone deletion claim. Shared route setup could be optional reuse only if it preserved source/MIME/network refusal and fixture isolation; no concrete need for that adapter is established.",
+      "evidence_anchors": "test:3-16; feedback-compatibility.browser.cjs harness; batch-010-postrefresh-test-review.json",
+      "verified_metrics": {
+        "cross_union_lines": 16,
+        "denominator_nonblank": 181,
+        "percentage": 8.84,
+        "pair_count": 22,
+        "worst_clone_lines": 15,
+        "provenance": "Current stored fresh clone facts; unique integer numerator recovered from actual181-line denominator and8.84% value, agreeing with prior accepted16-line union. No corpus rerun or fresh co-change history verification."
+      }
+    },
+    {
+      "record_id": "code_health:finding_c028bb03063849984a60",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "large_method",
+      "severity": "high",
+      "span": [
+        4,
+        181
+      ],
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_independent_parity_and_regression_oracles",
+      "scanner_finding_remains_open": true,
+      "verified_observation_details": {
+        "nloc": 177,
+        "ccn": 43,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 105,
+          "end": 171
+        }
+      },
+      "reason": "NLOC145 to177 is the32-line evidence-contract addition. Saved native output retains all304 prior checks and57 observations exactly, adds58 observations times3 assertions plus13 caller-state checks=187, and matches accepted491-check candidate. Keep independent original-matrix/Unicode/hostile-DOM and full detailed-caller state oracles together with their setup.",
+      "evidence_anchors": "test:19-92,139-181; batch011/full/correction-performance.browser.json",
+      "verified_metrics": {
+        "ccn": 43,
+        "cognitive": 125,
+        "nloc": 177,
+        "max_nesting": 5,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          105,
+          171
+        ],
+        "function_span": [
+          4,
+          181
+        ],
+        "function_lf_sha256": "48da507fa41373279229af0af946d29d44a077db128b59fe763ff5321d858840",
+        "installed_detector_replay_match": true
+      }
+    },
+    {
+      "record_id": "code_health:finding_3515e0fc6ceb77656ea4",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "nested_complexity",
+      "severity": "high",
+      "span": [
+        4,
+        181
+      ],
+      "proposed_status": "reviewed_no_change",
+      "classification": "retain_scoped_delegation_and_restoration",
+      "scanner_finding_remains_open": true,
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 43,
+        "cognitive": 125,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 105,
+          "end": 171
+        }
+      },
+      "reason": "Depth5 remains at the guarded evidence/reason observation region105-171. Explicit nested fixture loops cover text/score combinations; detailed caller checks preserve scores and unrelated data. Finally restores the actual analyzer and matrix; outer finally closes browser and failed checks force nonzero exit. Flattening only to clear this warning would obscure these native contracts.",
+      "evidence_anchors": "test:93-105,146-181",
+      "verified_metrics": {
+        "ccn": 43,
+        "cognitive": 125,
+        "nloc": 177,
+        "max_nesting": 5,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "deepest_block": [
+          105,
+          171
+        ],
+        "function_span": [
+          4,
+          181
+        ],
+        "function_lf_sha256": "48da507fa41373279229af0af946d29d44a077db128b59fe763ff5321d858840",
+        "installed_detector_replay_match": true
+      }
+    }
+  ],
+  "native_evidence": {
+    "prior_checks_exact_prefix": 304,
+    "prior_observations_exact_prefix": 57,
+    "new_observations": 58,
+    "new_checks": 187,
+    "current_checks_passed": 491,
+    "current_page_errors": [],
+    "actual_full_report_sha256": "16222a8958b39462d82cedd1f4668dd29a0c44dbbbaa990f5c822109b250c266",
+    "accepted074_review_sha256": "c990509fe3a7fb14ea364481fac7d752f987cf9d9a637037774d6e3ec62e6f9b",
+    "limit": "Saved native results and exact accepted-source binding, not a reviewer rerun. Original074 probe exited1 on a corrected wording expectation; not all79 original probe assertions passed."
+  },
+  "unchanged_shape_dryrun": {
+    "eligible_records": 0,
+    "prefilter_records": 3,
+    "reason": "All three candidates bind changed callback body4-149 to4-181; body identity fails. DRY is excluded by helper policy. No record can be automatically retained by this dry run.",
+    "prefilter_ids": [
+      "code_health:finding_3515e0fc6ceb77656ea4",
+      "code_health:finding_873694a833229c403503",
+      "code_health:finding_c028bb03063849984a60"
+    ],
+    "prior_function_lf_sha256": "d68f864bcd8701a0f0c9150d8fb76a5eb273c8256cdec1fd096e086faed57bbe",
+    "current_function_lf_sha256": "48da507fa41373279229af0af946d29d44a077db128b59fe763ff5321d858840",
+    "report_sha256": "78cdeaf08cc19de8b804b9895197960b430e4651ec4fbe253b023011d4b2ba63"
+  },
+  "fresh_summary_check": {
+    "added": 1,
+    "changed": 25,
+    "gone": 0,
+    "present_before": 1016,
+    "present_after": 1017,
+    "code_health_before": 942,
+    "code_health_after": 943,
+    "critical_before_and_after": 35,
+    "fixed_verified_before_and_after": 33,
+    "new_scanner_closures": 0,
+    "production_added_id": "code_health:finding_6cd2ab370b5ebac61df0",
+    "production_review": "Assigned separately to027; no production disposition here.",
+    "reason": "One added medium production evidence-helper warning; four changed test warnings and21 historical-fact deltas. No disappeared record, new fixed_verified transition, or blanket clearance. Pre-existing needs_revalidation remains work to triage rather than evidence of new bugs."
+  },
+  "limits": [
+    "Exactly four current test rows reviewed; no whole-repository audit or source change authorized. Required native literal/count/state assertions retained; no new worthwhile test gap found within this bounded scope.",
+    "Three installed target shape detectors replayed. Fresh clone percentage/denominator arithmetic inspected with prior accepted numerator binding; no full corpus/history reconstruction.",
+    "Batch011 remains76 original passing suites plus one whole passing auth retry; original full attempt failed, and browser-closure cause is unknown. This review does not recast it as an uninterrupted pass.",
+    "No app/browser/test runs, index/cache/tracker/source/Git mutation, new proof helper, or scanner closure."
+  ]
+}

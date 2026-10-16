@@ -1,0 +1,28 @@
+{
+  "batch": "batch-011",
+  "head": "9c8c9cfb5abeeaaaa1731f44d1d867c67959b844",
+  "verified_at_utc": "2026-10-16T09:14:04.651355+00:00",
+  "state_repository_all_metrics_agree": true,
+  "health_metric_count": 89,
+  "all_source_hashes_counts_percent_and_line_sets_match": true,
+  "lcov_contexts": 480,
+  "test_file_maps": 386,
+  "all_test_mapping_line_sets_match": true,
+  "strict_mapping_complete": true,
+  "totals": {
+    "covered": 10324,
+    "executable": 11100,
+    "percent": 93.009009009009
+  },
+  "source_hashes_normalized_lf": {
+    "google-drive-migration.js": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+    "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "js/app/00-storage-sync-patches.js": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/10-main-app.js": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+    "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+    "js/app/99-lightbox.js": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087"
+  },
+  "scope": "Read-only local DB and exact-source native executable-line coverage verification; no branch coverage or live service claim."
+}

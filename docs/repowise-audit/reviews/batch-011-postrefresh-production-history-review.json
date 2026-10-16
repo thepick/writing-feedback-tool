@@ -1,0 +1,290 @@
+{
+  "review_id": "batch-011-postrefresh-production-history-review",
+  "source_commit": "9c8c9cfb5abeeaaaa1731f44d1d867c67959b844",
+  "before_source_commit": "026bbea1acef1dca4263922b03d6f176a647f066",
+  "decision": "Retain new useful evidence guard and historical risk signals; no new actionable defect or source edit admitted.",
+  "inputs": {
+    "delta": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-fresh-delta.json",
+      "raw_sha256": "be7f04a5e76f3846eea59e0e08a57be5f590beb74c5352bcfd2940feda2b1485"
+    },
+    "before_tracker": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\before-batch-011-refresh.json",
+      "raw_sha256": "6245ac9f447557bf5b5da684c3a4c6b0deebce7bedd900deba4fa4c4680d9d8e"
+    },
+    "current_tracker_raw_sha256_at_read": "bf931d48c13e2dfaca9818f8deb1df1725743ec91345d1425792f4fb22a20818",
+    "overview_dom": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-overview-dom.txt",
+      "raw_sha256": "576e85b566cd2f8765bc5cdedb3d711f466cd20bf3a18e9edf7ba6edb1ccd755"
+    }
+  },
+  "completeness": {
+    "added_total": 1,
+    "changed_total": 25,
+    "gone_total": 0,
+    "scoped_records": 22,
+    "scoped_ids": [
+      "code_health:finding_07852add7f2c9cf7efbc",
+      "code_health:finding_0f637d1b3003eea4a93c",
+      "code_health:finding_243db0fbfb8a96a7c724",
+      "code_health:finding_2ddd6e095fd9837509d1",
+      "code_health:finding_48c252fe878571a96463",
+      "code_health:finding_52dd694654409f08a520",
+      "code_health:finding_615d19856374d52a4a9b",
+      "code_health:finding_6cd2ab370b5ebac61df0",
+      "code_health:finding_782b98d52eb223e30e23",
+      "code_health:finding_8900a9c008833aefb538",
+      "code_health:finding_b2267d45e0c328b33cd3",
+      "code_health:finding_b820d2d24da772091e34",
+      "code_health:finding_bd2f800fbe50490cc6fb",
+      "code_health:finding_c488fbf48a69c6dcaa4b",
+      "code_health:finding_da551e170029b179c512",
+      "code_health:finding_e3086671fe04a7875905",
+      "code_health:finding_e6aa12e550a273e0c1d0",
+      "code_health:finding_edf631be2ad1ae7ed2d9",
+      "code_health:finding_f505e8ce9087ba531b4a",
+      "code_health:finding_f6620a424e2963dccb69",
+      "code_health:finding_f9f2c6b5c37b83e8d423",
+      "code_health:finding_fb228dc4c6e6091ca885"
+    ],
+    "per_row_disposition_count": 22,
+    "scoped_ids_each_exactly_once": true,
+    "excluded_correction_performance_ids": [
+      "code_health:finding_873694a833229c403503",
+      "code_health:finding_e127d96b7167f455505c",
+      "code_health:finding_c028bb03063849984a60",
+      "code_health:finding_3515e0fc6ceb77656ea4"
+    ],
+    "excluded_owner": "028; no testshape/DRY or source approval for this file by this report."
+  },
+  "production_finding": {
+    "record_id": "code_health:finding_6cd2ab370b5ebac61df0",
+    "file": "js/app/10-main-app.js",
+    "symbol": "buildGrammarEvidenceFromData",
+    "marker": "complex_method",
+    "proposed_status": "reviewed_no_change",
+    "classification": "supported_high_score_early_exit_retained_after074",
+    "verified_observation_details": {
+      "ccn": 9,
+      "cognitive": 10,
+      "nloc": 18,
+      "dispatch_share": 0.0,
+      "symbol_line": 1914,
+      "deepest_block": {
+        "start": 1918,
+        "end": 1926
+      }
+    },
+    "verified_metrics": {
+      "before": {
+        "ccn": 8,
+        "cognitive": 9,
+        "nloc": 18,
+        "judged_ccn": 8,
+        "severity": null,
+        "sha256_lf": "320e3f62a9c9c476fa91ae289c534fa273c84278565542b8a7e39018a29d502b"
+      },
+      "current": {
+        "ccn": 9,
+        "cognitive": 10,
+        "nloc": 18,
+        "judged_ccn": 9,
+        "max_nesting": 2,
+        "severity": "medium",
+        "sha256_lf": "6ca2f92c6a848b758f598e499b4b0f010119923f59b85476778583c9064e335f"
+      }
+    },
+    "reason": "Independent bounded walker and current ComplexMethodDetector severity rule reproduce8->9 and newly crossing threshold9. The added high-score || guard skips unused analyzer/LCS work while preserving normalized scores and identical empty evidence above8. Low/mid words,polish prepass,error-density alignment and teacherComment are unchanged. Accepted074 literal/caller/work-count evidence supports keeping the useful guard; this is a true structural warning,not a new defect or a reason to undo performance benefit.",
+    "anchors": [
+      "js/app/10-main-app.js:1914-1931",
+      "js/app/10-main-app.js:2065-2120",
+      "js/app/10-main-app.js:4644-4663"
+    ],
+    "prior": "repair-074-safety-review.json",
+    "scanner_closure_claim": false
+  },
+  "history_interpretation": {
+    "all21_proposed_status": "reviewed_no_change",
+    "rule_basis": "Current entropy detector uses positive weight,>=80th percentile and>=3commits; Critical additionally requires hotspot and>=95th percentile. Scatter uses decayed-mass rank>=80th plus>=3commits,High>=95th; capped25recorded partners are not true total breadth. Preserve observed severity as metadata,not a rederived runtime fault ranking.",
+    "verification": "Fresh packet/IDs/file/marker/reason/spans/details match current canonical observations. Values compared with saved before metadata. Seventeen of18scoped file bodies are LF-identical to026; main differs solely by074guard. No old or new history graph/decay/ranking corpus rebuilt.",
+    "numeric_provenance_limit": "All history numbers are fresh indexed metadata. No independently reconstructed decimals,hotspot inputs or older corpus ranks are claimed. Prior009preference/record-identity exact-numerical mismatch caveats remain."
+  },
+  "function_pins": {
+    "evidence": {
+      "file": "js/app/10-main-app.js",
+      "lines": [
+        1914,
+        1931
+      ],
+      "sha256_lf": "6ca2f92c6a848b758f598e499b4b0f010119923f59b85476778583c9064e335f"
+    },
+    "reason": {
+      "file": "js/app/10-main-app.js",
+      "lines": [
+        1887,
+        1912
+      ],
+      "sha256_lf": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa"
+    },
+    "preview_drop": {
+      "file": "js/app/10-main-app.js",
+      "lines": [
+        3537,
+        3591
+      ],
+      "sha256_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237"
+    },
+    "normalize_schema": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "lines": [
+        1338,
+        1367
+      ],
+      "sha256_lf": "81827f785b87832d08b1b70bca6190a5a8db73f9a12ae382570768cb7dba62eb"
+    },
+    "image_fallback": {
+      "file": "js/app/00-storage-sync-patches.js",
+      "lines": [
+        1481,
+        1514
+      ],
+      "sha256_lf": "46d8299da47310ee78d0b591621beca016e50e0a8027283359c154162db19240"
+    },
+    "export_image": {
+      "file": "js/app/portfolio-export.js",
+      "lines": [
+        629,
+        668
+      ],
+      "sha256_lf": "b438dbc78924d3eace70466865a7db1b58ea70c23ebd831a6e10b0d7b946b06c"
+    }
+  },
+  "source_hashes_normalized_lf": {
+    "js/app/00-storage-sync-patches.js": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+    "js/app/10-main-app.js": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "scripts/check-test-runner.cjs": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/run-tests.cjs": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "tests/archive-integrity.browser.cjs": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+    "tests/auth-integrity.browser.cjs": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79",
+    "tests/class-deletion.cjs": "602de41f7472e6014dded1c05de286758a500f71f82738e7542c6f36d582dcd1",
+    "tests/notebook-guidance-repair.browser.cjs": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+    "tests/notebook-guide.browser.cjs": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/portfolio-index.browser.cjs": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+    "tests/portfolio-replacement.cjs": "83e2ba84e046c2741740159204d255f1432b1c5fef5645f5f466d2a9b2f722f5",
+    "tests/portfolio-sync.cjs": "04df094930b54795bc6185d6871dbcf93679e2c4ad35d6071dada706003641a6",
+    "tests/preference-integrity-scenarios.js": "ff6cf239b54a5ec6f279b151e6cc69ff3024e4c97f5ca4d2e9d2c1d5e6bc020c",
+    "tests/record-identity.cjs": "c3f2e945de3da7f6acfdf173b054e1fe98384e27f087e355d4bd37d4cf3afa59",
+    "tests/storage-health.cjs": "eaf6c8c760e788cc0342afc3ca8d29874a5da77b4ec9162d38371d41d132c7bf",
+    "tests/student-rename.cjs": "555f18cffcd227057c6dfda7ebfd432e73c6cb9b24f6a429952dbc8d9964812b"
+  },
+  "main_raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+  "overview_binding": {
+    "ui_head": "9c8c9cf",
+    "scores_observed": {
+      "code_health": 4.5,
+      "maintainability": 4.5,
+      "static_performance": 9.3
+    },
+    "do_next_cards": 2,
+    "now_card": {
+      "serious": 12,
+      "files": 4,
+      "critical": 1,
+      "starts_with": "js/app/10-main-app.js"
+    },
+    "normalize_card_values_observed": {
+      "commits_90d": 70,
+      "bug_fix_commits": 5,
+      "importing_files": 11,
+      "coverage_label": "92% (older report)"
+    },
+    "interpretation": "These are displayed planning/history context,not proof of12new bugs,70function edits or11direct callers. Fresh strict011coverage provenance is separately verified by coordinator; older card label does not supersede it. No vendor/planner investigation performed.",
+    "prior_disposition_checks": [
+      {
+        "record_ids": [
+          "code_health:finding_58a8b9f1eed6f92f7106"
+        ],
+        "proposed_status": "reviewed_no_change",
+        "reason": "Fresh main3557critical warning still has six boolean operators in the identical whole drop callbackcbc19422…. It rejects NaN,equal and both lower/upper index bounds before splice/OCR invalidation.045data-preservation behavior and retained007/010 rationale stand. No cosmetic predicate split admitted.",
+        "pin": "preview_drop"
+      },
+      {
+        "record_ids": [
+          "code_health:finding_9599830c23cff6c9eeab",
+          "code_health:finding_e12eb3ad598aa6782566"
+        ],
+        "proposed_status": "reviewed_no_change",
+        "reason": "Actual normalizeWftPortfolioForSchemaV1 remainsCCN14/cognitive22/NLOC25/depth4 and body81827f78….068already shared the exact reserved-key policy. Remaining safe-mode bypass,ordered own-key/legacy-array normalization,per-student optional-ID failure isolation and _meta attachment are substantive. Same planning card supplies no new failure or worthwhile smaller edit.",
+        "pin": "normalize_schema"
+      },
+      {
+        "record_ids": [
+          "code_health:finding_55691a30eadb5aba5f9f"
+        ],
+        "proposed_status": "reviewed_no_change",
+        "reason": "Identical image callback retains distinct decode,resize,null-encoder and original-byte fallback boundaries. Prior043/010 retention stands; no new source or behavioral evidence.",
+        "pin": "image_fallback"
+      },
+      {
+        "record_ids": [
+          "code_health:finding_481a4a617b0134a3a219"
+        ],
+        "proposed_status": "confirmed_repair_candidate",
+        "admission": "defer_low_incremental_benefit",
+        "reason": "Prior038 optional capture-scope maintenance remains a candidate,not a bug. Identical addImageExport captures per-image/task/manifest state and guards connection before/after blob acquisition. No new data-safety or measured performance benefit supports prioritizing this cleanup.",
+        "pin": "export_image"
+      }
+    ]
+  },
+  "accepted_evidence_reuse": {
+    "repair-074-safety-review.json": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-074-safety-review.json",
+      "raw_sha256": "737776747b84a4becb28bbe62817e4b289e20e2f2cc2590140152bf557b41ae9"
+    },
+    "batch-010-postrefresh-production-review.json": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\batch-010-postrefresh-production-review.json",
+      "raw_sha256": "561105fe2baad87a59857af204c236fd8e5fa33c8b48f237ab7383feb6789f37"
+    },
+    "batch-011-ingestion-verification.json": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\batch-011-ingestion-verification.json",
+      "raw_sha256": "682a45ae47125e9c953fa1059b4311045528395e702581360f24520eed01ace0"
+    },
+    "batch-011-auth-retry-review.json": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\batch-011-auth-retry-review.json",
+      "raw_sha256": "d5429d90e919b37282ac45133b6fc6eb99c9a1c1b5855008b8138461841a1c45"
+    }
+  },
+  "remaining_actionable_issues": [],
+  "new_cleanup_admissions": [],
+  "limits": [
+    "Trusted installed pure walker and severity rule executed only on bounded main/normalize targets; no app/browser/test/full-suite or broad audit rerun. Only this report written; no Git/index/tracker/source/runtime changes.",
+    "074native491checks plus30compatibility and later same-source auth111retry evidence reused. Original011full runner remains76passing suites/1browser-interrupted auth; successful retry is separate and closure cause remains unknown.",
+    "Fresh strict480contexts/386maps and all8source coverage binding reused from ingestion-verification receipt; not independently rebuilt in this final review. No scanner closure,coverage-only testing mandate or changed-history repair claim.",
+    "Retain P01/P09/P16 and other established deferrals. Correction-performance file is outside this assignment. Coordinator owns adoption and final documentation."
+  ],
+  "history_dispositions": [
+    {"record_id":"code_health:finding_fb228dc4c6e6091ca885","file":"tests/record-identity.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.7959,"change_entropy_pct":85.1,"commit_count_90d":5},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect.","numeric_limit":"Prior009 exact-old-history reconstruction caveat retained; current values are fresh stored metadata,not independently regenerated."},
+    {"record_id":"code_health:finding_c488fbf48a69c6dcaa4b","file":"scripts/check-test-runner.cjs","marker":"co_change_scatter","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"scatter":4,"recorded_partners":4,"co_change_mass":3.7228,"co_change_scatter_pct":94.2,"commit_count_90d":6},"reason":"True scatter,recorded partner count,rank and90-day commit count remain unchanged; only weighted mass changes. Retain historical caution,not a source refactor."},
+    {"record_id":"code_health:finding_615d19856374d52a4a9b","file":"tests/archive-integrity.browser.cjs","marker":"change_entropy","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.4303,"change_entropy_pct":94.3,"commit_count_90d":8},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_07852add7f2c9cf7efbc","file":"tests/auth-integrity.browser.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.861,"change_entropy_pct":87.4,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_f6620a424e2963dccb69","file":"tests/portfolio-index.browser.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.6939,"change_entropy_pct":82.8,"commit_count_90d":5},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_bd2f800fbe50490cc6fb","file":"tests/storage-health.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.0663,"change_entropy_pct":88.5,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_e3086671fe04a7875905","file":"tests/portfolio-sync.cjs","marker":"change_entropy","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.6352,"change_entropy_pct":95.4,"commit_count_90d":7},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_da551e170029b179c512","file":"scripts/check-test-runner.cjs","marker":"change_entropy","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.3019,"change_entropy_pct":93.1,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_0f637d1b3003eea4a93c","file":"scripts/run-tests.cjs","marker":"change_entropy","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.7312,"change_entropy_pct":96.6,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_b2267d45e0c328b33cd3","file":"scripts/run-tests.cjs","marker":"co_change_scatter","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"scatter":2,"recorded_partners":2,"co_change_mass":3.3169,"co_change_scatter_pct":92.3,"commit_count_90d":6},"reason":"True scatter,recorded partner count,rank and90-day commit count remain unchanged; only weighted mass changes. Retain historical caution,not a source refactor."},
+    {"record_id":"code_health:finding_48c252fe878571a96463","file":"tests/preference-integrity-scenarios.js","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.8582,"change_entropy_pct":86.2,"commit_count_90d":5},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect.","numeric_limit":"Prior009 exact-old-history reconstruction caveat retained; current values are fresh stored metadata,not independently regenerated."},
+    {"record_id":"code_health:finding_f505e8ce9087ba531b4a","file":"js/app/10-main-app.js","marker":"change_entropy","severity_observed":"critical","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":27.2362,"change_entropy_pct":97.7,"commit_count_90d":58},"reason":"One additional indexed main commit57->58; entropy rank97.7 and true scatter33 remain.074source edit is already behavior-reviewed; past co-editing is not a new runtime defect."},
+    {"record_id":"code_health:finding_2ddd6e095fd9837509d1","file":"js/app/10-main-app.js","marker":"co_change_scatter","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"scatter":33,"recorded_partners":25,"co_change_mass":43.1192,"co_change_scatter_pct":96.2,"commit_count_90d":58},"reason":"One additional indexed main commit57->58; entropy rank97.7 and true scatter33 remain.074source edit is already behavior-reviewed; past co-editing is not a new runtime defect."},
+    {"record_id":"code_health:finding_b820d2d24da772091e34","file":"js/app/00-storage-sync-patches.js","marker":"co_change_scatter","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"scatter":43,"recorded_partners":25,"co_change_mass":48.8753,"co_change_scatter_pct":98.1,"commit_count_90d":70},"reason":"True scatter,recorded partner count,rank and90-day commit count remain unchanged; only weighted mass changes. Retain historical caution,not a source refactor."},
+    {"record_id":"code_health:finding_782b98d52eb223e30e23","file":"tests/notebook-guidance-repair.browser.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.6674,"change_entropy_pct":81.6,"commit_count_90d":7},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_e6aa12e550a273e0c1d0","file":"tests/portfolio-replacement.cjs","marker":"change_entropy","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.292,"change_entropy_pct":92.0,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_243db0fbfb8a96a7c724","file":"tests/notebook-guide.browser.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.1776,"change_entropy_pct":89.7,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_52dd694654409f08a520","file":"js/app/storage-recovery.js","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.5481,"change_entropy_pct":80.5,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_edf631be2ad1ae7ed2d9","file":"tests/student-rename.cjs","marker":"change_entropy","severity_observed":"high","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":2.2299,"change_entropy_pct":90.8,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_f9f2c6b5c37b83e8d423","file":"tests/class-deletion.cjs","marker":"change_entropy","severity_observed":"medium","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":1.7426,"change_entropy_pct":83.9,"commit_count_90d":6},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."},
+    {"record_id":"code_health:finding_8900a9c008833aefb538","file":"js/app/00-storage-sync-patches.js","marker":"change_entropy","severity_observed":"critical","proposed_status":"reviewed_no_change","classification":"historical_risk_signal_retained","verified_observation_details":{"change_entropy":32.2743,"change_entropy_pct":98.9,"commit_count_90d":70},"reason":"Commit count,entropy percentile and source remain unchanged; small weighted-value change adds no new contract or actionable defect."}
+  ]
+}

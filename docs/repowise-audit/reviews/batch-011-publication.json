@@ -1,0 +1,38 @@
+{
+  "batch": "batch-011",
+  "pull_request": "https://github.com/thepick/writing-feedback-tool/pull/192",
+  "merge_commit": "9c8c9cfb5abeeaaaa1731f44d1d867c67959b844",
+  "verified_at": "2026-10-16T09:12:15.233420+00:00",
+  "pages_build": "built",
+  "pages_build_commit": "9c8c9cfb5abeeaaaa1731f44d1d867c67959b844",
+  "tested_source_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+  "all_committed_source_blobs_identical": true,
+  "all_normalized_lf_pins_match": true,
+  "source_pin_count": 91,
+  "configuration_pin_count": 1,
+  "configuration_checkout_newline_only_changes": [],
+  "raw_source_pins_match": 91,
+  "checkout_newline_only_changes": [],
+  "files": [
+    {
+      "file": "js/app/10-main-app.js",
+      "http_status": 200,
+      "bytes": 426996,
+      "git_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+      "live_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+      "exact_git_bytes": true
+    }
+  ],
+  "all_changed_scripts_match": true,
+  "scope": "Public static deployment and exact source equivalence; no real accounts, writing, Google, Drive or model calls.",
+  "html_verification": {
+    "http_status": 200,
+    "git_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+    "live_raw_sha256": "fe7d69ad3cd36dbae15c3692c16277da0f131e2758af25bf305a3657123fab3d",
+    "hosting_analytics_addition_sha256": "700e4af549e1df82a2068823d99721dfb1a601f44aa92f7be51c561bdc257b01",
+    "only_one_hosting_analytics_line_added": true,
+    "all_other_git_bytes_identical": true,
+    "mobile_layout_source_unchanged": true,
+    "no_new_physical_phone_test": true
+  }
+}

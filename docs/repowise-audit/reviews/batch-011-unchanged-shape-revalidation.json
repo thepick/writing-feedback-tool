@@ -1,0 +1,6 @@
+{
+  "before": "026bbea1acef1dca4263922b03d6f176a647f066",
+  "after": "9c8c9cfb5abeeaaaa1731f44d1d867c67959b844",
+  "records": [],
+  "limits": "Whole-function source and fresh stored shape facts only. Changed functions, ambiguous bodies, DRY, history, I/O and coverage are not accepted by this check."
+}

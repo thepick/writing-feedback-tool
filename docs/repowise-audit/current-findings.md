@@ -1,8 +1,8 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T16:10:39.728781+07:00.
+Updated 2026-10-16T16:19:03.975325+07:00.
 
-Source: 026bbea1acef1dca4263922b03d6f176a647f066. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
+Source: 9c8c9cfb5abeeaaaa1731f44d1d867c67959b844. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
 One source editor and two parallel read-only reviewers. Test and commit each fix; refresh RepoWise at batch boundaries and run the full gate before merging. Findings are leads, not proven bugs.
 
@@ -10,7 +10,7 @@ One source editor and two parallel read-only reviewers. Test and commit each fix
 
 | Surface | Present observations |
 | --- | ---: |
-| code_health | 942 |
+| code_health | 943 |
 | security | 29 |
 | dead_code | 14 |
 | documentation | 0 |
@@ -21,9 +21,9 @@ One source editor and two parallel read-only reviewers. Test and commit each fix
 Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 0. Test-oracle leads: 0.
 
 
-Statuses: {"candidate_needs_regression": 11, "confirmed_repair_candidate": 43, "needs_revalidation": 341, "reviewed_no_change": 621}.
+Statuses: {"candidate_needs_regression": 11, "confirmed_repair_candidate": 43, "needs_revalidation": 341, "reviewed_no_change": 622}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 11, "confirmed_repair_candidate": 44, "fixed_verified": 33, "needs_revalidation": 341, "not_detected_unverified": 4, "reviewed_no_change": 636}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 11, "confirmed_repair_candidate": 44, "fixed_verified": 33, "needs_revalidation": 341, "not_detected_unverified": 4, "reviewed_no_change": 637}.
 
 Findings confirmed cleared: 33. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
@@ -117,8 +117,8 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-071: Test native crop gestures against decoded output pixels - published_verified.
 - repair-072: Verify timeout recovery acknowledges only the intended Drive content - published_live_index_coverage_UI_verified.
 - repair-073: Skip unused grammar diff when no reason is generated - published_live_index_coverage_UI_verified.
+- repair-074: Skip unused grammar evidence comparison above score8 - published_live_index_coverage_UI_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-074: Skip unused grammar evidence comparison above score8 - validated_pending_merge_after_auth_retry.
 
 ## Additional source leads
 
@@ -152,9 +152,9 @@ These are review leads, separate from scanner observations. They require their o
 
 ## Coverage evidence
 
-93.0% native executable-line coverage from 60 browser suites. 7/8 shipped source files still match that capture. Ingestion: verified_merged_source_strict_all_line_sets.
+93.0% native executable-line coverage from 60 browser suites. 8/8 shipped source files still match that capture. Ingestion: verified_merged_source_strict_all_line_sets.
 
-Per-file gaps and excluded reference/mutated contexts are recorded in reviews/batch-010-validation.json. This is line coverage, not branch coverage.
+Per-file gaps and excluded reference/mutated contexts are recorded in reviews/batch-011-validation.json. This is line coverage, not branch coverage.
 
 
 ## Complete inventory
@@ -512,6 +512,7 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_8142e2f50ce57c01cca8 | medium | code_health | js/app/10-main-app.js:1777 | buildConventionReason / complex_method | yes | needs_revalidation |
 | code_health:finding_e0017e08473e350a01ab | medium | code_health | js/app/10-main-app.js:1847 | analyzeGrammarChanges / complex_method | yes | needs_revalidation |
 | code_health:finding_d101f599d7efdce35b73 | medium | code_health | js/app/10-main-app.js:1887 | buildGrammarReasonFromData / complex_method | yes | reviewed_no_change |
+| code_health:finding_6cd2ab370b5ebac61df0 | medium | code_health | js/app/10-main-app.js:1914 | buildGrammarEvidenceFromData / complex_method | yes | reviewed_no_change |
 | code_health:finding_612b7a712640a912fac4 | medium | code_health | js/app/10-main-app.js:2104 | polishCategoryWording / complex_method | yes | needs_revalidation |
 | code_health:finding_c72ee67ef2d568b7cc3b | medium | code_health | js/app/10-main-app.js:2147 | parseStep1 / complex_method | yes | needs_revalidation |
 | code_health:finding_2027f723da8a822bca97 | medium | code_health | js/app/10-main-app.js:2237 | parseWhatINoticedRowsFromBody / complex_method | yes | needs_revalidation |
