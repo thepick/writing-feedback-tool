@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T13:13:59.763560+07:00.
+Updated 2026-10-16T13:48:39.714909+07:00.
 
 Source: ed5783675bd334b165798eabaaeb01288afb339a. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -112,10 +112,10 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-066-settings-merge: Remove mirrored settings merge copy loops while preserving precedence and credentials - maintainability_improvement_verified_published_warning_retained.
 - repair-067-mobile-header: Separate mobile Sign Out and Settings controls and let sync status fit - fixed_verified_published.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-068: Share exact portfolio metadata key policy across five consumers - focused_tests_and_two_reviews_accepted_pending_batch_validation.
-- repair-069: Share existing settings form overlay while preserving caller failure contracts - focused_tests_and_two_reviews_accepted_pending_batch_validation.
-- repair-070: Assert archive refusals preserve work before unsafe side effects - focused_tests_and_two_reviews_accepted_pending_batch_validation.
-- repair-071: Test native crop gestures against decoded output pixels - focused_tests_and_two_reviews_accepted_pending_batch_validation.
+- repair-068: Share exact portfolio metadata key policy across five consumers - validated_pending_merge.
+- repair-069: Share existing settings form overlay while preserving caller failure contracts - validated_pending_merge.
+- repair-070: Assert archive refusals preserve work before unsafe side effects - validated_pending_merge.
+- repair-071: Test native crop gestures against decoded output pixels - validated_pending_merge.
 
 ## Additional source leads
 
