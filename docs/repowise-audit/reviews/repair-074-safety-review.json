@@ -1,0 +1,177 @@
+{
+  "repair_id": "repair-074",
+  "verdict": "accepted",
+  "blockers": [],
+  "base_commit": "e0ddfe18713df9eb967a2dab94840bdfae1c3c50",
+  "branch": "codex/repowise-batch-011-20261016",
+  "scope": "One evidence-helper early return and appended existing performance-suite assertions only. No new follow-up research or source authorization.",
+  "source_pins": {
+    "main": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\10-main-app.js",
+      "raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+      "lf_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43"
+    },
+    "performance_test": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\correction-performance.browser.cjs",
+      "raw_sha256": "cfe5f23f1f8086b58899e0024b0ca4cb6b1469a7c0f33ee0e57b52fcda999fd3",
+      "lf_sha256": "baef122e88d71a2d234552d3d7c53d152c2f4bbe9411b17424a487f45439c1e9"
+    },
+    "tests/storage-upload-ownership.browser.cjs": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\storage-upload-ownership.browser.cjs",
+      "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+      "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735"
+    },
+    "tests/feedback-compatibility.browser.cjs": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\feedback-compatibility.browser.cjs",
+      "raw_sha256": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+      "lf_sha256": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa"
+    },
+    "index.html": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\index.html",
+      "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+      "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898"
+    }
+  },
+  "inspected_main_function_pins": {
+    "buildGrammarEvidenceFromData": {
+      "lines": [
+        1914,
+        1931
+      ],
+      "original_lf_sha256": "320e3f62a9c9c476fa91ae289c534fa273c84278565542b8a7e39018a29d502b",
+      "candidate_lf_sha256": "6ca2f92c6a848b758f598e499b4b0f010119923f59b85476778583c9064e335f"
+    },
+    "buildGrammarReasonFromData": {
+      "lines": [
+        1887,
+        1912
+      ],
+      "original_lf_sha256": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa",
+      "candidate_lf_sha256": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa"
+    },
+    "buildGrammarPatternNotes": {
+      "lines": [
+        2021,
+        2037
+      ],
+      "original_lf_sha256": "07e06204d909a1bb1e309bb798adde6d7a47e5233feb6ce6a6deb30f58bb6b64",
+      "candidate_lf_sha256": "07e06204d909a1bb1e309bb798adde6d7a47e5233feb6ce6a6deb30f58bb6b64"
+    },
+    "polishFeedback": {
+      "lines": [
+        2065,
+        2120
+      ],
+      "original_lf_sha256": "30e75f032f59852dc0e8864867487b24b6e666f830d81d374a6cc9bdc4cb2312",
+      "candidate_lf_sha256": "30e75f032f59852dc0e8864867487b24b6e666f830d81d374a6cc9bdc4cb2312"
+    },
+    "alignGrammarWordingWithErrorData": {
+      "lines": [
+        4644,
+        4663
+      ],
+      "original_lf_sha256": "5f95900946ea91638e53ff6e7d6cca374d48da5c45ffa87f3b3653e075917350",
+      "candidate_lf_sha256": "5f95900946ea91638e53ff6e7d6cca374d48da5c45ffa87f3b3653e075917350"
+    }
+  },
+  "observations": [
+    {
+      "anchors": [
+        "js/app/10-main-app.js:552-557",
+        "js/app/10-main-app.js:1914-1931"
+      ],
+      "reason": "The original finite primitive-number/string normalization remains first. Original normalized scores>8 always reached empty evidence after unused analysis. The added guard returns that same empty value before analysis. Null/invalid handling,zero/negative,<=6 helper/verb/general branches and7/8 many-edit threshold/literal words remain unchanged. Whole candidate main equals immutable parent after exactly this context-bound guard replacement."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:1151-1185",
+        "js/app/10-main-app.js:1375-1382",
+        "js/app/10-main-app.js:1810-1885",
+        "js/app/10-main-app.js:2147-2167",
+        "js/app/10-main-app.js:7939",
+        "js/app/10-main-app.js:8267-8283"
+      ],
+      "reason": "Reused073 inspection binds the unchanged local token/diff/LCS/summary chain and primitive writing/corrected-story callers. For supported strings the skipped analysis publishes no UI/storage state. The benefit is one omitted evidence-specific analyzer/LCS call for high scores, not new score policy, latency or whole-assessment zero work."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:2065-2120",
+        "js/app/10-main-app.js:4644-4663",
+        "tests/correction-performance.browser.cjs:151-167"
+      ],
+      "reason": "Actual detailed-only polishFeedback still runs polishCategoryWording first, replaces evidence only when builder returns a nonempty value, then aligns existing evidence and teacherComment against error totals/density. All these caller bodies are exactly parent-identical. Independent raw comparison of13 selected original/candidate caller before/after states confirms preserved scores/counts/density,metadata/growth/content/sentence data,unrelated/root data and absence of quick Grammar. Dense high and mid fixtures retain the actual a-number-of grammar edits and important-fixes substitutions."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:1887-1912",
+        "js/app/10-main-app.js:2021-2037",
+        "tests/correction-performance.browser.cjs:93-170"
+      ],
+      "reason": "Accepted073 reason helper and separate pattern consumer are byte-identical. Existing reason observations remain exact; the high-score pattern control still delegates one real analyzer/LCS call and preserves its five-note level sequence. The new check helper only counts then delegates real implementations and restores them in finally; no fabricated summary, matrix or evidence return."
+    },
+    {
+      "anchors": [
+        "tests/correction-performance.browser.cjs:139-170",
+        "tests/correction-performance.browser.cjs:174-181"
+      ],
+      "reason": "Removing only the32-line inserted block reproduces the immutable304-check test source exactly after LF normalization. First304 named check objects/order/results and first57 reason observations equal010 evidence; normalization control remains161. All491 recorded checks are true with no page errors. False checks or page/evaluation errors still fail the runner; unchanged30-check compatibility report is byte-identical to010."
+    }
+  ],
+  "recorded_evidence": {
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\repair-074-high-score-evidence-guard.json",
+      "raw_sha256": "76c118ca3d5a6a5bff13cc5177cd9979095ce5ab1ebf9ef8e66a562eb401e8b9",
+      "lf_sha256": "bb6b0c78f397714f42ce3a8883ffb6b28077bea5b5e6d4f21628777502fdc690"
+    },
+    "original_probe": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-original-native-probe.json",
+      "raw_sha256": "1e924df66329806bc11221cff8861830b5e1aa3eb72f4a7c88939bd84a85ef34",
+      "lf_sha256": "1e924df66329806bc11221cff8861830b5e1aa3eb72f4a7c88939bd84a85ef34"
+    },
+    "original_probe_script": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\probe074-original.cjs",
+      "raw_sha256": "c86a64f936e0741e607456940846d41b5cd4e532a486a561aacaa69d027de6a6",
+      "lf_sha256": "aaba4c5e3a1fd7a2d7c3f3ebaa37f51f3ae19341447a41cc118914754947ab23"
+    },
+    "original_probe_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-original-native-probe.log",
+      "raw_sha256": "dc6d4c470bd39b12e7e7808a510136af7b56c40976ff6f73cbbe23ac268b88b7",
+      "lf_sha256": "b399d4dfc2789756ba9e08bcdca5af16a252f80c344115ed0bbca2b0e3b4d82d"
+    },
+    "candidate_performance": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-correction-performance-candidate.json",
+      "raw_sha256": "16222a8958b39462d82cedd1f4668dd29a0c44dbbbaa990f5c822109b250c266",
+      "lf_sha256": "16222a8958b39462d82cedd1f4668dd29a0c44dbbbaa990f5c822109b250c266"
+    },
+    "candidate_compatibility": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-feedback-compatibility-candidate.json",
+      "raw_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+      "lf_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0"
+    }
+  },
+  "independent_saved_data_comparison": {
+    "original_probe_direct_rows": 56,
+    "original_probe_caller_rows": 21,
+    "original_probe_controls": 2,
+    "original_probe_exit": 1,
+    "original_probe_limit": "Raw observations were saved before the wrong mid-density expectation failed. Existing mostly-small-fixes becomes important-fixes at error-density alignment. The failure is retained and explained; no all-pass original probe claim. Reviewer independently paired saved data, without executing the offline verifier.",
+    "candidate_checks": 491,
+    "retained_checks": 304,
+    "added_checks": 187,
+    "new_observations_paired_with_original": 58,
+    "high_evidence_zero_analyzer_and_LCS": 19,
+    "null_invalid_zero_analyzer_and_LCS": 11,
+    "low_mid_one_analyzer_and_LCS": 27,
+    "separate_pattern_one_analyzer_and_LCS": 1,
+    "exact_original_candidate_full_caller_states": 13,
+    "compatibility_checks": 30,
+    "compatibility_report_equals010": true
+  },
+  "limits": [
+    "Read-only source/Git/hash/JSON inspection only. No app/browser/tests, syntax check, offline verifier, index/tracker/Git write or new research executed by this reviewer. Supplied native execution results were inspected, not rerun.",
+    "Synthetic Edge fixtures and routed local app; no real account/model/Drive or user data. No latency,memory-size,throughput or full-app performance measurement.",
+    "Supported primitive text and actual string caller contracts only. Custom text-object coercion side effects and resource-exhaustion exceptions are not equivalent by design because unused high-score work is skipped.",
+    "No exhaustive wording/branch or image/data-preservation claim. Full validation,scanner disposition,integration and publication remain with coordinator."
+  ],
+  "end_recheck": "Changed main/test and protected072 raw/LF pins remained exact immediately before report write."
+}
