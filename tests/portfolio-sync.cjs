@@ -6,7 +6,7 @@ const source = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-p
 const start = source.indexOf('function getSessionKey(');
 const end = source.indexOf('// ── WFT Sync Engine V2 portfolio index sync', start);
 assert.ok(start >= 0 && end > start);
-const helpers = ['stableStringify', 'cloneWftJson', 'normalizePortfolioData', 'normalizePortfolioShape', 'validateWftPortfolioShape', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData', 'getDeletedStudentKey', 'getDeletedSessionKey', 'getWftTombstoneTimeMs', 'getWftDeletionRecords', 'isStudentSessionDeleted', 'isStudentDeletedByTombstone', 'applyDeletionsToPortfolio', 'downloadAndMergeDuplicatePortfolios'].map(name => {
+const helpers = ['stableStringify', 'cloneWftJson', 'normalizePortfolioData', 'normalizePortfolioShape', 'isWftPortfolioStudentKey', 'validateWftPortfolioShape', 'getEmptyDeletionsData', 'compactDeletions', 'normalizeDeletionsData', 'getDeletedStudentKey', 'getDeletedSessionKey', 'getWftTombstoneTimeMs', 'getWftDeletionRecords', 'isStudentSessionDeleted', 'isStudentDeletedByTombstone', 'applyDeletionsToPortfolio', 'downloadAndMergeDuplicatePortfolios'].map(name => {
     const from = source.indexOf('function ' + name + '(');
     const to = source.indexOf('\nfunction ', from + 1);
     assert.ok(from >= 0 && to > from, name);
