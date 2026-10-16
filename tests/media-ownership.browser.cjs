@@ -253,6 +253,10 @@ function assertSavedMediaChanges(scenario, result, entry) {
 function assertRetainedPendingMedia(scenario, result) {
     assert.equal(result.synced, false, 'Old completion must not report current writing synced');
     if (scenario !== 'pending-clear') assert.ok(result.pending, 'Current work must remain retryable');
+    if (scenario === 'pending-clear') {
+        assert.equal(result.pending, null, 'Old upload completion must not resurrect cleared pending writing');
+        assert.equal(result.storedPending, null, 'Old upload completion must not restore the durable pending record');
+    }
     if (scenario !== 'pending-new-during-flush') assert.deepEqual(result.portfolio, {});
     if (scenario === 'pending-replacement' || scenario === 'pending-analysis-bob' || scenario === 'pending-new-during-flush') assert.equal(result.pending.studentName, 'Bob');
     if (scenario === 'pending-analysis-alice') assert.equal(result.pending.studentName, 'Alice');

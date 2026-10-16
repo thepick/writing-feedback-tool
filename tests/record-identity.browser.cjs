@@ -180,7 +180,7 @@ async function runStudentIdentityCases(run) {
                 uploadWftJsonFilePromise = (filename, data) => { uploads.push(JSON.parse(JSON.stringify(data))); return Promise.resolve('canonical'); };
                 await syncWftPortfolioIfNeeded('synthetic-photo');
                 return { session: getPortfolioData().Alice.sessions[0], uploads };
-            }, r => { assert.equal(r.session.originalText, 'Newer writing'); assert.equal(r.session.images[0].driveFileId, 'new-file'); assert.equal(r.session.images[0].dataUrl, 'new-bytes'); assert.equal(r.session.images[0].name, 'new.png'); assert.equal(r.session.images[0].mimeType, 'image/png'); for (const upload of r.uploads) assert.equal(upload.Alice.sessions[0].images[0].driveFileId, 'new-file'); }, localNewer);
+            }, r => { if (localNewer) assert.ok(r.uploads.length > 0, 'Newer local writing must upload to the canonical portfolio'); assert.equal(r.session.originalText, 'Newer writing'); assert.equal(r.session.images[0].driveFileId, 'new-file'); assert.equal(r.session.images[0].dataUrl, 'new-bytes'); assert.equal(r.session.images[0].name, 'new.png'); assert.equal(r.session.images[0].mimeType, 'image/png'); for (const upload of r.uploads) assert.equal(upload.Alice.sessions[0].images[0].driveFileId, 'new-file'); }, localNewer);
         }
         for (const key of ['__proto__', 'constructor', 'toString', 'hasOwnProperty']) {
             await run('image-identity-' + key, key => {

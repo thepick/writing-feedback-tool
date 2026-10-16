@@ -31,7 +31,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     const pendingBefore = localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY);
                     const get = Storage.prototype.getItem, remove = Storage.prototype.removeItem;
                     const update = updateSyncPortfolioButtonState, getSignature = getCurrentPortfolioSessionSignature;
-                    let cleared = false, refreshes = 0;
+                    let cleared = false, refreshes = 0, refreshesAfterClear = 0;
                     Storage.prototype.removeItem = function(key) {
                         const result = remove.call(this, key);
                         if (this === localStorage && key === PENDING_PORTFOLIO_SYNC_KEY) cleared = true;
@@ -41,7 +41,11 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                         if (failure === 'read-after-clear' && cleared && this === localStorage && key === PENDING_PORTFOLIO_SYNC_KEY) throw Error('Synthetic pending read unavailable after clear');
                         return get.call(this, key);
                     };
-                    if (failure === 'refresh') updateSyncPortfolioButtonState = () => { refreshes++; throw Error('Synthetic button refresh failed'); };
+                    if (failure === 'refresh') updateSyncPortfolioButtonState = () => {
+                        refreshes++;
+                        if (cleared && pendingPortfolioSync === null && get.call(localStorage, PENDING_PORTFOLIO_SYNC_KEY) === null) refreshesAfterClear++;
+                        throw Error('Synthetic button refresh failed');
+                    };
                     if (failure === 'signature') {
                         pendingPortfolioSync.signature = '';
                         getCurrentPortfolioSessionSignature = () => { throw Error('Synthetic signature unavailable'); };
@@ -49,7 +53,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     let committed;
                     try { committed = commitPendingPortfolioSync(); }
                     finally { Storage.prototype.getItem = get; Storage.prototype.removeItem = remove; updateSyncPortfolioButtonState = update; getCurrentPortfolioSessionSignature = getSignature; }
-                    return { committed, cleared, refreshes, signature: lastSyncedPortfolioSessionSignature,
+                    return { committed, cleared, refreshes, refreshesAfterClear, signature: lastSyncedPortfolioSessionSignature,
                         portfolio: getLocalPortfolioSnapshot(), deletions: getDeletionsData(),
                         pending: getPendingPortfolioSync(), pendingRaw: localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY),
                         recovery: wftStudentChangeRecovery,
@@ -68,6 +72,10 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                     continue;
                 }
                 assert.equal(observed.cleared, true, 'Failure must happen after actual pending removal');
+                if (failure === 'refresh') {
+                    assert.ok(observed.refreshes > 0, 'The throwing refresh hook must run');
+                    assert.ok(observed.refreshesAfterClear > 0, 'The throwing refresh hook must observe pending memory and storage already cleared');
+                }
                 assert.equal(observed.committed, true, 'Display/read failure after cleanup must not roll back committed writing');
                 assert.equal(observed.signature, 'committed-signature');
                 assert.equal(observed.pending, null);
