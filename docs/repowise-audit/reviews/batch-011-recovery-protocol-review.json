@@ -1,0 +1,115 @@
+{
+  "review_id": "batch-011-recovery-protocol-review",
+  "decision": "Recommend one whole-auth-suite isolated retry after the original full attempt completes, then a separately typed recovered-gate receipt and selected passing-suite coverage. Conditional advice only; no retry or recovery is validated here.",
+  "frozen_source_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+  "observed_at_utc": "2026-10-16T08:46:22.313982+00:00",
+  "observed_state": {
+    "original_attempt_complete": false,
+    "original_attempt_passed": false,
+    "inventory": 77,
+    "recorded_suite_rows": 35,
+    "syntax_rows": 91,
+    "syntax_nonzero": 0,
+    "nonpassing_recorded_suites": [
+      {
+        "suite": "tests/auth-integrity.browser.cjs",
+        "status": 1,
+        "error": "Empty or failed case report"
+      }
+    ],
+    "auth_report": {
+      "cases": 111,
+      "passed_rows": 91,
+      "failed_rows": 20,
+      "raw_sha256": "ec7d402c3094e2fc8a9596d9fa6fde51f13b7ecdeb55512227df34a03abf13ae"
+    },
+    "failure_description": "First failure is browser.newPage reporting target page/context/browser closed;20 final case rows failed after91 passed. Root027 owns cause triage; this report does not prove an infrastructure cause or a production defect.",
+    "auth_capture_files_snapshot": 62,
+    "auth_record_bearing_files_snapshot": 29,
+    "sorted_auth_capture_manifest_sha256": "4f6737683582df95ae606acc541d58dfe8a8eec24bc9d2a180b9124273942a50",
+    "mutable_suite_results_sha256_at_read": "be3500fd3f71c77d2ac94d391c06f626a9a43e8894f7efa08527ad547eb58e98",
+    "mutable_receipt_limit": "Full attempt still evolving if complete=false. This snapshot/hash must not substitute for sealing final original attempt."
+  },
+  "read_only_pin_checks": {
+    "source_files_raw_matched": 91,
+    "config_files_raw_matched": 1,
+    "supplemental_files_raw_matched": 4,
+    "source_pin_manifest_sha256": "2797fd7ba8caee0d4f7cfd612cefd3551263871a798b6a59c1057c1692a854d1",
+    "supplemental_manifest_sha256": "f866e575f8ec6a96afdb08e57e5e1a56be6122d1a9da1eaeedc538d282afab7f",
+    "tools": {
+      "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\scripts\\run-tests.cjs": {
+        "raw_sha256": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca"
+      },
+      "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\do-next-05\\coverage-preload.cjs": {
+        "raw_sha256": "a60b0853b9f4d63ff24e568daa6110478bef73bdd36d1b1d1b37465a5d59a22a"
+      },
+      "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\do-next-05\\export-coverage.cjs": {
+        "raw_sha256": "d81306670c61191aa22db175fd988e3ecf53f0e10d3ef93ab86599615194f886"
+      },
+      "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\summarize-coverage.cjs": {
+        "raw_sha256": "85ee78990734b07a83998f044c63891550e4ee94704471e39c214e78b0e93995"
+      },
+      "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\save_batch_validation.py": {
+        "raw_sha256": "b3de9366c0fedee92e7960034ecc68a4fa3dd82c96c686e04e798755e0a2a7db"
+      }
+    }
+  },
+  "protocol": [
+    {
+      "step": 1,
+      "action": "Let the original runner finish; preserve and hash its entire final full/suite-results.json, full.log, suite logs/reports and native-coverage tree. Keep its failed pass flags and real exit status.",
+      "condition": "Confirm original complete=true, all77 inventory rows recorded,91syntax passes and exactly auth is the sole failed suite. Otherwise enumerate new failures and revise this one-suite plan; do not assume76 successes while still running."
+    },
+    {
+      "step": 2,
+      "action": "Use the existing runner once for the entire auth suite in a new empty output folder, with the same frozen repo, bundled Node/NODE_PATH, Edge channel and identical WFT_COVERAGE_PRELOAD.",
+      "suggested_arguments": [
+        "scripts/run-tests.cjs",
+        "--suite",
+        "tests/auth-integrity.browser.cjs",
+        "--out",
+        "<task>/work/repowise-batch-011/auth-retry"
+      ],
+      "details": "CLI --suite is supported and yields selected1/partial=true/complete=true after success; it still repeats all91syntax checks. Runner injects the same coverage source root and a new output/native-coverage directory. Clear absent/empty supplemental-manifest inheritance to retain original zero supplements; no case filters or EXPECT_BASELINE. Never reuse full/: prepareSuiteExecution deletes an existing report and runner overwrites suite-results/logs."
+    },
+    {
+      "step": 3,
+      "action": "Validate the isolated whole suite, source/tool pins and expected complete auth case inventory before accepting recovery.",
+      "required": "Retry status0, signal null, no runner/report error,111cases with111passed/0failed, same111 names/order as frozen original report, no missing report or skipped rows. Compare frozen91sources/config/HTML and three coverage tools again; preserve retry process/log/report hashes and the original failed receipt. A passing retry does not explain the first closure; a failed retry triggers027 triage, not retry-until-green."
+    },
+    {
+      "step": 4,
+      "action": "Create a new recovery-manifest/recovered-gate report; select exactly76 original successful suite rows plus the one complete passing auth retry row.",
+      "requirements": "Retain original row objects and provenance refs/hashes, identify which attempt supplies each selected suite, enforce exact equality with the77 inventory and no duplicate suites. Retain original91syntax result plus passing retry91syntax result. Expose full_attempt_passed=false, original_exit_code=1, retry_partial=true and effective_gate_passed=true only once all conditions pass. Label as composite/recovered, never one uninterrupted successful77-suite process."
+    },
+    {
+      "step": 5,
+      "action": "Stage a separate passing-only native capture input for the unchanged existing exporter.",
+      "selection": "Include every raw capture JSON from the59 original successful native suites, exclude ALL original auth captures (including its91passing-case portions), and include every auth retry capture. Select by normalized capture.test and exact selected native-suite set, not filename/PID heuristics. Prefix destination filenames by attempt if needed, keeping JSON bytes unchanged. Store the selection/exclusion manifest OUTSIDE this input directory: exporter treats every top-level .json as a capture.",
+      "source_assets": "Copy required content-addressed source .js and native .locations.json sidecars. Verify source hashes and duplicate assets; never silently overwrite incompatible location sidecars. If equal source hashes have different location bytes, require explicit equivalence validation of native locations/per-record denominator/EOF semantics or stop for review. Keep raw original/retry assets unchanged.",
+      "exclusions": "Keep real capture.excluded entries from included passing suites, including frozen-reference/source-mutation/collection exclusions, unchanged. Record original-auth supersession separately with source-file hashes and reason failed_suite_superseded_by_whole_retry; do not disguise it as a frozen-source exclusion, delete raw files or zero counts."
+    },
+    {
+      "step": 6,
+      "action": "Run unchanged export-coverage.cjs against that staged capture directory and frozen repo into a new recovered LCOV/summary destination; finalize only after normal strict ingestion/source checks.",
+      "required": "Exporter retains exact captured source/normalized current source checks, native executable-line denominator validation, hit-wins union and only final empty EOF return exclusion. Assert exactly60 selected native suite names =59original+1retry, eight scripts, correct source hashes, original-auth capture hashes absent, every included capture accounted for. Recompute strict contexts/maps and covered/coverable line sets; do not invent480/386 or prior percentages before actual output. Preserve actual exclusions and a separate supersession manifest.",
+      "reporting": "Final77suite outcomes/91syntax/60native aggregate must point to original76 and isolated1 evidence, with the original failed full attempt still accessible and unchanged."
+    }
+  ],
+  "validation_writer_advice": {
+    "existing_limit": "save_batch_validation.py asserts complete && passed && !partial on full/suite-results.json, then emits full_runner_exit_code0/full_suite_passedtrue and mutates publication tracker. It cannot honestly consume the failed full attempt or partial selected retry unchanged.",
+    "minimal_compatible_solution": "After valid retry, a small WORK-ONLY recovery-aware builder should read the two real receipts plus selection manifest and independently enforce their invariants, then produce a separately typed canonical validation report with explicit original/retry/effective provenance. Do not fabricate an all-pass full/suite-results.json or call the existing writer on altered pass flags. Any retained legacy full_suite_passed field must be explicitly scoped to the effective composite; original runner status must remain separately false/1. Prefer effective_gate_passed plus validation_mode=recovered_suite_attempt.",
+    "no_framework": "One fixed original/retry selection and coverage staging manifest is enough. No app/runner/preload/export source change or77-suite rerun is required absent a new justified cause."
+  },
+  "tool_observations": {
+    "runner": "scripts/run-tests.cjs:6-11,33-45,80-116. Selected-suite CLI works; all syntax rechecked; same preload injected; separate out prevents overwrite.",
+    "preload": "coverage-preload.cjs records capture.test/root, source-bound native lines and real exclusions; multiple flush files/page IDs are not themselves distinct suites or final LCOV contexts.",
+    "exporter": "export-coverage.cjs consumes all top-level captures with no pass/fail check, keys union by test+file, and verifies source/denominator/EOF. Passing-suite filtering must occur before export; dropping only20 failing auth cases is insufficient.",
+    "writer": "save_batch_validation.py:8-16 requires all-pass nonpartial full receipt and hard-codes full runner exit0; transparent recovery-aware report needed."
+  },
+  "limits": [
+    "Advice only, no application/test/browser/runner/exporter execution or source/Git/index/tracker/cache edits. Only this requested JSON output written. Read-only file hashing/JSON inspection performed.",
+    "Original gate was still running during reads, so final76+1/59+1 counts and completed immutable hashes remain prerequisites, not reported achievements. Root027 owns failure-cause triage.",
+    "No coverage amount, production correctness clearance, recovered gate pass, live-service validation or new whole-suite pass claimed."
+  ]
+}

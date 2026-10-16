@@ -4,7 +4,7 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "026bbea1acef1dca4263922b03d6f176a647f066",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T15:30:50.256711+07:00",
+  "updated_at": "2026-10-16T16:10:39.728781+07:00",
   "timezone": "Asia/Bangkok",
   "status": "risk_prioritized_code_health_active",
   "active_repair": null,
@@ -1950,7 +1950,7 @@
     {
       "id": "repair-074",
       "title": "Skip unused grammar evidence comparison above score8",
-      "status": "accepted_pending_batch_validation",
+      "status": "validated_pending_merge_after_auth_retry",
       "files": [
         "js/app/10-main-app.js",
         "tests/correction-performance.browser.cjs"
@@ -149946,6 +149946,29 @@
         ],
         "raw_scanner_warnings_are_not_bug_count": true
       }
+    },
+    {
+      "id": "batch-011",
+      "status": "validated_after_isolated_auth_retry_pending_merge",
+      "pull_request": null,
+      "source_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+      "validation_report": "reviews/batch-011-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "initial_full_attempt_passed": false,
+      "isolated_auth_retry_passed": true,
+      "all_source_pins_unchanged": true,
+      "repairs": [
+        "repair-074"
+      ],
+      "recovery_reviews": [
+        "reviews/batch-011-auth-interruption-triage.json",
+        "reviews/batch-011-recovery-protocol-review.json",
+        "reviews/batch-011-auth-retry-review.json",
+        "reviews/batch-011-recovery-implementation-review.json"
+      ],
+      "recovery_reviews_accepted": true
     }
   ],
   "workflow_policy": {

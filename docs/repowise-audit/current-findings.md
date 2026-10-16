@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T15:30:50.256711+07:00.
+Updated 2026-10-16T16:10:39.728781+07:00.
 
 Source: 026bbea1acef1dca4263922b03d6f176a647f066. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -118,7 +118,7 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-072: Verify timeout recovery acknowledges only the intended Drive content - published_live_index_coverage_UI_verified.
 - repair-073: Skip unused grammar diff when no reason is generated - published_live_index_coverage_UI_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-074: Skip unused grammar evidence comparison above score8 - accepted_pending_batch_validation.
+- repair-074: Skip unused grammar evidence comparison above score8 - validated_pending_merge_after_auth_retry.
 
 ## Additional source leads
 
