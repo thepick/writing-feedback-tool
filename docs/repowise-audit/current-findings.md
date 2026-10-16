@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T09:57:33.957171+07:00.
+Updated 2026-10-16T10:27:43.263133+07:00.
 
 Source: c0724763bc46926c4dab8f555fbbdb4e7616c6c3. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -103,12 +103,12 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-057: Review remaining deletion, publication and dialog harnesses - read_only_review_complete.
 - repair-058: Review remaining media, portfolio and recovery harnesses - read_only_review_complete.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-059: Keep the target-off status when writing matches a disabled target - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-060: Require literal own evidence tokens in teacher feedback - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-061: Recognize ordinary Dear Diary writing as a reflection - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-062: Prevent overlapping image preparations from silently dropping a selection - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-063: Recover valid later notebook examples after an unusable first candidate - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-064: Make Grammar calculation explanation agree with the captured grade result - coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate.
+- repair-059: Keep the target-off status when writing matches a disabled target - full_gate_and_independent_reviews_passed_awaiting_publication.
+- repair-060: Require literal own evidence tokens in teacher feedback - full_gate_and_independent_reviews_passed_awaiting_publication.
+- repair-061: Recognize ordinary Dear Diary writing as a reflection - full_gate_and_independent_reviews_passed_awaiting_publication.
+- repair-062: Prevent overlapping image preparations from silently dropping a selection - full_gate_and_independent_reviews_passed_awaiting_publication.
+- repair-063: Recover valid later notebook examples after an unusable first candidate - full_gate_and_independent_reviews_passed_awaiting_publication.
+- repair-064: Make Grammar calculation explanation agree with the captured grade result - full_gate_and_independent_reviews_passed_awaiting_publication.
 
 ## Additional source leads
 

@@ -4,7 +4,7 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T09:57:33.957171+07:00",
+  "updated_at": "2026-10-16T10:27:43.263133+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active_confirmed_bug_stabilization",
   "active_repair": null,
@@ -1544,7 +1544,7 @@
     {
       "id": "repair-059",
       "title": "Keep the target-off status when writing matches a disabled target",
-      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
+      "status": "full_gate_and_independent_reviews_passed_awaiting_publication",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
       "lead_id": "review050-disabled-target-status-badge",
@@ -1561,12 +1561,14 @@
         "reviews/repair-059-safety-review.json",
         "reviews/repair-059-regression-review.json"
       ],
-      "commit": "2538f9d6b8aadd49a9c5e33a55065d6644f7f4bd"
+      "commit": "2538f9d6b8aadd49a9c5e33a55065d6644f7f4bd",
+      "publication_status": "pending_batch006",
+      "validation_report": "reviews/batch-006-validation.json"
     },
     {
       "id": "repair-060",
       "title": "Require literal own evidence tokens in teacher feedback",
-      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
+      "status": "full_gate_and_independent_reviews_passed_awaiting_publication",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "source_commit": "2538f9d6b8aadd49a9c5e33a55065d6644f7f4bd",
       "lead_id": "049-L1",
@@ -1584,12 +1586,14 @@
         "reviews/repair-060-safety-review.json",
         "reviews/repair-060-regression-review.json"
       ],
-      "validation_limit": "Saved feedback regression verifies portfolio feedback object construction, not a storage commit. No historical rewrite or live service test."
+      "validation_limit": "Saved feedback regression verifies portfolio feedback object construction, not a storage commit. No historical rewrite or live service test.",
+      "publication_status": "pending_batch006",
+      "validation_report": "reviews/batch-006-validation.json"
     },
     {
       "id": "repair-061",
       "title": "Recognize ordinary Dear Diary writing as a reflection",
-      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
+      "status": "full_gate_and_independent_reviews_passed_awaiting_publication",
       "source_commit": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review030-diary-letter-precedence",
@@ -1605,12 +1609,14 @@
       "independent_reviews": [
         "reviews/repair-061-safety-review.json",
         "reviews/repair-061-regression-review.json"
-      ]
+      ],
+      "publication_status": "pending_batch006",
+      "validation_report": "reviews/batch-006-validation.json"
     },
     {
       "id": "repair-062",
       "title": "Prevent overlapping image preparations from silently dropping a selection",
-      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
+      "status": "full_gate_and_independent_reviews_passed_awaiting_publication",
       "source_commit": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review032-overlapping-image-preparation",
@@ -1630,12 +1636,14 @@
         "reviews/repair-062-safety-review.json",
         "reviews/repair-062-regression-review.json"
       ],
-      "validation_limit": "Separate File names share PNG content; tests prove acquisition count/order/retry, not distinct-pixel fidelity or physical camera behavior. Busy has no new cancellation/timeout."
+      "validation_limit": "Separate File names share PNG content; tests prove acquisition count/order/retry, not distinct-pixel fidelity or physical camera behavior. Busy has no new cancellation/timeout.",
+      "publication_status": "pending_batch006",
+      "validation_report": "reviews/batch-006-validation.json"
     },
     {
       "id": "repair-063",
       "title": "Recover valid later notebook examples after an unusable first candidate",
-      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
+      "status": "full_gate_and_independent_reviews_passed_awaiting_publication",
       "source_commit": "2043847c29760b6e122320a54c319a701ab41c4e",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review030-fallback-first-unusable-example",
@@ -1652,12 +1660,14 @@
       "independent_reviews": [
         "reviews/repair-063-safety-review.json",
         "reviews/repair-063-regression-review.json"
-      ]
+      ],
+      "publication_status": "pending_batch006",
+      "validation_report": "reviews/batch-006-validation.json"
     },
     {
       "id": "repair-064",
       "title": "Make Grammar calculation explanation agree with the captured grade result",
-      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "status": "full_gate_and_independent_reviews_passed_awaiting_publication",
       "source_commit": "0a812b326d5e4e40139d5a0bba0b69cf6efafbb0",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review034-grammar-band-debug-label",
@@ -1670,7 +1680,14 @@
       "focused_parser_checks": 393,
       "pipeline_scenarios": 74,
       "baseline_expected_display_failures": 4,
-      "potential_scanner_clearance": "renderScoredAnalysisDebug complex_method12->6,actualdetectorreturnsnone;awaitpersistedscanreconciliation."
+      "potential_scanner_clearance": "renderScoredAnalysisDebug complex_method12->6,actualdetectorreturnsnone;awaitpersistedscanreconciliation.",
+      "commit": "758526603018bde7cb193d23e03ec7531d4d083b",
+      "independent_reviews": [
+        "reviews/repair-064-safety-review.json",
+        "reviews/repair-064-regression-review.json"
+      ],
+      "publication_status": "pending_batch006",
+      "validation_report": "reviews/batch-006-validation.json"
     }
   ],
   "findings": [
@@ -139753,6 +139770,25 @@
         "tests/crop-ownership.browser.cjs",
         "tests/portfolio-html.browser.cjs",
         "tests/portfolio-reassessment.browser.cjs"
+      ]
+    },
+    {
+      "id": "batch-006",
+      "status": "validated_pending_merge",
+      "pull_request": null,
+      "source_commit": "758526603018bde7cb193d23e03ec7531d4d083b",
+      "validation_report": "reviews/batch-006-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "all_source_pins_unchanged": true,
+      "repairs": [
+        "repair-059",
+        "repair-060",
+        "repair-061",
+        "repair-062",
+        "repair-063",
+        "repair-064"
       ]
     }
   ],

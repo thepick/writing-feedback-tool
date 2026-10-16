@@ -1,0 +1,28 @@
+{
+  "repair_id": "repair-064-regression-review",
+  "before": "0a812b326d5e4e40139d5a0bba0b69cf6efafbb0",
+  "after": "758526603018bde7cb193d23e03ec7531d4d083b",
+  "blockers": [],
+  "decision": "No blockers in display-only fix or native regression proof.",
+  "pins_sha256": {
+    "js/app/10-main-app.js": {
+      "before_lf": "d0cb985da14546d89b17f9f20719c4bb1a7351a9b64b55c6b8d1f63bd1436a28",
+      "after_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b"
+    },
+    "tests/detailed-parser.browser.cjs": {
+      "before_lf": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+      "after_lf": "516203423543c397665d146df68a68124b7af67310081c60b920815ebbbb764e"
+    }
+  },
+  "fixture_lf_sha256": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+  "verified": [
+    "Pinned Git and before backups/after checkout EOL hashes reconciled. Entire production delta reconstructs exactly as formatter row replacement plus unused legacy mapping/property removal. All earlier repair functions, scoring/tables/weights unchanged.",
+    "Original detailed-parser file reconstructed by removing only new helper/call.393names/order stable; original383 rows identical/passing; exactly4old display failures ->393pass. Native audit/score controls pass before and after; no grading error or changed score claimed.",
+    "Real analyzeWriting uses synthetic provider markup, not invented audit/grade data. Literal4errors/100words/density4 controls assert Grade4 strict3=>10, Grade5 strict3=>9, Grade5 strict5=>8 and actual captured policy. Zero audit0errors/90words/10 and ordinary Show debug visibility with false flags verified.",
+    "Native render wrapper captures real arguments. After controls change to Grade4/strict1, rerender retains captured Grade5/strict5 HTML, audit/category/overall/policy/pending snapshot. Renderer and controls restore in finally; no skipped checks or relaxed expected result.",
+    "Physical parity fixture and pipeline driver bytes unchanged.74recorded original/refactored objects exactly equal, including grammarCalc in every UI comparison. Shared formatter serves both modern and frozen caller; no oracle removal or fixture rewrite.",
+    "Both focused runner receipts/statuses agree;91syntax entries succeed. Parent convenience band/final fields were checked against literal observed calculation rows, not used as primary proof; explicit parent_note discloses their population."
+  ],
+  "receipts": "work/repowise-repair-064/{before,after}/{suite-results.json,detailed-parser.browser.json,.log}; after/analysis-pipeline.browser.json and .log.",
+  "limits": "Read-only immutable Git/snapshot/receipt inspection; no app/browser/tests rerun, repository mutations or agents. Corrects opt-in diagnostic text, not calibration. No full-gate, live-service, publication or scanner-closure claim; parent owns full frozen-source gate."
+}
