@@ -1,0 +1,195 @@
+{
+  "review_id": "repair-067-regression-review",
+  "verdict": "accepted_with_scoped_limits",
+  "blockers": [],
+  "summary": "The isolated header CSS resolves the demonstrated Sign Out/Settings overlap and lost identity text. Native before evidence includes a gear-blocked Sign Out click; after geometry, separate control actions and retained synthetic writing support the repair. No ordinary desktop layout regression found in reviewed screenshots or desktop controls. Primary007 checkout was not changed by this review.",
+  "base_git_commit": "c814963f9f277920b876eef8f707f9572912ac95",
+  "isolated_source_root": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\mobile-header",
+  "primary_checkout": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "html_hashes_and_scope": {
+    "baseline_git_lf_sha256": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "baseline_isolated_crlf_sha256": "c633ebd0399ff9e29897686957bf1488a9d1351acf8c063b280be648ce292e7c",
+    "primary_raw_sha256": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "primary_lf_sha256": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+    "isolated_after_raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+    "isolated_after_lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+    "all_non_style_bytes_unchanged_lf": true,
+    "isolated_tracked_diff_files": [
+      "index.html"
+    ],
+    "diff_numstat": "20\t18\tindex.html"
+  },
+  "css_review": {
+    "file": "index.html",
+    "anchors": [
+      {
+        "lines": [
+          386,
+          398
+        ],
+        "role": "Bound identity/auth containers, wrap long text, keep sync dot from shrinking"
+      },
+      {
+        "lines": [
+          2923,
+          2985
+        ],
+        "role": "Mobile identity/status wrapping, separate Sign Out action, bottom-aligned gear and44px minimum mobile actions"
+      }
+    ],
+    "reason": "The former nowrap flex row forced avatar, identity, status and Sign Out into the grid column beside the gear. Allowing identity/status lines to wrap gives them real width and places Sign Out on its own action line. The gear remains a distinct right-column target aligned with the action row. Only20 added/18 removed CSS lines change; removing style blocks yields identical LF-normalized HTML, including every handler, markup and script. No JavaScript, auth logic, dependencies or fixtures changed."
+  },
+  "before_evidence": {
+    "responsive_cases": 104,
+    "failing_layout_states": 71,
+    "signout_settings_overlap_states": 9,
+    "native_blocked_action": "before-responsive.json interactions width360 explicitly reports settings-gear-btn intercepts pointer events while clicking the real Sign Out button. This is actual hit testing, not geometry alone.",
+    "screenshot": "before-390.png independently shows Sign Out and gear drawn over one another and hidden account name.",
+    "identity_zero_width_states_found_independently": 40,
+    "interpretation": "71 failing layout states combine overlap, undersized targets, clipping and overflow; they are not71 separate product bugs. The screenshot overlap is390/avatar, while the recorded blocked click is360/standard name."
+  },
+  "after_evidence": {
+    "responsive": "104 states across320/360/390/430/640/768/1024/1440:13 per width, including signed-out, signed-in name/avatar/long name, synced/syncing/readable error/unbroken long status. All supplied failure arrays empty; independent expected-element, header/viewport bounds, nonoverlap and mobile target checks also pass.",
+    "desktop": "Separate non-mobile desktop run39 states at768/1024/1440 plus3 actual control interactions: all pass. The wide states in the104 run use the mobile/touch emulation context; desktop39 is separate evidence.",
+    "mobile_target_minimum_width_height": [
+      44,
+      44
+    ],
+    "interaction_counts": {
+      "mobile_emulation_widths_passed": 8,
+      "desktop_widths_passed": 3
+    },
+    "actual_action_oracles": "The QA uses actual role/locator actions without force: open Settings and require its drawer open while signed-in controls remain visible; close it and require closed; activate Sign Out and require Sign In visible, drawer still closed, runtime token null, and exact saved portfolio/current textarea strings unchanged. Auth handlers are real; sync scheduling/network work is isolated by explicit stubs.",
+    "screenshot_assessment": "After390 shows readable identity and sync text above clearly separated Sign Out/gear. After320 error text wraps and both controls remain distinct. After640 long name wraps without covering actions. After768 and normal1440 keep the established tool/header structure; the ordinary1440 before/after appearance is visually unchanged. The mobile header is taller (the390 example grows about58px); that is the visible tradeoff for readable text and separate controls."
+  },
+  "oracle_review": {
+    "independent_geometry": "Recomputed all saved after rectangles rather than trusting passed flags: required auth/control/avatar nodes present for each state, header lies inside viewport, items lie inside header, no pair overlaps beyond0.5px tolerance, no horizontal document overflow, and mobile buttons are at least44x44. This supplements the source QA bounds/scrollWidth assertions.",
+    "nonblocking_weakness": "The original QA filters zero-size nodes and skips text-overflow checks when width is zero. Without an expected-presence assertion it could pass a future CSS change that hides controls/text. Independent replay here checks the required elements and finds none missing in either after run. If this scratch QA is retained, add that tiny presence check before relying on it as a future regression gate.",
+    "action_scope": "The104 states are layout observations, not104 sign-out journeys. Separate action checks use the standard name/syncing state once per viewport; long-name/error states have geometry and selected screenshots, not a complete interaction matrix."
+  },
+  "existing_suite_controls": {
+    "auth": {
+      "before_count": 111,
+      "after_count": 111,
+      "names_order_equal": true,
+      "before_all_pass": true,
+      "after_all_pass": true
+    },
+    "public-smoke": {
+      "before_count": 2,
+      "after_count": 2,
+      "names_order_equal": true,
+      "before_all_pass": true,
+      "after_all_pass": true
+    }
+  },
+  "unchanged_suite_source_hashes": {
+    "tests/auth-integrity.browser.cjs": {
+      "sha256_raw": "15b95507de994eb87fbb115f1fb814d1a1282fbc6e2429609c3027de7ec9a926",
+      "sha256_lf": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79"
+    },
+    "tests/script-loading.browser.cjs": {
+      "sha256_raw": "3b6813fd1a8b70f07d6449c39287082fcdb721008ceca36ccc3ac4eb6d55bb1a",
+      "sha256_lf": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836"
+    }
+  },
+  "visuals_inspected": {
+    "outputs/before-390.png": {
+      "sha256_raw": "be584effc849da80bb035044a28998a60cbf3b458b06a6d1441fbef9b2a03e3b",
+      "bytes": 78998
+    },
+    "outputs/after-390.png": {
+      "sha256_raw": "8ec7987971c037f0e783f2d392bbc39e402318fa454527ce29eb65d7f322b20f",
+      "bytes": 85313
+    },
+    "outputs/before-1440.png": {
+      "sha256_raw": "0f146fa1a541e7c81ba46e6165582967b8244db916bb3fa11648e042c9b456c3",
+      "bytes": 157267
+    },
+    "outputs/after-1440.png": {
+      "sha256_raw": "75937a2ce6b01eb9b89a6087b112524d53bff00c806e974d7b8860b827abce5b",
+      "bytes": 157279
+    },
+    "outputs/after-320-avatar.png": {
+      "sha256_raw": "60703ce456a0c15f2c2c19cf7538b60aa2fa3793b7e52889a06c42a85d2c3e55",
+      "bytes": 86411
+    },
+    "outputs/after-640-long-name.png": {
+      "sha256_raw": "b60addf055430e1c8428205ecf3894242a31a2b0563f6871f08d4a9f5f9c6d4f",
+      "bytes": 112194
+    },
+    "outputs/after-768-name.png": {
+      "sha256_raw": "b6739802a2ee795e98effe5162f497aa1d6447339bfa5f661950aa34fa556fbf",
+      "bytes": 98864
+    },
+    "outputs/after-desktop-1440.png": {
+      "sha256_raw": "69a6923119915d90f14b5b196ea00c960dd80687c592ab12d68752c1a427e941",
+      "bytes": 157316
+    }
+  },
+  "exact_QA_result_patch_receipt_hashes": {
+    "outputs/before-responsive.json": {
+      "sha256_raw": "03fa7f8f856b41149fb9b9ffae8660ceb1d97de8d5a561d30aa3d8312b34d32f",
+      "bytes": 143157
+    },
+    "outputs/after-responsive.json": {
+      "sha256_raw": "acdeea7bddafbd2df56b40c0233212bdb3bfa54efe42f0fc2e14977c76d65780",
+      "bytes": 139931
+    },
+    "outputs/after-desktop-responsive.json": {
+      "sha256_raw": "6546e285bbaae87476520c730c6c019b7cd628177f42edffe3225df7fc659f9f",
+      "bytes": 54001
+    },
+    "outputs/auth-before.json": {
+      "sha256_raw": "6dc762d674f96f578d92d89087028fa739299e33bb8fe96a950b4ce58789560f",
+      "bytes": 27097
+    },
+    "outputs/auth-after.json": {
+      "sha256_raw": "39d320c629b06b9a70cfd09a4ed2f29a3d052a1ba32f4c86aca22e2b8fb453ea",
+      "bytes": 27097
+    },
+    "outputs/public-smoke-before.json": {
+      "sha256_raw": "53e2d121d14d9a5a9a8a62c915788a032fbbc4a2e9066bb6f58d534798fe8be8",
+      "bytes": 21654
+    },
+    "outputs/public-smoke-after.json": {
+      "sha256_raw": "53e2d121d14d9a5a9a8a62c915788a032fbbc4a2e9066bb6f58d534798fe8be8",
+      "bytes": 21654
+    },
+    "outputs/mobile-header-receipt.json": {
+      "sha256_raw": "a5abdd61e30840310e8a6fb3c528ccbd685256499d5f530565d3b2048c11557b",
+      "bytes": 6024
+    },
+    "outputs/mobile-header.patch": {
+      "sha256_raw": "4bd079373997f6b238e165b73d20b3b91bd595e5e1fefca8ec238280527549b4",
+      "bytes": 2805
+    },
+    "work/header-qa.cjs": {
+      "sha256_raw": "d7ec1ebcfa062a40ff3638be8fd44062e3741fa9756ae717c39d247ba76dcf14",
+      "bytes": 7444
+    }
+  },
+  "evidence_receipt": {
+    "path": "work/repowise-review-067/static-review-receipt.json",
+    "sha256_raw": "89d76e1f0e28f8694e31b81d0f1470fbd8dd339fac6edb4a44db5dcbeb6f6714",
+    "includes": "Exact HTML/raw/LF and QA/results/screenshots/log hashes, independent geometry receipts, unchanged test source identities, and primary/isolated end checks."
+  },
+  "limits": [
+    "No app/browser/test reruns or source/Git/index/tracker writes. Only own scratch/report written; primary index.html raw hash still853d3e75... and matches Gitc814963. The isolated CRLF baseline hash differs from primary LF bytes only in line endings.",
+    "Headless native Edge with mobile/touch emulation is not physical Android. Real Chrome/Android fonts, OS scaling, browser chrome, keyboard, orientation, assistive tech and physical finger behavior were not independently tested.",
+    "44px targets are asserted and independently verified at widths<=640. Above640 the existing desktop control sizes remain (minimum observed height36); do not claim44px targets for all tablet/desktop contexts.",
+    "The QA stubs sync timers/background work and uses synthetic profile/avatar/token/writing. External origins are intercepted/aborted. No real account, provider/network success, live Drive or credential/data exposure claim.",
+    "Native before blocker log records click; final QA has touch actions for mobile mode and clicks for desktop. Reports bind HTML hashes but do not embed historical driver hashes/action metadata, so no identical-driver-bytes claim across every authoring attempt. Exact final QA and artifacts are pinned here.",
+    "Worker-supplied execution receipts were inspected, not independently executed. Integration/full-gate/publication remains coordinator work; no007 gate pass or deployment claimed."
+  ],
+  "reviewed_isolated_commit": "b0aa0fe36be872b1cb38a118f7a433cc33b8ddef",
+  "committed_delta_scope": {
+    "base": "c814963f9f277920b876eef8f707f9572912ac95",
+    "candidate": "b0aa0fe36be872b1cb38a118f7a433cc33b8ddef",
+    "files": [
+      "index.html"
+    ],
+    "candidate_git_lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+    "note": "Coordinator committed the already-reviewed isolated CSS candidate without changing working-file bytes. Commit-range scope verified read only; no test rerun needed."
+  }
+}

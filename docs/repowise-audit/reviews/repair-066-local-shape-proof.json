@@ -1,0 +1,28 @@
+{
+  "method": "Installed RepoWise0.56 pure AST walker and actual complex_method severity gate; no index or database change.",
+  "results": [
+    {
+      "stage": "before",
+      "file_sha256_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "symbol": "mergeWftSettings",
+      "ccn": 16,
+      "nloc": 34,
+      "judged_ccn": 16,
+      "complex_method_severity": "high",
+      "line_start": 5226,
+      "line_end": 5263
+    },
+    {
+      "stage": "after",
+      "file_sha256_lf": "49ba1cda785afe9d70483c59bebcc19089a4f8425e2b96e430ab7f973ea38a84",
+      "symbol": "mergeWftSettings",
+      "ccn": 13,
+      "nloc": 23,
+      "judged_ccn": 13,
+      "complex_method_severity": "medium",
+      "line_start": 5226,
+      "line_end": 5252
+    }
+  ],
+  "closure_claim": false
+}

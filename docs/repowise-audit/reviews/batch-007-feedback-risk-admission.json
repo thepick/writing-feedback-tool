@@ -1,0 +1,613 @@
+{
+  "review_id": "batch-007-feedback-risk-admission",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "inspected_git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+  "source_file": "js/app/10-main-app.js",
+  "current_source_sha256_normalized_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+  "source_hashes_begin_end": {
+    "git_blob_sha256_raw": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+    "git_blob_sha256_normalized_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+    "current_sha256_raw": "47e84be85ae35d0751a5f3406ceee5cfb8e9db00f2ba38d3b366b9789539189f",
+    "current_sha256_normalized_lf": "2fff436c3321b0707c14ddc78e8e32aaa7ab088e9ca8a511a33340eba4810c2b",
+    "current_matches_git_normalized_lf": true,
+    "tracker_commit_matches_git_normalized_lf": true,
+    "current_raw_unchanged_at_end": true
+  },
+  "tracker_source_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+  "tracker_source_matches_inspected_main_normalized_lf": true,
+  "tracker_sha256_raw_at_read": "351cf797109920d609ae713b83d265624062a37d860761f83c16176a372bcb12",
+  "summary": {
+    "critical_current_shape_groups_reviewed": 6,
+    "new_confirmed_wrong_result_or_security_bugs": 0,
+    "bounded_opportunities": 2,
+    "current_storage_group_blockers": 0,
+    "recommendation": "Retain all six Critical policy/guard shapes. Queue at most the two tiny cause-level cleanups if desired; neither is required to unblock the storage group. No calibration changes, new abstraction, scanner closure or runtime pass is claimed."
+  },
+  "method": "Read complete targets, immediate callers, relevant shared policies and immutable Git95026f test assertion source. Read-only installed walker binds functions and verifies current facts. Five whole-function LF bodies independently match actual historical Gitc072 and prior accepted review hashes. No application/test execution or index regeneration.",
+  "prior_reviews": {
+    "outputs/repowise-repairs/repair-010-notebook-guide-review.json": "b58f42cc78a8c369345aacc9a95c2b225d9c4e5743eaa3b183062cd40f9be893",
+    "outputs/repowise-repairs/repair-012-goal-checklist-review.json": "47c4a430fa24eaefdf06cf5fbd34450c004c30563e941f33ad8acc2fecf2b973",
+    "outputs/repowise-repairs/repair-050-notebook-policies.json": "90bb84fe40bc276e8a07172599291691ac45b7ed1e52391633b56156526a89cd",
+    "outputs/repowise-repairs/repair-045-photo-reorder.json": "57609c114007b35783cfd2c48194dadddc01ea2e23f926f594a94b07ae4d51b1",
+    "docs/repowise-audit/reviews/batch-005-unchanged-shape-recheck.json": "9d7f7197c2108102f0229b908225bad43e7c8b8b239546fd771fbca67e0841e2"
+  },
+  "prior_source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+  "findings": [
+    {
+      "record_id": "code_health:finding_58a8b9f1eed6f92f7106",
+      "symbol": "<anonymous>",
+      "marker": "complex_conditional",
+      "tracker_status": "unreviewed",
+      "disposition": "retain",
+      "classification": "data_loss_boundary_retained",
+      "current_span": [
+        3537,
+        3591
+      ],
+      "function_sha256_normalized_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237",
+      "condition_anchor": 3557,
+      "verified_observation_details": {
+        "operator_count": 6,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 3537,
+        "symbol_index": 72
+      },
+      "verified_metrics": {
+        "ccn": 21,
+        "cognitive": 20,
+        "nloc": 55,
+        "max_nesting": 1,
+        "dispatch_share": 0.0
+      },
+      "reason": "The six OR operators reject either NaN index, the same-index no-op, and both lower/upper bounds before splice and OCR invalidation. This is the actual repair045 data-loss boundary, not six redundant checks. Splitting into one-use predicates would hide the complete admission rule. Current controlled native assertions explicitly preserve prefix parsing and drag-index fallback; tightening parseInt would change that contract. No new wrong-result/security risk established in this guard.",
+      "source_anchors": [
+        [
+          3477,
+          3500
+        ],
+        [
+          3537,
+          3591
+        ]
+      ],
+      "callers": [
+        "bindOcrPreviewReorder installs delegated drop handler after dragstart/dragover setup; success mutates selectedImages then synchronizes preview/OCR state."
+      ],
+      "suggested_existing_tests": [
+        {
+          "file": "tests/crop-ownership.browser.cjs",
+          "lines": [
+            206,
+            277
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Thirteen controlled native drop cases retain bounds/no-op rejection, byte/reference ownership invariants, valid desktop/mobile ordering and intentional parseInt prefix/fallback compatibility."
+        }
+      ],
+      "prior_reuse": null
+    },
+    {
+      "record_id": "code_health:finding_360e96c0bf7e43661286",
+      "symbol": "getGoalPlan",
+      "marker": "complex_method",
+      "tracker_status": "needs_revalidation",
+      "disposition": "retain",
+      "classification": "sample_and_evidence_policy_retained",
+      "current_span": [
+        5914,
+        5971
+      ],
+      "function_sha256_normalized_lf": "1649fefca9084687eb10f1bead067049cdbce1f1175c87e9e59070a7dd2cd325",
+      "condition_anchor": null,
+      "verified_observation_details": {
+        "ccn": 28,
+        "cognitive": 31,
+        "nloc": 55,
+        "dispatch_share": 0.22,
+        "symbol_line": 5914,
+        "deepest_block": {
+          "start": 5915,
+          "end": 5927
+        }
+      },
+      "verified_metrics": {
+        "ccn": 28,
+        "cognitive": 31,
+        "nloc": 55,
+        "max_nesting": 2,
+        "dispatch_share": 0.22
+      },
+      "reason": "Keep early insufficient/limited-sample plans, absent-numeric-evidence teacher review, lowest-active-category rubric tie order, six distinct teaching messages and the non-generic category-specific detailed override. These branches establish pedagogical precedence; a dispatch table or one-use wrapper would relocate decisions without useful deletion. No concrete wrong-result/security defect found.",
+      "source_anchors": [
+        [
+          5861,
+          5873
+        ],
+        [
+          5914,
+          5971
+        ]
+      ],
+      "callers": [
+        "buildEncouragingClosing:5595",
+        "pickTeacherComment:5727",
+        "ensureNotebookGuide:7109",
+        "fillNotebookSummary:7191",
+        "reconcileScoredAssessment:8023"
+      ],
+      "suggested_existing_tests": [
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": [
+            20,
+            99
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Missing/invalid scores remain unknown; numeric zero/string acceptance; known-category goal availability and low-sample policy."
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            247,
+            280
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Rubric-order ties, legacy zero/missing scores and saved goal precedence, score-eight/two-category policy, unchanged-revision rejection."
+        }
+      ],
+      "prior_reuse": {
+        "report": "outputs/repowise-repairs/repair-012-goal-checklist-review.json",
+        "historical_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+        "historical_span": [
+          5899,
+          5956
+        ],
+        "whole_function_lf_equal": true,
+        "scope_limit": "Function identity does not establish all caller/helper behavior. Current immediate callers and relevant evidence/category/fallback helpers were also inspected."
+      }
+    },
+    {
+      "record_id": "code_health:finding_30846f5c87e3f081cd02",
+      "symbol": "buildNotebookGuidePrioritiesFromRawInput",
+      "marker": "complex_method",
+      "tracker_status": "needs_revalidation",
+      "disposition": "retain",
+      "classification": "ordered_priority_policy_retained",
+      "current_span": [
+        6292,
+        6351
+      ],
+      "function_sha256_normalized_lf": "ea6e393412e2c5df58dc9a687b4c73002c78485dbf9a54de733c9e8080b933df",
+      "condition_anchor": null,
+      "verified_observation_details": {
+        "ccn": 34,
+        "cognitive": 36,
+        "nloc": 53,
+        "dispatch_share": 0.0,
+        "symbol_line": 6292,
+        "deepest_block": {
+          "start": 6317,
+          "end": 6322
+        }
+      },
+      "verified_metrics": {
+        "ccn": 34,
+        "cognitive": 36,
+        "nloc": 53,
+        "max_nesting": 2,
+        "dispatch_share": 0.0
+      },
+      "reason": "Keep finite numeric-score admission (including zero), rubric-order ties, lowest-score first, growGoal/nextTime precedence, score<=8/two-category supplement, bounded computed-Flow admission and Grammar/Spelling defaults. Checklist threshold/order differ intentionally. The outer function body matches the prior review; only its unreachable local duplicate-update branch warrants the separate tiny deletion below. No ranking/calibration rewrite is justified.",
+      "source_anchors": [
+        [
+          6248,
+          6288
+        ],
+        [
+          6292,
+          6351
+        ]
+      ],
+      "callers": [
+        "buildNotebookGuidePriorities:6288 is the public wrapper used by ensure/fallback/assembly and analysis prompt preparation."
+      ],
+      "suggested_existing_tests": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            247,
+            280
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Rubric-order ties, legacy zero/missing scores and saved goal precedence, score-eight/two-category policy, unchanged-revision rejection."
+        },
+        {
+          "file": "tests/missing-feedback.browser.cjs",
+          "lines": [
+            20,
+            99
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Missing/invalid scores remain unknown; numeric zero/string acceptance; known-category goal availability and low-sample policy."
+        }
+      ],
+      "prior_reuse": {
+        "report": "outputs/repowise-repairs/repair-010-notebook-guide-review.json",
+        "historical_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+        "historical_span": [
+          6277,
+          6336
+        ],
+        "whole_function_lf_equal": true,
+        "scope_limit": "Function identity does not establish all caller/helper behavior. Current immediate callers and relevant evidence/category/fallback helpers were also inspected."
+      }
+    },
+    {
+      "record_id": "code_health:finding_0be1d750101405d79892",
+      "symbol": "sanitizeNotebookGuideCandidate",
+      "marker": "complex_method",
+      "tracker_status": "needs_revalidation",
+      "disposition": "retain",
+      "classification": "model_output_trust_boundary_retained",
+      "current_span": [
+        6371,
+        6408
+      ],
+      "function_sha256_normalized_lf": "131c75655f9e39a047e490f4be5072b0266288ef31d077f6eee4c14e9a00a63a",
+      "condition_anchor": null,
+      "verified_observation_details": {
+        "ccn": 34,
+        "cognitive": 33,
+        "nloc": 37,
+        "dispatch_share": 0.0,
+        "symbol_line": 6371,
+        "deepest_block": {
+          "start": 6374,
+          "end": 6374
+        }
+      },
+      "verified_metrics": {
+        "ccn": 34,
+        "cognitive": 33,
+        "nloc": 37,
+        "max_nesting": 1,
+        "dispatch_share": 0.0
+      },
+      "reason": "Flat checks preserve accepted legacy aliases, original-writing whole-word quote membership, category/priority membership, paragraph meaning, 180/220/130 text caps, expansion/sentence bounds and shared concrete/relevant-revision validation. Each rejects a distinct class of unsupported teaching content. Repeated checks in assembly also protect fallback/selection entry paths; deleting them would weaken grounding. No concrete wrong-result/security defect found.",
+      "source_anchors": [
+        [
+          6175,
+          6240
+        ],
+        [
+          6371,
+          6408
+        ]
+      ],
+      "callers": [
+        "parseNotebookGuideCandidatesFromStep3Text:6421",
+        "Organization fallback:6724",
+        "assembleNotebookGuideFromCandidates:6944"
+      ],
+      "suggested_existing_tests": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            55,
+            139
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Grounded whole-word quotes; malformed, generic and unrelated candidates; paragraph/truncation contracts; parse/ensure path and grounded fallback."
+        },
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "lines": [
+            88,
+            99
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Required-category order, continued search after rejected duplicate, grounded duplicate fallback and no invented Flow example."
+        }
+      ],
+      "prior_reuse": {
+        "report": "outputs/repowise-repairs/repair-010-notebook-guide-review.json",
+        "historical_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+        "historical_span": [
+          6356,
+          6393
+        ],
+        "whole_function_lf_equal": true,
+        "scope_limit": "Function identity does not establish all caller/helper behavior. Current immediate callers and relevant evidence/category/fallback helpers were also inspected."
+      }
+    },
+    {
+      "record_id": "code_health:finding_462e05bcd837b7e85209",
+      "symbol": "assembleNotebookGuideFromCandidates",
+      "marker": "complex_method",
+      "tracker_status": "needs_revalidation",
+      "disposition": "retain",
+      "classification": "bounded_shared_selection_transaction_retained",
+      "current_span": [
+        6930,
+        7015
+      ],
+      "function_sha256_normalized_lf": "70bafc596a6a683d5e185d7363bf9957a69709cad5421b35a2fb749a45ba45ad",
+      "condition_anchor": null,
+      "verified_observation_details": {
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "dispatch_share": 0.0,
+        "symbol_line": 6930,
+        "deepest_block": {
+          "start": 6974,
+          "end": 6978
+        }
+      },
+      "verified_metrics": {
+        "ccn": 33,
+        "cognitive": 44,
+        "nloc": 74,
+        "max_nesting": 3,
+        "dispatch_share": 0.0
+      },
+      "reason": "One selected/seen/category state spans required-category-first selection, continued search after rejected duplicates, constrained repeat-quote fallback, unique-category pass, minimum-example completion and grounded coverage fallback. Existing fallback adders have different admission rules; generalizing them would add state/options and obscure order. Null-prototype quote deduplication and validation remain visible. Prior dictionary-key and later-example bugs are already fixed and are not new leads. No worthwhile split or new defect found.",
+      "source_anchors": [
+        [
+          6930,
+          7015
+        ],
+        [
+          6948,
+          6968
+        ],
+        [
+          6853,
+          6871
+        ]
+      ],
+      "callers": [
+        "ensureNotebookGuide:7124"
+      ],
+      "suggested_existing_tests": [
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "lines": [
+            88,
+            99
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Required-category order, continued search after rejected duplicate, grounded duplicate fallback and no invented Flow example."
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            55,
+            139
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Grounded whole-word quotes; malformed, generic and unrelated candidates; paragraph/truncation contracts; parse/ensure path and grounded fallback."
+        }
+      ],
+      "prior_reuse": {
+        "report": "outputs/repowise-repairs/repair-010-notebook-guide-review.json",
+        "historical_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+        "historical_span": [
+          6907,
+          6992
+        ],
+        "whole_function_lf_equal": true,
+        "scope_limit": "Function identity does not establish all caller/helper behavior. Current immediate callers and relevant evidence/category/fallback helpers were also inspected."
+      }
+    },
+    {
+      "record_id": "code_health:finding_c9cb059592b435e51d58",
+      "symbol": "buildNotebookReconstructionDataFromSession",
+      "marker": "complex_method",
+      "tracker_status": "needs_revalidation",
+      "disposition": "retain",
+      "classification": "saved_schema_compatibility_retained",
+      "current_span": [
+        7136,
+        7166
+      ],
+      "function_sha256_normalized_lf": "edd0ccc71698d28c9ae6af81d99703e45fc2b447467c7d7d4a546b0e5c784785",
+      "condition_anchor": null,
+      "verified_observation_details": {
+        "ccn": 30,
+        "cognitive": 29,
+        "nloc": 30,
+        "dispatch_share": 0.0,
+        "symbol_line": 7136,
+        "deepest_block": {
+          "start": 7141,
+          "end": 7143
+        }
+      },
+      "verified_metrics": {
+        "ccn": 30,
+        "cognitive": 29,
+        "nloc": 30,
+        "max_nesting": 1,
+        "dispatch_share": 0.0
+      },
+      "reason": "The compact object maps saved string/object goals, detailed-versus-summary precedence, corrected text/markup aliases and genre/sample metadata. categoryScores and overall preserve unknown/zero distinctions; changing these logical defaults to numerical fallbacks would invent assessment evidence. The immediate caller restores saved guide/version before ensure. No useful schema abstraction or concrete wrong-result/security defect found.",
+      "source_anchors": [
+        [
+          7129,
+          7166
+        ]
+      ],
+      "callers": [
+        "getNotebookGuideFromPortfolioSession:7129; saved-session print/render routes consume the reconstructed data."
+      ],
+      "suggested_existing_tests": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            247,
+            280
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Rubric-order ties, legacy zero/missing scores and saved goal precedence, score-eight/two-category policy, unchanged-revision rejection."
+        },
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            282,
+            296
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Current summary, saved snapshot and legacy saved-guide paragraph rendering; original writing/source context preserved."
+        }
+      ],
+      "prior_reuse": {
+        "report": "outputs/repowise-repairs/repair-010-notebook-guide-review.json",
+        "historical_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
+        "historical_span": [
+          7113,
+          7143
+        ],
+        "whole_function_lf_equal": true,
+        "scope_limit": "Function identity does not establish all caller/helper behavior. Current immediate callers and relevant evidence/category/fallback helpers were also inspected."
+      }
+    }
+  ],
+  "candidate_edits": [
+    {
+      "id": "batch007-priority-dead-upgrade",
+      "record_ids": [
+        "code_health:finding_30846f5c87e3f081cd02",
+        "code_health:finding_08b13adf7c4b98cebed0"
+      ],
+      "file": "js/app/10-main-app.js",
+      "function": "buildNotebookGuidePrioritiesFromRawInput.addPriority",
+      "lines": [
+        6301,
+        6315
+      ],
+      "priority": "low; next-batch cleanup only",
+      "classification": "proven_unreachable_branch_deletion",
+      "status": "worthwhile_minimal_simplification",
+      "smallest_edit": "Delete only the conditional assignment at6306; keep the duplicate-category return, normalization, push and first-source precedence.",
+      "benefit": "Removes a misleading promise to upgrade an empty priority that the closure cannot produce. Every inserted priority comes from getNotebookGuideDefaultFocus, whose complete6248-6270 implementation always returns a nonempty string. The private array is neither passed out nor otherwise mutated before return; duplicate entries therefore cannot satisfy !priority. No new helper or score-driven split.",
+      "prior_reuse": "repair-050 finding_08b13adf7c4b98cebed0; proof rechecked against current complete closure and focus helper.",
+      "source_hashes": {
+        "addPriority": "b3456955269a9301d5b89a6108f7ff85cedb0a875a7bba60ca5928245178885d",
+        "getNotebookGuideDefaultFocus": "58aa20b9cc9cc6f8aa220c9c3eef0c1d3add938edacd4329ff3e08d59c007f87"
+      },
+      "regression_recommendation": "Use existing native notebook-guidance suite. Keep tied/legacy/score-eight assertions; add one same-category lowest-score + growGoal + nextTime case asserting first source/focus and order if a focused oracle is needed. Do not alter pedagogical strings.",
+      "suggested_existing_tests": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            247,
+            280
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Rubric-order ties, legacy zero/missing scores and saved goal precedence, score-eight/two-category policy, unchanged-revision rejection."
+        }
+      ],
+      "confirmed_behavioral_bug": false
+    },
+    {
+      "id": "batch007-category-policy-reuse",
+      "record_ids": [
+        "code_health:finding_88d56b7b2769df774320"
+      ],
+      "related_critical_record_ids": [
+        "code_health:finding_0be1d750101405d79892",
+        "code_health:finding_462e05bcd837b7e85209"
+      ],
+      "file": "js/app/10-main-app.js",
+      "function": "notebookGuideExampleMatchesPriority",
+      "lines": [
+        6427,
+        6435
+      ],
+      "priority": "low; next-batch cleanup only",
+      "classification": "existing_category_policy_reuse",
+      "status": "worthwhile_minimal_simplification",
+      "smallest_edit": "Replace only the category initializer at6429 with getNotebookGuideExampleCategory(example). Retain the no-priorities early true, unknown-category rejection and normalized-priority loop.",
+      "benefit": "One existing accessor already owns identical page1Connection -> area -> skill fallback and normalization at6511-6518, used by coverage and assembly. Reuse removes a second copy of a real alias-precedence policy without creating a wrapper or removing an evidence check. Current behavior is consistent; this prevents future policy drift rather than repairing a demonstrated bug.",
+      "prior_reuse": "repair-050 finding_88d56b7b2769df774320; exact initializer/getter semantics rechecked, including null example.",
+      "source_hashes": {
+        "notebookGuideExampleMatchesPriority": "11173585916a689c5cdcc751371101c7fbc4f924cd89bc8333acf5ee008509b2",
+        "getNotebookGuideExampleCategory": "35ee88ba36463ba26af106434c8a1532c7f0b88ef755dd6150ad3e0ee3265e62"
+      },
+      "regression_recommendation": "Use existing native notebook-guidance/main-health suites. A small direct table in the existing suite can retain null/empty priorities permissiveness; null/unknown example rejection with priorities; matching/mismatching categories; and page1Connection/area/skill precedence. Keep assembly order and grounding oracles.",
+      "suggested_existing_tests": [
+        {
+          "file": "tests/notebook-guidance-repair.browser.cjs",
+          "lines": [
+            55,
+            139
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Grounded whole-word quotes; malformed, generic and unrelated candidates; paragraph/truncation contracts; parse/ensure path and grounded fallback."
+        },
+        {
+          "file": "tests/main-app-health.browser.cjs",
+          "lines": [
+            88,
+            99
+          ],
+          "git_commit": "95026f777921d878ab68183950dd0cf83c0df112",
+          "contract": "Required-category order, continued search after rejected duplicate, grounded duplicate fallback and no invented Flow example."
+        }
+      ],
+      "confirmed_behavioral_bug": false
+    }
+  ],
+  "other_critical_file_markers_outside_shape_admission": {
+    "records": [
+      {
+        "record_id": "code_health:finding_f505e8ce9087ba531b4a",
+        "symbol": null,
+        "marker": "change_entropy",
+        "status": "needs_revalidation"
+      },
+      {
+        "record_id": "code_health:finding_da2a6cf442a22fa0e95f",
+        "symbol": null,
+        "marker": "prior_defect",
+        "status": "reviewed_no_change"
+      }
+    ],
+    "reason": "File-level historical entropy/defect signals are maintenance context, not a concrete editable condition. No independent history recomputation or defect inference."
+  },
+  "immutable_test_hashes": {
+    "tests/crop-ownership.browser.cjs": {
+      "sha256_raw": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "sha256_normalized_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608"
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "sha256_raw": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3",
+      "sha256_normalized_lf": "88f06ad373ead54b0b64fa8f02c311ab7c1e6070121709455c85e0ec901e9ae3"
+    },
+    "tests/notebook-guide.browser.cjs": {
+      "sha256_raw": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+      "sha256_normalized_lf": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "sha256_raw": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "sha256_normalized_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5"
+    },
+    "tests/missing-feedback.browser.cjs": {
+      "sha256_raw": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0",
+      "sha256_normalized_lf": "8ad3b7505414d2ed83643e54824573dc49c61e2c8c115beabcec1933dc8a6df0"
+    }
+  },
+  "additional_unconfirmed_bug_leads": [],
+  "evidence_receipts": [
+    "work/repowise-review-batch-007/source-receipt.json",
+    "work/repowise-review-batch-007/prior-reuse-receipt.json"
+  ],
+  "limits": [
+    "No source/test/fixture/config/Git/index/tracker mutations; no app/browser/tests/full suites run. Only own scratch and this report written.",
+    "Another writer may change tests. All test references and hashes bind immutable Git95026f; no whole-current-repository freeze or test-pass claim. Main raw/LF bytes verified unchanged at end.",
+    "Exact body reuse supports prior local shape dispositions only. Current relevant callers/helpers were inspected; no exhaustive equivalence, live model/Drive behavior or complete caller-history claim.",
+    "Native reproduction is required before promoting any future behavioral lead to confirmed. These two edits are static cleanup candidates, not bug fixes and not scanner clearance."
+  ]
+}

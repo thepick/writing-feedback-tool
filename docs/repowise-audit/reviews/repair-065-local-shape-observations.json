@@ -1,0 +1,161 @@
+{
+  "scope": "Changed test oracles only; pure installed ASTwalker, no detector/clearance/index claim.",
+  "results": [
+    {
+      "file": "tests/auth-integrity.browser.cjs",
+      "stages": {
+        "before": {
+          "file_sha256_lf": "3f68ebf2d4c3e0ebf5417fe543507b50000b0cc810dba55744eb192a228ff512",
+          "functions": [
+            {
+              "name": "checkRedirectRecovery",
+              "start": 257,
+              "end": 313,
+              "ccn": 22,
+              "nloc": 56,
+              "max_nesting": 4
+            }
+          ]
+        },
+        "after": {
+          "file_sha256_lf": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79",
+          "functions": [
+            {
+              "name": "checkRedirectRecovery",
+              "start": 257,
+              "end": 346,
+              "ccn": 26,
+              "nloc": 88,
+              "max_nesting": 4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "file": "tests/media-ownership.browser.cjs",
+      "stages": {
+        "before": {
+          "file_sha256_lf": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+          "functions": [
+            {
+              "name": "assertRetainedPendingMedia",
+              "start": 253,
+              "end": 263,
+              "ccn": 13,
+              "nloc": 11,
+              "max_nesting": 2
+            }
+          ]
+        },
+        "after": {
+          "file_sha256_lf": "e0abaad55d43adf321a29948331955842d8fef586a80a64229040e1c9313d54b",
+          "functions": [
+            {
+              "name": "assertRetainedPendingMedia",
+              "start": 253,
+              "end": 267,
+              "ccn": 14,
+              "nloc": 15,
+              "max_nesting": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "file": "tests/record-identity.browser.cjs",
+      "stages": {
+        "before": {
+          "file_sha256_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+          "functions": [
+            {
+              "name": "runStudentIdentityCases",
+              "start": 8,
+              "end": 133,
+              "ccn": 10,
+              "nloc": 125,
+              "max_nesting": 2
+            },
+            {
+              "name": "<anonymous@135>",
+              "start": 135,
+              "end": 196,
+              "ccn": 23,
+              "nloc": 60,
+              "max_nesting": 3
+            }
+          ]
+        },
+        "after": {
+          "file_sha256_lf": "ec94a2d2c9ee61998f3ac2e2ef4f3250978e8c5a634a240fe6b4ed602f48b499",
+          "functions": [
+            {
+              "name": "runStudentIdentityCases",
+              "start": 8,
+              "end": 133,
+              "ccn": 10,
+              "nloc": 125,
+              "max_nesting": 2
+            },
+            {
+              "name": "<anonymous@135>",
+              "start": 135,
+              "end": 196,
+              "ccn": 24,
+              "nloc": 60,
+              "max_nesting": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "stages": {
+        "before": {
+          "file_sha256_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+          "functions": [
+            {
+              "name": "<anonymous@7>",
+              "start": 7,
+              "end": 95,
+              "ccn": 14,
+              "nloc": 89,
+              "max_nesting": 5
+            },
+            {
+              "name": "<anonymous>",
+              "start": 35,
+              "end": 39,
+              "ccn": 3,
+              "nloc": 5,
+              "max_nesting": 1
+            }
+          ]
+        },
+        "after": {
+          "file_sha256_lf": "7a887eaffe5b6f67d8f7cf479c0b7d5642463a95af1be93cb3468b86da36f19b",
+          "functions": [
+            {
+              "name": "<anonymous@7>",
+              "start": 7,
+              "end": 103,
+              "ccn": 18,
+              "nloc": 97,
+              "max_nesting": 6
+            },
+            {
+              "name": "<anonymous>",
+              "start": 35,
+              "end": 39,
+              "ccn": 3,
+              "nloc": 5,
+              "max_nesting": 1
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

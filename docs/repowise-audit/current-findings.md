@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T10:39:51.295236+07:00.
+Updated 2026-10-16T12:16:44.813204+07:00.
 
 Source: 69a996eb4463d9734030b8439b0d1851776cd86b. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -18,12 +18,12 @@ One source editor and two parallel read-only reviewers. Test and commit each fix
 
 **Current focus:** Reproduce and fix user-facing bugs. The maintenance queue is optional; scanner counts below are not bug counts.
 
-Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 0. Test-oracle leads: 4.
+Confirmed unresolved bugs: 1. Application leads awaiting reproduction: 0. Test-oracle leads: 0.
 
 
-Statuses: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 52, "needs_revalidation": 308, "reviewed_no_change": 593, "unreviewed": 33}.
+Statuses: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 52, "needs_revalidation": 303, "reviewed_no_change": 599, "unreviewed": 32}.
 
-All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 53, "fixed_verified": 32, "needs_revalidation": 308, "not_detected_unverified": 1, "reviewed_no_change": 599, "unreviewed": 33}.
+All tracked rows, including findings absent on the latest scan: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 53, "fixed_verified": 32, "needs_revalidation": 303, "not_detected_unverified": 1, "reviewed_no_change": 605, "unreviewed": 32}.
 
 Findings confirmed cleared: 32. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
@@ -109,6 +109,9 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-063: Recover valid later notebook examples after an unusable first candidate - fixed_verified.
 - repair-064: Make Grammar calculation explanation agree with the captured grade result - fixed_verified.
 - repair-001: Verify security signals - reviewed_complete.
+- repair-065-storage-safety-oracles: Prove redirect recovery, cleared pending state, upload execution and commit refresh in native tests - reviewed_focused_tests_passed_pending_batch_validation.
+- repair-066-settings-merge: Remove mirrored settings merge copy loops while preserving precedence and credentials - reviewed_focused_tests_passed_pending_batch_validation.
+- repair-067-mobile-header: Separate mobile Sign Out and Settings controls and let sync status fit - candidate_tested_reviewed_committed_pending_integration.
 
 ## Additional source leads
 
@@ -130,18 +133,19 @@ These are review leads, separate from scanner observations. They require their o
 - review034-grammar-band-debug-label: renderScoredAnalysisDebug in js/app/10-main-app.js — fixed_verified. The Grammar band text is hardcoded for a legacy1-7 scale while grammarDensityBand returns4-10 from the selected grade table and strictness. Scores8/9/10 hit the default label18.1-or-higher=1; lower scores map to legacy intervals unrelated to current profile thresholds. formatGrammarCalc renders that label beside the actual final Grammar score. This is a source-supported misleading calculation display, not a reproduced grading-score change. Frozen old/new parity includes the same stale text and cannot establish its correctness.
 - review044-roster-portfolio-panel: openStudentPortfolio in js/app/00-storage-sync-patches.js — fixed_verified. Actual roster buttons reproduced hidden/wrong portfolio navigation. The integrated fix preselects the requested student and switches to the portfolio tab; eight new desktop/mobile/optional-control/storage-failure scenarios pass within58 checks. Existing26 checks are preserved. Full batch005 gate/publication pending.
 - review044-async-portfolio-stale-owner: renderStudentPortfolio in js/app/00-storage-sync-patches.js — reviewed_no_change. With the optional async path enabled, the completion for captured student A puts A data in _asyncStudentData then recursively renders using the current selector value. If the selector changed to B while A was loading, B can label/action A sessions; a late rejection can also overwrite the current view. There is no selector/generation check before either write. The flag is false by default, so this lead concerns the opt-in path; source supported and not reproduced.
-- 047-L1: checkRedirectRecovery in tests/auth-integrity.browser.cjs — candidate_needs_regression. For full/retry/drive-backed,297 checks exactly one intercepted navigation and298 skips the rest of the state oracle. The production redirect guard relies on full recoverability of pending work before leaving the tab. Current assertions do not directly prove those allowed cases stored the draft and complete/recoverable pending content.
-- 047-L2: assertRetainedPendingMedia (called by assertPendingMediaScenario) in tests/media-ownership.browser.cjs — candidate_needs_regression. pending-clear invokes clearPendingPortfolioSync before releasing the old upload. The retained-work oracle explicitly skips pending existence at255 for this case but does not require null; it also never checks storedPending. Restoring old pending in memory/storage while keeping portfolio empty and synced false is not rejected by this scenario oracle.
+- 047-L1: checkRedirectRecovery in tests/auth-integrity.browser.cjs — fixed_verified. For full/retry/drive-backed,297 checks exactly one intercepted navigation and298 skips the rest of the state oracle. The production redirect guard relies on full recoverability of pending work before leaving the tab. Current assertions do not directly prove those allowed cases stored the draft and complete/recoverable pending content.
+- 047-L2: assertRetainedPendingMedia (called by assertPendingMediaScenario) in tests/media-ownership.browser.cjs — fixed_verified. pending-clear invokes clearPendingPortfolioSync before releasing the old upload. The retained-work oracle explicitly skips pending existence at255 for this case but does not require null; it also never checks storedPending. Restoring old pending in memory/storage while keeping portfolio empty and synced false is not rejected by this scenario oracle.
 - 049-L1: getEvidenceTokens / commentOverlapsEvidence in js/app/10-main-app.js — fixed_verified. The evidence bag and stop-word set are ordinary objects. commentOverlapsEvidence uses bag[word] without an own-key check, so constructor is truthy through Object.prototype even when no evidence row contains it. The stop-word lookup also suppresses an actual constructor token through inheritance. This can mark an unsupported teacher comment as evidence-supported; no runtime reproduction was performed.
 - 049-L2: renderCorrected in js/app/10-main-app.js — reviewed_no_change. For unmarked corrected text with a detected title, buildStoryHtmlWithTitle separates the title into its own span. The later replacement searches for the escaped complete plain title+body string, which is no longer contiguous in storyHtml. The rendered title/body can therefore be returned without the previously built corrected-highlight spans. parseStep1 often supplies already-marked text, so affected production reachability needs confirmation. Existing parity includes a title input but compares the same renderer on both sides; the explicit DOM highlight oracle is untitled.
 - 049-L3: getAuditRawRows in js/app/10-main-app.js — reviewed_no_change. Numeric rows call isFinite(Number(value)) before formatting. null, empty string and whitespace coerce to0, unlike addAuditRawRow which deliberately omits null/undefined/empty values. Missing errorDensity, Flow average/varietyScore or Ideas multiplier supplied as null can therefore become a displayed measured zero in the teacher audit. Whether current producers emit each form was not established.
 - review050-disabled-target-status-badge: updateMeter wrapper in js/app/10-main-app.js — fixed_verified. getTargetWordCountValue retains a positive configured target even when its checkbox is off. The wrapper first chooses Target off, but the unconditional words===target override at8606 then assigns On target. updateStatusBar publishes that badge to visible #statusBarStatus. Thus an off target with exactly the stored word count appears able to display an enabled-target success message. Original updateMeter returns early for target-off, so its own meter text does not prevent the wrapper override. Source supported only; no application run here.
-- 054-L1: photo-conflict-sync checker inside <anonymous@135> in tests/record-identity.browser.cjs — candidate_needs_regression. At 183 the checker validates returned local newer metadata, then loops over uploads without requiring an upload. In the local-newer=true case, local data is already correct and omitting the required cloud push leaves an empty loop that cannot fail. Git7558 syncWftPortfolioIfNeeded:5685-5689 requires a push for pending local content differing from cloud. The cloud-newer case may legitimately need no push, so do not require an upload indiscriminately.
-- 057-L1: refresh publication case inside <anonymous@7> in tests/pending-commit-publication.browser.cjs — candidate_needs_regression. The refresh case replaces updateSyncPortfolioButtonState with a throwing callback that increments refreshes at 44, returns refreshes at 52, but no assertion uses it at 59-87. If a change stops invoking that callback, the case can retain correct committed data without exercising its named refresh-failure boundary. Current Git7558 clearPendingPortfolioSync does call the callback at 8263; this is a regression-oracle gap, not evidence that the present production path fails.
+- 054-L1: photo-conflict-sync checker inside <anonymous@135> in tests/record-identity.browser.cjs — fixed_verified. At 183 the checker validates returned local newer metadata, then loops over uploads without requiring an upload. In the local-newer=true case, local data is already correct and omitting the required cloud push leaves an empty loop that cannot fail. Git7558 syncWftPortfolioIfNeeded:5685-5689 requires a push for pending local content differing from cloud. The cloud-newer case may legitimately need no push, so do not require an upload indiscriminately.
+- 057-L1: refresh publication case inside <anonymous@7> in tests/pending-commit-publication.browser.cjs — fixed_verified. The refresh case replaces updateSyncPortfolioButtonState with a throwing callback that increments refreshes at 44, returns refreshes at 52, but no assertion uses it at 59-87. If a change stops invoking that callback, the case can retain correct committed data without exercising its named refresh-failure boundary. Current Git7558 clearPendingPortfolioSync does call the callback at 8263; this is a regression-oracle gap, not evidence that the present production path fails.
+- manual-mobile-header-overlap: mobile header account/status/action layout in index.html — confirmed_bug_fix_reviewed_pending_publication. Current code reproduced actual SignOut/Settings rectangle overlap in9normal sync geometry states and a blocked real360px SignOutclick. IsolatedCSScandidate passes143geometry states/11nativeactionsequences and111auth+2startup cases before/after; bothindependentreviewsaccepted. Primaryruntimeunchangeduntil007gatefinishes.
 
 ## Coverage evidence
 
-92.6% native executable-line coverage from 60 browser suites. 8/8 shipped source files still match that capture. Ingestion: verified_merged_source.
+92.6% native executable-line coverage from 60 browser suites. 7/8 shipped source files still match that capture. Ingestion: verified_merged_source.
 
 Per-file gaps and excluded reference/mutated contexts are recorded in reviews/batch-006-validation.json. This is line coverage, not branch coverage.
 
@@ -160,12 +164,12 @@ The JSON beside this document contains full evidence, scanner metadata, prior-re
 | code_health:finding_4f159d3281c1bca6dd40 | critical | code_health | js/app/00-storage-sync-patches.js:8310 | commitPendingPortfolioReplacement / complex_method | yes | reviewed_no_change |
 | code_health:finding_f505e8ce9087ba531b4a | critical | code_health | js/app/10-main-app.js | change_entropy | yes | needs_revalidation |
 | code_health:finding_da2a6cf442a22fa0e95f | critical | code_health | js/app/10-main-app.js | prior_defect | yes | reviewed_no_change |
-| code_health:finding_58a8b9f1eed6f92f7106 | critical | code_health | js/app/10-main-app.js:3557 | <anonymous> / complex_conditional | yes | unreviewed |
-| code_health:finding_360e96c0bf7e43661286 | critical | code_health | js/app/10-main-app.js:5914 | getGoalPlan / complex_method | yes | needs_revalidation |
-| code_health:finding_30846f5c87e3f081cd02 | critical | code_health | js/app/10-main-app.js:6292 | buildNotebookGuidePrioritiesFromRawInput / complex_method | yes | needs_revalidation |
-| code_health:finding_0be1d750101405d79892 | critical | code_health | js/app/10-main-app.js:6371 | sanitizeNotebookGuideCandidate / complex_method | yes | needs_revalidation |
-| code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6930 | assembleNotebookGuideFromCandidates / complex_method | yes | needs_revalidation |
-| code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7136 | buildNotebookReconstructionDataFromSession / complex_method | yes | needs_revalidation |
+| code_health:finding_58a8b9f1eed6f92f7106 | critical | code_health | js/app/10-main-app.js:3557 | <anonymous> / complex_conditional | yes | reviewed_no_change |
+| code_health:finding_360e96c0bf7e43661286 | critical | code_health | js/app/10-main-app.js:5914 | getGoalPlan / complex_method | yes | reviewed_no_change |
+| code_health:finding_30846f5c87e3f081cd02 | critical | code_health | js/app/10-main-app.js:6292 | buildNotebookGuidePrioritiesFromRawInput / complex_method | yes | reviewed_no_change |
+| code_health:finding_0be1d750101405d79892 | critical | code_health | js/app/10-main-app.js:6371 | sanitizeNotebookGuideCandidate / complex_method | yes | reviewed_no_change |
+| code_health:finding_462e05bcd837b7e85209 | critical | code_health | js/app/10-main-app.js:6930 | assembleNotebookGuideFromCandidates / complex_method | yes | reviewed_no_change |
+| code_health:finding_c9cb059592b435e51d58 | critical | code_health | js/app/10-main-app.js:7136 | buildNotebookReconstructionDataFromSession / complex_method | yes | reviewed_no_change |
 | code_health:finding_2f3ed327ca58291a143e | critical | code_health | tests/analysis-identity.browser.cjs:8 | evaluateAnalysisIdentity / large_method | yes | reviewed_no_change |
 | code_health:finding_615d19856374d52a4a9b | critical | code_health | tests/archive-integrity.browser.cjs | change_entropy | yes | needs_revalidation |
 | code_health:finding_b4dbf5c38542dee01117 | critical | code_health | tests/detailed-parser.browser.cjs:172 | checkGrammarCalculation / complex_method | yes | unreviewed |

@@ -1,0 +1,497 @@
+{
+  "review_id": "next-coverage-risk-benefit-admission",
+  "inspected_git_commit": "c814963f9f277920b876eef8f707f9572912ac95",
+  "verdict": "two_bounded_test_admissions_no_production_edit",
+  "confirmed_new_bugs": 0,
+  "scanner_closures_claimed": 0,
+  "summary": "Prioritize archive rejection before irreversible side effects, then genuine crop input-to-pixel correctness. Defer lightbox lifecycle and exporter-only compatibility/detail branches for this round. These are named assertion gaps supported by current source/tests, not defects inferred from low line coverage.",
+  "coverage_provenance": {
+    "latest_imported_snapshot_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+    "tracker_source_commit": "69a996eb4463d9734030b8439b0d1851776cd86b",
+    "tracker_sha256_raw": "6190e6fc177fbd550c06d568b04e55cec4e6cc175ab7bd0ba8f97c9f93cafccb",
+    "capture_commit": "758526603018bde7cb193d23e03ec7531d4d083b",
+    "capture_start": "2026-10-16T02:59:46.892Z",
+    "capture_finish": "2026-10-16T03:25:36.841Z",
+    "capture_tests": 60,
+    "branch_coverage_measured": false,
+    "known_final_empty_return_excluded": true,
+    "latest_known_effective_counts": {
+      "js/app/99-lightbox.js": {
+        "covered": 10,
+        "executable": 25,
+        "percent": 40,
+        "uncovered": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          15,
+          16,
+          18,
+          19,
+          20,
+          21
+        ]
+      },
+      "js/app/photo-crop.js": {
+        "covered": 180,
+        "executable": 210,
+        "percent": 85.71428571428571,
+        "uncovered": [
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          144,
+          145,
+          220,
+          221,
+          222,
+          223,
+          224,
+          227,
+          228,
+          229,
+          230,
+          234,
+          252,
+          253
+        ]
+      },
+      "js/app/portfolio-export.js": {
+        "covered": 571,
+        "executable": 596,
+        "percent": 95.80536912751678,
+        "uncovered": [
+          51,
+          128,
+          129,
+          130,
+          131,
+          198,
+          296,
+          297,
+          298,
+          299,
+          301,
+          602,
+          718,
+          813,
+          814,
+          833,
+          882,
+          930,
+          1005,
+          1006,
+          1031,
+          1071,
+          1072,
+          1073,
+          1079
+        ]
+      }
+    },
+    "coverage_records": [
+      {
+        "record_id": "code_health:finding_4057876aba2cd2a0cf7b",
+        "file": "js/app/99-lightbox.js",
+        "status": "candidate_needs_regression",
+        "details": {
+          "line_coverage_pct": 40.0,
+          "branch_coverage_pct": null,
+          "uncovered_fraction": 0.6,
+          "deduction": 2.4
+        }
+      },
+      {
+        "record_id": "code_health:finding_e8fa786727ce7172a436",
+        "file": "js/app/photo-crop.js",
+        "status": "candidate_needs_regression",
+        "details": {
+          "line_coverage_pct": 85.71,
+          "branch_coverage_pct": null,
+          "uncovered_fraction": 0.1429,
+          "deduction": 0.5716
+        }
+      },
+      {
+        "record_id": "code_health:finding_67272701e9295673aac2",
+        "file": "js/app/portfolio-export.js",
+        "status": "candidate_needs_regression",
+        "details": {
+          "line_coverage_pct": 95.81,
+          "branch_coverage_pct": null,
+          "uncovered_fraction": 0.0419,
+          "deduction": 0.1676
+        }
+      }
+    ],
+    "interpretation": "Latest imported snapshot is batch006/69a996e, not the active007 gate. The three full module LF hashes independently match that native capture and current Gitc814963; the seven reviewed relevant test files still match006 raw pins. This makes006 a useful source-bound prior execution map, not a new007 measurement or proof of behavior. EOF empty return points already excluded; do not count them again.",
+    "artifacts": {
+      "outputs/repowise-repairs/batch-006-validation.json": {
+        "raw_sha256": "9ba6e232fc3007b6b3087388b442abbb2b67a2af6d1bc8bdafc91aa7d8f37812",
+        "bytes": 60705
+      },
+      "work/repowise-coordinator/batch006-postmerge-ingestion-verification.json": {
+        "raw_sha256": "39efd926bf7bd7841d20028615b6d69fb5392456253548e6697828836930d2e6",
+        "bytes": 13837
+      },
+      "work/repowise-batch-006/current.lcov.summary.json": {
+        "raw_sha256": "934f41c156f4762caa5915d2215f8242316c4d7bcf1421ac4f24dcd7795ead1d",
+        "bytes": 44731
+      },
+      "work/repowise-batch-006/current.lcov": {
+        "raw_sha256": "4282da97c80ba88c869222b13bbcdd12a2fbea2183479f477976ae2efb180fda",
+        "bytes": 6561452
+      }
+    }
+  },
+  "current_module_hashes": {
+    "js/app/99-lightbox.js": {
+      "sha256_raw": "0ca315422d1850cb7a35c5a3a9ff04440789c91eab84ffb9dc5bba4a17c6d453",
+      "sha256_lf": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+      "matches_inspected_git_lf": true
+    },
+    "js/app/photo-crop.js": {
+      "sha256_raw": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+      "sha256_lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "matches_inspected_git_lf": true
+    },
+    "js/app/portfolio-export.js": {
+      "sha256_raw": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+      "sha256_lf": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "matches_inspected_git_lf": true
+    }
+  },
+  "relevant_test_hashes": {
+    "tests/archive-failures.browser.cjs": {
+      "sha256_raw": "748e335a4c8757d49ab2ac6d17f03f392a49b374cab79409c83bebdc464e045b",
+      "sha256_lf": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    },
+    "tests/archive-connection.browser.cjs": {
+      "sha256_raw": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "sha256_lf": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    },
+    "tests/archive-integrity.browser.cjs": {
+      "sha256_raw": "11f7807415cea27c165ad2584c37e7d58e81a0649acc9b0927ff243dc808029b",
+      "sha256_lf": "d7ff90997c80b1c47a20a0789c0866f1c6a7c4c407a51f44f3dc416f6f51f3a8",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    },
+    "tests/portfolio-html.browser.cjs": {
+      "sha256_raw": "b2ee367a9c2c01a8b9831d55c3e798461187b7aceb01b0cd9e79a7d81cd4050c",
+      "sha256_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    },
+    "tests/crop-ownership.browser.cjs": {
+      "sha256_raw": "ecfd9eb55e0771b5121a3f8ee56cde87c3e621a6d2f74b1bd98d57d4d9774507",
+      "sha256_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    },
+    "tests/crop-transparency.browser.cjs": {
+      "sha256_raw": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+      "sha256_lf": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    },
+    "tests/script-loading.browser.cjs": {
+      "sha256_raw": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "sha256_lf": "04f875fa49ec750de7e50b30552e2f11477e1700a8d2304e91ac610e4370c836",
+      "same_as_test_in_006_capture_pins": true,
+      "matches_inspected_git_lf": true
+    }
+  },
+  "admissions": [
+    {
+      "id": "next-T03-archive-rejection-io",
+      "queue_id": "T03",
+      "record_id": "code_health:finding_67272701e9295673aac2",
+      "priority": 1,
+      "classification": "data_retention_and_outgoing_IO_contract_tests",
+      "proposed_status": "admit_test_only_after007_freeze_release",
+      "why": "Year-end archive clears the active class only after successful creation/upload/download. A Drive folder-create response without an ID, a tiny resolved ZIP, or an initially signed-out call must not cross that boundary. Existing archive-failures tests distinguish failed compression/download and missing FILE upload IDs, but their folder mocks always return IDs; archive-connection tests switch an existing connection, not initial sign-out. Missing-folder and invalid-size success results are different failure shapes from a rejected compression promise. These checks protect writing/class state even though the current source already contains the right guards.",
+      "source_functions": {
+        "js/app/portfolio-export.js::ensureDriveSubfolderPromise": {
+          "span": [
+            851,
+            887
+          ],
+          "sha256_normalized_lf": "84030bd15edbbe283ead8601ee2f48075a4ac8c2c1b49914e0baaf3bf1cd1ae4"
+        },
+        "js/app/portfolio-export.js::saveArchiveZipToDrive": {
+          "span": [
+            928,
+            938
+          ],
+          "sha256_normalized_lf": "5b0a1a86cc64cbfd84b56548c4cd7c8f3e2c00499d9c15a7d94e7dfe989513eb"
+        },
+        "js/app/portfolio-export.js::archiveCurrentSchoolYear": {
+          "span": [
+            991,
+            1062
+          ],
+          "sha256_normalized_lf": "095705535d643f333bb8e09900117786c2eb3c2630c2cf3ef4e89a12e54883c0"
+        },
+        "js/app/portfolio-export.js::exportSelectedStudentPortfolio": {
+          "span": [
+            1064,
+            1089
+          ],
+          "sha256_normalized_lf": "5d3bfefe34a14688f17024d84bb58ead9ef04b69655a7a82fe4df65ed392a1e9"
+        },
+        "js/app/portfolio-export.js::captureWftArchiveClassState": {
+          "span": [
+            940,
+            957
+          ],
+          "sha256_normalized_lf": "bb61c6f5d7869a2cd4faff162d3e4552c13e388342f183da9425d01a25aae9bb"
+        },
+        "js/app/portfolio-export.js::clearCurrentClassAfterSuccessfulArchive": {
+          "span": [
+            959,
+            989
+          ],
+          "sha256_normalized_lf": "12c41564a4831641d1a5a6856474122876abdc4880bba98f9698efd595170328"
+        }
+      },
+      "specific_anchors": [
+        "portfolio-export.js:880-883 missing folder acknowledgement",
+        "portfolio-export.js:928-936 initial signed-out/save connection guard",
+        "portfolio-export.js:1028-1044 reject tiny archive before upload/download/class clear",
+        "portfolio-export.js:1076-1081 reject tiny single export before download"
+      ],
+      "smallest_existing_suite_change": "Extend tests/archive-failures.browser.cjs using its existing public invoke/real-JSZip/fetch/download/retention/retry seams. Keep every current8 scenario and7-check contract. Add four bounded cases: year missing folder ID; resolved tiny ZIP for year and single; initially signed-out year archive. Preserve actual ensureDriveSubfolderPromise/wftDriveFetch/public handlers. No generic browser mock framework or production rewrite.",
+      "required_cases": [
+        {
+          "name": "year/folder-create-empty-ack",
+          "seam": "Return an empty search result then HTTP200 JSON{} from the actual Archives subfolder create request. Existing valid root/folder and upload logic stay real.",
+          "oracle": "Expected lookup/folder-create requests may occur; zero archive multipart uploads and zero downloads, no class clear, exact protected storage bytes and runtime writing/selection/media/pending retained, useful folder error. Restore the acknowledgement and require one healthy real ZIP/upload/download completion."
+        },
+        {
+          "name": "single+year/tiny-resolved-zip",
+          "seam": "Temporarily resolve JSZip.generateAsync with a small nonempty Blob below500/1000 rather than rejecting compression or stubbing the entire public handler.",
+          "oracle": "Zero download in both modes, zero year archive upload/clear, exact protected bytes/runtime retained and truthful invalid-export error. Restore real compression for the existing healthy retry. Do not call a fabricated threshold-sized blob a valid ZIP."
+        },
+        {
+          "name": "year/initially-signed-out",
+          "seam": "Clear runtime connection before the public archive call; leave ordinary confirmation/input contracts and actual connection guards intact.",
+          "oracle": "Zero archive-related outgoing request, upload, download or class clear; exact protected work retained and sign-in/connection feedback. A direct saveArchiveZipToDrive rejection can be checked in the same case if cheap, but do not bypass the earlier public guard merely to execute930."
+        }
+      ],
+      "existing_assertions_read": [
+        "tests/archive-failures.browser.cjs:16-75 real public flow, storage/runtime retention, allowed upload boundary and successful retry;78-114 native download/failure aggregation",
+        "tests/archive-connection.browser.cjs:9-85 captured connection, stale request rejection and genuine ZIP multipart content",
+        "tests/archive-integrity.browser.cjs:113-138 image-source failures retain class; later held-current-work/storage/postcommit cases remain distinct"
+      ],
+      "limit": "Controlled dependency/response failures test intended safety boundaries; they do not reproduce a current production bug or establish live Drive acknowledgement semantics."
+    },
+    {
+      "id": "next-T02-crop-input-to-pixels",
+      "queue_id": "T02",
+      "record_id": "code_health:finding_e8fa786727ce7172a436",
+      "priority": 2,
+      "classification": "ordinary_user_input_correctness_gap",
+      "proposed_status": "admit_test_only_after007_freeze_release",
+      "why": "Ordinary users choose the OCR region by dragging. Current strong ownership/pixel tests assign _cropRect directly, and script-loading only opens the modal then presses Escape. Neither proves mouse/touch coordinate conversion, reverse drag or drag termination. A wrong region can produce the wrong writing/OCR image while all current pixel/ownership cases pass; original preservation makes this recoverable, but the missing native event-to-pixel contract has real correctness value.",
+      "source_functions": {
+        "js/app/photo-crop.js::getCropPos": {
+          "span": [
+            96,
+            114
+          ],
+          "sha256_normalized_lf": "b24da05d75a6b84588e6540fb79e571071d4ca8eceae05e96d5a7083a59115f6"
+        },
+        "js/app/photo-crop.js::onDown": {
+          "span": [
+            219,
+            224
+          ],
+          "sha256_normalized_lf": "c5e4ace5ff29eccb858431d1478cd6bb6160c15f00873fde7e2f5ba0bf2f926f"
+        },
+        "js/app/photo-crop.js::onMove": {
+          "span": [
+            225,
+            231
+          ],
+          "sha256_normalized_lf": "925c7274e6f98678ef165259389ce9a2da201c2c617781a685beda367ff52c7f"
+        },
+        "js/app/photo-crop.js::onUp": {
+          "span": [
+            232,
+            235
+          ],
+          "sha256_normalized_lf": "ab056926ffa786ea760cbfb8ae532ebd8c74cbab1f06dac139e4fa2142161e9a"
+        },
+        "js/app/photo-crop.js::applyCrop": {
+          "span": [
+            129,
+            181
+          ],
+          "sha256_normalized_lf": "9f32b145e285cf988fbff83536d3b2c1d0ebff6d2f8f4d7e5c0aa5f449b606b2"
+        },
+        "js/app/photo-crop.js::isCurrentCropSession": {
+          "span": [
+            1,
+            8
+          ],
+          "sha256_normalized_lf": "7a7add3fb216f0f64c032214515b5a7f63a5574ede06bc940dc31a049a1e1a63"
+        },
+        "js/app/photo-crop.js::setWftPhotoBytes": {
+          "span": [
+            116,
+            127
+          ],
+          "sha256_normalized_lf": "04c34412571c573d165cd3df2c3905a25538b91cef6f1fa1076ecb19a7ec8b48"
+        }
+      },
+      "specific_anchors": [
+        "photo-crop.js:96-114 mouse/touch source, rounding, CSS-to-bitmap scaling and clamping",
+        "photo-crop.js:219-242 delegated down/move/up listeners",
+        "photo-crop.js:129-180 guarded raster crop and original/OCR/Drive revision update"
+      ],
+      "smallest_existing_suite_change": "Add two adjacent native event cases to tests/crop-transparency.browser.cjs, reusing its real PNG acquisition, native Image decode, pixel sampling and reset helpers. Keep its existing4 opaque/transparent/reset cases and the entire crop-ownership suite. Open through the visible Crop button; do not assign _cropRect. Use one mouse drag and one browser touch sequence/reverse drag at a scaled rendered size, with document release and a later move that must not alter the final region.",
+      "substantive_oracle": "Use the existing asymmetric ink/background fixture or a tiny asymmetric raster. Assert independent literal output dimensions AND ink/background pixels at known source-relative points with the existing JPEG tolerance. Dimensions alone cannot detect a shifted rectangle. Also require the exact original bytes retained, only the intended image changed, stale Drive reference cleared/revision advanced and OCR cache invalidated; preserve owner/writing/pending/source state. Inspect actual getBoundingClientRect for input placement, but do not compute expected output by calling getCropPos or duplicating its implementation.",
+      "existing_assertions_read": [
+        "tests/crop-transparency.browser.cjs:14-51 real handleSelectedImages/PNG/native crop pixels and exact original reset, but rectangle assigned at30",
+        "tests/crop-ownership.browser.cjs:62,100,162 direct rectangle injection;177-204 current/stale/ready/reverse-scaled output and ownership contracts",
+        "tests/script-loading.browser.cjs:59-69 actual Crop button/load/Escape only"
+      ],
+      "limit": "Browser-dispatched touch proves browser listener behavior, not physical touchscreen hardware. Do not add a gesture framework or expand into an exhaustive viewport/device matrix."
+    }
+  ],
+  "retained_or_deferred": [
+    {
+      "queue_id": "T01",
+      "record_id": "code_health:finding_4057876aba2cd2a0cf7b",
+      "status": "defer_lower_risk_UI_contract",
+      "reason": "Real open/caption/scroll/backdrop lifecycle remains unasserted, so this is a genuine small future test opportunity, not a false positive. However the module only copies already-vetted image src/alt, uses textContent for captions and toggles display/scroll state; it writes no portfolio or credentials. Current preview/portfolio HTML tests already reject unsafe URLs/attributes and hydrate safe images. Do not rank this above data-retention/native crop input solely because its coverage is40%. Retain missing DOM/src guards; no production simplification needed.",
+      "anchors": [
+        "99-lightbox.js:2-29",
+        "10-main-app.js:3212 safe preview markup",
+        "00-storage-sync-patches.js:7275-7280 safe data/Drive image markup",
+        "tests/portfolio-html.browser.cjs:59-114,146-153",
+        "tests/script-loading.browser.cjs:41-46,59-74"
+      ],
+      "function_hashes": {
+        "js/app/99-lightbox.js::openImageLightbox": {
+          "span": [
+            2,
+            21
+          ],
+          "sha256_normalized_lf": "2f6d06bc42babaa5406ac01f670f9789ea1bf9add1b307309609c6f2b780320a"
+        },
+        "js/app/99-lightbox.js::closeImageLightbox": {
+          "span": [
+            22,
+            29
+          ],
+          "sha256_normalized_lf": "80f5f307b55dc4d9af053b2fc898f46eb94fa2c276587e4060a6411869015601"
+        }
+      }
+    },
+    {
+      "queue_id": "T03",
+      "scope": "legacy feedback and optional corrected-output fallback",
+      "status": "retain_compatibility_defer_this_round",
+      "reason": "Legacy feedback remains supported data, so keep summary-then-legacy ordering and distinct Encouragement/Comment fields. An exact legacy/both-source label table would have value, but no incorrect output is established. The missing-helper corrected branches are optional compatibility paths: normal shipped app defines getPortfolioCorrectedHtml, and current generated-document tests exercise hostile corrected HTML with that helper present. The fallback itself still calls the same escaped Markdown renderer, HTML sanitizer or escaped plain text; source review establishes no bypass. Keep it, and test it when exporter-only/loader compatibility is a real release target. Do not delete compatibility or inject helper absence solely to clear line counts.",
+      "anchors": [
+        "portfolio-export.js:114-146,274-328",
+        "00-storage-sync-patches.js:6604-6667 sanitizer,6717-6726 normal helper",
+        "10-main-app.js:1250-1282 escaped renderers",
+        "tests/portfolio-html.browser.cjs:15-56,133-153,265-280 generated hostile documents"
+      ],
+      "function_hashes": {
+        "js/app/portfolio-export.js::buildSessionExportFeedbackText": {
+          "span": [
+            114,
+            146
+          ],
+          "sha256_normalized_lf": "d18373589699c0d0052bcd5edfcce12d52d5c639eb28ac350b6ae33162bcdf02"
+        },
+        "js/app/portfolio-export.js::appendStructuredFeedback": {
+          "span": [
+            119,
+            133
+          ],
+          "sha256_normalized_lf": "042d775784ea47bd0efabf4990faa212de4f3a2e8ba6c5677808129c7faf6737"
+        },
+        "js/app/portfolio-export.js::buildStudentPortfolioSessionHtml": {
+          "span": [
+            274,
+            328
+          ],
+          "sha256_normalized_lf": "7ec8bbf4afebe7fcaacb07a8d58abe5deb7befc633c733068804f99fd9ba19e9"
+        }
+      }
+    },
+    {
+      "queue_id": "T03",
+      "scope": "empty/stale selection, empty portfolio, whitespace year and school-year month boundary",
+      "status": "retain_lower_risk_or_defensive",
+      "reason": "These are explicit no-op/error/compatibility boundaries, not evidence of lost data. The current portfolio navigation tests assert valid populated selection and export enabled; empty selection is ordinarily gated by the disabled UI. Keep helper rejection for stale data without manufacturing a user bug. Empty student HTML is an explanatory document; January/July labels affect naming rather than ownership or clearing. Blank-year/cancel returns precede archive work. They can gain cheap tests later, but are below the admitted IO and native-crop gaps.",
+      "anchors": [
+        "portfolio-export.js:198,711-719,813-814,1002-1015,1070-1074",
+        "tests/portfolio-html.browser.cjs:197-236 native navigation/export state"
+      ]
+    },
+    {
+      "queue_id": "T02",
+      "scope": "post-clipping minimum-size guard and optional DOM/backdrop branches",
+      "status": "retain_defensive_do_not_force_coverage",
+      "reason": "With stable loaded canvas dimensions, both drag endpoints are clamped, so a nominal >=5px region cannot become smaller merely through the later clipping calculation. Keep the second guard for changed-canvas/preload or nonstandard caller state; do not inject an impossible normal drag just to hit144-145. Existing initial3px/preload cases cover distinct contracts. Backdrop/optional missing-DOM behavior is lower risk; keep it without a new generic harness.",
+      "anchors": [
+        "photo-crop.js:96-114,132-145,219-253",
+        "tests/crop-ownership.browser.cjs:162,177-183"
+      ]
+    },
+    {
+      "scope": "already covered high-risk export behavior",
+      "status": "retain_existing_oracles_no_duplicate_admission",
+      "reason": "Do not add another generic upload-failure/connection race matrix: real photo/ZIP bytes, all-or-nothing requested-photo failures, current-work snapshot retention, connection changes at async stages, missing FILE acknowledgement, required storage failure/retry and postcommit UI failures already have substantive assertions in archive-integrity, archive-failures and archive-connection. Missing FOLDER acknowledgement is the distinct admitted gap."
+    },
+    {
+      "scope": "EOF return points and catch-only defensive lines",
+      "status": "retain_or_exclude_as_already_documented",
+      "reason": "Final empty return points35/259/1093 were already excluded by the corrected native denominator; they are not missing user behavior. Optional DOM text fallback and synchronous task/ZIP setup catches remain safety fallbacks. No new test, dead-code deletion or wrapper is justified by their line count alone.",
+      "anchors": [
+        "portfolio-export.js:51,602,833",
+        "accepted repair026 EOF evidence"
+      ]
+    }
+  ],
+  "prior_source_reuse": "Accepted repair038/remaining queue used only as named leads. Rebound complete three module hashes, current source contracts, actual relevant test assertions and latest006 provenance; did not repeat the historical shape/clone inventory.",
+  "evidence_receipt": {
+    "path": "work/repowise-review-next-coverage/source-coverage-pins.json",
+    "sha256_raw": "2b9efc7a240f653b587d5dcbd843ced734ea498c9ea215a6af467e964678aa6c",
+    "contents": "Exact production/context/test hashes, full relevant function hashes/spans,006 artifact hashes, latest imported coverage details and tracker IDs."
+  },
+  "limits": [
+    "No app/browser/tests, source/test/Git/index/tracker/dependency writes or new coverage capture/import. Only own scratch/report written; installed static parser used to bind function hashes.",
+    "Active007 full gate and postmerge overview refresh are coordinator work. No007 pass, new coverage percentage, branch coverage, bug reproduction or scanner closure claimed.",
+    "Two admissions are preparation only. Before implementation, rebind the final revision and inspect007 coverage/oracles so completed work is not duplicated. Neither test proposal authorizes a production behavior change.",
+    "No new unconfirmed production bug lead was raised; potential failures remain hypothetical until an actual expected-contract native reproduction."
+  ]
+}
