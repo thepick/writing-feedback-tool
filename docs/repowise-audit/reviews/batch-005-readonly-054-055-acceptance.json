@@ -1,0 +1,686 @@
+{
+  "basis": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "clone_archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+  "reports": [
+    {
+      "id": "repair-054",
+      "name": "repair-054-portfolio-harnesses.json",
+      "sha256": "4882943e9ad83b45a6377c1b67618b843645cf50625591eca59c4b88abe050cb",
+      "assignment_sha256": "e90b609550036d6d0dee77db719004a24aff582d76afc85ae58325696b740a5e"
+    },
+    {
+      "id": "repair-055",
+      "name": "repair-055-analysis-harnesses.json",
+      "sha256": "00213ce5ef3918a54ae4ac7a3d758f4326fc0e48ebfc8e25d29d9585cbd5efc0",
+      "assignment_sha256": "e2ed88d168d578b22f6fd18f1198140145f7fbdca5b424c70b99e70c92d12ee9"
+    }
+  ],
+  "records": [
+    {
+      "id": "code_health:finding_2ae7b251e6000adae8f6",
+      "file": "tests/portfolio-image-slots.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "dc6d5bda3eb2189551d6c6ccdb844e569498d47906d412e241ab75c3877f3f48"
+    },
+    {
+      "id": "code_health:finding_bc14e931dfc214b31489",
+      "file": "tests/portfolio-image-slots.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "dc6d5bda3eb2189551d6c6ccdb844e569498d47906d412e241ab75c3877f3f48"
+    },
+    {
+      "id": "code_health:finding_d9e3aa8549d422bd8ba6",
+      "file": "tests/portfolio-image-slots.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_de2a45ef8496cb5def8b",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "a73ffcce84a8059051e6a0542f060411607ee3359d8045a8a038e90187fcd800"
+    },
+    {
+      "id": "code_health:finding_0f253ac6e38e7de051fd",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "8d969728a399774b3f0b94e8070a5b385624fde73ca5e288ad6389c8e9ed3eba"
+    },
+    {
+      "id": "code_health:finding_e2c56e95f50025c0801d",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "b5c854fd3ead24061ba75415b2567cb97025621a2cd6d400c2789d49c8d881d0"
+    },
+    {
+      "id": "code_health:finding_47518767dfd74fe99a5d",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "4b47c3c0b03f84d8ccacf2aeae45a9c3d12f8a15616cbb15b1142b5c3f8d16ea"
+    },
+    {
+      "id": "code_health:finding_a7e57e07b1ce3ae4c3db",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "218da803dfa20e80d34348fdc645e2c7891e1519b47bfad526d9c8ab98b7efa1"
+    },
+    {
+      "id": "code_health:finding_b037ca650ba9936373c6",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "b6848ae8d6962f7442638c1715d0b58e37fe9aa0de13dc9866f8c58fd776d88c"
+    },
+    {
+      "id": "code_health:finding_85ffbca8e7a0cc8a34fc",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "8037f52d873b94be79bd38ea4c1640862b8d1cd473f1668a8901f3c44232b37a"
+    },
+    {
+      "id": "code_health:finding_de10672cfd74b3ab0eb7",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "a3a2eb811eb58d5cc971f72db44e48dd3dc2f83e795c3c1986346efad169a59b"
+    },
+    {
+      "id": "code_health:finding_68014df55b55b1e6b5c6",
+      "file": "tests/portfolio-replacement.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "77e5e368a5ad5ddac7ffa72f12c74ba7706683a8c225d0602ad1744798688225"
+    },
+    {
+      "id": "code_health:finding_069f504cc8d1622d62b8",
+      "file": "tests/portfolio-replacement.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "77e5e368a5ad5ddac7ffa72f12c74ba7706683a8c225d0602ad1744798688225"
+    },
+    {
+      "id": "code_health:finding_921b5f601d9bf89f7151",
+      "file": "tests/portfolio-replacement.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_85bb94a51527f7c5f1e2",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "a775d476be451df469275cdccca3af17a88a6c0441af219fbff6777d5474637c"
+    },
+    {
+      "id": "code_health:finding_b24caf94ce286264a74d",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "a2726c3111491a4585ce07aa2eb818d9fa0214df924c17c81d44dafea4cc506b"
+    },
+    {
+      "id": "code_health:finding_dd499f31fc7eb92a6266",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_922daa780754711de593",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "d40e5af7d4f5c69d23239e023c67bf7c3cc437d2bec7bd0c9e6ba0c57ee5d187"
+    },
+    {
+      "id": "code_health:finding_78862c658763199794b0",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "8a9c826220a3a5a179b4ca6064e03b5abcfa7d89a1c17fe99156394979e16969"
+    },
+    {
+      "id": "code_health:finding_aa964992afa4814d7c64",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "d40e5af7d4f5c69d23239e023c67bf7c3cc437d2bec7bd0c9e6ba0c57ee5d187"
+    },
+    {
+      "id": "code_health:finding_9dfe63deb01f1eb80636",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "8a9c826220a3a5a179b4ca6064e03b5abcfa7d89a1c17fe99156394979e16969"
+    },
+    {
+      "id": "code_health:finding_e1cab3eb1c1950913fb5",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_9dc817c0443cf17b94cf",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "0695ceb3e05ca94cb1fb20ae34475eb5f5098d5dee4538d0a6a400c3257cc124"
+    },
+    {
+      "id": "code_health:finding_a6e8de9e2a9b5306df36",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "0695ceb3e05ca94cb1fb20ae34475eb5f5098d5dee4538d0a6a400c3257cc124"
+    },
+    {
+      "id": "code_health:finding_c23168ca6063f958c85e",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "3334bb7517ce5f20387c7159b7076ec24febfe41995afb1f7a076741b0e7839f"
+    },
+    {
+      "id": "code_health:finding_dffe523407bccdaa39b7",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "c80d9bed228c6199ce03f91e9b67d1263d0413080b0de6aab5a5254723ffebc8"
+    },
+    {
+      "id": "code_health:finding_d7654f18e4ed451483c2",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "complex_conditional",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "df5c85a6fc61071b5684743742133320030e88cca196fe2fc002fa2730cef0b7"
+    },
+    {
+      "id": "code_health:finding_8b18d3effd9cb43c28e2",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "4938e902b61e005c86ea530b1ab5e4e8f7ffe130b600833409ab5d74410475bb"
+    },
+    {
+      "id": "code_health:finding_7e310eb3c5642cd8f8bd",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "1e3d513e8f8bb1a1ba00a4ed7d560e5200e82ed3d3f8b45209fffec1cd6c4e2d"
+    },
+    {
+      "id": "code_health:finding_ba7fe4ab642953d3d46e",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_aaf3e41cb85232d6ad7f",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2d52e3351a489dc1759c9b9cf2fcfb16b89f3dadbcd87705253c1ffbfce63b2c"
+    },
+    {
+      "id": "code_health:finding_3aa6fa417f0ed2ab046c",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "75b53d1bccef9c9819d70bd15598e34ba981957554d87770b7a220060fe474f8"
+    },
+    {
+      "id": "code_health:finding_562114464320b22afa93",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "1d48ed789724c09237922b7102ba49edf16f931959175810a276570f9c52601f"
+    },
+    {
+      "id": "code_health:finding_93e4866b7c6511aa7410",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "5fb54ec8929c3a763205bc397038f5b7e538155008c28224063af6cd4f698a95"
+    },
+    {
+      "id": "code_health:finding_cd13f605cdef84dd5e3f",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "bumpy_road",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2d52e3351a489dc1759c9b9cf2fcfb16b89f3dadbcd87705253c1ffbfce63b2c"
+    },
+    {
+      "id": "code_health:finding_b3b1206783e48f8fad98",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "io_in_loop",
+      "proof": "Source path and worker evidence reviewed; root graph/rank not regenerated.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_466fd884621dd6f44353",
+      "file": "tests/student-selection-storage.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "performance:perf3_39b5fabbe5976788df09",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "io_in_loop",
+      "proof": "Source path and worker evidence reviewed; root graph/rank not regenerated.",
+      "function_context_sha256_lf": null
+    },
+    {
+      "id": "code_health:finding_a56e02cc5c89d2eb6e9e",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "db5be6133dc16c636b49bdb5f13f8c6141886c2d84292fe4c87d5d2c53d77146"
+    },
+    {
+      "id": "code_health:finding_bfb4902f382649ef8306",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "11572dcf61f79364bf1fba05a6cd65b406771ff48f0a094b197d1cae5a5897bc"
+    },
+    {
+      "id": "code_health:finding_76d928a3e5e7dc43f8da",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "b3f0c1c88764d3aae6a52f97c6f9b97fa615559eb1131c0dd840210987457c83"
+    },
+    {
+      "id": "code_health:finding_0f7b96782dc7eb4598cd",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "cd8bfe2e744c2c7bf9bd2a11e366131251ce2bb5ac61a9334edc31f3dc77c5b4"
+    },
+    {
+      "id": "code_health:finding_5e09ee8dca0ad0327ab1",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "io_in_loop",
+      "proof": "Source path and worker evidence reviewed; root graph/rank not regenerated.",
+      "function_context_sha256_lf": "42e4d19bfccb8d8ba6b4383906102d496e1bf3b9bb294eecb2e767e908f03e2e"
+    },
+    {
+      "id": "code_health:finding_64fc231abf55dad4b2a3",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "3f2b615a2c11ad2d766f5cc11e36ca9ae5bd058acf75da78de53b2704ce9e942"
+    },
+    {
+      "id": "code_health:finding_38aaaf154679c0fea42f",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "01808bda6174da03f7514c6dcab193b5638bf67cab43054da1c4cf4cdec404dd"
+    },
+    {
+      "id": "code_health:finding_fa6408b6a784d14b37e2",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "b758c21907e1b82073a458cd52066320b61fde387236b512449c629c42f4e202"
+    },
+    {
+      "id": "code_health:finding_2a2f19c7aa24339c754c",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "608d6d9f4302ebfb23e5436baaa0a285ea3c4d20e441b14a4423cde8ffc5c8dc"
+    },
+    {
+      "id": "code_health:finding_11afb690652ff9e5bc9f",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "310820295478a7128e079d37f33d34e999de56cfbd11f09741d96f5d68b4b494"
+    },
+    {
+      "id": "code_health:finding_33ae5b7c5ae2fbe3f497",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2536f818ec845aff76700592761393cd523ca5ce9006a5d177e7311d096a4496"
+    },
+    {
+      "id": "code_health:finding_bc05e1f85a0cea31af89",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "64014c9565d08cb8ef366bf26cae570629422f8b6f048e5e560176c2850bdaf6"
+    },
+    {
+      "id": "code_health:finding_71b92201355099acf458",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "01808bda6174da03f7514c6dcab193b5638bf67cab43054da1c4cf4cdec404dd"
+    },
+    {
+      "id": "code_health:finding_3515e0fc6ceb77656ea4",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d"
+    },
+    {
+      "id": "code_health:finding_873694a833229c403503",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d"
+    },
+    {
+      "id": "code_health:finding_c028bb03063849984a60",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d"
+    },
+    {
+      "id": "code_health:finding_e127d96b7167f455505c",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d"
+    },
+    {
+      "id": "code_health:finding_887a8ae401645401acd2",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "7794057b3926652bf09e66e2d1267dad8dcaf286f2596263b1119129cf74ac2f"
+    },
+    {
+      "id": "code_health:finding_1c0c0ee54d1cd1d54d8b",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "905567f8023c2f5bcb2e4545289b1e731c80f830fdba4f1bad57b50a1f575da7"
+    },
+    {
+      "id": "code_health:finding_ecf2fa117e79b21b7feb",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "dc13c409d8c2357fcc58a501ad9357ee17fbcae4ea9465441e946f259643691b"
+    },
+    {
+      "id": "code_health:finding_28419b21daeeea84383d",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "24e976251bd6ff7c93db4a0a17e42526c3d5987e9d7e5afb6cb269f3919f0d23"
+    },
+    {
+      "id": "code_health:finding_005af86642206a3f69cb",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "a3e1eb428683c7e1c2854fdd57a3c43c43c31e31af940089e8174dce18df463d"
+    },
+    {
+      "id": "code_health:finding_6e57e46cfd771706f50b",
+      "file": "tests/feedback-compatibility.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "346ddd1cbb2e19d406b000d5391e6601a9716911bf7880551e2f8db626d4fa03"
+    },
+    {
+      "id": "code_health:finding_a837428ede3cbf0c9096",
+      "file": "tests/feedback-compatibility.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "346ddd1cbb2e19d406b000d5391e6601a9716911bf7880551e2f8db626d4fa03"
+    },
+    {
+      "id": "code_health:finding_3a510389b4b1a431469d",
+      "file": "tests/main-app-health.browser.cjs",
+      "marker": "nested_complexity",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "db99c8ca4d34cd27ba336308bac7ff9a79458ee9916456d3aaad5a5cc66cdc46"
+    },
+    {
+      "id": "code_health:finding_11a556def902a383e11c",
+      "file": "tests/main-app-health.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "db99c8ca4d34cd27ba336308bac7ff9a79458ee9916456d3aaad5a5cc66cdc46"
+    },
+    {
+      "id": "code_health:finding_e130e9384515730f3349",
+      "file": "tests/neatness-boundaries.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "b3520d05939c405e0c220e28d831060eeaf53c24fd106574fafdaa8e144333ad"
+    },
+    {
+      "id": "code_health:finding_039bf6f4e90b92d0d600",
+      "file": "tests/neatness-boundaries.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "b3520d05939c405e0c220e28d831060eeaf53c24fd106574fafdaa8e144333ad"
+    },
+    {
+      "id": "code_health:finding_3e06106d467f48269878",
+      "file": "tests/neatness-scoring.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2048412cb956c55f2df6d2a023733c43e7d53b850f2c22df904dd461d0f60459"
+    },
+    {
+      "id": "code_health:finding_7f05dea449294f08bb0f",
+      "file": "tests/neatness-scoring.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2048412cb956c55f2df6d2a023733c43e7d53b850f2c22df904dd461d0f60459"
+    },
+    {
+      "id": "code_health:finding_334957713e49cc25a47b",
+      "file": "tests/neatness-scoring.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2048412cb956c55f2df6d2a023733c43e7d53b850f2c22df904dd461d0f60459"
+    },
+    {
+      "id": "code_health:finding_41bebd95e154dbeb1101",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "65e53cdff9bd7e45e59e6a13699b4a6eafd47702f1321e3f3d6cc0e5938f0315"
+    },
+    {
+      "id": "code_health:finding_67ef791c85e9c929ff70",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "8dfdbf2e362de07f51ef813fa1364806ffa0b82f57d1ea2095f071327f81c0e6"
+    },
+    {
+      "id": "code_health:finding_89608ebb8544f121b620",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "f847d72b75be05b69af617cd7ebcd161fefe3d36126f1084cfd39bdb6b843c4a"
+    },
+    {
+      "id": "code_health:finding_cee983103af818acd1ab",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "2434d6cd1da740a14867a8b0cc48fc835a62d2879c6a25803bfcae113f1fc8ed"
+    },
+    {
+      "id": "code_health:finding_f832cc5b27c3d52f19ac",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "ff14a772505e4ead5ab46b2516fdbd6b4a69fe8246e0186c4190a9a28cef01a6"
+    },
+    {
+      "id": "code_health:finding_ac3dbb7c835d1db56e3a",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "65e53cdff9bd7e45e59e6a13699b4a6eafd47702f1321e3f3d6cc0e5938f0315"
+    },
+    {
+      "id": "code_health:finding_4ef2ddbf4e328909aa45",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "3b18f59c3672b26fd0f04d85e8ef12c7f7c810b2f664e2c09032600ff88e8bf5"
+    },
+    {
+      "id": "code_health:finding_e5b1b00ec32579307428",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "1c561c6e9208572c1951e0380c17552baa6ec99b08ff7af4fea388cf074e65e0"
+    },
+    {
+      "id": "code_health:finding_1d28d7d4d96b11c9fde1",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "complex_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "76d54f85a63f45b3d0d78e63046c6ed0ca894f19ad92901d0d8c0bcc9b225fcb"
+    },
+    {
+      "id": "code_health:finding_066a2edc5c549df655fa",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "large_method",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "12253563c8450ed34f299807997690e51fa0cf971d18e0e5709b8d23b33f4a53"
+    },
+    {
+      "id": "code_health:finding_6d349b0d589e2b547c8e",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "dry_violation",
+      "proof": "Actual detector replay matched emitted fields and span.",
+      "function_context_sha256_lf": "a900467986846c6ed2da04aef0e59274acd5e54fc98ebff4174dc21fe18c2e55"
+    },
+    {
+      "id": "performance:perf3_84dba4db32722c23655b",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "io_in_loop",
+      "proof": "Source path and worker evidence reviewed; root graph/rank not regenerated.",
+      "function_context_sha256_lf": "42e4d19bfccb8d8ba6b4383906102d496e1bf3b9bb294eecb2e767e908f03e2e"
+    }
+  ],
+  "file_pins": {
+    "tests/portfolio-index.browser.cjs": {
+      "raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+      "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8"
+    },
+    "tests/split-storage.browser.cjs": {
+      "raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b",
+      "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0"
+    },
+    "tests/portfolio-sync.browser.cjs": {
+      "raw": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066",
+      "normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0"
+    },
+    "tests/settings-deletions-sync.browser.cjs": {
+      "raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+      "normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+    },
+    "tests/portfolio-replacement.browser.cjs": {
+      "raw": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5",
+      "normalized_lf": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33"
+    },
+    "tests/portfolio-image-slots.browser.cjs": {
+      "raw": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974",
+      "normalized_lf": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848"
+    },
+    "tests/student-selection-storage.browser.cjs": {
+      "raw": "a507351f3c4d5485ffc4240153c42a2765dbb03fdc20bf385b96acea03ff7115",
+      "normalized_lf": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b"
+    },
+    "tests/record-identity.browser.cjs": {
+      "raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762",
+      "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d"
+    },
+    "tests/session-retention.browser.cjs": {
+      "raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de",
+      "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4"
+    },
+    "tests/analysis-policy.browser.cjs": {
+      "raw": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2",
+      "normalized_lf": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2"
+    },
+    "tests/openrouter-admission.browser.cjs": {
+      "raw": "f838ecef4bb64fd03ca8c74754d09e3bfd5015d35c3e8366a6f0e44455a71003",
+      "normalized_lf": "3480997ff22d1a0ec51e998c685dcee50f244b810fc1cb2814f78c0c8469f4ea"
+    },
+    "tests/analysis-pipeline.browser.cjs": {
+      "raw": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+      "normalized_lf": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155"
+    },
+    "tests/detailed-parser.browser.cjs": {
+      "raw": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+      "normalized_lf": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836"
+    },
+    "tests/correction-performance.browser.cjs": {
+      "raw": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+      "normalized_lf": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449"
+    },
+    "tests/openrouter-failures.browser.cjs": {
+      "raw": "d5b20c0095cbe8d1c3531e8ba548016886e0f0c235c003f9da28cd464595673d",
+      "normalized_lf": "04f0704a6b880cc3476fe1eac90ec55374cd341ce0fbf3ff3bef7d917da905dc"
+    },
+    "tests/neatness-scoring.browser.cjs": {
+      "raw": "a61c68eaeb8ae88b5c9bfc86690f4d73fe7eb763312d768b57ca44d71e4a32da",
+      "normalized_lf": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e"
+    },
+    "tests/feedback-compatibility.browser.cjs": {
+      "raw": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+      "normalized_lf": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "raw": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+      "normalized_lf": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f"
+    },
+    "tests/neatness-boundaries.browser.cjs": {
+      "raw": "a49615fd6124e05ebb1fdbaa15ff122c972dbfadb0ce5633493d6385acbacdf7",
+      "normalized_lf": "70b0721d739989dddde3fe060b3dbf143e9533bda4f510998ac9866a48be029f"
+    }
+  },
+  "counts": {
+    "bumpy_road": 1,
+    "complex_conditional": 1,
+    "complex_method": 44,
+    "dry_violation": 14,
+    "io_in_loop": 4,
+    "large_method": 12,
+    "nested_complexity": 5
+  },
+  "coordinator_acceptance": {
+    "at": "2026-10-16T01:39:59.318581+00:00",
+    "report_ids": [
+      "repair-054",
+      "repair-055"
+    ],
+    "record_count": 81,
+    "actual_detector_replays": 77,
+    "source_only_io_reviews": 4,
+    "limits": "No source edits, runtime execution or scanner closure; historical clone archive only."
+  }
+}

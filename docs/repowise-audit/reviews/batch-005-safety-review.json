@@ -1,0 +1,481 @@
+{
+  "review_id": "batch-005-safety-review",
+  "decision": "no_blocker_found",
+  "baseline_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "receipt_source_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "inspected_git_commit_begin": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "inspected_git_commit_end": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "source_receipt": {
+    "path": "work/repowise-coordinator/batch-005-review-source-pins.json",
+    "sha256_at_review_start": "2f9c4994bd5f6be3a69aa803a9988d73507b951171589893590a71634fbb6f75",
+    "code_files": 91,
+    "config_files": 1,
+    "all_receipt_raw_and_lf_hashes_matched_at_begin_and_end": true,
+    "extra_index_html_raw_and_lf_unchanged_during_review": true
+  },
+  "inspected_target_hashes": {
+    "js/app/00-storage-sync-patches.js": {
+      "begin": {
+        "raw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+        "normalized_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+      },
+      "end": {
+        "raw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+        "normalized_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+      }
+    },
+    "js/app/10-main-app.js": {
+      "begin": {
+        "raw": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+        "normalized_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+      },
+      "end": {
+        "raw": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+        "normalized_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+      }
+    },
+    "tests/crop-ownership.browser.cjs": {
+      "begin": {
+        "raw": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "normalized_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608"
+      },
+      "end": {
+        "raw": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "normalized_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608"
+      }
+    },
+    "tests/portfolio-html.browser.cjs": {
+      "begin": {
+        "raw": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+        "normalized_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4"
+      },
+      "end": {
+        "raw": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+        "normalized_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4"
+      }
+    },
+    "js/app/photo-crop.js": {
+      "begin": {
+        "raw": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+        "normalized_lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf"
+      },
+      "end": {
+        "raw": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+        "normalized_lf": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf"
+      }
+    },
+    "index.html": {
+      "begin": {
+        "raw": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+        "normalized_lf": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+      },
+      "end": {
+        "raw": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607",
+        "normalized_lf": "853d3e75f9baa423381c7578b0d8228d8ced52b11543228bb341b7f6aba67607"
+      }
+    },
+    "scripts/case-report-suites.json": {
+      "begin": {
+        "raw": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+        "normalized_lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff"
+      },
+      "end": {
+        "raw": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+        "normalized_lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff"
+      }
+    }
+  },
+  "reviewed_final_diff_sha256": "64a8c992ba656ea9c2ab8add21a8189579664f530d3d355603a462d027f3691e",
+  "findings": [],
+  "blockers": [],
+  "required_source_changes": [],
+  "accepted_changes": [
+    {
+      "repair_id": "repair-046",
+      "function": "openStudentPortfolio",
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:7168",
+        "js/app/00-storage-sync-patches.js:7170",
+        "js/app/00-storage-sync-patches.js:7176",
+        "js/app/00-storage-sync-patches.js:7178",
+        "js/app/00-storage-sync-patches.js:7179",
+        "js/app/00-storage-sync-patches.js:7181",
+        "js/app/10-main-app.js:27",
+        "js/app/10-main-app.js:49",
+        "js/app/10-main-app.js:52",
+        "js/app/10-main-app.js:53"
+      ],
+      "assessment": "The roster name button invokes the actual function. refreshPortfolioDropdown populates stale options before setting the target; switchTab then preserves that valid selection during its own refresh and invokes the existing renderer once. Removing explicit render/export updates avoids double rendering because refresh and render already update export state. The select object remains the same; refresh only replaces option children.",
+      "caller": [
+        "js/app/10-main-app.js:65",
+        "js/app/10-main-app.js:73",
+        "js/app/10-main-app.js:78"
+      ],
+      "function_span": [
+        7168,
+        7187
+      ],
+      "function_sha256_normalized_lf": "a407a8d75081d2bbee4580808d9f9e0dc9407d7fdd750b1cc6710ce093450abe"
+    },
+    {
+      "repair_id": "repair-046",
+      "scope": "optional DOM and storage",
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:7144",
+        "js/app/00-storage-sync-patches.js:7146",
+        "js/app/00-storage-sync-patches.js:7155",
+        "js/app/00-storage-sync-patches.js:7158",
+        "js/app/00-storage-sync-patches.js:7163",
+        "js/app/00-storage-sync-patches.js:7172",
+        "js/app/00-storage-sync-patches.js:7182",
+        "js/app/00-storage-sync-patches.js:7184",
+        "js/app/00-storage-sync-patches.js:7616",
+        "js/app/00-storage-sync-patches.js:7618",
+        "js/app/10-main-app.js:34",
+        "js/app/10-main-app.js:35"
+      ],
+      "assessment": "Absent tool select remains tolerated. Absent portfolio select still opens the Portfolio panel and safely skips content/scroll; the existing renderer returns. Missing scroll section remains a no-op. Selection persistence remains best effort with its prior bytes retained on failure. Required tab-shell elements are guarded by the unchanged switchTab and are present in shipped HTML; the repair does not promise rendering with a missing shell. Two cheap dropdown refreshes are an accepted cost of preserving correct target selection before the one render."
+    },
+    {
+      "repair_id": "repair-046",
+      "scope": "writing/crop/pending/media ownership",
+      "anchors": [
+        "js/app/00-storage-sync-patches.js:7170",
+        "js/app/00-storage-sync-patches.js:7171",
+        "js/app/10-main-app.js:596",
+        "js/app/photo-crop.js:1",
+        "js/app/photo-crop.js:3",
+        "js/app/photo-crop.js:4",
+        "js/app/photo-crop.js:183",
+        "js/app/photo-crop.js:184",
+        "js/app/00-storage-sync-patches.js:7053",
+        "js/app/00-storage-sync-patches.js:7057"
+      ],
+      "assessment": "The only owner/write operations remain the existing selectedStudent/tool selection and best-effort selected-student storage update. Navigation adds no writing/photo/OCR/report/pending/source clear. Different-student navigation still closes the crop session before changing owner; same-student navigation retains it. Crop session identity and pending/media ownership checks are unchanged.039 current-work snapshot includes runtime/DOM student and images, so a genuinely changed selection/queue while reassessment confirmation is held causes its existing retry guard to reject, rather than granting a new overwrite path."
+    },
+    {
+      "repair_id": "repair-045",
+      "function": "bindPreviewReorderHandlers drop callback",
+      "anchors": [
+        "js/app/10-main-app.js:3522",
+        "js/app/10-main-app.js:3533",
+        "js/app/10-main-app.js:3536",
+        "js/app/10-main-app.js:3538",
+        "js/app/10-main-app.js:3539",
+        "js/app/10-main-app.js:3542",
+        "js/app/10-main-app.js:3543",
+        "js/app/10-main-app.js:3544",
+        "js/app/10-main-app.js:3550",
+        "js/app/10-main-app.js:3554"
+      ],
+      "assessment": "The new clauses reject parsed source or target indices outside the current queue before geometry, splice, queue replacement or OCR invalidation. The prior NaN/equality checks, parseInt behavior, drag-index fallback and terminal cleanup remain unchanged. Valid zero and last-element indices are retained. This prevents the demonstrated negative-index mutation and out-of-range undefined insertion without broadening accepted input.",
+      "callback_span": [
+        3522,
+        3576
+      ],
+      "callback_sha256_normalized_lf": "cbc194224048c8135a36e688568b92ed5310be7b32482e88f8673af77d3e7237"
+    },
+    {
+      "repair_id": "repair-045",
+      "scope": "direction and valid mutation",
+      "anchors": [
+        "js/app/10-main-app.js:3551",
+        "js/app/10-main-app.js:3552",
+        "js/app/10-main-app.js:3553",
+        "js/app/10-main-app.js:3556",
+        "js/app/10-main-app.js:3557",
+        "js/app/10-main-app.js:3565",
+        "js/app/10-main-app.js:3569",
+        "js/app/10-main-app.js:3572",
+        "js/app/10-main-app.js:2940",
+        "js/app/10-main-app.js:2941"
+      ],
+      "assessment": "Desktop X versus mobile Y half-target insertion, source-index adjustment and final clamping are byte-identical after the guard. Valid reorder still retains the photo objects/bytes/revisions, clears OCR caches, updates primary-photo state and closes an obsolete crop session through the unchanged syncSelectedImageState ownership check. Rejected drops perform only drag-class/index cleanup. Pending references and durable writing are not modified by the added guard."
+    }
+  ],
+  "evidence_review": {
+    "interpretation": "Counts below describe existing hash-verified worker artifacts and inspected assertions. This reviewer ran no tests and makes no independent pass claim.",
+    "worker_reports": {
+      "repair-045-photo-reorder.json": {
+        "sha256": "57609c114007b35783cfd2c48194dadddc01ea2e23f926f594a94b07ae4d51b1",
+        "referenced_artifacts_hash_verified": 18
+      },
+      "repair-046-roster-navigation.json": {
+        "sha256": "02d162977fdea732390fe93772ba6c4d424c027b39ac1b199b6ebd7feb550a3a",
+        "referenced_artifacts_hash_verified": 15
+      }
+    },
+    "045_negative": {
+      "receipt": {
+        "started_at": "2026-10-16T00:59:23.2674719+00:00",
+        "ended_at": "2026-10-16T01:00:09.0671360+00:00",
+        "exit_code": 1,
+        "main_sha256": "5be2b687aedf96d6db06893db6f3e2f39884ff43c42be0b392e8d0bce504c895",
+        "test_sha256": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608"
+      },
+      "total_cases": 51,
+      "failed_names": [
+        "drop-source-negative",
+        "drop-source-past-end",
+        "drop-target-negative",
+        "drop-target-past-end",
+        "drop-stale-after-remove"
+      ],
+      "test_hash_same_as_current_and_after": true
+    },
+    "045_positive": {
+      "recorded_case_count": 51,
+      "all_recorded_cases_true": true,
+      "new_drop_cases": 13,
+      "old_crop_cases": 38,
+      "case_report_sha256": "55baa9328444e84389e514705aec3c640801d7a53e741959c803a002e24fad17"
+    },
+    "046_negative": {
+      "receipt": {
+        "started_at": "2026-10-16T01:14:50.5490253+00:00",
+        "ended_at": "2026-10-16T01:15:16.8460323+00:00",
+        "exit_code": 1,
+        "source_sha256": "ca88093125284d2b7cb9efb9e10f5cbcfea0728c683e70bc570be831a4af6a6f",
+        "test_sha256": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4"
+      },
+      "total_checks": 58,
+      "failed_checks": [
+        "roster desktop: real name click opens visible Portfolio tab/panel",
+        "roster mobile: real name click opens visible Portfolio tab/panel",
+        "roster same-student: real name click opens visible Portfolio tab/panel",
+        "roster stale-dropdown: real name click opens visible Portfolio tab/panel",
+        "roster stale-dropdown: target and dropdown populate with one correct render",
+        "roster missing-tool-select: real name click opens visible Portfolio tab/panel",
+        "roster missing-portfolio-select: real name click opens visible Portfolio tab/panel",
+        "roster missing-scroll-section: real name click opens visible Portfolio tab/panel",
+        "roster selection-write-failure: real name click opens visible Portfolio tab/panel"
+      ],
+      "test_hash_same_as_current_and_after": true
+    },
+    "046_positive": {
+      "recorded_checks": 58,
+      "all_recorded_checks_true": true,
+      "navigation_scenarios": [
+        {
+          "name": "desktop",
+          "owner": "Bob",
+          "selection": "Bob",
+          "renders": [
+            "Bob"
+          ],
+          "cropCloses": 1,
+          "scrolls": 1,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "mobile",
+          "owner": "Bob",
+          "selection": "Bob",
+          "renders": [
+            "Bob"
+          ],
+          "cropCloses": 1,
+          "scrolls": 0,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "same-student",
+          "owner": "Alice",
+          "selection": "Alice",
+          "renders": [
+            "Alice"
+          ],
+          "cropCloses": 0,
+          "scrolls": 1,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "stale-dropdown",
+          "owner": "Bob",
+          "selection": "Bob",
+          "renders": [
+            "Bob"
+          ],
+          "cropCloses": 1,
+          "scrolls": 1,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "missing-tool-select",
+          "owner": "Bob",
+          "selection": "Bob",
+          "renders": [
+            "Bob"
+          ],
+          "cropCloses": 1,
+          "scrolls": 1,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "missing-portfolio-select",
+          "owner": "Bob",
+          "selection": null,
+          "renders": [
+            null
+          ],
+          "cropCloses": 1,
+          "scrolls": 0,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "missing-scroll-section",
+          "owner": "Bob",
+          "selection": "Bob",
+          "renders": [
+            "Bob"
+          ],
+          "cropCloses": 1,
+          "scrolls": 0,
+          "protectedStateKept": true,
+          "sameReferences": true
+        },
+        {
+          "name": "selection-write-failure",
+          "owner": "Bob",
+          "selection": "Bob",
+          "renders": [
+            "Bob"
+          ],
+          "cropCloses": 1,
+          "scrolls": 1,
+          "protectedStateKept": true,
+          "sameReferences": true
+        }
+      ],
+      "case_report_sha256": "d2d841874fd69acd49f2cb5b39cec8572cbc51265936e0afda46cba4e308b538"
+    },
+    "test_oracles": [
+      {
+        "file": "tests/crop-ownership.browser.cjs",
+        "anchors": [
+          206,
+          222,
+          239,
+          243,
+          255,
+          265,
+          267,
+          268,
+          271,
+          272,
+          275,
+          276,
+          277,
+          301,
+          315
+        ],
+        "assessment": "Actual bound dragstart/drop listeners receive native DataTransfer/DragEvent objects. Cases explicitly inject malformed payload/target indices or remove a queued image through the real Remove handler. Rejection checks complete state/object/promise references; valid cases compare exact intended queue, preserved data and OCR-only invalidation. Errors are checked after a queued task and failed assertions feed the final failure list."
+      },
+      {
+        "file": "tests/portfolio-html.browser.cjs",
+        "anchors": [
+          155,
+          181,
+          183,
+          184,
+          185,
+          190,
+          195,
+          213,
+          214,
+          215,
+          216,
+          217,
+          219,
+          223,
+          226,
+          233,
+          290
+        ],
+        "assessment": "The navigation test clicks the real Admin/roster/name buttons. Renderer/closeCropModal/scroll spies delegate to native functions. It asserts panel/tab visibility, correct single render/selection/options/export state, exact protected bytes/references, crop-close calls and responsive scrolling. Missing DOM and storage faults are explicit controlled seams. All old26 security/export checks remain unchanged in the reviewed diff."
+      }
+    ]
+  },
+  "accepted_limits": [
+    {
+      "scope": "045 stale gesture semantics",
+      "limit": "Range validation is not identity validation. A queue change leaving an old index still in range is outside this repair; no claim that every stale gesture now moves its original photo is warranted. This residual behavior predates the diff.",
+      "blocking": false
+    },
+    {
+      "scope": "045 native event reachability",
+      "limit": "A separate mouse-driven headless attempt did not reach dragstart. The evidence establishes controlled native event/queue-change boundary failures, not a reproduced trusted human stale-drag journey. Worker report states this accurately.",
+      "blocking": false
+    },
+    {
+      "scope": "046 crop confirmation coverage",
+      "limit": "The new roster fixture counts delegated closeCropModal calls but does not hold an actual crop decode during the roster click. Unchanged crop identity/null-session guards and the existing crop suites support the ownership assessment; no fresh combined held-crop/navigation reproduction is claimed.",
+      "blocking": false
+    },
+    {
+      "scope": "046 optional asynchronous rendering",
+      "limit": "Experimental WFT_ASYNC_PORTFOLIO_ACCESS_V1 was not exercised by the new navigation scenarios. Its existing asynchronous race behavior is unchanged; the one-render claim applies to the shipped default synchronous path. Worker report explicitly excludes the experimental path.",
+      "blocking": false
+    },
+    {
+      "scope": "039 existing approval",
+      "limit": "The accepted reassessmentv2 logic was inspected only for interaction with changed selection/queue. Prior040/041 approvals remain its exhaustive review basis; this report does not repeat their full matrix.",
+      "blocking": false
+    }
+  ],
+  "inspected_scopes": [
+    {
+      "file": "js/app/10-main-app.js",
+      "ranges": [
+        "1-103 roster caller/tab refresh order",
+        "2934-2953 primary media/crop invalidation",
+        "3352-3402 reorder identification/move helper",
+        "3420-3577 full delegated preview handlers",
+        "039 reassessment current-work snapshot and unchanged guard interaction"
+      ]
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "ranges": [
+        "7144-7187 dropdown/export/entire changed navigation",
+        "7615-7693 entire renderer",
+        "7049-7079 media upload owner guards"
+      ]
+    },
+    {
+      "file": "js/app/photo-crop.js",
+      "ranges": [
+        "1-48 crop session identity/open/load boundary",
+        "172-204 successful crop completion/close/reset"
+      ]
+    },
+    {
+      "files": [
+        "tests/crop-ownership.browser.cjs",
+        "tests/portfolio-html.browser.cjs"
+      ],
+      "ranges": [
+        "Full added scenarios/helpers/oracles and aggregate diffs; retained old blocks compared to Git00c."
+      ]
+    }
+  ],
+  "limits": [
+    "Read-only correctness review, no source/test/fixture/config/Git/index/tracker/docs/dependency/runtime/chat edits or new agents. Only own scratch and this report written.",
+    "No application/browser/native suites, index/health/import or full gate run by this reviewer. Root owns commit/gate/index decisions.",
+    "All91 code files plus one configuration matched the designated receipt raw/LF at review begin and end; index.html additionally stayed exact during this review. Git metadata/docs may advance independently.",
+    "Worker report and referenced artifacts were read/hash-verified, not regenerated. Evidence observations do not establish live Drive/AI/OAuth behavior, real accounts/data, performance or universal stale-drag identity safety."
+  ],
+  "coordinator_acceptance": {
+    "all_assessments_and_limits_read": true,
+    "source91_and_config_frozen_pins_verified": true,
+    "no_source_changes_required": true,
+    "prior039independent_approvals_retained": true,
+    "full_suite_refresh_publication": "pending"
+  }
+}

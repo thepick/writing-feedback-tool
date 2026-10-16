@@ -1,0 +1,2677 @@
+{
+  "repair_id": "repair-057",
+  "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "observed_git_head_at_report": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "source_hashes_normalized_lf": {
+    "tests/rename-confirmation.browser.cjs": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+    "tests/storage-dialog-keyboard.browser.cjs": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+    "tests/pending-commit-publication.browser.cjs": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+    "tests/deletion-recovery.browser.cjs": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+    "tests/class-deletion.browser.cjs": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae",
+    "tests/preference-integrity.browser.cjs": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+    "js/app/00-storage-sync-patches.js": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+    "js/app/10-main-app.js": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "tests/support/local-app-route.js": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "tests/portfolio-removal.browser.cjs": "35acb1c28a4da150070905bc9ba5b68ec4c04376ff17c0f6aab7499a80196dd8",
+    "tests/deletion-merge.browser.cjs": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2",
+    "tests/storage-integrity.browser.cjs": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+    "tests/image-preparation.browser.cjs": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81",
+    "scripts/run-tests.cjs": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "scripts/check-test-runner.cjs": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/case-report-suites.json": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+    "tests/notebook-guide.browser.cjs": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/detailed-parser.browser.cjs": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+    "tests/archive-connection.browser.cjs": "d80fc58eeca85d7a26333b065b3769e05c864ff74225d2981fb61f8759e0dfb9",
+    "tests/portfolio-image-slots.browser.cjs": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+    "tests/preference-integrity-scenarios.js": "b4f8ccc460fd00ed9f3aef8c69a1f252ab329aea5f22d4f37c961ac2c2c95646",
+    "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c"
+  },
+  "assigned_file_bindings": {
+    "begin": {
+      "tests/rename-confirmation.browser.cjs": {
+        "raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf",
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465"
+      },
+      "tests/storage-dialog-keyboard.browser.cjs": {
+        "raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b",
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4"
+      },
+      "tests/pending-commit-publication.browser.cjs": {
+        "raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86",
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c"
+      },
+      "tests/deletion-recovery.browser.cjs": {
+        "raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+        "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+      },
+      "tests/class-deletion.browser.cjs": {
+        "raw": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48",
+        "normalized_lf": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae"
+      },
+      "tests/preference-integrity.browser.cjs": {
+        "raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+        "normalized_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5"
+      }
+    },
+    "end": {
+      "tests/rename-confirmation.browser.cjs": {
+        "raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf",
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465"
+      },
+      "tests/storage-dialog-keyboard.browser.cjs": {
+        "raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b",
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4"
+      },
+      "tests/pending-commit-publication.browser.cjs": {
+        "raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86",
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c"
+      },
+      "tests/deletion-recovery.browser.cjs": {
+        "raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+        "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+      },
+      "tests/class-deletion.browser.cjs": {
+        "raw": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48",
+        "normalized_lf": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae"
+      },
+      "tests/preference-integrity.browser.cjs": {
+        "raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286",
+        "normalized_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5"
+      }
+    },
+    "all_six_raw_lf_equal_pins_at_both_checks": true,
+    "all_six_normalized_bodies_equal_git_00c_and_git_7558": true
+  },
+  "context_scope_receipts": [
+    {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        150,
+        177
+      ],
+      "sha256_normalized_lf": "a7ce31501ceb9bf250e845a249065e66a66bfcb5089df640862380b2c7f5e35b",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        198,
+        320
+      ],
+      "sha256_normalized_lf": "837338019c63d2a65a5a1e664acd8d68a3feeb1dcd8e1573200a59e64d67c252",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        322,
+        331
+      ],
+      "sha256_normalized_lf": "531cbebfdce4e8e8a4d2ae3d67a8010856935f0abf2f882f079ff0e2d80a38f8",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        333,
+        431
+      ],
+      "sha256_normalized_lf": "15c8f4fdc999dcc70d5e103c60708049eb8e249b9488041c85dc1fc0543922d1",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        433,
+        451
+      ],
+      "sha256_normalized_lf": "2b53587b02bdd6d425b9e2f15b30927854fad65f444abc3757a56ce5e7c30ce1",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/10-main-app.js",
+      "span": [
+        3120,
+        3193
+      ],
+      "sha256_normalized_lf": "c81a1cc10bd1beb66c8ae24c474730c92e1f72228e3568ba9a36d57b3138cabd",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        4735,
+        4793
+      ],
+      "sha256_normalized_lf": "799e15b34b53f7016d9e2797dffe090a54dc4f32be7baf53c5b1568c8080f99d",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        8259,
+        8265
+      ],
+      "sha256_normalized_lf": "699285a987bf63d150aab0a73c8b9a34dd2b74845077bf88c97723379c61a429",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        8267,
+        8308
+      ],
+      "sha256_normalized_lf": "983cc2d8dc360f71e9cb8f42cdd4e497aff97055a7923e0c1d817f185f43df1d",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/00-storage-sync-patches.js",
+      "span": [
+        8345,
+        8383
+      ],
+      "sha256_normalized_lf": "22cfaa5d424df9a313480c903d7afd27cb843b4c4d37aed0f3066f582426dffa",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/storage-recovery.js",
+      "span": [
+        146,
+        207
+      ],
+      "sha256_normalized_lf": "1e837f0edc8645d45736dd1fca0fd4fedcf438b173d01e74ef6e7cfce1244775",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/dialogs.js",
+      "span": [
+        30,
+        111
+      ],
+      "sha256_normalized_lf": "3b031bdfde12d2faa8f1d5a6ff4ca726494a148096f00597b10d5a6cbd413c6b",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "js/app/dialogs.js",
+      "span": [
+        114,
+        230
+      ],
+      "sha256_normalized_lf": "b4ec168e2f7cfe11e4b135e76d7d683adb9751db9d411df193581211f6c1360f",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/support/local-app-route.js",
+      "span": [
+        5,
+        13
+      ],
+      "sha256_normalized_lf": "3ab456e6ba98df4c6a45fea3b9750a9054c24f42edb1bf60fc531b5591a36d6e",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/deletion-recovery.browser.cjs",
+      "span": [
+        7,
+        12
+      ],
+      "sha256_normalized_lf": "2bf6e83be012a8b8846811be86b99adfc1fa5aeb7c4e167f911122c2fc97b909",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/deletion-recovery.browser.cjs",
+      "span": [
+        14,
+        41
+      ],
+      "sha256_normalized_lf": "f63f276c6fce040b40dcadd982ee6ebe022d4c586e8dd97ffc6adcd053d72aae",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/deletion-recovery.browser.cjs",
+      "span": [
+        43,
+        53
+      ],
+      "sha256_normalized_lf": "9f41332a7aeb42fafeab1a00706aed4ffcceb5ca2e06f47c6cff877aec3ca83f",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/deletion-recovery.browser.cjs",
+      "span": [
+        55,
+        79
+      ],
+      "sha256_normalized_lf": "f9d54346d0a3f226e3476d2bcbe31fabab385ad119930f502f57167f1a50a11f",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/deletion-recovery.browser.cjs",
+      "span": [
+        81,
+        116
+      ],
+      "sha256_normalized_lf": "7d0c08e398a0e6940ad7d62a017c472120ed8393ce072069cd4fb9a345d09a6e",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/deletion-recovery.browser.cjs",
+      "span": [
+        118,
+        150
+      ],
+      "sha256_normalized_lf": "06f0bf974255478af448487bf7e57ead272a87611e5db60dfaa472e752162f62",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/preference-integrity.browser.cjs",
+      "span": [
+        6,
+        11
+      ],
+      "sha256_normalized_lf": "11be56cc4920d56a23b4986082f3eca25074b38a0d8bcc58bd2d9c74fa361df1",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/preference-integrity.browser.cjs",
+      "span": [
+        13,
+        43
+      ],
+      "sha256_normalized_lf": "91462ef99c470cf053158db792ea2d39dd3a45908a50cb6c4a2001dfa6059bc1",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "span": [
+        10,
+        20
+      ],
+      "sha256_normalized_lf": "d9bce806ab93c134f7f1ac63ab2e64233b08cb6d8bfa2c4851a1a72f96b23b22",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "span": [
+        22,
+        42
+      ],
+      "sha256_normalized_lf": "fc9e25396d153f333d39ae021c72bb2fca725f131e442903bebeb94b207836b5",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "span": [
+        44,
+        64
+      ],
+      "sha256_normalized_lf": "59739d821ef220b72e440e702e9717b4fdbae9a588ee7617ceee87e0e2e8fcd1",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "span": [
+        95,
+        103
+      ],
+      "sha256_normalized_lf": "17e380630a3016d7bb5d6dc35b36ee7c8c10fa447cf41bf71e3071eb45f27ebb",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    },
+    {
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "span": [
+        163,
+        174
+      ],
+      "sha256_normalized_lf": "cc9638e9ed86c2e8581d1c88694959be26d5c0a52db00d750c851769afdca731",
+      "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+    }
+  ],
+  "verification": {
+    "function_records": 18,
+    "all_stored_function_numeric_and_condition_facts_match_installed_walker": true,
+    "rename_IIFE_exception_state_refusal_replayed": true,
+    "dry_records": 5,
+    "historical_clone_archive": "work/repowise-coordinator/00c-full-clone-replay.json",
+    "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+    "all_dry_detector_fields_and_reported_spans_replayed": true,
+    "clone_generation_or_cochange_rebuilt": false,
+    "io_records": 2,
+    "io_call_site_path_source_verified": true,
+    "io_graph_rank_or_cost_recomputed": false,
+    "function_hash_definition": "SHA256 inclusive walker span, normalized LF, retaining terminal LF. No anonymous ordinal regeneration."
+  },
+  "inspected_scope": {
+    "tests": "All six native test files in full: complete assigned functions, nested scenario/fault setup, caller drivers and actual assertions/failure aggregates.",
+    "application": "Only immutable Git7558 context: main destructive/rename/chooser entries; storage transaction/publication and rollback/recovery readers; complete public dialogs. Hashes and selected scope receipts above. No claim to review all lines of these production files.",
+    "helper": "Complete local-app-route plus existing check-test-runner boundary assertions 51-59.",
+    "preference_scenario_dependency": "Historical script hash bound; inspected reset/check/throw/run contracts 1-58, named native checks and orchestrator 578-595 to connect wrapper aggregation. Not an exhaustive re-review of all 595 scenario lines.",
+    "clone_partners": "Exact archived pair spans read in portfolio-removal, notebook-guide, portfolio-image-slots, detailed-parser and archive-connection; specialized partner behavior not generalized."
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_39972fb07ea171d91fde",
+      "file": "tests/class-deletion.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The real reset, clear and single-delete paths need distinct success expectations, while failed writes must leave writing, roster, selection, markers, dirty counters and sync visibility intact. Keep those branches. The useful deletion is the copied asset route at 11-17, which can use the existing helper with octet-stream fallback.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 19,
+        "nloc": 101,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 87,
+          "end": 95
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae",
+        "current_raw": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "7-107",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "11-17",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "65-76",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "85-102",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level IIFE installs a context route, clicks each real action button, restores its fault and retries."
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:7-107;11-17;65-76;85-102"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 107,
+          "ccn": 10,
+          "cognitive": 19,
+          "max_nesting": 3,
+          "nloc": 101,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            87,
+            95
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          7,
+          107
+        ],
+        "sha256_normalized_lf": "1495fe3214fe79d2f08257bf1c61c88ccd24adb7ae03fef6ec60c840e50c7891",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/class-deletion.browser.cjs:7-107",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_717f58b2083cafd32ed4",
+      "file": "tests/class-deletion.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "This 101-line driver verifies failed native transactions and their repaired retries across three destructive actions. Reset additionally protects portfolio-only Carol and every saved session with tombstones. Remove the duplicated asset server, not the explicit failure/success oracles or reset-only checks; no threshold-driven scenario framework is warranted.",
+      "verified_observation_details": {
+        "nloc": 101,
+        "ccn": 10,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 87,
+          "end": 95
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae",
+        "current_raw": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "7-107",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "18-22",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "44-76",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "87-100",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same IIFE as the complex-method record; one candidate handles both shape observations."
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:7-107;18-22;44-76;87-100"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 107,
+          "ccn": 10,
+          "cognitive": 19,
+          "max_nesting": 3,
+          "nloc": 101,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            87,
+            95
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          7,
+          107
+        ],
+        "sha256_normalized_lf": "1495fe3214fe79d2f08257bf1c61c88ccd24adb7ae03fef6ec60c840e50c7891",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/class-deletion.browser.cjs:7-107",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_1d843be7f50439511641",
+      "file": "tests/class-deletion.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The worst clone 44-58 is similar quota instrumentation/button activation/state capture to portfolio-removal 37-52. Those operations verify different whole-class versus single-session contracts and should remain explicit. A separate real duplicate in this file is the asset route 11-17: reuse the existing helper rather than extract the reported quota/capture span.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 57.55,
+        "clone_pair_count": 23,
+        "worst_clone_lines": 16,
+        "worst_clone_partner": "tests/portfolio-removal.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 7,
+        "symbol": "<anonymous@7>"
+      },
+      "binding_hashes": {
+        "normalized_lf": "f01eef9a6fab2e76c46dd7f622b2771b3c3891114e7c8078cb621bf912c8ebae",
+        "current_raw": "8245edc6e10833ac1398b75c8ff82a7a1f8692f3296910dc466be7750d6b9c48"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "11-17",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "44-63",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "lines": "65-102",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "File-level clone observation stamped on IIFE line 7; quota instrumentation is a native transaction boundary."
+      ],
+      "test_assertion_references": [
+        "tests/class-deletion.browser.cjs:11-17;44-63;65-102"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 57.55,
+        "clone_pair_count": 23,
+        "worst_clone_lines": 16,
+        "worst_clone_partner": "tests/portfolio-removal.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          44,
+          58
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "Reconstructed archived ClonePair/FileContext -> installed DryViolationDetector; no whole corpus rerun",
+        "cochange_limit": "Stored metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/class-deletion.browser.cjs:file-level-setup-or-lifecycle",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_341a107a9fd3d840b37c",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "precise_rollback_fault_injection",
+      "reason": "The six-line storage override counts writes per key, then chooses which required transaction write and subsequent rollback write fail. Portfolio-restore and marker-restore deliberately exercise opposite restoration orders. Splitting these two predicates into helpers would hide the write-phase guard without removing redundant work.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 6,
+        "dispatch_share": 0.0,
+        "symbol_line": 35,
+        "deepest_block": {
+          "start": 37,
+          "end": 37
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+        "current_raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "35-40",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "123-144",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "prepareRecoveryScenario installs the override before holding a native upload and invoking removeStudent or resetCurrentClassData."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-recovery.browser.cjs:35-40;123-144"
+      ],
+      "regression_recommendation": "Retain exact before-images, truthful emergency warning, all-stream and delayed-ack blocking, remaining-key restoration and successful retry.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 35,
+          "end_line": 40,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 6,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            37,
+            37
+          ],
+          "complex_conditions": [
+            {
+              "line": 37,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 38,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          35,
+          40
+        ],
+        "sha256_normalized_lf": "358e5d19905c3fd182cc801b586fbb7d22887fa0ba2ecbd3c64a1b1215c7624c",
+        "enclosing_functions": [
+          {
+            "name": "prepareRecoveryScenario",
+            "start_line": 14,
+            "end_line": 41
+          }
+        ],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/deletion-recovery.browser.cjs:35-40"
+    },
+    {
+      "record_id": "code_health:finding_2c97f89ef33b930e177b",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The archived worst clone 1-7 with notebook-guide is mostly imports/root setup, not a reusable recovery policy. This file nevertheless has a complete duplicated local asset server at 7-12 called at 122; it can delegate to the existing helper with default text/html fallback. Keep the actual downloaded emergency-backup read and recovery assertions.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 17.02,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 7,
+        "worst_clone_partner": "tests/notebook-guide.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "binding_hashes": {
+        "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+        "current_raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "1-12",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "118-150",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "135-144",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level context route calls serveLocalRequest; fs remains required for reading the actual downloaded backup at 138."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-recovery.browser.cjs:1-12;118-150;135-144"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 17.02,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 7,
+        "worst_clone_partner": "tests/notebook-guide.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          1,
+          7
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "Reconstructed archived ClonePair/FileContext -> installed DryViolationDetector; no whole corpus rerun",
+        "cochange_limit": "Stored metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/deletion-recovery.browser.cjs:file-level-setup-or-lifecycle",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_58dcdb6608145bd5ed26",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "precise_portfolio_rollback_guard",
+      "reason": "The condition requires portfolio-restore mode AND either the deletions write or a portfolio write after the first one. The first portfolio mutation must succeed so its later restoration can fail. Removing the key/count grouping would change the fault premise and stop testing partial local state with a blocked delayed acknowledgement.",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 35
+      },
+      "binding_hashes": {
+        "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+        "current_raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "35-40",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "37",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "129-139",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Storage.setItem override inside prepareRecoveryScenario, invoked before the real deletion transaction."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-recovery.browser.cjs:35-40;37;129-139"
+      ],
+      "regression_recommendation": "Preserve mode/key/write-count conjunction and assertions that the in-memory original backup survives and delayed upload cannot acknowledge.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 35,
+          "end_line": 40,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 6,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            37,
+            37
+          ],
+          "complex_conditions": [
+            {
+              "line": 37,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 38,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          35,
+          40
+        ],
+        "sha256_normalized_lf": "358e5d19905c3fd182cc801b586fbb7d22887fa0ba2ecbd3c64a1b1215c7624c",
+        "enclosing_functions": [
+          {
+            "name": "prepareRecoveryScenario",
+            "start_line": 14,
+            "end_line": 41
+          }
+        ],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/deletion-recovery.browser.cjs:35-40"
+    },
+    {
+      "record_id": "code_health:finding_f4e8432758c40a946bbd",
+      "file": "tests/deletion-recovery.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "precise_marker_rollback_guard",
+      "reason": "The marker-restore branch fails the settings transaction write or the deletions restoration only after that key has first been written. It intentionally lets other reverse-order restoration work continue; assertRecoverySyncPaused checks the portfolio was restored despite marker failure. This compact predicate should remain visible.",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 35
+      },
+      "binding_hashes": {
+        "normalized_lf": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3",
+        "current_raw": "2730ef491585df3e130f66726b80a650a860fc8699dcf3b17f5e0700d94aa9b3"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "35-40",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "38",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "lines": "96-106",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same override as the preceding record, with a different partial-write/rollback sequence."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-recovery.browser.cjs:35-40;38;96-106"
+      ],
+      "regression_recommendation": "Keep portfolio restoration despite another key failure, unchanged counters/pending owner and retry clearing recovery only after storage restoration.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 35,
+          "end_line": 40,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 1,
+          "nloc": 6,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            37,
+            37
+          ],
+          "complex_conditions": [
+            {
+              "line": 37,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 38,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          35,
+          40
+        ],
+        "sha256_normalized_lf": "358e5d19905c3fd182cc801b586fbb7d22887fa0ba2ecbd3c64a1b1215c7624c",
+        "enclosing_functions": [
+          {
+            "name": "prepareRecoveryScenario",
+            "start_line": 14,
+            "end_line": 41
+          }
+        ],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/deletion-recovery.browser.cjs:35-40"
+    },
+    {
+      "record_id": "code_health:finding_ae453a360bd95fa61daa",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_failure_isolation",
+      "reason": "Depth five comes from a meaningful two-by-three publication matrix within per-page try/catch/finally. Signature failure must happen before pending cleanup; refresh/read failures after cleanup must preserve committed writing through reload. Catch retains observed evidence and records failure; finally closes each page. Flattening these scopes risks losing isolation or evidence.",
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 14,
+        "cognitive": 55,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 17,
+          "end": 89
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+        "current_raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "7-95",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "11-17",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "59-89",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level IIFE creates a fresh page for each new/replacement and failure combination; native commitPendingPortfolioSync is called at 50."
+      ],
+      "test_assertion_references": [
+        "tests/pending-commit-publication.browser.cjs:7-95;11-17;59-89"
+      ],
+      "regression_recommendation": "Retain all six cases and cleanup/reload assertions. Separate premise-assertion lead 057-L1 is unconfirmed, not a reason to flatten the matrix.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 95,
+          "ccn": 14,
+          "cognitive": 55,
+          "max_nesting": 5,
+          "nloc": 89,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            17,
+            89
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          7,
+          95
+        ],
+        "sha256_normalized_lf": "54f4b88f73c11b13a95f02f7760fc5a6700badbe02a6939a8b8c09d8f9f7478c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/pending-commit-publication.browser.cjs:7-95"
+    },
+    {
+      "record_id": "code_health:finding_462dcc351c71e400ee3d",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_publication_commit_contract",
+      "reason": "The 89-line driver exercises native save/replacement, actual pending removal, last-synced signature and durable reload. Post-clear display/read errors must not trigger transaction rollback, while a missing signature must preserve both original portfolio and durable draft. The differentiated assertions justify the branches; local routing already uses the shared helper.",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 55,
+        "nloc": 89,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 17,
+          "end": 89
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+        "current_raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "7-95",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "19-57",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "59-85",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Native commit at 50 uses a finally-restored storage/prototype and callback fault harness; final failed-case count at 94 determines failure."
+      ],
+      "test_assertion_references": [
+        "tests/pending-commit-publication.browser.cjs:7-95;19-57;59-85"
+      ],
+      "regression_recommendation": "Keep exact replacement tombstone, new/old session IDs, null draft/recovery after success and unchanged bytes before failed signature.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 95,
+          "ccn": 14,
+          "cognitive": 55,
+          "max_nesting": 5,
+          "nloc": 89,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            17,
+            89
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          7,
+          95
+        ],
+        "sha256_normalized_lf": "54f4b88f73c11b13a95f02f7760fc5a6700badbe02a6939a8b8c09d8f9f7478c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/pending-commit-publication.browser.cjs:7-95"
+    },
+    {
+      "record_id": "code_health:finding_4893cf08bb5ae166eb8e",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_multi_phase_fixture",
+      "reason": "The length includes one browser fixture, its six native failure cases, a reload check and explicit failure aggregation. It already shares the asset helper and avoids a new scenario framework. Moving assertions into wrappers solely to drop NLOC would hide the boundary between rollback-eligible failure and post-commit publication.",
+      "verified_observation_details": {
+        "nloc": 89,
+        "ccn": 14,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 17,
+          "end": 89
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+        "current_raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "7-95",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "14",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "49-57",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "59-95",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same IIFE as nested/complex records; six statically specified cases, each independently reported."
+      ],
+      "test_assertion_references": [
+        "tests/pending-commit-publication.browser.cjs:7-95;14;49-57;59-95"
+      ],
+      "regression_recommendation": "Retain browser closure, per-page finally, failed-case count and reload durability; no line-count extraction.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 95,
+          "ccn": 14,
+          "cognitive": 55,
+          "max_nesting": 5,
+          "nloc": 89,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            17,
+            89
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          7,
+          95
+        ],
+        "sha256_normalized_lf": "54f4b88f73c11b13a95f02f7760fc5a6700badbe02a6939a8b8c09d8f9f7478c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/pending-commit-publication.browser.cjs:7-95"
+    },
+    {
+      "record_id": "code_health:finding_c0f177fd0c19241ff17d",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "essential_failure_aggregation",
+      "reason": "The worst seven-line clone is catch/finally, optional report writing, case output and the final failed-case assertion, like portfolio-image-slots 48-54. These are essential lifecycle/reporting steps, not duplicated domain logic. Asset routing is already shared at 4/14. A generic browser/report runner would add coupling for little useful deletion.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 13.83,
+        "clone_pair_count": 3,
+        "worst_clone_lines": 7,
+        "worst_clone_partner": "tests/portfolio-image-slots.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 7,
+        "symbol": "<anonymous@7>"
+      },
+      "binding_hashes": {
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+        "current_raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "4-14",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "88-95",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level driver aggregates every case; catch records observed state, finally closes pages and final assertion fails the suite."
+      ],
+      "test_assertion_references": [
+        "tests/pending-commit-publication.browser.cjs:4-14;88-95"
+      ],
+      "regression_recommendation": "Keep failure evidence and final zero-failure assertion; no helper extraction for this clone.",
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 13.83,
+        "clone_pair_count": 3,
+        "worst_clone_lines": 7,
+        "worst_clone_partner": "tests/portfolio-image-slots.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          88,
+          94
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "Reconstructed archived ClonePair/FileContext -> installed DryViolationDetector; no whole corpus rerun",
+        "cochange_limit": "Stored metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/pending-commit-publication.browser.cjs:file-level-setup-or-lifecycle"
+    },
+    {
+      "record_id": "code_health:finding_489183df2dd8d8744d1c",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "precise_post_clear_read_fault",
+      "reason": "All four gates are necessary: the selected read-after-clear case, actual earlier pending removal, localStorage rather than another Storage instance, and exactly the pending key. They prevent an early/other-key read failure from masquerading as a post-cleanup fault. The three operators form a precise test boundary, not a need for another guard helper.",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 40,
+        "symbol_index": 1
+      },
+      "binding_hashes": {
+        "normalized_lf": "94caca63e3d02d1c25cedb251c716660c9ef510a90689cdd298e879c7e93ee8c",
+        "current_raw": "9c960a662624573601364c23f559f3760a1de6eb144a7d76475bff56e86dae86"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "35-43",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "50-57",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "70-85",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Storage.getItem override in the browser exercise; restored in the native commit finally before result inspection."
+      ],
+      "test_assertion_references": [
+        "tests/pending-commit-publication.browser.cjs:35-43;50-57;70-85"
+      ],
+      "regression_recommendation": "Preserve actual remove tracking, targeted key/store and post-commit draft absence/reload checks; do not broaden the injected failure.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 40,
+          "end_line": 43,
+          "ccn": 5,
+          "cognitive": 4,
+          "max_nesting": 1,
+          "nloc": 4,
+          "bumps": 0,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            41,
+            41
+          ],
+          "complex_conditions": [
+            {
+              "line": 41,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          40,
+          43
+        ],
+        "sha256_normalized_lf": "1729ac895490d73614919c4546d2efb39c06c9536bdc76ee04180ccb5902f1e3",
+        "enclosing_functions": [
+          {
+            "name": "<anonymous@7>",
+            "start_line": 7,
+            "end_line": 95
+          }
+        ],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/pending-commit-publication.browser.cjs:40-43"
+    },
+    {
+      "record_id": "code_health:finding_7041aa95c1ab7c98200b",
+      "file": "tests/preference-integrity.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The worst clone combines serveLocalFile return and browser setup with detailed-parser 174-186. Reuse existing local-app-route for serveLocalFile 6-11, retaining default text/html and root override. Do not merge the preference scenario loader, startup migration failure setup or credential assertions with an unrelated parser driver.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 36.59,
+        "clone_pair_count": 14,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/detailed-parser.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 6,
+        "symbol": "serveLocalFile"
+      },
+      "binding_hashes": {
+        "normalized_lf": "09dcd7dcafdfdce584a088a4f9d930bcd28043e18b7244106ec2a0cbc15068b5",
+        "current_raw": "07cc9d98a6085f88e45adbb81f25b4afce2fd497f2edfd816378a6b4b1875286"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "6-20",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "lines": "22-41",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Both main preference page and startup page route through serveLocalFile at 18/24. The loaded scenario script returns per-case pass results; final report fails on any false pass flag."
+      ],
+      "test_assertion_references": [
+        "tests/preference-integrity.browser.cjs:6-20;22-41"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 36.59,
+        "clone_pair_count": 14,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/detailed-parser.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          10,
+          18
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "Reconstructed archived ClonePair/FileContext -> installed DryViolationDetector; no whole corpus rerun",
+        "cochange_limit": "Stored metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/preference-integrity.browser.cjs:file-level-setup-or-lifecycle",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_ca57037d27555320805f",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@143>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The four-level driver nesting preserves observed evidence, fresh pages and a special failed-settings-read then retry branch. Keep those ownership scopes and the 39-case rename matrix. Its useful simplification is the copied context asset route at 147-152 using the existing helper, not flattening the exception/retry scopes.",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 9,
+        "cognitive": 24,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 143,
+        "deepest_block": {
+          "start": 164,
+          "end": 179
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "143-189",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "147-152",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "158-182",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level IIFE builds specs, invokes setup/dialog/check helpers, then performs a native retry for two flag variants."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:143-189;147-152;158-182"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@143>",
+          "start_line": 143,
+          "end_line": 189,
+          "ccn": 9,
+          "cognitive": 24,
+          "max_nesting": 4,
+          "nloc": 47,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "deepest_block": [
+            164,
+            179
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          143,
+          189
+        ],
+        "sha256_normalized_lf": "a18a80d50dcebd60d29ec7807505d838e1ad46dcca3d156746562039fc23ce0c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:143-189",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_aaf383178b76f56da2be",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "setupRenameFixture",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_rename_fixture_dispatch",
+      "reason": "The fixture dispatches explicit mutations while either text input or confirmation is open: intervening saves, roster/settings changes, source removal/rename, target conflict, corruption and storage faults. Its dispatch share describes this test setup, not a reusable application policy. Shared native entry and snapshot already avoid common-work duplication.",
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 20,
+        "nloc": 70,
+        "dispatch_share": 0.56,
+        "symbol_line": 20,
+        "deepest_block": {
+          "start": 52,
+          "end": 58
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "20-89",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "24-42",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "43-85",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Driver page.evaluate(setupRenameFixture,spec) at 160 starts actual renameStudent; exerciseRenameDialogs triggers renameMutate at the specified held stage."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:20-89;24-42;43-85"
+      ],
+      "regression_recommendation": "Retain both dialog stages, independent hostile names, exact settings-read-once fault, write/read faults and restore callbacks.",
+      "verified_metrics": {
+        "function": {
+          "name": "setupRenameFixture",
+          "start_line": 20,
+          "end_line": 89,
+          "ccn": 19,
+          "cognitive": 20,
+          "max_nesting": 2,
+          "nloc": 70,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.56,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            52,
+            58
+          ],
+          "complex_conditions": [
+            {
+              "line": 52,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          20,
+          89
+        ],
+        "sha256_normalized_lf": "19af0a45487ad852401a373f594f5ca6d92d5328b59430120b2f29cb370cf48c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:20-89"
+    },
+    {
+      "record_id": "code_health:finding_67e0cd1b6a8c92f79e5c",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "exerciseRenameDialogs",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_dialog_stage_policy",
+      "reason": "Input-stage cancellation, submitted input and confirmation-stage cancellation must deliver mutation at different yields. The helper waits for either completed rename or a real confirmation, so cases with an early rejection do not click a nonexistent dialog. These 15 lines express the actual dialog protocol and are already reused for initial attempt and retry.",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 13,
+        "nloc": 15,
+        "dispatch_share": 0.0,
+        "symbol_line": 91,
+        "deepest_block": {
+          "start": 99,
+          "end": 102
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "91-105",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "159-174",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Driver calls exerciseRenameDialogs at 161 and 171; setupRenameFixture starts the actual async rename."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:91-105;159-174"
+      ],
+      "regression_recommendation": "Keep real button actions, stage-specific mutation and renameDone waits; no new dialog abstraction.",
+      "verified_metrics": {
+        "function": {
+          "name": "exerciseRenameDialogs",
+          "start_line": 91,
+          "end_line": 105,
+          "ccn": 9,
+          "cognitive": 13,
+          "max_nesting": 3,
+          "nloc": 15,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            99,
+            102
+          ],
+          "complex_conditions": [
+            {
+              "line": 94,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          91,
+          105
+        ],
+        "sha256_normalized_lf": "9559d10c767c69adcc69bc32d23c1f85f1e39251e0e17e7eaefdc65bb1d04ae3",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:91-105"
+    },
+    {
+      "record_id": "code_health:finding_b04caf15b6931492d5ea",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "assertRenamedData",
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_rename_oracles",
+      "reason": "The checker chooses explicit expected session IDs for roster-only, intervening save and deleted-session cases, then verifies image identity/revision/Drive reference, other-student additions, metadata, ID-map flag behavior, selection, success feedback and deletion-marker case folding. These conditions are independent contracts, not repeated production logic to factor out.",
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 14,
+        "nloc": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 123,
+        "deepest_block": {
+          "start": 126,
+          "end": 126
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "123-141",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "126-140",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "assertRenameResult invokes this checker for allowed outcomes; the one-time settings-read retry also calls it at 174."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:123-141;126-140"
+      ],
+      "regression_recommendation": "Retain exact IDs, own old-name absence, per-image references, disabled/enabled ID map and case-only rename tombstone policy.",
+      "verified_metrics": {
+        "function": {
+          "name": "assertRenamedData",
+          "start_line": 123,
+          "end_line": 141,
+          "ccn": 15,
+          "cognitive": 14,
+          "max_nesting": 1,
+          "nloc": 19,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            126,
+            126
+          ],
+          "complex_conditions": [
+            {
+              "line": 128,
+              "operator_count": 1,
+              "enclosing_construct": "for"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          123,
+          141
+        ],
+        "sha256_normalized_lf": "5104ec96cca78d2f09f6d2bfe78aefcdca163296a765647a610afc243a9ad067",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:123-141"
+    },
+    {
+      "record_id": "code_health:finding_5d1eb75cd297ec384b50",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@143>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The 47-line driver already delegates fixture, dialog exercise, result capture and assertion logic. Its retry must keep settings metadata, other-student records, tab-only writing and pending work after the initial strict read fails. Delete only the copied asset route through existing-helper reuse; replay also confirms exception_state refusal in its evidence-carrying catch scope.",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 24,
+        "nloc": 47,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 143,
+        "deepest_block": {
+          "start": 164,
+          "end": 179
+        },
+        "extract_method_stage_refused": [
+          "exception_state"
+        ]
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "143-189",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "147-152",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "164-181",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same IIFE as nested record; observed is deliberately consumed by catch/report after a partially completed case."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:143-189;147-152;164-181"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@143>",
+          "start_line": 143,
+          "end_line": 189,
+          "ccn": 9,
+          "cognitive": 24,
+          "max_nesting": 4,
+          "nloc": 47,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "deepest_block": [
+            164,
+            179
+          ],
+          "complex_conditions": []
+        },
+        "dataflow": {
+          "function_start": 143,
+          "refused": [
+            "exception_state"
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          143,
+          189
+        ],
+        "sha256_normalized_lf": "a18a80d50dcebd60d29ec7807505d838e1ad46dcca3d156746562039fc23ce0c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:143-189",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_17ce0cce1930c0bc5070",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "large_method",
+      "symbol": "setupRenameFixture",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_serializable_fixture",
+      "reason": "Seventy lines place synthetic browser-state setup, exact before-state capture, stage mutation and key-specific faults in one page-evaluable closure. Splitting would require serializing helper dependencies and rebinding globals without removing useful behavior. Every action is consumed by the generated specs; no dead branch was found.",
+      "verified_observation_details": {
+        "nloc": 70,
+        "ccn": 19,
+        "dispatch_share": 0.56,
+        "symbol_line": 20,
+        "deepest_block": {
+          "start": 52,
+          "end": 58
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "8-89",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "20-42",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "43-88",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "buildRenameSpecs produces 39 specs; setup is passed directly into page.evaluate and its globals drive real held-dialog mutation."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:8-89;20-42;43-88"
+      ],
+      "regression_recommendation": "Retain all spec dimensions and exact before/after snapshot fields; no size-only wrapper or scenario option bag.",
+      "verified_metrics": {
+        "function": {
+          "name": "setupRenameFixture",
+          "start_line": 20,
+          "end_line": 89,
+          "ccn": 19,
+          "cognitive": 20,
+          "max_nesting": 2,
+          "nloc": 70,
+          "bumps": 1,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.56,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            52,
+            58
+          ],
+          "complex_conditions": [
+            {
+              "line": 52,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          20,
+          89
+        ],
+        "sha256_normalized_lf": "19af0a45487ad852401a373f594f5ca6d92d5328b59430120b2f29cb370cf48c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:20-89"
+    },
+    {
+      "record_id": "code_health:finding_241aec90374475ff57a6",
+      "file": "tests/rename-confirmation.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The worst clone 140-151 straddles the assertion helper end and top-level browser driver; its stored assertRenamedData stamp is not a true enclosing owner of that span. Archive-connection 85-97 has similar setup but also a specialized JSZip route. Reuse only this file local asset route 147-152; never extract the cross-function span or transplant the partner service route.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 10.99,
+        "clone_pair_count": 19,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/archive-connection.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 123,
+        "symbol": "assertRenamedData"
+      },
+      "binding_hashes": {
+        "normalized_lf": "ed50b7b2bbed87e7d6d4041d4f37f00937625a2a5cd95f8948427b36d8a41465",
+        "current_raw": "13d032458f90d94bb87fae6199337feffae9fd494b36062d5eaddd4c2c65ffcf"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "140-152",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "lines": "153-188",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "File-level setup spanning assertRenamedData and IIFE; native rename oracles remain local."
+      ],
+      "test_assertion_references": [
+        "tests/rename-confirmation.browser.cjs:140-152;153-188"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 10.99,
+        "clone_pair_count": 19,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/archive-connection.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          140,
+          151
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "Reconstructed archived ClonePair/FileContext -> installed DryViolationDetector; no whole corpus rerun",
+        "cochange_limit": "Stored metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/rename-confirmation.browser.cjs:file-level-setup-or-lifecycle",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_6f76ca4ed548a3b45a97",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runRenameWorkflow",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_native_keyboard_protocol",
+      "reason": "The 28-line helper tests focused input selection, IME early return, Tab reaching Cancel versus Save Name, Enter submission and focused confirmation buttons. accepted controls a real Tab to the confirm button; canceled/button-submission scenarios intentionally stop at different stages. It already shares checkCompositionSignal and the retained-data checker.",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 17,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "symbol_line": 66,
+        "deepest_block": {
+          "start": 77,
+          "end": 81
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+        "current_raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "66-93",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "69-91",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "runKeyboardScenario calls runRenameWorkflow at 153; native page.keyboard events exercise chooser -> text -> confirmation."
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:66-93;69-91"
+      ],
+      "regression_recommendation": "Retain focus assertions, actual Tab/Enter/Space/Escape and explicit synthetic composing/keyCode229 signal checks; no branch-count extraction.",
+      "verified_metrics": {
+        "function": {
+          "name": "runRenameWorkflow",
+          "start_line": 66,
+          "end_line": 93,
+          "ccn": 14,
+          "cognitive": 17,
+          "max_nesting": 2,
+          "nloc": 28,
+          "bumps": 2,
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            77,
+            81
+          ],
+          "complex_conditions": [
+            {
+              "line": 75,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 85,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          66,
+          93
+        ],
+        "sha256_normalized_lf": "e9c94b414b38c25b7dba7db4e1fa9a49683c67330160e0cac628397c189d3904",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/storage-dialog-keyboard.browser.cjs:66-93"
+    },
+    {
+      "record_id": "code_health:finding_16c64c2a184431b16205",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runKeyboardScenario",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The driver needs four real paths: missing body, archive, chooser and rename, followed by exact retained-data and browser-error checks. Its local asset read at 113-114 can reuse the existing helper while keeping 111-112 external request logging/abort. Do not replace native workflows or remove missing-body finally restoration to shorten this function.",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 23,
+        "nloc": 57,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 105,
+        "deepest_block": {
+          "start": 131,
+          "end": 154
+        }
+      },
+      "binding_hashes": {
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+        "current_raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "105-161",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "110-115",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "128-159",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing asset helper supports both MIME policies",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing boundary assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Thirty generated scenarios call runKeyboardScenario from 166-167; workflow helpers append explicit checks and catch records failures."
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:105-161;110-115;128-159"
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "verified_metrics": {
+        "function": {
+          "name": "runKeyboardScenario",
+          "start_line": 105,
+          "end_line": 161,
+          "ccn": 14,
+          "cognitive": 23,
+          "max_nesting": 3,
+          "nloc": 57,
+          "bumps": 2,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            131,
+            154
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "span": [
+          105,
+          161
+        ],
+        "sha256_normalized_lf": "e9fdf56dd3206490475a827a2fc685f8b009dc444a645d552785e7a14497f705",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/storage-dialog-keyboard.browser.cjs:105-161",
+      "candidate_id": "057-R1"
+    },
+    {
+      "record_id": "code_health:finding_1211ef84f5feb095204b",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "primitive_obsession",
+      "symbol": "runRenameWorkflow",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_small_workflow_parameters",
+      "reason": "All five parameters are used: page owns real keyboard actions; scenario selects named protocol branch; key preserves native Enter/Space/Escape; accepted selects confirmation focus; check appends named oracles to the current case. There are zero primitive-typed parameters, so the marker is a long-list heuristic. A context/options object would hide a small single caller rather than improve correctness.",
+      "verified_observation_details": {
+        "param_count": 5,
+        "typed_param_count": 0,
+        "primitive_param_count": 0,
+        "symbol_line": 66
+      },
+      "binding_hashes": {
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+        "current_raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "66-93",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "128-130",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "153",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Single call at 153 passes page, scenario, computed key/accepted and local check."
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:66-93;128-130;153"
+      ],
+      "regression_recommendation": "Retain the explicit signature unless reuse grows; no new option bag or wrapper merely to reduce param_count.",
+      "verified_metrics": {
+        "function": {
+          "name": "runRenameWorkflow",
+          "start_line": 66,
+          "end_line": 93,
+          "ccn": 14,
+          "cognitive": 17,
+          "max_nesting": 2,
+          "nloc": 28,
+          "bumps": 2,
+          "param_count": 5,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            77,
+            81
+          ],
+          "complex_conditions": [
+            {
+              "line": 75,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 85,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "span": [
+          66,
+          93
+        ],
+        "sha256_normalized_lf": "e9c94b414b38c25b7dba7db4e1fa9a49683c67330160e0cac628397c189d3904",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commits": true
+      },
+      "review_group": "tests/storage-dialog-keyboard.browser.cjs:66-93"
+    },
+    {
+      "record_id": "code_health:finding_accd5aba18f79b2d9999",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "inherent_native_test_boundary",
+      "reason": "The call-site path is real: the module iterates 30 scenarios, each creates a fresh page and its local route reads snapshot assets. Fresh pages preserve focus, body-removal restoration and storage/prototype isolation. The marker supplies no measured cost; caching or parallel execution could weaken those contracts. Helper reuse under R1 removes copied boundary code, not asset reads per scenario.",
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/storage-dialog-keyboard.browser.cjs::__module__",
+          "tests/storage-dialog-keyboard.browser.cjs::runKeyboardScenario"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 166,
+        "symbol_line": 163,
+        "symbol": "<anonymous@163>",
+        "role_owner": "tests/storage-dialog-keyboard.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_33039e5829a7d1318880"
+      },
+      "binding_hashes": {
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+        "current_raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "4-8",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "105-115",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "116-160",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "163-174",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Module loop 166 -> runKeyboardScenario 167 -> page.route callback 110 -> fs exists/read 114."
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:4-8;105-115;116-160;163-174"
+      ],
+      "regression_recommendation": "No performance change without measurement. Keep fresh pages, close-finally, final failed-case assertion and per-case request log.",
+      "verified_boundary_details": {
+        "scenario_count": 30,
+        "loop_line": 166,
+        "call_line": 167,
+        "asset_io_line": 114,
+        "fresh_page_line": 106,
+        "method": "Actual source call-site path, not regenerated graph/rank or timing"
+      },
+      "review_group": "tests/storage-dialog-keyboard.browser.cjs:module-loop-and-route"
+    },
+    {
+      "record_id": "performance:perf3_33039e5829a7d1318880",
+      "file": "tests/storage-dialog-keyboard.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": "tests/storage-dialog-keyboard.browser.cjs::__module__",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_performance_view",
+      "reason": "This is the promoted view of the same 30-scenario filesystem path, already labeled low-confidence/unknown exposure and inherent_to_boundary. Source inspection verifies the call-site boundary, not a cost or safe batching plan. Its module intervention is not independent evidence for parallelizing or caching native dialog pages.",
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/storage-dialog-keyboard.browser.cjs::runKeyboardScenario"
+        ],
+        "shared_path_suffix": [
+          "tests/storage-dialog-keyboard.browser.cjs::__module__",
+          "tests/storage-dialog-keyboard.browser.cjs::runKeyboardScenario"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "binding_hashes": {
+        "normalized_lf": "7ed7af4afefe66e04cea8be88120b3647aa9b4d4d6bbd7ab625973dfdff9e9d4",
+        "current_raw": "9ffc32dc77fb8a8f14fee2b3dc1b25dff226eb5ee44c43cc0afa1ceae07fa61b"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "4-8",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "105-115",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "lines": "163-174",
+          "note": "Source/assertion boundary read",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same boundary as code_health:finding_accd5aba18f79b2d9999; one underlying issue, no second repair."
+      ],
+      "test_assertion_references": [
+        "tests/storage-dialog-keyboard.browser.cjs:4-8;105-115;163-174"
+      ],
+      "regression_recommendation": "Do not count as a separate speed improvement. R1 is maintenance reuse only; measure before changing execution/isolation.",
+      "verified_boundary_details": {
+        "scenario_count": 30,
+        "loop_line": 166,
+        "call_line": 167,
+        "asset_io_line": 114,
+        "fresh_page_line": 106,
+        "method": "Actual source call-site path, not regenerated graph/rank or timing"
+      },
+      "review_group": "tests/storage-dialog-keyboard.browser.cjs:module-loop-and-route"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "057-R1",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "smallest_change": "Delete only five copied local asset servers; delegate to the existing helper while preserving MIME/root policy and keyboard request logging.",
+      "targets": [
+        {
+          "file": "tests/class-deletion.browser.cjs",
+          "span": [
+            11,
+            17
+          ],
+          "fallback": "application/octet-stream",
+          "caller": "context.route at 11"
+        },
+        {
+          "file": "tests/deletion-recovery.browser.cjs",
+          "span": [
+            7,
+            12
+          ],
+          "fallback": "text/html",
+          "caller": "context.route at 122",
+          "retain_fs": "Actual emergency backup read at 138"
+        },
+        {
+          "file": "tests/preference-integrity.browser.cjs",
+          "span": [
+            6,
+            11
+          ],
+          "fallback": "text/html",
+          "callers": [
+            "page.route at 18",
+            "startup.route at 24"
+          ],
+          "retain_fs": "Scenario script read at 20 and optional report at 39"
+        },
+        {
+          "file": "tests/rename-confirmation.browser.cjs",
+          "span": [
+            147,
+            152
+          ],
+          "fallback": "text/html",
+          "caller": "context.route at 147",
+          "retain_fs": "Optional report at 185"
+        },
+        {
+          "file": "tests/storage-dialog-keyboard.browser.cjs",
+          "span": [
+            113,
+            114
+          ],
+          "fallback": "text/html",
+          "caller": "page.route at 110",
+          "retain_wrapper": "URL parsing/external request recording+abort at 111-112; default helper only for local branch",
+          "retain_fs": "Optional report at 171"
+        }
+      ],
+      "regression_recommendation": "Reuse tests/support/local-app-route.js:5-12 only. Class deletion opts into application/octet-stream; deletion-recovery, preference-integrity, rename-confirmation and keyboard retain default text/html. Preserve each existing root/override, external abort and 404 semantics; retain keyboard blocked-request logging before delegation. Preserve native scenarios, fault keys/timings, report fields and cleanup. Keep fs where needed for backup/scenario/report reads/writes. Before adoption compare all five native suite results and helper checks (scripts/check-test-runner.cjs:51-59), including missing/directory/encoded-traversal assets. No tests run here.",
+      "limits": "Related existing-helper reuse pattern to 054/047 proposals, applied to these different assigned files. Does not promise marker closure or filesystem speed improvement."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "057-L1",
+      "file": "tests/pending-commit-publication.browser.cjs",
+      "function": "refresh publication case inside <anonymous@7>",
+      "classification": "unconfirmed_fault_premise_assertion_gap",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "The refresh case replaces updateSyncPortfolioButtonState with a throwing callback that increments refreshes at 44, returns refreshes at 52, but no assertion uses it at 59-87. If a change stops invoking that callback, the case can retain correct committed data without exercising its named refresh-failure boundary. Current Git7558 clearPendingPortfolioSync does call the callback at 8263; this is a regression-oracle gap, not evidence that the present production path fails.",
+      "evidence_anchors": [
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "34-57",
+          "note": "Recorded refresh invocation count and injected callback",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/pending-commit-publication.browser.cjs",
+          "lines": "59-87",
+          "note": "Outcome assertions omit refreshes",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "8259-8265",
+          "note": "Actual clear then isolated refresh publication",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "smallest_change": "Assert observed.refreshes > 0 for failure === refresh. If claiming exact post-clear timing, also record cleared in the throwing hook and assert that premise; avoid hard-coding an unverified exact call count.",
+      "regression_recommendation": "Check both new and replacement refresh cases. A targeted bypass of the refresh callback should fail the new premise assertion; the existing committed bytes/null draft/reload oracles must remain. No mutation or test executed here."
+    }
+  ],
+  "summary": {
+    "assigned_records": 25,
+    "dispositions": {
+      "confirmed_repair_candidate": 9,
+      "reviewed_no_change": 16
+    },
+    "unique_structural_candidates": 1,
+    "candidate_files": 5,
+    "additional_unconfirmed_leads": 1,
+    "retained_contracts": "Rollback write-phase guards; emergency before-images and all-stream delayed-ack blocking; pre-signature versus post-clear publication; held rename revalidation; exact writing/metadata/identity/tombstone oracles; native keyboard focus/IME/missing-body policies.",
+    "scanner_state": "No closure, import, tracker or index changes."
+  },
+  "limits": [
+    "No app, browser, native suite, mutation or test runner executed. No new pass, bug reproduction, live-service or real-IME/hardware claim.",
+    "Only own scratch and this report written. Accepted 054 report unchanged; no repository/source/test/config/fixture/Git/index/tracker/docs/dependency/chat changes.",
+    "Six assigned files match raw/LF pins at beginning/end and historical commits. Production context is immutable Git7558; unrelated current source is not claimed frozen or identical.",
+    "Historical 90-source archive digest and detector replay verified; no full clone corpus recomputation, current 91-corpus equivalence or independently rebuilt cochange history claimed.",
+    "I/O path checked in source; scanner graph/rank/resource magnitude and cost not regenerated. Both IO records describe one native isolation boundary.",
+    "Helper reuse is a maintenance proposal and may leave shape scores above thresholds. Preserve external logging, MIME fallbacks, specialized fixtures and real assertion aggregates; regression checks precede adoption.",
+    "057-L1 is source-supported, unconfirmed and has not been mutation-tested. Parent owns deduplication/adoption and any implementation."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+    "all_individual_reasons_read": true,
+    "assigned_files_raw_and_lf_verified": 6,
+    "actual_detector_replays_combined": 48,
+    "source_verified_io_records_combined": 2,
+    "evidence_receipt": "reviews/batch-005-readonly-057-058-acceptance.json",
+    "limits": "Historical 90-source clone archive reused. No current91 corpus, regenerated I/O graph/rank/cost, runtime pass, bug reproduction or scanner closure. New057-L1 assertion premise checked against native test and immutable production clear callback."
+  }
+}

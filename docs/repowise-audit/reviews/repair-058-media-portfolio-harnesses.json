@@ -1,0 +1,2316 @@
+{
+  "repair_id": "repair-058",
+  "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "inspected_git_commit_end": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "source_hashes_raw_and_normalized_lf": {
+    "tests/media-upload-boundary.browser.cjs": {
+      "raw_sha256": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "normalized_lf_sha256": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "file_nloc": 123,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/image-preparation.browser.cjs": {
+      "raw_sha256": "97c63242cd57bddb7963b2946377b816b645ecb98a57aa5573a1cc3f0f462f19",
+      "normalized_lf_sha256": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81",
+      "file_nloc": 70,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/corrupt-portfolio.browser.cjs": {
+      "raw_sha256": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "normalized_lf_sha256": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "file_nloc": 235,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/crop-transparency.browser.cjs": {
+      "raw_sha256": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+      "normalized_lf_sha256": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1",
+      "file_nloc": 51,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/deletion-durability.browser.cjs": {
+      "raw_sha256": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+      "normalized_lf_sha256": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+      "file_nloc": 212,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/deletion-merge.browser.cjs": {
+      "raw_sha256": "1b85dbcb9c92f8bb011fb99c2b8940fd12436c25e63368cf14bb024176f02987",
+      "normalized_lf_sha256": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2",
+      "file_nloc": 78,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/portfolio-removal.browser.cjs": {
+      "raw_sha256": "005bc8ee18110db59ad8b73c104767bc8386e76c2d9cdd5ef3ce88464d10256a",
+      "normalized_lf_sha256": "35acb1c28a4da150070905bc9ba5b68ec4c04376ff17c0f6aab7499a80196dd8",
+      "file_nloc": 85,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/portfolio-render-failures.browser.cjs": {
+      "raw_sha256": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+      "normalized_lf_sha256": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+      "file_nloc": 50,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/notebook-guide.browser.cjs": {
+      "raw_sha256": "851afd0acd495bab673f81b1400513901b3db22891c29ee5ef61d0b6d5657ba3",
+      "normalized_lf_sha256": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+      "file_nloc": 145,
+      "historical_sources_identical": [
+        "00c9454e6c89f258cb3afc938201a10feda16087",
+        "7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ]
+    },
+    "tests/support/local-app-route.js@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+      "normalized_lf_sha256": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f"
+    },
+    "scripts/check-test-runner.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+      "normalized_lf_sha256": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612"
+    },
+    "scripts/run-tests.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+      "normalized_lf_sha256": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf"
+    },
+    "scripts/case-report-suites.json@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+      "normalized_lf_sha256": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff"
+    },
+    "js/app/00-storage-sync-patches.js@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+      "normalized_lf_sha256": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+    },
+    "js/app/10-main-app.js@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+      "normalized_lf_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+    },
+    "tests/portfolio-image-slots.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+      "normalized_lf_sha256": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848"
+    },
+    "tests/student-selection-storage.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b",
+      "normalized_lf_sha256": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b"
+    },
+    "tests/media-ownership.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+      "normalized_lf_sha256": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8"
+    },
+    "tests/neatness-scoring.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e",
+      "normalized_lf_sha256": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e"
+    },
+    "js/app/photo-crop.js@7558f482974721eecc8c71e368b9bb47ab9017ff": {
+      "raw_sha256": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "normalized_lf_sha256": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf"
+    }
+  },
+  "source_hashes_normalized_lf": {
+    "tests/media-upload-boundary.browser.cjs": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+    "tests/image-preparation.browser.cjs": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81",
+    "tests/corrupt-portfolio.browser.cjs": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+    "tests/crop-transparency.browser.cjs": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1",
+    "tests/deletion-durability.browser.cjs": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+    "tests/deletion-merge.browser.cjs": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2",
+    "tests/portfolio-removal.browser.cjs": "35acb1c28a4da150070905bc9ba5b68ec4c04376ff17c0f6aab7499a80196dd8",
+    "tests/portfolio-render-failures.browser.cjs": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+    "tests/notebook-guide.browser.cjs": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497",
+    "tests/support/local-app-route.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "scripts/check-test-runner.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/run-tests.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "scripts/case-report-suites.json@7558f482974721eecc8c71e368b9bb47ab9017ff": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+    "js/app/00-storage-sync-patches.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+    "js/app/10-main-app.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "tests/portfolio-image-slots.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+    "tests/student-selection-storage.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b",
+    "tests/media-ownership.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "b818fb074fe61cdbad0299613e3b58b841d2bb4305ce40ded3dc0ecd79e840e8",
+    "tests/neatness-scoring.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e",
+    "js/app/photo-crop.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf"
+  },
+  "assigned_source_hashes_raw_and_lf_end": {
+    "tests/media-upload-boundary.browser.cjs": {
+      "raw": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab",
+      "normalized_lf": "de05ed95c268bb2b6186d0ed02f26ba7959ce0b9450d2ff3de46e532b661c2ab"
+    },
+    "tests/image-preparation.browser.cjs": {
+      "raw": "97c63242cd57bddb7963b2946377b816b645ecb98a57aa5573a1cc3f0f462f19",
+      "normalized_lf": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81"
+    },
+    "tests/corrupt-portfolio.browser.cjs": {
+      "raw": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675",
+      "normalized_lf": "1e7760200844c9f4110fa7b7a2732f4eea4b8babcc3feb072cbd4e1a89a01675"
+    },
+    "tests/crop-transparency.browser.cjs": {
+      "raw": "a644d093495a0aeb7ac368a1343a9c2f50a22ccddefe416cb32c9f1e0fe17682",
+      "normalized_lf": "1b11cb3c6a6a95937bbf6e95f404764093510f431492260b10d129b00d6fabb1"
+    },
+    "tests/deletion-durability.browser.cjs": {
+      "raw": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429",
+      "normalized_lf": "82d1058580e238e75121bfb868bab0c2697536498c7871490f4041cd1bc15429"
+    },
+    "tests/deletion-merge.browser.cjs": {
+      "raw": "1b85dbcb9c92f8bb011fb99c2b8940fd12436c25e63368cf14bb024176f02987",
+      "normalized_lf": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2"
+    },
+    "tests/portfolio-removal.browser.cjs": {
+      "raw": "005bc8ee18110db59ad8b73c104767bc8386e76c2d9cdd5ef3ce88464d10256a",
+      "normalized_lf": "35acb1c28a4da150070905bc9ba5b68ec4c04376ff17c0f6aab7499a80196dd8"
+    },
+    "tests/portfolio-render-failures.browser.cjs": {
+      "raw": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+      "normalized_lf": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b"
+    },
+    "tests/notebook-guide.browser.cjs": {
+      "raw": "851afd0acd495bab673f81b1400513901b3db22891c29ee5ef61d0b6d5657ba3",
+      "normalized_lf": "ed40143d053d0d3d1eebb50e0964a260377cf830465860f8a4300611c964c497"
+    }
+  },
+  "context_scope": "All9 assigned tests matched raw/LF pins at begin/end and normalized bytes of immutable Git00c/Git7558. App/helper/runner/partner context read solely from immutable Git7558 with hashes; no whole-current-app freeze claimed. Stored anonymous names retained; function binding is by exact source span, not regenerated anonymous ordinal.",
+  "function_hash_convention": "SHA256 over normalized LF start_line..end_line inclusive with one trailing LF. DRY spans at module prefixes may include more than the nearby function; its function/hash is supplied as context only.",
+  "replay": {
+    "shape_records": 17,
+    "historical_dry_records": 8,
+    "all25_details_replayed": true,
+    "clone_archive": "work/repowise-coordinator/00c-full-clone-replay.json",
+    "clone_archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+    "clone_scope": "Historical90-source archive reused, no global corpus recomputation or cache/index writes. All9 assigned LF hashes independently match archive; stored co-change0 carried through detector, not independently reconstructed.",
+    "installed_rule_sha256": {
+      "biomarkers\\complex_method.py": "6dbc6b0e9bcb70d26d8047c8b5e542d9c9cf57d5215f434de407948dbb3e19d0",
+      "biomarkers\\large_method.py": "abb2d7c9a2142631ec09991250a6b1a19d0af43e0235b711f96bba4dbdc2f744",
+      "biomarkers\\nested_complexity.py": "9f1f973ad3ad8ca459328a6c5432dcf753dc02aa69beda0deb103b9359c81761",
+      "biomarkers\\bumpy_road.py": "415d8674c3cd1eba53b2a5976b1b348c613834a5c3d864ec7b41bf9b82dd9d86",
+      "biomarkers\\dry_violation.py": "31f7f7c1be61edd1977866575b98a70bf0a564cd327df7e8ed1eb4fa1ea09d01",
+      "complexity\\dispatch.py": "bf3a1419d9b4c5d04f9a90d7dc7f1c69d04b718ebcccb73e6cda5cb5350ce20b"
+    },
+    "rules": {
+      "complex_method": "judged_ccn>=9; full walker/raw metrics and dispatch/terminal shares included",
+      "large_method": "NLOC>=60 and raw CCN>=3",
+      "nested_complexity": "judged_nesting>=4",
+      "bumpy_road": "bumps>=3 and judged_ccn>=5; regions are top-level body statements reaching depth>=2",
+      "dry_violation": "cross-file coverage>=8%; worst max-side span>=6lines; active co-change threshold3. Partner span can exceed local reported span."
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_4ac8491954ec6fcd130d",
+      "file": "tests/corrupt-portfolio.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "exerciseCloudCorruption",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_corruption_and_async_boundary_controls",
+      "reason": "The105-line callback deliberately distinguishes denied local reads, valid empty portfolios, malformed canonical/duplicate cloud data, local corruption arriving during find/download/upload, legacy pulls, delayed media callbacks and unreadable split-student files. The branches exercise different native guards; the existing local helpers already isolate denied reads and empty setup without obscuring the scenarios.",
+      "evidence_anchors": [
+        "tests/corrupt-portfolio.browser.cjs:88@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:97@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:108@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:120@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:136@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:159@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:179@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:195@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:243@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:247@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4495@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5027@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5610@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:2777@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "exerciseCloudCorruption",
+          "line_start": 88,
+          "line_end": 196,
+          "details": {
+            "ccn": 13,
+            "cognitive": 22,
+            "nloc": 105,
+            "dispatch_share": 0.0
+          },
+          "reason": "exerciseCloudCorruption has cyclomatic complexity 13",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseCloudCorruption",
+          "start_line": 88,
+          "end_line": 196,
+          "ccn": 13,
+          "cognitive": 22,
+          "nloc": 105,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 3,
+          "param_count": 0,
+          "deepest_block": [
+            120,
+            128
+          ]
+        },
+        "function_normalized_lf_sha256": "794f9115496eb95bfc7dc77c449ef30bfa35122e407269c0fd9518001cde2119",
+        "judged_ccn": 13,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 22,
+        "nloc": 105,
+        "dispatch_share": 0.0,
+        "symbol_line": 88,
+        "deepest_block": {
+          "start": 120,
+          "end": 128
+        }
+      },
+      "callers": [
+        "runCorruptPortfolioSuite evaluates exerciseCloudCorruption once after the15 damaged-local payload cases, then invokes four focused Node assertion functions."
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:179@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:195@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:243@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:247@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain failed/error, exact raw-byte preservation, pending=true, zero uploads/writes, delayed lookup/media callback failure, and valid-empty split-file positive control."
+    },
+    {
+      "record_id": "code_health:finding_3950fcf55e93d82f8063",
+      "file": "tests/corrupt-portfolio.browser.cjs",
+      "marker": "bumpy_road",
+      "symbol": "exerciseCloudCorruption",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_failure_family_regions",
+      "reason": "The three nesting bumps are independent invalid-cloud payloads, delayed async-stage mutations and invalid split-student payloads. Each region has a positive or preservation oracle in the returned object; replacing these with one generic corruption runner would require unrelated promise/callback and shape-validation hooks.",
+      "evidence_anchors": [
+        "tests/corrupt-portfolio.browser.cjs:120@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:126@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:136@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:145@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:149@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:188@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:190@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:203@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:210@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:215@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4495@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5027@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5610@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:2777@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "bumpy_road",
+          "severity": "low",
+          "function_name": "exerciseCloudCorruption",
+          "line_start": 88,
+          "line_end": 196,
+          "details": {
+            "bumps": 3,
+            "ccn": 13,
+            "max_nesting": 3
+          },
+          "reason": "exerciseCloudCorruption has 3 nested blocks at the same level (bumpy road)",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseCloudCorruption",
+          "start_line": 88,
+          "end_line": 196,
+          "ccn": 13,
+          "cognitive": 22,
+          "nloc": 105,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 3,
+          "param_count": 0,
+          "deepest_block": [
+            120,
+            128
+          ]
+        },
+        "function_normalized_lf_sha256": "794f9115496eb95bfc7dc77c449ef30bfa35122e407269c0fd9518001cde2119",
+        "judged_ccn": 13,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 13,
+        "max_nesting": 3,
+        "symbol_line": 88,
+        "deepest_block": {
+          "start": 120,
+          "end": 128
+        }
+      },
+      "callers": [
+        "same exerciseCloudCorruption; assertRejectedCloudPayloads, assertDelayedUploadAndMedia and assertRejectedStudentFiles consume the separate observations."
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:190@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:203@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:210@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:215@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep each corruption family and its native failure/bytes/pending/no-write evidence. Bumps3 is a valid shape observation, not evidence that those independent boundaries should be merged."
+    },
+    {
+      "record_id": "code_health:finding_c0e356fbf188b37be38c",
+      "file": "tests/corrupt-portfolio.browser.cjs",
+      "marker": "large_method",
+      "symbol": "exerciseCloudCorruption",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_size_view_of_complete_recovery_callback",
+      "reason": "This is the size view of the same cloud-corruption scenario, not another repair. Its result gathers denied-read fallback, valid-empty writes, six bad cloud payloads, three held stages, legacy guards, real outgoing-request count, delayed media and six bad split payloads. Splitting just for105NLOC adds data passing without removing duplicate work.",
+      "evidence_anchors": [
+        "tests/corrupt-portfolio.browser.cjs:88@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:105@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:127@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:149@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:169@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:177@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:194@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:195@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4495@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5027@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5610@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:2777@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "medium",
+          "function_name": "exerciseCloudCorruption",
+          "line_start": 88,
+          "line_end": 196,
+          "details": {
+            "nloc": 105,
+            "ccn": 13,
+            "dispatch_share": 0.0
+          },
+          "reason": "exerciseCloudCorruption is 105 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseCloudCorruption",
+          "start_line": 88,
+          "end_line": 196,
+          "ccn": 13,
+          "cognitive": 22,
+          "nloc": 105,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 3,
+          "param_count": 0,
+          "deepest_block": [
+            120,
+            128
+          ]
+        },
+        "function_normalized_lf_sha256": "794f9115496eb95bfc7dc77c449ef30bfa35122e407269c0fd9518001cde2119",
+        "judged_ccn": 13,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "nloc": 105,
+        "ccn": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 88,
+        "deepest_block": {
+          "start": 120,
+          "end": 128
+        }
+      },
+      "callers": [
+        "same callback and focused assertions as the CCN and bumpy-road records; suite driver awaits completion before asserting."
+      ],
+      "test_assertion_references": [
+        "tests/corrupt-portfolio.browser.cjs:169@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:177@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:194@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/corrupt-portfolio.browser.cjs:195@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve actual native sync/upload entrypoints and all returned projections; do not replace byte/zero-write checks with a single caught-error Boolean."
+    },
+    {
+      "record_id": "code_health:finding_c67b19acce629039408a",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@6>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "real_crop_pixel_and_reset_oracles",
+      "reason": "CCN15 comes from transparent versus opaque setup and concrete decoded-pixel, size, JPEG, original-retention and exact-reset assertions. This is a compact native crop lifecycle with actual image load/canvas/apply/reset, so extracting assertions to lower the score would hide its calibration tolerances.",
+      "evidence_anchors": [
+        "tests/crop-transparency.browser.cjs:6@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:9@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:33@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:41@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:51@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/photo-crop.js:129@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/photo-crop.js:195@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "<anonymous@6>",
+          "line_start": 6,
+          "line_end": 52,
+          "details": {
+            "ccn": 15,
+            "cognitive": 24,
+            "nloc": 47,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.02
+          },
+          "reason": "<anonymous@6> has cyclomatic complexity 15",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 52,
+          "ccn": 15,
+          "cognitive": 24,
+          "nloc": 47,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            48
+          ]
+        },
+        "function_normalized_lf_sha256": "094e956eccc32d96eba53168f9660ab76803f51124b942a279301d854aa31fab",
+        "judged_ccn": 15,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 24,
+        "nloc": 47,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 9,
+          "end": 48
+        }
+      },
+      "callers": [
+        "IIFE opens native crop modal, waits for ready, applies a controlled full-image rect, inspects output pixels and calls resetCrop on the actual selected photo."
+      ],
+      "test_assertion_references": [
+        "tests/crop-transparency.browser.cjs:41@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:51@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain both200x100 fixtures, white/colored background tolerance<10, ink<15, JPEG/original flags, exact reset bytes and errors[]. This sets the crop rectangle directly, not a human pointer gesture."
+    },
+    {
+      "record_id": "code_health:finding_4a4191a6c326f518d7f9",
+      "file": "tests/crop-transparency.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "already_shared_route_native_setup_overlap",
+      "reason": "The nine-line clone is browser/case-loop/page-error/shared-localAppRoute setup also used by portfolio-image-slots. The asset implementation is already shared. Combining transparent crop pixels/reset with mixed image-slot rendering under a new runner would add protocol hooks for little real deletion.",
+      "evidence_anchors": [
+        "tests/crop-transparency.browser.cjs:4@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:6@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:9@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:33@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/photo-crop.js:129@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/photo-crop.js:195@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 4,
+          "line_end": 12,
+          "details": {
+            "cross_file_duplication_pct": 23.53,
+            "clone_pair_count": 3,
+            "worst_clone_lines": 9,
+            "worst_clone_partner": "tests/portfolio-image-slots.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "24% of file duplicated in other files; worst clone shares 9 lines with tests/portfolio-image-slots.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 52,
+          "ccn": 15,
+          "cognitive": 24,
+          "nloc": 47,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            48
+          ]
+        },
+        "function_normalized_lf_sha256": "094e956eccc32d96eba53168f9660ab76803f51124b942a279301d854aa31fab",
+        "judged_ccn": 15,
+        "judged_nesting": 3,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 23.53,
+        "clone_pair_count": 3,
+        "worst_clone_lines": 9,
+        "worst_clone_partner": "tests/portfolio-image-slots.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "crop-transparency IIFE owns two pages; portfolio-image-slots@7558 has a different mixed-slot fixture and renderer/export assertions."
+      ],
+      "test_assertion_references": [
+        "tests/crop-transparency.browser.cjs:9@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:33@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/crop-transparency.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep shared route helper and independent per-page pixel/reset oracles, errors and cleanup. No extra browser fixture framework for three dormant historical clone pairs."
+    },
+    {
+      "record_id": "code_health:finding_d2b18d43cdb6cc9e91aa",
+      "file": "tests/deletion-durability.browser.cjs",
+      "marker": "large_method",
+      "symbol": "exerciseStorageFailure",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_transaction_failure_retry_fixture",
+      "reason": "The81-line callback seeds raw portfolio/deletion/settings/roster/selection/pending state, injects a real selected Storage.setItem failure, invokes the native destructive or restore action, restores storage, records all failure projections and retries the same action. Its state must stay together to prove transactional recovery.",
+      "evidence_anchors": [
+        "tests/deletion-durability.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:64@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:83@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:91@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:93@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:108@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:218@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:150@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:333@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4590@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6844@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "exerciseStorageFailure",
+          "line_start": 28,
+          "line_end": 108,
+          "details": {
+            "nloc": 81,
+            "ccn": 7,
+            "dispatch_share": 0.0
+          },
+          "reason": "exerciseStorageFailure is 81 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseStorageFailure",
+          "start_line": 28,
+          "end_line": 108,
+          "ccn": 7,
+          "cognitive": 8,
+          "nloc": 81,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "deepest_block": [
+            91,
+            91
+          ]
+        },
+        "function_normalized_lf_sha256": "19afac2ea63cc5393d5c3d983e06e6dfe87dd21838f4779b0049cb40a345df4d",
+        "judged_ccn": 7,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "nloc": 81,
+        "ccn": 7,
+        "dispatch_share": 0.0,
+        "symbol_line": 28,
+        "deepest_block": {
+          "start": 91,
+          "end": 91
+        }
+      },
+      "callers": [
+        "runDeletionDurability evaluates exerciseStorageFailure for60 action/key combinations; recordDeletionCaseResult applies ten focused failure/retry assertion functions."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-durability.browser.cjs:93@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:108@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:218@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain exact portfolio/marker/settings/pending bytes, memory/stored/UI roster and selection, sync counters, no scheduling/flush, signature, visible-to-sync state and positive retry assertions. Returned state is a deliberate projection, not all browser state."
+    },
+    {
+      "record_id": "code_health:finding_eaebebe81e5cd3e15235",
+      "file": "tests/deletion-durability.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse",
+      "reason": "The12-line worst clone is the identical named local asset router7-12 shared with corrupt-portfolio. Replace routeLocalAppRequest with existing localAppRoute(route,root), preserving text/html fallback, JS MIME, external abort and missing404. The companion serveTestFile in assigned corrupt-portfolio can use the same helper; retain both suites and all60 durability oracles.",
+      "evidence_anchors": [
+        "tests/deletion-durability.browser.cjs:1@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:187@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:210@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:218@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:223@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:150@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:333@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4590@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6844@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 1,
+          "line_end": 12,
+          "details": {
+            "cross_file_duplication_pct": 8.49,
+            "clone_pair_count": 11,
+            "worst_clone_lines": 12,
+            "worst_clone_partner": "tests/corrupt-portfolio.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "8% of file duplicated in other files; worst clone shares 12 lines with tests/corrupt-portfolio.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "routeLocalAppRequest",
+          "start_line": 7,
+          "end_line": 12,
+          "ccn": 5,
+          "cognitive": 5,
+          "nloc": 6,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "deepest_block": [
+            11,
+            11
+          ]
+        },
+        "function_normalized_lf_sha256": "3180d45f2cbdaa95625a9989392f08e62d16aa14caf573f325b655c99fe60c14",
+        "judged_ccn": 5,
+        "judged_nesting": 2,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 8.49,
+        "clone_pair_count": 11,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/corrupt-portfolio.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "runDeletionDurability context.route installs routeLocalAppRequest; corrupt-portfolio runCorruptPortfolioSuite context.route installs serveTestFile."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-durability.browser.cjs:187@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:210@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:218@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-durability.browser.cjs:223@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Rerun unchanged deletion-durability and corrupt-portfolio suites plus existing helper checks. Keep native quota-failure injection, raw bytes, rollback and retry logic; remove fs imports only if unused after route deletion.",
+      "smallest_candidate": "Reuse existing tests/support/local-app-route.js only for the legacy asset route. Use existing text/html default. Preserve specialized mocks, native entrypoints, oracle conditions and report/failure protocol."
+    },
+    {
+      "record_id": "code_health:finding_47086b374bcafe376e31",
+      "file": "tests/deletion-merge.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_native_deletion_merge_oracles",
+      "reason": "The73-line lifecycle establishes conflicting restored/deleted students and sessions, native cloud sync, repeated unchanged sync and a real local deletion saved during the pull. Independent outer assertions bind roster/portfolio/split-file filtering, deduplicated history, exact upload count and acknowledged counters. Splitting for length would obscure the two-merge causal sequence.",
+      "evidence_anchors": [
+        "tests/deletion-merge.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:37@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:54@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:64@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:77@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5363@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5414@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4590@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "<anonymous@7>",
+          "line_start": 7,
+          "line_end": 81,
+          "details": {
+            "nloc": 73,
+            "ccn": 7,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.02
+          },
+          "reason": "<anonymous@7> is 73 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 81,
+          "ccn": 7,
+          "cognitive": 12,
+          "nloc": 73,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            80
+          ]
+        },
+        "function_normalized_lf_sha256": "637c9a054d1550c3bedc393ae7b8e5fd406669775f1f29d5c5ee459bcecda6a1",
+        "judged_ccn": 7,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "nloc": 73,
+        "ccn": 7,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 80
+        }
+      },
+      "callers": [
+        "IIFE invokes syncWftDeletionsIfNeeded three times and evaluates actual applyDeletionsToStudents/Portfolio/File; provider file I/O is synthetic."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-merge.browser.cjs:64@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:77@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain newest restore/deletion precedence, Lamport-aware archive filtering, no repeated upload, during-pull history survival, exact uploaded records, pending=false and synchronized counters."
+    },
+    {
+      "record_id": "code_health:finding_942b10662480a46ec8a1",
+      "file": "tests/deletion-merge.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse_with_mime_parameter",
+      "reason": "The25-line worst clone includes the duplicate asset router13-19 shared with neatness-scoring. Existing localAppRoute(route,root,\"application/octet-stream\") deletes that implementation while retaining this suite's non-HTML/non-JS MIME. Keep deletion fixtures and second-merge assertions local; the41.77% historical duplication does not establish that all overlap is harmful.",
+      "evidence_anchors": [
+        "tests/deletion-merge.browser.cjs:1@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:13@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:21@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5363@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:5414@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:4590@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 1,
+          "line_end": 25,
+          "details": {
+            "cross_file_duplication_pct": 41.77,
+            "clone_pair_count": 23,
+            "worst_clone_lines": 25,
+            "worst_clone_partner": "tests/neatness-scoring.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "42% of file duplicated in other files; worst clone shares 25 lines with tests/neatness-scoring.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 81,
+          "ccn": 7,
+          "cognitive": 12,
+          "nloc": 73,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            80
+          ]
+        },
+        "function_normalized_lf_sha256": "637c9a054d1550c3bedc393ae7b8e5fd406669775f1f29d5c5ee459bcecda6a1",
+        "judged_ccn": 7,
+        "judged_nesting": 2,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 41.77,
+        "clone_pair_count": 23,
+        "worst_clone_lines": 25,
+        "worst_clone_partner": "tests/neatness-scoring.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "deletion-merge IIFE serves the native app before its sync scenario; neatness-scoring@7558 shares asset setup but tests unrelated score persistence."
+      ],
+      "test_assertion_references": [
+        "tests/deletion-merge.browser.cjs:21@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/deletion-merge.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Use explicit application/octet-stream fallback, preserve HTML/JS override, successful200/missing404/external abort and page errors; rerun unchanged deletion merge and helper MIME checks. Do not claim every historical pair disappears.",
+      "smallest_candidate": "Reuse existing tests/support/local-app-route.js only for the legacy asset route. Pass application/octet-stream as third argument. Preserve specialized mocks, native entrypoints, oracle conditions and report/failure protocol."
+    },
+    {
+      "record_id": "code_health:finding_1680dfdc2c2903f2af21",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "real_decoded_image_calibration",
+      "reason": "The65-line native callback makes real PNG/JPEG/SVG File objects, decodes actual optimized output and counts light/dark pixels. It also reaches public handleSelectedImages, oversized2200px resize, colored opaque preservation, smaller-original retention and broken-image rejection. The assertion branches are the independent readability oracle, not reusable production image logic.",
+      "evidence_anchors": [
+        "tests/image-preparation.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:17@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:26@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:38@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:53@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:60@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3249@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3283@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "<anonymous@7>",
+          "line_start": 7,
+          "line_end": 77,
+          "details": {
+            "ccn": 23,
+            "cognitive": 27,
+            "nloc": 65,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@7> has cyclomatic complexity 23",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 77,
+          "ccn": 23,
+          "cognitive": 27,
+          "nloc": 65,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            76
+          ]
+        },
+        "function_normalized_lf_sha256": "038f3780468c70c1eb820fb32acef31e8ab40a0563e3eba1516d1473595faa59",
+        "judged_ccn": 23,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 27,
+        "nloc": 65,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 76
+        }
+      },
+      "callers": [
+        "IIFE page.evaluate uses real optimizeImageForOcr/loadImageElement/fileToDataUrl and public handleSelectedImages; errors and failed rows are asserted outside."
+      ],
+      "test_assertion_references": [
+        "tests/image-preparation.browser.cjs:60@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain pixel thresholds, original-versus-JPEG size,1200x900/2200x1760 dimensions, opaque color tolerance, supported raster SVG preview and exact prior queue bytes after invalid input. No fake codec/pixel summaries."
+    },
+    {
+      "record_id": "code_health:finding_c12bceffea7618fdd8b8",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_size_view_of_pixel_fixture",
+      "reason": "This size flag describes the same image-preparation IIFE. The real fixture builder, decoder/pixel counter and ordered public-acquisition assertions share one page state; moving them into a new framework for65NLOC adds transport and hidden fixture policy rather than deleting work.",
+      "evidence_anchors": [
+        "tests/image-preparation.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:17@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:26@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:47@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:59@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:76@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3249@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3283@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "<anonymous@7>",
+          "line_start": 7,
+          "line_end": 77,
+          "details": {
+            "nloc": 65,
+            "ccn": 23,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@7> is 65 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 77,
+          "ccn": 23,
+          "cognitive": 27,
+          "nloc": 65,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            76
+          ]
+        },
+        "function_normalized_lf_sha256": "038f3780468c70c1eb820fb32acef31e8ab40a0563e3eba1516d1473595faa59",
+        "judged_ccn": 23,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "nloc": 65,
+        "ccn": 23,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 76
+        }
+      },
+      "callers": [
+        "same image-preparation callback as complex record; its two named browser-local helpers serve only this pixel corpus."
+      ],
+      "test_assertion_references": [
+        "tests/image-preparation.browser.cjs:47@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:59@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:76@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep transparent/opaque/oversized/small/SVG/invalid cases, exact queue checks, native acquisition and errors[]; no metric-only split."
+    },
+    {
+      "record_id": "code_health:finding_200b7f89bb709f880329",
+      "file": "tests/image-preparation.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "already_shared_route_with_distinct_safety_fixture",
+      "reason": "The12-line prefix/setup clone includes localAppRoute, already reused, plus the entry into a page-local cases/check callback. Student-selection-storage instead injects storage selection failures and protects writing ownership. A common page/case framework would couple distinct safety fixtures without deleting an asset implementation.",
+      "evidence_anchors": [
+        "tests/image-preparation.browser.cjs:3@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:5@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:10@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3249@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:3283@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 3,
+          "line_end": 14,
+          "details": {
+            "cross_file_duplication_pct": 30.0,
+            "clone_pair_count": 12,
+            "worst_clone_lines": 12,
+            "worst_clone_partner": "tests/student-selection-storage.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "30% of file duplicated in other files; worst clone shares 12 lines with tests/student-selection-storage.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 77,
+          "ccn": 23,
+          "cognitive": 27,
+          "nloc": 65,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            76
+          ]
+        },
+        "function_normalized_lf_sha256": "038f3780468c70c1eb820fb32acef31e8ab40a0563e3eba1516d1473595faa59",
+        "judged_ccn": 23,
+        "judged_nesting": 3,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 30.0,
+        "clone_pair_count": 12,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/student-selection-storage.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "image-preparation IIFE uses shared local route; student-selection-storage@7558 uses the same setup but tests selection storage side effects."
+      ],
+      "test_assertion_references": [
+        "tests/image-preparation.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/image-preparation.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain native pixel corpus and public queue calls as local assertions. Historical30% duplication is not an independent maintenance defect after existing helper reuse."
+    },
+    {
+      "record_id": "code_health:finding_bb483c9c40cb5b8453ab",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@99>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_native_case_failure_aggregation",
+      "reason": "Depth4 is browser try/finally,25-scenario loop and per-case evaluation/assertion catch. Failure creates a passed:false row and the final assertion rejects any such row; browser closes even on failure. This intentional lifecycle should stay visible rather than be hidden behind another runner.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:99@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:103@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:114@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:119@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:121@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:125@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "nested_complexity",
+          "severity": "medium",
+          "function_name": "<anonymous@99>",
+          "line_start": 99,
+          "line_end": 126,
+          "details": {
+            "max_nesting": 4,
+            "ccn": 9,
+            "cognitive": 27,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.07
+          },
+          "reason": "<anonymous@99> nests 4 levels deep",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@99>",
+          "start_line": 99,
+          "end_line": 126,
+          "ccn": 9,
+          "cognitive": 27,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.07,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            103,
+            121
+          ]
+        },
+        "function_normalized_lf_sha256": "6ffc2abef03094623a0f424e95808b200c39fa5a9a5f30a34eed8bcd6a72a6a5",
+        "judged_ccn": 9,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 9,
+        "cognitive": 27,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.07,
+        "symbol_line": 99,
+        "deepest_block": {
+          "start": 103,
+          "end": 121
+        }
+      },
+      "callers": [
+        "IIFE evaluates exerciseOwnershipBoundary, calls assertOwnershipOutcome and records each scenario result."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:119@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:121@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:125@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve25 cases, false-row aggregation, error payloads, final failure assertion and browser cleanup. Asset-serving duplication is a separate candidate below; it does not justify flattening lifecycle guards."
+    },
+    {
+      "record_id": "code_health:finding_22d1f5de4bf7e22b8cca",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "exerciseOwnershipBoundary",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_held_upload_owner_scenario",
+      "reason": "This68-line callback starts actual saved-media sync, pending manual-save or direct blob upload, holds compression/folder resolution, changes a specific owner/source condition and releases the native pipeline. Its branches distinguish token, photo, deletion, rename, corruption/recovery and pending-state boundaries plus positive new-essay/UI-switch controls.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:20@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:26@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:31@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:61@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "exerciseOwnershipBoundary",
+          "line_start": 12,
+          "line_end": 79,
+          "details": {
+            "ccn": 23,
+            "cognitive": 26,
+            "nloc": 68,
+            "dispatch_share": 0.23
+          },
+          "reason": "exerciseOwnershipBoundary has cyclomatic complexity 23",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseOwnershipBoundary",
+          "start_line": 12,
+          "end_line": 79,
+          "ccn": 23,
+          "cognitive": 26,
+          "nloc": 68,
+          "dispatch_share": 0.23,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 1,
+          "deepest_block": [
+            39,
+            39
+          ]
+        },
+        "function_normalized_lf_sha256": "8f1a485c4fa4a681646f74450209d15249fe79825cb32aaa68f997fadccae44a",
+        "judged_ccn": 23,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 26,
+        "nloc": 68,
+        "dispatch_share": 0.23,
+        "symbol_line": 12,
+        "deepest_block": {
+          "start": 39,
+          "end": 39
+        }
+      },
+      "callers": [
+        "media-upload-boundary IIFE page.evaluate invokes exerciseOwnershipBoundary; native syncPendingPortfolioMedia/manualSaveToDrive/uploadBlobToDrive execute with controlled compression/folder/fetch seams."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:61@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep real canvas Blob, held boundaries, actual upload request capture/authorization, rejected request count0, successful request count1 and appropriate pending/current saved-session projections. No live Drive or real compression performance claim."
+    },
+    {
+      "record_id": "code_health:finding_ed57c83e3c13fa85d009",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "changeStoredWriting",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_distinct_source_mutation_premises",
+      "reason": "Fourteen lines change token, saved image bytes, image/session/student existence, rename, newer Drive reference and pending replace/clear/photo. Each mutation establishes a different stale-upload premise; a table would need action functions and hide which storage or pending representation changed. Dispatch share0.57 remains below the installed dispatch-adjustment gate.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:48@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:50@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:51@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:52@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:53@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:54@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:55@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:56@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "changeStoredWriting",
+          "line_start": 46,
+          "line_end": 59,
+          "details": {
+            "ccn": 15,
+            "cognitive": 14,
+            "nloc": 14,
+            "dispatch_share": 0.57
+          },
+          "reason": "changeStoredWriting has cyclomatic complexity 15",
+          "deduction": null
+        },
+        "function": {
+          "name": "changeStoredWriting",
+          "start_line": 46,
+          "end_line": 59,
+          "ccn": 15,
+          "cognitive": 14,
+          "nloc": 14,
+          "dispatch_share": 0.57,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            48,
+            48
+          ]
+        },
+        "function_normalized_lf_sha256": "81c230bc8e03de1b3e125d019ac1d149777229756c82a694315cb702abf2b5a1",
+        "judged_ccn": 15,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 14,
+        "nloc": 14,
+        "dispatch_share": 0.57,
+        "symbol_line": 46,
+        "deepest_block": {
+          "start": 48,
+          "end": 48
+        }
+      },
+      "callers": [
+        "exerciseOwnershipBoundary calls changeStoredWriting after the compression/folder hold is reached and before releasing upload."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:54@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:55@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:56@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain exact per-mode mutations and savePortfolioLocalOnly for saved sources; pending mutations must continue targeting actual pending objects and persistence APIs."
+    },
+    {
+      "record_id": "code_health:finding_610b93475e328f905a6c",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "assertOwnershipOutcome",
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_owner_and_success_control_oracles",
+      "reason": "The17-line assertion function proves settled callbacks, zero requests for stale cases versus one for allowed cases, Alice authorization/body for positives, new-essay survival and correct saved image reference. Pending failures additionally prove no flush and retention/replacement of the intended pending writing; corrupt raw bytes must remain unchanged.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:81@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:83@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:84@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:85@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:87@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:89@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:91@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:92@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:93@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:96@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "assertOwnershipOutcome",
+          "line_start": 81,
+          "line_end": 97,
+          "details": {
+            "ccn": 11,
+            "cognitive": 13,
+            "nloc": 17,
+            "dispatch_share": 0.0
+          },
+          "reason": "assertOwnershipOutcome has cyclomatic complexity 11",
+          "deduction": null
+        },
+        "function": {
+          "name": "assertOwnershipOutcome",
+          "start_line": 81,
+          "end_line": 97,
+          "ccn": 11,
+          "cognitive": 13,
+          "nloc": 17,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 3,
+          "deepest_block": [
+            86,
+            95
+          ]
+        },
+        "function_normalized_lf_sha256": "45adcfedbf99db9d1044a5777a163a4a0b18f2c74073361088348f3588ab44eb",
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 13,
+        "nloc": 17,
+        "dispatch_share": 0.0,
+        "symbol_line": 81,
+        "deepest_block": {
+          "start": 86,
+          "end": 95
+        }
+      },
+      "callers": [
+        "media-upload IIFE invokes assertOwnershipOutcome after awaited native scenario return; catch records any assertion failure as a failed case."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:91@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:92@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:93@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:96@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep positive happy/new-essay/UI-switch controls alongside rejection cases, request/auth/body/reference checks, pending ownership and corrupt bytes. These are selected projections, not a claim that every state field or uploaded pixel byte is compared."
+    },
+    {
+      "record_id": "code_health:finding_c3978aff4543b6851d31",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@99>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "driver_complexity_has_real_failure_contract",
+      "reason": "The28-line driver owns case isolation, local routing, page load, native evaluation, Node assertions, passed/failed rows, output reporting and final rejection. The separately identified route reuse is useful deletion; replacing try/catch/reporting with a generic run function just to lower CCN9 is not.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:99@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:103@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:106@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:114@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:119@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:121@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:124@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:125@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "<anonymous@99>",
+          "line_start": 99,
+          "line_end": 126,
+          "details": {
+            "ccn": 9,
+            "cognitive": 27,
+            "nloc": 28,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.07
+          },
+          "reason": "<anonymous@99> has cyclomatic complexity 9",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@99>",
+          "start_line": 99,
+          "end_line": 126,
+          "ccn": 9,
+          "cognitive": 27,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.07,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            103,
+            121
+          ]
+        },
+        "function_normalized_lf_sha256": "6ffc2abef03094623a0f424e95808b200c39fa5a9a5f30a34eed8bcd6a72a6a5",
+        "judged_ccn": 9,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 27,
+        "nloc": 28,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.07,
+        "symbol_line": 99,
+        "deepest_block": {
+          "start": 103,
+          "end": 121
+        }
+      },
+      "callers": [
+        "suite IIFE loops25 scenarios and relies on assertOwnershipOutcome rather than marking caught failures as success."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:119@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:121@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:124@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:125@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain report row schema and every scenario, page errors, final failed-count assertion and process exit on fatal failure; route-only adoption needs unchanged suite rerun."
+    },
+    {
+      "record_id": "code_health:finding_ba559d6dc72385ac8e8b",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "bumpy_road",
+      "symbol": "exerciseOwnershipBoundary",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_upload_lifecycle_regions",
+      "reason": "The three bumps represent fetch request validation, native entrypoint dispatch/wait and pending versus saved callback settlement. They are deliberately separated phases around the held async boundary; merging them would obscure whether validation happens before the outgoing upload.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:26@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:31@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:39@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:43@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:69@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "bumpy_road",
+          "severity": "low",
+          "function_name": "exerciseOwnershipBoundary",
+          "line_start": 12,
+          "line_end": 79,
+          "details": {
+            "bumps": 3,
+            "ccn": 23,
+            "max_nesting": 2
+          },
+          "reason": "exerciseOwnershipBoundary has 3 nested blocks at the same level (bumpy road)",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseOwnershipBoundary",
+          "start_line": 12,
+          "end_line": 79,
+          "ccn": 23,
+          "cognitive": 26,
+          "nloc": 68,
+          "dispatch_share": 0.23,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 1,
+          "deepest_block": [
+            39,
+            39
+          ]
+        },
+        "function_normalized_lf_sha256": "8f1a485c4fa4a681646f74450209d15249fe79825cb32aaa68f997fadccae44a",
+        "judged_ccn": 23,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 23,
+        "max_nesting": 2,
+        "symbol_line": 12,
+        "deepest_block": {
+          "start": 39,
+          "end": 39
+        }
+      },
+      "callers": [
+        "same exerciseOwnershipBoundary; outer assertion verifies no outgoing requests for invalid owners and successful completion for controls."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:44@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:69@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve bound-before-release ordering, unexpected-service rejection and settlement timeout. Bumps3 is exact walker evidence, not a reason to combine upload phases."
+    },
+    {
+      "record_id": "code_health:finding_40d1a80c7dd317811846",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "large_method",
+      "symbol": "exerciseOwnershipBoundary",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_size_view_of_upload_boundary_fixture",
+      "reason": "This is the size view of the same controlled-upload callback. Shared state contains the original real image/session, pending/saved owner, held callbacks, captured multipart requests and terminal results. Splitting it for68NLOC would add mutable plumbing without reducing actual repeated work.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:20@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:24@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:61@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:79@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "exerciseOwnershipBoundary",
+          "line_start": 12,
+          "line_end": 79,
+          "details": {
+            "nloc": 68,
+            "ccn": 23,
+            "dispatch_share": 0.23
+          },
+          "reason": "exerciseOwnershipBoundary is 68 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "exerciseOwnershipBoundary",
+          "start_line": 12,
+          "end_line": 79,
+          "ccn": 23,
+          "cognitive": 26,
+          "nloc": 68,
+          "dispatch_share": 0.23,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 3,
+          "param_count": 1,
+          "deepest_block": [
+            39,
+            39
+          ]
+        },
+        "function_normalized_lf_sha256": "8f1a485c4fa4a681646f74450209d15249fe79825cb32aaa68f997fadccae44a",
+        "judged_ccn": 23,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "nloc": 68,
+        "ccn": 23,
+        "dispatch_share": 0.23,
+        "symbol_line": 12,
+        "deepest_block": {
+          "start": 39,
+          "end": 39
+        }
+      },
+      "callers": [
+        "same scenario as complex and bumpy records; driver/Node oracle provide actual pass/failure policy."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:75@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:79@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep held compression and folder cases plus direct/pending/saved entrypoints and positive controls; do not replace native upload or ownership validation with a mock outcome."
+    },
+    {
+      "record_id": "code_health:finding_112b8b7c85259f7e792f",
+      "file": "tests/media-upload-boundary.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse_partial_dry",
+      "reason": "The11-line worst clone at104-114 contains page setup and duplicated local asset serving106-112, also present in media-ownership. Reuse existing localAppRoute for this assigned route with text/html fallback; leave scenario evaluation, ownership oracles and reporting local. Remaining runner overlap does not need a new framework.",
+      "evidence_anchors": [
+        "tests/media-upload-boundary.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:106@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:112@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:114@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:117@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:125@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6199@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6968@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7052@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7101@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7872@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 104,
+          "line_end": 114,
+          "details": {
+            "cross_file_duplication_pct": 14.63,
+            "clone_pair_count": 17,
+            "worst_clone_lines": 11,
+            "worst_clone_partner": "tests/media-ownership.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "15% of file duplicated in other files; worst clone shares 11 lines with tests/media-ownership.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@99>",
+          "start_line": 99,
+          "end_line": 126,
+          "ccn": 9,
+          "cognitive": 27,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.07,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            103,
+            121
+          ]
+        },
+        "function_normalized_lf_sha256": "6ffc2abef03094623a0f424e95808b200c39fa5a9a5f30a34eed8bcd6a72a6a5",
+        "judged_ccn": 9,
+        "judged_nesting": 4,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 14.63,
+        "clone_pair_count": 17,
+        "worst_clone_lines": 11,
+        "worst_clone_partner": "tests/media-ownership.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 99,
+        "symbol": "<anonymous@99>"
+      },
+      "callers": [
+        "media-upload-boundary driver installs local route per scenario; media-ownership@7558 has a related but independently asserted driver."
+      ],
+      "test_assertion_references": [
+        "tests/media-upload-boundary.browser.cjs:114@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:117@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/media-upload-boundary.browser.cjs:125@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Rerun unchanged25-scenario media-upload suite and helper route checks; preserve all held-owner controls, exact request policy, error collection, report cases and failures. No claim17 historical clone pairs vanish.",
+      "smallest_candidate": "Reuse existing tests/support/local-app-route.js only for the legacy asset route. Use existing text/html default. Preserve specialized mocks, native entrypoints, oracle conditions and report/failure protocol."
+    },
+    {
+      "record_id": "code_health:finding_898530e97870b376ca26",
+      "file": "tests/notebook-guide.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse_with_mime_parameter",
+      "reason": "The openNotebookGuideTestPage helper repeats local asset resolution/read/MIME/404 logic30-36. Delegate it to localAppRoute(route,repoRoot,\"application/octet-stream\"), while preserving pageerror registration, navigation and ensureNotebookGuide readiness. Keep the existing focused notebook helper; no broader print-test runner is needed.",
+      "evidence_anchors": [
+        "tests/notebook-guide.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:29@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:30@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:37@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:38@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:118@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:144@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:155@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:7082@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:7479@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:7763@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 29,
+          "line_end": 38,
+          "details": {
+            "cross_file_duplication_pct": 11.03,
+            "clone_pair_count": 10,
+            "worst_clone_lines": 10,
+            "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "11% of file duplicated in other files; worst clone shares 10 lines with tests/deletion-merge.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "openNotebookGuideTestPage",
+          "start_line": 28,
+          "end_line": 39,
+          "ccn": 6,
+          "cognitive": 5,
+          "nloc": 12,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            32,
+            32
+          ]
+        },
+        "function_normalized_lf_sha256": "f8f61afcb3a9b847643c967472e7d3bf60e61eaf8291ed0d3ac4724004f47cc4",
+        "judged_ccn": 6,
+        "judged_nesting": 1,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 11.03,
+        "clone_pair_count": 10,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 28,
+        "symbol": "openNotebookGuideTestPage"
+      },
+      "callers": [
+        "notebook-guide IIFE calls openNotebookGuideTestPage before assessment/fallback/snapshot and print checks."
+      ],
+      "test_assertion_references": [
+        "tests/notebook-guide.browser.cjs:38@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:118@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:144@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/notebook-guide.browser.cjs:155@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Rerun unchanged notebook suite plus route MIME checks; retain A4 pixel dimensions/font/fit, exact print colors, saved/legacy page preservation, candidate grounding, screenshots/PDF generation and failure behavior. No current rendered artifact inspected or produced here.",
+      "smallest_candidate": "Reuse existing tests/support/local-app-route.js only for the legacy asset route. Pass application/octet-stream as third argument. Preserve specialized mocks, native entrypoints, oracle conditions and report/failure protocol."
+    },
+    {
+      "record_id": "code_health:finding_11f605dd287d9c2e0c11",
+      "file": "tests/portfolio-removal.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "actual_remove_button_rollback_retry_oracles",
+      "reason": "The80-line lifecycle clicks the native Remove button, denies real portfolio writes, checks exact original bytes/no tombstones/no counter changes/sync visibility and handled alert, then retries. Successful removal is bound to session ID and stale index0 must not remove a different session. This sequence is coherent; splitting it for size would weaken the causal evidence.",
+      "evidence_anchors": [
+        "tests/portfolio-removal.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:29@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:48@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:64@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:76@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:83@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6844@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6862@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7615@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "<anonymous@7>",
+          "line_start": 7,
+          "line_end": 86,
+          "details": {
+            "nloc": 80,
+            "ccn": 6,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@7> is 80 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 86,
+          "ccn": 6,
+          "cognitive": 10,
+          "nloc": 80,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            85
+          ]
+        },
+        "function_normalized_lf_sha256": "a53706932006c00ccee8c5e23cda2933494bdb25b83f81f51090cc46f0a43f83",
+        "judged_ccn": 6,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "nloc": 80,
+        "ccn": 6,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 85
+        }
+      },
+      "callers": [
+        "IIFE renders actual session history and invokes button.click through its real listener; later directly calls deletePortfolioSession with stale0 for the identifier control."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-removal.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:71@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:76@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:83@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain two attempted portfolio writes under fault, raw bytes, no deletion markers, counters, all original sync-visible IDs, retry result, exact remaining IDs/markers, stale-ID preservation, remaining buttons and errors[]. Synthetic confirmation/storage fault remain disclosed."
+    },
+    {
+      "record_id": "code_health:finding_fd5616187b5342041dc1",
+      "file": "tests/portfolio-removal.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse_with_mime_parameter",
+      "reason": "The21-line prefix worst clone is imports/browser/page setup and the duplicate local asset router13-19. Reuse existing localAppRoute(route,root,\"application/octet-stream\"), then remove fs only if unused. Do not merge the Remove-button transaction with deletion-merge's cloud history fixture despite high56.47% historical token overlap.",
+      "evidence_anchors": [
+        "tests/portfolio-removal.browser.cjs:1@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:13@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:21@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:76@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6844@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6862@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7615@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 1,
+          "line_end": 21,
+          "details": {
+            "cross_file_duplication_pct": 56.47,
+            "clone_pair_count": 24,
+            "worst_clone_lines": 21,
+            "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "56% of file duplicated in other files; worst clone shares 21 lines with tests/deletion-merge.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 86,
+          "ccn": 6,
+          "cognitive": 10,
+          "nloc": 80,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            9,
+            85
+          ]
+        },
+        "function_normalized_lf_sha256": "a53706932006c00ccee8c5e23cda2933494bdb25b83f81f51090cc46f0a43f83",
+        "judged_ccn": 6,
+        "judged_nesting": 2,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 56.47,
+        "clone_pair_count": 24,
+        "worst_clone_lines": 21,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "portfolio-removal IIFE serves the native app before its actual button and storage-failure scenario."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-removal.browser.cjs:21@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-removal.browser.cjs:76@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Rerun unchanged native removal and helper MIME checks; preserve successful200/HTML/JS override,404/external abort, button delegation, fault/retry and stale-session-ID checks. No blanket DRY clearance predicted.",
+      "smallest_candidate": "Reuse existing tests/support/local-app-route.js only for the legacy asset route. Pass application/octet-stream as third argument. Preserve specialized mocks, native entrypoints, oracle conditions and report/failure protocol."
+    },
+    {
+      "record_id": "code_health:finding_eb2b04694e8a4d4925c6",
+      "file": "tests/portfolio-render-failures.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@5>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "expected_chart_error_and_recovery_lifecycle",
+      "reason": "Depth4 is the two injected constructor positions inside browser cleanup and per-page cleanup. The test requires exactly the injected deferred error, preserves readable history/raw bytes, distinguishes partial chart registration and destruction, then waits for two successful charts on refresh. This explicit exception oracle should remain local.",
+      "evidence_anchors": [
+        "tests/portfolio-render-failures.browser.cjs:5@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:8@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:16@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:30@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:38@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:43@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7615@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7692@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "nested_complexity",
+          "severity": "medium",
+          "function_name": "<anonymous@5>",
+          "line_start": 5,
+          "line_end": 50,
+          "details": {
+            "max_nesting": 4,
+            "ccn": 5,
+            "cognitive": 15,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.02
+          },
+          "reason": "<anonymous@5> nests 4 levels deep",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 50,
+          "ccn": 5,
+          "cognitive": 15,
+          "nloc": 46,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            12,
+            45
+          ]
+        },
+        "function_normalized_lf_sha256": "4bb06681758ae5fdc369e4aebea2b7e1818ca1dc78f8139a465f17d31bb677a2",
+        "judged_ccn": 5,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 5,
+        "cognitive": 15,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 12,
+          "end": 45
+        }
+      },
+      "callers": [
+        "IIFE calls native renderStudentPortfolio with synthetic Chart constructor throwing at1 or2, then replaces only Chart and renders again."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-render-failures.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:43@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain exact one expected pageerror, partial registry[]/overall, destruction0/1, read-only stored bytes before/after and recovery without another error. This verifies containment/retry, not a graceful catch or real Chart library behavior."
+    },
+    {
+      "record_id": "code_health:finding_6621240af0e5e4025e77",
+      "file": "tests/portfolio-render-failures.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "already_shared_route_distinct_chart_oracle",
+      "reason": "The local clone spans11lines while worst_clone_lines12 takes the larger partner span in portfolio-image-slots. Both already use localAppRoute. The rest is ordinary browser/two-case lifecycle; a new common runner would need incompatible image-slot and deferred-chart-error contracts and would save little.",
+      "evidence_anchors": [
+        "tests/portfolio-render-failures.browser.cjs:1@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:3@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:5@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:8@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:10@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:11@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7615@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7692@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 1,
+          "line_end": 11,
+          "details": {
+            "cross_file_duplication_pct": 40.0,
+            "clone_pair_count": 5,
+            "worst_clone_lines": 12,
+            "worst_clone_partner": "tests/portfolio-image-slots.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "40% of file duplicated in other files; worst clone shares 12 lines with tests/portfolio-image-slots.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@5>",
+          "start_line": 5,
+          "end_line": 50,
+          "ccn": 5,
+          "cognitive": 15,
+          "nloc": 46,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            12,
+            45
+          ]
+        },
+        "function_normalized_lf_sha256": "4bb06681758ae5fdc369e4aebea2b7e1818ca1dc78f8139a465f17d31bb677a2",
+        "judged_ccn": 5,
+        "judged_nesting": 4,
+        "scope": "Historical90-source clone archive; digest and all9 assigned LF hashes independently verified. Installed ClonePair/FileContext/DRY detector replay. No current91-corpus or independent co-change history claim. For clones crossing module prefix, nearby function is context, not a function-local DRY attribution."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 40.0,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/portfolio-image-slots.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "portfolio-render-failures IIFE uses shared route; portfolio-image-slots@7558 has different mixed-image/history assertions."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-render-failures.browser.cjs:11@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/portfolio-render-failures.browser.cjs:49@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep expected error event, raw bytes, partial registry/destruction and successful native refresh checks explicit. Historical five dormant pairs do not justify another abstraction."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "assigned_records": 25,
+    "reviewed_no_change": 20,
+    "confirmed_repair_candidate": 5,
+    "candidate_groups": 5,
+    "candidate_files": [
+      "tests/deletion-durability.browser.cjs",
+      "tests/deletion-merge.browser.cjs",
+      "tests/media-upload-boundary.browser.cjs",
+      "tests/notebook-guide.browser.cjs",
+      "tests/portfolio-removal.browser.cjs"
+    ],
+    "companion_route_candidate": "Assigned corrupt-portfolio serveTestFile7-12 is identical to deletion-durability routeLocalAppRequest7-12 and can reuse the same helper in that candidate group. No change to its three retained exerciseCloudCorruption shape dispositions.",
+    "retained_dry_files": [
+      "tests/crop-transparency.browser.cjs",
+      "tests/image-preparation.browser.cjs",
+      "tests/portfolio-render-failures.browser.cjs"
+    ],
+    "candidate_scope": "Existing local route reuse only, with MIME parameter where needed; no shared fixture/runner framework or calibration/oracle rewrite. Partial duplication deletion, no prediction all clone flags disappear.",
+    "new_unconfirmed_leads": 0,
+    "scanner_closures_claimed": false
+  },
+  "limits": [
+    "No app/test/browser/syntax execution, new runtime reproduction, source/config/fixture/Git/index/tracker/docs/dependency/chat changes or additional agents. Only own scratch and this report written; no test-pass or closure claim.",
+    "Static detector metrics establish shape and historical token overlap, not a behavioral fault. Individual retention/candidate recommendations require parent adoption.",
+    "Pixel fixtures decode real synthetic canvas/image output in the authored tests; reviewer did not execute codecs, inspect screenshots or produce print artifacts. Crop rectangle, confirmations, storage faults and provider/folder/compression/Chart services are controlled seams, not physical input or live-service evidence.",
+    "Corrupt-data/durability/upload tests return explicit selected state projections. Exact bytes are asserted where identified; no complete browser-state or uploaded-image-byte-equivalence claim is made.",
+    "Existing deferred Chart errors are required exactly by the chart-failure test and explicitly remain uncaught; this report does not reinterpret them as graceful error handling.",
+    "Historical archive digest binds stored90-source clone evidence. No current91 global clone claim, regenerated I/O graph, global rank or independent co-change reconstruction.",
+    "Parent owns full batch005 gate, any source adoption and scanner reconciliation."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+    "all_individual_reasons_read": true,
+    "assigned_files_raw_and_lf_verified": 9,
+    "actual_detector_replays_combined": 48,
+    "source_verified_io_records_combined": 2,
+    "evidence_receipt": "reviews/batch-005-readonly-057-058-acceptance.json",
+    "limits": "Historical 90-source clone archive reused. No current91 corpus, regenerated I/O graph/rank/cost, runtime pass, bug reproduction or scanner closure. New057-L1 assertion premise checked against native test and immutable production clear callback."
+  }
+}

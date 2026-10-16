@@ -1,0 +1,357 @@
+{
+  "review_id": "batch-005-regression-review",
+  "verdict": "no_blocking_regression_oracle_issue_found",
+  "baseline_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "source_pin_commit": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "inspected_git_commit_begin": "d9bc81b9855ae736e84c931de5963fbaa785ca37",
+  "inspected_git_commit_end": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "blockers": [],
+  "findings": [],
+  "source_verification": {
+    "pin_file": "work/repowise-coordinator/batch-005-review-source-pins.json",
+    "pin_file_sha256": "2f9c4994bd5f6be3a69aa803a9988d73507b951171589893590a71634fbb6f75",
+    "code_files": 91,
+    "config_files": 1,
+    "all_raw_and_normalized_lf_match_begin_and_end": true,
+    "begin_end_hash_maps_equal": true,
+    "relevant_source_hashes": {
+      "js/app/00-storage-sync-patches.js": {
+        "raw": "14d1aa9e8b4f1dbad28e9e62fa2f6def8aa2a1f4042297a0aaa041c4c8e932e3",
+        "normalized_lf": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb"
+      },
+      "js/app/10-main-app.js": {
+        "raw": "95b4bcb4e3596b3ac322ad059cc10cd7f67406bddfd2b7800a01a0ea973fd478",
+        "normalized_lf": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+      },
+      "tests/crop-ownership.browser.cjs": {
+        "raw": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608",
+        "normalized_lf": "52403f8b04bf062f60819c78a2e268b044993cd26b64ee393b51c5f730902608"
+      },
+      "tests/portfolio-html.browser.cjs": {
+        "raw": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4",
+        "normalized_lf": "6ed1c59140fc6a14911a77ae203a47034776c4ba87deebc10e8a35ca022639f4"
+      },
+      "tests/portfolio-reassessment.browser.cjs": {
+        "raw": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2",
+        "normalized_lf": "12905d135ec74fd5b05a64981f6ebcfcf92cc1344f071590ca57b5324293f3d2"
+      },
+      "scripts/case-report-suites.json": {
+        "raw": "53977b2dc0ea658616daf7599536742cf4599373bc9b66b0f771bad317674ad8",
+        "normalized_lf": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff"
+      }
+    },
+    "normalized_lf_changes_from_git00c": [
+      {
+        "file": "js/app/00-storage-sync-patches.js",
+        "kind": "changed"
+      },
+      {
+        "file": "js/app/10-main-app.js",
+        "kind": "changed"
+      },
+      {
+        "file": "tests/crop-ownership.browser.cjs",
+        "kind": "changed"
+      },
+      {
+        "file": "tests/portfolio-html.browser.cjs",
+        "kind": "changed"
+      },
+      {
+        "file": "tests/portfolio-reassessment.browser.cjs",
+        "kind": "new"
+      },
+      {
+        "file": "scripts/case-report-suites.json",
+        "kind": "changed"
+      }
+    ],
+    "scope_note": "Only two production functions/areas, two existing native suites, one new native suite and one manifest entry differ within pinned code/config from Git00c. Metadata/docs/HEAD can advance under root; HEAD advanced d9bc to7558 during this review while pinned bytes stayed equal."
+  },
+  "evidence_verification": {
+    "worker_reports": {
+      "repair-039-reassessment-integration.json": "2c11ef321f90ac9d352394ae9887611b474d7c26c77494ece66c3b9e1fd5dd97",
+      "repair-045-photo-reorder.json": "57609c114007b35783cfd2c48194dadddc01ea2e23f926f594a94b07ae4d51b1",
+      "repair-046-roster-navigation.json": "92ad4ac8bcdd3eec73bf526db21669dcd00234bc4e718f863647462e0d044902"
+    },
+    "hash_receipted_artifacts_including_reports": 63,
+    "provided_expected_artifact_hashes_verified": 60,
+    "artifact_hash_mismatches": [],
+    "before_after_names_and_reassessment_assertion_labels_identical": true,
+    "summaries": {
+      "repair-039-reassessment-integration.json": {
+        "before": {
+          "cases": 16,
+          "passed": 7,
+          "checks": 79,
+          "failed_checks": 27,
+          "operational_errors": 0,
+          "page_errors": 0
+        },
+        "after": {
+          "cases": 16,
+          "passed": 16,
+          "checks": 79,
+          "failed_checks": 0,
+          "operational_errors": 0,
+          "page_errors": 0
+        },
+        "before_failure_names": [
+          "source-delete-confirm",
+          "late-analysis-confirm",
+          "pending-read-failure-confirm",
+          "portfolio-read-failure-confirm",
+          "pending-parse-failure-confirm",
+          "storage-only-pending-confirm",
+          "original-photo-change-confirm",
+          "source-save-confirm",
+          "deletion-only-confirm"
+        ],
+        "after_failure_names": []
+      },
+      "repair-045-photo-reorder.json": {
+        "before": {
+          "cases": 51,
+          "passed": 46,
+          "old_cases": 38,
+          "old_passed": 38,
+          "new_cases": 13
+        },
+        "after": {
+          "cases": 51,
+          "passed": 51,
+          "old_cases": 38,
+          "old_passed": 38,
+          "new_cases": 13
+        },
+        "before_failure_names": [
+          "drop-source-negative",
+          "drop-source-past-end",
+          "drop-target-negative",
+          "drop-target-past-end",
+          "drop-stale-after-remove"
+        ],
+        "after_failure_names": []
+      },
+      "repair-046-roster-navigation.json": {
+        "before": {
+          "checks": 58,
+          "passed": 49,
+          "old_checks": 26,
+          "old_passed": 26,
+          "navigation_scenarios": 8,
+          "new_checks": 32
+        },
+        "after": {
+          "checks": 58,
+          "passed": 58,
+          "old_checks": 26,
+          "old_passed": 26,
+          "navigation_scenarios": 8,
+          "new_checks": 32
+        },
+        "before_failure_names": [
+          "roster desktop: real name click opens visible Portfolio tab/panel",
+          "roster mobile: real name click opens visible Portfolio tab/panel",
+          "roster same-student: real name click opens visible Portfolio tab/panel",
+          "roster stale-dropdown: real name click opens visible Portfolio tab/panel",
+          "roster stale-dropdown: target and dropdown populate with one correct render",
+          "roster missing-tool-select: real name click opens visible Portfolio tab/panel",
+          "roster missing-portfolio-select: real name click opens visible Portfolio tab/panel",
+          "roster missing-scroll-section: real name click opens visible Portfolio tab/panel",
+          "roster selection-write-failure: real name click opens visible Portfolio tab/panel"
+        ],
+        "after_failure_names": []
+      }
+    },
+    "receipts": {
+      "source_begin": {
+        "path": "work/repowise-review-batch-005/begin-pins.json",
+        "sha256": "f33f43986896c03d6ddd4cd63cde9ea18d226a590c6da8ebc62beea346d38684"
+      },
+      "source_end": {
+        "path": "work/repowise-review-batch-005/end-pins.json",
+        "sha256": "cd7432f18ace0a28df76d5c7ce49f89340bba90450a5c1db70131ac852cc5ad1"
+      },
+      "artifact_audit": {
+        "path": "work/repowise-review-batch-005/evidence.json",
+        "sha256": "6c7795335610dde72dfed0015fc8e7c7783a38ba39d7153a7b3a7fa084f10d95"
+      }
+    },
+    "negative_source_alignment": "039 negative main raw be45 equals Git00c main with checkout CRLF;046 negative storage raw ca880 likewise equals Git00c storage with CRLF. Removing only045 added range checks from frozen current main gives039 reviewed raw5be2 exactly, matching045 negative main receipt. This avoids treating checkout EOL differences as different code.",
+    "attribution": "Counts and outcomes below are recomputed from hash-verified worker result artifacts, not test runs by this reviewer."
+  },
+  "reviews": [
+    {
+      "repair_id": "repair-039",
+      "conclusion": "Native suite and required report admission preserve the approved reassessment contract; no false-green blocker found.",
+      "before_after": "Same official test bytes12905d...:16 cases/79 assertion blocks before and after. Baseline has9 failing cases/27 failed blocks,7 passing controls and no operational/page errors; accepted after report has16 passing cases/79 blocks and no errors.27 is failed assertions, not27 bugs.",
+      "event_paths": "Actual portfolio tab/select and Reassess/Confirm/Cancel UI. Source deletion uses a second same-origin page and public Remove Entry UI while first real confirmation stays open. Late-result cases start the actual Analyze button and hold only the provider response seam; three real analysis stages finish and persist a Bob result behind the actual dialog.",
+      "controlled_seams": "One-shot required-storage read failures, malformed stored pending bytes, required preference write failure, controlled real savePortfolioLocalOnly and saveDeletionsLocalOnly writer calls, synthetic AI responses and original-photo mutation. The legacy timestamp caller is direct because that ID is a supported legacy entry point. None replaces the target reassessment function, real dialog or analysis publication.",
+      "oracle_strength": "Snapshots clone current writing/owner/source/photo/pending/report/genre/preferences plus six exact storage byte fields. Deletion-only premises prove physical source still exists, actual deletion policy excludes it, newer timestamp and no competing snapshot field changed; stored-only pending has cached-runtime/other-byte premises. Confirm rejection compares acceptance-time current work; cancel/grade/read/parse failures compare complete snapshots. Ordinary/no-date/legacy controls prove unchanged sources load and acknowledged pre-existing pending is intentionally cleared in runtime and storage.",
+      "aggregation": "Every caught check is recorded false; operational exceptions and page errors make case.passed false. End assertions require all16 cases and79 blocks, so a skipped/premature path cannot quietly satisfy the suite. Manifest adds exactly this suite once; runner requires a fresh nonempty passing case report.",
+      "anchors": [
+        {
+          "file": "tests/portfolio-reassessment.browser.cjs",
+          "lines": "8-68",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "tests/portfolio-reassessment.browser.cjs",
+          "lines": "73-181",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "tests/portfolio-reassessment.browser.cjs",
+          "lines": "182-262",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "7626-7761",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "scripts/case-report-suites.json",
+          "lines": "28",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "scripts/run-tests.cjs",
+          "lines": "33-76,79-105",
+          "source": "frozen batch005 bytes"
+        }
+      ],
+      "limits": "Source039 semantic review was already approved by040/041+root; this review checks the integrated official regression/conversion/config. Recovery refusal is source-inspected rather than a dedicated injected test; conservative whole-byte retry policy is accepted scope, not a general cross-tab lock."
+    },
+    {
+      "repair_id": "repair-045",
+      "conclusion": "The five invalid/stale parsed-bound failures are concretely detected; valid/no-op behavior remains asserted. No blocker for this scoped bounds fix.",
+      "before_after": "Same extended test52403f...:51 cases both stages, including all38 old crop cases. Before:46 pass and exactly five failing new boundary cases; two native browser exceptions in out-of-range/stale-source cases. After:51 pass, including13 new drop cases, no new page errors/undefined entries, terminal cleanup asserted. Eight valid/no-op new controls pass before as well.",
+      "event_paths": "New tests dispatch native DragEvent/DataTransfer through the actual delegated dragstart/drop listeners and real preview cards. The stale sequence performs real dragstart index2, then public Remove index0 before dropping retained transfer on the shortened two-item queue. Source/target invalid payloads and dataset edits are explicit controlled boundary inputs.",
+      "oracle_strength": "Rejected/no-op cases compare photo bytes/originals, IDs/revisions/Drive refs/owner/OCR text, queue and per-photo promise reference identity, writing/selection/primary state, pending payload and exact stored portfolio/settings/deletion/selection/pending bytes. Defined queue and terminal drag index/classes have separate assertions. Valid desktop/mobile before/after controls use opposing X/Y positions to test axis selection, preserve expected ID order/bytes and clear only intended OCR caches with primary resynchronization. Prefix/fraction parseInt and drag-index/text fallback controls retain existing input semantics.",
+      "old_test_preservation": {
+        "baseline_all_lines_preserved_in_order": true,
+        "baseline_lines": 230,
+        "current_lines": 325,
+        "insertions": [
+          {
+            "baseline_after_line": 205,
+            "current_start": 206,
+            "current_end": 280,
+            "added_lines": 75
+          },
+          {
+            "baseline_after_line": 225,
+            "current_start": 301,
+            "current_end": 320,
+            "added_lines": 20
+          }
+        ]
+      },
+      "aggregation": "All baseline lines remain in original order; new case failures/operational exceptions enter the existing failures array and final assert. A tick after dispatch collects native event exceptions. Before/after case names match exactly; no expected-failure allowance or filter added.",
+      "anchors": [
+        {
+          "file": "tests/crop-ownership.browser.cjs",
+          "lines": "206-280",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "tests/crop-ownership.browser.cjs",
+          "lines": "301-325",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "3435-3577",
+          "source": "frozen batch005 bytes"
+        }
+      ],
+      "limits": "A separate mouse-generated headless drag attempt did not reach dragstart. These tests substantiate the controlled native event/queue boundary, not a trusted human mouse/touch gesture. Still-in-range stale index identity is explicitly outside this repair, not an omitted claimed fix."
+    },
+    {
+      "repair_id": "repair-046",
+      "conclusion": "Actual roster name-button navigation, one correct render and preserved current work are asserted; no false-green blocker found.",
+      "before_after": "Same extended test6ed1c...:58 named checks both stages. Before:49 pass, nine failures across eight navigation scenarios; all26 old security/export checks pass. After:58 pass,32 new checks across all8 scenarios. No operational/page errors in the inspected navigation artifacts.",
+      "event_paths": "Each fresh page loads shipped app, then clicks Teacher Admin, Show Class Roster if needed and actual rendered Alice/Bob accessible name button. Desktop/mobile use actual viewport-driven CSS/media behavior. Additional stale/missing dropdown/tool/section and local selection write failures are explicit compatibility seams.",
+      "oracle_strength": "Checks both actual panel visibility and tab classes, runtime/tool/portfolio selection, exact dropdown option order, saved card title, enabled export and exactly one correct render where a selector exists. Protected snapshot includes writing, complete photo content/OCR and primary values, cloned source/pending/analysis, grade/neatness, corrected report and exact roster/settings/portfolio/deletion/pending storage. Reference checks preserve photo/OCR promise/pending/source/report identity; selection storage has a separate expected-change/failure oracle. Crop-close count and desktop/mobile smooth-scroll expectations are independent.",
+      "instrumentation": "Renderer, crop-close and native scroll spies record calls and delegate to their captured real implementations. No replacement openStudentPortfolio/switchTab handler, fabricated card DOM or mocked visibility; actual branch order is exercised. Missing portfolio selector deliberately accepts graceful no-render behavior while still checking owner/panel safety, not nonexistent cards.",
+      "old_test_preservation": {
+        "baseline_all_lines_preserved_in_order": true,
+        "baseline_lines": 207,
+        "current_lines": 298,
+        "insertions": [
+          {
+            "baseline_after_line": 154,
+            "current_start": 155,
+            "current_end": 243,
+            "added_lines": 89
+          },
+          {
+            "baseline_after_line": 201,
+            "current_start": 291,
+            "current_end": 291,
+            "added_lines": 1
+          },
+          {
+            "baseline_after_line": 202,
+            "current_start": 293,
+            "current_end": 293,
+            "added_lines": 1
+          }
+        ]
+      },
+      "aggregation": "Original check collector records failures and final assert remains unchanged. Operational errors create a failed check rather than disappearing;8 observations and32 new named checks are present in both raw reports. Original export/security/performance code is retained byte-for-byte after LF normalization.",
+      "anchors": [
+        {
+          "file": "tests/portfolio-html.browser.cjs",
+          "lines": "155-242",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "tests/portfolio-html.browser.cjs",
+          "lines": "245-298",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "7144-7187",
+          "source": "frozen batch005 bytes"
+        },
+        {
+          "file": "js/app/10-main-app.js",
+          "lines": "27-89",
+          "source": "frozen batch005 bytes"
+        }
+      ],
+      "limits": "No experimental async portfolio load or live Drive/AI; the guarded optional missing-DOM cases are compatibility checks, while core desktop/mobile clicks use normal DOM. Closing an already held crop is also exercised compositionally by the unchanged old crop portfolio-away/back case."
+    }
+  ],
+  "config_admission": {
+    "manifest_before": 44,
+    "manifest_after": 45,
+    "only_added_entry": "tests/portfolio-reassessment.browser.cjs",
+    "all_old_entries_order_preserved": true,
+    "new_suite_discovered_as_cjs": true,
+    "required_report_entry_exactly_once": true,
+    "runner_unchanged_from_baseline": true,
+    "meaning": "The runner still removes stale reports, clears baseline/filter environment switches and admits only nonempty successful case rows plus successful process status; adding this suite does not weaken old suite/report contracts."
+  },
+  "nonblocking_limits": [
+    "Drop snapshots project per-photo extraction promises to booleans plus separate per-photo reference checks. The primary promise is only a Boolean projection, and before.source retains the source object until serialization. Thus this is not a universal detector of hypothetical in-place source/primary-promise mutation. The edited handler never writes that source object; its actual invalid-path OCR/queue mutations are detected, so this does not block the bounds claim.",
+    "The crop and roster suites rely on their fixed frozen arrays and observed complete reports for51 cases/58 checks; unlike the new reassessment suite, they do not add a hardcoded total-count assert. Actual before/after inventories and all baseline lines are verified here; this is not evidence of missing cases in this batch.",
+    "Programmatic drag events and injected writer/read boundaries are intentionally controlled seams. No claim of a human drag gesture, real network/Drive/AI/OAuth, whole-browser coverage or global race/transaction guarantee is made."
+  ],
+  "final_limits": [
+    "No app/test/syntax execution by this reviewer. Worker before/after results are evidence inspected and hashed, not independently rerun outcomes. Root owns the combined full gate, source adoption and publication.",
+    "No repo/test/fixture/config/Git/index/cache/tracker/docs/dependency/chat changes or extra agents. Only own scratch and this report written.",
+    "Freeze validation covers supplied91code+1config raw/LF maps at beginning and end. Metadata/docs/HEAD progression was permitted; source maps are equal despite HEAD advancement. No scanner closure or full-gate pass claim."
+  ],
+  "coordinator_acceptance": {
+    "all_reviews_and_nonblocking_limits_read": true,
+    "all91source_and_config_pins_match": true,
+    "three_audit_receipts_hash_verified": true,
+    "no_required_source_change": true,
+    "full_suite_refresh_publication": "pending"
+  }
+}

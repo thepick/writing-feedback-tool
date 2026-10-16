@@ -1,0 +1,3595 @@
+{
+  "repair_id": "repair-054",
+  "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "observed_git_head_at_report": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "review_mode": "Independent read-only source/oracle/metric review; no app, test, browser or full clone execution.",
+  "source_hashes_normalized_lf": {
+    "tests/portfolio-index.browser.cjs": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+    "tests/split-storage.browser.cjs": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+    "tests/portfolio-sync.browser.cjs": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0",
+    "tests/settings-deletions-sync.browser.cjs": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+    "tests/portfolio-replacement.browser.cjs": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33",
+    "tests/portfolio-image-slots.browser.cjs": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+    "tests/student-selection-storage.browser.cjs": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b",
+    "tests/record-identity.browser.cjs": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+    "tests/session-retention.browser.cjs": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+    "js/app/00-storage-sync-patches.js": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+    "js/app/10-main-app.js": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+    "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+    "tests/support/local-app-route.js": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "tests/portfolio-render-failures.browser.cjs": "e2aa82dadfb5747ffc593b815c0354b5be608e5d3e6f988d4e001c16e995990b",
+    "tests/deletion-merge.browser.cjs": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2",
+    "tests/storage-integrity.browser.cjs": "62171ccbad1ea2d4ed902697fc9a256176142da5e8626e69d0adceb2669f3acd",
+    "tests/image-preparation.browser.cjs": "d010aba53dd6780905dd33d7c6dffe3c483a27fca3e9fe43d30c11fce5373c81",
+    "scripts/run-tests.cjs": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "scripts/check-test-runner.cjs": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/case-report-suites.json": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff"
+  },
+  "assigned_file_bindings": {
+    "begin": {
+      "tests/portfolio-index.browser.cjs": {
+        "raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8"
+      },
+      "tests/split-storage.browser.cjs": {
+        "raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b",
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0"
+      },
+      "tests/portfolio-sync.browser.cjs": {
+        "raw": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066",
+        "normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0"
+      },
+      "tests/settings-deletions-sync.browser.cjs": {
+        "raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+        "normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+      },
+      "tests/portfolio-replacement.browser.cjs": {
+        "raw": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5",
+        "normalized_lf": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33"
+      },
+      "tests/portfolio-image-slots.browser.cjs": {
+        "raw": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974",
+        "normalized_lf": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848"
+      },
+      "tests/student-selection-storage.browser.cjs": {
+        "raw": "a507351f3c4d5485ffc4240153c42a2765dbb03fdc20bf385b96acea03ff7115",
+        "normalized_lf": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b"
+      },
+      "tests/record-identity.browser.cjs": {
+        "raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762",
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d"
+      },
+      "tests/session-retention.browser.cjs": {
+        "raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de",
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4"
+      }
+    },
+    "end": {
+      "tests/portfolio-index.browser.cjs": {
+        "raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce",
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8"
+      },
+      "tests/split-storage.browser.cjs": {
+        "raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b",
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0"
+      },
+      "tests/portfolio-sync.browser.cjs": {
+        "raw": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066",
+        "normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0"
+      },
+      "tests/settings-deletions-sync.browser.cjs": {
+        "raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+        "normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+      },
+      "tests/portfolio-replacement.browser.cjs": {
+        "raw": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5",
+        "normalized_lf": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33"
+      },
+      "tests/portfolio-image-slots.browser.cjs": {
+        "raw": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974",
+        "normalized_lf": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848"
+      },
+      "tests/student-selection-storage.browser.cjs": {
+        "raw": "a507351f3c4d5485ffc4240153c42a2765dbb03fdc20bf385b96acea03ff7115",
+        "normalized_lf": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b"
+      },
+      "tests/record-identity.browser.cjs": {
+        "raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762",
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d"
+      },
+      "tests/session-retention.browser.cjs": {
+        "raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de",
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4"
+      }
+    },
+    "all_nine_raw_and_lf_match_assignment_at_both_checks": true,
+    "all_nine_normalized_bodies_equal_git_00c_and_git_7558": true
+  },
+  "verification": {
+    "function_records": 30,
+    "all_stored_numeric_function_and_condition_facts_replayed": true,
+    "dataflow_exception_state_replayed": true,
+    "dry_records": 6,
+    "dry_archive": "work/repowise-coordinator/00c-full-clone-replay.json",
+    "dry_archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+    "dry_replay": "Reconstructed archived pairs/context; all detector detail fields and reported spans match. Stored symbol stamps are retained as facts but not used to infer clone ownership.",
+    "io_records": 2,
+    "io_verification": "Manually followed the actual loop/call-site/route/filesystem path; rank/graph metadata not independently regenerated.",
+    "function_hash_definition": "SHA256 of normalized LF source, inclusive walker start/end lines with original terminal LF."
+  },
+  "inspected_scopes": {
+    "assigned_tests": "All nine files, complete assigned functions, nested scenario definitions, caller drivers and actual check/failure aggregation code.",
+    "shared_route": "Git7558 helper complete body and check-test-runner helper assertions 51-59.",
+    "application_context": "Historical Git7558 only: portfolio index summary/build/cache and native index synchronization/guards; native save/pending replacement/retention and selection boundaries; own-key session/image merging and syncWftPortfolioIfNeeded, including push/ack 5685-5694. Production file hashes identify context, not a claim to have reviewed every line.",
+    "clone_partners": "Archived pairs plus corresponding setup in portfolio-render-failures, deletion-merge, storage-integrity and image-preparation; no full current corpus clone run.",
+    "runner": "Historical native runner/report configuration used to inspect case-report/failed-case contracts; no runner execution."
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_2ae7b251e6000adae8f6",
+      "file": "tests/portfolio-image-slots.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@6>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_failure_isolation",
+      "reason": "The fifth nesting level is the two-mode null-slot fixture inside page/exception ownership. The inner catch records a failed case and the finally closes that page; outer finally closes the browser. Flattening these scopes would couple fixture failures or lose cleanup. The actual saved-session DOM, raw bytes and surviving image oracles justify this shape.",
+      "verified_observation_details": {
+        "max_nesting": 5,
+        "ccn": 14,
+        "cognitive": 50,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 14,
+          "end": 49
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "14-49",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "39-46",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "48-54",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "IIFE launches the browser and runs each null-image mode on a fresh page."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-image-slots.browser.cjs:14-49;39-46;48-54"
+      ],
+      "regression_recommendation": "No shape repair. Preserve both modes, raw-byte immutability, native render and failure aggregation.",
+      "binding_hashes": {
+        "normalized_lf": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+        "current_raw": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 55,
+          "ccn": 14,
+          "cognitive": 50,
+          "max_nesting": 5,
+          "nloc": 50,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "deepest_block": [
+            14,
+            49
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          6,
+          55
+        ],
+        "sha256_normalized_lf": "dc6d5bda3eb2189551d6c6ccdb844e569498d47906d412e241ab75c3877f3f48",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-image-slots.browser.cjs:6-55"
+    },
+    {
+      "record_id": "code_health:finding_bc14e931dfc214b31489",
+      "file": "tests/portfolio-image-slots.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@6>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_assertion_matrix",
+      "reason": "The 50-line driver covers distinct null-image layouts and verifies native rendering rather than a mock normalization result. Exception state is consumed by the failing-case report; pure extraction/staging replay also reports exception_state. Removing these assertions or hiding the driver in a generic browser factory has no useful repair benefit.",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 50,
+        "nloc": 50,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 6,
+        "deepest_block": {
+          "start": 14,
+          "end": 49
+        },
+        "extract_method_stage_refused": [
+          "exception_state"
+        ]
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "6-55",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "39-54",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level native browser suite; per-mode exercise and check stay inside the protected page scope."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-image-slots.browser.cjs:6-55;39-54"
+      ],
+      "regression_recommendation": "Keep the native unavailable-image, zero-score, reassessment identity and page-error checks.",
+      "binding_hashes": {
+        "normalized_lf": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+        "current_raw": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@6>",
+          "start_line": 6,
+          "end_line": 55,
+          "ccn": 14,
+          "cognitive": 50,
+          "max_nesting": 5,
+          "nloc": 50,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "deepest_block": [
+            14,
+            49
+          ],
+          "complex_conditions": []
+        },
+        "dataflow": {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "function_start": 6,
+          "refused": [
+            "exception_state"
+          ],
+          "stored_refusal_verified": "exception_state"
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          6,
+          55
+        ],
+        "sha256_normalized_lf": "dc6d5bda3eb2189551d6c6ccdb844e569498d47906d412e241ab75c3877f3f48",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-image-slots.browser.cjs:6-55"
+    },
+    {
+      "record_id": "code_health:finding_d9e3aa8549d422bd8ba6",
+      "file": "tests/portfolio-image-slots.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "already_shared_boundary",
+      "reason": "The worst clone is import/browser/route setup. This file already imports local-app-route at line 3 and delegates routing at line 12, as does its render-failures partner. A second browser factory would abstract ordinary lifecycle scaffolding rather than remove remaining duplicated asset logic.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 35.19,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/portfolio-render-failures.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "1-12",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-image-slots.browser.cjs",
+          "lines": "51-55",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level IIFE; shared route helper already owns asset serving."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-image-slots.browser.cjs:1-12;51-55"
+      ],
+      "regression_recommendation": "No additional extraction. Retain page-error collection, final browser close and failed-case aggregation.",
+      "binding_hashes": {
+        "normalized_lf": "505fd1afc5eea1683b13a188b698f88acd84c92c8dd11aa51f4d3752a4f07848",
+        "current_raw": "d650059e2d2d2a63da40417c02d088c72954aa42cdf99797ea04d2163b0b5974"
+      },
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 35.19,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/portfolio-render-failures.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          1,
+          12
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "DryViolationDetector over reconstructed archived ClonePair/FileContext, not a new corpus clone run",
+        "cochange_limit": "Stored cochange metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/portfolio-image-slots.browser.cjs:file-level-browser-setup"
+    },
+    {
+      "record_id": "code_health:finding_de2a45ef8496cb5def8b",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyScoreSummaries",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_score_contract",
+      "reason": "Nine explicit precedence cases distinguish zero, legacy/current own fields, null and invalid scores; main and split summaries have independent expected outputs. Getter-driven mutation checks assert exactly which date/score values are read, null-prototype output, untouched metadata/storage and original thrown sentinel. Combining those into an opaque oracle would weaken the test.",
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 20,
+        "nloc": 39,
+        "dispatch_share": 0.0,
+        "symbol_line": 44,
+        "deepest_block": {
+          "start": 46,
+          "end": 63
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "44-83",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "46-62",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "66-81",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Suite runner calls verifyScoreSummaries through reset/run; native index builders and split summaries are exercised."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:44-83;46-62;66-81"
+      ],
+      "regression_recommendation": "Preserve current-wins/null-wins/zero and getter-read-order cases if production scoring changes.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyScoreSummaries",
+          "start_line": 44,
+          "end_line": 83,
+          "ccn": 18,
+          "cognitive": 20,
+          "max_nesting": 2,
+          "nloc": 39,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            46,
+            63
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          44,
+          83
+        ],
+        "sha256_normalized_lf": "a73ffcce84a8059051e6a0542f060411607ee3359d8045a8a038e90187fcd800",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:44-83"
+    },
+    {
+      "record_id": "code_health:finding_0f253ac6e38e7de051fd",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyNativeCommits",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_native_commit_contract",
+      "reason": "The first case proves a real local save becomes one acknowledged index upload and then a clean no-op. The second stages a real assessment, commits it and checks own score schema plus exact uploaded bytes. Its CCN is largely conjunctions in these independent oracles, not redundant work.",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 84
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "84-103",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "88-91",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "96-101",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Suite run/reset calls native save and pending commit, then the actual index sync engine."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:84-103;88-91;96-101"
+      ],
+      "regression_recommendation": "Retain clean retry, primary/photo/settings bytes and exact summary upload checks.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyNativeCommits",
+          "start_line": 84,
+          "end_line": 103,
+          "ccn": 12,
+          "cognitive": 11,
+          "max_nesting": 0,
+          "nloc": 20,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null,
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          84,
+          103
+        ],
+        "sha256_normalized_lf": "8d969728a399774b3f0b94e8070a5b385624fde73ca5e288ad6389c8e9ed3eba",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:84-103"
+    },
+    {
+      "record_id": "code_health:finding_e2c56e95f50025c0801d",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyRebuiltIdentity",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_identity_recovery_matrix",
+      "reason": "New, existing and failed ID allocation intentionally have different identity/cache expectations. A failed settings write must leave the index dirty with honest name fallback; the repaired retry must allocate/cache the correct stable ID and acknowledge the matching primary. These assertions are the contract, not a candidate for field-bag extraction.",
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 25,
+        "nloc": 25,
+        "dispatch_share": 0.0,
+        "symbol_line": 104,
+        "deepest_block": {
+          "start": 105,
+          "end": 127
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "104-128",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "105-112",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "116-126",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "verifyRebuiltIdentity is invoked through the isolated suite runner; it uses native index rebuild and upload paths."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:104-128;105-112;116-126"
+      ],
+      "regression_recommendation": "Retain allocation failure then repaired retry, stable IDs and primary/cache agreement.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyRebuiltIdentity",
+          "start_line": 104,
+          "end_line": 128,
+          "ccn": 23,
+          "cognitive": 25,
+          "max_nesting": 2,
+          "nloc": 25,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            105,
+            127
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          104,
+          128
+        ],
+        "sha256_normalized_lf": "b5c854fd3ead24061ba75415b2567cb97025621a2cd6d400c2789d49c8d881d0",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:104-128"
+    },
+    {
+      "record_id": "code_health:finding_47518767dfd74fe99a5d",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyDirtyHintReads",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_dirty_read_guard",
+      "reason": "The unreadable hint and malformed null/array/scalar/object hints must preserve exact bytes, prohibit network acknowledgement and remain retryable. These are different from the normal native callback upload preceding them. The loop makes the validation boundary explicit with little setup duplication.",
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 23,
+        "dispatch_share": 0.0,
+        "symbol_line": 173,
+        "deepest_block": {
+          "start": 188,
+          "end": 194
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "173-195",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "179-186",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "188-194",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Suite runner restores storage/prototypes before and after each case; native index sync is called."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:173-195;179-186;188-194"
+      ],
+      "regression_recommendation": "Keep no-I/O/exact-byte/dirty assertions before repaired retry for every malformed hint.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyDirtyHintReads",
+          "start_line": 173,
+          "end_line": 195,
+          "ccn": 9,
+          "cognitive": 8,
+          "max_nesting": 1,
+          "nloc": 23,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            188,
+            194
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          173,
+          195
+        ],
+        "sha256_normalized_lf": "4b47c3c0b03f84d8ccacf2aeae45a9c3d12f8a15616cbb15b1142b5c3f8d16ea",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:173-195"
+    },
+    {
+      "record_id": "code_health:finding_a7e57e07b1ce3ae4c3db",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifySnapshotOwnership",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_snapshot_ownership",
+      "reason": "Prebuilt-index staleness, token movement during held upload and recovery beginning during upload represent three different owners. Each must reject stale acknowledgement, preserve current primary/pending state and succeed after a fresh retry. A common boolean scenario helper would obscure which owner changed.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 25,
+        "dispatch_share": 0.0,
+        "symbol_line": 196
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "196-220",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "197-201",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "203-210",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "211-219",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Suite runner calls native sync; upload promises deliberately hold the acknowledgement boundary."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:196-220;197-201;203-210;211-219"
+      ],
+      "regression_recommendation": "Preserve all three stale-owner timings and fresh retry; never weaken strict primary or token guards.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifySnapshotOwnership",
+          "start_line": 196,
+          "end_line": 220,
+          "ccn": 10,
+          "cognitive": 9,
+          "max_nesting": 0,
+          "nloc": 25,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": null,
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          196,
+          220
+        ],
+        "sha256_normalized_lf": "218da803dfa20e80d34348fdc645e2c7891e1519b47bfad526d9c8ab98b7efa1",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:196-220"
+    },
+    {
+      "record_id": "code_health:finding_b037ca650ba9936373c6",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyDirectGuardsAndRebuildRetry",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_direct_callback_guards",
+      "reason": "Safe mode, recovery and disabled sync block the direct callback uploader, not only its scheduled wrapper. Failed index rebuilding may return a usable object while retaining dirty work; the following retry has different expected behavior. The dispatch share is not evidence that the direct-guard coverage is redundant.",
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 13,
+        "nloc": 19,
+        "dispatch_share": 0.3,
+        "symbol_line": 221,
+        "deepest_block": {
+          "start": 222,
+          "end": 229
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "221-239",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "222-229",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "232-237",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Native direct callback upload and native sync are separate tested entries."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:221-239;222-229;232-237"
+      ],
+      "regression_recommendation": "Keep no file-ID/no network for direct guards and dirty rebuild failure followed by retry.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyDirectGuardsAndRebuildRetry",
+          "start_line": 221,
+          "end_line": 239,
+          "ccn": 11,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 19,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.3,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            222,
+            229
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          221,
+          239
+        ],
+        "sha256_normalized_lf": "b6848ae8d6962f7442638c1715d0b58e37fe9aa0de13dc9866f8c58fd776d88c",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:221-239"
+    },
+    {
+      "record_id": "code_health:finding_85ffbca8e7a0cc8a34fc",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyStorageFailure",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_fault_timing_matrix",
+      "reason": "Ten storage faults are injected at different read/write/ack phases. Holding acknowledgement before injection distinguishes required marker failures from optional remove failure. Native reads bypass the failing shim to verify durable bytes, then restoration precedes retry. The dense key/phase predicates prevent faults from firing on unrelated setup operations.",
+      "verified_observation_details": {
+        "ccn": 24,
+        "cognitive": 26,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 242,
+        "deepest_block": {
+          "start": 253,
+          "end": 258
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "240-265",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "244-257",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "259-262",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Outer failure loop invokes verifyStorageFailure through run/reset; native sync and callback storage are exercised."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:240-265;244-257;259-262"
+      ],
+      "regression_recommendation": "Keep exact failed acknowledgement, optional-remove success, unchanged primary and repaired retry for each fault.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyStorageFailure",
+          "start_line": 242,
+          "end_line": 263,
+          "ccn": 24,
+          "cognitive": 26,
+          "max_nesting": 2,
+          "nloc": 22,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            253,
+            258
+          ],
+          "complex_conditions": [
+            {
+              "line": 247,
+              "operator_count": 1,
+              "enclosing_construct": "ternary"
+            },
+            {
+              "line": 257,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          242,
+          263
+        ],
+        "sha256_normalized_lf": "8037f52d873b94be79bd38ea4c1640862b8d1cd473f1668a8901f3c44232b37a",
+        "enclosing_functions": [
+          {
+            "name": "verifyStorageFailuresAndWrites",
+            "start_line": 240,
+            "end_line": 279
+          },
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:242-263"
+    },
+    {
+      "record_id": "code_health:finding_de10672cfd74b3ab0eb7",
+      "file": "tests/portfolio-index.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "verifyLocalAndIndexedDbCaches",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_cache_boundary",
+      "reason": "The function covers optional file-ID read failure, lazy startup discovery and real IndexedDB hit/clear/fallback behavior. Captured flags and finally restoration isolate the actual browser database path. Replacing this with a fake cache or moving every assertion to a helper would reduce boundary coverage.",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 12,
+        "nloc": 44,
+        "dispatch_share": 0.0,
+        "symbol_line": 280,
+        "deepest_block": {
+          "start": 296,
+          "end": 321
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "280-323",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "281-292",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-index.browser.cjs",
+          "lines": "294-321",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Suite runner exercises native local and IndexedDB index/cache operations; flags restored in finally."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-index.browser.cjs:280-323;281-292;294-321"
+      ],
+      "regression_recommendation": "Retain actual IDB hit, cache clear, local fallback and primary equality under optional cache failure.",
+      "binding_hashes": {
+        "normalized_lf": "184dd3ec4630568836f53c59a16f5ba702ac53e7ea75e225c8a46f7a7742fdc8",
+        "current_raw": "7a040588d673f170d6db5a54a402868d447eda1a3e55a6a79f17c39bf12a84ce"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "verifyLocalAndIndexedDbCaches",
+          "start_line": 280,
+          "end_line": 323,
+          "ccn": 12,
+          "cognitive": 12,
+          "max_nesting": 1,
+          "nloc": 44,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            296,
+            321
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          280,
+          323
+        ],
+        "sha256_normalized_lf": "a3a2eb811eb58d5cc971f72db44e48dd3dc2f83e795c3c1986346efad169a59b",
+        "enclosing_functions": [
+          {
+            "name": "verifyPortfolioIndexCases",
+            "start_line": 17,
+            "end_line": 367
+          },
+          {
+            "name": "<anonymous@4>",
+            "start_line": 4,
+            "end_line": 373
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-index.browser.cjs:280-323"
+    },
+    {
+      "record_id": "code_health:finding_68014df55b55b1e6b5c6",
+      "file": "tests/portfolio-replacement.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The outer driver contains a copied local asset route at 13-19; use the existing local-app-route helper with application/octet-stream fallback. This removes real duplicated request validation/asset loading. Keep the native replacement/quota/normalization transactions and their failure assertions in place.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 26,
+        "nloc": 100,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 105
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "7-106",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "13-19",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "31-44",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "83-103",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level IIFE installs one route, evaluates native pending-session transactions, then checks each returned outcome."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-replacement.browser.cjs:7-106;13-19;31-44;83-103"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33",
+        "current_raw": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 106,
+          "ccn": 10,
+          "cognitive": 26,
+          "max_nesting": 3,
+          "nloc": 100,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            9,
+            105
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          7,
+          106
+        ],
+        "sha256_normalized_lf": "77e5e368a5ad5ddac7ffa72f12c74ba7706683a8c225d0602ad1744798688225",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-replacement.browser.cjs:7-106",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_069f504cc8d1622d62b8",
+      "file": "tests/portfolio-replacement.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The 100-line driver needs its successful move, missing-source, quota, malformed-session and proactive-retry cases. Its useful size reduction is the already-supported route reuse at 13-19, not splitting the transaction matrix or inventing a generic scenario runner.",
+      "verified_observation_details": {
+        "nloc": 100,
+        "ccn": 10,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 9,
+          "end": 105
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "7-106",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "13-19",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "49-75",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "91-103",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same IIFE as the complex-method record; one shared repair, no second extraction."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-replacement.browser.cjs:7-106;13-19;49-75;91-103"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33",
+        "current_raw": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 106,
+          "ccn": 10,
+          "cognitive": 26,
+          "max_nesting": 3,
+          "nloc": 100,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            9,
+            105
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          7,
+          106
+        ],
+        "sha256_normalized_lf": "77e5e368a5ad5ddac7ffa72f12c74ba7706683a8c225d0602ad1744798688225",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-replacement.browser.cjs:7-106",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_921b5f601d9bf89f7151",
+      "file": "tests/portfolio-replacement.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "Archived duplication is real, but the first 22 lines mix imports, lifecycle and a copied asset server. Delete only that local server by using the existing helper; preserve octet-stream fallback and the current repository-root expression. Browser construction and transaction-specific setup remain local.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 26.67,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 22,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "1-22",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-replacement.browser.cjs",
+          "lines": "13-19",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level replacement-suite route installation; clone partner is deletion-merge."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-replacement.browser.cjs:1-22;13-19"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "e27950550e0f591383aeb7b060c7717409fa7b3dbc53dbc251ccf018d13c3e33",
+        "current_raw": "2f5197ca6e4106b114de8e4eed45b14809bfe47464dad43ad79bfb0d047242d5"
+      },
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 26.67,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 22,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          1,
+          22
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "DryViolationDetector over reconstructed archived ClonePair/FileContext, not a new corpus clone run",
+        "cochange_limit": "Stored cochange metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/portfolio-replacement.browser.cjs:file-level-browser-setup",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_85bb94a51527f7c5f1e2",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "preparePortfolioFixtures",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_before_after_fixture_order",
+      "reason": "The local/cloud-newer branches define intentionally conflicting text, dates and image IDs. Deletion/restoration seeding occurs before native save, while actual removal and tombstones occur afterward. Collapsing the two similarly worded conditions would alter the durable-state order the test needs.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 20,
+        "dispatch_share": 0.0,
+        "symbol_line": 125,
+        "deepest_block": {
+          "start": 126,
+          "end": 132
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "125-145",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "126-132",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "133-143",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "preparePortfolioFixtures is nested in runPortfolioSyncScenario and called before native cloud sync."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-sync.browser.cjs:125-145;126-132;133-143"
+      ],
+      "regression_recommendation": "Keep both timestamp directions, image union, deletion and restoration timing; no shape-only helper.",
+      "binding_hashes": {
+        "normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0",
+        "current_raw": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "preparePortfolioFixtures",
+          "start_line": 125,
+          "end_line": 145,
+          "ccn": 10,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 20,
+          "bumps": 2,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            126,
+            132
+          ],
+          "complex_conditions": [
+            {
+              "line": 133,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 139,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          125,
+          145
+        ],
+        "sha256_normalized_lf": "a775d476be451df469275cdccca3af17a88a6c0441af219fbff6777d5474637c",
+        "enclosing_functions": [
+          {
+            "name": "runPortfolioSyncScenario",
+            "start_line": 108,
+            "end_line": 170
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-sync.browser.cjs:125-145"
+    },
+    {
+      "record_id": "code_health:finding_b24caf94ce286264a74d",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runPortfolioSyncScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_multi_phase_scenario",
+      "reason": "This 62-line browser exercise isolates unrelated streams while using native portfolio save/deletion/sync. It records the failed write state before restoring the writer and retrying, so one result contains both failure and recovery evidence. The asset route lies outside this function and does not justify reshaping this record.",
+      "verified_observation_details": {
+        "nloc": 62,
+        "ccn": 6,
+        "dispatch_share": 0.0,
+        "symbol_line": 108,
+        "deepest_block": {
+          "start": 147,
+          "end": 149
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "108-170",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "114-117",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "147-169",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level browser driver reloads for each scenario and checks via assertScenario; delayed-save case has its own held-download boundary."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-sync.browser.cjs:108-170;114-117;147-169"
+      ],
+      "regression_recommendation": "Keep pre-retry bytes/pending/counters and post-retry cloud/local equality; no extraction needed.",
+      "binding_hashes": {
+        "normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0",
+        "current_raw": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runPortfolioSyncScenario",
+          "start_line": 108,
+          "end_line": 170,
+          "ccn": 6,
+          "cognitive": 6,
+          "max_nesting": 1,
+          "nloc": 62,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            147,
+            149
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          108,
+          170
+        ],
+        "sha256_normalized_lf": "a2726c3111491a4585ce07aa2eb818d9fa0214df924c17c81d44dafea4cc506b",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/portfolio-sync.browser.cjs:108-170"
+    },
+    {
+      "record_id": "code_health:finding_dd499f31fc7eb92a6266",
+      "file": "tests/portfolio-sync.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The archived worst span 170-178 crosses the end of runPortfolioSyncScenario and the top-level browser driver; its stored symbol stamp is not a complete clone owner. The useful duplicate is serveLocalApp at 7-13 and its route call at 178. Delegate it to the existing helper with octet-stream fallback; do not extract the cross-function clone span.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 31.72,
+        "clone_pair_count": 26,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 108,
+        "symbol": "runPortfolioSyncScenario"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "7-13",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "170-178",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/portfolio-sync.browser.cjs",
+          "lines": "184-189",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "File-level setup: serveLocalApp is called by the top-level route; scenario assertions remain independent."
+      ],
+      "test_assertion_references": [
+        "tests/portfolio-sync.browser.cjs:7-13;170-178;184-189"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "2f02222c686547f93c0af0aa8e0e00bcc7d43b9811c30fcfc5dc5a2bc07ee6d0",
+        "current_raw": "c6b12c0584399c4e00df997c3dc11eed3a493cab39b7d25c20e053353a08c066"
+      },
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 31.72,
+        "clone_pair_count": 26,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          170,
+          178
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "DryViolationDetector over reconstructed archived ClonePair/FileContext, not a new corpus clone run",
+        "cochange_limit": "Stored cochange metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/portfolio-sync.browser.cjs:file-level-browser-setup",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_922daa780754711de593",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runStudentIdentityCases",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_own_key_matrix",
+      "reason": "Special names must independently survive local merge, real sync, new save, legacy and split merge, stable-ID lookup, rename, index and deletions without inherited-key pollution. The later initial-read and lookup-failure cases distinguish required reads from an optimized no-read path and verify safe retry. They already share run; a new case framework offers little benefit.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 16,
+        "nloc": 125,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 9,
+          "end": 68
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "8-133",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "9-68",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "69-118",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "120-132",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level driver passes its isolated run helper to runStudentIdentityCases at 173."
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:8-133;9-68;69-118;120-132"
+      ],
+      "regression_recommendation": "Retain own __proto__/constructor/toString/hasOwnProperty cases, alias order, exact preserved bytes and retry identities.",
+      "binding_hashes": {
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+        "current_raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runStudentIdentityCases",
+          "start_line": 8,
+          "end_line": 133,
+          "ccn": 10,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 125,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            9,
+            68
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          8,
+          133
+        ],
+        "sha256_normalized_lf": "d40e5af7d4f5c69d23239e023c67bf7c3cc437d2bec7bd0c9e6ba0c57ee5d187",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/record-identity.browser.cjs:8-133"
+    },
+    {
+      "record_id": "code_health:finding_78862c658763199794b0",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@135>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The driver already shares reload/reset/exercise/check handling in run at 147-159. Its remaining copied asset server at 141-146 can use local-app-route with the default text/html fallback. Keep JSON-string transport, real FileReader import and photo/image identity oracles. The separate upload-assertion lead is 054-L1.",
+      "verified_observation_details": {
+        "ccn": 23,
+        "cognitive": 53,
+        "nloc": 60,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 135,
+        "deepest_block": {
+          "start": 137,
+          "end": 192
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "135-196",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "141-159",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "161-189",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level IIFE supplies run to identity cases and performs import/photo/image cases."
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:135-196;141-159;161-189"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+        "current_raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@135>",
+          "start_line": 135,
+          "end_line": 196,
+          "ccn": 23,
+          "cognitive": 53,
+          "max_nesting": 3,
+          "nloc": 60,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            137,
+            192
+          ],
+          "complex_conditions": [
+            {
+              "line": 164,
+              "operator_count": 1,
+              "enclosing_construct": "for"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          135,
+          196
+        ],
+        "sha256_normalized_lf": "8a9c826220a3a5a179b4ca6064e03b5abcfa7d89a1c17fe99156394979e16969",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/record-identity.browser.cjs:135-196",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_aa964992afa4814d7c64",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runStudentIdentityCases",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_browser_fixture_closure",
+      "reason": "The 125-line function keeps the hostile-key matrices and their real application operations inside one serializable exercise/callback model. The read-failure cases require different counts and expected identities; merging them into a parameter bag would hide those distinctions. No dead branch or unneeded helper was found.",
+      "verified_observation_details": {
+        "nloc": 125,
+        "ccn": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 9,
+          "end": 68
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "8-133",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "9-68",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "93-117",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "120-132",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "runStudentIdentityCases(run) at 173; run reloads/reset state and aggregates checker failures."
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:8-133;9-68;93-117;120-132"
+      ],
+      "regression_recommendation": "Preserve native sync/upload union, own-key persistence, no-pollution and initial-read failure preservation.",
+      "binding_hashes": {
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+        "current_raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runStudentIdentityCases",
+          "start_line": 8,
+          "end_line": 133,
+          "ccn": 10,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 125,
+          "bumps": 2,
+          "param_count": 1,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            9,
+            68
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          8,
+          133
+        ],
+        "sha256_normalized_lf": "d40e5af7d4f5c69d23239e023c67bf7c3cc437d2bec7bd0c9e6ba0c57ee5d187",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/record-identity.browser.cjs:8-133"
+    },
+    {
+      "record_id": "code_health:finding_9dfe63deb01f1eb80636",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@135>",
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The 60-line lifecycle/aggregation function has one useful deletion: its duplicate local asset route. Its real import, own-key JSON transport, same-image metadata and image-ID conflict cases serve different contracts and should remain visible. Reuse the existing route helper rather than extracting those tests for a line threshold.",
+      "verified_observation_details": {
+        "nloc": 60,
+        "ccn": 23,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 135,
+        "deepest_block": {
+          "start": 137,
+          "end": 192
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "135-196",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "141-146",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "156-159",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "161-195",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same IIFE as the complex-method record, sharing one R1 change."
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:135-196;141-146;156-159;161-195"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+        "current_raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@135>",
+          "start_line": 135,
+          "end_line": 196,
+          "ccn": 23,
+          "cognitive": 53,
+          "max_nesting": 3,
+          "nloc": 60,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "deepest_block": [
+            137,
+            192
+          ],
+          "complex_conditions": [
+            {
+              "line": 164,
+              "operator_count": 1,
+              "enclosing_construct": "for"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          135,
+          196
+        ],
+        "sha256_normalized_lf": "8a9c826220a3a5a179b4ca6064e03b5abcfa7d89a1c17fe99156394979e16969",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/record-identity.browser.cjs:135-196",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_e1cab3eb1c1950913fb5",
+      "file": "tests/record-identity.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The worst clone 132-145 crosses the end of runStudentIdentityCases and the beginning of its browser driver; the stored line-8 symbol stamp is not its true enclosing function. Reuse the existing asset helper for the route at 141-146. Do not move the preceding read-only identity assertions or merge the two functions.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 11.34,
+        "clone_pair_count": 28,
+        "worst_clone_lines": 14,
+        "worst_clone_partner": "tests/storage-integrity.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 8,
+        "symbol": "runStudentIdentityCases"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "132-146",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "147-159",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "193-196",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "File-level browser setup; retain fs because optional report writing at 193 still uses it."
+      ],
+      "test_assertion_references": [
+        "tests/record-identity.browser.cjs:132-146;147-159;193-196"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "cd569d27a4cd72dfbaa78f9d9cbd8c7f707aef4882a1aff5ac78001cadce024d",
+        "current_raw": "c37c5a78c7e014185897ddc17e28a77edde0923203bf8b645dfb3df6710ac762"
+      },
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 11.34,
+        "clone_pair_count": 28,
+        "worst_clone_lines": 14,
+        "worst_clone_partner": "tests/storage-integrity.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          132,
+          145
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "DryViolationDetector over reconstructed archived ClonePair/FileContext, not a new corpus clone run",
+        "cochange_limit": "Stored cochange metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/record-identity.browser.cjs:file-level-browser-setup",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_9dc817c0443cf17b94cf",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "checkRetentionModes",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_retention_cross_product",
+      "reason": "Four native commit modes, six history counts and older/newer insertion dates exercise 48 cases; four extra date/cap styles per mode cover legacy, ties, absent and invalid caps. The fourth nesting level represents that meaningful cross-product, with independent byte/photo/index assertions. Pruning it to flatten nesting would lose coverage.",
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 16,
+        "cognitive": 41,
+        "dispatch_share": 0.0,
+        "symbol_line": 63,
+        "deepest_block": {
+          "start": 66,
+          "end": 81
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "63-97",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "64-81",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "83-95",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "exerciseSessionRetention calls checkRetentionModes after defining native commit/reset helpers."
+      ],
+      "test_assertion_references": [
+        "tests/session-retention.browser.cjs:63-97;64-81;83-95"
+      ],
+      "regression_recommendation": "Retain cap boundaries, chronological selection, all retained metadata/photos, move tombstone, pending clear and latest index.",
+      "binding_hashes": {
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+        "current_raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkRetentionModes",
+          "start_line": 63,
+          "end_line": 97,
+          "ccn": 16,
+          "cognitive": 41,
+          "max_nesting": 4,
+          "nloc": 35,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            66,
+            81
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          63,
+          97
+        ],
+        "sha256_normalized_lf": "0695ceb3e05ca94cb1fb20ae34475eb5f5098d5dee4538d0a6a400c3257cc124",
+        "enclosing_functions": [
+          {
+            "name": "exerciseSessionRetention",
+            "start_line": 5,
+            "end_line": 204
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/session-retention.browser.cjs:63-97"
+    },
+    {
+      "record_id": "code_health:finding_a6e8de9e2a9b5306df36",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkRetentionModes",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_retention_oracles",
+      "reason": "CCN 16 mostly reflects commit/date styles and exact retained-entry assertions. Tests verify both the chosen 49 previous sessions plus the new session and every surviving payload, not only a count. Tie/legacy/invalid-cap expected ID lists are explicit independent oracles, so extraction would not simplify the policy.",
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 41,
+        "nloc": 35,
+        "dispatch_share": 0.0,
+        "symbol_line": 63,
+        "deepest_block": {
+          "start": 66,
+          "end": 81
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "63-97",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "71-79",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "88-93",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same checkRetentionModes function as the nesting record; native four-mode commit helper is shared already."
+      ],
+      "test_assertion_references": [
+        "tests/session-retention.browser.cjs:63-97;71-79;88-93"
+      ],
+      "regression_recommendation": "Keep exact ID order and unchanged surviving metadata/photo fields as well as counts.",
+      "binding_hashes": {
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+        "current_raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkRetentionModes",
+          "start_line": 63,
+          "end_line": 97,
+          "ccn": 16,
+          "cognitive": 41,
+          "max_nesting": 4,
+          "nloc": 35,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            66,
+            81
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          63,
+          97
+        ],
+        "sha256_normalized_lf": "0695ceb3e05ca94cb1fb20ae34475eb5f5098d5dee4538d0a6a400c3257cc124",
+        "enclosing_functions": [
+          {
+            "name": "exerciseSessionRetention",
+            "start_line": 5,
+            "end_line": 204
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/session-retention.browser.cjs:63-97"
+    },
+    {
+      "record_id": "code_health:finding_c23168ca6063f958c85e",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkPendingFailureRecovery",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_pending_fault_recovery",
+      "reason": "The two pending modes and six targeted failures must preserve the same pending owner, text/photos, tombstones and counters. Deletion/rollback-only failures are skipped for pending-add because that operation does not write deletions. Rollback failure is injected only after the first portfolio write; native recovery or corrupt-state repair precedes retry.",
+      "verified_observation_details": {
+        "ccn": 14,
+        "cognitive": 28,
+        "nloc": 35,
+        "dispatch_share": 0.0,
+        "symbol_line": 121,
+        "deepest_block": {
+          "start": 122,
+          "end": 154
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "121-155",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "122-144",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "145-152",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "exerciseSessionRetention calls this group; run restores storage prototypes in finally and records each assertion result."
+      ],
+      "test_assertion_references": [
+        "tests/session-retention.browser.cjs:121-155;122-144;145-152"
+      ],
+      "regression_recommendation": "Retain negative acknowledgement, exact owner/durable bytes, rollback buffer, successful retry and inert second retry.",
+      "binding_hashes": {
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+        "current_raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkPendingFailureRecovery",
+          "start_line": 121,
+          "end_line": 155,
+          "ccn": 14,
+          "cognitive": 28,
+          "max_nesting": 3,
+          "nloc": 35,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            122,
+            154
+          ],
+          "complex_conditions": [
+            {
+              "line": 123,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          121,
+          155
+        ],
+        "sha256_normalized_lf": "3334bb7517ce5f20387c7159b7076ec24febfe41995afb1f7a076741b0e7839f",
+        "enclosing_functions": [
+          {
+            "name": "exerciseSessionRetention",
+            "start_line": 5,
+            "end_line": 204
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/session-retention.browser.cjs:121-155"
+    },
+    {
+      "record_id": "code_health:finding_dffe523407bccdaa39b7",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "large_method",
+      "symbol": "exerciseSessionRetention",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_serializable_fixture",
+      "reason": "The 199-line root is a browser-evaluate closure containing named fixture, reset, native commit and check groups. Retention, ordinary saves, undated IDs and actual quota behavior share captured prototype restoration, not a single oversized application policy. Moving closures outside would require transport/rebinding without removing real logic.",
+      "verified_observation_details": {
+        "nloc": 199,
+        "ccn": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 5,
+        "deepest_block": {
+          "start": 11,
+          "end": 11
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "5-204",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "13-59",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "63-155",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "164-202",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Native driver page.evaluate(exerciseSessionRetention) at 218; aggregate checks/report at 219-224."
+      ],
+      "test_assertion_references": [
+        "tests/session-retention.browser.cjs:5-204;13-59;63-155;164-202"
+      ],
+      "regression_recommendation": "No root-size repair. Preserve per-case reset/finally, complete groups and failed-case aggregate.",
+      "binding_hashes": {
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+        "current_raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "exerciseSessionRetention",
+          "start_line": 5,
+          "end_line": 204,
+          "ccn": 8,
+          "cognitive": 7,
+          "max_nesting": 1,
+          "nloc": 199,
+          "bumps": 0,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            11,
+            11
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          5,
+          204
+        ],
+        "sha256_normalized_lf": "c80d9bed228c6199ce03f91e9b67d1263d0413080b0de6aab5a5254723ffebc8",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/session-retention.browser.cjs:5-204"
+    },
+    {
+      "record_id": "code_health:finding_d7654f18e4ed451483c2",
+      "file": "tests/session-retention.browser.cjs",
+      "marker": "complex_conditional",
+      "symbol": "<anonymous>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "precise_fault_guard",
+      "reason": "The three operators select the portfolio key AND either the immediate portfolio-write failure OR the rollback-only phase after a write has occurred. They prevent the injected exception from firing on other keys/setup or on the first rollback-path write. A helper would merely hide this small load-bearing predicate.",
+      "verified_observation_details": {
+        "operator_count": 3,
+        "enclosing_construct": "if",
+        "dispatch_share": 0.0,
+        "symbol_line": 132
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "132-136",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/session-retention.browser.cjs",
+          "lines": "138-152",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Storage.setItem override inside checkPendingFailureRecovery, itself inside exerciseSessionRetention."
+      ],
+      "test_assertion_references": [
+        "tests/session-retention.browser.cjs:132-136;138-152"
+      ],
+      "regression_recommendation": "Keep both first-write and post-write rollback fault timings plus unchanged pending owner and retry assertions.",
+      "binding_hashes": {
+        "normalized_lf": "3c8f7f0b474a29f2e5798da055249f98ff0cdbe4e7f3e06321b78f7915e31bf4",
+        "current_raw": "d25d611cdf3f8ad819ac0fcd5b6014d6af342cbfbd774492d773ad8df2e9a5de"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous>",
+          "start_line": 132,
+          "end_line": 136,
+          "ccn": 8,
+          "cognitive": 7,
+          "max_nesting": 1,
+          "nloc": 5,
+          "bumps": 0,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            133,
+            133
+          ],
+          "complex_conditions": [
+            {
+              "line": 133,
+              "operator_count": 3,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 134,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          132,
+          136
+        ],
+        "sha256_normalized_lf": "df5c85a6fc61071b5684743742133320030e88cca196fe2fc002fa2730cef0b7",
+        "enclosing_functions": [
+          {
+            "name": "checkPendingFailureRecovery",
+            "start_line": 121,
+            "end_line": 155
+          },
+          {
+            "name": "exerciseSessionRetention",
+            "start_line": 5,
+            "end_line": 204
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/session-retention.browser.cjs:132-136"
+    },
+    {
+      "record_id": "code_health:finding_8b18d3effd9cb43c28e2",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_held_upload_scenario",
+      "reason": "The scenario selects settings versus deletion stream, native versus edited-during-upload state, and whether saving a cloud merge fails. Its held first upload is released only after a real edit; captured local state after awaiting the native orchestrator proves follow-up behavior. A generic upload stub helper would hide the tested ordering.",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 13,
+        "nloc": 42,
+        "dispatch_share": 0.0,
+        "symbol_line": 51,
+        "deepest_block": {
+          "start": 84,
+          "end": 88
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "51-92",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "63-71",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "84-91",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "runSettingsDeletionScenarios invokes runScenario across eight matrix combinations; assertRace/assertFailedMerge interpret results."
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:51-92;63-71;84-91"
+      ],
+      "regression_recommendation": "Keep two searches/two uploads after intervening edit, pending/counters/status, and no-leaked-suppression failure assertions.",
+      "binding_hashes": {
+        "normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+        "current_raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runScenario",
+          "start_line": 51,
+          "end_line": 92,
+          "ccn": 12,
+          "cognitive": 13,
+          "max_nesting": 2,
+          "nloc": 42,
+          "bumps": 1,
+          "param_count": 2,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            84,
+            88
+          ],
+          "complex_conditions": [
+            {
+              "line": 71,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          51,
+          92
+        ],
+        "sha256_normalized_lf": "4938e902b61e005c86ea530b1ab5e4e8f7ffe130b600833409ab5d74410475bb",
+        "enclosing_functions": [
+          {
+            "name": "runSettingsDeletionScenarios",
+            "start_line": 15,
+            "end_line": 100
+          }
+        ],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/settings-deletions-sync.browser.cjs:51-92"
+    },
+    {
+      "record_id": "code_health:finding_7e310eb3c5642cd8f8bd",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runSettingsDeletionScenarios",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_stream_fixture_closure",
+      "reason": "The 83-line browser fixture already shares initialization and editDuringUpload, and scopes native storage/prototype handles with isolated unrelated streams. The nested runScenario owns distinct race/failure timings; the eight-result matrix is compact. The copied route is outside this function and is handled by the DRY record, not a reason to split this closure.",
+      "verified_observation_details": {
+        "nloc": 83,
+        "ccn": 3,
+        "dispatch_share": 0.0,
+        "symbol_line": 15,
+        "deepest_block": {
+          "start": 94,
+          "end": 98
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "15-100",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "17-48",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "51-98",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level browser driver evaluates runSettingsDeletionScenarios at 159 and checks via assertScenarioResults."
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:15-100;17-48;51-98"
+      ],
+      "regression_recommendation": "Retain the full two-stream/edit/failure matrix and exact durable state/orchestrator assertions.",
+      "binding_hashes": {
+        "normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+        "current_raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runSettingsDeletionScenarios",
+          "start_line": 15,
+          "end_line": 100,
+          "ccn": 3,
+          "cognitive": 3,
+          "max_nesting": 2,
+          "nloc": 83,
+          "bumps": 1,
+          "param_count": 0,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            94,
+            98
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          15,
+          100
+        ],
+        "sha256_normalized_lf": "1e3d513e8f8bb1a1ba00a4ed7d560e5200e82ed3d3f8b45209fffec1cd6c4e2d",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/settings-deletions-sync.browser.cjs:15-100"
+    },
+    {
+      "record_id": "code_health:finding_ba7fe4ab642953d3d46e",
+      "file": "tests/settings-deletions-sync.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_helper_reuse",
+      "reason": "The reported 150-156 setup span ends at the driver route call, while the actual duplicate server is serveSnapshot at 7-13. Delegate that server to local-app-route with octet-stream fallback; preserve the eight-scenario fixture, result checker and native cloud-merge failure oracles. Worst clone length is the detector pair maximum, not a mandate to extract this seven-line span.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 23.72,
+        "clone_pair_count": 24,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 150,
+        "symbol": "<anonymous@150>"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "7-13",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "150-165",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/settings-deletions-sync.browser.cjs",
+          "lines": "102-147",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level route calls serveSnapshot at 156; browser exercise and aggregate result checks remain unchanged."
+      ],
+      "test_assertion_references": [
+        "tests/settings-deletions-sync.browser.cjs:7-13;150-165;102-147"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "binding_hashes": {
+        "normalized_lf": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571",
+        "current_raw": "899cbf5269757212ea006fe2a000c552e3e141975630446dcde9c9f1e03aa571"
+      },
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 23.72,
+        "clone_pair_count": 24,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          150,
+          156
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "DryViolationDetector over reconstructed archived ClonePair/FileContext, not a new corpus clone run",
+        "cochange_limit": "Stored cochange metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/settings-deletions-sync.browser.cjs:file-level-browser-setup",
+      "candidate_id": "054-R1"
+    },
+    {
+      "record_id": "code_health:finding_aaf3e41cb85232d6ad7f",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "replySearch",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_drive_query_fixture",
+      "reason": "Root, students folder, index and student-file searches require different query assertions and reply shapes. Non-folder decoys, missing discovery IDs, newest/older order and search failure deliberately exercise native discovery validation. The 13-line dispatcher already delegates JSON serialization; further subdivision would only redistribute its branches.",
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 16,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 53,
+        "deepest_block": {
+          "start": 55,
+          "end": 55
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "53-65",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "54-64",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "routeSplitRequest dispatches nonempty query to replySearch at 81."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:53-65;54-64"
+      ],
+      "regression_recommendation": "Retain exact parent/name/trashed query assertions, decoy filter, missing ID and newest selection behavior.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "replySearch",
+          "start_line": 53,
+          "end_line": 65,
+          "ccn": 12,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 13,
+          "bumps": 3,
+          "param_count": 4,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            55,
+            55
+          ],
+          "complex_conditions": [
+            {
+              "line": 58,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 59,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          53,
+          65
+        ],
+        "sha256_normalized_lf": "2d52e3351a489dc1759c9b9cf2fcfb16b89f3dadbcd87705253c1ffbfce63b2c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/split-storage.browser.cjs:53-65"
+    },
+    {
+      "record_id": "code_health:finding_3aa6fa417f0ed2ab046c",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "routeSplitRequest",
+      "proposed_status": "candidate_needs_regression",
+      "classification": "existing_helper_reuse_needs_boundary_check",
+      "reason": "The local-origin branch at 69-72 duplicates asset serving already available in local-app-route. Only that branch is a useful reuse candidate; keep external abort, Google preflight, bearer assertion, request capture and service-specific reply helpers. Existing local 404 replies include JSON MIME and CORS while the helper returns a bare 404, so confirm that difference before adoption.",
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 16,
+        "nloc": 18,
+        "dispatch_share": 0.0,
+        "symbol_line": 67,
+        "deepest_block": {
+          "start": 69,
+          "end": 72
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "67-84",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "69-77",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "78-83",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/support/local-app-route.js",
+          "lines": "5-12",
+          "note": "Existing helper; supported fallback and containment",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "scripts/check-test-runner.cjs",
+          "lines": "51-59",
+          "note": "Existing helper assertions read, not executed",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "runScenario installs routeSplitRequest at 174, passing scenario, request log and current failure phase."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:67-84;69-77;78-83"
+      ],
+      "regression_recommendation": "Compare the local asset branch with helper default MIME, missing asset, directory and encoded traversal behavior, including the old 404 JSON/CORS versus bare helper 404. Then compare all 33 split scenarios with unchanged Google routes, authorization/callback/request logs, failure-then-retry, index and payload oracles. No tests executed here.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "routeSplitRequest",
+          "start_line": 67,
+          "end_line": 84,
+          "ccn": 13,
+          "cognitive": 16,
+          "max_nesting": 3,
+          "nloc": 18,
+          "bumps": 1,
+          "param_count": 4,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            69,
+            72
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          67,
+          84
+        ],
+        "sha256_normalized_lf": "75b53d1bccef9c9819d70bd15598e34ba981957554d87770b7a220060fe474f8",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/split-storage.browser.cjs:67-84",
+      "candidate_id": "054-R2"
+    },
+    {
+      "record_id": "code_health:finding_562114464320b22afa93",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkUpload",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_upload_oracles",
+      "reason": "This nine-line checker independently validates exactly one upload, the returned file ID/cache, parsed multipart record, target fields, merged remote/local sessions, tombstones, aliases and the absence of cached-folder lookup I/O. Its CCN comes from these assertions; collapsing them would obscure failures rather than remove duplication.",
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 155,
+        "deepest_block": {
+          "start": 161,
+          "end": 161
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "155-163",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "158-162",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "runScenario calls checkUpload only for upload-bearing successful/repaired scenarios via shouldVerifyUpload."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:155-163;158-162"
+      ],
+      "regression_recommendation": "Keep payload parsing, merge union, deleted-session exclusion, target identity and cached-folder no-extra-IO checks.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "checkUpload",
+          "start_line": 155,
+          "end_line": 163,
+          "ccn": 13,
+          "cognitive": 12,
+          "max_nesting": 1,
+          "nloc": 9,
+          "bumps": 0,
+          "param_count": 4,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            161,
+            161
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          155,
+          163
+        ],
+        "sha256_normalized_lf": "1d48ed789724c09237922b7102ba49edf16f931959175810a276570f9c52601f",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/split-storage.browser.cjs:155-163"
+    },
+    {
+      "record_id": "code_health:finding_93e4866b7c6511aa7410",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_failure_then_retry_driver",
+      "reason": "Each scenario gets a fresh page and captured route log. The driver records the first result before an explicit repaired retry, distinguishes expected failures from protected-root behavior, checks callback count, optional index results and browser errors, then closes the page. These phase distinctions justify the branches and already use small existing checker helpers.",
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 34,
+        "dispatch_share": 0.0,
+        "symbol_line": 170,
+        "deepest_block": {
+          "start": 191,
+          "end": 194
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "170-203",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "174-179",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "183-201",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "202",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level 33-scenario loop at 208 calls runScenario; route handler and native callback entry are real."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:170-203;174-179;183-201;202"
+      ],
+      "regression_recommendation": "Retain first-failure checks, repairable retry only, callback-once, root-byte protection and per-case failed result aggregation.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "runScenario",
+          "start_line": 170,
+          "end_line": 203,
+          "ccn": 10,
+          "cognitive": 13,
+          "max_nesting": 3,
+          "nloc": 34,
+          "bumps": 1,
+          "param_count": 3,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            191,
+            194
+          ],
+          "complex_conditions": []
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          170,
+          203
+        ],
+        "sha256_normalized_lf": "5fb54ec8929c3a763205bc397038f5b7e538155008c28224063af6cd4f698a95",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/split-storage.browser.cjs:170-203"
+    },
+    {
+      "record_id": "code_health:finding_cd13f605cdef84dd5e3f",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "bumpy_road",
+      "symbol": "replySearch",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_query_dispatch",
+      "reason": "The three bumps are the successive query families for root, students, index and final student lookup. The students branch nests only enough to verify its parent and model error/missing-ID/decoy outcomes. They are meaningful mutually exclusive fixture branches, and replyJson already handles shared response work.",
+      "verified_observation_details": {
+        "bumps": 3,
+        "ccn": 12,
+        "max_nesting": 2,
+        "symbol_line": 53,
+        "deepest_block": {
+          "start": 55,
+          "end": 55
+        }
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "53-65",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same replySearch body as the complex-method record; called by routeSplitRequest at 81."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:53-65"
+      ],
+      "regression_recommendation": "No bumpy-road extraction. Keep all query assertions and service-specific discovery edge cases.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_metrics": {
+        "function": {
+          "name": "replySearch",
+          "start_line": 53,
+          "end_line": 65,
+          "ccn": 12,
+          "cognitive": 16,
+          "max_nesting": 2,
+          "nloc": 13,
+          "bumps": 3,
+          "param_count": 4,
+          "typed_param_count": 0,
+          "primitive_param_count": 0,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "deepest_block": [
+            55,
+            55
+          ],
+          "complex_conditions": [
+            {
+              "line": 58,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            },
+            {
+              "line": 59,
+              "operator_count": 1,
+              "enclosing_construct": "if"
+            }
+          ]
+        }
+      },
+      "scope_binding": {
+        "function_span": [
+          53,
+          65
+        ],
+        "sha256_normalized_lf": "2d52e3351a489dc1759c9b9cf2fcfb16b89f3dadbcd87705253c1ffbfce63b2c",
+        "enclosing_functions": [],
+        "same_body_at_stored_and_inspected_commit": true
+      },
+      "review_group": "tests/split-storage.browser.cjs:53-65"
+    },
+    {
+      "record_id": "code_health:finding_b3b1206783e48f8fad98",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "inherent_test_boundary",
+      "reason": "The source path is real: the 33-case module loop calls runScenario, which installs routeSplitRequest, whose local branch reads snapshot assets. Fresh pages intentionally request assets separately to isolate native scenarios. No measured cost or redundant application I/O is established; changing concurrency or caching solely from this marker could alter isolation.",
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/split-storage.browser.cjs::__module__",
+          "tests/split-storage.browser.cjs::runScenario",
+          "tests/split-storage.browser.cjs::routeSplitRequest"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 208,
+        "symbol_line": 205,
+        "symbol": "<anonymous@205>",
+        "role_owner": "tests/split-storage.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_39b5fabbe5976788df09"
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "5-9",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "67-72",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "170-174",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "208",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Module loop -> runScenario -> page.route callback -> routeSplitRequest -> fs exists/read."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:5-9;67-72;170-174;208"
+      ],
+      "regression_recommendation": "No performance repair without measurement. R2 may remove route-copy maintenance, but does not remove per-page filesystem I/O.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_boundary_details": {
+        "scenario_count": 33,
+        "loop_line": 208,
+        "source_path": [
+          "__module__",
+          "runScenario:170-203",
+          "routeSplitRequest:67-84",
+          "fs.existsSync/readFileSync:71"
+        ],
+        "fresh_page_line": 171,
+        "method": "source call-site inspection; no new graph/rank or cost measurement"
+      },
+      "review_group": "tests/split-storage.browser.cjs:module-loop-and-local-route"
+    },
+    {
+      "record_id": "code_health:finding_466fd884621dd6f44353",
+      "file": "tests/student-selection-storage.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "already_shared_boundary",
+      "reason": "The cloned import/browser setup already imports local-app-route at line 4 and installs it at line 11, as does its image-preparation partner. The actual selection/quota scenario has useful distinct assertions for runtime Bob, invalidated feedback, retained text, truthful storage, Alice pending owner and unchanged portfolio bytes. No remaining asset duplication warrants a second abstraction.",
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 40.0,
+        "clone_pair_count": 11,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/image-preparation.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/student-selection-storage.browser.cjs",
+          "lines": "2-13",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/student-selection-storage.browser.cjs",
+          "lines": "17-44",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Top-level driver runs normal and quota selection cases with native change event and finally-restored storage writer."
+      ],
+      "test_assertion_references": [
+        "tests/student-selection-storage.browser.cjs:2-13;17-44"
+      ],
+      "regression_recommendation": "Retain both outcomes, native event, pending ownership and byte preservation; no universal browser setup factory.",
+      "binding_hashes": {
+        "normalized_lf": "11b95576f63a90b0b2324695c2bd2d29d49afbb2fbe5ac0f79952e98f8ef401b",
+        "current_raw": "a507351f3c4d5485ffc4240153c42a2765dbb03fdc20bf385b96acea03ff7115"
+      },
+      "verified_duplication_details": {
+        "cross_file_duplication_pct": 40.0,
+        "clone_pair_count": 11,
+        "worst_clone_lines": 12,
+        "worst_clone_partner": "tests/image-preparation.browser.cjs",
+        "worst_clone_co_change": 0,
+        "reported_span": [
+          2,
+          13
+        ],
+        "basis": "00c9454e6c89f258cb3afc938201a10feda16087",
+        "archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+        "method": "DryViolationDetector over reconstructed archived ClonePair/FileContext, not a new corpus clone run",
+        "cochange_limit": "Stored cochange metadata consumed, not independently rebuilt"
+      },
+      "review_group": "tests/student-selection-storage.browser.cjs:file-level-browser-setup"
+    },
+    {
+      "record_id": "performance:perf3_39b5fabbe5976788df09",
+      "file": "tests/split-storage.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": "tests/split-storage.browser.cjs::runScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_performance_view",
+      "reason": "This promoted opportunity describes the same module/runScenario/routeSplitRequest filesystem path as the code-health record, with low confidence, unknown exposure and inherent_to_boundary. Source inspection verifies that path and the fresh-page rationale, not a speedup opportunity. Its suggested shared-helper intervention corresponds only to R2 maintenance reuse.",
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "shared_helper",
+        "terminal_sinks": [
+          "tests/split-storage.browser.cjs::routeSplitRequest"
+        ],
+        "shared_path_suffix": [
+          "tests/split-storage.browser.cjs::__module__",
+          "tests/split-storage.browser.cjs::runScenario",
+          "tests/split-storage.browser.cjs::routeSplitRequest"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "evidence_anchors": [
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "5-9",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "67-72",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "170-174",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "tests/split-storage.browser.cjs",
+          "lines": "205-214",
+          "note": "Reviewed source/oracle boundary",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "callers": [
+        "Same source boundary as code_health:finding_b3b1206783e48f8fad98, not a second measured problem."
+      ],
+      "test_assertion_references": [
+        "tests/split-storage.browser.cjs:5-9;67-72;170-174;205-214"
+      ],
+      "regression_recommendation": "Do not count this as a separate performance repair or make a throughput claim; profile first if runtime cost matters.",
+      "binding_hashes": {
+        "normalized_lf": "e9001814c6bf574a3bc8fe3ff0f75ff090614c2819810cafd948aff964a10ea0",
+        "current_raw": "4d0308e82915d9ccd6deddcaaf21abd93b497b82ec5e254e821b0b7c14117d3b"
+      },
+      "verified_boundary_details": {
+        "scenario_count": 33,
+        "loop_line": 208,
+        "source_path": [
+          "__module__",
+          "runScenario:170-203",
+          "routeSplitRequest:67-84",
+          "fs.existsSync/readFileSync:71"
+        ],
+        "fresh_page_line": 171,
+        "method": "source call-site inspection; no new graph/rank or cost measurement"
+      },
+      "review_group": "tests/split-storage.browser.cjs:module-loop-and-local-route"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "054-R1",
+      "status": "confirmed_repair_candidate",
+      "smallest_change": "Replace only four copied local asset servers with existing local-app-route, retaining MIME/root policies and all native scenarios.",
+      "files": [
+        "tests/portfolio-replacement.browser.cjs",
+        "tests/portfolio-sync.browser.cjs",
+        "tests/settings-deletions-sync.browser.cjs",
+        "tests/record-identity.browser.cjs"
+      ],
+      "regression_recommendation": "Use existing tests/support/local-app-route.js:5-12. Preserve roots and MIME fallback: application/octet-stream for replacement/sync/settings; default text/html for record identity. Preserve external abort/404 and native scenario assertions, failure aggregation and cleanup. Compare all four native suites and existing helper boundary checks before adopting; no tests executed here. Keep record-identity fs import for report writing; remove other fs imports only if unused.",
+      "benefit": "Removes copied request-to-snapshot boundary code; no metric or speedup guarantee."
+    },
+    {
+      "id": "054-R2",
+      "status": "candidate_needs_regression",
+      "smallest_change": "Delegate only routeSplitRequest local-origin branch to existing local-app-route after resolving missing-asset response compatibility.",
+      "file": "tests/split-storage.browser.cjs",
+      "regression_recommendation": "Compare the local asset branch with helper default MIME, missing asset, directory and encoded traversal behavior, including the old 404 JSON/CORS versus bare helper 404. Then compare all 33 split scenarios with unchanged Google routes, authorization/callback/request logs, failure-then-retry, index and payload oracles. No tests executed here.",
+      "benefit": "Reuses the existing contained asset server while retaining purpose-built Drive transport fixtures."
+    }
+  ],
+  "additional_leads": [
+    {
+      "id": "054-L1",
+      "file": "tests/record-identity.browser.cjs",
+      "function": "photo-conflict-sync checker inside <anonymous@135>",
+      "classification": "potential_false_green_missing_upload_count",
+      "proposed_status": "candidate_needs_regression",
+      "source_supported": true,
+      "reproduced": false,
+      "needs_user_attention": false,
+      "reason": "At 183 the checker validates returned local newer metadata, then loops over uploads without requiring an upload. In the local-newer=true case, local data is already correct and omitting the required cloud push leaves an empty loop that cannot fail. Git7558 syncWftPortfolioIfNeeded:5685-5689 requires a push for pending local content differing from cloud. The cloud-newer case may legitimately need no push, so do not require an upload indiscriminately.",
+      "evidence_anchors": [
+        {
+          "file": "tests/record-identity.browser.cjs",
+          "lines": "174-184",
+          "note": "Same image ID, local/cloud timestamp directions, captured uploads and vacuous loop",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        },
+        {
+          "file": "js/app/00-storage-sync-patches.js",
+          "lines": "5685-5689",
+          "note": "Pending distinct merged content uploads and acknowledges",
+          "git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff"
+        }
+      ],
+      "smallest_change": "For localNewer only, assert r.uploads.length === 1 before the existing payload loop. Keep cloud-newer semantics.",
+      "regression_recommendation": "Demonstrate that suppressing the local-newer push fails this checker, and compare both conflict directions with exact uploaded image metadata. This review did not run a mutation or reproduction."
+    }
+  ],
+  "summary": {
+    "assigned_records": 38,
+    "dispositions": {
+      "reviewed_no_change": 29,
+      "confirmed_repair_candidate": 8,
+      "candidate_needs_regression": 1
+    },
+    "unique_structural_candidates": 2,
+    "additional_unconfirmed_oracle_leads": 1,
+    "retained_policies": "Native fault matrices, strict storage/pending/owner/readback guards, own-key/null-prototype identity, chronological retention, exact merge/deletion payloads and actual failed-case aggregation.",
+    "scanner_state": "No closures, imports, index updates or tracker mutations."
+  },
+  "limits": [
+    "No application, native tests, browser or mutation test executed; this is not a new pass or bug-reproduction claim.",
+    "No source/test/fixture/config/Git/index/tracker/docs/dependency changes. Only own scratch and this report written.",
+    "All assigned current file bytes were verified against supplied pins at start/end. Historical production context is Git7558; no claim that every current application file or current 91-file corpus is frozen or identical to historical 90-file clone corpus.",
+    "Historical clone archive digest and detector replay verified. Clone generation/whole corpus and cochange history were not independently rebuilt; stored cochange=0 is not independent evidence that reuse is safe.",
+    "IO loop path is source-verified, but performance graph resolution, rank/exposure and elapsed cost were not newly measured. The performance record is a duplicate view of the same boundary.",
+    "Candidate changes are proposals, not implemented. R1 may leave large/complex markers above thresholds; the reason to adopt is deleting existing boundary duplication. R2 needs explicit 404/header compatibility review.",
+    "New oracle lead 054-L1 is source-supported and unconfirmed; parent must compare prior tracked leads before adoption."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+    "all_individual_reasons_read": true,
+    "assigned_files_raw_and_lf_verified": 9,
+    "actual_detector_replays_combined": 77,
+    "source_verified_io_records_combined": 4,
+    "evidence_receipt": "reviews/batch-005-readonly-054-055-acceptance.json",
+    "limits": "Historical 90-source clone archive reused; no current 91-source clone corpus, regenerated I/O graph, new runtime/test pass, bug reproduction or scanner closure claimed."
+  }
+}

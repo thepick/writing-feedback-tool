@@ -1,0 +1,3573 @@
+{
+  "repair_id": "repair-055",
+  "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "stored_analysis_commit": "00c9454e6c89f258cb3afc938201a10feda16087",
+  "inspected_git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "inspected_git_commit_end": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "source_hashes_normalized_lf": {
+    "tests/analysis-policy.browser.cjs": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2",
+    "tests/openrouter-admission.browser.cjs": "3480997ff22d1a0ec51e998c685dcee50f244b810fc1cb2814f78c0c8469f4ea",
+    "tests/analysis-pipeline.browser.cjs": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+    "tests/detailed-parser.browser.cjs": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+    "tests/correction-performance.browser.cjs": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+    "tests/openrouter-failures.browser.cjs": "04f0704a6b880cc3476fe1eac90ec55374cd341ce0fbf3ff3bef7d917da905dc",
+    "tests/neatness-scoring.browser.cjs": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e",
+    "tests/feedback-compatibility.browser.cjs": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+    "tests/main-app-health.browser.cjs": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f",
+    "tests/neatness-boundaries.browser.cjs": "70b0721d739989dddde3fe060b3dbf143e9533bda4f510998ac9866a48be029f",
+    "tests/support/local-app-route.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "00eab5521068f3101fa9bdfa592cfa5c8cf9cd538a01ff0f751f61414215746f",
+    "scripts/check-test-runner.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "3caac6e5903dc845668500278cd2e6a972e304189018914cb5d0bbcd9e4a6612",
+    "scripts/case-report-suites.json@7558f482974721eecc8c71e368b9bb47ab9017ff": "de852d41923f01271c6756bc9f4b2d7a7e47153b786aeb9af4180eba7bd5e2ff",
+    "js/app/00-storage-sync-patches.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "159d6d7bffcf23e04335c22126a0c56b62afcf313581f3de8c7a2d97610b5fdb",
+    "js/app/10-main-app.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+    "tests/fixtures/analysis-pipeline-baseline.js@7558f482974721eecc8c71e368b9bb47ab9017ff": "b7db67e08a7c289c78aa4080f3c61c18ea0c75dc466638a3f1e9b4f0b826df36",
+    "scripts/run-tests.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf",
+    "tests/archive-failures.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "f91db40f7c714b59b7201c5f92fd28f2e04928da4f716e95dc6eceb03905acc9",
+    "tests/deletion-merge.browser.cjs@7558f482974721eecc8c71e368b9bb47ab9017ff": "71ea840bd0ded70c2d905d62a4a2d0cffca81d845c9dc8bb17defc79eea436e2"
+  },
+  "assigned_source_hashes_raw_and_lf_end": {
+    "tests/analysis-policy.browser.cjs": {
+      "raw": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2",
+      "normalized_lf": "e4e50b2308ecdc60af0ab540c23006a5218ce1992f74a58ba33121efb86b0bd2"
+    },
+    "tests/openrouter-admission.browser.cjs": {
+      "raw": "f838ecef4bb64fd03ca8c74754d09e3bfd5015d35c3e8366a6f0e44455a71003",
+      "normalized_lf": "3480997ff22d1a0ec51e998c685dcee50f244b810fc1cb2814f78c0c8469f4ea"
+    },
+    "tests/analysis-pipeline.browser.cjs": {
+      "raw": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155",
+      "normalized_lf": "4c33ceb6b7000d17b767ca67e085e4540243784f5875d7cd378248fa9b963155"
+    },
+    "tests/detailed-parser.browser.cjs": {
+      "raw": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836",
+      "normalized_lf": "f8452770783d0e7f86682d4505624f7ede5b9693b559978a1c735de1d245f836"
+    },
+    "tests/correction-performance.browser.cjs": {
+      "raw": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449",
+      "normalized_lf": "aafb824b975932ed5dabc89dd5a6d4e6d33fa1b035a008a5557a1e85b5c40449"
+    },
+    "tests/openrouter-failures.browser.cjs": {
+      "raw": "d5b20c0095cbe8d1c3531e8ba548016886e0f0c235c003f9da28cd464595673d",
+      "normalized_lf": "04f0704a6b880cc3476fe1eac90ec55374cd341ce0fbf3ff3bef7d917da905dc"
+    },
+    "tests/neatness-scoring.browser.cjs": {
+      "raw": "a61c68eaeb8ae88b5c9bfc86690f4d73fe7eb763312d768b57ca44d71e4a32da",
+      "normalized_lf": "9589fcbb55c384539134c4030dd9f7ed368c23cdb969e67a520bfbe097d9d74e"
+    },
+    "tests/feedback-compatibility.browser.cjs": {
+      "raw": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+      "normalized_lf": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "raw": "3ca8f4b32e0cea608ea239c12122b6a7edf45bebc9a910bd6973705559ad0af5",
+      "normalized_lf": "3dab55bebf219a5baffd6407054ad0d7f491c7d6ded4df2440ae81fcbcd8451f"
+    },
+    "tests/neatness-boundaries.browser.cjs": {
+      "raw": "a49615fd6124e05ebb1fdbaa15ff122c972dbfadb0ce5633493d6385acbacdf7",
+      "normalized_lf": "70b0721d739989dddde3fe060b3dbf143e9533bda4f510998ac9866a48be029f"
+    }
+  },
+  "context_scope": "Assigned10 tests match raw/LF pins and normalized Git00c/Git7558 at beginning; end pins unchanged. All other app/helper/runner/partner/fixture references read from immutable Git7558 snapshots with hashes, not asserted CURRENT app freeze. Anonymous stored names preserved; local function bindings use exact spans and hashes, no new anonymous ordinal identity.",
+  "function_hash_convention": "SHA256 of normalized LF function lines start_line..end_line inclusive with one trailing LF. For file-level DRY crossing module prefix, function metrics/hash identify surrounding context only.",
+  "replay": {
+    "shape_records": 33,
+    "historical_dry_records": 8,
+    "io_records": 2,
+    "shape_and_dry_exact_details_match": true,
+    "historical_clone_archive": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\00c-full-clone-replay.json",
+    "historical_clone_archive_sha256": "d405af0cbbf47fe9ba45755fd54771b584d0411a57445dd6085173999564bff3",
+    "historical_clone_digest_and_10_sources_verified": true,
+    "clone_limit": "Reused historical90-source archive; constructed installed ClonePair/FileContext and replayed DRY detector. No whole-corpus rerun/current91-corpus claim; co-change copied from archive, not independently reconstructed.",
+    "io_graph": {
+      "id": "90c828ccda574e32806ddbca888e1723",
+      "head_commit": "00c9454e6c89f258cb3afc938201a10feda16087"
+    },
+    "io_graph_mode": "mode=ro&immutable=1",
+    "io_limit": "Cross-function replay uses immutable read-only stored00c graph call sites, not a regenerated graph; assigned source bytes identical00c/7558/current. Global rank_position not independently replayed.",
+    "installed_rule_sha256": {
+      "biomarkers\\complex_method.py": "6dbc6b0e9bcb70d26d8047c8b5e542d9c9cf57d5215f434de407948dbb3e19d0",
+      "biomarkers\\large_method.py": "abb2d7c9a2142631ec09991250a6b1a19d0af43e0235b711f96bba4dbdc2f744",
+      "biomarkers\\nested_complexity.py": "9f1f973ad3ad8ca459328a6c5432dcf753dc02aa69beda0deb103b9359c81761",
+      "biomarkers\\dry_violation.py": "31f7f7c1be61edd1977866575b98a70bf0a564cd327df7e8ed1eb4fa1ea09d01",
+      "biomarkers\\io_in_loop.py": "4bb99a7936f242c7795f65c6622552a62c7e55c87acb73d9f38fe146f0a3a810",
+      "complexity\\dispatch.py": "bf3a1419d9b4c5d04f9a90d7dc7f1c69d04b718ebcccb73e6cda5cb5350ce20b",
+      "perf\\crossfn.py": "f6f89544c203f3cd0786015539d3265b90c2c84022f9008564b5b00487c29be2",
+      "perf\\opportunities.py": "023f55d46aed876866c5ccac4df2a5dd3e890f67f78c5bdb53aa70d417379622"
+    },
+    "rules": {
+      "complex_method": "judged_ccn >=9; dispatch adjustment from installed function facts, raw CCN also reported",
+      "large_method": "NLOC>=60 and raw CCN>=3",
+      "nested_complexity": "judged_nesting>=4",
+      "dry_violation": "cross-file coverage>=8%; worst clone>=6lines; active co-change threshold3; assigned co-change0 historical only",
+      "io_in_loop": "stored call-site path replay; aggregate role=test, inherent_to_boundary, expected, rank score12; global position not replayed"
+    }
+  },
+  "findings": [
+    {
+      "record_id": "code_health:finding_a56e02cc5c89d2eb6e9e",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "prepareWriting",
+      "proposed_status": "reviewed_no_change",
+      "classification": "bounded_fixture_setup",
+      "reason": "Grade4/5/12, target enabled/off/under/met/over, genre and text are distinct policy inputs, not repeated processing. The 14-line setup intentionally makes each parity scenario explicit; a lookup or tiny wrapper would hide its UI contracts.",
+      "evidence_anchors": [
+        "tests/analysis-pipeline.browser.cjs:51@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "prepareWriting",
+          "line_start": 51,
+          "line_end": 65,
+          "details": {
+            "ccn": 10,
+            "cognitive": 9,
+            "nloc": 14,
+            "dispatch_share": 0.33
+          },
+          "reason": "prepareWriting has cyclomatic complexity 10",
+          "deduction": null
+        },
+        "function": {
+          "name": "prepareWriting",
+          "start_line": 51,
+          "end_line": 65,
+          "ccn": 10,
+          "cognitive": 9,
+          "nloc": 14,
+          "dispatch_share": 0.33,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            57,
+            57
+          ]
+        },
+        "function_normalized_lf_sha256": "db5be6133dc16c636b49bdb5f13f8c6141886c2d84292fe4c87d5d2c53d77146",
+        "judged_ccn": 10,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 9,
+        "nloc": 14,
+        "dispatch_share": 0.33,
+        "symbol_line": 51,
+        "deepest_block": {
+          "start": 57,
+          "end": 57
+        }
+      },
+      "callers": [
+        "exercise page.evaluate invokes prepareWriting; both original/refactored sides use it."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep grade, target, genre and trimmed text fixtures plus exact whole-result parity; no new test required for retention."
+    },
+    {
+      "record_id": "code_health:finding_bfb4902f382649ef8306",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "prepareImages",
+      "proposed_status": "reviewed_no_change",
+      "classification": "bounded_image_fixture_setup",
+      "reason": "The branches distinguish typed-only, OCR, photo, multi-image and held-boundary fixtures and initialize actual selected-image state and cached OCR text. These are different native paths; combining them would make image ownership/policy premises harder to inspect.",
+      "evidence_anchors": [
+        "tests/analysis-pipeline.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:77@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "prepareImages",
+          "line_start": 66,
+          "line_end": 77,
+          "details": {
+            "ccn": 11,
+            "cognitive": 11,
+            "nloc": 12,
+            "dispatch_share": 0.0
+          },
+          "reason": "prepareImages has cyclomatic complexity 11",
+          "deduction": null
+        },
+        "function": {
+          "name": "prepareImages",
+          "start_line": 66,
+          "end_line": 77,
+          "ccn": 11,
+          "cognitive": 11,
+          "nloc": 12,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            72,
+            72
+          ]
+        },
+        "function_normalized_lf_sha256": "11572dcf61f79364bf1fba05a6cd65b406771ff48f0a094b197d1cae5a5897bc",
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 11,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 66,
+        "deepest_block": {
+          "start": 72,
+          "end": 72
+        }
+      },
+      "callers": [
+        "exercise invokes prepareImages before native analysis; runSide executes both sides."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:77@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain real canvas/image synchronization and OCR versus typed-photo cases; do not replace the target image pipeline with a common stub."
+    },
+    {
+      "record_id": "code_health:finding_76d928a3e5e7dc43f8da",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "large_method",
+      "symbol": "exercise",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_native_parity_scenario",
+      "reason": "The 192-line exercise is one serializable browser callback containing named local setup/respond/capture helpers. It observes real analysis, pending bytes, ownership, snapshots and rendering, including explicit zero/undefined/absent/null score cases. Moving local closures just to reduce size risks parity scope without deleting duplicate work.",
+      "evidence_anchors": [
+        "tests/analysis-pipeline.browser.cjs:23@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:218@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:230@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:234@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "high",
+          "function_name": "exercise",
+          "line_start": 23,
+          "line_end": 216,
+          "details": {
+            "nloc": 192,
+            "ccn": 3,
+            "dispatch_share": 0.0
+          },
+          "reason": "exercise is 192 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "exercise",
+          "start_line": 23,
+          "end_line": 216,
+          "ccn": 3,
+          "cognitive": 2,
+          "nloc": 192,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            203,
+            203
+          ]
+        },
+        "function_normalized_lf_sha256": "b3f0c1c88764d3aae6a52f97c6f9b97fa615559eb1131c0dd840210987457c83",
+        "judged_ccn": 3,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "nloc": 192,
+        "ccn": 3,
+        "dispatch_share": 0.0,
+        "symbol_line": 23,
+        "deepest_block": {
+          "start": 203,
+          "end": 203
+        }
+      },
+      "callers": [
+        "runSide calls exercise; outer loop deep-compares original/refactored complete observed objects."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:234@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve serialization sentinels, key ordering, provider/effect logs, ownership identity and cleanup checks; no extraction solely for NLOC."
+    },
+    {
+      "record_id": "code_health:finding_0f7b96782dc7eb4598cd",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse_partial_dry",
+      "reason": "A useful small deletion is local asset resolution/read/fulfill at 243-244 via the existing localAppRoute helper. Keep the external-origin abort/recording at 242. The reported worst clone at 252-259 is result return/cleanup plus runner setup, so this is a partial DRY improvement, not a promise to remove that clone or flag.",
+      "evidence_anchors": [
+        "tests/analysis-pipeline.browser.cjs:237@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:240@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:242@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:259@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 252,
+          "line_end": 259,
+          "details": {
+            "cross_file_duplication_pct": 9.29,
+            "clone_pair_count": 8,
+            "worst_clone_lines": 8,
+            "worst_clone_partner": "tests/archive-failures.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "9% of file duplicated in other files; worst clone shares 8 lines with tests/archive-failures.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "runSide",
+          "start_line": 237,
+          "end_line": 254,
+          "ccn": 6,
+          "cognitive": 8,
+          "nloc": 18,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 3,
+          "deepest_block": [
+            244,
+            244
+          ]
+        },
+        "function_normalized_lf_sha256": "cd8bfe2e744c2c7bf9bd2a11e366131251ce2bb5ac61a9334edc31f3dc77c5b4",
+        "judged_ccn": 6,
+        "judged_nesting": 2,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 9.29,
+        "clone_pair_count": 8,
+        "worst_clone_lines": 8,
+        "worst_clone_partner": "tests/archive-failures.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 237,
+        "symbol": "runSide"
+      },
+      "callers": [
+        "runSide is called for original and refactored within each scenario; its local route serves the real app."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:259@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Rerun unchanged parity suite and helper route checks after replacing only asset serving; preserve isolated contexts, original-source injection, error collection and full output equality.",
+      "smallest_candidate": "Replace only legacy local asset serving with tests/support/local-app-route.js; preserve specialized seams and all scenario/oracle/report code. Use default text/html fallback MIME."
+    },
+    {
+      "record_id": "code_health:finding_5e09ee8dca0ad0327ab1",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_test_io_boundary",
+      "reason": "The repeated call creates a fresh browser context and loads actual local assets for each original/refactored scenario. This is the isolation boundary of the parity test, not a demonstrated product N+1 cost. Reference source is read once at module scope. Sharing a live page or changing read timing needs a separate measured benefit.",
+      "evidence_anchors": [
+        "tests/analysis-pipeline.browser.cjs:3@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:237@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:243@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:249@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:259@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:262@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@256>",
+          "start_line": 256,
+          "end_line": 274,
+          "ccn": 4,
+          "cognitive": 8,
+          "nloc": 19,
+          "max_nesting": 3
+        },
+        "function_normalized_lf_sha256": "42e4d19bfccb8d8ba6b4383906102d496e1bf3b9bb294eecb2e767e908f03e2e",
+        "replayed_raw_hit": {
+          "biomarker_type": "io_in_loop",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 262,
+          "line_end": 262,
+          "details": {
+            "boundary_kind": "filesystem",
+            "cross_function": true,
+            "path": [
+              "tests/analysis-pipeline.browser.cjs::__module__",
+              "tests/analysis-pipeline.browser.cjs::runSide"
+            ],
+            "resolution_basis": "call-site",
+            "loop_line": 259
+          },
+          "reason": "a filesystem call is reached once per loop iteration through __module__ -> runSide (cross-function I/O call inside a loop)",
+          "deduction": null
+        }
+      },
+      "verified_observation_details": {
+        "boundary_kind": "filesystem",
+        "cross_function": true,
+        "path": [
+          "tests/analysis-pipeline.browser.cjs::__module__",
+          "tests/analysis-pipeline.browser.cjs::runSide"
+        ],
+        "resolution_basis": "call-site",
+        "loop_line": 259,
+        "symbol_line": 256,
+        "symbol": "<anonymous@256>",
+        "role_owner": "tests/analysis-pipeline.browser.cjs::__module__",
+        "execution_role": "test",
+        "opportunity_id": "perf3_84dba4db32722c23655b"
+      },
+      "callers": [
+        "module scenario/side loops call runSide; filesystem boundary includes its asset route."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:259@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:262@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain independent page/context state and full side parity. Route helper reuse may reduce code, but does not establish fewer I/O operations."
+    },
+    {
+      "record_id": "code_health:finding_64fc231abf55dad4b2a3",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@278>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_failure_aggregation_and_cleanup",
+      "reason": "Depth4 is the scenario loop inside browser cleanup plus per-case try/catch/finally. A failed native evaluation or assertion creates a passed:false row, every page closes, and the final failed-count assertion fails the process. Replacing this with a generic runner would add a protocol abstraction for little deletion.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:278@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:282@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:290@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:295@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:298@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:303@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "nested_complexity",
+          "severity": "medium",
+          "function_name": "<anonymous@278>",
+          "line_start": 278,
+          "line_end": 305,
+          "details": {
+            "max_nesting": 4,
+            "ccn": 5,
+            "cognitive": 12,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.12
+          },
+          "reason": "<anonymous@278> nests 4 levels deep",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@278>",
+          "start_line": 278,
+          "end_line": 305,
+          "ccn": 5,
+          "cognitive": 12,
+          "nloc": 28,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.12,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            295,
+            298
+          ]
+        },
+        "function_normalized_lf_sha256": "3f2b615a2c11ad2d766f5cc11e36ca9ae5bd058acf75da78de53b2704ce9e942",
+        "judged_ccn": 5,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 5,
+        "cognitive": 12,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.12,
+        "symbol_line": 278,
+        "deepest_block": {
+          "start": 295,
+          "end": 298
+        }
+      },
+      "callers": [
+        "IIFE evaluates runPolicyScenario and assertPolicyResult per selected case."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:295@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:298@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:303@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain failed rows, result payloads, unconditional page/browser close, and final failure assertion. Native runner clears optional FILTER flags; no app run performed here."
+    },
+    {
+      "record_id": "code_health:finding_38aaaf154679c0fea42f",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runPolicyScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_policy_snapshot_scenario",
+      "reason": "The branches establish old real analysis/pending/report state, hold distinct provider boundaries, mutate actual policy/UI/owner inputs and then retry or commit. They are deliberate premises for stale-publication and grade-policy oracles, rather than interchangeable operations.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:87@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:157@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:198@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:291@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "runPolicyScenario",
+          "line_start": 18,
+          "line_end": 198,
+          "details": {
+            "ccn": 19,
+            "cognitive": 20,
+            "nloc": 179,
+            "dispatch_share": 0.0
+          },
+          "reason": "runPolicyScenario has cyclomatic complexity 19",
+          "deduction": null
+        },
+        "function": {
+          "name": "runPolicyScenario",
+          "start_line": 18,
+          "end_line": 198,
+          "ccn": 19,
+          "cognitive": 20,
+          "nloc": 179,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 1,
+          "deepest_block": [
+            87,
+            87
+          ]
+        },
+        "function_normalized_lf_sha256": "01808bda6174da03f7514c6dcab193b5638bf67cab43054da1c4cf4cdec404dd",
+        "judged_ccn": 19,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 20,
+        "nloc": 179,
+        "dispatch_share": 0.0,
+        "symbol_line": 18,
+        "deepest_block": {
+          "start": 87,
+          "end": 87
+        }
+      },
+      "callers": [
+        "policy IIFE page.evaluate(runPolicyScenario); assertPolicyResult chooses rejection versus success checks."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:157@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:198@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:291@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep old pending bytes/identity and reports, fresh retry inputs, real prompt/model captures and controlled delayed responses; avoid a broad scenario framework."
+    },
+    {
+      "record_id": "code_health:finding_fa6408b6a784d14b37e2",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runControlledPolicyAnalysis",
+      "proposed_status": "reviewed_no_change",
+      "classification": "native_provider_guard_control",
+      "reason": "This 39-line helper restores native text/image request wrappers only for request-boundary cases, then controls fetch/body/backoff to expose actual cancellation and policy checks. The delayed branches represent different timing windows; removing them would weaken guard coverage.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:19@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:29@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "runControlledPolicyAnalysis",
+          "line_start": 19,
+          "line_end": 57,
+          "details": {
+            "ccn": 19,
+            "cognitive": 25,
+            "nloc": 39,
+            "dispatch_share": 0.33
+          },
+          "reason": "runControlledPolicyAnalysis has cyclomatic complexity 19",
+          "deduction": null
+        },
+        "function": {
+          "name": "runControlledPolicyAnalysis",
+          "start_line": 19,
+          "end_line": 57,
+          "ccn": 19,
+          "cognitive": 25,
+          "nloc": 39,
+          "dispatch_share": 0.33,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 2,
+          "param_count": 0,
+          "deepest_block": [
+            29,
+            35
+          ]
+        },
+        "function_normalized_lf_sha256": "b758c21907e1b82073a458cd52066320b61fde387236b512449c629c42f4e202",
+        "judged_ccn": 19,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 25,
+        "nloc": 39,
+        "dispatch_share": 0.33,
+        "symbol_line": 19,
+        "deepest_block": {
+          "start": 29,
+          "end": 35
+        }
+      },
+      "callers": [
+        "runPolicyScenario invokes runControlledPolicyAnalysis; it reaches native requestOpenRouterWithFallback for selected cases."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:29@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve body-stall and retry held controls, real wrapper delegation and assertion of the changed policy before a later fetch. Synthetic provider/timer seams remain disclosed."
+    },
+    {
+      "record_id": "code_health:finding_2a2f19c7aa24339c754c",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "imageResponse",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_provider_response_fixture",
+      "reason": "OCR extraction, typed/printed classification, missing handwriting criteria and complete fallback criteria require different response texts. Nine branches in ten lines are compact fixture dispatch and preserve unknown versus usable8/10; no useful common production logic is duplicated here.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:127@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:132@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "imageResponse",
+          "line_start": 123,
+          "line_end": 132,
+          "details": {
+            "ccn": 9,
+            "cognitive": 9,
+            "nloc": 10,
+            "dispatch_share": 0.0
+          },
+          "reason": "imageResponse has cyclomatic complexity 9",
+          "deduction": null
+        },
+        "function": {
+          "name": "imageResponse",
+          "start_line": 123,
+          "end_line": 132,
+          "ccn": 9,
+          "cognitive": 9,
+          "nloc": 10,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            127,
+            127
+          ]
+        },
+        "function_normalized_lf_sha256": "608d6d9f4302ebfb23e5436baaa0a285ea3c4d20e441b14a4423cde8ffc5c8dc",
+        "judged_ccn": 9,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 9,
+        "nloc": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 123,
+        "deepest_block": {
+          "start": 127,
+          "end": 127
+        }
+      },
+      "callers": [
+        "runPolicyScenario image provider seam invokes imageResponse during actual OCR/neatness stages."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:127@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:132@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep OCR versus neatness response discrimination and typed/missing/fallback classifications; do not collapse Missing into zero."
+    },
+    {
+      "record_id": "code_health:finding_11afb690652ff9e5bc9f",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "assertRejectedPolicyResult",
+      "proposed_status": "reviewed_no_change",
+      "classification": "distinct_rejection_and_recovery_oracles",
+      "reason": "These checks separately prove old pending bytes survive, old report/data survive where ownership permits, the terminal message is correct, busy clears and a new analysis adopts the edited grade/target/strictness/model/writing/owner. The conditional expectations follow distinct mutations; an assertion wrapper would only relocate branching.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:200@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:203@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:206@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:212@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:226@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "assertRejectedPolicyResult",
+          "line_start": 200,
+          "line_end": 226,
+          "details": {
+            "ccn": 15,
+            "cognitive": 14,
+            "nloc": 27,
+            "dispatch_share": 0.36
+          },
+          "reason": "assertRejectedPolicyResult has cyclomatic complexity 15",
+          "deduction": null
+        },
+        "function": {
+          "name": "assertRejectedPolicyResult",
+          "start_line": 200,
+          "end_line": 226,
+          "ccn": 15,
+          "cognitive": 14,
+          "nloc": 27,
+          "dispatch_share": 0.36,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            203,
+            206
+          ]
+        },
+        "function_normalized_lf_sha256": "310820295478a7128e079d37f33d34e999de56cfbd11f09741d96f5d68b4b494",
+        "judged_ccn": 15,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 15,
+        "cognitive": 14,
+        "nloc": 27,
+        "dispatch_share": 0.36,
+        "symbol_line": 200,
+        "deepest_block": {
+          "start": 203,
+          "end": 206
+        }
+      },
+      "callers": [
+        "assertPolicyResult calls assertRejectedPolicyResult for unsuccessful scenarios."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:206@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:212@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:226@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain preservation plus positive retry checks, including the documented OCR/owner report exceptions. No new runtime verification claimed."
+    },
+    {
+      "record_id": "code_health:finding_33ae5b7c5ae2fbe3f497",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "assertPolicyScores",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_calibration_oracles",
+      "reason": "The 16-line assertion map encodes exact grade4/12, target/word-count, grammar/Flow and overall calibration outcomes. Computing expectations with the same production scoring helper or turning this into generic teaching-string data would reduce independence, not maintenance cost.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:227@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:228@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:241@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "assertPolicyScores",
+          "line_start": 227,
+          "line_end": 242,
+          "details": {
+            "ccn": 11,
+            "cognitive": 14,
+            "nloc": 16,
+            "dispatch_share": 0.0
+          },
+          "reason": "assertPolicyScores has cyclomatic complexity 11",
+          "deduction": null
+        },
+        "function": {
+          "name": "assertPolicyScores",
+          "start_line": 227,
+          "end_line": 242,
+          "ccn": 11,
+          "cognitive": 14,
+          "nloc": 16,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            228,
+            241
+          ]
+        },
+        "function_normalized_lf_sha256": "2536f818ec845aff76700592761393cd523ca5ce9006a5d177e7311d096a4496",
+        "judged_ccn": 11,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 14,
+        "nloc": 16,
+        "dispatch_share": 0.0,
+        "symbol_line": 227,
+        "deepest_block": {
+          "start": 228,
+          "end": 241
+        }
+      },
+      "callers": [
+        "assertSuccessfulPolicyResult calls assertPolicyScores."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:227@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:228@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:241@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep literal expected scores, visible grade/overall and target values; any intentional calibration change requires explicit reviewed expectation changes."
+    },
+    {
+      "record_id": "code_health:finding_bc05e1f85a0cea31af89",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "assertSuccessfulPolicyResult",
+      "proposed_status": "reviewed_no_change",
+      "classification": "policy_persistence_and_unknown_score_oracles",
+      "reason": "The success checks bind the captured policy across analysis, pending, committed, stored and serialized records, then distinguish null missing neatness, absent neatness and fallback8. Reassessment provenance and later report stability are additional independent contracts; all remain readable in 26 lines.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:243@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:247@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:250@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:255@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:261@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:262@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "assertSuccessfulPolicyResult",
+          "line_start": 243,
+          "line_end": 268,
+          "details": {
+            "ccn": 9,
+            "cognitive": 8,
+            "nloc": 26,
+            "dispatch_share": 0.5
+          },
+          "reason": "assertSuccessfulPolicyResult has cyclomatic complexity 9",
+          "deduction": null
+        },
+        "function": {
+          "name": "assertSuccessfulPolicyResult",
+          "start_line": 243,
+          "end_line": 268,
+          "ccn": 9,
+          "cognitive": 8,
+          "nloc": 26,
+          "dispatch_share": 0.5,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 2,
+          "deepest_block": [
+            245,
+            245
+          ]
+        },
+        "function_normalized_lf_sha256": "64014c9565d08cb8ef366bf26cae570629422f8b6f048e5e560176c2850bdaf6",
+        "judged_ccn": 9,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 9,
+        "cognitive": 8,
+        "nloc": 26,
+        "dispatch_share": 0.5,
+        "symbol_line": 243,
+        "deepest_block": {
+          "start": 245,
+          "end": 245
+        }
+      },
+      "callers": [
+        "assertPolicyResult invokes success branch; it delegates exact score checks to existing assertPolicyScores."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:258@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:261@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:262@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain all five policy projections, commit result, category scores, targets, overall, later report metadata and reassessment source ID."
+    },
+    {
+      "record_id": "code_health:finding_71b92201355099acf458",
+      "file": "tests/analysis-policy.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runPolicyScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_shape_view_of_coherent_scenario",
+      "reason": "This is the size view of the same runPolicyScenario reviewed for CCN, not a second repair. Its nested named local helpers must serialize together into page.evaluate; length includes setup, held mutation, retained-state capture, retry and persistence observations needed to understand each oracle.",
+      "evidence_anchors": [
+        "tests/analysis-policy.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:57@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:198@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:291@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:577@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "high",
+          "function_name": "runPolicyScenario",
+          "line_start": 18,
+          "line_end": 198,
+          "details": {
+            "nloc": 179,
+            "ccn": 19,
+            "dispatch_share": 0.0
+          },
+          "reason": "runPolicyScenario is 179 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "runPolicyScenario",
+          "start_line": 18,
+          "end_line": 198,
+          "ccn": 19,
+          "cognitive": 20,
+          "nloc": 179,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 1,
+          "deepest_block": [
+            87,
+            87
+          ]
+        },
+        "function_normalized_lf_sha256": "01808bda6174da03f7514c6dcab193b5638bf67cab43054da1c4cf4cdec404dd",
+        "judged_ccn": 19,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "nloc": 179,
+        "ccn": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 18,
+        "deepest_block": {
+          "start": 87,
+          "end": 87
+        }
+      },
+      "callers": [
+        "same runPolicyScenario as finding_38aaaf154679c0fea42f; browser evaluation supplies its global environment."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-policy.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:198@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-policy.browser.cjs:291@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain one complete callback unless a separately useful repeated operation can be deleted; keep all policy and recovery oracles."
+    },
+    {
+      "record_id": "code_health:finding_3515e0fc6ceb77656ea4",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "<anonymous@4>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_deterministic_mutation_nesting",
+      "reason": "The deepest block is the seeded inner mutation loop at55-58, inside generation of100 deterministic input pairs. Its indices, operation and splice are the test stimulus, not accidental nested product logic. Existing independent matrix/caller comparisons justify retaining this nesting.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:50@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:53@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:55@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:1166@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "nested_complexity",
+          "severity": "medium",
+          "function_name": "<anonymous@4>",
+          "line_start": 4,
+          "line_end": 102,
+          "details": {
+            "max_nesting": 4,
+            "ccn": 18,
+            "cognitive": 36,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@4> nests 4 levels deep",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@4>",
+          "start_line": 4,
+          "end_line": 102,
+          "ccn": 18,
+          "cognitive": 36,
+          "nloc": 98,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            55,
+            58
+          ]
+        },
+        "function_normalized_lf_sha256": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d",
+        "judged_ccn": 18,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "max_nesting": 4,
+        "ccn": 18,
+        "cognitive": 36,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 55,
+          "end": 58
+        }
+      },
+      "callers": [
+        "suite callback builds corpus and compares originalMatrix with native buildLcsMatrix and downstream callers."
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:58@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve seed827163, all100 generated cases and fixed inputs; route duplication is a separate candidate below and does not repair this depth."
+    },
+    {
+      "record_id": "code_health:finding_873694a833229c403503",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@4>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_algorithm_and_dom_oracles",
+      "reason": "CCN18 combines seeded input generation, original LCS loops, exact caller comparisons and safe DOM assertions. Sharing the candidate algorithm or moving branches into scoring helpers would undermine the independent oracle. Only the separately identified asset route is useful existing-helper reuse.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:19@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:20@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:82@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:90@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:1166@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "<anonymous@4>",
+          "line_start": 4,
+          "line_end": 102,
+          "details": {
+            "ccn": 18,
+            "cognitive": 36,
+            "nloc": 98,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@4> has cyclomatic complexity 18",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@4>",
+          "start_line": 4,
+          "end_line": 102,
+          "ccn": 18,
+          "cognitive": 36,
+          "nloc": 98,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            55,
+            58
+          ]
+        },
+        "function_normalized_lf_sha256": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d",
+        "judged_ccn": 18,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "ccn": 18,
+        "cognitive": 36,
+        "nloc": 98,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 55,
+          "end": 58
+        }
+      },
+      "callers": [
+        "IIFE page.evaluate swaps buildLcsMatrix between retained originalMatrix and candidate, then restores native normalization."
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:82@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:90@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep independent original algorithm, Unicode/punctuation/hostile fixtures, exact matrix/caller equality and normalization-call count."
+    },
+    {
+      "record_id": "code_health:finding_c028bb03063849984a60",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@4>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_algorithm_parity_lifecycle",
+      "reason": "The long callback maintains one page, one deterministic corpus and exact original-versus-candidate function swaps, followed by normalization and live DOM checks. Splitting it for the98-line score adds mutable seam plumbing. The route DRY candidate can stand alone without restructuring this lifecycle.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:4@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:16@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:36@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:78@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:94@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:100@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:1166@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "medium",
+          "function_name": "<anonymous@4>",
+          "line_start": 4,
+          "line_end": 102,
+          "details": {
+            "nloc": 98,
+            "ccn": 18,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@4> is 98 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@4>",
+          "start_line": 4,
+          "end_line": 102,
+          "ccn": 18,
+          "cognitive": 36,
+          "nloc": 98,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            55,
+            58
+          ]
+        },
+        "function_normalized_lf_sha256": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d",
+        "judged_ccn": 18,
+        "judged_nesting": 4
+      },
+      "verified_observation_details": {
+        "nloc": 98,
+        "ccn": 18,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 55,
+          "end": 58
+        }
+      },
+      "callers": [
+        "suite IIFE launches page and serializes its single complete comparison callback."
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:78@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:94@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:100@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain122 fixed/generated matrix comparisons, four long caller cases, once-per-token normalization and actual corrected result DOM checks."
+    },
+    {
+      "record_id": "code_health:finding_e127d96b7167f455505c",
+      "file": "tests/correction-performance.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse",
+      "reason": "The clone includes the familiar browser setup and identical local asset route9-14; the existing helper can delete its path/read/MIME/404 implementation without touching the independent originalMatrix oracle. Do not abstract the neighboring browser lifecycle or comparison logic to chase remaining overlap.",
+      "evidence_anchors": [
+        "tests/correction-performance.browser.cjs:3@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:9@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:16@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:100@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:1166@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 3,
+          "line_end": 16,
+          "details": {
+            "cross_file_duplication_pct": 15.69,
+            "clone_pair_count": 22,
+            "worst_clone_lines": 15,
+            "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "16% of file duplicated in other files; worst clone shares 15 lines with tests/feedback-compatibility.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@4>",
+          "start_line": 4,
+          "end_line": 102,
+          "ccn": 18,
+          "cognitive": 36,
+          "nloc": 98,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 4,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            55,
+            58
+          ]
+        },
+        "function_normalized_lf_sha256": "126d092d685c65db94fff03944099e217386cde52ca59b965cc3e63ca9d3af0d",
+        "judged_ccn": 18,
+        "judged_nesting": 4,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 15.69,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "correction-performance IIFE installs local page route before its native matrix/caller evaluation."
+      ],
+      "test_assertion_references": [
+        "tests/correction-performance.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:16@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/correction-performance.browser.cjs:100@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Use helper default text/html, keep external abort, JS MIME, missing404 and report/error/cleanup protocol; rerun unchanged suite and helper route checks.",
+      "smallest_candidate": "Replace only legacy local asset serving with tests/support/local-app-route.js; preserve specialized seams and all scenario/oracle/report code. Use default text/html fallback MIME."
+    },
+    {
+      "record_id": "code_health:finding_887a8ae401645401acd2",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkCompleteCategories",
+      "proposed_status": "reviewed_no_change",
+      "classification": "compact_category_cross_product_oracles",
+      "reason": "Bold/plain headings crossed with five independent trailing sections test whether six categories retain their own score/notices and stop before the next section. Separate guide and grow-goal checks guard parser boundaries. Twelve branches in13lines are useful independent assertions, not repeated parsing work to merge.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:21@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:22@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:30@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:31@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:34@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2222@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2257@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "checkCompleteCategories",
+          "line_start": 21,
+          "line_end": 33,
+          "details": {
+            "ccn": 12,
+            "cognitive": 20,
+            "nloc": 13,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkCompleteCategories has cyclomatic complexity 12",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkCompleteCategories",
+          "start_line": 21,
+          "end_line": 33,
+          "ccn": 12,
+          "cognitive": 20,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            22,
+            32
+          ]
+        },
+        "function_normalized_lf_sha256": "7794057b3926652bf09e66e2d1267dad8dcaf286f2596263b1119129cf74ac2f",
+        "judged_ccn": 12,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 20,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 21,
+        "deepest_block": {
+          "start": 22,
+          "end": 32
+        }
+      },
+      "callers": [
+        "runDetailedParserCases calls checkCompleteCategories, then returns failed/passed rows to native driver."
+      ],
+      "test_assertion_references": [
+        "tests/detailed-parser.browser.cjs:30@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:31@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:34@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain both heading styles, all suffixes, per-category raw-body boundary assertions and guide/goal checks; avoid computing expected scores from parser output."
+    },
+    {
+      "record_id": "code_health:finding_1c0c0ee54d1cd1d54d8b",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkCategoryBounds",
+      "proposed_status": "reviewed_no_change",
+      "classification": "distinct_category_boundary_oracles",
+      "reason": "Header formats, reordered categories, duplicate first-category selection, Organization/Flow fields and ghost-category rejection test different parser hazards. The conjunctions verify content and boundaries together; reducing CCN through generic predicates would obscure which contract failed.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:93@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:94@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:96@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:98@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:100@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:102@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2222@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2257@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "checkCategoryBounds",
+          "line_start": 93,
+          "line_end": 105,
+          "details": {
+            "ccn": 12,
+            "cognitive": 11,
+            "nloc": 13,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkCategoryBounds has cyclomatic complexity 12",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkCategoryBounds",
+          "start_line": 93,
+          "end_line": 105,
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            94,
+            97
+          ]
+        },
+        "function_normalized_lf_sha256": "905567f8023c2f5bcb2e4545289b1e731c80f830fdba4f1bad57b50a1f575da7",
+        "judged_ccn": 12,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 93,
+        "deepest_block": {
+          "start": 94,
+          "end": 97
+        }
+      },
+      "callers": [
+        "runDetailedParserCases invokes checkCategoryBounds after adjacent/missing score cases."
+      ],
+      "test_assertion_references": [
+        "tests/detailed-parser.browser.cjs:100@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:102@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep first duplicate semantics, exact category content, no bleed into neighboring bodies and no categories fabricated from section prose."
+    },
+    {
+      "record_id": "code_health:finding_ecf2fa117e79b21b7feb",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkAnalysisPipeline",
+      "proposed_status": "reviewed_no_change",
+      "classification": "end_to_end_parser_persistence_cases",
+      "reason": "Fourteen detailed-response variants flow through actual analyzeWriting, parsing, reconciliation, pending commit, saved feedback and export, with additional missing/word-count/eligibility controls. The branch count reflects intentionally different score sources; a dispatcher table is no simpler than the visible loop.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:127@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:143@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:157@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:160@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:173@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2222@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2257@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "checkAnalysisPipeline",
+          "line_start": 123,
+          "line_end": 173,
+          "details": {
+            "ccn": 12,
+            "cognitive": 12,
+            "nloc": 51,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkAnalysisPipeline has cyclomatic complexity 12",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkAnalysisPipeline",
+          "start_line": 123,
+          "end_line": 173,
+          "ccn": 12,
+          "cognitive": 12,
+          "nloc": 51,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            127,
+            157
+          ]
+        },
+        "function_normalized_lf_sha256": "dc13c409d8c2357fcc58a501ad9357ee17fbcae4ea9465441e946f259643691b",
+        "judged_ccn": 12,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 12,
+        "nloc": 51,
+        "dispatch_share": 0.0,
+        "symbol_line": 123,
+        "deepest_block": {
+          "start": 127,
+          "end": 157
+        }
+      },
+      "callers": [
+        "runDetailedParserCases awaits checkAnalysisPipeline; provider responses are synthetic but native analysis/persistence paths run."
+      ],
+      "test_assertion_references": [
+        "tests/detailed-parser.browser.cjs:157@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:160@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:173@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain omitted versus explicit Missing, malformed and hostile responses, section-boundary controls, real commit/export and eligibility/word-count checks."
+    },
+    {
+      "record_id": "code_health:finding_28419b21daeeea84383d",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkAnalysisPersistence",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_analysis_pending_saved_export_oracles",
+      "reason": "These13lines compare expected Ideas/Word scores across latest data, pending and the actual committed session, assert all three provider stages, exportability and safe detailed DOM. Hostile and section variants need their own additional checks; a combined Boolean helper would hide useful failure evidence.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:143@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:144@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:148@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:151@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:153@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:155@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2222@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2257@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "checkAnalysisPersistence",
+          "line_start": 143,
+          "line_end": 155,
+          "details": {
+            "ccn": 13,
+            "cognitive": 12,
+            "nloc": 13,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkAnalysisPersistence has cyclomatic complexity 13",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkAnalysisPersistence",
+          "start_line": 143,
+          "end_line": 155,
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            153,
+            153
+          ]
+        },
+        "function_normalized_lf_sha256": "24e976251bd6ff7c93db4a0a17e42526c3d5987e9d7e5afb6cb269f3919f0d23",
+        "judged_ccn": 13,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 13,
+        "dispatch_share": 0.0,
+        "symbol_line": 143,
+        "deepest_block": {
+          "start": 153,
+          "end": 153
+        }
+      },
+      "callers": [
+        "checkAnalysisPipeline invokes checkAnalysisPersistence inside each detailed-response case."
+      ],
+      "test_assertion_references": [
+        "tests/detailed-parser.browser.cjs:151@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:153@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:155@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve actual commit=true and saved ID lookup, safe DOM and no accidental later-section inheritance; do not replace projections with a single success flag."
+    },
+    {
+      "record_id": "code_health:finding_005af86642206a3f69cb",
+      "file": "tests/detailed-parser.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse",
+      "reason": "The13-line worst clone covers driver setup and the duplicated local asset route181-187. Delegate just asset serving to localAppRoute; parser fixtures and native evaluate/assertion/report/error handling remain local. Do not expect all22 historical clone pairs to disappear.",
+      "evidence_anchors": [
+        "tests/detailed-parser.browser.cjs:177@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:181@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:187@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:189@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:195@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2222@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2257@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 177,
+          "line_end": 189,
+          "details": {
+            "cross_file_duplication_pct": 8.65,
+            "clone_pair_count": 22,
+            "worst_clone_lines": 14,
+            "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "9% of file duplicated in other files; worst clone shares 14 lines with tests/feedback-compatibility.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@177>",
+          "start_line": 177,
+          "end_line": 197,
+          "ccn": 7,
+          "cognitive": 14,
+          "nloc": 21,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.04,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            179,
+            196
+          ]
+        },
+        "function_normalized_lf_sha256": "a3e1eb428683c7e1c2854fdd57a3c43c43c31e31af940089e8174dce18df463d",
+        "judged_ccn": 7,
+        "judged_nesting": 3,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 8.65,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 14,
+        "worst_clone_partner": "tests/feedback-compatibility.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 177,
+        "symbol": "<anonymous@177>"
+      },
+      "callers": [
+        "driver IIFE loads native page, evaluates runDetailedParserCases and rejects failed rows except its explicit diagnostic EXPECT_BASELINE mode."
+      ],
+      "test_assertion_references": [
+        "tests/detailed-parser.browser.cjs:187@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:189@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/detailed-parser.browser.cjs:195@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep default text/html, local origin, missing404, error collection, report schema and final assertion; normal run-tests clears EXPECT_BASELINE. Rerun unchanged detailed parser suite plus helper checks.",
+      "smallest_candidate": "Replace only legacy local asset serving with tests/support/local-app-route.js; preserve specialized seams and all scenario/oracle/report code. Use default text/html fallback MIME."
+    },
+    {
+      "record_id": "code_health:finding_6e57e46cfd771706f50b",
+      "file": "tests/feedback-compatibility.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@13>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_native_compatibility_contracts",
+      "reason": "The56-line IIFE contains20 native renderer/sanitizer/modal checks plus10 Flow/grammar contracts. Its branches include null versus zero, malicious imported HTML, actual modal click navigation and calibrated language. Those assertions should remain direct; route duplication has a separate small candidate.",
+      "evidence_anchors": [
+        "tests/feedback-compatibility.browser.cjs:13@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7324@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6739@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:1932@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:4329@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "<anonymous@13>",
+          "line_start": 13,
+          "line_end": 71,
+          "details": {
+            "ccn": 21,
+            "cognitive": 30,
+            "nloc": 56,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.01
+          },
+          "reason": "<anonymous@13> has cyclomatic complexity 21",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@13>",
+          "start_line": 13,
+          "end_line": 71,
+          "ccn": 21,
+          "cognitive": 30,
+          "nloc": 56,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            15,
+            70
+          ]
+        },
+        "function_normalized_lf_sha256": "346ddd1cbb2e19d406b000d5391e6601a9716911bf7880551e2f8db626d4fa03",
+        "judged_ccn": 21,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 21,
+        "cognitive": 30,
+        "nloc": 56,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.01,
+        "symbol_line": 13,
+        "deepest_block": {
+          "start": 15,
+          "end": 70
+        }
+      },
+      "callers": [
+        "IIFE executes renderer and flow browser callbacks, asserts their counts20/10 and page errors empty."
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:70@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain all30 assertions, exact sanitizer output policy, actual modal navigation and saved genre/goal checks; avoid a new compatibility-test framework."
+    },
+    {
+      "record_id": "code_health:finding_a837428ede3cbf0c9096",
+      "file": "tests/feedback-compatibility.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse",
+      "reason": "The15-line shared region includes duplicated local asset routing18-23 and ordinary browser setup. Existing localAppRoute replaces the asset implementation with the same normal JS/HTML/404/external protocol; keep the30 compatibility assertions and lifecycle independent.",
+      "evidence_anchors": [
+        "tests/feedback-compatibility.browser.cjs:12@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:23@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:7324@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:6739@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:1932@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:4329@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 12,
+          "line_end": 26,
+          "details": {
+            "cross_file_duplication_pct": 21.43,
+            "clone_pair_count": 22,
+            "worst_clone_lines": 15,
+            "worst_clone_partner": "tests/correction-performance.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "21% of file duplicated in other files; worst clone shares 15 lines with tests/correction-performance.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@13>",
+          "start_line": 13,
+          "end_line": 71,
+          "ccn": 21,
+          "cognitive": 30,
+          "nloc": 56,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.01,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            15,
+            70
+          ]
+        },
+        "function_normalized_lf_sha256": "346ddd1cbb2e19d406b000d5391e6601a9716911bf7880551e2f8db626d4fa03",
+        "judged_ccn": 21,
+        "judged_nesting": 3,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 21.43,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 15,
+        "worst_clone_partner": "tests/correction-performance.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "feedback compatibility driver route precedes real native renderer and Flow callbacks."
+      ],
+      "test_assertion_references": [
+        "tests/feedback-compatibility.browser.cjs:27@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:65@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/feedback-compatibility.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Use default text/html and retain errors[], renderer20/flow10 counts and process failure semantics; rerun unchanged suite and helper route checks.",
+      "smallest_candidate": "Replace only legacy local asset serving with tests/support/local-app-route.js; preserve specialized seams and all scenario/oracle/report code. Use default text/html fallback MIME."
+    },
+    {
+      "record_id": "code_health:finding_3a510389b4b1a431469d",
+      "file": "tests/main-app-health.browser.cjs",
+      "marker": "nested_complexity",
+      "symbol": "checkVisibility",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_visibility_cross_product",
+      "reason": "Depth6 comes from the four-axis32-case matrix inside try/finally. The axes V2/legacy, visible/hidden, sign-in and read/save/sync failure are semantically independent. The captured shipped handler executes; boundary calls are controlled and restored. Converting to flattened tuple data saves no logic.",
+      "evidence_anchors": [
+        "tests/main-app-health.browser.cjs:102@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:105@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:109@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:115@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:119@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:133@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8552@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "nested_complexity",
+          "severity": "high",
+          "function_name": "checkVisibility",
+          "line_start": 102,
+          "line_end": 123,
+          "details": {
+            "max_nesting": 6,
+            "ccn": 16,
+            "cognitive": 52,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkVisibility nests 6 levels deep",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkVisibility",
+          "start_line": 102,
+          "end_line": 123,
+          "ccn": 16,
+          "cognitive": 52,
+          "nloc": 22,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 6,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            109,
+            118
+          ]
+        },
+        "function_normalized_lf_sha256": "db99c8ca4d34cd27ba336308bac7ff9a79458ee9916456d3aaad5a5cc66cdc46",
+        "judged_ccn": 16,
+        "judged_nesting": 6
+      },
+      "verified_observation_details": {
+        "max_nesting": 6,
+        "ccn": 16,
+        "cognitive": 52,
+        "dispatch_share": 0.0,
+        "symbol_line": 102,
+        "deepest_block": {
+          "start": 109,
+          "end": 118
+        }
+      },
+      "callers": [
+        "exerciseMainAppHealth invokes checkVisibility; init hook records real document handlers and delegates native registration."
+      ],
+      "test_assertion_references": [
+        "tests/main-app-health.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:119@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:133@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain one-handler assertion before early return, exact per-case ordered traces and restoration. This is controlled handler invocation, not an OS page-hide integration test."
+    },
+    {
+      "record_id": "code_health:finding_11a556def902a383e11c",
+      "file": "tests/main-app-health.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkVisibility",
+      "proposed_status": "reviewed_no_change",
+      "classification": "lifecycle_order_and_error_short_circuit_oracles",
+      "reason": "The22-line function checks V2 local-only versus legacy read/save/sync order and each failure short circuit. The expected trace is independent of the actual captured handler; merging setup/expected branches risks false greens. Conditional visibility and error behavior justify CCN16.",
+      "evidence_anchors": [
+        "tests/main-app-health.browser.cjs:103@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:106@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:110@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:113@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:115@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:117@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:120@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8552@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "checkVisibility",
+          "line_start": 102,
+          "line_end": 123,
+          "details": {
+            "ccn": 16,
+            "cognitive": 52,
+            "nloc": 22,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkVisibility has cyclomatic complexity 16",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkVisibility",
+          "start_line": 102,
+          "end_line": 123,
+          "ccn": 16,
+          "cognitive": 52,
+          "nloc": 22,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 6,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            109,
+            118
+          ]
+        },
+        "function_normalized_lf_sha256": "db99c8ca4d34cd27ba336308bac7ff9a79458ee9916456d3aaad5a5cc66cdc46",
+        "judged_ccn": 16,
+        "judged_nesting": 6
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 52,
+        "nloc": 22,
+        "dispatch_share": 0.0,
+        "symbol_line": 102,
+        "deepest_block": {
+          "start": 109,
+          "end": 118
+        }
+      },
+      "callers": [
+        "same checkVisibility as nesting record; driver rejects any failed check and page error."
+      ],
+      "test_assertion_references": [
+        "tests/main-app-health.browser.cjs:116@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:117@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/main-app-health.browser.cjs:120@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep failure injection at the named boundary, portfolio argument validation, exact trace, handler presence and finally restoration; no extraction solely to lower CCN."
+    },
+    {
+      "record_id": "code_health:finding_e130e9384515730f3349",
+      "file": "tests/neatness-boundaries.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@4>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_numeric_parser_boundary_corpus",
+      "reason": "The43-line driver defines separate malformed labeled/legacy numerators/denominators, legal2/4/6/8/10, comma/sentence punctuation and criteria fallback. Those concrete inputs protect against accepting partial numeric tokens or turning missing into zero. Only its duplicated asset route is a useful small reuse.",
+      "evidence_anchors": [
+        "tests/neatness-boundaries.browser.cjs:4@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:17@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:22@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:26@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:30@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:39@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:977@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "<anonymous@4>",
+          "line_start": 4,
+          "line_end": 46,
+          "details": {
+            "ccn": 11,
+            "cognitive": 20,
+            "nloc": 43,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.02
+          },
+          "reason": "<anonymous@4> has cyclomatic complexity 11",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@4>",
+          "start_line": 4,
+          "end_line": 46,
+          "ccn": 11,
+          "cognitive": 20,
+          "nloc": 43,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            6,
+            41
+          ]
+        },
+        "function_normalized_lf_sha256": "b3520d05939c405e0c220e28d831060eeaf53c24fd106574fafdaa8e144333ad",
+        "judged_ccn": 11,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 11,
+        "cognitive": 20,
+        "nloc": 43,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 4,
+        "deepest_block": {
+          "start": 6,
+          "end": 41
+        }
+      },
+      "callers": [
+        "IIFE evaluates actual parseNeatnessAssessmentResponse for each input and strictly compares returned score with literal expected score."
+      ],
+      "test_assertion_references": [
+        "tests/neatness-boundaries.browser.cjs:30@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:39@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain39 rows, malformed overall with complete criteria fallback, errors[] and final failed0. No runtime pass claimed."
+    },
+    {
+      "record_id": "code_health:finding_039bf6f4e90b92d0d600",
+      "file": "tests/neatness-boundaries.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse",
+      "reason": "Its13-line worst clone contains imports/setup and local asset route9-14. Replace just that route using existing helper default text/html; keep all39 literal numeric-boundary expectations and their strict null/number comparison. Shared parser corpus abstraction is unnecessary.",
+      "evidence_anchors": [
+        "tests/neatness-boundaries.browser.cjs:1@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:9@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:33@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:977@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 1,
+          "line_end": 13,
+          "details": {
+            "cross_file_duplication_pct": 34.78,
+            "clone_pair_count": 15,
+            "worst_clone_lines": 13,
+            "worst_clone_partner": "tests/correction-performance.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "35% of file duplicated in other files; worst clone shares 13 lines with tests/correction-performance.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@4>",
+          "start_line": 4,
+          "end_line": 46,
+          "ccn": 11,
+          "cognitive": 20,
+          "nloc": 43,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            6,
+            41
+          ]
+        },
+        "function_normalized_lf_sha256": "b3520d05939c405e0c220e28d831060eeaf53c24fd106574fafdaa8e144333ad",
+        "judged_ccn": 11,
+        "judged_nesting": 3,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 34.78,
+        "clone_pair_count": 15,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/correction-performance.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "neatness-boundaries IIFE routes real app before parser evaluation."
+      ],
+      "test_assertion_references": [
+        "tests/neatness-boundaries.browser.cjs:33@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-boundaries.browser.cjs:45@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Rerun unchanged parser-boundary suite and helper checks; preserve external abort, JS MIME, default MIME, missing404 and report/failure protocol.",
+      "smallest_candidate": "Replace only legacy local asset serving with tests/support/local-app-route.js; preserve specialized seams and all scenario/oracle/report code. Use default text/html fallback MIME."
+    },
+    {
+      "record_id": "code_health:finding_3e06106d467f48269878",
+      "file": "tests/neatness-scoring.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_neatness_analysis_and_commit_oracles",
+      "reason": "The branches intentionally exercise HANDWRITTEN missing, MIXED valid8 and NOT_SCORABLE through native analysis and actual pending commit. The assertions separately bind latest/pending/saved scores and assessed flags plus overall exclusion for unknown neatness. Keep these explicit despite CCN13.",
+      "evidence_anchors": [
+        "tests/neatness-scoring.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:51@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:55@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:59@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:79@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:977@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "<anonymous@7>",
+          "line_start": 7,
+          "line_end": 85,
+          "details": {
+            "ccn": 13,
+            "cognitive": 29,
+            "nloc": 79,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.02
+          },
+          "reason": "<anonymous@7> has cyclomatic complexity 13",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 85,
+          "ccn": 13,
+          "cognitive": 29,
+          "nloc": 79,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            40,
+            65
+          ]
+        },
+        "function_normalized_lf_sha256": "2048412cb956c55f2df6d2a023733c43e7d53b850f2c22df904dd461d0f60459",
+        "judged_ccn": 13,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 29,
+        "nloc": 79,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 40,
+          "end": 65
+        }
+      },
+      "callers": [
+        "IIFE browser callback calls actual analyzeWriting with synthetic text/image provider responses, then commitPendingPortfolioSync."
+      ],
+      "test_assertion_references": [
+        "tests/neatness-scoring.browser.cjs:59@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:79@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain three text requests, exact source type, score/assessed projections, commit=true, saved overall and unknown-neatness denominator behavior; route reuse is separate."
+    },
+    {
+      "record_id": "code_health:finding_7f05dea449294f08bb0f",
+      "file": "tests/neatness-scoring.browser.cjs",
+      "marker": "large_method",
+      "symbol": "<anonymous@7>",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_neatness_persistence_scenario",
+      "reason": "The79-line lifecycle includes native setup, three source classifications, real analysis/commit and independent outer assertions. Splitting the callback would pass image/pending/state between closures without removing work. The shared route can shrink boilerplate without promising this size flag disappears.",
+      "evidence_anchors": [
+        "tests/neatness-scoring.browser.cjs:7@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:22@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:51@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:59@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:84@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:977@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "<anonymous@7>",
+          "line_start": 7,
+          "line_end": 85,
+          "details": {
+            "nloc": 79,
+            "ccn": 13,
+            "dispatch_share": 0.0,
+            "terminal_share": 0.02
+          },
+          "reason": "<anonymous@7> is 79 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 85,
+          "ccn": 13,
+          "cognitive": 29,
+          "nloc": 79,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            40,
+            65
+          ]
+        },
+        "function_normalized_lf_sha256": "2048412cb956c55f2df6d2a023733c43e7d53b850f2c22df904dd461d0f60459",
+        "judged_ccn": 13,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "nloc": 79,
+        "ccn": 13,
+        "dispatch_share": 0.0,
+        "terminal_share": 0.02,
+        "symbol_line": 7,
+        "deepest_block": {
+          "start": 40,
+          "end": 65
+        }
+      },
+      "callers": [
+        "same three-case native scenario as complex record; Node assertions consume actual browser observations."
+      ],
+      "test_assertion_references": [
+        "tests/neatness-scoring.browser.cjs:59@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:68@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:84@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Preserve all existing projections and browser cleanup; do not replace commit or parser with canned outcomes."
+    },
+    {
+      "record_id": "code_health:finding_334957713e49cc25a47b",
+      "file": "tests/neatness-scoring.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "confirmed_repair_candidate",
+      "classification": "existing_route_helper_reuse_with_mime_parameter",
+      "reason": "The25-line worst clone includes the identical local asset router and page setup shared with deletion-merge. Reuse localAppRoute(route,root,\"application/octet-stream\") to preserve non-JS/non-HTML MIME; default helper MIME would change that behavior. Keep source-classification fixtures outside any new framework; other clone overlap may remain.",
+      "evidence_anchors": [
+        "tests/neatness-scoring.browser.cjs:1@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:13@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:18@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:20@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:977@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 1,
+          "line_end": 25,
+          "details": {
+            "cross_file_duplication_pct": 29.76,
+            "clone_pair_count": 22,
+            "worst_clone_lines": 25,
+            "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "30% of file duplicated in other files; worst clone shares 25 lines with tests/deletion-merge.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "<anonymous@7>",
+          "start_line": 7,
+          "end_line": 85,
+          "ccn": 13,
+          "cognitive": 29,
+          "nloc": 79,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.02,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            40,
+            65
+          ]
+        },
+        "function_normalized_lf_sha256": "2048412cb956c55f2df6d2a023733c43e7d53b850f2c22df904dd461d0f60459",
+        "judged_ccn": 13,
+        "judged_nesting": 3,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 29.76,
+        "clone_pair_count": 22,
+        "worst_clone_lines": 25,
+        "worst_clone_partner": "tests/deletion-merge.browser.cjs",
+        "worst_clone_co_change": 0
+      },
+      "callers": [
+        "neatness-scoring IIFE installs router before actual analysis; deletion-merge@7558 shares the same asset MIME branch."
+      ],
+      "test_assertion_references": [
+        "tests/neatness-scoring.browser.cjs:20@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/neatness-scoring.browser.cjs:40@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Use explicit application/octet-stream fallback, preserve HTML/JS override,200 success,404 missing and external abort; rerun unchanged native suite and helper MIME assertions.",
+      "smallest_candidate": "Replace only legacy local asset serving with tests/support/local-app-route.js; preserve specialized seams and all scenario/oracle/report code. Pass application/octet-stream as fallback MIME."
+    },
+    {
+      "record_id": "code_health:finding_41bebd95e154dbeb1101",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "runAdmissionScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_provider_admission_scenario",
+      "reason": "The111-line callback creates retained state, instruments actual key reads and native90000ms timer handles, dispatches real text/image/OCR/neatness/analysis callers, then verifies delayed and recovery outcomes. These are different admission boundaries with shared local state, not redundant provider algorithms.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:25@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:74@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:122@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:132@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "runAdmissionScenario",
+          "line_start": 14,
+          "line_end": 132,
+          "details": {
+            "ccn": 19,
+            "cognitive": 18,
+            "nloc": 111,
+            "dispatch_share": 0.0
+          },
+          "reason": "runAdmissionScenario has cyclomatic complexity 19",
+          "deduction": null
+        },
+        "function": {
+          "name": "runAdmissionScenario",
+          "start_line": 14,
+          "end_line": 132,
+          "ccn": 19,
+          "cognitive": 18,
+          "nloc": 111,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "deepest_block": [
+            25,
+            25
+          ]
+        },
+        "function_normalized_lf_sha256": "65e53cdff9bd7e45e59e6a13699b4a6eafd47702f1321e3f3d6cc0e5938f0315",
+        "judged_ccn": 19,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 19,
+        "cognitive": 18,
+        "nloc": 111,
+        "dispatch_share": 0.0,
+        "symbol_line": 14,
+        "deepest_block": {
+          "start": 25,
+          "end": 25
+        }
+      },
+      "callers": [
+        "runScenario page.evaluate(runAdmissionScenario);47 text/image/stored-key/native caller scenarios."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:122@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:132@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep exact key-read counts, no-request/no-backoff/no-timer failures, old primary/pending/report state and subsequent valid recovery. Timers/fetch are controlled seams."
+    },
+    {
+      "record_id": "code_health:finding_67ef791c85e9c929ff70",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "configureAdmissionKey",
+      "proposed_status": "reviewed_no_change",
+      "classification": "explicit_credential_storage_modes",
+      "reason": "Seven lines expose missing/whitespace/recovery/read-fault/session/remembered/legacy credential routes and delegate the real credential reader. These branches are required premises for admission behavior; a mode table would hide recovery/read-fault side effects while saving little.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "configureAdmissionKey",
+          "line_start": 66,
+          "line_end": 72,
+          "details": {
+            "ccn": 10,
+            "cognitive": 13,
+            "nloc": 7,
+            "dispatch_share": 0.33
+          },
+          "reason": "configureAdmissionKey has cyclomatic complexity 10",
+          "deduction": null
+        },
+        "function": {
+          "name": "configureAdmissionKey",
+          "start_line": 66,
+          "end_line": 72,
+          "ccn": 10,
+          "cognitive": 13,
+          "nloc": 7,
+          "dispatch_share": 0.33,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 2,
+          "param_count": 0,
+          "deepest_block": [
+            67,
+            67
+          ]
+        },
+        "function_normalized_lf_sha256": "8dfdbf2e362de07f51ef813fa1364806ffa0b82f57d1ea2095f071327f81c0e6",
+        "judged_ccn": 10,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 13,
+        "nloc": 7,
+        "dispatch_share": 0.33,
+        "symbol_line": 66,
+        "deepest_block": {
+          "start": 67,
+          "end": 67
+        }
+      },
+      "callers": [
+        "runAdmissionScenario calls configureAdmissionKey before invoking actual request or native analysis caller."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:72@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain exact read instrumentation and restoration, whitespace normalization, recovery sentinel and storage faults. Do not stub refreshApiKeyRuntimeValue to bypass admission."
+    },
+    {
+      "record_id": "code_health:finding_89608ebb8544f121b620",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "fetchSyntheticProvider",
+      "proposed_status": "reviewed_no_change",
+      "classification": "bounded_provider_transport_fixture",
+      "reason": "The12-line fetch seam verifies actual URL/auth/model payload and emits success, two503 retries, held delayed retry, abortable stalled body, OCR or neatness responses. The branches control native transport windows rather than replacing request admission, so keep them explicit.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:74@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:78@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:80@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:85@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "fetchSyntheticProvider",
+          "line_start": 74,
+          "line_end": 85,
+          "details": {
+            "ccn": 13,
+            "cognitive": 13,
+            "nloc": 12,
+            "dispatch_share": 0.0
+          },
+          "reason": "fetchSyntheticProvider has cyclomatic complexity 13",
+          "deduction": null
+        },
+        "function": {
+          "name": "fetchSyntheticProvider",
+          "start_line": 74,
+          "end_line": 85,
+          "ccn": 13,
+          "cognitive": 13,
+          "nloc": 12,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            80,
+            80
+          ]
+        },
+        "function_normalized_lf_sha256": "f847d72b75be05b69af617cd7ebcd161fefe3d36126f1084cfd39bdb6b843c4a",
+        "judged_ccn": 13,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 13,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 74,
+        "deepest_block": {
+          "start": 80,
+          "end": 80
+        }
+      },
+      "callers": [
+        "window.fetch is fetchSyntheticProvider while native callOpenRouter/callOpenRouterImage and selected native callers execute."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:78@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:80@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:85@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain request schema/auth assertions, real90000ms callback handle for body abort, model/retry counts and body-failure responses; no real service timing claimed."
+    },
+    {
+      "record_id": "code_health:finding_cee983103af818acd1ab",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkAdmissionOutcome",
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_no_side_effect_admission_oracles",
+      "reason": "These nine lines distinguish credential failures by caller and prove zero fetches/backoffs/timers with exactly one real key read, retained state and appropriate storage-error alerts. Combining them into one truthy status would lose causal evidence of rejection before work.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:105@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:106@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:110@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:112@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "checkAdmissionOutcome",
+          "line_start": 104,
+          "line_end": 112,
+          "details": {
+            "ccn": 13,
+            "cognitive": 12,
+            "nloc": 9,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkAdmissionOutcome has cyclomatic complexity 13",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkAdmissionOutcome",
+          "start_line": 104,
+          "end_line": 112,
+          "ccn": 13,
+          "cognitive": 12,
+          "nloc": 9,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 0,
+          "deepest_block": [
+            106,
+            106
+          ]
+        },
+        "function_normalized_lf_sha256": "2434d6cd1da740a14867a8b0cc48fc835a62d2879c6a25803bfcae113f1fc8ed",
+        "judged_ccn": 13,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 13,
+        "cognitive": 12,
+        "nloc": 9,
+        "dispatch_share": 0.0,
+        "symbol_line": 104,
+        "deepest_block": {
+          "start": 106,
+          "end": 106
+        }
+      },
+      "callers": [
+        "runAdmissionScenario invokes checkAdmissionOutcome after actual selected caller returns or throws."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:106@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:110@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:112@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep zero-work assertions, exact read count, correct error/status/alert and old-state preservation; do not infer admission from a UI message alone."
+    },
+    {
+      "record_id": "code_health:finding_f832cc5b27c3d52f19ac",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkDelayedOutcome",
+      "proposed_status": "reviewed_no_change",
+      "classification": "delayed_retry_revalidation_oracles",
+      "reason": "The10-line checker distinguishes key removal/read fault/recovery/cancel from legitimate key edit after the held backoff, validates one1200ms wait, second fetch only for edit, expected read counts and caller-specific terminal failures. Each branch proves credential freshness or cancellation at a later boundary.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:122@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:123@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:126@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:130@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:131@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "high",
+          "function_name": "checkDelayedOutcome",
+          "line_start": 122,
+          "line_end": 131,
+          "details": {
+            "ccn": 16,
+            "cognitive": 24,
+            "nloc": 10,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkDelayedOutcome has cyclomatic complexity 16",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkDelayedOutcome",
+          "start_line": 122,
+          "end_line": 131,
+          "ccn": 16,
+          "cognitive": 24,
+          "nloc": 10,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 3,
+          "bumps": 1,
+          "param_count": 0,
+          "deepest_block": [
+            123,
+            130
+          ]
+        },
+        "function_normalized_lf_sha256": "ff14a772505e4ead5ab46b2516fdbd6b4a69fe8246e0186c4190a9a28cef01a6",
+        "judged_ccn": 16,
+        "judged_nesting": 3
+      },
+      "verified_observation_details": {
+        "ccn": 16,
+        "cognitive": 24,
+        "nloc": 10,
+        "dispatch_share": 0.0,
+        "symbol_line": 122,
+        "deepest_block": {
+          "start": 123,
+          "end": 130
+        }
+      },
+      "callers": [
+        "runAdmissionScenario holds actual native retry sleep, mutates controlled key/cancellation state, then calls checkDelayedOutcome."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:126@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:130@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:131@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain no forbidden second fetch, edited-key authorization, exact reads/waits and analysis cleanup. Avoid deriving expected calls from observed calls."
+    },
+    {
+      "record_id": "code_health:finding_ac3dbb7c835d1db56e3a",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runAdmissionScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_size_view_of_provider_scenario",
+      "reason": "This is the size view of the same admission callback reviewed for CCN. Its local named credential/transport/assertion helpers share instrumentation and old state inside page.evaluate. Extracting a universal provider harness would add protocol plumbing for47 deliberately different native caller paths.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:14@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:66@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:74@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:97@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:122@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:132@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "medium",
+          "function_name": "runAdmissionScenario",
+          "line_start": 14,
+          "line_end": 132,
+          "details": {
+            "nloc": 111,
+            "ccn": 19,
+            "dispatch_share": 0.0
+          },
+          "reason": "runAdmissionScenario is 111 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "runAdmissionScenario",
+          "start_line": 14,
+          "end_line": 132,
+          "ccn": 19,
+          "cognitive": 18,
+          "nloc": 111,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "deepest_block": [
+            25,
+            25
+          ]
+        },
+        "function_normalized_lf_sha256": "65e53cdff9bd7e45e59e6a13699b4a6eafd47702f1321e3f3d6cc0e5938f0315",
+        "judged_ccn": 19,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "nloc": 111,
+        "ccn": 19,
+        "dispatch_share": 0.0,
+        "symbol_line": 14,
+        "deepest_block": {
+          "start": 25,
+          "end": 25
+        }
+      },
+      "callers": [
+        "same runAdmissionScenario as complex finding_41bebd95e154dbeb1101; runScenario supplies native page."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:122@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:132@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain all47 scenarios and per-case independent state; only separately demonstrated boilerplate reuse should be considered."
+    },
+    {
+      "record_id": "code_health:finding_4ef2ddbf4e328909aa45",
+      "file": "tests/openrouter-admission.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_native_runner_boilerplate",
+      "reason": "This remaining ten-line clone is evaluation/result aggregation, catch-to-failed-row, page cleanup and the next suite driver, not the asset route, which already uses localAppRoute. Archive failures has downloads, frozen clock and ZIP-byte oracles; a common runScenario framework would need hooks to preserve different protocols.",
+      "evidence_anchors": [
+        "tests/openrouter-admission.browser.cjs:134@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:141@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:144@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:147@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:153@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:160@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 144,
+          "line_end": 153,
+          "details": {
+            "cross_file_duplication_pct": 12.24,
+            "clone_pair_count": 6,
+            "worst_clone_lines": 10,
+            "worst_clone_partner": "tests/archive-failures.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "12% of file duplicated in other files; worst clone shares 10 lines with tests/archive-failures.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "runScenario",
+          "start_line": 134,
+          "end_line": 146,
+          "ccn": 3,
+          "cognitive": 5,
+          "nloc": 13,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.13,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 3,
+          "deepest_block": [
+            138,
+            145
+          ]
+        },
+        "function_normalized_lf_sha256": "3b18f59c3672b26fd0f04d85e8ef12c7f7c810b2f664e2c09032600ff88e8bf5",
+        "judged_ccn": 3,
+        "judged_nesting": 2,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 12.24,
+        "clone_pair_count": 6,
+        "worst_clone_lines": 10,
+        "worst_clone_partner": "tests/archive-failures.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 134,
+        "symbol": "runScenario"
+      },
+      "callers": [
+        "admission IIFE runs runScenario for each case; its checks.every result and page errors determine passed."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-admission.browser.cjs:147@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:153@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-admission.browser.cjs:160@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep isolated pages, exceptions as failed rows, final failed-count assertion and case report. No new abstraction for six dormant historical pairs."
+    },
+    {
+      "record_id": "code_health:finding_e5b1b00ec32579307428",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "createFailureResponse",
+      "proposed_status": "reviewed_no_change",
+      "classification": "bounded_failure_response_catalog",
+      "reason": "Twelve lines enumerate network throw, abortable timeout, HTTP401/429, payload errors, nonJSON, missing choices, non-string and blank content. These distinct malformed responses exercise native parser/retry classification; retaining them directly is cheaper than a generic response factory.",
+      "evidence_anchors": [
+        "tests/openrouter-failures.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:39@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2716@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "createFailureResponse",
+          "line_start": 28,
+          "line_end": 39,
+          "details": {
+            "ccn": 10,
+            "cognitive": 10,
+            "nloc": 12,
+            "dispatch_share": 0.0
+          },
+          "reason": "createFailureResponse has cyclomatic complexity 10",
+          "deduction": null
+        },
+        "function": {
+          "name": "createFailureResponse",
+          "start_line": 28,
+          "end_line": 39,
+          "ccn": 10,
+          "cognitive": 10,
+          "nloc": 12,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "deepest_block": [
+            35,
+            35
+          ]
+        },
+        "function_normalized_lf_sha256": "1c561c6e9208572c1951e0380c17552baa6ec99b08ff7af4fea388cf074e65e0",
+        "judged_ccn": 10,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "ccn": 10,
+        "cognitive": 10,
+        "nloc": 12,
+        "dispatch_share": 0.0,
+        "symbol_line": 28,
+        "deepest_block": {
+          "start": 35,
+          "end": 35
+        }
+      },
+      "callers": [
+        "runFailureScenario synthetic fetch delegates to createFailureResponse while native request wrappers remain active."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-failures.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:35@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:39@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep exact error modes and abortable body semantics; do not collapse retryable transport and nonretryable authentication/payload outcomes."
+    },
+    {
+      "record_id": "code_health:finding_1d28d7d4d96b11c9fde1",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "complex_method",
+      "symbol": "checkTerminalFailure",
+      "proposed_status": "reviewed_no_change",
+      "classification": "independent_retry_and_error_oracles",
+      "reason": "The eight-line checker independently calculates one attempt for nonretryable errors or two per fallback model, exact model order and waits, then checks useful terminal messages. Branches encode the retry contract rather than production control flow; a generic pass predicate would weaken diagnosis.",
+      "evidence_anchors": [
+        "tests/openrouter-failures.browser.cjs:41@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:48@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2716@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "complex_method",
+          "severity": "medium",
+          "function_name": "checkTerminalFailure",
+          "line_start": 41,
+          "line_end": 48,
+          "details": {
+            "ccn": 12,
+            "cognitive": 11,
+            "nloc": 8,
+            "dispatch_share": 0.0
+          },
+          "reason": "checkTerminalFailure has cyclomatic complexity 12",
+          "deduction": null
+        },
+        "function": {
+          "name": "checkTerminalFailure",
+          "start_line": 41,
+          "end_line": 48,
+          "ccn": 12,
+          "cognitive": 11,
+          "nloc": 8,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 1,
+          "bumps": 0,
+          "param_count": 1,
+          "deepest_block": [
+            42,
+            42
+          ]
+        },
+        "function_normalized_lf_sha256": "76d54f85a63f45b3d0d78e63046c6ed0ca894f19ad92901d0d8c0bcc9b225fcb",
+        "judged_ccn": 12,
+        "judged_nesting": 1
+      },
+      "verified_observation_details": {
+        "ccn": 12,
+        "cognitive": 11,
+        "nloc": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 41,
+        "deepest_block": {
+          "start": 42,
+          "end": 42
+        }
+      },
+      "callers": [
+        "runFailureScenario invokes checkTerminalFailure after actual native text/image/analysis request failure."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-failures.browser.cjs:42@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:46@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:48@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain literal attempt/backoff expectations, model sequence and mode-specific error patterns; no swallowing unexpected exceptions as expected failures."
+    },
+    {
+      "record_id": "code_health:finding_066a2edc5c549df655fa",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "large_method",
+      "symbol": "runFailureScenario",
+      "proposed_status": "reviewed_no_change",
+      "classification": "coherent_failure_preservation_and_recovery_scenario",
+      "reason": "The67-line browser callback controls provider failures, wraps native90000ms timers, verifies terminal retry behavior and exact old primary/pending/report identity, then makes a valid request to prove recovery. State and instrumentation are intentionally one lifecycle; splitting for NLOC offers no duplicate deletion.",
+      "evidence_anchors": [
+        "tests/openrouter-failures.browser.cjs:8@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:28@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:41@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:50@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:62@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:79@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2716@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "large_method",
+          "severity": "low",
+          "function_name": "runFailureScenario",
+          "line_start": 8,
+          "line_end": 79,
+          "details": {
+            "nloc": 67,
+            "ccn": 8,
+            "dispatch_share": 0.0
+          },
+          "reason": "runFailureScenario is 67 lines long",
+          "deduction": null
+        },
+        "function": {
+          "name": "runFailureScenario",
+          "start_line": 8,
+          "end_line": 79,
+          "ccn": 8,
+          "cognitive": 10,
+          "nloc": 67,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 1,
+          "deepest_block": [
+            67,
+            71
+          ]
+        },
+        "function_normalized_lf_sha256": "12253563c8450ed34f299807997690e51fa0cf971d18e0e5709b8d23b33f4a53",
+        "judged_ccn": 8,
+        "judged_nesting": 2
+      },
+      "verified_observation_details": {
+        "nloc": 67,
+        "ccn": 8,
+        "dispatch_share": 0.0,
+        "symbol_line": 8,
+        "deepest_block": {
+          "start": 67,
+          "end": 71
+        }
+      },
+      "callers": [
+        "runScenario evaluates runFailureScenario for29 text/image/analysis failures; Node rejects page errors or failed checks."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-failures.browser.cjs:62@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:67@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:79@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain exact saved/pending bytes, old data/report/writing identity, cleared timer handles and busy flag, secret exclusion, alert and subsequent success."
+    },
+    {
+      "record_id": "code_health:finding_6d349b0d589e2b547c8e",
+      "file": "tests/openrouter-failures.browser.cjs",
+      "marker": "dry_violation",
+      "symbol": null,
+      "proposed_status": "reviewed_no_change",
+      "classification": "intentional_failure_suite_runner_boilerplate",
+      "reason": "The13-line clone is final result/error/page-close aggregation and suite driver shared in shape with archive failure tests. localAppRoute is already reused. Archive runner additionally verifies actual download timing and multipart byte capture; one runner abstraction would complicate both assertion contracts.",
+      "evidence_anchors": [
+        "tests/openrouter-failures.browser.cjs:81@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:90@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:92@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:94@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:102@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2716@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2753@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2846@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:2863@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "detector": {
+          "biomarker_type": "dry_violation",
+          "severity": "low",
+          "function_name": null,
+          "line_start": 90,
+          "line_end": 102,
+          "details": {
+            "cross_file_duplication_pct": 21.88,
+            "clone_pair_count": 5,
+            "worst_clone_lines": 13,
+            "worst_clone_partner": "tests/archive-failures.browser.cjs",
+            "worst_clone_co_change": 0
+          },
+          "reason": "22% of file duplicated in other files; worst clone shares 13 lines with tests/archive-failures.browser.cjs",
+          "deduction": null
+        },
+        "function": {
+          "name": "runScenario",
+          "start_line": 81,
+          "end_line": 92,
+          "ccn": 2,
+          "cognitive": 3,
+          "nloc": 12,
+          "dispatch_share": 0.0,
+          "terminal_share": 0.0,
+          "max_nesting": 2,
+          "bumps": 1,
+          "param_count": 2,
+          "deepest_block": [
+            85,
+            91
+          ]
+        },
+        "function_normalized_lf_sha256": "a900467986846c6ed2da04aef0e59274acd5e54fc98ebff4174dc21fe18c2e55",
+        "judged_ccn": 2,
+        "judged_nesting": 2,
+        "scope": "Historical90-file clone archive with verified digest and all10 assigned LF hashes; detector replay only; stored co-change0 not independently reconstructed. Function is nearby enclosing context where clone crosses module prefix; not an assertion that DRY is function-local."
+      },
+      "verified_observation_details": {
+        "cross_file_duplication_pct": 21.88,
+        "clone_pair_count": 5,
+        "worst_clone_lines": 13,
+        "worst_clone_partner": "tests/archive-failures.browser.cjs",
+        "worst_clone_co_change": 0,
+        "symbol_line": 81,
+        "symbol": "runScenario"
+      },
+      "callers": [
+        "failure suite IIFE runs runScenario; collected checks.every plus errors determine passed and final assertion rejects failed rows."
+      ],
+      "test_assertion_references": [
+        "tests/openrouter-failures.browser.cjs:94@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:102@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/openrouter-failures.browser.cjs:104@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Retain report row schema, failures payload, per-page close and final failure count; five historical dormant pairs alone do not justify a new runner."
+    },
+    {
+      "record_id": "performance:perf3_84dba4db32722c23655b",
+      "file": "tests/analysis-pipeline.browser.cjs",
+      "marker": "io_in_loop",
+      "symbol": "tests/analysis-pipeline.browser.cjs::__module__",
+      "proposed_status": "reviewed_no_change",
+      "classification": "duplicate_aggregate_of_intentional_test_io",
+      "reason": "This opportunity aggregates the single code-health I/O observation above: one call site, one affected file, score12, test execution role and expected/inherent_to_boundary with no safe plan. The rank factor affected_call_sites=2 is points for one call site, not evidence of two sites. Global position29 is stored only.",
+      "evidence_anchors": [
+        "tests/analysis-pipeline.browser.cjs:237@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:243@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:259@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:262@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:8252@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/10-main-app.js:596@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "js/app/00-storage-sync-patches.js:8345@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "verified_metrics": {
+        "function": {
+          "name": "<anonymous@256>",
+          "start_line": 256,
+          "end_line": 274,
+          "ccn": 4,
+          "cognitive": 8,
+          "nloc": 19,
+          "max_nesting": 3
+        },
+        "function_normalized_lf_sha256": "42e4d19bfccb8d8ba6b4383906102d496e1bf3b9bb294eecb2e767e908f03e2e",
+        "replayed_raw_hit": {
+          "biomarker_type": "io_in_loop",
+          "severity": "medium",
+          "function_name": null,
+          "line_start": 262,
+          "line_end": 262,
+          "details": {
+            "boundary_kind": "filesystem",
+            "cross_function": true,
+            "path": [
+              "tests/analysis-pipeline.browser.cjs::__module__",
+              "tests/analysis-pipeline.browser.cjs::runSide"
+            ],
+            "resolution_basis": "call-site",
+            "loop_line": 259
+          },
+          "reason": "a filesystem call is reached once per loop iteration through __module__ -> runSide (cross-function I/O call inside a loop)",
+          "deduction": null
+        },
+        "aggregate": {
+          "opportunity_id": "perf3_84dba4db32722c23655b",
+          "performance_model_version": 3,
+          "biomarker_type": "io_in_loop",
+          "biomarker_types": [
+            "io_in_loop"
+          ],
+          "boundary_kind": "filesystem",
+          "execution_context": "test",
+          "terminal_sink": "tests/analysis-pipeline.browser.cjs::runSide",
+          "shared_path_suffix": [
+            "tests/analysis-pipeline.browser.cjs::__module__",
+            "tests/analysis-pipeline.browser.cjs::runSide"
+          ],
+          "intervention_symbol": "tests/analysis-pipeline.browser.cjs::__module__",
+          "intervention_kind": "module",
+          "terminal_sinks": [
+            "tests/analysis-pipeline.browser.cjs::runSide"
+          ],
+          "resource_fingerprints": [],
+          "affected_call_sites_total": 1,
+          "affected_files_total": 1,
+          "observations_total": 1,
+          "reliable_entry_reachability": null,
+          "provenance": "call-site",
+          "confidence": "high",
+          "facets": {
+            "actionability_confidence": "low",
+            "exposure": "unknown",
+            "amplification": "per_iteration",
+            "leverage": "isolated",
+            "change_risk": "contained",
+            "loop_magnitude": "unknown",
+            "execution_role": "test"
+          },
+          "actionability_state": "expected",
+          "actionability_reason": "inherent_to_boundary",
+          "prerequisites": [],
+          "rank_score": 12,
+          "rank_factors": {
+            "multiplier_shape": 4,
+            "boundary_kind": 2,
+            "execution_context": 1,
+            "execution_role": 0,
+            "affected_call_sites": 2,
+            "provenance": 3,
+            "loop_magnitude": 0
+          },
+          "why_ranked": [
+            {
+              "factor": "multiplier_shape",
+              "value": "io_in_loop",
+              "points": 4
+            },
+            {
+              "factor": "provenance",
+              "value": "call-site",
+              "points": 3
+            },
+            {
+              "factor": "affected_call_sites",
+              "value": 1,
+              "points": 2
+            }
+          ],
+          "fix": null,
+          "may_lead": false,
+          "siblings": []
+        }
+      },
+      "verified_observation_details": {
+        "biomarker_types": [
+          "io_in_loop"
+        ],
+        "intervention_kind": "module",
+        "terminal_sinks": [
+          "tests/analysis-pipeline.browser.cjs::runSide"
+        ],
+        "shared_path_suffix": [
+          "tests/analysis-pipeline.browser.cjs::__module__",
+          "tests/analysis-pipeline.browser.cjs::runSide"
+        ],
+        "resource_fingerprints": [],
+        "reliable_entry_reachability": null,
+        "provenance": "call-site",
+        "facets": {
+          "actionability_confidence": "low",
+          "exposure": "unknown",
+          "amplification": "per_iteration",
+          "leverage": "isolated",
+          "change_risk": "contained",
+          "loop_magnitude": "unknown",
+          "execution_role": "test"
+        },
+        "actionability_reason": "inherent_to_boundary",
+        "prerequisites": [],
+        "rank_factors": {
+          "multiplier_shape": 4,
+          "boundary_kind": 2,
+          "execution_context": 1,
+          "execution_role": 0,
+          "affected_call_sites": 2,
+          "provenance": 3,
+          "loop_magnitude": 0
+        },
+        "why_ranked": [
+          {
+            "factor": "multiplier_shape",
+            "value": "io_in_loop",
+            "points": 4
+          },
+          {
+            "factor": "provenance",
+            "value": "call-site",
+            "points": 3
+          },
+          {
+            "factor": "affected_call_sites",
+            "value": 1,
+            "points": 2
+          }
+        ],
+        "fix_rationale": null,
+        "may_lead": false,
+        "siblings": []
+      },
+      "callers": [
+        "module loop -> runSide -> isolated local asset reads; same opportunity perf3_84dba4db32722c23655b as raw observation."
+      ],
+      "test_assertion_references": [
+        "tests/analysis-pipeline.browser.cjs:259@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:262@7558f482974721eecc8c71e368b9bb47ab9017ff",
+        "tests/analysis-pipeline.browser.cjs:264@7558f482974721eecc8c71e368b9bb47ab9017ff"
+      ],
+      "regression_recommendation": "Keep per-case side isolation unless measured test cost supports a separate change. No product latency claim, global-rank replay or additional closure follows from this aggregate."
+    }
+  ],
+  "additional_leads": [],
+  "summary": {
+    "assigned_records": 43,
+    "reviewed_no_change": 37,
+    "confirmed_repair_candidate": 6,
+    "unique_candidate_changes": 6,
+    "candidate_files": [
+      "tests/analysis-pipeline.browser.cjs",
+      "tests/correction-performance.browser.cjs",
+      "tests/detailed-parser.browser.cjs",
+      "tests/feedback-compatibility.browser.cjs",
+      "tests/neatness-boundaries.browser.cjs",
+      "tests/neatness-scoring.browser.cjs"
+    ],
+    "candidate_scope": "Existing route helper reuse only; preserve policy/calibration/null-zero-missing/provider/retry/ownership/assertion protocols. Each candidate is partial duplication deletion, not predicted marker disappearance.",
+    "other_dry_retentions": "Admission and failure suites already reuse localAppRoute; remaining clone regions are deliberately local assertion aggregation and browser lifecycle.",
+    "new_behavior_leads": 0,
+    "scanner_closures_claimed": false
+  },
+  "limits": [
+    "No app/browser/test/syntax execution, runtime reproduction, source/index/Git/tracker/docs/config/package changes or pass claims. Only own scratch and this report written.",
+    "Static metrics and detector replays establish observed shape, not a behavioral failure. Retention is an individual engineering judgment, not scanner closure.",
+    "Controlled provider fetch/body/timer seams and captured visibility-handler invocation are preserved and are not claimed to reproduce live service timing or OS page hiding.",
+    "Optional FILTER/EXPECT_BASELINE diagnostic modes can narrow manual invocation; immutable7558 run-tests.cjs:36 clears these for normal runner execution. Existing report/failure assertions remain the actual oracles.",
+    "No independent whole-history co-change reconstruction or current global clone/rank replay. Archive digest binds historical receipts; assigned10 source hashes independently match.",
+    "The parent controls live full005 gate and any adoption. No conclusion here is a new full-gate result."
+  ],
+  "coordinator_acceptance": {
+    "reviewed": true,
+    "source_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+    "all_individual_reasons_read": true,
+    "assigned_files_raw_and_lf_verified": 10,
+    "actual_detector_replays_combined": 77,
+    "source_verified_io_records_combined": 4,
+    "evidence_receipt": "reviews/batch-005-readonly-054-055-acceptance.json",
+    "limits": "Historical 90-source clone archive reused; no current 91-source clone corpus, regenerated I/O graph, new runtime/test pass, bug reproduction or scanner closure claimed."
+  }
+}

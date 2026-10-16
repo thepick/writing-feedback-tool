@@ -1,0 +1,66 @@
+{
+  "subject": "work/repowise-coordinator/revalidate_unchanged_shapes.py",
+  "helper_sha256_raw": "47bfc9596ce791158b5465d2eb9421a8556f8fd34304c42a6dd56815b41b9b84",
+  "sync_tracker_sha256_raw": "0054fe59f1c74ec94be400dbbe63210c794dfff839d4f4282fa565f65a5b17e2",
+  "inspected_git_commit": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+  "comparison": {
+    "before": "00c9454e6c89f258cb3afc938201a10feda16087",
+    "after": "7558f482974721eecc8c71e368b9bb47ab9017ff",
+    "evidence": "Read-only immutable Git diff of the two changed production files; coordinator helper and sync_tracker preserve/import/write paths inspected. No scan, tracker adoption or app execution."
+  },
+  "conclusion": "No concrete false-accept defect found for retaining these local shape dispositions across the three approved production fixes, subject to the planned fresh-scan and inspected dry-run preconditions. No helper change recommended for this bounded use.",
+  "blockers": [],
+  "checks": [
+    {
+      "anchors": [
+        "revalidate_unchanged_shapes.py:81-94",
+        "revalidate_unchanged_shapes.py:29-42"
+      ],
+      "result": "Binding uses normalized whole-function lines from each immutable Git commit, requires exact owner start and finding containment, and rejects duplicate function bodies within each file. Equivalence compares full body bytes before accepting relative scanner facts. This avoids accepting an unchanged highlighted/deepest sub-block inside an otherwise edited function. Same-file and same prior ID constraints additionally bound matching."
+    },
+    {
+      "anchors": [
+        "revalidate_unchanged_shapes.py:18-26",
+        "revalidate_unchanged_shapes.py:32-42"
+      ],
+      "result": "Only symbol_index and absolute source coordinates are normalized. CCN, NLOC, cognitive complexity, nesting, bumps, dispatch/terminal shares and any other detail keys remain exact comparisons. Finding start/end offsets, severity, marker and reason also match; reason normalization substitutes the bound symbol so anonymous line-name changes can pass. Changed facts fail closed."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:7626@7558",
+        "js/app/10-main-app.js:3543@7558",
+        "js/app/00-storage-sync-patches.js:7168@7558",
+        "revalidate_unchanged_shapes.py:30"
+      ],
+      "result": "039 changes reassessPortfolioSession through source/current-work snapshots and post-confirmation guards; 045 changes the drop callback inside bindPreviewReorderHandlers with source/target bounds; 046 changes openStudentPortfolio navigation ordering and target tab. Each edited function's whole bytes differ from00c, so its own shape disposition cannot pass this equality gate even if its detector metrics or a selected sub-block happened to match. The enclosing bindPreviewReorderHandlers also differs because the edited callback lies inside it."
+    },
+    {
+      "anchors": [
+        "revalidate_unchanged_shapes.py:13-15",
+        "revalidate_unchanged_shapes.py:97-116",
+        "sync_tracker.py:129-141"
+      ],
+      "result": "Only present code-health rows needing revalidation and six local shape markers qualify; prior review/presence and one of three review statuses are required. DRY, I/O, history, coverage, missing rows and fixed_verified are excluded. Existing sync_tracker preservation supplies the review object. The helper restores a review disposition and records a function-hash proof; it does not close the scanner warning."
+    },
+    {
+      "anchors": [
+        "revalidate_unchanged_shapes.py:66-77",
+        "revalidate_unchanged_shapes.py:117-127",
+        "sync_tracker.py:module imports and __main__ guard"
+      ],
+      "result": "The --selfcheck path returns before loading trackers, invoking Git or writing reports. sync_tracker has definitions/constants at import and a guarded main. Ran only the authorized helper with Python -B --selfcheck; exit0, exact output: Five unchanged-function equivalence checks passed. The five assertions exercise shifted coordinates/ordinal acceptance and body/CCN/deepest-block/severity rejection. They do not exercise actual Git binding, duplicate-body rejection, argument parsing or adoption writes."
+    }
+  ],
+  "limits_for_coordinator_and_future_use": [
+    "Whole-function bytes and local scanner facts are not a semantic context proof. An unchanged nested callback can be carried across an edited enclosing function; unchanged functions can also acquire different callers, globals, captured bindings, dependency behavior, UI/event reachability or external fixtures. Review affected prior rationales when any of those change. These three known production diffs do not justify general automatic semantic reapproval.",
+    "Require the fresh scan to describe exactly the source at data.source_commit. The helper verifies HEAD equals that commit, but does not verify checkout cleanliness, per-file working-tree hashes, scanner analyzed_commit values or the scan's tool/config pins. The planned fresh-scan/frozen-source receipt and parent review must supply those preconditions.",
+    "The dry run and --adopt independently reload inputs and recompute records. There is no built-in binding of adoption to the previously inspected dry-run report. Keep the source and tracker snapshots stable, or compare the newly computed adoption set with the reviewed dry run. No general workflow framework is requested here.",
+    "Uniqueness is within each file, not lexical-parent identity or call-graph identity. A uniquely moved function with identical source can pass under a new enclosing scope; inspect such moves. Ambiguous bodies, changed whitespace/comments and some missing/renamed metadata can instead be conservative nonmatches.",
+    "The original classification, rationale and evidence anchors remain historical; the proof records old/new function spans and the new commit but does not rewrite old anchors or establish that a prior repair candidate is still worthwhile. Report only retained shape disposition, not new behavior verification or marker clearance.",
+    "This review did not run a fresh scan, dry run, --adopt, app code, browser, tests or tracker/index writes. Only the permitted helper selfcheck ran; only this review output was written."
+  ],
+  "coordinator_acceptance": {
+    "bounded_use": "Batch005 only after fresh merged-source scan/coverage and frozen pins verify. Inspect dry run and exact set equality before adoption. Review nested/caller context; prior rationale remains historical. No changed-function, semantic reapproval or closure claim.",
+    "reviewed": true
+  }
+}
