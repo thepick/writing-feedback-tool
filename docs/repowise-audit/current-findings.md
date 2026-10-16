@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T14:37:03.365201+07:00.
+Updated 2026-10-16T15:02:20.130709+07:00.
 
 Source: c9375ec2bbfcddf448709344acd676f505b57713. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -116,8 +116,8 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-070: Assert archive refusals preserve work before unsafe side effects - published_verified.
 - repair-071: Test native crop gestures against decoded output pixels - published_verified.
 - repair-001: Verify security signals - reviewed_complete.
-- repair-072: Verify timeout recovery acknowledges only the intended Drive content - accepted_pending_batch_validation.
-- repair-073: Skip unused grammar diff when no reason is generated - accepted_pending_batch_validation.
+- repair-072: Verify timeout recovery acknowledges only the intended Drive content - validated_pending_merge.
+- repair-073: Skip unused grammar diff when no reason is generated - validated_pending_merge.
 
 ## Additional source leads
 

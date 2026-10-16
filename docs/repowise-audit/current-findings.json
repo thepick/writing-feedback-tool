@@ -4,7 +4,7 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c9375ec2bbfcddf448709344acd676f505b57713",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T14:37:03.365201+07:00",
+  "updated_at": "2026-10-16T15:02:20.130709+07:00",
   "timezone": "Asia/Bangkok",
   "status": "risk_prioritized_code_health_active",
   "active_repair": null,
@@ -1884,7 +1884,7 @@
     {
       "id": "repair-072",
       "title": "Verify timeout recovery acknowledges only the intended Drive content",
-      "status": "accepted_pending_batch_validation",
+      "status": "validated_pending_merge",
       "file": "tests/storage-upload-ownership.browser.cjs",
       "thread_id": "01a1438c-80f9-7333-bb0c-8b7b45b23d56",
       "scope": "P10 test-only native upload timeout/canonical readback contracts; no production refactor",
@@ -1906,12 +1906,14 @@
       "independent_reviews": [
         "reviews/repair-072-safety-review.json",
         "reviews/repair-072-regression-review.json"
-      ]
+      ],
+      "batch": "batch-010",
+      "validation_report": "reviews/batch-010-validation.json"
     },
     {
       "id": "repair-073",
       "title": "Skip unused grammar diff when no reason is generated",
-      "status": "accepted_pending_batch_validation",
+      "status": "validated_pending_merge",
       "files": [
         "js/app/10-main-app.js",
         "tests/correction-performance.browser.cjs"
@@ -1937,7 +1939,9 @@
       "independent_reviews": [
         "reviews/repair-073-safety-review.json",
         "reviews/repair-073-regression-review.json"
-      ]
+      ],
+      "batch": "batch-010",
+      "validation_report": "reviews/batch-010-validation.json"
     }
   ],
   "findings": [
@@ -147250,6 +147254,23 @@
         "reviews/batch-009-postrefresh-test-review.json"
       ],
       "unchanged_shape_revalidation": "reviews/batch-009-unchanged-shape-revalidation.json"
+    },
+    {
+      "id": "batch-010",
+      "status": "validated_pending_merge",
+      "pull_request": null,
+      "source_commit": "ad1203b7916a13bee88c23e695b20804ccc54ed9",
+      "validation_report": "reviews/batch-010-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "all_source_pins_unchanged": true,
+      "repairs": [
+        "repair-072",
+        "repair-073"
+      ],
+      "supplemental_html_and_coverage_tools_unchanged": true,
+      "supplemental_pins": "work/repowise-coordinator/batch-010-supplemental-pins.json"
     }
   ],
   "workflow_policy": {
