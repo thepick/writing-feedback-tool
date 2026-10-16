@@ -1,0 +1,30 @@
+{
+  "repair_id": "repair-061-regression-review",
+  "before": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
+  "after": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
+  "decision": "No blocker found for the scoped standalone Dear Diary comma/no-comma LF/CRLF fix.",
+  "pins_sha256": {
+    "js/app/10-main-app.js": {
+      "before_git_lf": "c9ea6897da11d891a257be9c8c567bad2708de166f930801e78483af1932bd7a",
+      "after_git_lf": "dac599dee6ce88e6539ab71f406d493055dc32704bcef4d2cc4ed987fdefde55",
+      "after_checkout_raw_reconciled": "b59774c5fd6805145d4ccddad32dbbeb365a92a5f1359281383240143ba485cb"
+    },
+    "tests/main-app-health.browser.cjs": {
+      "before_git_lf": "507cc4cfea26220bf6ff8d2b0e3bc697f40187f1107c9977b0c2f10ceeb8ad49",
+      "after_git_lf": "78395e6e348e613a1c94b72a28d8e4dec5c1f0efcef3dd9b565e76c57d1cebb5",
+      "after_checkout_raw_reconciled": "5017cfc1cceaf2ef5696c4667e7659d1b547fe402b0617809ab03ac5463bcfe0"
+    }
+  },
+  "verified": [
+    "Immutable Git diff is one classifier condition. Before backups match Gitf312 after LF normalization; restoring CRLF to Gita9e32 source/test exactly matches both writer after hashes. Current photo edits not inspected or assumed.",
+    "Removing only checkDiaryGenre and its invocation reconstructs the prior test LF bytes. Original137 rows identical/passing;171 names/order retained; exactly14 predicted old failures and171 after pass, page errors[]. Both receipts record91 successful syntax checks; before suite status1 from assertions, after0.",
+    "Four direct detector cases receive original LF/CRLF strings. Native textarea assignment normalizes CRLF to LF; tests correctly capture its entered value before dispatch and assert preservation afterward. They do not claim browser textarea retains CR bytes.",
+    "Real input/change handlers update current genre and visible summary; direct/UI mainGenre and safeReference use independent Journal / Reflection/reflection literals. Summary active/layout/visibility and actual buildWritingGenrePromptText are checked without classifier/renderer mocks.",
+    "Controls retain Dear Maya letters, letters containing I feel, Dear Diary Club recipient, unsaluted reflection, manual letter override and return to automatic diary. State restored in finally; original error/report contract retained."
+  ],
+  "receipt_refs": [
+    "work/repowise-repair-061/before/{suite-results,main-app-health.browser}.json",
+    "work/repowise-repair-061/after/{suite-results,main-app-health.browser}.json"
+  ],
+  "limits": "Read-only source/receipt review; no runtime/app/test/browser execution or repository mutations/agents. No numerical-score, full-analysis/provider, storage-persistence, full-gate or publication claim. Intended scope is standalone Dear Diary with optional comma and LF/CRLF; other mixed-feature genre precedence remains unchanged."
+}

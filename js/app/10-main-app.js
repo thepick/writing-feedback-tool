@@ -520,6 +520,7 @@ var API_KEY = EMBEDDED_API_KEY;
 var DEFAULT_MODEL = "google/gemini-3.1-flash-lite-preview";
 var OCR_MODEL = "google/gemini-3.1-flash-lite-preview";
 var selectedImages = [];
+var isPreparingImages = false;
 var selectedImageDataUrl = "";
 var selectedImageName = "";
 var selectedImageExtractedText = "";
@@ -2911,20 +2912,26 @@ function updateOcrControls() {
     var extractBtn = document.getElementById("extractTextBtn");
     var takePhotoBtn = document.getElementById("takePhotoBtn");
     var uploadImageBtn = document.getElementById("uploadImageBtn");
+    var cameraInput = document.getElementById("cameraInput");
+    var imageUploadInput = document.getElementById("imageUploadInput");
     var studentWriting = document.getElementById("studentWriting");
     if (!extractBtn) return;
     var hasImages = selectedImages && selectedImages.length > 0;
     var hasText = studentWriting && studentWriting.value.trim().length > 0;
+    if (cameraInput) cameraInput.disabled = isPreparingImages;
+    if (imageUploadInput) imageUploadInput.disabled = isPreparingImages;
     extractBtn.disabled = isAnalyzing || !hasImages;
 
     // Keep the photo/upload controls useful after the first page is queued.
     // On mobile, users usually take one page at a time, so the buttons must remain visible.
     if (takePhotoBtn) {
+        takePhotoBtn.disabled = isPreparingImages;
         takePhotoBtn.innerHTML = hasImages
             ? '<span aria-hidden="true" style="font-size:18px;vertical-align:text-bottom;margin-right:6px;">📷</span>Add Another Photo'
             : '<span aria-hidden="true" style="font-size:18px;vertical-align:text-bottom;margin-right:6px;">📷</span>Take Photo';
     }
     if (uploadImageBtn) {
+        uploadImageBtn.disabled = isPreparingImages;
         uploadImageBtn.textContent = hasImages ? '⬆️ Add More Images' : '⬆️ Upload Image';
     }
 
@@ -3282,6 +3289,10 @@ async function optimizeImageForOcr(file) {
 
 async function handleSelectedImages(files) {
     if (!files || !files.length) return;
+    if (isPreparingImages) {
+        setOcrStatus("Please wait for image preparation to finish, then try adding your images again.", "error");
+        return;
+    }
     var imageFiles = [];
     for (var i = 0; i < files.length; i++) {
         if (files[i] && files[i].type && files[i].type.indexOf("image/") === 0) imageFiles.push(files[i]);
@@ -3293,11 +3304,12 @@ async function handleSelectedImages(files) {
 
     var existingCount = selectedImages.length;
     var context = captureCurrentWritingContext();
-    setOcrStatus(imageFiles.length === 1 ? "Preparing image..." : "Preparing " + imageFiles.length + " images...", "");
-    updateOcrControls();
 
     var prepared = [];
+    isPreparingImages = true;
     try {
+        setOcrStatus(imageFiles.length === 1 ? "Preparing image..." : "Preparing " + imageFiles.length + " images...", "");
+        updateOcrControls();
         for (var j = 0; j < imageFiles.length; j++) {
             var optimizedDataUrl = await optimizeImageForOcr(imageFiles[j]);
             prepared.push({
@@ -3326,6 +3338,9 @@ async function handleSelectedImages(files) {
         updateSelectedImagePreview();
         syncUiState();
         setOcrStatus(e.message || "Could not prepare the selected images.", "error");
+    } finally {
+        isPreparingImages = false;
+        updateOcrControls();
     }
 }
 

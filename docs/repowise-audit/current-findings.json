@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T09:31:34.880680+07:00",
+  "updated_at": "2026-10-16T09:39:15.295840+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active_confirmed_bug_stabilization",
-  "active_repair": "repair-061",
+  "active_repair": "repair-062",
   "index_provenance": {
     "last_sync_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
     "repository_metadata_head": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
@@ -1589,7 +1589,7 @@
     {
       "id": "repair-061",
       "title": "Recognize ordinary Dear Diary writing as a reflection",
-      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
       "source_commit": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "lead_id": "review030-diary-letter-precedence",
@@ -1600,7 +1600,31 @@
       "behavior_fix_verified": true,
       "report": "reviews/repair-061-diary-genre.json",
       "focused_checks": 171,
-      "baseline_expected_failures": 14
+      "baseline_expected_failures": 14,
+      "commit": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
+      "independent_reviews": [
+        "reviews/repair-061-safety-review.json",
+        "reviews/repair-061-regression-review.json"
+      ]
+    },
+    {
+      "id": "repair-062",
+      "title": "Prevent overlapping image preparations from silently dropping a selection",
+      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "source_commit": "a9e32e618fad5b2ecd0aa2b3da9c8cf7107be786",
+      "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "lead_id": "review032-overlapping-image-preparation",
+      "scope": [
+        "js/app/10-main-app.js",
+        "tests/image-preparation.browser.cjs"
+      ],
+      "behavior_fix_verified": true,
+      "report": "reviews/repair-062-image-preparation-busy.json",
+      "focused_image_checks": 32,
+      "focused_ownership_cases": 23,
+      "baseline_race_failures": 2,
+      "baseline_busy_contract_failures": 12,
+      "behavior_change": "Explicit single-flight/retry policy; no queue/owner equality relaxation."
     }
   ],
   "findings": [
@@ -140216,7 +140240,7 @@
       "classification": "possible_lost_concurrent_same_owner_acquisition",
       "proposed_status": "candidate_needs_regression",
       "source_supported": true,
-      "reproduced": false,
+      "reproduced": true,
       "needs_user_attention": false,
       "reason": "Each acquisition captures the entire current image queue before awaiting optimization. Two overlapping camera/upload additions for unchanged owner/text can start from the same context; when one commits its prepared image, the second context becomes stale because images/primaryImage changed, so the second addition silently returns at3312. Camera/upload controls are relabeled but not disabled during preparation, and independent async change handlers are not serialized. This may lose an intended same-owner page addition. Intent and actual native behavior require a held-optimization regression; do not weaken stale-owner protection merely to append everything.",
       "evidence_anchors": [
@@ -140231,12 +140255,14 @@
       ],
       "regression_recommendation": "Hold two real acquisition calls at optimizeImageForOcr for the same owner/writing, release in both orders, and decide the intended acceptance/order contract for both pages. Require clear retry feedback or preservation of both intended additions while retaining current rejection on student/writing/source changes, failed-batch queue preservation and image safety.",
       "id": "review032-overlapping-image-preparation",
-      "status": "candidate_needs_regression",
+      "status": "fixed_focused_awaiting_publication",
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-032-ui-lifecycle-shapes.json",
-      "related_repair": "repair-032",
+      "related_repair": "repair-062",
       "followup_report": "reviews/bug-focus-image-overlap-relevance.json",
-      "shipped_relevance": "Credible normal-user race causing a selected same-owner addition to disappear without retry feedback; deterministic native reproduction required before calling it confirmed."
+      "shipped_relevance": "Credible normal-user race causing a selected same-owner addition to disappear without retry feedback; deterministic native reproduction required before calling it confirmed.",
+      "assigned_chat": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "fix_report": "reviews/repair-062-image-preparation-busy.json"
     },
     {
       "id": "review034-grammar-band-debug-label",
@@ -184653,10 +184679,10 @@
   },
   "required_work_summary": {
     "confirmed_unresolved_bugs": 0,
-    "unconfirmed_application_leads": 3,
+    "unconfirmed_application_leads": 2,
     "test_oracle_leads": 4,
     "optional_historical_maintenance_edits": 96,
     "note": "Potential leads still require investigation; static warnings and pending coordinate revalidation are not diagnosed bugs.",
-    "confirmed_fixes_awaiting_publication": 3
+    "confirmed_fixes_awaiting_publication": 4
   }
 }
