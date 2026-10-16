@@ -90,7 +90,54 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             check('actual corrected result rejects HTML injection', !document.querySelector('#correctedStory img, #correctedStory script') && !window.diffInjected && hostile.includes('&lt;') && hostile.includes('&amp;'));
             setWftSanitizedInnerHtml('correctedStory', renderCorrected('We was happy.', 'We were happy.'));
             check('actual result highlights only corrected word', document.querySelectorAll('#correctedStory .corrected-highlight').length === 1 && document.querySelector('#correctedStory .corrected-highlight').textContent === 'were');
-            return {cases, normalizationCalls:count};
+            const grammarGuardObservations = [], grammarAnalyzer = analyzeGrammarChanges, grammarLcs = buildLcsMatrix;
+            let analyzerCalls = 0, lcsCalls = 0;
+            analyzeGrammarChanges = function(...args) { analyzerCalls++; return grammarAnalyzer.apply(this, args); };
+            buildLcsMatrix = function(...args) { lcsCalls++; return grammarLcs.apply(this, args); };
+            const checkGrammarGuard = (name, expected, calls, run) => {
+                analyzerCalls = lcsCalls = 0;
+                const output = run();
+                grammarGuardObservations.push({name, output, analyzerCalls, lcsCalls});
+                check(name + ' literal original output', output === expected);
+                check(name + ' delegated analyzer count', analyzerCalls === calls);
+                check(name + ' delegated LCS count', lcsCalls === calls);
+            };
+            try {
+                const helperReason = 'Your ideas are clear, though many sentences need verb form fixes. Try reading each sentence aloud and check that every verb matches its subject.';
+                const midVerbReason = 'Your grammar is mostly clear, and your ideas come through well. Before you finish, reread each sentence and make sure every verb stays in the right tense.';
+                const smallEditReason = 'Your ideas come through clearly. A few grammar fixes are still needed - check that each sentence has a clear subject and the right verb form.';
+                const scores = [
+                    ['null', null, '', 0], ['undefined', undefined, '', 0], ['zero', 0, helperReason, 1], ['negative', -1, helperReason, 1],
+                    ['string-zero', '0', helperReason, 1], ['string-six', '6', helperReason, 1], ['string-seven', '7', midVerbReason, 1], ['string-eight', '8', midVerbReason, 1],
+                    ['string-eight-half', '8.5', '', 0], ['string-nine', '9', '', 0], ['string-ten', '10', '', 0],
+                    ['six', 6, helperReason, 1], ['seven', 7, midVerbReason, 1], ['eight', 8, midVerbReason, 1], ['eight-half', 8.5, '', 0], ['nine', 9, '', 0], ['ten', 10, '', 0],
+                    ['trimmed-high', ' 9 ', '', 0], ['empty', '', '', 0], ['blank', '   ', '', 0], ['invalid', 'not-a-score', '', 0],
+                    ['nan', NaN, '', 0], ['infinite', Infinity, '', 0], ['negative-infinite', -Infinity, '', 0], ['above-rubric', 11, '', 0], ['boolean', true, '', 0]
+                ];
+                for (const [label, score, expected, calls] of scores) checkGrammarGuard('grammar score/' + label, expected, calls, () => buildGrammarReasonFromData(score, 'We was happy.', 'We were happy.'));
+                const manyOriginal = 'A cat sleeps. The dog sits. A bird sings. The fish swims.';
+                const manyCorrected = 'A kitten sleeps. The puppy sits. A parrot sings. The shark swims.';
+                const branches = [
+                    ['helper', 6, 'We was happy.', 'We were happy.', helperReason],
+                    ['verb', 6, 'I go home.', 'I went home.', 'Your message makes sense, but verb tense shifts throughout. Pick one tense (past or present) and use it consistently all the way through.'],
+                    ['many-low', 6, manyOriginal, manyCorrected, 'Your writing is easy to follow, but several grammar issues need attention. Do a line-by-line proofread focusing on subject-verb agreement and complete sentences.'],
+                    ['small-low', 6, 'The cat sleeps.', 'The kitten sleeps.', smallEditReason],
+                    ['verb-mid', 7, 'I go home.', 'I went home.', midVerbReason],
+                    ['many-mid', 7, manyOriginal, manyCorrected, 'Your grammar is mostly strong. Do one more careful reread and look for any missing words, small verb changes, or sentences that sound incomplete.'],
+                    ['small-mid', 7, 'The cat sleeps.', 'The kitten sleeps.', '']
+                ];
+                for (const [label, score, original, corrected, expected] of branches) checkGrammarGuard('grammar branch/' + label, expected, 1, () => buildGrammarReasonFromData(score, original, corrected));
+                const primitiveTexts = [['null', null, null], ['undefined', undefined, undefined], ['zero', 0, 0], ['number', 123, 456], ['boolean', true, false], ['empty', '', ''], ['unicode', 'ไทย café 😀', 'ไทย CAFÉ 😁']];
+                for (const [label, original, corrected] of primitiveTexts) for (const score of [6, 9]) checkGrammarGuard('grammar primitive/' + label + '/' + score, score === 6 ? smallEditReason : '', score === 6 ? 1 : 0, () => buildGrammarReasonFromData(score, original, corrected));
+                const polishedHighReason = 'Your sentences are mostly clear; next, proofread for complete sentences and verb tense.';
+                const callerScores = [[null, 'Existing grammar reason.', 0], [0, 'Your ideas are clear, though many sentences need verb form fixes.', 1], [6, 'Your ideas are clear, though many sentences need verb form fixes.', 1], [7, 'Your grammar is mostly clear, and your ideas come through well.', 1], [8, 'Your grammar is mostly clear, and your ideas come through well.', 1], [8.5, polishedHighReason, 0], [9, polishedHighReason, 0], [10, polishedHighReason, 0], ['9', polishedHighReason, 0], ['invalid', 'Existing grammar reason.', 0]];
+                for (const [index, [score, expected, calls]] of callerScores.entries()) checkGrammarGuard('grammar actual caller/' + index, expected, calls, () => {
+                    const quick = {Grammar:{score, reason:'Existing grammar reason.'}};
+                    polishFeedback(quick, {categories:{}}, 'We was happy.', 'We were happy.', null);
+                    return quick.Grammar.reason;
+                });
+            } finally { analyzeGrammarChanges = grammarAnalyzer; buildLcsMatrix = grammarLcs; }
+            return {cases, normalizationCalls:count, grammarGuardObservations};
         });
         result.errors = errors; result.root = root;
         result.passed = result.cases.filter(c => c.passed).length; result.failed = result.cases.length - result.passed;
