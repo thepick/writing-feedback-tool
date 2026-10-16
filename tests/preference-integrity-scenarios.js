@@ -164,6 +164,14 @@
             const a = source === 'cloud' || source === 'empty' ? {} : marker, b = source === 'local' || source === 'empty' ? {} : cloudMarker;
             const before = [JSON.stringify(a), JSON.stringify(b)], merged = mergeWftSettings(a, b, preferLocal), serialized = JSON.parse(JSON.stringify(merged));
             equal([JSON.stringify(a), JSON.stringify(b)], before, 'sources unchanged'); check(!Object.hasOwn(merged, 'apiKey'), 'key excluded');
+            check(Object.getPrototypeOf(merged) === null, 'merge output has no inherited settings');
+            const expected = {
+                empty: '{}',
+                local: '{"__proto__":{"keep":"local"},"constructor":"local","toString":"metadata","students":["Local","constructor","Local"]}',
+                cloud: '{"__proto__":{"keep":"cloud"},"constructor":"cloud","unknown":{"future":true},"students":["Cloud","constructor","Cloud"]}',
+                both: preferLocal ? '{"__proto__":{"keep":"local"},"constructor":"local","unknown":{"future":true},"students":["Cloud","constructor","Local"],"toString":"metadata"}' : '{"__proto__":{"keep":"cloud"},"constructor":"cloud","toString":"metadata","students":["Cloud","constructor","Local"],"unknown":{"future":true}}'
+            };
+            equal(serialized, JSON.parse(expected[source]), 'exact own-key insertion order and values');
             if (source === 'empty') equal(serialized, {}, 'empty settings valid');
             else {
                 check(Object.hasOwn(merged, '__proto__') && Object.hasOwn(serialized, '__proto__'), 'own __proto__ serialized');
