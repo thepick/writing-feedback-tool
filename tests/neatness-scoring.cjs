@@ -2,9 +2,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const source = fs.readFileSync(path.join(__dirname, '../js/app/00-storage-sync-patches.js'), 'utf8');
+const source = fs.readFileSync(path.join(__dirname, '../js/app/10-neatness.js'), 'utf8');
 const start = source.indexOf('async function assessNeatnessFromImage(');
-const end = source.indexOf('/* =============================================', start);
+const end = source.length;
 assert.ok(start >= 0 && end > start);
 const labels = ['Letter Formation', 'Spacing', 'Staying on the Line', 'Size Consistency', 'Pen Control and Marks', 'Page Layout and Paragraphs'];
 function response(scores, overall = 'Missing', sourceType = 'HANDWRITTEN') {
