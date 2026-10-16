@@ -191,7 +191,50 @@ function exerciseMainAppHealth() {
             check('evidence tokens: analysis and pending state unchanged', JSON.stringify([latestAnalysisData, pendingPortfolioSync]) === state);
         } finally { containers.forEach((el, i) => { el.innerHTML = html[i]; }); }
     }
-    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility(); checkWordCountMeter(); checkEvidenceTokens();
+    function checkDiaryGenre() {
+        const writing = document.getElementById('studentWriting'), select = document.getElementById('writingGenreSelect');
+        const box = document.getElementById('genreReviewBox'), summary = document.getElementById('genreReviewSummary');
+        const before = [writing.value, select.value, manualGenreOverrideValue, currentWritingGenreInfo];
+        const change = value => { select.value = value; select.dispatchEvent(new Event('change', { bubbles: true })); };
+        function expectGenre(name, genre, reference, source, entered) {
+            const info = getWritingGenreInfoFromUi(writing.value), current = currentWritingGenreInfo;
+            const observed = { genre: info.mainGenre, reference: info.safeReference, source: info.source, summary: summary.textContent,
+                visible: box.classList.contains('active') && summary.getClientRects().length > 0 && getComputedStyle(summary).visibility === 'visible' };
+            const label = source === 'manual' ? 'Teacher-selected' : 'Auto-detected';
+            checks.push({ name: 'diary genre: native summary ' + name, passed: observed.genre === genre && observed.reference === reference && observed.source === source && current.mainGenre === genre && current.safeReference === reference && observed.visible && observed.summary.startsWith(label + ': ' + genre) && observed.summary.includes('Feedback will call it: ' + reference + '.'), observed });
+            check('diary genre: prompt reference ' + name, buildWritingGenrePromptText(info).includes('Writing Type: ' + genre + '\n') && buildWritingGenrePromptText(info).includes('Safe reference word: ' + reference + '\n'));
+            check('diary genre: writing preserved ' + name, writing.value === entered);
+        }
+        try {
+            change('__auto__');
+            for (const newline of ['\n', '\r\n']) for (const comma of ['', ',']) {
+                const text = 'Dear Diary' + comma + newline + 'Today I learned that sharing helped me feel calm.';
+                writing.value = text; const entered = writing.value;
+                writing.dispatchEvent(new Event('input', { bubbles: true }));
+                const name = (newline === '\n' ? 'LF' : 'CRLF') + (comma ? ' comma' : ' no comma');
+                const detected = detectWritingGenreInfo(text);
+                check('diary genre: direct detection ' + name, detected.mainGenre === 'Journal / Reflection' && detected.safeReference === 'reflection');
+                expectGenre(name, 'Journal / Reflection', 'reflection', 'auto', entered);
+            }
+            const diary = writing.value;
+            change('letter'); expectGenre('manual letter', 'Letter / Email', 'letter', 'manual', diary);
+            change('__auto__'); expectGenre('return to automatic diary', 'Journal / Reflection', 'reflection', 'auto', diary);
+            for (const [name, text, genre, reference] of [
+                ['letter', 'Dear Maya,\nThank you for visiting our class.\nSincerely,\nSam', 'Letter / Email', 'letter'],
+                ['letter with reflection words', 'Dear Maya,\nI feel happy that you visited our class.\nSincerely,\nSam', 'Letter / Email', 'letter'],
+                ['diary-named recipient', 'Dear Diary Club,\nThank you for inviting our class.\nSincerely,\nSam', 'Letter / Email', 'letter'],
+                ['unsaluted reflection', 'Today I learned that sharing helped me feel calm.', 'Journal / Reflection', 'reflection']
+            ]) {
+                writing.value = text; const entered = writing.value;
+                writing.dispatchEvent(new Event('input', { bubbles: true }));
+                expectGenre(name, genre, reference, 'auto', entered);
+            }
+        } finally {
+            writing.value = before[0]; change(before[1]); writing.dispatchEvent(new Event('input', { bubbles: true }));
+            manualGenreOverrideValue = before[2]; currentWritingGenreInfo = before[3];
+        }
+    }
+    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility(); checkWordCountMeter(); checkEvidenceTokens(); checkDiaryGenre();
     return checks;
 }
 

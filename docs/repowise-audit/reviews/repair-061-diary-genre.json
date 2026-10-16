@@ -1,0 +1,75 @@
+{
+  "repair_id": "repair-061",
+  "lead": "review030-diary-letter-precedence",
+  "status": "confirmed_fixed_focused_native_verified_awaiting_review",
+  "source_commit_assignment": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
+  "generated_at": "2026-10-16T09:30:59.4539515+07:00",
+  "reproduced": "Ordinary standalone Dear Diary opening, comma/no comma and LF/CRLF, selected Letter / Email with safeReference letter in direct detection, actual textarea-event handling and visible genre review summary. Returning from manual letter to automatic detection repeated the wrong label.",
+  "change": {
+    "file": "js/app/10-main-app.js:5398",
+    "old": "if (hasLetterFeatures(raw)) {",
+    "new": "if (!/^dear diary,?[ \\t]*(?:\\r?\\n|$)/i.test(raw) && hasLetterFeatures(raw)) {",
+    "scope": "Only exclude the unambiguous standalone opening from the early letter branch; existing reflection rule5410-5412 handles it. No broad reflection-keyword reprioritization, letter-feature rewrite, scoring or manual-selection change."
+  },
+  "callers": "hasLetterFeatures5335 only called by classifier5393. UI selection5475 preserves manual precedence; updateGenreReviewBox5527 stores current genre and renders summary. Actual textarea listeners8379-8380 and genre change8419-8421 exercised. Analysis8273 uses same UI selector; prompt text5482 and saved-session fallback5312 use classifier contract. Remaining classifier fallbacks/feedback callers5578/5705/6872/6908/7098 unchanged.",
+  "tests": {
+    "suite": "tests/main-app-health.browser.cjs",
+    "method": "Native Edge full app, real textarea input/genre-select change bindings; summary active, has layout rects and visible style; actual UI/current genre, safeReference and prompt reference asserted. No classifier/renderer mocks or provider analysis.",
+    "preserved": 137,
+    "added": 34,
+    "before": {
+      "exit": 1,
+      "total": 171,
+      "passed": 157,
+      "failed": 14,
+      "page_errors": 0,
+      "production_matched_before_pin": true,
+      "failure": "Expected direct/UI-summary/prompt assertions on4diary variants plus return-to-auto; no operational failures."
+    },
+    "after": {
+      "exit": 0,
+      "total": 171,
+      "passed": 171,
+      "failed": 0,
+      "page_errors": 0,
+      "original137_rows_identical": true
+    },
+    "controls": "Dear Maya+closing/signature; letter containing I feel; Dear Diary Club named recipient; unsaluted Today I learned; explicit manual letter wins; returning auto restores diary. Writing values preserved after native textarea CRLF-to-LF normalization; direct detector also receives original CRLF strings. Page writing/select/manual/current-genre state restored.",
+    "syntax": {
+      "before": 91,
+      "after": 91,
+      "failed": 0,
+      "both_touched_files_included": true
+    }
+  },
+  "summary_observations": {
+    "before": "Auto-detected: Letter / Email - Letter | Feedback will call it: letter. Confidence: high.",
+    "after": "Auto-detected: Journal / Reflection - Reflection | Feedback will call it: reflection. Confidence: medium."
+  },
+  "receipts": {
+    "before": "work/repowise-repair-061/before/suite-results.json",
+    "before_cases": "work/repowise-repair-061/before/main-app-health.browser.json",
+    "after": "work/repowise-repair-061/after/suite-results.json",
+    "after_cases": "work/repowise-repair-061/after/main-app-health.browser.json"
+  },
+  "sha256_raw": [
+    {
+      "file": "js/app/10-main-app.js",
+      "before": "6f7558a52ddc1d293bb9dda56bf34bb9a1d50f9eeefdbba00b75e9a0d9421540",
+      "after": "b59774c5fd6805145d4ccddad32dbbeb365a92a5f1359281383240143ba485cb"
+    },
+    {
+      "file": "tests/main-app-health.browser.cjs",
+      "before": "c2f506b114c1716052af81da578f2603ace02debcf506330c26fc601846f2326",
+      "after": "5017cfc1cceaf2ef5696c4667e7659d1b547fe402b0617809ab03ac5463bcfe0"
+    }
+  ],
+  "scope": {
+    "all91_source_and_manifest_pins_matched_before": true,
+    "only_allowed2_changed": true,
+    "only1_production_condition_changed": true,
+    "existing_tests_reporting_unchanged": true,
+    "git_tracker_docs_config_index_dependencies_hooks_deploy_agents": 0
+  },
+  "limits": "One focused suite; no full repository gate, independent review, commit, index refresh, deployment or live services. No numerical-grade effect claimed. Other mixed genre features retain existing order; fix targets standalone Dear Diary comma/no-comma opening. Stop for coordinator review; no further task released."
+}

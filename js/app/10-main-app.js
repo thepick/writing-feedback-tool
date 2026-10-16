@@ -5395,7 +5395,7 @@ function detectWritingGenreInfo(text) {
     var value = raw.toLowerCase();
     if (!value) return makeWritingGenreInfo("Other / Unsure", "Writing", "piece of writing", "low", "auto");
 
-    if (hasLetterFeatures(raw)) {
+    if (!/^dear diary,?[ \t]*(?:\r?\n|$)/i.test(raw) && hasLetterFeatures(raw)) {
         return makeWritingGenreInfo("Letter / Email", "Letter", "letter", "high", "auto");
     }
 

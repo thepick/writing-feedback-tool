@@ -4,10 +4,10 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T09:27:29.377415+07:00",
+  "updated_at": "2026-10-16T09:31:34.880680+07:00",
   "timezone": "Asia/Bangkok",
   "status": "active_confirmed_bug_stabilization",
-  "active_repair": "repair-060",
+  "active_repair": "repair-061",
   "index_provenance": {
     "last_sync_commit": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
     "repository_metadata_head": "c0724763bc46926c4dab8f555fbbdb4e7616c6c3",
@@ -1566,7 +1566,7 @@
     {
       "id": "repair-060",
       "title": "Require literal own evidence tokens in teacher feedback",
-      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "status": "reviewed_focused_verified_awaiting_full_gate_publication",
       "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
       "source_commit": "2538f9d6b8aadd49a9c5e33a55065d6644f7f4bd",
       "lead_id": "049-L1",
@@ -1578,7 +1578,29 @@
       "behavior_fix_verified": true,
       "report": "reviews/repair-060-evidence-token-ownership.json",
       "focused_checks": 395,
-      "baseline_expected_failures": 8
+      "baseline_expected_failures": 8,
+      "commit": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
+      "independent_reviews": [
+        "reviews/repair-060-safety-review.json",
+        "reviews/repair-060-regression-review.json"
+      ],
+      "validation_limit": "Saved feedback regression verifies portfolio feedback object construction, not a storage commit. No historical rewrite or live service test."
+    },
+    {
+      "id": "repair-061",
+      "title": "Recognize ordinary Dear Diary writing as a reflection",
+      "status": "coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate",
+      "source_commit": "f3120d7aa36abe5a6df2f7264d16dc95050791c7",
+      "thread_id": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "lead_id": "review030-diary-letter-precedence",
+      "scope": [
+        "js/app/10-main-app.js",
+        "tests/main-app-health.browser.cjs"
+      ],
+      "behavior_fix_verified": true,
+      "report": "reviews/repair-061-diary-genre.json",
+      "focused_checks": 171,
+      "baseline_expected_failures": 14
     }
   ],
   "findings": [
@@ -140117,7 +140139,7 @@
     {
       "lead_id": "review030-diary-letter-precedence",
       "kind": "source_supported_behavioral_candidate",
-      "status": "candidate_needs_regression",
+      "status": "fixed_focused_awaiting_publication",
       "file": "js/app/10-main-app.js",
       "symbol": "detectWritingGenreInfo",
       "reason": "For ordinary multi-line Dear Diary, followed by reflection prose, hasLetterFeatures can count the salutation as both hasGreeting and directRecipient and meet its two-feature threshold. detectWritingGenreInfo returns Letter/Email before reaching its explicit dear-diary Journal/Reflection rule. The overlap is directly visible in source; intended diary precedence and actual native behavior still need a test. Do not silently alter genre calibration during structural cleanup.",
@@ -140137,13 +140159,15 @@
       "proposed_status": "candidate_needs_regression",
       "classification": "source_supported_behavioral_candidate",
       "source_supported": true,
-      "reproduced": false,
+      "reproduced": true,
       "needs_user_attention": false,
       "source_commit": "413c1cf35e704b78d05f6172ebc21268688d4c6d",
       "report": "reviews/repair-030-feedback-shapes.json",
-      "related_repair": "repair-030",
+      "related_repair": "repair-061",
       "followup_report": "reviews/bug-focus-genre-calculation-relevance.json",
-      "shipped_relevance": "Credible normal-user automatic genre defect; reproduce before source changes."
+      "shipped_relevance": "Credible normal-user automatic genre defect; reproduce before source changes.",
+      "assigned_chat": "01a1424c-ca75-73f0-9fe5-8c5c59f16256",
+      "fix_report": "reviews/repair-061-diary-genre.json"
     },
     {
       "lead_id": "review032-preview-drop-index-range",
@@ -184629,10 +184653,10 @@
   },
   "required_work_summary": {
     "confirmed_unresolved_bugs": 0,
-    "unconfirmed_application_leads": 4,
+    "unconfirmed_application_leads": 3,
     "test_oracle_leads": 4,
     "optional_historical_maintenance_edits": 96,
     "note": "Potential leads still require investigation; static warnings and pending coordinate revalidation are not diagnosed bugs.",
-    "confirmed_fixes_awaiting_publication": 2
+    "confirmed_fixes_awaiting_publication": 3
   }
 }

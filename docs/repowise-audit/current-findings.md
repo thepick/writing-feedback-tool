@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T09:27:29.377415+07:00.
+Updated 2026-10-16T09:31:34.880680+07:00.
 
 Source: c0724763bc46926c4dab8f555fbbdb4e7616c6c3. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -18,7 +18,7 @@ One source editor and two parallel read-only reviewers. Test and commit each fix
 
 **Current focus:** Reproduce and fix user-facing bugs. The maintenance queue is optional; scanner counts below are not bug counts.
 
-Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 4. Test-oracle leads: 4.
+Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 3. Test-oracle leads: 4.
 
 
 Statuses: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 102, "needs_revalidation": 126, "reviewed_no_change": 728, "unreviewed": 25}.
@@ -27,7 +27,7 @@ All tracked rows, including findings absent on the latest scan: {"candidate_need
 
 Findings confirmed cleared: 30. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Behavior repairs with regression evidence: 11.
+Behavior repairs with regression evidence: 12.
 
 Supporting refactoring plans: 120; grouped refactoring opportunities: 34.
 
@@ -104,7 +104,8 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-058: Review remaining media, portfolio and recovery harnesses - read_only_review_complete.
 - repair-001: Verify security signals - reviewed_complete.
 - repair-059: Keep the target-off status when writing matches a disabled target - reviewed_focused_verified_awaiting_full_gate_publication.
-- repair-060: Require literal own evidence tokens in teacher feedback - coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate.
+- repair-060: Require literal own evidence tokens in teacher feedback - reviewed_focused_verified_awaiting_full_gate_publication.
+- repair-061: Recognize ordinary Dear Diary writing as a reflection - coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate.
 
 ## Additional source leads
 
@@ -120,7 +121,7 @@ These are review leads, separate from scanner observations. They require their o
 - review028-reassessment-confirmation-freshness: reassessPortfolioSession in js/app/10-main-app.js — fixed_verified. The held reassessment regression now covers16 cases/79 check blocks. Old source fails nine cases/27 blocks; the integrated guard preserves changed source/deletion state and newly completed pending writing. Targeted tests pass on the fix; full batch005 gate and publication are still pending.
 - review029-invalid-dateiso-display: normalizeWftSessionDate in js/app/00-storage-sync-patches.js — reviewed_no_change. A truthy invalid dateIso is retained because only missing dateIso is filled. With no existing date/displayDate, setDisplayDateFromIso reads an invalid Date with getMonth/getDate/getFullYear; invalid Date getters return NaN rather than throwing, so the catch does not provide a useful display fallback. This is a source-supported malformed display lead, not a reproduced saved-data defect.
 - review030-fallback-first-unusable-example: buildFallbackExampleForPriority in js/app/10-main-app.js — candidate_needs_regression. Search branches immediately return the first factory result. The factory may return null or an example whose truncated originalQuote contains an added ellipsis; the caller later rejects that quote as not present in the source. The search then never reaches a later sentence that might yield a valid grounded example. Concrete source-based scenario to test: an over-180-character first sentence eligible for an opener-comma Grammar fallback followed by a short eligible sentence. This is not reproduced and should not be merged with the behavior-preserving branch-coalescence repair.
-- review030-diary-letter-precedence: detectWritingGenreInfo in js/app/10-main-app.js — candidate_needs_regression. For ordinary multi-line Dear Diary, followed by reflection prose, hasLetterFeatures can count the salutation as both hasGreeting and directRecipient and meet its two-feature threshold. detectWritingGenreInfo returns Letter/Email before reaching its explicit dear-diary Journal/Reflection rule. The overlap is directly visible in source; intended diary precedence and actual native behavior still need a test. Do not silently alter genre calibration during structural cleanup.
+- review030-diary-letter-precedence: detectWritingGenreInfo in js/app/10-main-app.js — fixed_focused_awaiting_publication. For ordinary multi-line Dear Diary, followed by reflection prose, hasLetterFeatures can count the salutation as both hasGreeting and directRecipient and meet its two-feature threshold. detectWritingGenreInfo returns Letter/Email before reaching its explicit dear-diary Journal/Reflection rule. The overlap is directly visible in source; intended diary precedence and actual native behavior still need a test. Do not silently alter genre calibration during structural cleanup.
 - review032-preview-drop-index-range: bindPreviewReorderHandlers/drop callback in js/app/10-main-app.js — fixed_verified. Five new invalid/stale-index cases fail against the old actual drop handlers, including two expected native TypeErrors. Four added bounds checks reject them before queue/geometry/OCR mutation; all51 crop cases pass on the fix. In-range stale identity remains a separate scope. Full batch005 gate/publication pending.
 - review032-overlapping-image-preparation: handleSelectedImages in js/app/10-main-app.js — candidate_needs_regression. Each acquisition captures the entire current image queue before awaiting optimization. Two overlapping camera/upload additions for unchanged owner/text can start from the same context; when one commits its prepared image, the second context becomes stale because images/primaryImage changed, so the second addition silently returns at3312. Camera/upload controls are relabeled but not disabled during preparation, and independent async change handlers are not serialized. This may lose an intended same-owner page addition. Intent and actual native behavior require a held-optimization regression; do not weaken stale-owner protection merely to append everything.
 - review034-grammar-band-debug-label: renderScoredAnalysisDebug in js/app/10-main-app.js — candidate_needs_regression. The Grammar band text is hardcoded for a legacy1-7 scale while grammarDensityBand returns4-10 from the selected grade table and strictness. Scores8/9/10 hit the default label18.1-or-higher=1; lower scores map to legacy intervals unrelated to current profile thresholds. formatGrammarCalc renders that label beside the actual final Grammar score. This is a source-supported misleading calculation display, not a reproduced grading-score change. Frozen old/new parity includes the same stale text and cannot establish its correctness.
