@@ -1913,7 +1913,7 @@ function buildGrammarReasonFromData(score, originalText, correctedText) {
 
 function buildGrammarEvidenceFromData(score, originalText, correctedText) {
     var n = getNumericAssessmentScore(score);
-    if (n == null) return "";
+    if (n == null || n > 8) return "";
     var summary = analyzeGrammarChanges(originalText, correctedText);
     if (n <= 6) {
         if (summary.verbIssues > 0 && summary.helperVerbIssues > 0) {

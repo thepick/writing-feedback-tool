@@ -4,7 +4,7 @@
   "repository": "thepick/writing-feedback-tool",
   "source_commit": "026bbea1acef1dca4263922b03d6f176a647f066",
   "coordinator_chat": "01a13f6f-740b-7b60-8863-d6ca9c58baf0",
-  "updated_at": "2026-10-16T15:15:57.830974+07:00",
+  "updated_at": "2026-10-16T16:10:39.728781+07:00",
   "timezone": "Asia/Bangkok",
   "status": "risk_prioritized_code_health_active",
   "active_repair": null,
@@ -1946,6 +1946,42 @@
       "thread_id": "01a140bb-d411-7a52-9f82-de537714d5e0",
       "status": "reviewed_complete",
       "outcome": "Ten initial test-only signals verified. Changed test files require a current context/hash review before retaining their outcomes."
+    },
+    {
+      "id": "repair-074",
+      "title": "Skip unused grammar evidence comparison above score8",
+      "status": "validated_pending_merge_after_auth_retry",
+      "files": [
+        "js/app/10-main-app.js",
+        "tests/correction-performance.browser.cjs"
+      ],
+      "base_commit": "e0ddfe18713df9eb967a2dab94840bdfae1c3c50",
+      "thread_id": "01a1438c-80f9-7333-bb0c-8b7b45b23d56",
+      "scope": "One guard in buildGrammarEvidenceFromData; keep existing304performance and30compatibility contracts plus actual detailed-caller alignment",
+      "admission_reports": [
+        "reviews/batch-010-postrefresh-production-review.json"
+      ],
+      "pre_edit_report": "outputs/repowise-repairs/repair-074-evidence-guard-pre-edit-investigation.json",
+      "pre_edit_native_observations": {
+        "direct": 56,
+        "detailed_caller": 21,
+        "controls": 2,
+        "high_score_unused_one_real_analyzer_LCS": 26
+      },
+      "pre_edit_limit": "Raw probe capture complete; exit1 from expected-text substitution mismatch retained/offline corrected, not an all-pass baseline probe.",
+      "no_latency_or_memory_measurement": true,
+      "report": "reviews/repair-074-high-score-evidence-guard.json",
+      "performance_checks_before": 304,
+      "performance_checks_after": 491,
+      "compatibility_checks_before_after": 30,
+      "native_work_output_observations_added": 58,
+      "production_diff_lines": 1,
+      "commit": "cc7b7e799c731c4740a691246377aa059b3277c4",
+      "batch": "batch-011",
+      "independent_reviews": [
+        "reviews/repair-074-safety-review.json",
+        "reviews/repair-074-regression-review.json"
+      ]
     }
   ],
   "findings": [
@@ -149910,6 +149946,29 @@
         ],
         "raw_scanner_warnings_are_not_bug_count": true
       }
+    },
+    {
+      "id": "batch-011",
+      "status": "validated_after_isolated_auth_retry_pending_merge",
+      "pull_request": null,
+      "source_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+      "validation_report": "reviews/batch-011-validation.json",
+      "suites_passed": 77,
+      "syntax_passed": 91,
+      "runner_selfcheck_passed": true,
+      "initial_full_attempt_passed": false,
+      "isolated_auth_retry_passed": true,
+      "all_source_pins_unchanged": true,
+      "repairs": [
+        "repair-074"
+      ],
+      "recovery_reviews": [
+        "reviews/batch-011-auth-interruption-triage.json",
+        "reviews/batch-011-recovery-protocol-review.json",
+        "reviews/batch-011-auth-retry-review.json",
+        "reviews/batch-011-recovery-implementation-review.json"
+      ],
+      "recovery_reviews_accepted": true
     }
   ],
   "workflow_policy": {
@@ -151025,7 +151084,7 @@
       "js/app/storage-recovery.js": true,
       "js/app/00-storage-sync-patches.js": true,
       "js/app/portfolio-export.js": true,
-      "js/app/10-main-app.js": true,
+      "js/app/10-main-app.js": false,
       "js/app/photo-crop.js": true,
       "js/app/99-lightbox.js": true
     },

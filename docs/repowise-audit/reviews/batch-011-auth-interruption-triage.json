@@ -1,0 +1,221 @@
+{
+  "review_id": "batch-011-auth-interruption-triage",
+  "inspected_git_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+  "recorded_at_utc": "2026-10-16T08:45:32.655627+00:00",
+  "classification": "browser_target_creation_interruption_cause_unknown",
+  "decision": "No app fix supported by this failure. One isolated same-source native retry is justified after remaining gate work settles; not executed or authorized by this report. Publication remains held pending coordinator validation.",
+  "actual_results": {
+    "cases": 111,
+    "passed": 91,
+    "failed": 20,
+    "passing_prefix": {
+      "cases_1_through": 91,
+      "pre_ownership_cases": 90,
+      "last_pass": "ownership profile-body / sign-out"
+    },
+    "first_failure": {
+      "case_1_based": 92,
+      "name": "ownership profile-body / newer-B",
+      "error_first_line": "browser.newPage: Target page, context or browser has been closed"
+    },
+    "remaining_failures": "Cases92-111 all have that same browser.newPage closed-target error; no auth-contract assertion was reached in those cases.",
+    "final_assertion": "auth-integrity.browser.cjs:504 correctly rejects20failed reports (20!==0); process exit1.",
+    "passing010": {
+      "count": 111,
+      "passed": 111,
+      "failed": 0,
+      "same_all_case_names_order": true,
+      "same_first91_names_pass_status": true,
+      "full_case_state_parity_claimed": false,
+      "observed_differences": "Three passing redirect-preserves-current-work reports have different observed fields across executions; do not claim their full snapshots byte-identical."
+    }
+  },
+  "source_and_teardown": [
+    {
+      "anchors": [
+        "tests/auth-integrity.browser.cjs:6-24",
+        "tests/auth-integrity.browser.cjs:444-496"
+      ],
+      "reason": "A single shared browser is launched once. Ownership matrix creates a fresh page through pageFor before registering routes,navigating,installing case observers or evaluating profile/token logic. First failure is pageFor line9 browser.newPage, reached from446; failing newer-B profile-body logic451-486 therefore never executes."
+    },
+    {
+      "anchors": [
+        "tests/auth-integrity.browser.cjs:26-30",
+        "tests/auth-integrity.browser.cjs:496-505"
+      ],
+      "reason": "run catches each error and continues matrix loops, explaining the20case cascade after browser became unavailable. Successful case teardown closes its page at496. The only explicit browser.close is outerfinally500, after all case loops; it is not an intentional premature suite shutdown in the source. Closing page/context and browser process/disconnect are not conflated as an established root cause."
+    },
+    {
+      "anchors": [
+        "scripts/run-tests.cjs:36-45",
+        "scripts/run-tests.cjs:91-105",
+        "work/do-next-05/coverage-preload.cjs:28-60"
+      ],
+      "reason": "Runner reports status1,signalnull,failed-case report rather than child timeout/kill. It continues later suites as designed. Existing preload wraps page/context/browser creation and teardown to collect coverage, then delegates native close; it does not add an early explicit browser.close. Coverage instrumentation and lifecycle/resource causes remain possible, not proven or excluded."
+    },
+    {
+      "anchors": [
+        "js/app/10-main-app.js:1914-1931",
+        "tests/auth-integrity.browser.cjs:447-496"
+      ],
+      "reason": "Auth driver,seven other shipped scripts and runner LF match passing010 receipt. Whole main differs from passing010 only by accepted074 evidence guard. Auth/profile/migration/token/signout/teardown source is unchanged. The20newPage failures occur before their app case loads or runs, and retained auth main coverage has no evidence/helper/caller execution. No source-supported connection to074 or data-loss assertion failure established."
+    }
+  ],
+  "failed_coverage": {
+    "directory": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\native-coverage",
+    "filename_prefix": "42784-3baed87a-1caf-4d0d-921e-fbf14b1819ef.json.",
+    "artifact_count": 62,
+    "nonempty_artifacts": 29,
+    "records": 235,
+    "main_records": 30,
+    "retained_page_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "all_record_source_hashes_match_current_raw": true,
+    "main_raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+    "covered_lines_in_changed_and_related_scopes": {
+      "evidence_helper": [],
+      "polishFeedback": [],
+      "analyzeGrammarChanges": []
+    },
+    "source_mismatch_exclusions": 0,
+    "ordered_manifest_sha256": "7b4de758f9353c42a9abefd95278204c373448d20a9e1580919cb117ba7573f0",
+    "manifest_convention": "SHA256 of UTF8 JSON array {file,raw_sha256}, filenames sorted lexicographically, sort_keys=true,separators=comma/colon, no final newline.",
+    "limit": "Retained coverage only; a closed/disconnected browser can lose unfinished context evidence. No claim of complete lifetime coverage or failed-suite coverage eligibility. Preserve these files for diagnosis; do not replace them with retry output."
+  },
+  "evidence_pins": {
+    "failed_auth_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\auth-integrity.browser.json",
+      "raw_sha256": "ec7d402c3094e2fc8a9596d9fa6fde51f13b7ecdeb55512227df34a03abf13ae",
+      "lf_sha256": "ec7d402c3094e2fc8a9596d9fa6fde51f13b7ecdeb55512227df34a03abf13ae"
+    },
+    "failed_auth_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\auth-integrity.browser.log",
+      "raw_sha256": "845792acbad06ddd93998865a16418b466fe4d770c81a1369f509483b854f6f1",
+      "lf_sha256": "845792acbad06ddd93998865a16418b466fe4d770c81a1369f509483b854f6f1"
+    },
+    "passing010_auth_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-010\\full\\auth-integrity.browser.json",
+      "raw_sha256": "194880551c8ca29cd7508c10ef993d15483eac4d7955411fb733f1b6eb5c4d77",
+      "lf_sha256": "194880551c8ca29cd7508c10ef993d15483eac4d7955411fb733f1b6eb5c4d77"
+    },
+    "coverage_preload": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\do-next-05\\coverage-preload.cjs",
+      "raw_sha256": "a60b0853b9f4d63ff24e568daa6110478bef73bdd36d1b1d1b37465a5d59a22a",
+      "lf_sha256": "a60b0853b9f4d63ff24e568daa6110478bef73bdd36d1b1d1b37465a5d59a22a"
+    },
+    "current_main": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\10-main-app.js",
+      "raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+      "lf_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43"
+    },
+    "unchanged_010_lf_bindings": {
+      "google-drive-migration.js": {
+        "raw_sha256": "df073e0d0288afa22e56673974ab155cf3a3dbec00b3bcb2decfa531e6469c13",
+        "lf_sha256": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9"
+      },
+      "js/app/dialogs.js": {
+        "raw_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+        "lf_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c"
+      },
+      "js/app/storage-recovery.js": {
+        "raw_sha256": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+        "lf_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5"
+      },
+      "js/app/00-storage-sync-patches.js": {
+        "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+        "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677"
+      },
+      "js/app/portfolio-export.js": {
+        "raw_sha256": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+        "lf_sha256": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94"
+      },
+      "js/app/photo-crop.js": {
+        "raw_sha256": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+        "lf_sha256": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf"
+      },
+      "js/app/99-lightbox.js": {
+        "raw_sha256": "0ca315422d1850cb7a35c5a3a9ff04440789c91eab84ffb9dc5bba4a17c6d453",
+        "lf_sha256": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087"
+      },
+      "tests/auth-integrity.browser.cjs": {
+        "raw_sha256": "15b95507de994eb87fbb115f1fb814d1a1282fbc6e2429609c3027de7ec9a926",
+        "lf_sha256": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79"
+      },
+      "scripts/run-tests.cjs": {
+        "raw_sha256": "9cf7eb0fca1ae0dc4fc6a112b87f175562a0155405cd7c917bf91e32072abcca",
+        "lf_sha256": "5e32bcd4f9341d1dbb5ba97b1304c3aa4ac98ee66eadf630828183f16cc8ecbf"
+      }
+    }
+  },
+  "running_gate_snapshot": {
+    "suite_results_path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\suite-results.json",
+    "snapshot_raw_sha256": "08c831c9fea153952d5312b2251bc7f2c8a2e8f5926b956cbbe786aca5350665",
+    "complete": false,
+    "passed": false,
+    "recorded_suites": 32,
+    "auth_row": {
+      "suite": "tests/auth-integrity.browser.cjs",
+      "status": 1,
+      "signal": null,
+      "error": "Empty or failed case report",
+      "started": "2026-10-16T08:38:29.965Z",
+      "seconds": 38.318,
+      "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\auth-integrity.browser.log",
+      "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\auth-integrity.browser.json",
+      "nativeInstrumented": true
+    },
+    "later_correction_performance_rows": [
+      {
+        "suite": "tests/correction-performance.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:39:14.252Z",
+        "seconds": 27.547,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\correction-performance.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\correction-performance.browser.json",
+        "nativeInstrumented": true
+      }
+    ],
+    "limit": "This runner-owned file is advancing; snapshot count/hash is evidence only as of read time, not a final full-gate result."
+  },
+  "next_step_conditions": [
+    "Let the current remaining gate finish; do not run a competing browser retry while it continues.",
+    "If coordinator chooses a retry, require identical frozen app/auth/runner/preload pins, all111cases without filters and a separate output/coverage directory. Retain original failed JSON/log/native artifacts and explicitly record the interruption beside any retry outcome.",
+    "A successful isolated111/0 result would fill the interrupted auth validation scope; it does not retroactively make the first full gate pass or establish root cause. Coordinator must reconcile final gate and retry evidence before publication/coverage adoption.",
+    "If same boundary/browser closure repeats, stop treating it as incidental and investigate shared-browser lifecycle,coverage instrumentation and process-exit/disconnect diagnostics before any application repair. No auth assertion logic should be weakened."
+  ],
+  "cause_limits": [
+    "Closed-target error identifies unusable browser/page/context at creation, not whether Edge crashed,disconnected,was externally closed or hit another lifecycle/resource fault. Generic renderer/task-provider stderr is not a crash diagnosis.",
+    "Parent reports no matching WindowsApplication1000/1001Edgecrash event; reviewer did not query OS logs. This neither proves nor excludes a browser crash and does not support an OS/update attribution.",
+    "No app/browser/tests/runtime changes,retries,Git/index/source/test/tracker writes or failed-artifact modifications. Only requested triage report written."
+  ]
+}

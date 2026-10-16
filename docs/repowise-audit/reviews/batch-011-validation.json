@@ -1,0 +1,1134 @@
+{
+  "batch": "batch-011",
+  "source_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+  "created_at_utc": "2026-10-16T09:03:39.439164+00:00",
+  "validation_mode": "composite_after_browser_interruption",
+  "full_attempt_passed": false,
+  "initial_full_runner_exit_code": 1,
+  "isolated_auth_retry_exit_code": 0,
+  "effective_gate_passed": true,
+  "suites": 77,
+  "syntax_checks": 91,
+  "retry_syntax_checks": 91,
+  "runner_selfcheck_passed": true,
+  "selected_passing_original_suites": 76,
+  "whole_auth_retry_cases_passed": 111,
+  "all_source_and_configuration_raw_pins_unchanged": true,
+  "html_and_three_coverage_tools_unchanged": true,
+  "source_pin_receipt": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-source-pins.json",
+    "raw_sha256": "2797fd7ba8caee0d4f7cfd612cefd3551263871a798b6a59c1057c1692a854d1"
+  },
+  "recovery_manifest": {
+    "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\recovery-manifest.json",
+    "raw_sha256": "4eaf3c2dc911696d51ff3076fcb7a95d52be950636ee3f9f7e94be1f773fc780"
+  },
+  "superseded_original_auth_capture_count": 62,
+  "suite_results": [
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "test-google-drive-migration.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:32:16.636Z",
+        "seconds": 0.169,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\test-google-drive-migration.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/analysis-identity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:32:16.810Z",
+        "seconds": 23.313,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\analysis-identity.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/analysis-pipeline.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:32:40.124Z",
+        "seconds": 158.964,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\analysis-pipeline.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\analysis-pipeline.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/analysis-policy.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:35:19.090Z",
+        "seconds": 125.766,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\analysis-policy.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\analysis-policy.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/archive-connection.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:37:24.859Z",
+        "seconds": 27.666,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\archive-connection.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\archive-connection.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/archive-failures.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:37:52.528Z",
+        "seconds": 25.086,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\archive-failures.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\archive-failures.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/archive-integrity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:38:17.617Z",
+        "seconds": 12.346,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\archive-integrity.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\archive-integrity.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "auth-retry",
+      "row": {
+        "suite": "tests/auth-integrity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:59:37.745Z",
+        "seconds": 60.977,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\auth-integrity.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\auth-integrity.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/class-deletion.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:39:08.285Z",
+        "seconds": 5.837,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\class-deletion.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/class-deletion.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:39:14.124Z",
+        "seconds": 0.099,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\class-deletion.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/correction-performance.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:39:14.252Z",
+        "seconds": 27.547,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\correction-performance.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\correction-performance.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/corrupt-portfolio.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:39:41.800Z",
+        "seconds": 15.698,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\corrupt-portfolio.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/crop-ownership.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:39:57.500Z",
+        "seconds": 71.39,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\crop-ownership.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\crop-ownership.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/crop-transparency.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:41:08.894Z",
+        "seconds": 10.357,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\crop-transparency.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\crop-transparency.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/csv-formula.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:41:19.253Z",
+        "seconds": 3.504,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\csv-formula.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/deletion-durability.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:41:22.761Z",
+        "seconds": 55.555,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\deletion-durability.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/deletion-merge.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:42:18.318Z",
+        "seconds": 4.72,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\deletion-merge.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/deletion-merge.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:42:23.040Z",
+        "seconds": 0.198,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\deletion-merge.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/deletion-recovery.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:42:23.240Z",
+        "seconds": 5.625,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\deletion-recovery.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/detailed-parser.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:42:28.866Z",
+        "seconds": 4.567,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\detailed-parser.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\detailed-parser.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/drive-folder-selection.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:42:33.436Z",
+        "seconds": 0.152,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\drive-folder-selection.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/drive-lifecycle.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:42:33.594Z",
+        "seconds": 71.523,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\drive-lifecycle.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\drive-lifecycle.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/feedback-compatibility.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:43:45.120Z",
+        "seconds": 2.902,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\feedback-compatibility.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\feedback-compatibility.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/google-drive-migration.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:43:48.024Z",
+        "seconds": 8.719,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\google-drive-migration.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\google-drive-migration.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/image-preparation.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:43:56.746Z",
+        "seconds": 6.959,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\image-preparation.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/main-app-health.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:44:03.706Z",
+        "seconds": 3.741,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\main-app-health.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\main-app-health.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/media-ownership.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:44:07.449Z",
+        "seconds": 51.862,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\media-ownership.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\media-ownership.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/media-upload-boundary.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:44:59.314Z",
+        "seconds": 22.139,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\media-upload-boundary.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\media-upload-boundary.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/missing-feedback.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:21.454Z",
+        "seconds": 3.522,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\missing-feedback.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\missing-feedback.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/neatness-boundaries.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:24.978Z",
+        "seconds": 2.82,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\neatness-boundaries.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\neatness-boundaries.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/neatness-scoring.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:27.799Z",
+        "seconds": 3.42,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\neatness-scoring.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/neatness-scoring.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:31.221Z",
+        "seconds": 0.131,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\neatness-scoring.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/notebook-guidance-repair.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:31.354Z",
+        "seconds": 4.466,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\notebook-guidance-repair.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\notebook-guidance-repair.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/notebook-guide.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:35.822Z",
+        "seconds": 5.224,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\notebook-guide.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/notebook-print-failure.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:45:41.048Z",
+        "seconds": 19.526,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\notebook-print-failure.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\notebook-print-failure.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/openrouter-admission.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:46:00.575Z",
+        "seconds": 46.951,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\openrouter-admission.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\openrouter-admission.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/openrouter-failures.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:46:47.528Z",
+        "seconds": 35.881,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\openrouter-failures.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\openrouter-failures.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/openrouter-request.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:47:23.410Z",
+        "seconds": 0.478,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\openrouter-request.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/optional-storage.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:47:23.891Z",
+        "seconds": 73.638,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\optional-storage.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\optional-storage.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/pending-commit-publication.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:48:37.531Z",
+        "seconds": 19.215,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\pending-commit-publication.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\pending-commit-publication.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/pending-portfolio.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:48:56.749Z",
+        "seconds": 7.898,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\pending-portfolio.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\pending-portfolio.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/pending-portfolio.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:49:04.649Z",
+        "seconds": 0.151,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\pending-portfolio.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-html.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:49:04.802Z",
+        "seconds": 25.523,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-html.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-html.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-image-slots.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:49:30.327Z",
+        "seconds": 5.901,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-image-slots.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-image-slots.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-index-load.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:49:36.230Z",
+        "seconds": 0.192,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-index-load.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-index.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:49:36.424Z",
+        "seconds": 4.858,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-index.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-index.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-reassessment.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:49:41.288Z",
+        "seconds": 35.744,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-reassessment.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-reassessment.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-removal.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:50:17.034Z",
+        "seconds": 4.857,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-removal.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-removal.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:50:21.896Z",
+        "seconds": 0.228,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-removal.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-render-failures.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:50:22.128Z",
+        "seconds": 6.401,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-render-failures.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-render-failures.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-renderer.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:50:28.533Z",
+        "seconds": 69.517,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-renderer.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-renderer.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-replacement.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:38.052Z",
+        "seconds": 3.168,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-replacement.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-replacement.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:41.222Z",
+        "seconds": 0.144,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-replacement.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-save.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:41.367Z",
+        "seconds": 0.092,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-save.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-sync.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:41.461Z",
+        "seconds": 7.631,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-sync.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/portfolio-sync.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:49.094Z",
+        "seconds": 0.119,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\portfolio-sync.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/preference-integrity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:49.215Z",
+        "seconds": 5.46,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\preference-integrity.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\preference-integrity.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/record-identity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:51:54.677Z",
+        "seconds": 44.068,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\record-identity.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\record-identity.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/record-identity.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:52:38.747Z",
+        "seconds": 0.318,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\record-identity.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\record-identity.json",
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/recovery-cache.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:52:39.067Z",
+        "seconds": 66.785,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\recovery-cache.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\recovery-cache.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/rename-confirmation.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:53:45.854Z",
+        "seconds": 54.023,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\rename-confirmation.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\rename-confirmation.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/script-loading.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:54:39.879Z",
+        "seconds": 8.548,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\script-loading.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\script-loading.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/session-retention.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:54:48.429Z",
+        "seconds": 6.646,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\session-retention.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\session-retention.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/session-retention.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:54:55.078Z",
+        "seconds": 0.147,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\session-retention.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\session-retention.json",
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/settings-deletions-sync.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:54:55.227Z",
+        "seconds": 5.309,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\settings-deletions-sync.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/settings-deletions-sync.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:55:00.538Z",
+        "seconds": 0.297,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\settings-deletions-sync.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/split-storage.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:55:00.839Z",
+        "seconds": 49.168,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\split-storage.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\split-storage.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/storage-dialog-keyboard.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:55:50.010Z",
+        "seconds": 44.521,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-dialog-keyboard.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-dialog-keyboard.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/storage-health.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:56:34.532Z",
+        "seconds": 0.107,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-health.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/storage-held-request.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:56:34.641Z",
+        "seconds": 4.735,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-held-request.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-held-request.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/storage-integrity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:56:39.381Z",
+        "seconds": 23.69,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-integrity.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-integrity.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/storage-public-ui.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:57:03.075Z",
+        "seconds": 24.756,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-public-ui.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-public-ui.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/storage-upload-ownership.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:57:27.834Z",
+        "seconds": 33.189,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-upload-ownership.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\storage-upload-ownership.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/student-read-ownership.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:58:01.026Z",
+        "seconds": 19.37,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\student-read-ownership.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\student-read-ownership.browser.json",
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/student-rename.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:58:20.397Z",
+        "seconds": 4.17,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\student-rename.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/student-rename.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:58:24.569Z",
+        "seconds": 0.166,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\student-rename.log",
+        "report": null,
+        "nativeInstrumented": false
+      }
+    },
+    {
+      "attempt": "full",
+      "row": {
+        "suite": "tests/student-selection-storage.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:58:24.737Z",
+        "seconds": 3.612,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\student-selection-storage.browser.log",
+        "report": null,
+        "nativeInstrumented": true
+      }
+    }
+  ],
+  "native_coverage": {
+    "tests": 60,
+    "totals": {
+      "covered": 10324,
+      "executable": 11100,
+      "percent": 93.009009009009
+    },
+    "source_hashes_normalized_lf": {
+      "google-drive-migration.js": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+      "js/app/dialogs.js": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+      "js/app/storage-recovery.js": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+      "js/app/00-storage-sync-patches.js": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+      "js/app/portfolio-export.js": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+      "js/app/10-main-app.js": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+      "js/app/photo-crop.js": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+      "js/app/99-lightbox.js": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087"
+    },
+    "method": "Fresh native Edge V8 precise ranges mapped to native possible-breakpoint lines. Exact source hashes verified after CRLF normalization. Full raw native line sets are validated; only return points at column 0 of the final empty EOF line are excluded from effective executable-line totals. Per-suite contexts and hit-wins line union; no branch coverage. Frozen reference contexts, source mutations and VM snippets are excluded.",
+    "excluded_contexts": 103,
+    "report_sha256": "5b240b7562e8ae2eb1f30b0c363a97aa32a49a73ca1b896edc04188447693dee",
+    "ingestion_status": "Pending post-merge strict ingestion."
+  },
+  "limits": [
+    "Initial full attempt failed and remains unchanged. Isolated passing retry fills its interrupted scope; browser-closure root cause remains unknown.",
+    "All original auth captures are superseded; passing-only input preserves actual source/location assets and exporter exclusions.",
+    "Native executable-line coverage, not branch coverage; no live Google, Drive, model, account or student-data testing."
+  ]
+}

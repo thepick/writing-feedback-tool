@@ -1,0 +1,76 @@
+{
+  "review_id": "batch-011-recovery-implementation",
+  "verdict": "accepted_for_this_frozen_composite",
+  "blockers": [],
+  "source_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+  "scope": "Read-only adapter and actual staged/coverage/composite artifact review; no app, runner, exporter, browser or test execution by reviewer.",
+  "findings": [
+    {
+      "area": "Failed original preserved",
+      "evidence": "Independently hashed all 2,294 original full-tree files against the pre-retry seal and manifest, plus full.log. Seal filesystem timestamp precedes retry started timestamp. Original receipt remains complete=true, passed=false, partial=false: 76 passing suites and auth exit 1. Its auth report retains 91 pass/20 browser-closed errors across 111 cases. Original failure is not relabeled."
+    },
+    {
+      "area": "Exact suite replacement",
+      "evidence": "77 unique inventory/selected suite names agree. Each composite row is structurally identical to its original passing row, except auth is exactly the whole retry row with explicit attempt label. Retry is complete=true, partial=true, passed=true, selected=[auth]; 111 names match original in order, all pass. Both attempts contain exactly 91 unique passing syntax records. Exit receipt is original=1/retry=0."
+    },
+    {
+      "area": "Passing native input and assets",
+      "evidence": "All 2,256 raw capture entries accounted for: 2,092 original non-auth +102 retry-auth copied byte-for-byte; every one of 62 original-auth captures superseded, including earlier successful contexts. Selected suite set is exactly 59 original native suites +auth retry. Input has only these 2,194 capture JSONs; manifest is outside it. All 16 required source/location assets match originals; 16 cross-attempt collisions are byte-identical. No excluded original auth capture enters input."
+    },
+    {
+      "area": "Actual coverage output",
+      "evidence": "Independent JSON/set arithmetic over 8,330 selected records verifies source hashes/current LF bytes, raw executable lines against native location assets, covered-line containment, EOF-return filtering, per-suite hit unions and every emitted LCOV DA/LF/LH record. Exactly 480 suite/file contexts, 60 tests, 8 files; 10,324/11,100 executable lines (93.009009%). All 103 genuine exclusions and 8 EOF source exclusions match saved captures/assets. Exporter raw hash unchanged."
+    },
+    {
+      "area": "Honest saved composite",
+      "evidence": "Final batch-011-validation.json selects exactly manifest rows and binds exact manifest/LCOV hashes, totals and source hashes. It explicitly records full_attempt_passed=false, initial exit1, retry exit0, effective_gate_passed=true and composite_after_browser_interruption. Runner selfcheck log contains its success receipt. All 91 source raw/LF pins, config and four supplemental raw pins remain exact at review end."
+    }
+  ],
+  "pins": [
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\recover_interrupted_gate.py",
+      "raw_sha256": "857de043359a7caa9aca4a8cf2a48e49a7b2e53044ed0fce2419bf037cc5f8dc"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\initial-full-seal.json",
+      "raw_sha256": "2d5d185f894a758f512c2ad4681c5a9ca064badbfc67eac83a518ec82758ceec"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\suite-results.json",
+      "raw_sha256": "44653917e5900d42997d27efb72bdf2969e145babca34987eae7a81d37d99213"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\suite-results.json",
+      "raw_sha256": "3589355fc954bfa88847f5fcfbae83f66a46624a5f30f2bd3d326996073f328f"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\recovery-manifest.json",
+      "raw_sha256": "4eaf3c2dc911696d51ff3076fcb7a95d52be950636ee3f9f7e94be1f773fc780"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\current.lcov",
+      "raw_sha256": "5b240b7562e8ae2eb1f30b0c363a97aa32a49a73ca1b896edc04188447693dee"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\current.lcov.summary.json",
+      "raw_sha256": "3fe01f4b61d0e2d9007f8cdfacd34c765ffd2de5dfb4ea427c57db513bc9a9ee"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\batch-011-validation.json",
+      "raw_sha256": "f26ca7ff827e4a30efd607fa14337e24d1039482328cdf1b7a6d38d2dd3237f9"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-source-pins.json",
+      "raw_sha256": "2797fd7ba8caee0d4f7cfd612cefd3551263871a798b6a59c1057c1692a854d1"
+    },
+    {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-supplemental-pins.json",
+      "raw_sha256": "f866e575f8ec6a96afdb08e57e5e1a56be6122d1a9da1eaeedc538d282afab7f"
+    }
+  ],
+  "limits": [
+    "Browser-closure root cause remains unknown. This is a transparent composite recovery, not an uninterrupted passing full runner or proof that an environmental fault cannot recur.",
+    "Review accepts this exact frozen inventory and artifacts. Adapter uses assertions, trusted coordinator inputs and fixed counts; it is not a generic recovery protocol for changed suites, arbitrary failures or modified source. No broad rerun is justified by the inspected evidence.",
+    "Native executable-line coverage is not branch coverage. Existing synthetic service/provider boundaries and original test oracles apply; no live account/data claims. Post-merge database ingestion/publication is outside this review."
+  ]
+}

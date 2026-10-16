@@ -136,6 +136,38 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
                     polishFeedback(quick, {categories:{}}, 'We was happy.', 'We were happy.', null);
                     return quick.Grammar.reason;
                 });
+                const helperEvidence = 'Several grammar edits were needed, especially with verb forms and helping words in some sentences.';
+                const lowEvidence = 'Several sentences needed grammar corrections before the meaning was fully clear.';
+                const midEvidence = 'Only a few grammar edits were needed, mostly small fixes that will make your sentences sound smoother and more correct.';
+                for (const [label, score, , calls] of scores) checkGrammarGuard('evidence score/' + label, calls && Number(score) <= 6 ? helperEvidence : '', calls, () => buildGrammarEvidenceFromData(score, 'We was happy.', 'We were happy.'));
+                const evidenceBranches = [
+                    ['verb', 6, 'I go home.', 'I went home.', 'Several grammar edits were needed, especially to keep verb tense steady across the story.'],
+                    ['small-low', 6, 'The cat sleeps.', 'The kitten sleeps.', lowEvidence],
+                    ['many-seven', 7, manyOriginal, manyCorrected, midEvidence], ['many-eight', 8, manyOriginal, manyCorrected, midEvidence]
+                ];
+                for (const [label, score, original, corrected, expected] of evidenceBranches) checkGrammarGuard('evidence branch/' + label, expected, 1, () => buildGrammarEvidenceFromData(score, original, corrected));
+                for (const [label, original, corrected] of primitiveTexts) for (const score of [6, 9]) checkGrammarGuard('evidence primitive/' + label + '/' + score, score === 6 ? lowEvidence : '', score === 6 ? 1 : 0, () => buildGrammarEvidenceFromData(score, original, corrected));
+                const evidenceCallers = [
+                    ['null', null, polishedHighReason, 0], ['zero', 0, helperEvidence, 1], ['negative', -1, helperEvidence, 1], ['six', 6, helperEvidence, 1],
+                    ['seven', 7, polishedHighReason, 1], ['eight', 8, polishedHighReason, 1], ['eight-half', 8.5, polishedHighReason, 0], ['nine', 9, polishedHighReason, 0], ['string-nine', '9', polishedHighReason, 0], ['invalid', 'invalid', polishedHighReason, 0],
+                    ['many-mid', 7, midEvidence, 1, false, true],
+                    ['high-density', 9, 'a number of grammar edits remain before this draft is ready.', 0, true],
+                    ['mid-density', 7, 'a number of grammar edits were needed, important fixes that will make your sentences sound smoother and more correct.', 1, true, true]
+                ];
+                for (const [label, score, expected, calls, dense, many] of evidenceCallers) {
+                    const quick = {UnrelatedFixture:{value:'quick-other'}}, detailed = {categories:{Grammar:{score, evidence:dense ? 'Only a few grammar edits remain before this draft is ready.' : polishedHighReason, teacherComment:dense ? 'Only a few grammar edits need a final careful reread.' : 'Keep this teacher comment exactly.', totalErrors:dense ? 40 : 2, errorDensity:dense ? 10 : 1, growthTip:'Reread each sentence carefully and check every subject and verb.', contentOrganization:'Specific details stay in their original order.', sentenceVariety:'The sentence pattern stays unchanged in this fixture.', metadata:{token:'keep-exact'}}, UnrelatedFixture:{value:'detail-other'}}, metadata:{token:'detail-root'}};
+                    const before = structuredClone({quick, detailed});
+                    checkGrammarGuard('evidence detailed caller/' + label, JSON.stringify([expected, dense ? 'a number of grammar edits need a final careful reread.' : 'Keep this teacher comment exactly.']), calls, () => {
+                        polishFeedback(quick, detailed, many ? manyOriginal : 'We was happy.', many ? manyCorrected : 'We were happy.', null);
+                        return JSON.stringify([detailed.categories.Grammar.evidence, detailed.categories.Grammar.teacherComment]);
+                    });
+                    const after = structuredClone({quick, detailed}), preserved = structuredClone(after);
+                    grammarGuardObservations.at(-1).callerState = {before, after};
+                    preserved.detailed.categories.Grammar.evidence = before.detailed.categories.Grammar.evidence;
+                    preserved.detailed.categories.Grammar.teacherComment = before.detailed.categories.Grammar.teacherComment;
+                    check('evidence detailed caller/' + label + ' retains score and all other data without quick Grammar', Object.is(detailed.categories.Grammar.score, score) && JSON.stringify(preserved) === JSON.stringify(before) && !Object.hasOwn(quick, 'Grammar'));
+                }
+                checkGrammarGuard('evidence separate pattern consumer', 'Minor issue|Minor to moderate issue|Mostly clear|Not a major issue|Mostly clear', 1, () => buildGrammarPatternNotes(9, 'We was happy.', 'We were happy.').map(note => note.level).join('|'));
             } finally { analyzeGrammarChanges = grammarAnalyzer; buildLcsMatrix = grammarLcs; }
             return {cases, normalizationCalls:count, grammarGuardObservations};
         });

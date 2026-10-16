@@ -1,0 +1,319 @@
+{
+  "repair": "074 high-score Grammar evidence guard",
+  "status": "candidate_frozen_awaiting_two_independent_reviews",
+  "created_at": "2026-10-16T15:24:09.239724+07:00",
+  "repository": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool",
+  "coordinator_reported_branch": "codex/repowise-batch-011-20261016",
+  "coordinator_reported_parent": "e0ddfe18713df9eb967a2dab94840bdfae1c3c50",
+  "Git_provenance": "Coordinator supplied branch/parent; no Git command executed by writer.",
+  "change": {
+    "files": [
+      "js/app/10-main-app.js",
+      "tests/correction-performance.browser.cjs"
+    ],
+    "production": "Only evidence-builder guard becomes if (n == null || n > 8) return \"\".",
+    "purpose": "Return identical empty evidence for normalized n>8 while skipping its unused analyzer/LCS work.",
+    "no_other_production_change": "LF original main plus exactly one context-bound guard replacement equals whole candidate main.",
+    "test_scope": "Append bounded checks inside existing real delegating observers/helper; reuse score and primitive fixture tables. No new framework or dependency."
+  },
+  "function_pins": {
+    "function": "buildGrammarEvidenceFromData",
+    "file": "js/app/10-main-app.js",
+    "span_original_and_candidate": [
+      1914,
+      1931
+    ],
+    "original_lf_sha256": "320e3f62a9c9c476fa91ae289c534fa273c84278565542b8a7e39018a29d502b",
+    "candidate_lf_sha256": "6ca2f92c6a848b758f598e499b4b0f010119923f59b85476778583c9064e335f",
+    "073_reason_retained_lf_sha256": "1e99bfb4cf227fa673f1115da7fda58d3009e0efd22a75906d82c896f78ae1fa"
+  },
+  "source_test_pins": {
+    "before": {
+      "main": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-before-main.js",
+        "raw_sha256": "f41d156c41a615eeb42c05bd80c17c6812053c1c9c4d827e148d547e00e236fd",
+        "lf_sha256": "dd4bc78456639df8c9fffd9c95e5d9ecc142e4a7a01461ace2fc18984afc478f",
+        "bytes": 435675
+      },
+      "performance_test": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-before-performance.cjs",
+        "raw_sha256": "a4784a6c5c28a74702d67be99a9b97e92f1007a2de03abb3b4a9534116daabe7",
+        "lf_sha256": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+        "bytes": 14168
+      },
+      "capture": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-before-pins.json",
+        "raw_sha256": "b0abc30f66518d7de7cd5a572efc689da04708b413df76e51ea7fc3285395bb0",
+        "lf_sha256": "62a374cabd69d87d24382b3b310020d08a733e2f968babba4ba0b4d56b4cd2db",
+        "bytes": 1272
+      }
+    },
+    "candidate": {
+      "main": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\10-main-app.js",
+        "raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+        "lf_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+        "bytes": 435684
+      },
+      "performance_test": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\correction-performance.browser.cjs",
+        "raw_sha256": "cfe5f23f1f8086b58899e0024b0ca4cb6b1469a7c0f33ee0e57b52fcda999fd3",
+        "lf_sha256": "baef122e88d71a2d234552d3d7c53d152c2f4bbe9411b17424a487f45439c1e9",
+        "bytes": 19044
+      },
+      "pretest_capture": {
+        "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-pretest-pins.json",
+        "raw_sha256": "8081b769f6d9871c77a1943fa4802b4dd4231e83612bf100c712f29bc6fe4e7e",
+        "lf_sha256": "1f9871900a73a9181489ab247beeed08655e936f5b0e1eb7dd6ea2292ebe8afb",
+        "bytes": 216
+      },
+      "tested_bytes_equal_frozen": true,
+      "frozen_copies": [
+        {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-frozen-main.js",
+          "raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+          "lf_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43",
+          "bytes": 435684
+        },
+        {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-frozen-correction-performance.cjs",
+          "raw_sha256": "cfe5f23f1f8086b58899e0024b0ca4cb6b1469a7c0f33ee0e57b52fcda999fd3",
+          "lf_sha256": "baef122e88d71a2d234552d3d7c53d152c2f4bbe9411b17424a487f45439c1e9",
+          "bytes": 19044
+        }
+      ]
+    },
+    "unchanged_affected": {
+      "google-drive-migration.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\google-drive-migration.js",
+        "raw_sha256": "df073e0d0288afa22e56673974ab155cf3a3dbec00b3bcb2decfa531e6469c13",
+        "lf_sha256": "5a5e6aba9b5e77850f3145175470a719953f847faa969a96e802d4ea689c3bc9",
+        "bytes": 13369
+      },
+      "js/app/00-storage-sync-patches.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\00-storage-sync-patches.js",
+        "raw_sha256": "6f9dc30c89e7c6358efa43b3390ca21b1ff72a419c4a8520620603aa1ab868f9",
+        "lf_sha256": "27c0062d05385b4f4caf00b1a3fe75a41b2b645fc8c36cc1acb10b10aa78c677",
+        "bytes": 404610
+      },
+      "js/app/99-lightbox.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\99-lightbox.js",
+        "raw_sha256": "0ca315422d1850cb7a35c5a3a9ff04440789c91eab84ffb9dc5bba4a17c6d453",
+        "lf_sha256": "e5cfeab3f2693527024b86ba27c2c17f2dd3207ced02e4d18fb234500e91c087",
+        "bytes": 1149
+      },
+      "js/app/dialogs.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\dialogs.js",
+        "raw_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+        "lf_sha256": "f6a4d091deaff8602071bdad1f0ff356e340886c857e1a69ce96e7d9a05bb27c",
+        "bytes": 9431
+      },
+      "js/app/photo-crop.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\photo-crop.js",
+        "raw_sha256": "58cbca5192a648ecd6addd419936ee35f9781d1d4d5f5059ebb43c345b3d67eb",
+        "lf_sha256": "be574c2f9b138063b174b4233c43d650cb1d071ca224341ca034c1e538ea4bbf",
+        "bytes": 10781
+      },
+      "js/app/portfolio-export.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\portfolio-export.js",
+        "raw_sha256": "f71c93da22f7767e728d51f05311e693484d27180c29eafef4e60e86e2b75348",
+        "lf_sha256": "f9757b52d1614ba0f6918adc23eeab7ab81ba47a986aadb94bc9610fcc1bbe94",
+        "bytes": 50327
+      },
+      "js/app/storage-recovery.js": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\js\\app\\storage-recovery.js",
+        "raw_sha256": "9371df8b2fc21312cb14dd3471a2eb82cae81852984910aa265dd65f86e8b472",
+        "lf_sha256": "980ff8b72f48b55498be0de06baf5b88243f7c22e76d1a2183807dba372becf5",
+        "bytes": 15618
+      },
+      "tests/feedback-compatibility.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\feedback-compatibility.browser.cjs",
+        "raw_sha256": "1e6916f7a86e0bb0fd33cd7ff325d59c4bbe297822d3e0b4c5cb919059699830",
+        "lf_sha256": "0634dda79c52e4867eb800c19faa1c9951177841c16212d6f1d238bf8b32b4aa",
+        "bytes": 11274
+      },
+      "tests/storage-upload-ownership.browser.cjs": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\tests\\storage-upload-ownership.browser.cjs",
+        "raw_sha256": "969f32ae104ca03cd5719117911b58df058e1a8da86eca616f2b6040e6a16bb2",
+        "lf_sha256": "307fd5e6855f460ecf937817f901b4bee42ad339011af0a6902b87a0ee34b735",
+        "bytes": 24430
+      },
+      "index.html": {
+        "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\index.html",
+        "raw_sha256": "4b98988268a8490874a4f5b978eced3cc329ceaf30f93ea2239df1fe7d192c63",
+        "lf_sha256": "606d5af37fd99acff8acba5a3d8296977f0b9ce2d15db19a6b365f8922b9a898",
+        "bytes": 212502
+      }
+    }
+  },
+  "baseline010": {
+    "receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\GitHub\\Repowise\\writing-feedback-tool\\docs\\repowise-audit\\reviews\\batch-010-validation.json",
+      "raw_sha256": "3a8f236bcc4d24d65863ed6afb87c1f0305c487ab7d66bdffde7918f27b91b9b",
+      "lf_sha256": "dddcd2b47e96d00cfbc443c80ac93df72e2f2c79161cabe20600fafb7e0bcfed",
+      "bytes": 59059
+    },
+    "suites": [
+      {
+        "suite": "tests/correction-performance.browser.cjs",
+        "source_commit": "ad1203b7916a13bee88c23e695b20804ccc54ed9",
+        "exit_code": 0,
+        "passed": 304,
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-010\\full\\correction-performance.browser.json",
+          "raw_sha256": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca",
+          "lf_sha256": "ce72a17aeafab681af808b21317c7b6f89a5f21732a506f9a4329b14ff15ecca",
+          "bytes": 38840
+        },
+        "reused_not_rerun": true
+      },
+      {
+        "suite": "tests/feedback-compatibility.browser.cjs",
+        "source_commit": "ad1203b7916a13bee88c23e695b20804ccc54ed9",
+        "exit_code": 0,
+        "passed": 30,
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-010\\full\\feedback-compatibility.browser.json",
+          "raw_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "lf_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "bytes": 1444
+        },
+        "reused_not_rerun": true
+      }
+    ],
+    "reuse_binding": "Before main matches010 raw bytes. Before performance test matches010 LF exactly; Git changed checkout newlines only. Compatibility source and all other native app scripts match010 raw. Inline fixtures are pinned with these self-contained suite sources. No redundant baseline rerun.",
+    "performance_checkout_newline_difference": {
+      "observed_raw": "a4784a6c5c28a74702d67be99a9b97e92f1007a2de03abb3b4a9534116daabe7",
+      "reference010_raw": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5",
+      "shared_LF": "e6cc030b06b5d559dd873b74d2eda6b02e340abcd04880815d093c5cc0f775f5"
+    }
+  },
+  "preserved304_proof": {
+    "source": "Remove only inserted evidence-test block and entire original304-check suite equals010 LF source. Existing helper, fixtures, exception restoration, runner and report fields retained.",
+    "runtime": "First304 check names/order/results and first57 reason-work observations exactly equal010; normalizationCalls remains161.",
+    "compatibility": "Entire30-check report equals010; source unchanged.",
+    "073_reason_and_patterns": "All073 reason checks retained; source differs only in evidence guard. Separate high pattern test still delegates one real analyzer/LCS call and preserves observed five-note level sequence."
+  },
+  "candidate_validation": {
+    "runs": 1,
+    "suites": [
+      {
+        "suite": "tests/correction-performance.browser.cjs",
+        "exit_code": 0,
+        "passed": 491,
+        "failed": 0,
+        "original_checks": 304,
+        "added_checks": 187,
+        "added_native_observations": 58,
+        "groups": {
+          "evidence score": 26,
+          "evidence branch": 4,
+          "evidence primitive": 14,
+          "evidence detailed caller": 13,
+          "evidence separate pattern consumer": 1
+        },
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-correction-performance-candidate.json",
+          "raw_sha256": "16222a8958b39462d82cedd1f4668dd29a0c44dbbbaa990f5c822109b250c266",
+          "lf_sha256": "16222a8958b39462d82cedd1f4668dd29a0c44dbbbaa990f5c822109b250c266",
+          "bytes": 97820
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-correction-performance-candidate.log",
+          "raw_sha256": "50884f070c2e64cba21c4bc36d7bacce5942f3608b0e96bfe89069b903dfbbc6",
+          "lf_sha256": "48a9d82cc914a81196bfc40d1fcba0a9e9d21254351f059aaa039949442c65ac",
+          "bytes": 111
+        }
+      },
+      {
+        "suite": "tests/feedback-compatibility.browser.cjs",
+        "exit_code": 0,
+        "passed": 30,
+        "failed": 0,
+        "complete_report_equal010": true,
+        "report": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-feedback-compatibility-candidate.json",
+          "raw_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "lf_sha256": "30a6d4d1db0067aaa9eb545378970e4922ffd5a33fddef2b2232c8a6cff2b9e0",
+          "bytes": 1444
+        },
+        "log": {
+          "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-feedback-compatibility-candidate.log",
+          "raw_sha256": "d70e5459e2e7daa94f3e24c0578f2405620bf132a902782939f18c84243c9117",
+          "lf_sha256": "4f955bccd5c622bdf70671ba5f08d263d2a9685b7c29d90d798f96ec58f19b79",
+          "bytes": 70
+        }
+      }
+    ],
+    "affected_syntax": [
+      "node --check js/app/10-main-app.js: pass",
+      "node --check tests/correction-performance.browser.cjs: pass"
+    ],
+    "new_observations": {
+      "literal_outputs_equal_corresponding_original_probe": 58,
+      "high_evidence_zero_analyzer_and_LCS": 19,
+      "null_invalid_zero_analyzer_and_LCS": 11,
+      "supported_low_mid_one_analyzer_and_LCS": 27,
+      "separate_high_pattern_one_analyzer_and_LCS": 1,
+      "detailed_only_caller_state_checks": 13,
+      "check_count": "58*3 output/analyzer/LCS checks +13 exact caller preservation checks =187.",
+      "native_implementation": "Existing observers always delegate actual analyzer/LCS implementations and restore in finally; no fake summary or matrix.",
+      "caller_preservation": "13 actual polishFeedback calls with quick Grammar absent. Literal evidence and teacherComment include high/mid/low, numeric-string and error-density controls; full before/after states equal corresponding original native rows. Score, counts/density, metadata, growth/content/sentence data and unrelated/root data preserved outside expected evidence/comment changes.",
+      "raw_location": "grammarGuardObservations appended58 rows and callerState before/after in work candidate performance report; no full-row duplicate in receipt."
+    }
+  },
+  "original_probe": {
+    "proposal": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\outputs\\repair-074-evidence-guard-pre-edit-investigation.json",
+      "raw_sha256": "88ed0a4d02146892c439f5789ad81d2b6501cf6726a87e9fb93b71f093d5e26b",
+      "lf_sha256": "7197065e3b65235ae31952114d8c54b17be2c6107b0c280745f570961fa7e8b6",
+      "bytes": 16967
+    },
+    "data": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-original-native-probe.json",
+      "raw_sha256": "1e924df66329806bc11221cff8861830b5e1aa3eb72f4a7c88939bd84a85ef34",
+      "lf_sha256": "1e924df66329806bc11221cff8861830b5e1aa3eb72f4a7c88939bd84a85ef34",
+      "bytes": 101719
+    },
+    "script": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\probe074-original.cjs",
+      "raw_sha256": "c86a64f936e0741e607456940846d41b5cd4e532a486a561aacaa69d027de6a6",
+      "lf_sha256": "aaba4c5e3a1fd7a2d7c3f3ebaa37f51f3ae19341447a41cc118914754947ab23",
+      "bytes": 10868
+    },
+    "log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\repair074-original-native-probe.log",
+      "raw_sha256": "dc6d4c470bd39b12e7e7808a510136af7b56c40976ff6f73cbbe23ac268b88b7",
+      "lf_sha256": "b399d4dfc2789756ba9e08bcdca5af16a252f80c344115ed0bbca2b0e3b4d82d",
+      "bytes": 960
+    },
+    "raw_exit": 1,
+    "explanation": "Single original native run saved56 direct,21 caller and2 consumer-control rows before assertions. One expected mid-density sentence missed existing mostly small fixes -> important fixes substitution. Native behavior was correct; raw assertion failure retained, no all-passing baseline-probe claim. Correct literal output and all saved rows were verified offline without another browser run. Candidate explicitly asserts important fixes wording.",
+    "offline_verifier": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-16\\repowise-batch-010-save-feedback\\work\\verify074-saved-evidence.py",
+      "raw_sha256": "fdc02f1ea5bd0de781f1b202399655930739747ab69f579e1a218f50af1b19ff",
+      "lf_sha256": "e75075b153a98b05c4c55c18c19cc65a6286681fb3462d24923a52283298d11c",
+      "bytes": 14084
+    }
+  },
+  "attempts": [
+    {
+      "attempt": "original pre-edit native probe",
+      "exit_code": 1,
+      "cause": "Incorrect expectation for existing density-aligned wording; retained with offline correction."
+    },
+    {
+      "attempt": "candidate implementation validation",
+      "exit_code": 0,
+      "result": "491 performance/30 compatibility, affected two syntax checks; no failing candidate run or subsequent code edit."
+    }
+  ],
+  "limits": [
+    "Synthetic native Edge fixtures and local routed files; no live model/Drive/account or real student data.",
+    "Observed benefit is skipped evidence-specific analyzer/LCS calls for n>8, not measured latency/memory, full-assessment or whole-app zero work.",
+    "Supported primitive text and actual string caller boundary; unsupported custom object coercion and resource-exhaustion exception parity not claimed. Normalization, low/mid outputs and caller density alignment remain intact.",
+    "073 reason, pattern consumers,304 original checks and30 compatibility checks preserved.",
+    "No Git, index, tracker, coverage, full-gate, deployment, dependency or integration operation.",
+    "Source/test bytes frozen; two independent reviews and coordinator integration pending."
+  ]
+}

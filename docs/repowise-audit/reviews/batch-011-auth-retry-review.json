@@ -1,0 +1,156 @@
+{
+  "review_id": "batch-011-auth-retry-review",
+  "verdict": "accepted_same_source_isolated_auth_validation",
+  "blockers": [],
+  "inspected_git_commit": "b248dcf310f3b56201474d20a44b8ea73b977312",
+  "reviewed_at_utc": "2026-10-16T09:03:58.702216+00:00",
+  "conclusion": "Separate instrumented retry validates the interrupted111-case auth scope on unchanged frozen source. Original full gate remains completed with76passing suites and1browser-interrupted auth failure,exit1.074 remains an evidence-only performance guard,not an auth fix. Cause of the original browser closure remains unknown.",
+  "retry_verification": {
+    "count": 111,
+    "passed": 111,
+    "failed": 0,
+    "case_rows_with_error": 0,
+    "ordered_inventory_matches_failed_full_and_passing010": true,
+    "ownership_cases_with_actual_observed_state": 21,
+    "formerly_first_failed_profile_body_newer_B": "Now passes with sessionUnchanged,zero callbacks/remaps,no delayed publication,newer-B retained and restoreCurrent true.",
+    "all_previous20_failed_case_positions_pass": true,
+    "inventory_identity_limit": "111ordered rows,108unique rendered names. Three baseline labels each occur twice because numeric/string scalar fixtures stringify identically: invalid runtime expiry Infinity;ordinary completion TTL3600;invalid completion TTL Infinity. Exact multiplicity/order is preserved; no case was deduplicated or dropped.",
+    "reported_no_errors_limit": "No per-case error field,failed row or runner error; auth report has no separate all-console/page-error aggregate. No broader error-free-browser claim.",
+    "runner": {
+      "partial": true,
+      "selected": [
+        "tests/auth-integrity.browser.cjs"
+      ],
+      "complete": true,
+      "passed": true,
+      "suite_row": {
+        "suite": "tests/auth-integrity.browser.cjs",
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "started": "2026-10-16T08:59:37.745Z",
+        "seconds": 60.977,
+        "log": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\auth-integrity.browser.log",
+        "report": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\auth-integrity.browser.json",
+        "nativeInstrumented": true
+      },
+      "syntax_checks": 91,
+      "syntax_failures": 0
+    }
+  },
+  "original_full_result": {
+    "complete": true,
+    "passed": false,
+    "suites": 77,
+    "passing_suites": 76,
+    "failed_suites": 1,
+    "syntax_checks": 91,
+    "syntax_failures": 0,
+    "auth_cases": {
+      "passed": 91,
+      "failed": 20
+    },
+    "finished": "2026-10-16T08:58:28.351Z",
+    "isolated_retry_started": "2026-10-16T08:59:31.162Z",
+    "execution_order_verified": "Original full runner completed before isolated retry began.",
+    "actual_exit_codes": {
+      "initial_full_runner_exit_code": 1,
+      "isolated_auth_retry_exit_code": 0
+    }
+  },
+  "freeze_verification": {
+    "source_pin_manifest": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-source-pins.json",
+      "raw_sha256": "2797fd7ba8caee0d4f7cfd612cefd3551263871a798b6a59c1057c1692a854d1"
+    },
+    "source_files_raw_and_lf_match": 91,
+    "config_files_raw_and_lf_match": 1,
+    "supplemental_manifest": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-coordinator\\batch-011-supplemental-pins.json",
+      "raw_sha256": "f866e575f8ec6a96afdb08e57e5e1a56be6122d1a9da1eaeedc538d282afab7f"
+    },
+    "supplemental_files_raw_and_lf_match": 4,
+    "supplemental_files": [
+      "work/do-next-05/coverage-preload.cjs",
+      "work/do-next-05/export-coverage.cjs",
+      "work/summarize-coverage.cjs",
+      "index.html"
+    ],
+    "main": {
+      "raw_sha256": "3d096846c489fd47c353d96e0b65e9db6e5cd6248c322ecd3b2e086d86c36a75",
+      "lf_sha256": "2579ce75893fbf7efc1c86a6a459b858558777c37a88f5edf0f7493074d9fa43"
+    },
+    "auth_test": {
+      "raw_sha256": "15b95507de994eb87fbb115f1fb814d1a1282fbc6e2429609c3027de7ec9a926",
+      "lf_sha256": "bc9ceb450ce233b069b808c3042659d6357d8e835f966e9c6480569a54433b79"
+    },
+    "instrumentation": "Retry runner row nativeInstrumented=true; same frozen preload,exporter,line-summary helper andHTML raw/LF pins verified. No case filter or changed driver: exact111row ordered inventory and immutable auth source.",
+    "repair074_logic": "Prior074review plus frozen main pin reused; no new source correction between interrupted run and retry."
+  },
+  "original_evidence_preservation": {
+    "initial_full_seal": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\initial-full-seal.json",
+      "raw_sha256": "2d5d185f894a758f512c2ad4681c5a9ca064badbfc67eac83a518ec82758ceec"
+    },
+    "sealed_original_files_checked": 2294,
+    "all_raw_hashes_match": true,
+    "full_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full.log",
+      "raw_sha256": "381fd27c0c4da26f565dff79fefca0e57a54bfa766b77e6098d0c6b28ba49baa"
+    },
+    "full_log_matches_seal": true,
+    "failed_auth_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\auth-integrity.browser.json",
+      "raw_sha256": "ec7d402c3094e2fc8a9596d9fa6fde51f13b7ecdeb55512227df34a03abf13ae"
+    },
+    "failed_auth_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\auth-integrity.browser.log",
+      "raw_sha256": "845792acbad06ddd93998865a16418b466fe4d770c81a1369f509483b854f6f1"
+    },
+    "prior_triage": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\outputs\\repowise-repairs\\batch-011-auth-interruption-triage.json",
+      "raw_sha256": "bcc0ae5480653cfd5464ea1682129c98874a53ac812bd4944ce2611d19c02bbc"
+    },
+    "failed_auth_report_log_match_prior_triage": true,
+    "failed_auth_capture_files": 62,
+    "failed_auth_capture_manifest_digest_matches_prior_triage": true,
+    "failed_auth_capture_manifest_sha256": "7b4de758f9353c42a9abefd95278204c373448d20a9e1580919cb117ba7573f0",
+    "retry_uses_separate_directory": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry"
+  },
+  "evidence_pins": {
+    "passing_retry_auth_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\auth-integrity.browser.json",
+      "raw_sha256": "b0307716aa9812d4fc941ccd19db1e7a61883f70608bb2defcab0ed447c2d55f"
+    },
+    "retry_auth_log": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\auth-integrity.browser.log",
+      "raw_sha256": "ee6e322e5be008897e8f80e60b954a049415b1dd481c25ec8ea54ec009288a5c"
+    },
+    "retry_runner_stdout": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry.log",
+      "raw_sha256": "96d82698c13f3e5cde44dcf93ba185b975b29f147918197b18e44b8fdfa0c607"
+    },
+    "retry_suite_results": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\auth-retry\\suite-results.json",
+      "raw_sha256": "3589355fc954bfa88847f5fcfbae83f66a46624a5f30f2bd3d326996073f328f"
+    },
+    "original_full_suite_results": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\full\\suite-results.json",
+      "raw_sha256": "44653917e5900d42997d27efb72bdf2969e145babca34987eae7a81d37d99213"
+    },
+    "gate_exit_receipt": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-011\\gate-exits.json",
+      "raw_sha256": "78db97df8fd48b6c1018b05dcce6bce75048cdbacbdd775e2a58fa7d1401d367"
+    },
+    "passing010_auth_report": {
+      "path": "C:\\Users\\Michael\\Documents\\Codex\\2026-10-15\\files-pasted-by-the-user-you\\work\\repowise-batch-010\\full\\auth-integrity.browser.json",
+      "raw_sha256": "194880551c8ca29cd7508c10ef993d15483eac4d7955411fb733f1b6eb5c4d77"
+    }
+  },
+  "limits": [
+    "Read-only source/artifact/hash/JSON/Git inspection only. No tests,browser,app,tool runtime,source,Git,index,tracker or failed-artifact mutation. Only this report written.",
+    "No original-full-pass claim,root-cause diagnosis,OS/update attribution or claim that074fixed authentication. One successful retry does not prove the earlier closure cannot recur.",
+    "Recovery adapter,staged77suite/coverage selection and derived manifests are reviewed separately by028/coordinator; this report does not approve their bytes,coverage import or publication.",
+    "Caller scenario observations and frozen source support authentic completion; no separate network/live-provider or exhaustive application correctness claim."
+  ]
+}
