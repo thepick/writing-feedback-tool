@@ -149,7 +149,49 @@ function exerciseMainAppHealth() {
             [writing.value, target.value] = before; change(before[2]); writing.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
-    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility(); checkWordCountMeter();
+    function checkEvidenceTokens() {
+        const unrelated = [{ area: 'Details', comment: 'Birds gather nearby.' }], literal = [{ area: 'Details', comment: 'Constructor' }];
+        const candidate = 'The constructor belongs in this phrase.';
+        const own = (bag, key) => Object.prototype.hasOwnProperty.call(bag, key);
+        check('evidence tokens: unrelated constructor rejected', !commentOverlapsEvidence(candidate, unrelated));
+        check('evidence tokens: unrelated bag has no own constructor', !own(getEvidenceTokens(unrelated), 'constructor'));
+        check('evidence tokens: literal constructor is an own token', own(getEvidenceTokens(literal), 'constructor') && getEvidenceTokens(literal).constructor === true);
+        check('evidence tokens: literal constructor supported', commentOverlapsEvidence(candidate, literal));
+        check('evidence tokens: ordinary case-insensitive match', commentOverlapsEvidence('BIRDS gather.', unrelated));
+        check('evidence tokens: ordinary unrelated word rejected', !commentOverlapsEvidence('Lanterns glow.', unrelated));
+        const stopOnly = [{ area: 'Your writing', comment: 'The reader makes this clear.' }];
+        check('evidence tokens: stop-only rows supply no support', Object.keys(getEvidenceTokens(stopOnly)).length === 0 && !commentOverlapsEvidence('Your writing is clear.', stopOnly));
+        check('evidence tokens: short tokens ignored', !commentOverlapsEvidence('Cat', [{ comment: 'Cat' }]));
+        for (const rows of [null, undefined, []]) check('evidence tokens: absent rows neutral ' + String(rows), commentOverlapsEvidence(candidate, rows));
+        const containers = ['detailedAssessment', 'growGoalBox', 'teacherAuditView'].map(id => document.getElementById(id));
+        const html = containers.map(el => el.innerHTML), state = JSON.stringify([latestAnalysisData, pendingPortfolioSync]);
+        try {
+            for (const [name, rows, comment, supported, expected] of [
+                ['unsupported', unrelated, candidate, false, 'Your grammar is mostly clear, and birds gather nearby.'],
+                ['literal', literal, candidate, true, candidate],
+                ['ordinary', unrelated, 'The birds gather nearby in this passage.', true, 'The birds gather nearby in this passage.']
+            ]) {
+                const parsed = parseDetailedAssessment('**2. Grammar:** 8/10\n- Teacher Comment: ' + comment + '\n- What I Noticed:\n  - Area: ' + rows[0].area + '\n    Comment: ' + rows[0].comment + '\n- Growth Tip: Reread each sentence and check the verb tense.', 'Birds gather nearby.');
+                const item = parsed.categories.Grammar, before = JSON.stringify(item), detailed = { categories: { Grammar: item } };
+                const feedback = buildStudentFeedbackForCategory('Grammar', item);
+                check('evidence tokens: parsed rows retained ' + name, equal(item.noticeRows, rows) && equal(feedback.noticeRows, rows));
+                check('evidence tokens: validator ' + name, isValidTeacherComment(comment, 'Grammar', item, rows) === supported);
+                check('evidence tokens: shared builder ' + name, buildTeacherComment('Grammar', item, rows) === expected);
+                const source = supported ? 'AI teacher comment passed validation.' : 'Fallback evidence-based comment used because the AI teacher comment did not pass validation.';
+                check('evidence tokens: audit source ' + name, getAuditTeacherCommentSource('Grammar', item, rows) === source && feedback.audit.teacherCommentSource === source);
+                const validation = buildAuditValidationRows('Grammar', item, rows, comment, feedback.growthTip, feedback);
+                check('evidence tokens: original candidate audit ' + name, validation.find(row => row.label === 'Teacher Comment matches evidence rows').passed === supported);
+                renderDetailedAssessment(detailed); renderTeacherAuditView({ detailed });
+                const auditComment = [...containers[2].querySelectorAll('.teacher-audit-label')].find(el => el.textContent === 'Displayed Teacher Comment').nextElementSibling.textContent;
+                const observed = { feedback: feedback.teacherComment, student: containers[0].querySelector('.assessment-sub').textContent, audit: auditComment, source: feedback.audit.teacherCommentSource };
+                checks.push({ name: 'evidence tokens: native feedback and rendering ' + name, passed: observed.feedback === expected && observed.student === 'Teacher Comment: ' + expected && observed.audit === expected && containers[2].textContent.includes(source), observed });
+                check('evidence tokens: saved feedback ' + name, buildPortfolioDetailedFeedback({ detailed, categoryScores: { Grammar: 8 } }).categories.Grammar.teacherComment === expected);
+                check('evidence tokens: source score and rows unchanged ' + name, JSON.stringify(item) === before && item.score === 8);
+            }
+            check('evidence tokens: analysis and pending state unchanged', JSON.stringify([latestAnalysisData, pendingPortfolioSync]) === state);
+        } finally { containers.forEach((el, i) => { el.innerHTML = html[i]; }); }
+    }
+    checkTabs(); checkMerge(); checkScoresAndGrammar(); checkGuide(); checkVisibility(); checkWordCountMeter(); checkEvidenceTokens();
     return checks;
 }
 

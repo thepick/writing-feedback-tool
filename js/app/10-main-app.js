@@ -4145,7 +4145,7 @@ function getEvidenceTokens(rows) {
         var text = String((row.area || "") + " " + (row.comment || "")).toLowerCase();
         var words = text.match(/[a-z]{4,}/g) || [];
         for (var j = 0; j < words.length; j++) {
-            if (!stop[words[j]]) bag[words[j]] = true;
+            if (!Object.prototype.hasOwnProperty.call(stop, words[j])) bag[words[j]] = true;
         }
     }
     return bag;
@@ -4157,7 +4157,7 @@ function commentOverlapsEvidence(text, rows) {
     var value = String(text || "").toLowerCase();
     var words = value.match(/[a-z]{4,}/g) || [];
     for (var i = 0; i < words.length; i++) {
-        if (bag[words[i]]) return true;
+        if (Object.prototype.hasOwnProperty.call(bag, words[i])) return true;
     }
     return false;
 }

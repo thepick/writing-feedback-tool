@@ -1,0 +1,139 @@
+{
+  "review": "bounded fallback relevance and native reproduction plan",
+  "lead_id": "review030-fallback-first-unusable-example",
+  "tracker_status": "candidate_needs_regression",
+  "source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "source_hashes": {
+    "js/app/10-main-app.js": {
+      "git_blob_raw_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a",
+      "normalized_lf_sha256": "4caee8020b90927432c81eb769a8a11f2580d3fbcd237deefd968cd53010404a"
+    },
+    "tests/notebook-guidance-repair.browser.cjs": {
+      "git_blob_raw_sha256": "e118756b4b61c4ef2b3d740cb398192f231cbfc24db3d09caa08c09358d96c03",
+      "normalized_lf_sha256": "e118756b4b61c4ef2b3d740cb398192f231cbfc24db3d09caa08c09358d96c03"
+    }
+  },
+  "scope_hashes": [
+    {
+      "function": "truncateNotebookGuideText",
+      "span": [
+        6200,
+        6206
+      ],
+      "sha256_normalized_lf": "a2f874a1f153d9cb43526fe4d7fe2b66c67bab9bf8d2a5a664bcb82fa54832ad"
+    },
+    {
+      "function": "makeNotebookGuideExample",
+      "span": [
+        6683,
+        6693
+      ],
+      "sha256_normalized_lf": "3542f49c080e5a00a4c7b3c2862b8f4ed63d46cfee0a02eac9a5e24da5a768c7"
+    },
+    {
+      "function": "buildFallbackExampleForPriority",
+      "span": [
+        6695,
+        6828
+      ],
+      "sha256_normalized_lf": "8d0ea7834f454f54f5fad61f2de08687ccf499ef809e7bbbfe1704a455ae27d1"
+    },
+    {
+      "function": "addNotebookGuideFallbackExample",
+      "span": [
+        6830,
+        6848
+      ],
+      "sha256_normalized_lf": "d36b96a279871c7558d12db6369b52c6308d7bd8a1ab19de385e5e553787df7a"
+    },
+    {
+      "function": "ensureNotebookGuide",
+      "span": [
+        7082,
+        7104
+      ],
+      "sha256_normalized_lf": "081d57bcf8e14f9a04b07fe7671626180e2ef41fd1726b0984e54232ab1e69c1"
+    }
+  ],
+  "tracker_sha256": "a146514c0a6dc74fc1b27e1d7735e84eb3fa1569ed69af4d7720a6c405dbf1e7",
+  "accepted_report_reference": "reviews/repair-030-feedback-shapes.json",
+  "decision": "Credible shipped feedback-quality lead; recommend one focused native reproduction before any fix. Not yet a confirmed bug.",
+  "source_supported": true,
+  "reproduced": false,
+  "user_exposure": {
+    "normal_path": "presentAnalysisResult8043-8048 calls ensureNotebookGuide. Fresh scorable data without a current cached guide uses priorities and model candidates at7082-7103; empty/rejected candidates invoke the fallback search through assembleNotebookGuideFromCandidates. No experimental feature flag is required. fillNotebookSummary renders the cached/generated guide to actual notebookPage2Content at7188; saved sessions lacking a current guide reconstruct through7110.",
+    "preconditions": "Scorable sample; Grammar is a required priority; no valid supplied Grammar candidate; first eligible source sentence is long enough to yield a null or non-source truncated factory result; a later safe eligible sentence exists. Existing current-version guides and intentionally non-scorable focus-only guides bypass this case.",
+    "impact": "The student can receive a focus list/quick checks with no concrete Grammar example even though a later exact-source example is available. This is missed useful guidance, not demonstrated lost writing or unsafe quotation."
+  },
+  "causal_chain": [
+    {
+      "anchor": "10-main-app.js:6552-6561,6725-6750",
+      "fact": "Grammar opener pass scans in source order and immediately returns makeNotebookGuideExample for its first corrected/mechanical opener, rather than checking whether that result is usable and continuing."
+    },
+    {
+      "anchor": "10-main-app.js:6683-6693,6200-6206",
+      "fact": "Factory truncates source quote to180 with an added ... and revision to220, then can return null if generic/concrete/text-connection checks fail."
+    },
+    {
+      "anchor": "10-main-app.js:6208-6224,6830-6847,6925-6944",
+      "fact": "Insertion retains exact normalized-source containment, including punctuation/case/word boundaries. Normalization does not remove ellipses. A newly added truncation ellipsis is not in ordinary source and is correctly rejected."
+    },
+    {
+      "anchor": "10-main-app.js:6884-6894,6958-6981",
+      "fact": "Required/general fallback retries the same category helper from the beginning, yielding the same first unusable candidate. It does not resume the sentence search, so the later valid source is not reached."
+    },
+    {
+      "anchor": "10-main-app.js:7030-7050,7082-7104,7188,8043-8048",
+      "fact": "The ordinary generator/renderer exposes the missing example as guide-no-examples text. No safety guard should be removed to make the first quote pass."
+    }
+  ],
+  "focused_native_plan": {
+    "suite": "tests/notebook-guidance-repair.browser.cjs",
+    "entry": "Extend runNotebookGuidanceCases near its existing missing-model fallback and sanitized DOM checks129-157, before final print fixture capture. Use full shipped native helpers; no factory/search/insertion mocks or source-extraction substitute.",
+    "fixture": {
+      "first_sentence": "Finally we carried the picnic basket along the winding path beside the river while our friends followed us through the quiet woods and past the old wooden bridge near the wide meadow where the bright flowers grew beside the tall trees.",
+      "first_sentence_chars": 235,
+      "later_sentence": "Next we ate lunch.",
+      "originalText": "Finally we carried the picnic basket along the winding path beside the river while our friends followed us through the quiet woods and past the old wooden bridge near the wide meadow where the bright flowers grew beside the tall trees. Next we ate lunch.",
+      "correctedStory": "Use exactly originalText for the minimum mechanical-opener case. The existing buildSimpleOpenerCommaModel is the intended safe comma model; do not fabricate unrelated corrections.",
+      "analysis_data": {
+        "categoryScores": {
+          "Grammar": 4
+        },
+        "detailed": {
+          "categories": {
+            "Grammar": {
+              "score": 4,
+              "growthTip": "Add commas after openers."
+            }
+          },
+          "notebookGuideCandidates": []
+        },
+        "sampleStatus": {
+          "status": "scorable"
+        },
+        "notebookGuide": null
+      },
+      "setup": "Assign correctedStory=originalText and a normal Narrative/Story genre if needed to make the test deterministic; use a fresh data object so the guide cache does not bypass generation."
+    },
+    "primary_regression": [
+      "Call real ensureNotebookGuide(data,originalText). Require a Grammar example whose originalQuote is exactly Next we ate lunch. and nextTimeExample is exactly Next, we ate lunch.; require isValidNotebookGuideExample and originalTextContainsNotebookQuote to be true. Capture the first factory result/null and whole resulting guide as evidence, rather than assuming which early validity gate rejects it.",
+      "Render real renderNotebookGuideHtml via setWftSanitizedInnerHtml into notebookPage2Content, as existing149-153 does. Require the exact later quote and revision in .guide-example DOM and no guide-no-examples placeholder for this one-priority fixture. Preserve safe escaping.",
+      "Run on immutable old source first and require this expected-contract assertion to fail for the missing later example, without native page/harness errors. A source review alone is not that reproduction."
+    ],
+    "only_needed_controls": [
+      "Later sentence alone must already produce the expected grounded comma example, proving the fixture contains a usable candidate.",
+      "Long first sentence alone must not gain a fabricated/truncated non-source example; retain exact containment and current size limits.",
+      "One short earlier run-on plus a later short eligible opener must still select the opener. Keep the global opener pass ahead of the run-on/generic pass; do not switch to one mixed per-sentence pass."
+    ],
+    "preserve_existing_tests": "Keep convention no-guessing/possessive/plural/capitalization39-74; exact quote and word-boundary checks54-73; paragraph/cut-break/truncation97-128; ordinary missing-model fallback135-139; native sanitized DOM and final failed-case/assertion/report/print checks149-157,253-280. Retain current expected final print fixture rather than leaving the new transient guide in it.",
+    "scope_limit": "One concrete failing fixture with three small controls; no broad category/boundary matrix or whole algorithm rewrite."
+  },
+  "possible_minimum_fix_only_after_reproduction": "Within the existing ordered Grammar search passes, accept a factory result only when it is valid and its resulting quote passes the existing original-source containment check; otherwise continue looking within that same pass. Checking only result truthiness is insufficient when truncation produced a non-source quote. Preserve corrected/mechanical preference, global opener-before-run-on ordering and the Organization long-source/Flow no-mechanical-fallback policies. Do not loosen insertion validation or invent a shorter quoted span in this repair.",
+  "limits": [
+    "No app/test/browser/helper execution. Only text reads, hashes and fixture character count were evaluated; this report does not claim an observed failing guide or passing fix.",
+    "Immutable6542 source is the review basis; unrelated current059 meter guard excluded. No source/tracker/Git/index edits or agents.",
+    "A valid model Grammar candidate or a current cached guide can avoid this fallback; impact is conditional and limited to missing useful guidance.",
+    "The supplied long sentence is a proposed native fixture, not a proven runtime reproduction. Source evidence supports why the bounded test is worth running."
+  ]
+}

@@ -1,6 +1,6 @@
 # RepoWise findings tracker
 
-Updated 2026-10-16T09:23:26.574863+07:00.
+Updated 2026-10-16T09:27:29.377415+07:00.
 
 Source: c0724763bc46926c4dab8f555fbbdb4e7616c6c3. Coordinator: 01a13f6f-740b-7b60-8863-d6ca9c58baf0.
 
@@ -18,7 +18,7 @@ One source editor and two parallel read-only reviewers. Test and commit each fix
 
 **Current focus:** Reproduce and fix user-facing bugs. The maintenance queue is optional; scanner counts below are not bug counts.
 
-Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 5. Test-oracle leads: 4.
+Confirmed unresolved bugs: 0. Application leads awaiting reproduction: 4. Test-oracle leads: 4.
 
 
 Statuses: {"candidate_needs_regression": 17, "confirmed_repair_candidate": 102, "needs_revalidation": 126, "reviewed_no_change": 728, "unreviewed": 25}.
@@ -27,7 +27,7 @@ All tracked rows, including findings absent on the latest scan: {"candidate_need
 
 Findings confirmed cleared: 30. Reviewed no-change outcomes retain their individual rationale; they do not mean scanner clearance.
 
-Behavior repairs with regression evidence: 10.
+Behavior repairs with regression evidence: 11.
 
 Supporting refactoring plans: 120; grouped refactoring opportunities: 34.
 
@@ -104,6 +104,7 @@ These plans and opportunities can overlap findings; their counts are not added a
 - repair-058: Review remaining media, portfolio and recovery harnesses - read_only_review_complete.
 - repair-001: Verify security signals - reviewed_complete.
 - repair-059: Keep the target-off status when writing matches a disabled target - reviewed_focused_verified_awaiting_full_gate_publication.
+- repair-060: Require literal own evidence tokens in teacher feedback - coordinator_reviewed_focused_verified_awaiting_independent_review_full_gate.
 
 ## Additional source leads
 
@@ -127,7 +128,7 @@ These are review leads, separate from scanner observations. They require their o
 - review044-async-portfolio-stale-owner: renderStudentPortfolio in js/app/00-storage-sync-patches.js — reviewed_no_change. With the optional async path enabled, the completion for captured student A puts A data in _asyncStudentData then recursively renders using the current selector value. If the selector changed to B while A was loading, B can label/action A sessions; a late rejection can also overwrite the current view. There is no selector/generation check before either write. The flag is false by default, so this lead concerns the opt-in path; source supported and not reproduced.
 - 047-L1: checkRedirectRecovery in tests/auth-integrity.browser.cjs — candidate_needs_regression. For full/retry/drive-backed,297 checks exactly one intercepted navigation and298 skips the rest of the state oracle. The production redirect guard relies on full recoverability of pending work before leaving the tab. Current assertions do not directly prove those allowed cases stored the draft and complete/recoverable pending content.
 - 047-L2: assertRetainedPendingMedia (called by assertPendingMediaScenario) in tests/media-ownership.browser.cjs — candidate_needs_regression. pending-clear invokes clearPendingPortfolioSync before releasing the old upload. The retained-work oracle explicitly skips pending existence at255 for this case but does not require null; it also never checks storedPending. Restoring old pending in memory/storage while keeping portfolio empty and synced false is not rejected by this scenario oracle.
-- 049-L1: getEvidenceTokens / commentOverlapsEvidence in js/app/10-main-app.js — candidate_needs_regression. The evidence bag and stop-word set are ordinary objects. commentOverlapsEvidence uses bag[word] without an own-key check, so constructor is truthy through Object.prototype even when no evidence row contains it. The stop-word lookup also suppresses an actual constructor token through inheritance. This can mark an unsupported teacher comment as evidence-supported; no runtime reproduction was performed.
+- 049-L1: getEvidenceTokens / commentOverlapsEvidence in js/app/10-main-app.js — fixed_focused_awaiting_publication. The evidence bag and stop-word set are ordinary objects. commentOverlapsEvidence uses bag[word] without an own-key check, so constructor is truthy through Object.prototype even when no evidence row contains it. The stop-word lookup also suppresses an actual constructor token through inheritance. This can mark an unsupported teacher comment as evidence-supported; no runtime reproduction was performed.
 - 049-L2: renderCorrected in js/app/10-main-app.js — reviewed_no_change. For unmarked corrected text with a detected title, buildStoryHtmlWithTitle separates the title into its own span. The later replacement searches for the escaped complete plain title+body string, which is no longer contiguous in storyHtml. The rendered title/body can therefore be returned without the previously built corrected-highlight spans. parseStep1 often supplies already-marked text, so affected production reachability needs confirmation. Existing parity includes a title input but compares the same renderer on both sides; the explicit DOM highlight oracle is untitled.
 - 049-L3: getAuditRawRows in js/app/10-main-app.js — reviewed_no_change. Numeric rows call isFinite(Number(value)) before formatting. null, empty string and whitespace coerce to0, unlike addAuditRawRow which deliberately omits null/undefined/empty values. Missing errorDensity, Flow average/varietyScore or Ideas multiplier supplied as null can therefore become a displayed measured zero in the teacher audit. Whether current producers emit each form was not established.
 - review050-disabled-target-status-badge: updateMeter wrapper in js/app/10-main-app.js — fixed_focused_awaiting_publication. getTargetWordCountValue retains a positive configured target even when its checkbox is off. The wrapper first chooses Target off, but the unconditional words===target override at8606 then assigns On target. updateStatusBar publishes that badge to visible #statusBarStatus. Thus an off target with exactly the stored word count appears able to display an enabled-target success message. Original updateMeter returns early for target-off, so its own meter text does not prevent the wrapper override. Source supported only; no application run here.

@@ -1,0 +1,52 @@
+{
+  "lead_id": "review032-overlapping-image-preparation",
+  "inspected_source_commit": "6542e9bc9d9baeed568a8a6e85e4b3318e529b3e",
+  "source_pins_git_blobs": {
+    "js/app/10-main-app.js": "e42674822ddd14795db4ff2d033a2c7213ef351f",
+    "js/app/00-storage-sync-patches.js": "0507b0746b6996208be49b5fd6e90a0a4299ddd0",
+    "index.html": "a32e5d12804bf140be5653c0c753d89b068fb267",
+    "tests/image-preparation.browser.cjs": "7e62f19bb6a4f915899e8da608b8918c9088adc9",
+    "tests/analysis-identity.browser.cjs": "b6e618a320c06b5250a92371a77448a5aeeb18be"
+  },
+  "source_scope": "Application and both tests inspected through immutable Git6542 only. Read-only current main diff confirms only unrelated059 badge guard at8606; current test bytes were not assumed.",
+  "disposition": "Credible normal-user race causing a selected same-owner addition to disappear without retry feedback; deterministic native reproduction required before calling it confirmed.",
+  "proposed_status": "candidate_needs_regression",
+  "source_supported": true,
+  "reproduced": false,
+  "normal_user_reachability": {
+    "path": "Take Photo opens cameraInput; Upload Image opens imageUploadInput. Separate async change handlers call handleSelectedImages and clear the input only after its promise returns. DOM event handlers do not serialize these promises. The main drop handler also enters the same acquisition function.",
+    "availability": "Shipped buttons/file inputs have no disabled attribute. updateOcrControls disables extraction based on analysis/images but only relabels camera/upload buttons. No preparation busy flag or entry guard was found in these paths. The Preparing image status is informational, not a busy/retry rejection.",
+    "timing": "The real optimizer awaits FileReader/data URL and native image decode. A second valid selection can arrive during that interval, particularly for slower/larger batches. No simultaneous native picker windows are required: the first picker has already returned while its asynchronous preparation remains pending.",
+    "bound": "Source establishes availability and the race mechanism, not its frequency on a particular camera/device. One multi-file selection is processed within one call and is a different, sequential case. No saved-portfolio deletion or corruption is alleged."
+  },
+  "mechanism_and_contract": "Both acquisitions can snapshot identical owner, writing, queue, primary image and reassessment source at3295. The first completed batch appends at3313 and updates the actual queue/preview/status. The second sees unequal serialized context because getSessionImagePayloads includes queue contents/order/bytes and returns at3312 before append or retry feedback. With unchanged owner/text/source, one otherwise valid selection is lost depending on completion order. Comments at2920-2921 and Add Another Photo/Add More Images labels support retaining successive page additions; they do not establish a required ordering policy for concurrent batches. Existing stale-context rejection is an intentional safety boundary and must remain effective.",
+  "anchors_at_inspected_commit": [
+    "index.html:3423-3426 ordinary camera/upload controls and file inputs",
+    "js/app/10-main-app.js:2910-2938 control availability/relabeling",
+    "js/app/10-main-app.js:3258-3280 real async optimizer",
+    "js/app/10-main-app.js:3283-3330 context, batch preparation, append and silent stale returns",
+    "js/app/10-main-app.js:3602-3618 drop entrypoint",
+    "js/app/10-main-app.js:8432-8452 native picker/change handlers",
+    "js/app/00-storage-sync-patches.js:6569-6583 queue payload contents",
+    "js/app/00-storage-sync-patches.js:8116-8131 full writing-context equality"
+  ],
+  "existing_tests": {
+    "image_preparation": "Real File/canvas/decode/pixel coverage at17-70, public acquisition awaited sequentially at46/65. It does not overlap additions. Its invalid-image assertion calls optimizeImageForOcr directly, so it is not itself proof of atomic failure of a multi-file handleSelectedImages batch.",
+    "analysis_identity": "66-77 holds one stubbed optimizer, switches Alice to Bob and protects Bob's queue/writing;226-230 independently asserts Bob name/count/text and retained pending result. Keep this safety case unchanged. It does not establish same-owner concurrent acceptance or real optimizer pixels."
+  },
+  "smallest_deterministic_native_plan": [
+    "Extend the existing image-preparation native suite when authorized. Make two distinguishable valid canvas Files A/B using its real fixture/decoder helpers, plus a pre-existing real image Q. Set one consistent Alice selection, writing and same-owner reassessment source; retain pending bytes. Wrap optimizeImageForOcr only to await the original optimizer and then hold its actual result behind per-file deferred completion gates. Never return fabricated URLs or stub context equality/append/preview.",
+    "Start A through cameraInput change and B through imageUploadInput change while A is held, using real FileLists/DOM change handlers. Observe the buttons/inputs are still available, both original optimizer calls actually finish to held results, and owner/text/source/Q remain unchanged. A thin delegating observer of handleSelectedImages promises may record actual handler settlement; it must invoke the original function and preserve failures. Use bounded readiness promises, not timing sleeps.",
+    "Run fresh cases for release A then B and B then A; wait for each real append/handler settlement. Record exact queue identities/names/bytes, previews, primary state, pending bytes, OCR status and errors. Under today's enabled-two-selection policy, assert both selected files survive with Q exactly once. Baseline source predicts Q+A only in the first order and Q+B only in the reverse, with the other valid handler settling silently. Do not assert an unsupported selection-versus-completion ordering contract merely to create an extra failure.",
+    "Retain the existing analysis-identity owner-change case and add small held-real-optimizer controls for same-owner writing change and same-owner reassessment-source change. Release the old result only after installing the new writing/source/queue; it must not append or overwrite the newer state/pending result. Also retain a sequential A-then-B positive control and one real [valid,broken] acquisition batch proving no partial append to Q on optimization failure and a visible error. Restore wrappers in finally; keep original pixel/resize/SVG assertions and errors[] unchanged."
+  ],
+  "repair_policy_boundary": {
+    "not_selected_by_this_review": "A clearly enforced single-flight/busy policy or safe serialization can both address the problem. Do not weaken isCurrentWritingContext or compare only owner while allowing old results into edited text, replaced/cropped/reordered queues or another reassessment source.",
+    "if_busy_is_chosen": "Give the second user action a specific observable contract: unavailable controls while pending, plus guarded drop/direct entry with clear retry feedback and no second preparation. After A finishes or fails, controls recover and a fresh B retry succeeds. The after-test should assert that concrete policy; do not allow either arbitrary missing files or a success-looking status as acceptable outcomes. Baseline both-release-order cases still establish the original defect.",
+    "if_serialization_is_chosen": "Assert both accepted additions finish exactly once in the chosen documented order in both timing cases, retain their initiating owner/text/source safety, and release the queue after failure. Do not recapture a different owner merely when delayed work starts. No generic job framework or scoring change is needed."
+  },
+  "limits": [
+    "Read-only relevance and reproduction plan only: no app/test/browser execution, source/test/config/Git/index/tracker/chat changes or agents. Only this output written.",
+    "No camera hardware/picker timing, actual file loss or repaired behavior was reproduced. Controlled completion gates make a later native regression deterministic while preserving real image optimization; they do not measure live-device frequency."
+  ]
+}
