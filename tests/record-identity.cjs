@@ -108,7 +108,7 @@ for (const file of ['js/app/00-storage-sync-patches.js']) {
 }
 check('shipped-schema-normalization-own-student-key', () => {
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: false });
-    load(c, patch, ['isWftPortfolioStudentKey', 'normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'ensureStudentIdIfMappingEnabled', 'normalizeWftPortfolioForSchemaV1']);
+    load(c, patch, ['isWftPortfolioStudentKey', 'normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'normalizeWftPortfolioForSchemaV1']);
     const data = JSON.parse('{"__proto__":{"sessions":[{"id":"constructor","createdAt":"2026-10-01"}]}}');
     assert.deepEqual(plain(c.normalizeWftPortfolioForSchemaV1(data)), data);
 });
