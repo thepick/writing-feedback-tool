@@ -28,7 +28,9 @@ function summarizeOpenRouterFailure(status, rawText) {
     var text = String(rawText || "");
     if (status === 401) return "Authentication failed. The API key may be invalid, expired, revoked, or rejected by the selected provider.";
     if (status === 402) return "The account or API key may not have enough credits.";
-    if (status === 502 || status === 503 || status === 504 || /Upstream Response Error|Provider returned error|Decode transfer failed|KVTransferError/i.test(text)) {
+    var upstreamStatus = status === 502 || status === 503 || status === 504;
+    var upstreamText = /Upstream Response Error|Provider returned error|Decode transfer failed|KVTransferError/i.test(text);
+    if (upstreamStatus || upstreamText) {
         return "The model provider had a temporary upstream failure.";
     }
     if (status === 429) return "The request was rate-limited by the provider.";
