@@ -24,6 +24,18 @@ function toOneSentence(input) {
     return s;
 }
 
+var TEACHERIZE_CATEGORY_NUDGES = Object.create(null);
+TEACHERIZE_CATEGORY_NUDGES["Flow"] = "Your writing reads smoothly; next, add 1-2 transition words to connect ideas.";
+TEACHERIZE_CATEGORY_NUDGES["Organization"] = "Your ideas stay in a clear order; next, add a transition word like First, Next, or Finally.";
+TEACHERIZE_CATEGORY_NUDGES["Word Choice"] = "Your word choices fit your topic; next, swap 2 simple words for more specific ones.";
+TEACHERIZE_CATEGORY_NUDGES["Grammar"] = "Your sentences are mostly clear; next, proofread for complete sentences and verb tense.";
+TEACHERIZE_CATEGORY_NUDGES["Ideas & Details"] = "Your main idea is clear; next, add 2-3 specific details to help the reader picture it.";
+TEACHERIZE_CATEGORY_NUDGES["Spelling & Punctuation"] = "Your writing is easy to read; next, proofread for capitals and end punctuation.";
+
+function isShortGenericOpening(s) {
+    return s.length < 28 || /^good\b/i.test(s) || /^nice\b/i.test(s);
+}
+
 function teacherizeWording(input, category, score) {
     var s = String(input || "").trim();
     if (!s) return s;
@@ -45,7 +57,7 @@ function teacherizeWording(input, category, score) {
     s = s.replace(/\b[Aa]re developing\b/g, "are getting stronger");
 
     // Remove extra filler.
-    s = s.replace(/\b(even\s+more|overall|in\s+general)\b/gi, function(m) { return m.toLowerCase() === 'overall' ? '' : ''; });
+    s = s.replace(/\b(even\s+more|overall|in\s+general)\b/gi, "");
     s = s.replace(/\s{2,}/g, " ").trim();
 
     // Category-specific nudges (keep it to one sentence for quick rubric).
@@ -59,13 +71,9 @@ function teacherizeWording(input, category, score) {
     }
 
     // If the sentence is very generic, gently make it more teacher-like.
-    if (getNumericAssessmentScore(score) != null && category && (s.length < 28 || /^good\b/i.test(s) || /^nice\b/i.test(s))) {
-        if (category === "Flow") s = "Your writing reads smoothly; next, add 1-2 transition words to connect ideas.";
-        else if (category === "Organization") s = "Your ideas stay in a clear order; next, add a transition word like First, Next, or Finally.";
-        else if (category === "Word Choice") s = "Your word choices fit your topic; next, swap 2 simple words for more specific ones.";
-        else if (category === "Grammar") s = "Your sentences are mostly clear; next, proofread for complete sentences and verb tense.";
-        else if (category === "Ideas & Details") s = "Your main idea is clear; next, add 2-3 specific details to help the reader picture it.";
-        else if (category === "Spelling & Punctuation") s = "Your writing is easy to read; next, proofread for capitals and end punctuation.";
+    if (getNumericAssessmentScore(score) != null && category && isShortGenericOpening(s)) {
+        var nudge = TEACHERIZE_CATEGORY_NUDGES[category];
+        if (nudge) s = nudge;
     }
 
     s = softenOverclaim(s, score);
