@@ -1696,6 +1696,14 @@ function isMobilePreviewLayout() {
     return typeof window !== "undefined" && window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
 }
 
+function isValidPreviewIndex(index) {
+    return !isNaN(index) && index >= 0 && index < selectedImages.length;
+}
+
+function isInvalidPreviewReorderIndex(fromIndex, toIndex) {
+    return !isValidPreviewIndex(fromIndex) || !isValidPreviewIndex(toIndex) || fromIndex === toIndex;
+}
+
 function bindPreviewReorderHandlers() {
     var list = document.getElementById("ocrPreviewList");
     if (!list) return;
@@ -1818,9 +1826,7 @@ function bindPreviewReorderHandlers() {
         if (isNaN(fromIndex) && previewDragIndex >= 0) {
             fromIndex = previewDragIndex;
         }
-        if (isNaN(fromIndex) || isNaN(toIndex) || fromIndex === toIndex
-                || fromIndex < 0 || fromIndex >= selectedImages.length
-                || toIndex < 0 || toIndex >= selectedImages.length) {
+        if (isInvalidPreviewReorderIndex(fromIndex, toIndex)) {
             clearPreviewDragClasses();
             list.classList.remove("is-dragging");
             previewDragIndex = -1;
