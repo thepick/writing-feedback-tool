@@ -157,25 +157,52 @@ Note: these call nothing at init time; they are only invoked by `analyzeWriting`
 
 ---
 
-## Phase 3 — High-coupling clusters (the churn center; do last, one PR each, largest risk)
+## Phase 3 — Two sub-phases, sequenced by risk (revised after audit)
 
-These are entangled with the sync engine, auth, and portfolio persistence — the very code taking ~100 commits/month. Schedule them only after Phases 1-2 are landed and the file sizes have measurably dropped. Each is its own PR and its own full-suite gate.
+The original Task 6-9 list assumed Drive plumbing was one contiguous cut; it is not. The sync region is five contiguous blocks, and the notebook work is feature-scoped (lower risk) while the sync/Drive work is the churn center (high blast radius). Sequence them separately.
 
-### Task 6: Extract Drive file plumbing from `00-storage-sync-patches.js`
+### Gating rules (run before every cut)
 
-**Create:** `js/app/11-drive-client.js` — `wftDriveFetch`, `getCachedWftDriveFolderId`, `setCachedWftDriveFolderId`, `getWftDriveFileCacheKey`, `getCachedWftDriveFileId`, `setCachedWftDriveFileId`, `clearCachedWftDriveFileId`, `validateCachedDriveFolderPromise`, `validateCachedDriveFilePromise`, `ensureDriveFolder`, `ensureDriveFolderPromise`, `saveFileToDrive`, `saveFileToDriveOncePromise`, `isTransientWftDriveError`, `saveFileToDrivePromise`, `stableStringify`, `getWftHash`, `cloneWftJson`, `findWftFilesByNamePromise`, `downloadWftJsonFilePromise`, `uploadWftJsonFilePromise` (lines ~3846-4368 and ~4941-5122). Load before `00-storage-sync-patches.js`.
+- **Churn gate:** `git log --since="30 days" --oneline -- <file> | wc -l`. If >= ~40 commits/30 days, skip the file — you are cutting a moving target. This rule forced the original deferral and stays in force.
+- **Blast-radius scan:** `grep -rln <each moved fn> tests/*.cjs | grep -v '\.browser'`. Distinct non-browser suites referencing the cluster's functions = rewiring cost. If > 2, do it as its own dedicated PR, never stacked.
+- **Pure-relocation check** (`git diff --numstat` = `0 N`) and **full 77/77 gate** after every cut — unchanged from Phases 1-2.
 
-### Task 7: Extract portfolio rendering from `00-storage-sync-patches.js`
+### Corrected cluster map (`00-storage-sync-patches.js`)
 
-**Create:** `js/app/12-portfolio-render.js` — `scoreBadgeColor`, `getRubricScoreColorClass`, `getSessionImagePayloads`, `reflowCorrectedWritingText`, `isWftSafeInlineStyle`, `sanitizeWftHtmlFragment`, `setWftSanitizedInnerHtml`, `textToWftHtml`, `stripInlineTextColorStyles`, `reflowCorrectedHtmlForDisplay`, `getPortfolioCorrectedHtml`, `buildSessionFeedbackSummary`, `buildPortfolioDetailedFeedback`, `retainWftStudentSessions`, `saveStudentSession`, `removeStudentSession`, `deletePortfolioSession`, `toggleRosterVisibility`, `renderStudentPortfolio` and the feedback-modal + chart cluster (lines ~6534-7677). Load before `00-storage-sync-patches.js`.
+| cluster | lines | functions | blast radius |
+|---|---|---|---|
+| Drive JSON I/O | 4626-4847 | 9 (download/upload/merge/duplicate) | low (to confirm) |
+| Drive transport | 3520-4053 | 19 (fetch/cache/folder/save) | medium |
+| Fingerprint/snapshot | 4054-4178 | 12 (hash/clone/snapshot) | high — 9 suites |
+| Deletions/tombstones | 4179-4570 | 14 | high |
+| Sync orchestration | 4581+ | mark*/schedule/flush/sync*IfNeeded | highest — do NOT extract |
 
-### Task 8: Extract the notebook guide from `10-main-app.js`
+Line numbers are from the post-Phase-2 tree and drift as churn continues; re-derive them with the function inventory before every cut.
 
-**Create:** `js/app/24-notebook-guide.js` — the title/genre-detection and notebook-guide cluster (lines ~5028-7136), ending at `getNotebookGuideFromPortfolioSession`.
+### Phase 3a — Notebook (do first, lowest risk, from `10-main-app.js`)
 
-### Task 9: Extract notebook printing from `10-main-app.js`
+Split the ~2,100-line notebook feature into 2-3 coherent cuts (title/genre detection → guide building → guide rendering/printing), each its own PR. `record-identity.cjs` pulls `titleCaseGeneratedWritingTitle`, so expect one harness update.
 
-**Create:** `js/app/25-notebook-print.js` — `getNotebookPrintCss`, `getNotebookPrintFitScript`, `writeWftPrintWindow`, `scheduleWftPrintWindow`, `buildNotebookPrintDocument`, `printNotebookSummary`, `captureNotebookPrintSnapshotForCurrentAnalysis`, `renderNotebookDetailedAssessmentFromSavedSession`, `buildNotebookPrintHtmlFromPortfolioSession`, `printPortfolioNotebookSummary` (lines ~7215-7529).
+### Phase 3b — Sync/Drive/portfolio (gated, from `00-storage-sync-patches.js`)
+
+In risk order, only after the churn gate passes:
+
+1. Drive JSON I/O.
+2. Drive transport.
+3. Fingerprint/snapshot — one dedicated PR, all 9 harness updates together.
+4. Deletions/tombstones — only if churn has genuinely settled.
+5. Portfolio render (UI-focused, last).
+
+**Never extract** the sync orchestration core (`mergeWft*`, `syncWft*IfNeeded`, `flushWftCloudSyncNow`, `scheduleWftCloudSync`).
+
+### Per-step procedure (unchanged)
+
+audit boundary + top-level vars → byte-exact cut (`extract_range.py`) → `numstat 0 N` → update any VM harness by name/range → full suite → squash-merge. One PR per cluster, `codex/<topic>-<date>` branch.
+
+### Stop conditions
+
+- Churn gate fails → stop the whole phase, not just the cluster.
+- Any cut needs > 2 harness rewires → halt and reconsider whether the navigability gain is worth it.
 
 ---
 
