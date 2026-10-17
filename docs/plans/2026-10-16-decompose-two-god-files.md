@@ -1,8 +1,8 @@
 # Decompose the two god files (10-main-app.js + 00-storage-sync-patches.js)
 
-> **For agentic workers:** execute task-by-task with `superpowers:subagent-driven-development` or `executing-plans`. Checkboxes (`- [ ]`) track progress.
+> **Status, 17 October 2026 (Asia/Bangkok):** Phases 1-2 are complete. Their original procedures below are historical; do not rerun them. Phase 3 and the constraints/acceptance criteria are revised after the independent audit. Michael requested this documentation update only; implementation has not been authorized in this chat.
 
-**Goal:** Split `js/app/10-main-app.js` (~8,450 lines, 382 functions) and `js/app/00-storage-sync-patches.js` (~8,365 lines, 339 functions) into focused classic scripts by continuing the pattern this repo already uses (dialogs.js, storage-recovery.js, portfolio-export.js, photo-crop.js, 99-lightbox.js are each "one source file"), with zero behavior change.
+**Goal:** Improve navigation and ownership through a small number of coherent classic scripts, with zero behavior change. Phases 1-2 relocated 85 functions into six scripts. The remaining Phase 3 proposal is one bounded title-handling extraction from `js/app/10-main-app.js`, followed by reassessment. Further sync/Drive decomposition and file-length targets are outside its scope.
 
 **Architecture:** Mechanical extraction, not a rewrite. Each new file is a classic browser script of global `function` declarations loaded via an extra `<script>` tag in `index.html`, in an order that keeps every function defined before its first call. No ES modules, no bundler, no new runtime dependency, no rename, no edit to function bodies.
 
@@ -13,12 +13,12 @@
 - **No behavior change.** Function bodies move verbatim; only their file and load position change. `git diff` on each moved function must be pure relocation (identical source lines, different location).
 - **No renames.** Global function/state names are referenced by `index.html` inline `onclick` handlers and by the 77 test suites. Names are part of the contract.
 - **No modules / no build step.** The app is a static site (GitHub Pages); `index.html` loads classic scripts. Do not introduce `type="module"`, imports, or a bundler.
-- **Load order is the only real risk.** Within a script, `function` declarations hoist; across scripts, a function called at load time must live in a script loaded *before* its call site. Known init-time callers live at the bottom of `10-main-app.js` (`updateAnalyzeBtnState()`, `updateSyncPortfolioButtonState()`, `updateMeter()`, `GRADE_PROFILES[n] = makeGradeProfile(...)`). Rule: **every extracted file is loaded before `10-main-app.js`.**
-- **Node VM suites extract functions by name from one file.** Non-browser `tests/*.cjs` suites `read('js/app/10-main-app.js')` and pull each function via `lastIndexOf('function ' + name + '(')` — they bypass `index.html`, so a moved function breaks them even when the browser suites stay green. Every extraction must update any `tests/*.cjs` that reads the file a function moved out of: add `read('<new-file>')` and a `load(ctx, <new-source>, [...])` for the moved names (see `record-identity.cjs` as the reference example).
-- **Every step is gated by the full suite.** `node scripts/run-tests.cjs --out ./test-results` must exit 0 with 77/77 suites passing, before and after every extraction. A load-order or relocation mistake fails suites immediately (the browser harness asserts `pageerror` is empty).
+- **Preserve declaration availability and execution order.** Function declarations hoist within their own script, not across scripts. Load each extracted script before its earliest caller, ordinarily before its original owner; being before `10-main-app.js` alone is insufficient for a storage-file extraction. Separately inventory top-level declarations, assignments, wrappers and initialization-time calls. Keep state initialization at its original execution point unless a separately reviewed change proves parity. Browser tests help detect mistakes but cannot prove every path is covered.
+- **Measure actual source dependencies in test harnesses.** Some VM suites extract named functions, others slice ranges or evaluate a whole file. Search references, then inspect loaders and slice delimiters across tests and scripts, including browser-labelled files. Count only harnesses whose source loading must change; a stub or runtime call is not a rewire. Update affected loaders without replacing real implementations with new stubs or weakening assertions. See `tests/record-identity.cjs` as a named-extraction example.
+- **Every extraction is gated by the full current suite.** `node scripts/run-tests.cjs --out ./test-results` must exit 0 before and after the move. Compare suite identities and required case reports against a baseline captured on the exact implementation base. The audit snapshot had 77 suites and 91 syntax inputs; extra scripts increase the syntax inventory, so require zero syntax failures rather than freezing its count. Preserve browser `pageerror` assertions.
 - **One PR per extraction**, squash merge, branch name `codex/<topic>-<date>` (matches the repo's own `GITHUB_UPDATE_GUIDE.md`).
 - **Update `docs/script-locations.md`** on every extraction — the repo treats it as the source of truth for script locations (per README).
-- **Version query string:** each new `<script src="...">` gets `?v=decompose-20261016`; bump the version tag of any file whose *contents* changed to force cache refresh.
+- **Version query string:** use a fresh extraction-specific `?v=` value for the new script and every changed existing script. The `decompose-20261016` values in the historical procedures record earlier work; do not reuse an existing value for newly changed contents.
 
 ---
 
@@ -157,69 +157,116 @@ Note: these call nothing at init time; they are only invoked by `analyzeWriting`
 
 ---
 
-## Phase 3 — Two sub-phases, sequenced by risk (revised after audit)
+## Phase 3 — One optional title-handling extraction, then reassess
 
-The original Task 6-9 list assumed Drive plumbing was one contiguous cut; it is not. The sync region is five contiguous blocks, and the notebook work is feature-scoped (lower risk) while the sync/Drive work is the churn center (high blast radius). Sequence them separately.
+### Audit basis and current status
 
-### Gating rules (run before every cut)
+Revised on 17 October 2026 (Asia/Bangkok) at Michael's request, following the independent audit in this Codex chat. Source and git history were checked at committed HEAD `3382b2e`; Repowise's stored analysis was at `53bb1fb`, with semantic search disabled. Repowise scores and relationship counts are historical evidence, not fresh verification of the working tree.
 
-- **Churn gate:** `git log --since="30 days" --oneline -- <file> | wc -l`. If >= ~40 commits/30 days, skip the file — you are cutting a moving target. This rule forced the original deferral and stays in force.
-- **Blast-radius scan:** `grep -rln <each moved fn> tests/*.cjs | grep -v '\.browser'`. Distinct non-browser suites referencing the cluster's functions = rewiring cost. If > 2, do it as its own dedicated PR, never stacked.
-- **Pure-relocation check** (`git diff --numstat` = `0 N`) and **full 77/77 gate** after every cut — unchanged from Phases 1-2.
+The checkout contained unrelated edits to `js/app/00-storage-sync-patches.js` and `tests/record-identity.cjs`. This plan update leaves them untouched. Before later implementation, establish an isolated working copy at the intended base and resolve overlap with their owner; do not reset or absorb another task's work.
 
-### Corrected cluster map (`00-storage-sync-patches.js`)
+The audit ran the main-app browser health suite (171 checks), browser neatness integration, and neatness parser/scoring tests successfully. It did not rerun the full 77-suite gate or exercise live Drive/OpenRouter services. These focused passes are not an implementation baseline for a future extraction.
 
-| cluster | lines | functions | blast radius |
+### Proposed scope
+
+One PR to move the title-handling block from `js/app/10-main-app.js` into a proposed `js/app/25-writing-titles.js`. At the audited HEAD it is approximately 171 physical lines, bounded by `normalizeSuggestedTitle` and the end of `getWritingTitle`, before `cleanNotebookSentence`.
+
+Move exactly these nine declarations, with byte-identical function source:
+
+- `normalizeSuggestedTitle`
+- `titleCaseGeneratedWritingTitle`
+- `looksLikeProseLine`
+- `isTitleCaseish`
+- `isLikelyStandaloneTitle`
+- `extractWritingTitleParts`
+- `getObviousWritingTitle`
+- `getPreferredWritingTitle`
+- `getWritingTitle`
+
+Leave `latestAnalysisData` and all other state initializers in their current execution positions. Load the new declaration-only classic script immediately before `10-main-app.js`, after verifying all callers. Preserve global names and signatures.
+
+Expected future file changes: the new script, `js/app/10-main-app.js`, `index.html`, `docs/script-locations.md`, and `tests/record-identity.cjs`. The one expected harness rewire is its extraction of `titleCaseGeneratedWritingTitle`; recheck the complete source-consumer inventory on the implementation base.
+
+After that PR is validated and reviewed, reassess whether navigation actually improved. Do not automatically proceed to genre handling, guide construction, printing, portfolio rendering, or another extraction. Completing this one cut, or deciding from its preflight that it is not worthwhile, closes this Phase 3 scope without a file-length target.
+
+### Unified preflight and stop rules
+
+- **Authorization:** this revision is documentation only. Do not execute any extraction until Michael requests implementation.
+- **Overlap:** pause this candidate if another task is changing its functions, callers, initialization dependencies, or required harness. Isolate the work; never discard unrelated edits.
+- **Churn:** measure the source file's last 30 days and compare recent weekly activity, then inspect history of the actual cluster. At audit time storage had 70 commits/30 days and main had 60. The former absolute threshold of about 40 would block both; it is removed. Mechanical campaign commits and unrelated file changes are not evidence that a particular cluster is unsafe. A falling trend is useful context, not proof of safety.
+- **Dependency cost:** search references, then inspect named extraction lists, range delimiters and whole-file evaluators. Do not equate stubs with rewires or exclude browser-labelled consumers blindly. The current proposal expects one rewire. If there are more than two actual harness rewires, pause and revise this candidate's cost/benefit before implementation; a dedicated PR alone is not an exception. Pausing one candidate does not create a whole-project stop.
+- **Boundary and state:** verify all nine functions remain a coherent declaration-only block. Pause if preserving behavior requires moving state initializers, changing bodies, introducing helpers, or widening the cut.
+- **Baseline:** a failing full-suite baseline blocks this extraction until its failure is understood. A regression after the move blocks publication; a passing suite does not replace exact-source and initialization review.
+
+### Future implementation procedure
+
+1. Record the exact base revision, clean isolated working-copy status, cluster inventory, callers and actual harness dependencies. Capture a full-suite baseline on that base.
+2. Move only the nine declarations; preserve their exact source bytes. Review top-level declaration/assignment order separately. Add the script tag and fresh cache-busters for both new and changed script contents.
+3. Update the affected VM loader and `docs/script-locations.md`. Retain existing assertions and use the shipped implementation rather than new stubs.
+4. Compare every moved function's source before and after, including its signature and body. Check for missing or duplicate declarations and unintended changes in the original file. Include new/untracked destination files in the review. `git diff --numstat` is a summary only: deletions in the old file do not prove an exact move.
+5. Run the full current suite and require exit 0, no failed required case reports, no lost baseline suites, and zero syntax failures. Inspect startup/browser errors and title behavior. Record results against the exact final diff.
+6. Review one PR using `codex/<topic>-<date>` naming. Do not bundle cleanup or begin another extraction. Publishing or merging follows the user's authorization and repository workflow; this document is not an instruction to do either now.
+
+### Storage/sync inventory — reference only, outside the proposed scope
+
+These ranges refer to committed `3382b2e`, not the dirty working tree. Names and source boundaries must be reverified if revisiting them.
+
+| Block | Committed lines | Actual membership | Audit disposition |
 |---|---|---|---|
-| Drive JSON I/O | 4626-4847 | 9 (download/upload/merge/duplicate) | low (to confirm) |
-| Drive transport | 3520-4053 | 19 (fetch/cache/folder/save) | medium |
-| Fingerprint/snapshot | 4054-4178 | 12 (hash/clone/snapshot) | high — 9 suites |
-| Deletions/tombstones | 4179-4570 | 14 | high |
-| Sync orchestration | 4581+ | mark*/schedule/flush/sync*IfNeeded | highest — do NOT extract |
+| Drive transport | 3520-4053 | 19 functions, `captureWftArchiveConnection` through `saveFileToDrivePromise` | Contiguous; outside scope. One direct source-extraction harness identified (`drive-folder-selection.cjs`), not every reference-bearing suite. |
+| Fingerprints/snapshots | 4054-4178 | 12 functions, `stableStringify` through `getLocalPortfolioSnapshot` | Drop from this phase: four actual VM harness rewires for a small block. |
+| Deletions/tombstones | 4179-4570 | 18 functions, `getEmptyDeletionsData` through `saveDeletionsLocalOnly` | Not a safe generic deletion cut: contains transaction/recovery coordination and a merge function. |
+| Deletion counts | 4571-4578 | `getWftDeletionCounts` | Immediately adjacent; including it makes 19 deletion-region functions, not 14. |
+| Dirty flags/queue | 4581-4625 | Five functions, `markWftSettingsDirty` through `flushWftCloudSyncNow` | Contiguous small seam; retain with sync because its navigation benefit is marginal. |
+| Drive JSON/duplicates | 4626-4847 | Nine functions, `escapeDriveQueryValue` through `downloadAndMergeDuplicateSettings` | Contiguous; outside scope. Three non-browser suites reference it, but only `portfolio-sync.cjs` extracts a moved implementation. |
 
-Line numbers are from the post-Phase-2 tree and drift as churn continues; re-derive them with the function inventory before every cut.
+The four fingerprint source consumers are `tests/deletion-merge.cjs`, `tests/portfolio-sync.cjs`, `tests/record-identity.cjs`, and `tests/settings-deletions-sync.cjs`. The former count of nine included five suites supplying stubs. These are audit-time counts, not substitutes for a new loader review.
 
-### Phase 3a — Notebook (do first, lowest risk, from `10-main-app.js`)
+There is no single contiguous "orchestration starts at 4581+" region: queue helpers, Drive JSON functions and later merge/sync logic are interleaved. The deletion block includes `saveWftStudentChange` (writes, rollback, recovery and postcommit publication) and `mergeWftDeletions`. A blanket deletion cut would move code the old retention rule said to keep.
 
-Split the ~2,100-line notebook feature into 2-3 coherent cuts (title/genre detection → guide building → guide rendering/printing), each its own PR. `record-identity.cjs` pulls `titleCaseGeneratedWritingTitle`, so expect one harness update.
+For this phase, retain `saveWftStudentChange`, `mergeWft*`, `syncWft*IfNeeded`, `syncWftNow`, `scheduleWftCloudSync`, and `flushWftCloudSyncNow`, along with their state initialization and wrappers. This is a scope decision, not a claim that no future seam can exist. The three `markWft*Dirty` functions could move mechanically, but about 18 lines do not justify an extra script now.
 
-### Phase 3b — Sync/Drive/portfolio (gated, from `00-storage-sync-patches.js`)
+### Other candidates — require separate planning, not automatic follow-on work
 
-In risk order, only after the churn gate passes:
+- **Teacher-audit display:** 14 functions, about 215 lines, `getAuditScoreBandLabel` through `renderTeacherAuditView`; no direct VM extraction rewires identified. A coherent alternative if navigation there becomes a real problem.
+- **Notebook guide rendering:** eight functions, `getNotebookGuideIntro` through `renderNotebookGuideHtml`; no direct VM extraction rewires identified. Keep fallback-builder/global dependencies explicit; a small file is not itself a benefit.
+- **Genre handling:** no direct VM extraction rewires identified, but shared with analysis, reassessment and OAuth draft restoration. Inventory `currentWritingGenreInfo` and `manualGenreOverrideValue`; do not label it notebook-only or move their initializers casually.
+- **Image compression:** three functions plus two configuration initializers form a small region, but it handles fallback/error paths and remains outside this phase.
+- **Small reuse cleanup:** emergency backup's six-key metadata exclusion duplicates `isWftPortfolioStudentKey`. Reusing the existing helper with its VM fixture updated is a separate behavior-preserving cleanup candidate, not part of a relocation PR.
 
-1. Drive JSON I/O.
-2. Drive transport.
-3. Fingerprint/snapshot — one dedicated PR, all 9 harness updates together.
-4. Deletions/tombstones — only if churn has genuinely settled.
-5. Portfolio render (UI-focused, last).
+Keep guide building, printing/reassessment orchestration, portfolio rendering, Drive transport/JSON, deletions and fingerprints outside the proposed extraction. Revisit only for a concrete maintenance need with a separately reviewed scope.
 
-**Never extract** the sync orchestration core (`mergeWft*`, `syncWft*IfNeeded`, `flushWftCloudSyncNow`, `scheduleWftCloudSync`).
+### Corrected remaining-repair record
 
-### Per-step procedure (unchanged)
+The handoff's repair list was stale relative to its own HEAD. Git history between Repowise's indexed `53bb1fb` and audited `3382b2e` contains:
 
-audit boundary + top-level vars → byte-exact cut (`extract_range.py`) → `numstat 0 N` → update any VM harness by name/range → full suite → squash-merge. One PR per cluster, `codex/<topic>-<date>` branch.
+| Handoff item | Verified state at audit |
+|---|---|
+| `teacherizeWording` | Changed in PR #201 (`516533e`); do not repeat the old recommendation. |
+| `buildWftEmergencyBackupObject` | Changed in PR #202 (`776646a`), introducing `parseWftBackupKey`. |
+| `summarizeOpenRouterFailure` | Changed in PR #203 (`19ed8ac`). |
+| Anonymous preview reorder condition | Changed in PR #204 (`7813ded`), introducing `isInvalidPreviewReorderIndex`. |
+| Claimed `normalizeWftPortfolioForSchemaV1` finding | Misidentified: Repowise's fifth stored item targets the anonymous image-compression callback inside `resizeImageDataUrlToBlob`, not normalization. |
 
-### Stop conditions
+The image callback includes real fallback and error handling; leave it unless a separate proposal makes those paths clearer without losing their behavior. Do not act on the normalization recommendation using this finding's identity. Existing normalization edits belong to other work and are not adjudicated or included by this plan.
 
-- Churn gate fails → stop the whole phase, not just the cluster.
-- Any cut needs > 2 harness rewires → halt and reconsider whether the navigability gain is worth it.
+Repowise's "71 changes" and "10 importers" describe the storage file, not that function. File-level coverage does not prove coverage of an individual change, and estimated health gains are not confirmed bugs or guaranteed improvements. These five entries are not an exhaustive backlog. Before comparing health after any future source change, refresh the index against the intended committed revision when no competing refresh is running, verify the analyzed revision, and match findings by function identity rather than disappearing paths.
+
+### Load-order result retained from the audit
+
+`index.html` correctly loads `10-neatness.js` before `00-storage-sync-patches.js`. The extracted neatness file contains declarations, and no missed initialization-time caller was found; its main entry runs during analysis. Preserve that order. Future script moves still require an explicit earliest-caller and state-initialization review.
 
 ---
 
-## Acceptance criteria (whole plan done)
+## Acceptance criteria (revised remaining scope)
 
-- [ ] Both files are each < ~3,000 lines, with no function remaining that belongs to an extracted cluster.
-- [ ] `node scripts/run-tests.cjs --out ./test-results` = 77/77 pass, exit 0, identical to the Phase-0 baseline pass set.
-- [ ] `index.html` loads every new file before `10-main-app.js`; `docs/script-locations.md` lists all of them.
-- [ ] `repowise update` shows the two files' `at_risk` band has shifted toward the tail — per-file health up, no new open findings from the moves (findings must not increase on a pure relocation).
-- [ ] No new runtime dependency; `package.json` unchanged.
-
-## Self-review
-
-- **Spec coverage:** every cluster in the two inventories is assigned a target file (Tasks 1-9). Load-order risk is covered by the Phase-0 rule + Task-1 Step-1 grep + the full-suite gate on every task.
-- **Placeholder scan:** no TBDs; every task names exact files, functions, and commands. Function boundaries within a cluster are intentionally resolved by the Step-1 caller grep (the suite is the backstop), not left vague.
-- **Type/name consistency:** moved names are copied verbatim from the inventories; no renames anywhere, so cross-task references cannot drift.
+- [ ] The title candidate's preflight records a concrete navigation benefit, exact base, callers, state constraints and actual harness cost; overlapping work is isolated. If preflight rejects the candidate, record the reason and close this phase without inventing a replacement extraction.
+- [ ] If implemented, exactly the nine listed title functions move once, with byte-identical function source, unchanged names/signatures and unchanged state-initialization order. No cleanup or behavior change is bundled.
+- [ ] The full current test gate passes before and after implementation on the recorded revisions, with no missing baseline suites or failed required case reports, zero syntax failures, and retained browser error assertions.
+- [ ] `index.html` places the new script before its earliest caller; fresh cache-busters cover changed script contents; `docs/script-locations.md` and the affected harness match the final locations.
+- [ ] No runtime dependency, module system, build step or data-format change is introduced; dependency manifests remain unchanged.
+- [ ] The reviewed result documents the navigation benefit and then stops. Neither file length nor a higher Repowise score is a completion requirement. Source relocation does not resolve retained complexity findings by itself.
 
 ## Execution handoff
 
-Recommended: execute **Phase 1 only** first (2 low-risk extractions, ~4-6 hours total including suite runs), reassess against the churn rate, then continue. Do not batch Phases 2-3 until Phase 1 proves the mechanism and the file churn has settled — the sync/auth/portfolio cluster is the busiest code in the repo and is where a botched extraction would cost the most.
+This revision changes the plan only. Phases 1-2 remain complete; do not replay their historical commands. If Michael later requests implementation, begin with the title candidate's preflight and one bounded PR, then reassess. There is no queued Phase 3b sync campaign, automatic merge instruction, or requirement to shrink either owner file below 3,000 lines.
