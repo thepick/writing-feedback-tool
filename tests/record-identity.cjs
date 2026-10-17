@@ -18,12 +18,12 @@ function check(name, fn) {
     try { fn(); cases.push({ name, passed: true }); }
     catch (e) { cases.push({ name, passed: false, error: e.message }); }
 }
-const main = read('js/app/10-main-app.js'), textMetrics = read('js/app/20-text-metrics.js'), diffEngine = read('js/app/21-diff-engine.js'), feedbackWording = read('js/app/23-feedback-wording.js'), patch = read('js/app/00-storage-sync-patches.js');
+const writingTitles = read('js/app/25-writing-titles.js'), textMetrics = read('js/app/20-text-metrics.js'), diffEngine = read('js/app/21-diff-engine.js'), feedbackWording = read('js/app/23-feedback-wording.js'), patch = read('js/app/00-storage-sync-patches.js');
 const ctx = vm.createContext({});
 load(ctx, textMetrics, ['analyzeSentenceStarters', 'getShortSentenceRun', 'analyzeSentenceVariety', 'stripCorrectionMarkdown']);
 load(ctx, diffEngine, ['normalizeDiffToken', 'tokenizeForDiff', 'buildLcsMatrix']);
 load(ctx, feedbackWording, ['getDiffOperations', 'analyzeGrammarChanges']);
-load(ctx, main, ['titleCaseGeneratedWritingTitle']);
+load(ctx, writingTitles, ['titleCaseGeneratedWritingTitle']);
 for (const word of ['constructor', '__proto__', 'toString', 'hasOwnProperty', 'ordinary']) {
     check('starter-count-' + word, () => assert.deepEqual(plain(ctx.analyzeSentenceStarters([word + ' arrives.', word + ' leaves.'])), { mostCommonStarter: word.toLowerCase(), count: 2, ratio: 1 }));
 }
@@ -108,7 +108,7 @@ for (const file of ['js/app/00-storage-sync-patches.js']) {
 }
 check('shipped-schema-normalization-own-student-key', () => {
     const c = vm.createContext({ WFT_STUDENT_ID_MAP_V1: false });
-    load(c, patch, ['isWftPortfolioStudentKey', 'normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'normalizeWftPortfolioForSchemaV1']);
+    load(c, patch, ['isWftPortfolioStudentKey', 'normalizeWftSessionDate', 'normalizeWftSessionForStorage', 'normalizeWftStudentRecord', 'ensureStudentIdIfMappingEnabled', 'normalizeWftPortfolioForSchemaV1']);
     const data = JSON.parse('{"__proto__":{"sessions":[{"id":"constructor","createdAt":"2026-10-01"}]}}');
     assert.deepEqual(plain(c.normalizeWftPortfolioForSchemaV1(data)), data);
 });
