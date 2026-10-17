@@ -1020,6 +1020,11 @@ function isWftPortfolioStudentKey(name) {
     return name !== "_meta" && name !== "updatedAt" && name !== "__syncMeta" && name !== "syncMeta" && name !== "lastSyncedAt" && name !== "lastSyncStatus";
 }
 
+function ensureStudentIdIfMappingEnabled(name, skipStudentIds) {
+    if (!WFT_STUDENT_ID_MAP_V1 || skipStudentIds) return;
+    try { getOrCreateStudentId(name); } catch (e) {}
+}
+
 function normalizeWftPortfolioForSchemaV1(portfolio, skipStudentIds) {
     if (!portfolio) { return {}; }
     if (typeof isWftStorageSafeMode === "function" && isWftStorageSafeMode()) {
@@ -1042,9 +1047,7 @@ function normalizeWftPortfolioForSchemaV1(portfolio, skipStudentIds) {
             sessions: normalizeWftStudentRecord(name, sessions)
         };
 
-        if (WFT_STUDENT_ID_MAP_V1 && !skipStudentIds) {
-            try { getOrCreateStudentId(name); } catch (e) {}
-        }
+        ensureStudentIdIfMappingEnabled(name, skipStudentIds);
     }
 
     if (portfolio._meta) { normalized._meta = portfolio._meta; }
