@@ -279,7 +279,7 @@ function buildWftEmergencyBackupObject() {
     // Add student/session counts from portfolio
     try {
         var pf = getPortfolioData();
-        var names = Object.keys(pf).filter(function(k) { return k !== "_meta" && k !== "updatedAt" && k !== "__syncMeta" && k !== "syncMeta" && k !== "lastSyncedAt" && k !== "lastSyncStatus"; });
+        var names = Object.keys(pf).filter(isWftPortfolioStudentKey);
         backup.studentNames = names;
         backup.sessionCount = 0;
         for (var sn = 0; sn < names.length; sn++) {

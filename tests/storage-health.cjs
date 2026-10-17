@@ -56,8 +56,10 @@ function context(source, globals) {
         const source = section('js/app/storage-recovery.js', '// ── Emergency Backup ──', 'function downloadWftEmergencyBackup(');
         const flags = Object.fromEntries([...source.matchAll(/\b(WFT_[A-Z0-9_]+)\b/g)].map(match => [match[1], false]));
         const values = { wft_settings: '{"unknown":{"keep":true}}', wft_students: 'null', wft_portfolio: '{invalid', wft_selectedStudent: 'Alice', wft_google_user: '' };
+        const isWftPortfolioStudentKey = context(section(production, 'function isWftPortfolioStudentKey(', 'function ensureStudentIdIfMappingEnabled(')).isWftPortfolioStudentKey;
         const app = context(source, {
             ...flags, WFT_STORAGE_SCHEMA_VERSION: 2,
+            isWftPortfolioStudentKey,
             localStorage: { getItem(key) { if (key === 'wft_deletions') throw new Error('unavailable'); return Object.hasOwn(values, key) ? values[key] : null; } },
             getPortfolioData: () => ({ Alice: { sessions: [{}, {}] }, Bob: {}, _meta: {}, updatedAt: 'date', __syncMeta: {}, syncMeta: {}, lastSyncedAt: 'date', lastSyncStatus: 'ok' })
         });
