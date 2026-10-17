@@ -211,6 +211,15 @@ function parseWftBackupValue(raw) {
     catch (e) { return raw; }
 }
 
+function parseWftBackupKey(bk, raw) {
+    if (bk !== 'wft_settings') return parseWftBackupValue(raw);
+    var value = JSON.parse(raw);
+    // Raw or invalid settings cannot be safely exported with credentials removed.
+    validateWftRequiredStorage(bk, value);
+    delete value.apiKey;
+    return value;
+}
+
 function buildWftEmergencyBackupObject() {
     var backup = {
         timestamp: new Date().toISOString(),
@@ -248,13 +257,7 @@ function buildWftEmergencyBackupObject() {
         try {
             var raw = readWftStudentChangeStorage(bk);
             if (raw === null) continue;
-            var value = bk === 'wft_settings' ? JSON.parse(raw) : parseWftBackupValue(raw);
-            if (bk === 'wft_settings') {
-                // Raw or invalid settings cannot be safely exported with credentials removed.
-                validateWftRequiredStorage(bk, value);
-                delete value.apiKey;
-            }
-            backup.contents[bk] = value;
+            backup.contents[bk] = parseWftBackupKey(bk, raw);
         } catch (e) {
             backup.contents[bk] = null;
             backup.readErrors = backup.readErrors || [];
