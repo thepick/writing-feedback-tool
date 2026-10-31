@@ -143,20 +143,20 @@ function assertRenamedData(spec, observed) {
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     try {
-        const context = await browser.newContext();
-        await context.route('**/*', route => {
+        const specs = buildRenameSpecs();
+        for (const spec of specs) {
+            const context = await browser.newContext();
+            await context.route('**/*', route => {
             const url = new URL(route.request().url());
             if (url.origin !== 'http://127.0.0.1:8765') return route.abort();
             const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
             return fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
         });
-        const specs = buildRenameSpecs();
-        for (const spec of specs) {
             const page = await context.newPage();
             const errors = []; page.on('pageerror', error => errors.push(error.message));
             let observed;
             try {
-                await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+                await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
                 await page.evaluate(setupRenameFixture, spec);
                 await exerciseRenameDialogs(page, spec);
                 observed = JSON.parse(await page.evaluate(captureRenameResult));
@@ -179,7 +179,7 @@ function assertRenamedData(spec, observed) {
                 }
                 cases.push({ ...spec, passed: true, observed });
             } catch (e) { cases.push({ ...spec, passed: false, error: e.message, observed }); }
-            finally { await page.close(); }
+            finally { await context.close(); }
         }
     } finally { await browser.close(); }
     if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify({ root, fixture: 'Full app, native Edge dialogs, real saveStudentSession/storage/ID/deletion/UI helpers; external requests blocked; synthetic records only.', passed: cases.filter(c => c.passed).length, failed: cases.filter(c => !c.passed).length, cases }, null, 2));

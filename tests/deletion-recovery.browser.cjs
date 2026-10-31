@@ -24,6 +24,11 @@ const prepareRecoveryScenario = scenario => {
                 };
                 Object.entries(recoveryOriginal).forEach(([key, value]) => localStorage.setItem(key, value));
                 renderStudentList(); populateStudentDropdown();
+                const draftOwners = scenario === 'portfolio-restore' ? ['Alice'] : students.concat('');
+                draftOwners.forEach(owner => {
+                    const key = wftWritingDraftKey(owner);
+                    recoveryOriginal[key] = localStorage.getItem(key);
+                });
                 pendingPortfolioSync = { studentName: 'Bob', sessionData: { id: 'new', originalText: 'Pending writing' }, signature: 'pending' };
                 persistPendingPortfolioSync();
                 wftSyncState.pendingPortfolioPush = true;
@@ -118,13 +123,13 @@ function assertSuccessfulRetry(retry, scenario, alertsBeforeRetry) {
 (async () => {
     const browser = await chromium.launch({ channel: 'msedge', headless: true });
     try {
-        const context = await browser.newContext({ acceptDownloads: true });
-        await context.route('**/*', serveLocalRequest);
         for (const scenario of ['portfolio-restore', 'marker-restore']) {
+            const context = await browser.newContext({ acceptDownloads: true });
+            await context.route('**/*', serveLocalRequest);
             const page = await context.newPage();
             const errors = [];
             page.on('pageerror', error => errors.push(error.message));
-            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+            await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
             await page.evaluate(prepareRecoveryScenario, scenario);
             await page.evaluate(beginRecoveryUpload, scenario);
             await page.evaluate(async scenario => { if (scenario === 'portfolio-restore') await removeStudent('Alice'); else await resetCurrentClassData(); }, scenario);
@@ -143,7 +148,7 @@ function assertSuccessfulRetry(retry, scenario, alertsBeforeRetry) {
             const retry = await page.evaluate(() => ({ portfolio: getPortfolioData(), backup: buildWftEmergencyBackupObject(), pending: !!getPendingPortfolioSync(), alerts: recoveryAlerts.length }));
             assertSuccessfulRetry(retry, scenario, alertsBeforeRetry);
             assert.deepEqual(errors, []);
-            await page.close();
+            await context.close();
         }
         console.log('Deletion recovery browser cases: 2/2 passed; failed rollbacks preserve exact emergency backup bytes, block sync, restore remaining keys and allow retry.');
     } finally { await browser.close(); }

@@ -44,7 +44,7 @@ const localAppRoute = require('./support/local-app-route'), root = path.resolve(
                 const expectedAlert = blocked ? (kind === 'current' ? 'Please allow pop-ups for this page to print the notebook summary.' : 'Please allow pop-ups for this page to re-print the notebook summary.') : 'Could not safely open the notebook summary for printing. Please try again.';
                 const checks = {
                     oneAttempt: result.attempts === 1,
-                    writesAndPrints: success ? result.writes === 1 && result.prints === 1 : result.writes === 0 && result.prints === 0,
+                    explicitPreviewWithoutAutomaticPrint: success ? result.writes === 1 && result.prints === 0 : result.writes === 0 && result.prints === 0,
                     notice: JSON.stringify(result.alerts) === JSON.stringify(success ? [] : [expectedAlert]),
                     isolatedSuccess: !success || result.openerDetached && result.printedText.includes('Synthetic'),
                     failedPopupCleanup: blocked || success || result.closeAttempts === 1 && (mode === 'close-throws' ? !result.popupClosed : result.popupClosed),

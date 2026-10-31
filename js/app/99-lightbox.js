@@ -13,7 +13,7 @@ function openImageLightbox(imgEl) {
     }
 
     lb.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    wftOpenDialog(lb, document.getElementById('imgLightboxClose'), closeImageLightbox);
 
     lb.onclick = function(e) {
         if (e.target === lb) closeImageLightbox();
@@ -22,8 +22,8 @@ function openImageLightbox(imgEl) {
 function closeImageLightbox() {
     var lb = document.getElementById('imgLightbox');
     if (!lb) return;
+    if (wftCloseDialog(lb) === false) return;
     lb.classList.remove('open');
-    document.body.style.overflow = '';
     var lbImg = document.getElementById('imgLightboxImg');
     if (lbImg) lbImg.src = '';
 }

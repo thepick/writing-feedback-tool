@@ -34,8 +34,7 @@ function buildLcsMatrix(a, b) {
     // shortcut: the full LCS matrix still uses quadratic space, revisit if longer essays remain slow.
     var dp = [];
     for (var i = 0; i < rows; i++) {
-        dp[i] = [];
-        for (var j = 0; j < cols; j++) dp[i][j] = 0;
+        dp[i] = new Array(cols).fill(0);
     }
     for (var ai = a.length - 1; ai >= 0; ai--) {
         for (var bi = b.length - 1; bi >= 0; bi--) {

@@ -381,13 +381,20 @@
    SETTINGS DRAWER
 ============================================= */
 function openSettingsDrawer() {
-    document.getElementById('settingsDrawer').classList.add('open');
+    var drawer = document.getElementById('settingsDrawer');
+    drawer.hidden = false;
+    drawer.classList.add('open');
     document.getElementById('settingsDrawerOverlay').classList.add('open');
     refreshStorageHealthUI();
+    wftOpenDialog(drawer, drawer.querySelector('.settings-drawer-close'), closeSettingsDrawer);
+    document.getElementById('settingsDrawerOverlay').inert = false;
 }
 function closeSettingsDrawer() {
     if (!saveWftPreferencesFromForm()) return;
-    document.getElementById('settingsDrawer').classList.remove('open');
+    var drawer = document.getElementById('settingsDrawer');
+    if (wftCloseDialog(drawer) === false) return;
+    drawer.classList.remove('open');
+    drawer.hidden = true;
     document.getElementById('settingsDrawerOverlay').classList.remove('open');
 }
 
@@ -592,8 +599,16 @@ function saveSettingsToLocalStorage(settingsOverride) {
 }
 
 function saveWftPreferencesFromForm() {
-    try { saveSettingsToLocalStorage(); return true; }
+    var status = document.getElementById('preferenceSaveStatus');
+    try {
+        saveSettingsToLocalStorage();
+        if (status) { status.textContent = 'Saved on this device.'; status.setAttribute('role', 'status'); }
+        if (typeof refreshTeacherWorkflow === 'function') refreshTeacherWorkflow();
+        return true;
+    }
     catch (e) {
+        if (status) { status.textContent = 'Settings could not be saved. Your saved preferences were kept. Retry when browser storage is available.'; status.setAttribute('role', 'alert'); }
+        if (typeof refreshTeacherWorkflow === 'function') refreshTeacherWorkflow();
         alert(e.wftStudentChangeRecovery ? e.message : 'Settings could not be saved. The saved preferences were kept. Check browser storage and retry.');
         return false;
     }
@@ -3175,6 +3190,26 @@ function restoreWftOAuthDraftAfterRedirect() {
             return draft[key] !== undefined && typeof draft[key] !== 'string';
         })) throw new Error('Unreadable writing draft');
 
+        if (typeof wftReadDraft === 'function') {
+            var ordinaryDraft = wftReadDraft(draft.selectedStudent || '');
+            if (ordinaryDraft.record && ordinaryDraft.record.deleted) {
+                setOcrStatus('Sign-in draft belongs to a removed student or class. Its bytes are kept for manual recovery.', 'error');
+                return false;
+            }
+            var incomingDraft = { text: draft.text, genre: draft.writingGenreSelectValue || draft.manualGenreOverrideValue || '__auto__', source: null };
+            if (!wftValidateDraft(incomingDraft)) throw new Error('Unreadable sign-in draft genre');
+            var ordinarySnapshot = ordinaryDraft.record && ordinaryDraft.record.current;
+            var targetJournal = wftReadDraftJournal(draft.selectedStudent || '');
+            if (targetJournal) {
+                if (targetJournal.generation === (ordinaryDraft.record ? ordinaryDraft.record.generation : '')) ordinarySnapshot = targetJournal.current;
+            }
+            if (ordinarySnapshot && (ordinarySnapshot.text !== '' || ordinarySnapshot.genre !== '__auto__' || ordinarySnapshot.source)
+                && JSON.stringify(ordinarySnapshot) !== JSON.stringify(incomingDraft)) {
+                setOcrStatus('A different browser draft exists for this student. Both drafts were kept. Review that student’s writing before restoring the sign-in draft.', 'error');
+                return false;
+            }
+        }
+
         var ta = document.getElementById("studentWriting");
         if (!ta) throw new Error('Writing field unavailable');
         // A removal retry may find the exact writing already restored; other writing must stay coherent.
@@ -3203,6 +3238,13 @@ function restoreWftOAuthDraftAfterRedirect() {
         if (genreSelect) genreSelect.value = draft.writingGenreSelectValue || manualGenreOverrideValue;
         if (typeof syncUiState === "function") syncUiState();
         if (ta.value !== draft.text) throw new Error('Writing could not be fully restored');
+        if (typeof wftLoadWritingDraft === 'function' && wftWritingDraft) {
+            var restoredSnapshot = { text: ta.value, genre: genreSelect.value || '__auto__', source: null };
+            wftLoadWritingDraft(selectedStudent, true);
+            wftWritingDraft.allowMissingOwner = true;
+            wftApplyDraft(restoredSnapshot, true);
+            if (!wftSaveWritingDraft(true)) throw new Error('Restored draft could not be preserved');
+        }
         localStorage.removeItem(WFT_OAUTH_TEXTAREA_DRAFT_KEY);
         if (typeof setOcrStatus === "function" && draft.text && draft.text.trim()) {
             setOcrStatus("Restored unsaved writing after Google sign-in.", "success");
@@ -3491,6 +3533,11 @@ function setDriveSyncStatus(state, text) {
     if (dotHeader) { dotHeader.className = dotClass; }
     if (txt) txt.textContent = text || "";
     if (txtHeader) txtHeader.textContent = text || "";
+    var visibleStatus = document.getElementById('portfolioSaveStatus');
+    if (visibleStatus) visibleStatus.textContent = 'Drive: ' + (text || 'Not connected. Connect Drive to save a portfolio.')
+        + (state === 'synced' && /^(Portfolio synced|Manual sync complete|Synced)(\s|$)/.test(text || '') ? ' · Confirmed at ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '');
+    var recoveryAction = document.getElementById('syncRecoveryAction');
+    if (recoveryAction) recoveryAction.hidden = state !== 'error';
 }
 
 // ── WFT Sync Engine V2 guarded Drive fetch ──
@@ -4420,6 +4467,7 @@ function saveWftStudentChange(change) {
         wftStudentChangeRecovery = null;
     }
     preflightWftRequiredStorage();
+    var draftWrites = typeof prepareWritingDraftStudentChange === 'function' ? prepareWritingDraftStudentChange(change) : {};
     var keys = ['wft_portfolio', WFT_DELETIONS_STORAGE_KEY];
     var rosterChanged = Array.isArray(change.students);
     var settings;
@@ -4432,6 +4480,7 @@ function saveWftStudentChange(change) {
         else delete settings.apiKey;
     }
     var previous = {};
+    keys = keys.concat(Object.keys(draftWrites));
     keys.forEach(function(key) { previous[key] = localStorage.getItem(key); });
     var savedPortfolio;
     try {
@@ -4443,6 +4492,10 @@ function saveWftStudentChange(change) {
             localStorage.setItem('wft_selectedStudent', change.selectedStudent);
             localStorage.setItem('wft_settings', JSON.stringify(settings));
         }
+        Object.keys(draftWrites).forEach(function(key) {
+            if (draftWrites[key] === null) localStorage.removeItem(key);
+            else localStorage.setItem(key, draftWrites[key]);
+        });
     } catch (e) {
         if (!restoreWftStudentChangeStorage(previous)) {
             wftStudentChangeRecovery = previous;
@@ -4460,6 +4513,11 @@ function saveWftStudentChange(change) {
             wftDebugWarn('Class change saved; crop UI could not close:', e);
         }
         selectedStudent = change.selectedStudent;
+        try {
+            if (typeof finishWritingDraftStudentChange === 'function') finishWritingDraftStudentChange(change, draftWrites);
+        } catch (e) {
+            wftDebugWarn('Class change saved; draft view could not refresh:', e);
+        }
     }
     if (!wftSuppressDirtyMarks) {
         if (WFT_SYNC_ENGINE_V2) {
@@ -6566,6 +6624,7 @@ function toggleRosterVisibility() {
             roster.style.display = 'none';
             btn.textContent = '🎓 Show Class Roster';
         }
+        btn.setAttribute('aria-expanded', String(isHidden));
     } catch (e) {
         wftDebugError('toggleRosterVisibility error', e);
     }
@@ -6837,6 +6896,7 @@ function updateExportSelectedStudentButton() {
 
 function openStudentPortfolio(name) {
     if (!name) return;
+    if (typeof wftSwitchWritingOwner === 'function' && !wftSwitchWritingOwner(name)) return;
     if (selectedStudent !== name) closeCropModal();
     selectedStudent = name;
     try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) { }
@@ -6921,11 +6981,11 @@ function hydratePortfolioDriveImages(root) {
                 img.src = url;
                 img.removeAttribute('data-drive-file-id');
                 img.setAttribute('data-drive-loaded', 'true');
-                var status = img.parentNode ? img.parentNode.querySelector('.drive-image-status') : null;
+                var status = img.parentNode ? img.parentNode.nextElementSibling : null;
                 if (status) status.textContent = 'Loaded from Drive';
             }).catch(function(e) {
                 wftDebugWarn('Could not load portfolio image from Drive:', e);
-                var status = img.parentNode ? img.parentNode.querySelector('.drive-image-status') : null;
+                var status = img.parentNode ? img.parentNode.nextElementSibling : null;
                 if (status) status.textContent = 'Image stored in Drive, but preview could not load.';
             });
         })(imgs[i]);
@@ -6953,12 +7013,12 @@ function renderPortfolioSessionImageHtml(image) {
     image = image || {};
     var name = escapeHtmlAttr(image.name || 'Student work image');
     if (image.dataUrl && isSafeWftImageDataUrl(image.dataUrl)) {
-        return '<img src="' + escapeHtmlAttr(image.dataUrl) + '" alt="' + name + '" data-caption="' + name + '" onclick="openImageLightbox(this)" title="Click to enlarge" style="cursor: zoom-in;">';
+        return '<button type="button" class="wft-image-preview-button" aria-label="Enlarge ' + name + '" onclick="openImageLightbox(this.firstElementChild)"><img src="' + escapeHtmlAttr(image.dataUrl) + '" alt="' + name + '" data-caption="' + name + '"></button>';
     }
     if (image.driveFileId) {
         var safeDriveFileId = sanitizeWftDriveFileId(image.driveFileId);
         if (safeDriveFileId) {
-            return '<img data-drive-file-id="' + escapeHtmlAttr(safeDriveFileId) + '" alt="' + name + '" data-caption="' + name + '" onclick="openImageLightbox(this)" title="Click to enlarge" style="cursor: zoom-in;"><div class="thumb-caption drive-image-status">Loading from Drive...</div>';
+            return '<button type="button" class="wft-image-preview-button" aria-label="Enlarge ' + name + '" onclick="openImageLightbox(this.firstElementChild)"><img data-drive-file-id="' + escapeHtmlAttr(safeDriveFileId) + '" alt="' + name + '" data-caption="' + name + '"></button><div class="thumb-caption drive-image-status">Loading from Drive...</div>';
         }
     }
     return '<div class="thumb-caption">Image not available offline.</div>';
@@ -7035,7 +7095,7 @@ function buildPortfolioFeedbackModalShell(title, subtitle, bodyHtml) {
 }
 
 function showPortfolioFeedbackModal(html) {
-    closePortfolioFeedbackModal();
+    if (closePortfolioFeedbackModal() === false) return;
     var backdrop = document.createElement('div');
     backdrop.id = 'portfolioFeedbackModalBackdrop';
     backdrop.className = 'portfolio-feedback-modal-backdrop';
@@ -7044,16 +7104,15 @@ function showPortfolioFeedbackModal(html) {
         if (e.target === backdrop) closePortfolioFeedbackModal();
     };
     document.body.appendChild(backdrop);
-    document.body.style.overflow = 'hidden';
+    var dialog = backdrop.querySelector('[role="dialog"]');
+    wftOpenDialog(dialog, backdrop.querySelector('.portfolio-feedback-close'), closePortfolioFeedbackModal);
 }
 
 function closePortfolioFeedbackModal() {
     var existing = document.getElementById('portfolioFeedbackModalBackdrop');
+    if (existing && wftCloseDialog(existing.querySelector('[role="dialog"]')) === false) return false;
     if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
-    var imageLightbox = document.getElementById('imgLightbox');
-    if (!imageLightbox || !imageLightbox.classList || !imageLightbox.classList.contains('open')) {
-        document.body.style.overflow = '';
-    }
+    return true;
 }
 
 
@@ -7065,7 +7124,8 @@ function openPortfolioDetailedFeedback(studentName, sessionId) {
     var session = findPortfolioSession(studentName, sessionId);
     var detailedFeedback = getPortfolioDetailedFeedbackForSession(session);
     var title = 'Detailed Writing Feedback';
-    var subtitle = (session && session.title ? session.title : 'Saved writing') + (session && session.overall != null ? ' - ' + session.overall + '%' : '');
+    var overall = getNumericAssessmentScore(session && session.overall);
+    var subtitle = (session && session.title ? session.title : 'Saved writing') + ' - ' + (overall != null ? overall + '%' : 'Not scored');
     var bodyHtml = '';
     if (!detailedFeedback) {
         bodyHtml = '<div class="portfolio-feedback-empty">Detailed feedback was not saved for this older portfolio entry.</div>';
@@ -7090,7 +7150,8 @@ function openPortfolioCategoryFeedback(studentName, sessionId, categoryName) {
     var session = findPortfolioSession(studentName, sessionId);
     var detailedFeedback = getPortfolioDetailedFeedbackForSession(session);
     var title = categoryName || 'Category Feedback';
-    var subtitle = (session && session.title ? session.title : 'Saved writing') + (session && session.overall != null ? ' - ' + session.overall + '%' : '');
+    var overall = getNumericAssessmentScore(session && session.overall);
+    var subtitle = (session && session.title ? session.title : 'Saved writing') + ' - ' + (overall != null ? overall + '%' : 'Not scored');
     var bodyHtml = '';
     if (!detailedFeedback || !detailedFeedback.categories || !detailedFeedback.categories[categoryName]) {
         bodyHtml = '<div class="portfolio-feedback-empty">Detailed feedback was not saved for this category.</div>';
@@ -7124,30 +7185,33 @@ function showWftChartUnavailableMessage(canvasId) {
 }
 
 function renderWftPortfolioScoreStatHtml(label, score, trendHtml) {
-    return '<div class="portfolio-stat-card"><div class="stat-label">' + label + '</div><div class="stat-value">' + (score != null ? score + '%' : '-') + '</div>' + trendHtml + '</div>';
+    return '<div class="portfolio-stat-card"><div class="stat-label">' + label + '</div><div class="stat-value">' + (score != null ? score + '%' : 'Not scored') + '</div>' + trendHtml + '</div>';
 }
 
 function renderWftPortfolioStatsHtml(sessions, portfolioCategoryKeys) {
     function calculateTrend() {
-        var prevOverall = prevSession && prevSession.overall != null ? Number(prevSession.overall) : null;
+        var prevOverall = getNumericAssessmentScore(prevSession && prevSession.overall);
         return latestOverall != null && prevOverall != null ? latestOverall - prevOverall : null;
     }
 
     function renderTrendHtml() {
         var trendHtml = '';
         if (trend != null) {
-            if (trend > 0) trendHtml = '<div class="stat-trend trend-up">+' + trend + '% vs last</div>';
-            else if (trend < 0) trendHtml = '<div class="stat-trend trend-down">' + trend + '% vs last</div>';
-            else trendHtml = '<div class="stat-trend trend-flat">Same as last</div>';
+            // Remove binary subtraction noise while keeping hundredth-point score changes.
+            var change = Number(Math.abs(trend).toFixed(2));
+            var amount = change === 0 && trend !== 0 ? 'less than 0.01 percentage point' : change + (change === 1 ? ' percentage point' : ' percentage points');
+            if (trend > 0) trendHtml = '<div class="stat-trend trend-up">Up ' + amount + ' from previous writing</div>';
+            else if (trend < 0) trendHtml = '<div class="stat-trend trend-down">Down ' + amount + ' from previous writing</div>';
+            else trendHtml = '<div class="stat-trend trend-flat">No change from previous writing</div>';
         }
         return trendHtml;
     }
 
     var latestSession = sessions[sessions.length - 1];
     var prevSession = sessions.length >= 2 ? sessions[sessions.length - 2] : null;
-    var overalls = sessions.map(function(session) { return session.overall != null ? Number(session.overall) : null; }).filter(function(value) { return value != null && !isNaN(value); });
+    var overalls = sessions.map(function(session) { return getNumericAssessmentScore(session.overall); }).filter(function(value) { return value != null; });
     var avgOverall = overalls.length ? Math.round(overalls.reduce(function(a, b) { return a + b; }, 0) / overalls.length) : null;
-    var latestOverall = latestSession.overall != null ? Number(latestSession.overall) : null;
+    var latestOverall = getNumericAssessmentScore(latestSession.overall);
     var trend = calculateTrend();
     var bestOverall = overalls.length ? Math.max.apply(null, overalls) : null;
     var categoryAverages = getCategoryAverageMap(sessions);
@@ -7170,10 +7234,11 @@ function renderWftPortfolioStatsHtml(sessions, portfolioCategoryKeys) {
 }
 
 function renderWftPortfolioSessionHeaderHtml(sess, scoreColor) {
-    return '<div class="session-card-header">'
-    + '<div class="session-card-title-wrap"><div class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</div><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></div>'
-    + '<div class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (sess.overall != null ? escapeHtml(sess.overall + '%') : 'N/A') + '</div>'
-    + '</div>';
+    var overall = getNumericAssessmentScore(sess.overall);
+    return '<span class="session-card-header">'
+    + '<span class="session-card-title-wrap"><span class="session-date">' + escapeHtml(sess.date || 'Unknown date') + '</span><span class="session-title">' + escapeHtml(sess.title || 'Untitled') + '</span></span>'
+    + '<span class="session-score" style="color:' + scoreColor + ';border-color:' + scoreColor + '33;">' + (overall != null ? escapeHtml(overall + '%') : 'Not scored') + '</span>'
+    + '</span>';
 }
 
 function renderWftPortfolioSessionMetaHtml(sess) {
@@ -7188,12 +7253,11 @@ function renderWftPortfolioSessionActionsHtml(name, sess, si) {
     return '<div class="session-card-actions">'
     + '<button type="button" class="btn-reprint" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="printPortfolioNotebookSummary(this.dataset.student, this.dataset.session)">Re-print Notebook Summary</button>'
     + '<button type="button" class="btn-reassess" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="reassessPortfolioSession(this.dataset.student, this.dataset.session)">Reassess Writing</button>'
-    + '<button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sess.id || sess.createdAt || String(si)) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button>'
     + '</div>';
 }
 
 function renderWftPortfolioSessionCardHtml(name, sess, si) {
-    var scoreColor = scoreBadgeColor(sess.overall);
+    var scoreColor = scoreBadgeColor(getNumericAssessmentScore(sess.overall));
     var chipsHtml = '';
     var sessionId = sess.id || sess.createdAt || String(si);
     getSessionCategoryKeys(sess).forEach(function(key) {
@@ -7204,6 +7268,8 @@ function renderWftPortfolioSessionCardHtml(name, sess, si) {
     });
     var detailedFeedbackButtonHtml = '<div class="session-feedback-actions"><button type="button" class="btn-view-detailed-feedback" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sessionId) + '" onclick="openPortfolioDetailedFeedback(this.dataset.student, this.dataset.session)">View Detailed Feedback</button></div>';
     var feedback = sess.feedbackSummary || {};
+    var detailedGoal = sess.detailedFeedback && sess.detailedFeedback.growGoal ? sess.detailedFeedback.growGoal : {};
+    var nextGoal = feedback.growGoal || feedback.nextTime || detailedGoal.growGoal || detailedGoal.nextTime || 'No next goal saved.';
     var imageStripHtml = '';
     if (sess.images && sess.images.length) {
         imageStripHtml = '<div class="session-photo-strip">' + sess.images.map(function(image) {
@@ -7215,7 +7281,10 @@ function renderWftPortfolioSessionCardHtml(name, sess, si) {
         }).join('') + '</div>';
     }
     return '<div class="session-card">'
+        + '<details class="portfolio-session-details"><summary class="portfolio-session-summary">'
         + renderWftPortfolioSessionHeaderHtml(sess, scoreColor)
+        + '<span class="session-next-goal"><strong>Next goal:</strong> ' + escapeHtml(nextGoal) + '</span>'
+        + '</summary><div class="portfolio-session-body">'
         + renderWftPortfolioSessionMetaHtml(sess)
         + '<div class="session-chip-row">' + chipsHtml + '</div>'
         + detailedFeedbackButtonHtml
@@ -7225,17 +7294,121 @@ function renderWftPortfolioSessionCardHtml(name, sess, si) {
         + '<div class="session-artifact-box"><h5>Teacher Notes</h5><div class="session-rich-html">' + renderWftPortfolioTeacherNotesHtml(feedback) + '</div></div>'
         + '</div>'
         + imageStripHtml
+        + '<div class="session-remove-action"><button type="button" class="btn-delete" data-student="' + escapeHtml(name) + '" data-session="' + escapeHtml(sessionId) + '" onclick="deletePortfolioSession(this.dataset.student, this.dataset.session)">Remove from Portfolio</button></div>'
+        + '</div></details>'
         + renderWftPortfolioSessionActionsHtml(name, sess, si)
         + '</div>';
 }
 
+function getWftPortfolioComparisonContext(sessions) {
+    if (!sessions || sessions.length < 2) return '';
+    var previous = sessions[sessions.length - 2];
+    var latest = sessions[sessions.length - 1];
+    function context(session) {
+        var grade = session.gradeLabel || (session.gradeLevel != null ? 'Grade ' + session.gradeLevel : 'Grade not recorded');
+        var genre = getWritingGenreInfoFromSession(session);
+        return grade + ', ' + genre.mainGenre + (genre.subtype ? ' (' + genre.subtype + ')' : '');
+    }
+    var previousContext = context(previous);
+    var latestContext = context(latest);
+    if (previousContext !== latestContext) return 'Assessment context changed from ' + previousContext + ' to ' + latestContext + '. Scores are not directly comparable.';
+    if (previous.gradeProfileVersion && latest.gradeProfileVersion && previous.gradeProfileVersion !== latest.gradeProfileVersion) return 'Scoring guide changed between entries in ' + latestContext + '. Scores are not directly comparable.';
+    var previousPolicy = previous.assessmentPolicy;
+    var latestPolicy = latest.assessmentPolicy;
+    if (!previousPolicy || !latestPolicy) {
+        var missingFor = !previousPolicy && !latestPolicy ? 'both entries' : (!previousPolicy ? 'the previous writing' : 'the latest writing');
+        return 'Saved scoring settings are missing for ' + missingFor + '. Assessment context is unknown; scores are not directly comparable.';
+    }
+    function savedSetting(policy, key) {
+        var value = policy[key];
+        if (key === 'grammarStrictness' || key === 'targetWords') return getNumericAssessmentScore(value);
+        if (key === 'model') return typeof value === 'string' && value.trim() ? value.trim() : null;
+        return typeof value === 'boolean' ? value : null;
+    }
+    function settingLabel(value) {
+        return typeof value === 'boolean' ? (value ? 'on' : 'off') : String(value);
+    }
+    var settings = [['grammarStrictness', 'grammar strictness'], ['targetEnabled', 'word-count target'], ['neatnessActive', 'neatness participation'], ['model', 'assessment model']];
+    if (previousPolicy.targetEnabled === true && latestPolicy.targetEnabled === true) settings.push(['targetWords', 'word-count target size']);
+    var changes = [];
+    var unknown = [];
+    settings.forEach(function(setting) {
+        var before = savedSetting(previousPolicy, setting[0]);
+        var after = savedSetting(latestPolicy, setting[0]);
+        if (before == null || after == null) unknown.push(setting[1]);
+        else if (before !== after) changes.push(setting[1] + ' (' + settingLabel(before) + ' to ' + settingLabel(after) + ')');
+    });
+    if (changes.length || unknown.length) {
+        return (changes.length ? 'Assessment context changed: ' + changes.join('; ') + '. ' : '')
+            + (unknown.length ? 'Saved scoring settings are unknown for: ' + unknown.join(', ') + '. ' : '')
+            + 'Scores are not directly comparable.';
+    }
+    return 'Saved assessment context: ' + latestContext + '. Task difficulty may differ.';
+}
+
+function getWftPortfolioChartSummary(labels, overallData, sessions) {
+    var lastIndex = overallData.length - 1;
+    var latest = overallData[lastIndex];
+    var previous = lastIndex > 0 ? overallData[lastIndex - 1] : null;
+    var summary;
+    if (latest == null) {
+        summary = 'The latest overall score is not scored.';
+    } else if (lastIndex === 0) {
+        summary = 'Overall score: ' + latest + '% on ' + labels[lastIndex] + '. Save another session to compare progress.';
+    } else if (previous == null) {
+        summary = 'Latest overall score: ' + latest + '% on ' + labels[lastIndex] + '. The previous session was not scored.';
+    } else if (latest === previous) {
+        summary = 'Overall score is unchanged at ' + latest + '% between ' + labels[lastIndex - 1] + ' and ' + labels[lastIndex] + '.';
+    } else {
+        summary = 'Overall score ' + (latest > previous ? 'increased' : 'decreased') + ' from ' + previous + '% on ' + labels[lastIndex - 1] + ' to ' + latest + '% on ' + labels[lastIndex] + '.';
+    }
+    var context = getWftPortfolioComparisonContext(sessions);
+    return summary + (context ? ' ' + context : '') + ' Saved sessions are listed oldest to newest. Category scores are out of 10; missing scores are marked Not scored.';
+}
+
+function renderWftPortfolioScoreHistoryHtml(name, sessions, overallData, catDatasets) {
+    var html = '<div class="portfolio-chart-data" tabindex="0" role="region" aria-label="Scrollable score history for ' + escapeHtml(name) + '"><table>'
+        + '<caption>Score history for ' + escapeHtml(name) + '</caption>'
+        + '<thead><tr><th scope="col">Date</th><th scope="col">Writing</th><th scope="col">Overall (%)</th>';
+    catDatasets.forEach(function(dataset) {
+        html += '<th scope="col">' + escapeHtml(dataset.label) + ' (/10)</th>';
+    });
+    html += '</tr></thead><tbody>';
+    sessions.forEach(function(session, index) {
+        var date = session.date || (session.createdAt && isFinite(Date.parse(session.createdAt)) ? new Date(session.createdAt).toLocaleDateString() : 'Date not recorded');
+        html += '<tr><th scope="row">' + escapeHtml(date) + '</th><td>' + escapeHtml(session.title || 'Untitled') + '</td>'
+            + '<td>' + (overallData[index] == null ? 'Not scored' : escapeHtml(String(overallData[index])) + '%') + '</td>';
+        catDatasets.forEach(function(dataset) {
+            var value = dataset.data[index];
+            html += '<td>' + (value == null ? 'Not scored' : escapeHtml(String(value)) + '/10') + '</td>';
+        });
+        html += '</tr>';
+    });
+    return html + '</tbody></table></div>';
+}
+
+function renderWftPortfolioChartLegendHtml(catDatasets) {
+    var html = '<fieldset class="portfolio-chart-legend"><legend>Categories shown</legend>';
+    catDatasets.forEach(function(dataset, index) {
+        html += '<label class="portfolio-chart-series"><input type="checkbox" checked disabled data-dataset-index="' + index + '">'
+            + '<svg width="40" height="16" viewBox="0 0 40 16" aria-hidden="true" focusable="false"><line x1="0" y1="8" x2="40" y2="8" stroke="' + dataset.borderColor + '" stroke-width="3" stroke-dasharray="' + dataset.borderDash.join(' ') + '"></line></svg>'
+            + '<span>Show ' + escapeHtml(dataset.label) + '</span></label>';
+    });
+    return html + '</fieldset>';
+}
+
 function setupWftPortfolioCharts(chartId, catChartId, labels, overallData, catDatasets) {
-    setTimeout(function() {
-        if (typeof Chart === 'undefined') {
-            showWftChartUnavailableMessage(chartId);
-            showWftChartUnavailableMessage(catChartId);
-            return;
-        }
+    var ctxOverall = document.getElementById(chartId);
+    var ctxCat = document.getElementById(catChartId);
+    if (!ctxOverall || !ctxCat || ctxOverall._wftChartSetupStarted) return;
+    ctxOverall._wftChartSetupStarted = true;
+    var ChartConstructor;
+    function canvasesAreCurrent() {
+        return ctxOverall.isConnected && ctxCat.isConnected
+            && document.getElementById(chartId) === ctxOverall && document.getElementById(catChartId) === ctxCat;
+    }
+    function renderCharts() {
+        if (!canvasesAreCurrent()) return;
         var validOverall = overallData.filter(function(v) { return v != null; });
         var overallMin = validOverall.length ? Math.max(0, Math.floor((Math.min.apply(null, validOverall) - 10) / 10) * 10) : 0;
         var overallMax = validOverall.length ? Math.min(100, Math.ceil((Math.max.apply(null, validOverall) + 10) / 10) * 10) : 100;
@@ -7244,9 +7417,8 @@ function setupWftPortfolioCharts(chartId, catChartId, labels, overallData, catDa
         }, []);
         var catMin = allCatValues.length ? Math.max(0, Math.floor(Math.min.apply(null, allCatValues) - 1)) : 0;
         var catMax = allCatValues.length ? Math.min(10, Math.ceil(Math.max.apply(null, allCatValues) + 0.5)) : 10;
-        var ctxOverall = document.getElementById(chartId);
         if (ctxOverall) {
-            wftPortfolioChartInstances.overall = new Chart(ctxOverall, {
+            wftPortfolioChartInstances.overall = new ChartConstructor(ctxOverall, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -7267,19 +7439,49 @@ function setupWftPortfolioCharts(chartId, catChartId, labels, overallData, catDa
                 }
             });
         }
-        var ctxCat = document.getElementById(catChartId);
         if (ctxCat) {
-            wftPortfolioChartInstances.categories = new Chart(ctxCat, {
+            wftPortfolioChartInstances.categories = new ChartConstructor(ctxCat, {
                 type: 'line',
                 data: { labels: labels, datasets: catDatasets },
                 options: {
                     responsive: true,
                     scales: { y: { min: catMin, max: catMax, ticks: { callback: function(v) { return v + '/10'; }, stepSize: 1 } } },
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+                    plugins: { legend: { display: false, position: 'bottom', labels: { boxWidth: 12, font: { size: 11 }, usePointStyle: true } } }
                 }
             });
+            var categoryChart = wftPortfolioChartInstances.categories;
+            if (typeof categoryChart.setDatasetVisibility === 'function' && typeof categoryChart.update === 'function') {
+                var controls = ctxCat.parentNode.querySelectorAll('.portfolio-chart-legend input');
+                Array.prototype.forEach.call(controls, function(control) {
+                    control.disabled = false;
+                    control.addEventListener('change', function() {
+                        categoryChart.setDatasetVisibility(Number(this.getAttribute('data-dataset-index')), this.checked);
+                        categoryChart.update();
+                    });
+                });
+            }
         }
-    }, 50);
+    }
+    if (typeof Chart === 'function') {
+        ChartConstructor = Chart;
+        setTimeout(renderCharts, 50);
+        return;
+    }
+    var loading = document.createElement('p');
+    loading.className = 'portfolio-chart-loading';
+    loading.setAttribute('role', 'status');
+    loading.textContent = 'Loading progress charts. The score history table is available below.';
+    ctxOverall.parentNode.appendChild(loading);
+    loadWftFeatureLibrary('chart').then(function(library) {
+        loading.remove();
+        ChartConstructor = library;
+        setTimeout(renderCharts, 50);
+    }, function() {
+        loading.remove();
+        if (!canvasesAreCurrent()) return;
+        showWftChartUnavailableMessage(chartId);
+        showWftChartUnavailableMessage(catChartId);
+    });
 }
 
 function renderStudentPortfolio() {
@@ -7290,7 +7492,9 @@ function renderStudentPortfolio() {
     updateExportSelectedStudentButton();
     var name = sel.value;
     if (!name) {
-        contentEl.innerHTML = '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>';
+        contentEl.innerHTML = students.length
+            ? '<div class="portfolio-empty">Select a student above to view saved writing and progress.</div>'
+            : '<div class="portfolio-empty">Add your first student to start a writing portfolio. <button type="button" class="secondary-btn" onclick="openRosterCreation()">Add first student</button></div>';
         return;
     }
     if (WFT_ASYNC_PORTFOLIO_ACCESS_V1 && !isWftStorageSafeMode() && !renderStudentPortfolio._syncRender) {
@@ -7312,7 +7516,7 @@ function renderStudentPortfolio() {
     var portfolio = renderStudentPortfolio._asyncStudentData ? null : getPortfolioData();
     var studentData = renderStudentPortfolio._asyncStudentData || (portfolio ? portfolio[name] : null);
     if (!studentData || !studentData.sessions || studentData.sessions.length === 0) {
-        contentEl.innerHTML = '<div class="portfolio-empty">No sessions recorded yet for ' + escapeHtml(name) + '. Analyze a piece of their writing, then press Sync to Portfolio to save it here.</div>';
+        contentEl.innerHTML = '<div class="portfolio-empty">No sessions recorded yet for ' + escapeHtml(name) + '. Analyze a piece of their writing, then press Save portfolio &amp; sync Drive to save it here.</div>';
         return;
     }
     var sessions = studentData.sessions.slice().sort(function(a, b) {
@@ -7326,10 +7530,13 @@ function renderStudentPortfolio() {
     var labels = sessions.map(function(session, i) {
         return session.date || ('Session ' + (i + 1));
     });
-    var overallData = sessions.map(function(session) { return session.overall != null ? Number(session.overall) : null; });
+    var overallData = sessions.map(function(session) { return getNumericAssessmentScore(session.overall); });
     var chartId = 'portfolioOverallChart_' + Date.now();
     var catChartId = 'portfolioCatChart_' + Date.now();
+    var chartSummaryId = chartId + '_summary';
+    var chartTableHintId = chartId + '_tableHint';
     var colors = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#64748b', '#db2777'];
+    var pointStyles = ['circle', 'rect', 'triangle', 'rectRot', 'cross', 'star', 'line', 'dash'];
     var catDatasets = portfolioCategoryKeys.map(function(key, idx) {
         var color = colors[idx % colors.length];
         return {
@@ -7339,6 +7546,8 @@ function renderStudentPortfolio() {
             }),
             borderColor: color,
             backgroundColor: color + '22',
+            borderDash: idx === 0 ? [] : [2 + idx * 2, 3],
+            pointStyle: pointStyles[idx % pointStyles.length],
             tension: 0.35,
             fill: false,
             pointRadius: 3
@@ -7351,10 +7560,13 @@ function renderStudentPortfolio() {
     }
 
     contentEl.innerHTML = statsHtml
+        + '<p id="' + chartSummaryId + '" class="portfolio-chart-summary">' + escapeHtml(getWftPortfolioChartSummary(labels, overallData, sessions)) + '</p>'
         + '<div class="portfolio-charts-row">'
-        + '<div class="portfolio-chart-wrap"><h4>Overall Score Over Time</h4><canvas id="' + chartId + '" class="portfolio-chart-canvas"></canvas></div>'
-        + '<div class="portfolio-chart-wrap"><h4>Category Scores Over Time</h4><canvas id="' + catChartId + '" class="portfolio-chart-canvas"></canvas></div>'
+        + '<div class="portfolio-chart-wrap"><h4>Overall Score Over Time</h4><canvas id="' + chartId + '" class="portfolio-chart-canvas" role="img" aria-label="Overall score over time for ' + escapeHtml(name) + ' (percent)" aria-describedby="' + chartSummaryId + ' ' + chartTableHintId + '"></canvas></div>'
+        + '<div class="portfolio-chart-wrap"><h4>Category Scores Over Time</h4><canvas id="' + catChartId + '" class="portfolio-chart-canvas" role="img" aria-label="Category scores over time for ' + escapeHtml(name) + ' (out of 10)" aria-describedby="' + chartSummaryId + ' ' + chartTableHintId + '"></canvas>' + renderWftPortfolioChartLegendHtml(catDatasets) + '</div>'
         + '</div>'
+        + '<p id="' + chartTableHintId + '" class="portfolio-chart-table-hint">The score history table below contains every chart value without hovering. Category lines also use different dashes and markers.</p>'
+        + renderWftPortfolioScoreHistoryHtml(name, sessions, overallData, catDatasets)
         + '<div class="portfolio-sessions-list"><h4>Saved Work</h4>' + sessionCardsHtml + '</div>';
 
     hydratePortfolioDriveImages(contentEl);
@@ -7599,6 +7811,8 @@ function manualSaveToDrive() {
             return;
         }
 
+        if (committedPending) setDriveSyncStatus('syncing', 'Portfolio saved on this device; waiting for Drive.');
+
         // ── WFT Sync V2: use immediate flush for explicit Sync to Portfolio ──
         if (WFT_SYNC_ENGINE_V2) {
             markWftPortfolioDirty("explicit-sync-to-portfolio");
@@ -7731,6 +7945,8 @@ function showDiffView(mode) {
         if (btnC) btnC.classList.add('active');
         if (btnO) btnO.classList.remove('active');
     }
+    if (btnC) btnC.setAttribute('aria-pressed', String(mode !== 'original'));
+    if (btnO) btnO.setAttribute('aria-pressed', String(mode === 'original'));
     // Small timeout to re-enable observer after DOM settles
     setTimeout(function() { _diffSwitching = false; }, 50);
 }
@@ -7949,7 +8165,7 @@ function updateSyncPortfolioButtonState() {
             btn.classList.remove('synced-done', 'is-syncing');
             btn.classList.add('btn-ready');
             btn.disabled = false;
-            if (label) label.textContent = 'Sync to Portfolio';
+            if (label) label.textContent = 'Save portfolio & sync Drive';
         } else if (manualSyncInProgress) {
             btn.classList.remove('btn-ready', 'synced-done');
             btn.classList.add('is-syncing');
@@ -7959,7 +8175,7 @@ function updateSyncPortfolioButtonState() {
             btn.classList.remove('synced-done', 'is-syncing');
             btn.classList.add('btn-ready');
             btn.disabled = false;
-            if (label) label.textContent = 'Sync to Portfolio';
+            if (label) label.textContent = 'Save portfolio & sync Drive';
         } else if (hasAnalysis && !activeStudent) {
             btn.classList.remove('btn-ready', 'is-syncing', 'synced-done');
             btn.disabled = true;
@@ -7975,6 +8191,7 @@ function updateSyncPortfolioButtonState() {
             if (label) label.textContent = 'Analyze First';
         }
     }
+    if (typeof refreshTeacherWorkflow === 'function') refreshTeacherWorkflow();
 }
 
 function commitPendingPortfolioReplacement(pending) {

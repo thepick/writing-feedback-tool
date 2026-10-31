@@ -22,6 +22,9 @@ async function runArchiveScenario({ kind, mode }) {
     localStorage.setItem('wft_students', '["Synthetic"]'); localStorage.setItem('wft_settings', '{"students":["Synthetic"]}');
     localStorage.setItem('wft_selectedStudent', 'Synthetic'); localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, '{}');
     localStorage.setItem('wft_portfolio', JSON.stringify({ Synthetic: { sessions: [{ id: 'saved', originalText: 'Protected synthetic essay. '.repeat(40), overall: 75, images: [] }] } }));
+    wftWritingDraft = null;
+    document.getElementById('studentSelect').value = '';
+    populateStudentDropdown(); wftLoadWritingDraft('Synthetic', false);
     document.getElementById('studentWriting').value = 'Protected current writing.';
     if (refusal) {
         const canvas = document.createElement('canvas'); canvas.width = canvas.height = 3;
@@ -34,6 +37,8 @@ async function runArchiveScenario({ kind, mode }) {
         activePortfolioReassessmentSource = { sourceStudentName: 'Synthetic', sourceSessionId: 'saved' };
     }
     populateStudentDropdown(); refreshPortfolioDropdown(); document.getElementById('portfolioStudentSelect').value = 'Synthetic';
+    if (!wftSaveWritingDraft(true)) throw Error('Synthetic draft setup could not save');
+    if (navigator.locks) await navigator.locks.request(wftWritingDraftKey('Synthetic'), function() {});
     document.getElementById('archiveIncludeImages').checked = false;
     driveAccessToken = wftSyncState.accessToken = 'synthetic-token'; wftSyncState.signedIn = true; wftSyncState.tokenExpiresAt = Date.now() + 600000;
     driveFolderId = wftSyncState.folderId = 'synthetic-root'; clearWftSyncBlockState();
@@ -42,7 +47,7 @@ async function runArchiveScenario({ kind, mode }) {
     window.alert = text => alerts.push(String(text));
     const keys = ['wft_portfolio', 'wft_students', 'wft_settings', WFT_DELETIONS_STORAGE_KEY, 'wft_selectedStudent', PENDING_PORTFOLIO_SYNC_KEY];
     const bytes = () => keys.map(key => localStorage.getItem(key)), before = JSON.stringify(bytes());
-    const Zip = JSZip, generate = JSZip.prototype.generateAsync, objectUrl = URL.createObjectURL;
+    const Zip = JSZip, generate = JSZip.prototype.generateAsync, objectUrl = URL.createObjectURL, featureLoader = loadWftFeatureLibrary;
     const uploadBodies = [];
     const requests = [], runtime = () => JSON.parse(JSON.stringify({ students, selectedStudent, selectedImages, selectedImageDataUrl, pendingPortfolioSync, latestAnalysisData, activeAnalysisContext, activePortfolioReassessmentSource,
         writing: document.getElementById('studentWriting').value, selection: document.getElementById('studentSelect').value,
@@ -57,7 +62,10 @@ async function runArchiveScenario({ kind, mode }) {
         clearCurrentClassAfterSuccessfulArchive = function() { clearCalls++; return realClear.apply(this, arguments); };
     }
     let failing = true;
-    if (mode === 'library') delete window.JSZip;
+    if (mode === 'library') {
+        delete window.JSZip;
+        window.loadWftFeatureLibrary = name => name === 'zip' ? Promise.reject(Error('Synthetic JSZip loading refusal')) : featureLoader(name);
+    }
     if (mode === 'generation') JSZip.prototype.generateAsync = () => Promise.reject(Error('Synthetic compression refusal'));
     if (mode === 'tiny-resolved') JSZip.prototype.generateAsync = () => { tinyResolutions++; return Promise.resolve(new Blob(['Synthetic tiny resolved result'], { type: 'application/zip' })); };
     if (mode === 'download') URL.createObjectURL = () => { throw Error('Synthetic download refusal'); };
@@ -100,7 +108,7 @@ async function runArchiveScenario({ kind, mode }) {
     }
     checkFailedRetention();
     checkFailureBoundary();
-    window.JSZip = Zip; Zip.prototype.generateAsync = generate; URL.createObjectURL = objectUrl; failing = false;
+    window.JSZip = Zip; window.loadWftFeatureLibrary = featureLoader; Zip.prototype.generateAsync = generate; URL.createObjectURL = objectUrl; failing = false;
     if (mode === 'signed-out') { driveAccessToken = wftSyncState.accessToken = 'synthetic-token'; wftSyncState.signedIn = true; wftSyncState.tokenExpiresAt = Date.now() + 600000; }
     await invoke();
     check('retry completes existing public flow', kind === 'single' ? /Student export complete/.test(document.getElementById('archiveStatus').textContent) && JSON.stringify(bytes()) === before : /Archive complete/.test(document.getElementById('archiveStatus').textContent) && Object.keys(getPortfolioData()).length === 0 && students.length === 0);
@@ -129,6 +137,7 @@ async function runScenario(browser, scenario, cases) {
             if (new Date(0).getTime() !== 0 || Date.parse !== NativeDate.parse || Date.UTC !== NativeDate.UTC) throw Error('Archive clock fixture failed');
         }, archiveClock);
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
+        await page.evaluate(() => loadWftFeatureLibrary('zip'));
         const downloaded = page.waitForEvent('download').then(d => d.suggestedFilename(), e => { throw Error('Retry download missing: ' + e.message); });
         downloaded.catch(() => {});
         const observed = await page.evaluate(runArchiveScenario, scenario);

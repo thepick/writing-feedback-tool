@@ -179,7 +179,8 @@ function setupRosterNavigation(spec) {
         grade: document.getElementById('gradeLevelSelect').value, neatness: document.getElementById('assessScriptQuality').checked,
         corrected: document.getElementById('correctedStory').innerHTML,
         stored: Object.fromEntries(['wft_students', 'wft_settings', 'wft_portfolio', WFT_DELETIONS_STORAGE_KEY, PENDING_PORTFOLIO_SYNC_KEY].map(key => [key, localStorage.getItem(key)])) });
-    globalThis.rosterBefore = snapshot(); globalThis.rosterRenders = []; globalThis.rosterCropCloses = 0; globalThis.rosterScrolls = [];
+    globalThis.rosterBefore = snapshot(); globalThis.rosterDraftBefore = { text: rosterBefore.writing, genre: document.getElementById('writingGenreSelect').value, source: rosterBefore.source };
+    globalThis.rosterRenders = []; globalThis.rosterCropCloses = 0; globalThis.rosterScrolls = [];
     const realRender = renderStudentPortfolio;
     renderStudentPortfolio = Object.assign(function() { rosterRenders.push((document.getElementById('portfolioStudentSelect') || {}).value || null); return realRender.apply(this, arguments); }, realRender);
     const realClose = closeCropModal; closeCropModal = function() { rosterCropCloses++; return realClose.apply(this, arguments); };
@@ -199,6 +200,9 @@ function setupRosterNavigation(spec) {
         storedSelection: localStorage.getItem('wft_selectedStudent'), renders: rosterRenders.slice(), cropCloses: rosterCropCloses, scrolls: rosterScrolls.slice(),
         tabActive: document.getElementById('portfolioTabBtn').classList.contains('active'), adminActive: document.getElementById('adminTabBtn').classList.contains('active'),
         exportDisabled: document.getElementById('exportSelectedStudentBtn').disabled,
+        pendingReferenceKept: pendingPortfolioSync === pending,
+        outgoingDraft: JSON.parse(sessionStorage.getItem(wftWritingDraftKey('Alice')) || 'null')?.current,
+        expectedDraft: rosterDraftBefore, draftStatus: document.getElementById('writingDraftStatus').textContent,
         sameReferences: selectedImages[0] === photo && selectedImages[0].extractionPromise === promise && pendingPortfolioSync === pending && activePortfolioReassessmentSource === source && latestAnalysisData === latest });
 }
 
@@ -214,7 +218,7 @@ async function checkRosterNavigation(browser, check, serve) {
         const page = await browser.newPage({ viewport: spec.mobile ? { width: 390, height: 844 } : { width: 1200, height: 900 } });
         const errors = []; page.on('pageerror', error => errors.push(error.message)); await page.route('**/*', serve);
         try {
-            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' }); await page.evaluate(setupRosterNavigation, spec);
+            await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' }); await page.evaluate(setupRosterNavigation, spec);
             await page.locator('#adminTabBtn').click();
             if (!(await page.locator('#rosterSection').isVisible())) await page.locator('#toggleRosterBtn').click();
             await page.locator('#studentList').getByRole('button', { name: spec.target, exact: true }).click();
@@ -227,13 +231,28 @@ async function checkRosterNavigation(browser, check, serve) {
                 if (!spec.missingPortfolioSelect) { assert.equal(result.portfolioSelection, spec.target); assert.deepEqual(result.options, ['', 'Alice', 'Bob']); assert.deepEqual(result.titles, [spec.target + ' saved essay']); assert.deepEqual(result.renders, [spec.target]); assert.equal(result.exportDisabled, false); }
                 else assert.ok(result.renders.length <= 1);
             });
-            check(label + 'writing media pending and crop ownership stay safe', () => { assert.deepEqual(errors, []); assert.deepEqual(result.after, result.before); assert.equal(result.sameReferences, true); assert.equal(result.cropCloses, spec.target === 'Alice' ? 0 : 1); });
+            check(label + 'draft isolation, pending media and crop ownership stay safe', () => {
+                assert.deepEqual(errors, []);
+                assert.deepEqual(result.after.stored, result.before.stored, 'Primary, settings, deletion and pending bytes stay intact');
+                assert.deepEqual(result.after.pending, result.before.pending); assert.equal(result.pendingReferenceKept, true);
+                assert.equal(result.after.grade, result.before.grade); assert.equal(result.after.neatness, result.before.neatness);
+                if (spec.target === 'Alice') { assert.deepEqual(result.after, result.before); assert.equal(result.sameReferences, true); }
+                else {
+                    assert.deepEqual(result.outgoingDraft, result.expectedDraft, 'Alice exact text, genre and source remain in her journal');
+                    assert.equal(result.after.writing, ''); assert.deepEqual(result.after.photos, []);
+                    assert.deepEqual(result.after.primary, ['', '', '', false]); assert.equal(result.after.source, null); assert.equal(result.after.latest, null);
+                    assert.doesNotMatch(result.after.corrected, /Keep previous report/); assert.match(result.draftStatus, /Photos need reattaching/i);
+                    assert.equal(result.sameReferences, false, 'Bob must not inherit Alice editor references');
+                }
+                assert.equal(result.cropCloses, spec.target === 'Alice' ? 0 : 1);
+            });
             check(label + 'optional storage and responsive scroll contracts survive', () => {
                 assert.equal(result.storedSelection, spec.storageFailure ? 'Alice' : spec.target);
                 assert.deepEqual(result.scrolls, spec.mobile || spec.missingSection || spec.missingPortfolioSelect ? [] : [{ behavior: 'smooth', block: 'start' }]);
             });
             observations.push({ name: spec.name, target: spec.target, ...visible, tabActive: result.tabActive, owner: result.owner, selection: result.portfolioSelection,
-                renders: result.renders, protectedStateKept: JSON.stringify(result.before) === JSON.stringify(result.after), sameReferences: result.sameReferences,
+                renders: result.renders, editorStateUnchanged: JSON.stringify(result.before) === JSON.stringify(result.after),
+                protectedBytesKept: JSON.stringify(result.before.stored) === JSON.stringify(result.after.stored) && JSON.stringify(result.before.pending) === JSON.stringify(result.after.pending), sameReferences: result.sameReferences,
                 cropCloses: result.cropCloses, scrolls: result.scrolls.length, pageErrors: errors });
         } catch (error) { check('roster ' + spec.name + ': completes without operational error', () => { throw error; }); observations.push({ name: spec.name, operationalError: error.message, pageErrors: errors }); }
         finally { await page.evaluate(() => globalThis.restoreRosterStorage?.()).catch(() => {}); await page.close(); }

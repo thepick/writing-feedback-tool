@@ -251,6 +251,20 @@ function buildWftEmergencyBackupObject() {
         "wft_google_user", "wft_google_connected", "wft_pending_portfolio_sync_v1",
         "wft_oauth_textarea_draft_v1"
     ];
+    if (typeof WFT_WRITING_DRAFT_PREFIX === 'string') {
+        try {
+            for (var di = 0; di < localStorage.length; di++) {
+                var draftKey = localStorage.key(di);
+                if (draftKey.indexOf(WFT_WRITING_DRAFT_PREFIX) === 0) keysToBackup.push(draftKey);
+            }
+            backup.tabWritingDrafts = {};
+            for (var ti = 0; ti < sessionStorage.length; ti++) {
+                var tabDraftKey = sessionStorage.key(ti);
+                if (tabDraftKey.indexOf(WFT_WRITING_DRAFT_PREFIX) === 0) backup.tabWritingDrafts[tabDraftKey] = parseWftBackupValue(sessionStorage.getItem(tabDraftKey));
+            }
+            if (typeof wftDraftSnapshot === 'function' && wftWritingDraft) backup.currentWritingDraft = { owner: wftWritingDraft.owner, current: wftDraftSnapshot() };
+        } catch (e) { backup.draftReadError = true; }
+    }
 
     for (var bi = 0; bi < keysToBackup.length; bi++) {
         var bk = keysToBackup[bi];

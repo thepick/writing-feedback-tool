@@ -100,6 +100,7 @@ function checkArchiveConnectionOutcome(stage, result, errors) {
             const page = await context.newPage(), errors = [];
             page.on('pageerror', e => errors.push(e.message));
             await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+            await page.evaluate(() => loadWftFeatureLibrary('zip'));
             const result = await page.evaluate(runArchiveConnectionScenario, stage);
             checkArchiveConnectionOutcome(stage, result, errors);
             await page.close();

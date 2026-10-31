@@ -108,6 +108,7 @@ const cases = [];
                     await other.waitForFunction(() => typeof reassessPortfolioSession === 'function');
                     await other.evaluate(() => { stopWftSyncPolling(); scheduleWftCloudSync = () => {}; });
                     await showAlicePortfolio(other);
+                    await other.locator('.portfolio-session-details').filter({ has: other.locator('.btn-delete[data-session="saved-alice"]') }).locator('summary').click();
                     await other.locator('.btn-delete[data-session="saved-alice"]').click();
                     await other.getByRole('button', { name: 'Remove Entry', exact: true }).click();
                     await other.waitForFunction(() => !findPortfolioSession('Alice', 'saved-alice'));

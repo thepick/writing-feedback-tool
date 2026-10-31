@@ -15,6 +15,8 @@ async function runAdmissionScenario({kind,mode}) {
     stopWftSyncPolling(); scheduleWftCloudSync=()=>{};
     const el=id=>document.getElementById(id), checks=[], check=(name,value)=>checks.push({name,passed:!!value});
     const alerts=[], waits=[], models=[], authorizationMatches=[]; window.alert=message=>alerts.push(String(message));
+    const extractionChoices=[];
+    if(kind==='ocr'&&mode==='success')wftConfirm=async(message,options)=>{extractionChoices.push({message,options});return true;};
     sessionStorage.clear(); localStorage.clear(); wftApiKeyStorageRecovery=null; wftStudentChangeRecovery=null;
     cancelAnalysis=false; analysisAbortController=null; activeAnalysisContext=null;
     const fake='synthetic-admission-key', edited='synthetic-edited-key';
@@ -59,6 +61,7 @@ async function runAdmissionScenario({kind,mode}) {
     checkAdmissionOutcome();
     checkTransportOutcome();
     checkDelayedOutcome();
+    if(kind==='ocr'&&mode==='success')check('explicit extraction replacement choice',extractionChoices.length===1&&extractionChoices[0].options.confirmText==='Replace Writing'&&extractionChoices[0].options.alternativeText==='Append Text');
     check('all synthetic authorization checks',authorizationMatches.every(Boolean));check('no leaked synthetic credentials',![error,...alerts,el('debugRaw').textContent,el('ocrStatus').textContent].some(v=>v.includes(fake)||v.includes(edited)));
     check('no timeout remains',timers.size===0);
     return {checks,reads,fetches,models,waits,configuredBackoffMs:waits.reduce((a,b)=>a+b,0),timerStarts,error,alerts};
@@ -136,7 +139,7 @@ async function runScenario(browser,scenario,rows) {
     page.on('pageerror', error => errors.push(error.message));
     await page.route('**/*', route => localAppRoute(route, root));
     try {
-        await page.goto('http://127.0.0.1:8765',{waitUntil:'domcontentloaded'});
+        await page.goto('http://127.0.0.1:8765',{waitUntil:'load'});
         const result=await page.evaluate(runAdmissionScenario,scenario);
         assert.deepEqual(errors,[]);
         rows.push({...scenario,...result,passed:result.checks.every(check=>check.passed)});

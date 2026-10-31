@@ -206,18 +206,18 @@ async function runDeletionDurability() {
         } catch (error) { failures.push(`${action}/${failedKey}: ${error.message}`); }
     }
     try {
-        const context = await browser.newContext();
-        await context.route('**/*', routeLocalAppRequest);
         const cases = createDeletionCases();
         for (const [action, failedKey] of cases) {
+            const context = await browser.newContext();
+            await context.route('**/*', routeLocalAppRequest);
             const page = await context.newPage();
             const errors = [];
             page.on('pageerror', error => errors.push(error.message));
-            await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+            await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
             await page.waitForFunction(() => typeof removeStudent === 'function');
             const result = await page.evaluate(exerciseStorageFailure, { action, failedKey });
             recordDeletionCaseResult(action, failedKey, result, errors);
-            await page.close();
+            await context.close();
         }
         console.log(`Deletion durability browser cases: ${passed}/${cases.length} passed, ${failures.length} failed. Synthetic records; all external network blocked.`);
         assert.deepEqual(failures, []);

@@ -72,7 +72,10 @@ function assertSuccessfulDeletion(action, success) {
         assert.deepEqual(success.markers.filter(marker => marker[0] === 'session'), [['session', 'Alice', 'a'], ['session', 'Bob', 'b'], ['session', 'Archived', 'c']]);
         assert.deepEqual(success.events.slice(-5), ['settings-dirty', 'portfolio-dirty', 'deletions-dirty', 'flush', 'status']);
     }
-    if (action === 'clearAllStudents') assert.match(success.confirmations[0], /all saved writing/i);
+    if (action === 'clearAllStudents') {
+        assert.match(success.confirmations[0], /every student, saved writing, and unsubmitted text draft/i);
+        assert.match(success.confirmations[0], /Copy any drafts you need first/i);
+    }
 }
 (async () => {
     const failures = [];

@@ -34,7 +34,7 @@ async function openNotebookGuideTestPage(page, errors) {
   if (!fs.existsSync(file)) return route.fulfill({status:404,body:''});
   return route.fulfill({status:200,contentType:file.endsWith('.js')?'application/javascript':file.endsWith('.html')?'text/html':'application/octet-stream',body:fs.readFileSync(file)});
  });
- await page.goto('http://127.0.0.1:8765', {waitUntil:'domcontentloaded'});
+ await page.goto('http://127.0.0.1:8765', {waitUntil:'load'});
  await page.waitForFunction(() => typeof ensureNotebookGuide === 'function');
 }
 
@@ -57,11 +57,11 @@ async function createNotebookGuideAssessment(page) {
   const malformed=parseNotebookGuideCandidatesFromStep3Text('## Notebook Guide Candidate JSON\n{oops',original,data.writingGenre);
   const low=ensureNotebookGuide({sampleStatus:{status:'insufficient'},writingGenre:data.writingGenre},'dog');
   const missing=buildNotebookGuidePriorities({categoryScores:{Flow:4,Grammar:null}});
-  document.getElementById('studentWriting').value=original;
-  latestAnalysisData=data;
   selectedStudent='Test Student';
   students=['Test Student'];
   populateStudentDropdown();
+  document.getElementById('studentWriting').value=original;
+  latestAnalysisData=data;
   data.inputContext=captureCurrentWritingContext();
   fillNotebookSummary();
   const prompt=buildStep3Prompt(data.correctedStory,'',{},100,24,getGradeProfile(),data.writingGenre,original,buildNotebookGuidePriorities(data));
