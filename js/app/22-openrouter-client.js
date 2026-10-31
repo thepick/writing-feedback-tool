@@ -1,5 +1,5 @@
 /* =============================================================================
-   OpenRouter client - model fallback chain, retry/timeout, response parsing,
+   OpenRouter client - single-model retries/timeouts, response parsing,
    text/image request wrappers. Extracted from 10-main-app.js (decompose-20261016).
    Classic script; global names unchanged, loaded before 10-main-app.js.
    ============================================================================= */
@@ -8,16 +8,8 @@ function sleepMs(ms) {
     return new Promise(function(resolve) { setTimeout(resolve, ms); });
 }
 
-function buildFallbackModelList(primaryModel, isImageRequest) {
-    var candidates = isImageRequest
-        ? [primaryModel, OCR_MODEL, "openai/gpt-5.4-nano"]
-        : [primaryModel, "openai/gpt-5.4-nano", "x-ai/grok-4.1-fast", "xiaomi/mimo-v2-flash", "xiaomi/mimo-v2-omni"];
-    var seen = {};
-    return candidates.filter(function(item) {
-        if (!item || seen[item]) return false;
-        seen[item] = true;
-        return true;
-    });
+function buildFallbackModelList() {
+    return [DEFAULT_MODEL];
 }
 
 function isRetryableOpenRouterStatus(status) {

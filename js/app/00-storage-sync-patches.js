@@ -5925,7 +5925,7 @@ function loadSettingsFromDrive() {
 function applyWftPreferenceForm(settings) {
     var defaults = { model: document.getElementById('modelSelect') ? document.getElementById('modelSelect').options[0].value : '', targetWordCount: '200', useWordCountTarget: true, grammarStrictness: 3, assessScriptQuality: false };
     settings = Object.assign(Object.create(null), defaults, settings || {});
-    if (settings.model && document.getElementById("modelSelect")) document.getElementById("modelSelect").value = settings.model;
+    if (document.getElementById("modelSelect")) document.getElementById("modelSelect").value = DEFAULT_MODEL;
     if (settings.targetWordCount && document.getElementById("targetWordCount")) document.getElementById("targetWordCount").value = settings.targetWordCount;
     if (settings.useWordCountTarget != null && document.getElementById("useWordCountTarget")) document.getElementById("useWordCountTarget").checked = settings.useWordCountTarget;
     if (settings.grammarStrictness && document.getElementById("grammarStrictness")) {

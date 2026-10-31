@@ -28,6 +28,8 @@ Before using the tool, you will need:
 
 This tool uses OpenRouter for AI analysis.
 
+All AI requests use [Gemini Flash Latest](https://openrouter.ai/~google/gemini-flash-latest) (`~google/gemini-flash-latest`), including writing feedback, image text extraction, and handwriting assessment. OpenRouter automatically resolves this alias to the latest Gemini Flash release, so the underlying version and pricing can change. Failed requests retry the same model; there are no alternate-model fallbacks. Older saved model preferences are ignored.
+
 Steps:
 
 1. Go to https://openrouter.ai/
@@ -108,7 +110,7 @@ Both must exactly match the deployed site.
 The Settings panel includes:
 
 - OpenRouter API Key
-- AI model selection
+- Gemini Flash Latest (fixed model)
 - Grammar strictness
 - Target word count
 - The option to assess script quality
@@ -123,7 +125,7 @@ Important:
 
 1. Open the tool
 2. Add your OpenRouter API key in Settings
-3. Choose the AI model and writing options you want
+3. Set your writing options
 4. Enter or upload student writing
 5. Run the analysis
 6. Review feedback, corrected writing, and scores
@@ -158,9 +160,9 @@ Check the following:
 
 - Your OpenRouter API key is valid
 - The API key was pasted into Settings correctly
-- You selected a supported model
+- Gemini Flash Latest is available through OpenRouter
 - Your browser is allowing local storage
-- Your OpenRouter account has enough credits or access for the selected model
+- Your OpenRouter account has enough credits and access for Gemini Flash Latest
 
 ## Security note
 

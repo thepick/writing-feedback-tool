@@ -517,8 +517,8 @@ function importStudents(event) {
 
 var EMBEDDED_API_KEY = "";
 var API_KEY = EMBEDDED_API_KEY;
-var DEFAULT_MODEL = "google/gemini-3.1-flash-lite-preview";
-var OCR_MODEL = "google/gemini-3.1-flash-lite-preview";
+var DEFAULT_MODEL = "~google/gemini-flash-latest";
+var OCR_MODEL = DEFAULT_MODEL;
 var selectedImages = [];
 var isPreparingImages = false;
 var selectedImageDataUrl = "";
@@ -588,7 +588,7 @@ function captureAssessmentPolicy() {
         neatnessEnabled: getRawSettings().assessScriptQuality === true,
         neatnessShown: shouldShowNeatnessWeighting(),
         neatnessActive: shouldAssessNeatness(),
-        model: document.getElementById("modelSelect").value,
+        model: DEFAULT_MODEL,
         ocrModel: OCR_MODEL,
         genreChoice: document.getElementById("writingGenreSelect").value
     };
@@ -6481,7 +6481,7 @@ var studentWriting = document.getElementById("studentWriting");
 var targetWordCountInput = document.getElementById("targetWordCount");
 var useWordCountTargetInput = document.getElementById("useWordCountTarget");
 var modelSelect = document.getElementById("modelSelect");
-modelSelect.value = DEFAULT_MODEL; // default, overwritten below by saved settings
+modelSelect.value = DEFAULT_MODEL;
 loadSettingsFromLocalStorage();
 refreshApiKeyRuntimeValue();    // restore all saved settings including strictness
 // Initialize grade level feature (sets up select, applies defaults)

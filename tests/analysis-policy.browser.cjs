@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
 const localAppRoute = require('./support/local-app-route');
-const changes = ['grade', 'class', 'override', 'target', 'target-off', 'grammar', 'neatness', 'model', 'genre'];
+const changes = ['grade', 'class', 'override', 'target', 'target-off', 'grammar', 'neatness', 'genre'];
 const cases = ['correction', 'rubric', 'detail', 'photo', 'ocr', 'publish'].flatMap(boundary =>
     changes.map(change => ({ boundary, change })));
 for (const change of ['profile-weights', 'profile-grammar', 'profile-wordcount', 'profile-neatness']) cases.push({ boundary: 'detail', change });
@@ -100,7 +100,6 @@ async function runPolicyScenario({ boundary, change }) {
         if (change === 'target-off') event('useWordCountTarget', false);
         if (change === 'grammar') event('grammarStrictness', '5', 'input');
         if (change === 'neatness') event('assessScriptQuality', false);
-        if (change === 'model') event('modelSelect', Array.from(el('modelSelect').options).find(option => option.value !== el('modelSelect').value).value);
         if (change === 'genre') event('writingGenreSelect', Array.from(el('writingGenreSelect').options).find(option => option.value !== '__auto__').value);
         if (change === 'profile-weights') GRADE_PROFILES[12].weights.Grammar += 0.1;
         if (change === 'profile-grammar') GRADE_PROFILES[12].grammarDensityTables[3][0] = -1;
