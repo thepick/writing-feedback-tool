@@ -113,7 +113,7 @@ async function runAdmissionScenario({kind,mode}) {
 
     function checkTransportOutcome() {
         if(['success','session','remembered','legacy'].includes(mode)){check('successful single transport',fetches===1&&waits.length===0);check('successful result',kind==='ocr'?value==='Synthetic photo transcription.':kind==='neatness'?value?.quickRubric.score===8:value==='Synthetic request success');}
-        if(mode==='fallback'){check('same-model retry then supported fallback',fetches===3&&models[0]===models[1]&&models[2]!==models[0]);check('meaningful retry waits',JSON.stringify(waits)==='[1200,2400]');check('fallback succeeds',value==='Synthetic request success');}
+        if(mode==='fallback'){check('exhausted retries never switch models',fetches===2&&models.every(model=>model==='~google/gemini-flash-latest'));check('one meaningful retry wait',JSON.stringify(waits)==='[1200]');check('terminal failure is reported',/OpenRouter request failed after retries/.test(error));}
         if(mode==='timeout'){check('body timeout abort propagated into retry',rawAbort&&fetches===2&&waits.length===1&&timerStarts===2);check('timeout recovered',value==='Synthetic request success');}
         if(mode==='cancel-before')check('cancel before admission',reads===0&&fetches===0&&waits.length===0&&/cancelled/.test(error));
         if(mode==='cancel-body')check('body cancellation no retry',rawAbort&&fetches===1&&waits.length===0&&/cancelled/.test(error));
