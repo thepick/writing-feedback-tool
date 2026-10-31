@@ -12,7 +12,7 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
             return route.fulfill(fs.existsSync(file) ? { contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html', body: fs.readFileSync(file) } : { status: 404, body: '' });
         });
-        await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+        await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
         await page.waitForFunction(() => typeof syncWftPortfolioIndexIfNeeded === 'function');
         const cases = await page.evaluate(async function verifyPortfolioIndexCases() {
             stopWftSyncPolling(); scheduleWftCloudSync = () => {};
@@ -21,12 +21,14 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
             const copy = value => JSON.parse(JSON.stringify(value));
             const entry = (id, overall = 80) => ({ id, createdAt: '2026-10-12T00:00:00Z', date: '12/10/2026', overall, originalText: 'Synthetic writing ' + id, categoryScores: {}, images: [{ imageId: 'photo-' + id, driveFileId: 'synthetic-photo', name: 'writing.png' }] });
             let uploads, requests;
-            function reset() {
+            async function reset() {
                 Storage.prototype.getItem = native.get; Storage.prototype.setItem = native.set; Storage.prototype.removeItem = native.remove;
+                for (const owner of new Set(['Synthetic', wftWritingDraft?.owner || ''])) await navigator.locks.request(wftWritingDraftKey(owner), () => {});
                 delete navigator.onLine;
                 uploadWftJsonFilePromise = native.upload; saveFileToDrive = native.save; wftDriveFetch = native.fetch; ensureDriveFolder = native.ensure;
                 saveWftPreMigrationBackupToDrive = native.backup; ensureWftStudentsFolderPromise = native.studentsFolder; saveStudentFileToDrive = native.studentSave;
-                localStorage.clear(); localStorage.setItem('wft_settings', JSON.stringify({ students: ['Synthetic'], extra: 'keep' }));
+                localStorage.clear(); sessionStorage.clear(); wftWritingDraft = null; wftDraftJournalWarnings = Object.create(null);
+                localStorage.setItem('wft_settings', JSON.stringify({ students: ['Synthetic'], extra: 'keep' }));
                 localStorage.setItem('wft_students', '["Synthetic"]'); localStorage.setItem('wft_selectedStudent', 'Synthetic');
                 students = ['Synthetic']; selectedStudent = 'Synthetic'; selectedImages = []; pendingPortfolioSync = null; wftStudentChangeRecovery = null;
                 wftApiKeyStorageRecovery = null; wftSyncState.needsSyncAfterCurrent = false;
@@ -37,8 +39,12 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
                 uploads = []; requests = [];
                 uploadWftJsonFilePromise = async (name, data) => { uploads.push(copy(data)); return 'synthetic-index'; };
                 window.alert = () => {}; wftConfirm = async () => true;
+                activePortfolioReassessmentSource = null; latestAnalysisData = null;
+                document.getElementById('studentSelect').value = '';
+                populateStudentDropdown(); wftLoadWritingDraft('Synthetic', true);
+                if (wftWritingDraft.owner !== selectedStudent || selectedStudent !== document.getElementById('studentSelect').value || document.getElementById('studentWriting').value !== '') throw Error('Synthetic case reset must start with one aligned empty draft owner');
             }
-            async function run(name, fn) { reset(); try { await fn(name); } catch (e) { check(name + ' completed', false, e.message); } finally { reset(); } }
+            async function run(name, fn) { await reset(); try { await fn(name); } catch (e) { check(name + ' completed', false, e.message); } finally { await reset(); } }
             const sync = () => syncWftPortfolioIndexIfNeeded('synthetic-test');
             const direct = index => new Promise(resolve => savePortfolioIndexToDrive(index, (error, fileId) => resolve({ error: error && error.message, fileId })));
             async function verifyScoreSummaries() {
@@ -137,6 +143,7 @@ const root = path.resolve(process.env.WFT_TEST_ROOT || path.join(__dirname, '..'
                     if (action === 'clear') await clearAllStudents();
                     if (action === 'reset-class') await resetCurrentClassData();
                     if (action === 'archive-clear') clearCurrentClassAfterSuccessfulArchive();
+                    if (['clear', 'reset-class', 'archive-clear'].includes(action)) check(name + ' local clearing committed before upload acknowledgement', students.length === 0 && !getLocalPortfolioSnapshot().Synthetic);
                     if (action === 'cloud-merge') savePortfolioLocalOnly({ Synthetic: { sessions: [entry('one'), entry('cloud', 90)] } }, 'cloud-merge');
                     if (action === 'same-millisecond-mark') {
                         const old = JSON.parse(localStorage.getItem('wft_settings'))._indexDirtyAt;

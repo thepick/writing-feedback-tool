@@ -39,7 +39,9 @@ async function runStorageScenario(browser,scenario,cases){
   await page.evaluate(initializeStorageScenario,scenario);
   const check=(name,condition)=>checks.push({name,passed:!!condition});
   async function checkPortfolioViews(){
-   await page.locator('#adminTabBtn').click();await page.locator('#toggleRosterBtn').click();check('Roster show button displays current students',await page.locator('#rosterSection').isVisible()&&(await page.locator('#studentList').textContent()).includes('Alice'));
+   await page.locator('#adminTabBtn').click();
+   if(await page.locator('#rosterSection').isVisible())await page.locator('#toggleRosterBtn').click();
+   await page.locator('#toggleRosterBtn').click();check('Roster show button displays current students',await page.locator('#rosterSection').isVisible()&&(await page.locator('#studentList').textContent()).includes('Alice'));
    await page.locator('#toggleRosterBtn').click();check('Roster hide button hides section',!await page.locator('#rosterSection').isVisible());
    await page.locator('#portfolioTabBtn').click();
    await page.locator('#portfolioStudentSelect').selectOption('Alice');await page.waitForFunction(()=>document.getElementById('portfolioContent').textContent.includes('Original synthetic'));
@@ -48,9 +50,12 @@ async function runStorageScenario(browser,scenario,cases){
    const zip=await JSZip.loadAsync(fs.readFileSync(await download.path())),names=Object.keys(zip.files),html=await zip.file('Alice - Portfolio.html').async('string');
    check('Actual student download contains only selected portfolio',download.suggestedFilename()==='Alice - Writing Portfolio.zip'&&names.length===1&&html.includes('Original synthetic exact writing.')&&!html.includes('Bob writing must not export'));
    const popupEvent=page.waitForEvent('popup');await page.getByRole('button',{name:'Re-print Notebook Summary',exact:true}).click();const popup=await popupEvent;
+   await popup.getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor();
+   check('Saved notebook opens for review before explicit printing',await popup.evaluate(()=>window.nativePrintCalls===0));
+   await popup.getByRole('button',{name:'Print / Save as PDF',exact:true}).click();
    await popup.waitForFunction(()=>window.nativePrintCalls===1);
    const printed=await popup.evaluate(()=>({openerDetached:window.opener===null,text:document.body.textContent,title:document.title,printCalls:window.nativePrintCalls}));
-   check('Actual reprint popup schedules saved notebook summary with detached opener',printed.openerDetached&&printed.text.includes('Alice')&&printed.text.includes('Synthetic story')&&printed.text.includes('4 words')&&printed.printCalls===1);await popup.close();
+   check('Explicit printing uses saved notebook summary with detached opener',printed.openerDetached&&printed.text.includes('Alice')&&printed.text.includes('Synthetic story')&&printed.text.includes('4 words')&&printed.printCalls===1);await popup.close();
    observed={downloadNames:names,printed};
    return{names,printed};
   }

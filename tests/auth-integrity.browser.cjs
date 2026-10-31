@@ -371,7 +371,7 @@ const root = process.env.WFT_TEST_ROOT || path.resolve(__dirname, '..');
                 await checkCompletionExpiry();
                 async function checkSignOutRetention() {
                     for (const failure of ['session-remove', 'legacy-token-remove', 'legacy-expiry-remove', 'optional-user-remove', 'optional-cache-remove', 'all-removes']) await run('actual sign-out ' + failure + ' preserves writing and retry', () => {
-                        connect(); const ta = document.getElementById('studentWriting'); ta.value = 'Retained synthetic writing'; students = ['Alice']; selectedStudent = 'Alice'; populateStudentDropdown(); manualGenreOverrideValue = 'narrative'; document.getElementById('writingGenreSelect').value = 'narrative';
+                        connect(); const ta = document.getElementById('studentWriting'); students = ['Alice']; selectedStudent = 'Alice'; populateStudentDropdown(); ta.value = 'Retained synthetic writing'; manualGenreOverrideValue = 'narrative'; document.getElementById('writingGenreSelect').value = 'narrative';
                         const keys = ['wft_portfolio', 'wft_students', 'wft_settings', 'wft_selectedStudent', PENDING_PORTFOLIO_SYNC_KEY, WFT_OAUTH_TEXTAREA_DRAFT_KEY];
                         const retained = Object.fromEntries(keys.map(key => [key, key === 'wft_selectedStudent' ? 'Alice' : 'retained-' + key]));
                         keys.forEach(key => localStorage.setItem(key, retained[key]));

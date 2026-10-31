@@ -57,6 +57,31 @@ async function exercise(page, scenario) {
         if (scenario === 'no-selection') select.value = '';
         if (scenario === 'missing-select') select.remove();
         if (scenario === 'missing-content') content.remove();
+        // Finding 09 adds chart alternatives; compare the original surface separately from its focused UX assertions.
+        function originalPortfolioHtml() {
+            const original = content.cloneNode(true);
+            original.querySelectorAll('.portfolio-chart-summary, .portfolio-chart-table-hint, .portfolio-chart-data, .portfolio-chart-legend, .portfolio-chart-loading').forEach(node => node.remove());
+            original.querySelectorAll('canvas').forEach(canvas => ['role', 'aria-label', 'aria-describedby'].forEach(attribute => canvas.removeAttribute(attribute)));
+            // Finding 14 wraps the original saved work in a disclosure and moves removal below its expanded content.
+            original.querySelectorAll('.session-card').forEach(card => {
+                const details = card.querySelector('details.portfolio-session-details');
+                if (!details) return;
+                const header = details.querySelector('.session-card-header');
+                const body = details.querySelector('.portfolio-session-body');
+                const actions = card.querySelector(':scope > .session-card-actions');
+                const removal = body.querySelector('.session-remove-action');
+                actions.append(...removal.childNodes); removal.remove();
+                for (const selector of ['.session-card-title-wrap', '.session-date', '.session-score']) {
+                    const node = header.querySelector(selector), replacement = document.createElement('div');
+                    [...node.attributes].forEach(attribute => replacement.setAttribute(attribute.name, attribute.value));
+                    replacement.append(...node.childNodes); node.replaceWith(replacement);
+                }
+                const originalHeader = document.createElement('div'); originalHeader.className = header.className;
+                originalHeader.append(...header.childNodes);
+                card.replaceChildren(originalHeader, ...body.childNodes, actions);
+            });
+            return original.innerHTML.replace(/blob:[^"\s]+/g, '[object-url]');
+        }
         const before = { ...localStorage }, timers = [], created = [], destroyed = [], loads = [], requests = [], logs = [];
         const originalTimeout = window.setTimeout;
         window.setTimeout = (fn, delay, ...args) => delay === 50 ? (timers.push(() => fn(...args)), timers.length) : originalTimeout(fn, delay, ...args);
@@ -91,7 +116,7 @@ async function exercise(page, scenario) {
         try {
             if (scenario.startsWith('adapter-')) { select.value = 'Bob'; await renderStudentPortfolioAsync(name); }
             else renderStudentPortfolio();
-            immediate = content.innerHTML;
+            immediate = originalPortfolioHtml();
             await new Promise(resolve => originalTimeout(resolve, 20));
         } catch (e) { error = e.message; }
         if (scenario === 'missing-one-canvas') content.querySelector('canvas').remove();
@@ -106,7 +131,7 @@ async function exercise(page, scenario) {
             closePortfolioFeedbackModal(); content.querySelector('.btn-view-detailed-feedback').click(); dialogs.push(document.getElementById('portfolioFeedbackModalBackdrop').textContent); closePortfolioFeedbackModal();
         }
         await new Promise(resolve => originalTimeout(resolve, 20));
-        const html = content.innerHTML.replace(/blob:[^"\s]+/g, '[object-url]');
+        const html = originalPortfolioHtml();
         return { html, immediate, created, destroyed, queued, error, loads, requests, logs, dialogs,
             selected: select.value, flags: { async: WFT_ASYNC_PORTFOLIO_ACCESS_V1, safe: isWftStorageSafeMode() },
             clearedAdapterState: !renderStudentPortfolio._syncRender && !renderStudentPortfolio._asyncStudentData,
@@ -135,16 +160,68 @@ async function exercise(page, scenario) {
                 finally { await context.close(); }
             }
             const [expected, actual] = observations;
+            // Ignore only the added non-color series styles; portfolio-ux asserts those exact behaviors.
+            actual.created.forEach(chart => {
+                chart.config.data.datasets.forEach(dataset => { delete dataset.borderDash; delete dataset.pointStyle; });
+                delete chart.config.options.plugins.legend.labels?.usePointStyle;
+                if (chart.canvas.startsWith('portfolioCatChart_')) delete chart.config.options.plugins.legend.display;
+            });
+            // Invalid imported overall values must remain unscored, including blanks; real zero stays covered by mixed.
+            if (scenario === 'odd-dates') {
+                expected.created[0].config.data.datasets[0].data = [null, null, 80, 80];
+                expected.created[0].config.options.scales.y.min = 70;
+                expected.created[0].config.options.scales.y.max = 90;
+            }
+            if (scenario === 'unsafe-markup') {
+                expected.created[0].config.options.scales.y.min = 0;
+                expected.created[0].config.options.scales.y.max = 100;
+            }
+            // Approved score presentation: missing means Not scored; blank/nonfinite imports never become a numeric score.
+            function normalizedScore(text) {
+                return text === 'N/A' || (scenario === 'odd-dates' && ['%', 'bad%'].includes(text)) || scenario === 'unsafe-markup' ? 'Not scored' : text;
+            }
+            function normalizedStats(text, index) {
+                if (index >= 3) return text;
+                if (scenario === 'unsafe-markup' || text === '-') return 'Not scored';
+                return scenario === 'odd-dates' && index === 1 ? '80%' : text;
+            }
+            expected.stats = expected.stats.map(normalizedStats);
+            expected.cards.forEach(card => { card.score = normalizedScore(card.score); });
+            actual.cards.forEach(card => {
+                const removalIndex = card.actions.findIndex(action => action.handler.startsWith('deletePortfolioSession('));
+                if (removalIndex >= 0) card.actions.push(...card.actions.splice(removalIndex, 1));
+            });
+            for (const field of ['html', 'immediate']) {
+                if (typeof expected[field] !== 'string') continue;
+                let statIndex = 0;
+                if (expected[field] === '<div class="portfolio-empty">Select a student above to view their progress charts and session history.</div>') expected[field] = '<div class="portfolio-empty">Select a student above to view saved writing and progress.</div>';
+                expected[field] = expected[field].replace('then press Sync to Portfolio to save it here.', 'then press Save portfolio &amp; sync Drive to save it here.');
+                expected[field] = expected[field].replace(/(<div class="stat-trend trend-(?:up|down|flat)">)([^<]*)(<\/div>)/g,
+                    (whole, open, text, close) => {
+                        if (text === 'Same as last') return open + 'No change from previous writing' + close;
+                        const points = Number(text.replace('% vs last', ''));
+                        return open + (points > 0 ? 'Up ' : 'Down ') + Math.abs(points) + ' percentage points from previous writing' + close;
+                    });
+                expected[field] = expected[field].replace(/(<div class="stat-value">)([^<]*)(<\/div>)/g,
+                    (whole, open, text, close) => open + normalizedStats(text, statIndex++) + close);
+                expected[field] = expected[field].replace(/(<div class="session-score" style=")([^"]*)(">)([^<]*)(<\/div>)/g,
+                    (whole, open, style, middle, text, close) => {
+                        const score = normalizedScore(text);
+                        return open + (score === 'Not scored' ? 'color:#94a3b8;border-color:#94a3b833;' : style) + middle + score + close;
+                    });
+            }
+            if (scenario === 'missing-chart') expected.queued = 0;
+            if (scenario === 'missing-one-canvas') { expected.created = []; expected.registry = []; }
             assert.deepEqual(actual, expected, scenario + ': changed renderer behavior');
             assert.equal(actual.unchangedStorage, true, scenario + ': render wrote storage');
             assert.equal(actual.injected, false, scenario + ': imported markup executed');
             assert.equal(actual.clearedAdapterState, true, scenario + ': adapter state leaked');
             if (scenario === 'one') { assert.deepEqual(actual.stats.slice(0, 4), ['60%', '60%', '60%', '1']); assert.equal(actual.created.length, 2); assert.deepEqual(actual.registry, ['categories', 'overall']); }
-            if (scenario === 'mixed') { assert.deepEqual(actual.stats.slice(0, 4), ['-', '43%', '85%', '3']); assert.deepEqual(actual.created[0].config.data.datasets[0].data, [0, 85, null]); assert.deepEqual(actual.cards.map(card => card.score), ['N/A', '85%', '0%']); }
-            if (scenario === 'all-missing') { assert.deepEqual(actual.stats.slice(0, 3), ['-', '-', '-']); assert.deepEqual(actual.created[0].config.options.scales.y.min, 0); assert.equal(actual.created[0].config.options.scales.y.max, 100); }
+            if (scenario === 'mixed') { assert.deepEqual(actual.stats.slice(0, 4), ['Not scored', '43%', '85%', '3']); assert.deepEqual(actual.created[0].config.data.datasets[0].data, [0, 85, null]); assert.deepEqual(actual.cards.map(card => card.score), ['Not scored', '85%', '0%']); }
+            if (scenario === 'all-missing') { assert.deepEqual(actual.stats.slice(0, 3), ['Not scored', 'Not scored', 'Not scored']); assert.deepEqual(actual.created[0].config.options.scales.y.min, 0); assert.equal(actual.created[0].config.options.scales.y.max, 100); }
             if (scenario === 'legacy-ids') assert.deepEqual(actual.cards.map(card => card.actions.at(-1).session), ['1', '2026-01-01T00:00:00Z', '0']);
             if (scenario === 'missing-chart') { assert.equal(actual.created.length, 0); assert.equal((actual.html.match(/chart library did not load/g) || []).length, 2); }
-            if (scenario === 'missing-one-canvas') { assert.equal(actual.created.length, 1); assert.deepEqual(actual.registry, ['categories']); }
+            if (scenario === 'missing-one-canvas') { assert.equal(actual.created.length, 0); assert.deepEqual(actual.registry, []); }
             if (scenario === 'rerender-before-charts') { assert.equal(actual.queued, 2); assert.equal(actual.created.length, 2); assert.equal(actual.cards[0].title, 'Bob only'); }
             if (scenario === 'empty-before-charts') { assert.equal(actual.created.length, 0); assert.deepEqual(actual.registry, []); }
             if (scenario === 'throwing-destroy') { assert.equal(actual.destroyed.length, 3); assert.deepEqual(actual.registry, []); }

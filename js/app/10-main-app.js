@@ -8,7 +8,7 @@ function loadStudents() {
     } catch (e) {
         students = [];
     }
-    selectedStudent = localStorage.getItem("wft_selectedStudent") || "";
+    selectedStudent = getWritingDraftStartupOwner(localStorage.getItem("wft_selectedStudent") || "");
 }
 
 function saveStudents() {
@@ -46,6 +46,7 @@ function switchTab(tab) {
     if (tab === "admin") {
         adminPanel.classList.add("active");
         adminBtn.classList.add("active");
+        if (!students.length) openRosterCreation(false);
     } else if (tab === "portfolio") {
         portfolioPanel.classList.add("active");
         portfolioBtn.classList.add("active");
@@ -56,6 +57,10 @@ function switchTab(tab) {
         toolShell.classList.add("active");
         toolBtn.classList.add("active");
     }
+    [toolBtn, portfolioBtn, adminBtn].forEach(function(button) {
+        if (button.classList.contains('active')) button.setAttribute('aria-current', 'page');
+        else button.removeAttribute('aria-current');
+    });
 }
 
 function restoreActiveTab() {
@@ -86,6 +91,9 @@ function renderStudentList() {
         list.appendChild(li);
     });
     count.textContent = students.length + (students.length === 1 ? ' student' : ' students');
+    var clearClassButton = document.querySelector('button[onclick="clearAllStudents()"]');
+    if (clearClassButton) clearClassButton.disabled = !students.length;
+    if (!students.length) openRosterCreation(false);
     try { refreshPortfolioDropdown(); } catch (e) {}
 }
 
@@ -103,12 +111,24 @@ function populateStudentDropdown() {
     if (currentValue && students.indexOf(currentValue) !== -1) {
         select.value = currentValue;
         selectedStudent = currentValue;
+    } else if (currentValue) {
+        var recoveredOwner = document.createElement('option');
+        recoveredOwner.value = currentValue;
+        recoveredOwner.textContent = currentValue + ' (draft owner unavailable)';
+        select.appendChild(recoveredOwner);
+        select.value = currentValue;
+        selectedStudent = currentValue;
     }
     if (_cropSession && !isCurrentCropSession(_cropSession)) closeCropModal();
+    if (wftWritingDraft && wftWritingDraft.owner !== selectedStudent) wftSwitchWritingOwner(selectedStudent);
 }
 
 function updateSelectedStudent() {
     var select = document.getElementById("studentSelect");
+    if (!wftSwitchWritingOwner(select ? select.value : '')) {
+        if (select) select.value = selectedStudent;
+        return;
+    }
     selectedStudent = select ? select.value : "";
     try { localStorage.setItem("wft_selectedStudent", selectedStudent); }
     catch (e) { wftDebugWarn("Could not remember the selected student:", e); }
@@ -287,6 +307,7 @@ function chooseStudentToManage(defaultName) {
         var settled = false;
         function close(result) {
             if (settled) return;
+            if (wftCloseDialog(dialog) === false) return;
             settled = true;
             document.removeEventListener('keydown', onKeyDown);
             if (backdrop.parentNode) {
@@ -313,9 +334,7 @@ function chooseStudentToManage(defaultName) {
         });
         document.addEventListener('keydown', onKeyDown);
 
-        setTimeout(function() {
-            try { studentSelect.focus(); } catch (e) { }
-        }, 0);
+        wftOpenDialog(dialog, studentSelect, function() { close(''); });
     });
 }
 
@@ -403,7 +422,7 @@ async function renameStudent(oldName) {
         var settings = readWftRequiredStorage('wft_settings');
         updateStudentRecordOnRename(oldName, newName, settings);
         saveWftStudentChange({ portfolio: portfolio, deletions: deletions, settings: settings,
-            students: nextStudents, selectedStudent: newName });
+            students: nextStudents, selectedStudent: newName, draftRename: [oldName, newName] });
     } catch (e) {
         wftDebugError('Student rename failed while saving changes:', e);
         alert(e.wftStudentChangeRecovery ? e.message : 'The student could not be renamed because the changes could not be saved. The original name and writing have been kept. Please try again.');
@@ -432,7 +451,7 @@ async function renameStudent(oldName) {
 
 async function clearAllStudents() {
     if (!students.length) return;
-    if (!(await wftConfirm("Clear the entire student list and active portfolio? This will remove every student and all saved writing from the current class.", {
+    if (!(await wftConfirm("Delete the class roster and active portfolio? This removes every student, saved writing, and unsubmitted text draft from the current class. Copy any drafts you need first.", {
         title: "Clear Student List",
         confirmText: "Clear All",
         danger: true
@@ -1149,20 +1168,21 @@ function refreshScoreWeightingDescription() {
 
 function setOcrStatus(message, state) {
     var el = document.getElementById("ocrStatus");
+    if (state === 'error') document.getElementById('ocrPanel').open = true;
+    el.setAttribute('role', state === 'error' ? 'alert' : 'status');
+    el.setAttribute('aria-live', state === 'error' ? 'assertive' : 'polite');
     el.textContent = message;
     el.className = "ocr-status" + (state ? " " + state : "");
+    if (state === 'error' && /API key/i.test(message)) {
+        document.getElementById('apiKeyInput').setAttribute('aria-invalid', 'true');
+        var keyError = document.getElementById('apiKeyError');
+        keyError.textContent = message;
+        keyError.hidden = false;
+    }
 }
 
 function isMobileLayout() {
     return !!(window.matchMedia && window.matchMedia("(max-width: 640px)").matches);
-}
-
-function syncMobileOcrPanelState() {
-    var panel = document.getElementById("ocrPanel");
-    if (!panel) return;
-    if (isMobileLayout()) {
-        panel.open = true;
-    }
 }
 
 function syncOcrPanelTitle() {
@@ -1389,7 +1409,7 @@ async function moveDuplicateSyncFilesToBackup() {
 }
 
 async function resetCurrentClassData() {
-    if (!(await wftConfirm("Reset the current class? This will clear the student list and active portfolio. Use this only if you already have an archive or backup.\n\nThis does not create an archive.", {
+    if (!(await wftConfirm("Reset the current class? This clears the student list, active portfolio, and unsubmitted text drafts. Copy drafts and save an archive or backup first.\n\nThis does not create an archive.", {
         title: "Reset Current Class",
         confirmText: "Reset Class",
         danger: true
@@ -1473,7 +1493,7 @@ function updateSelectedImagePreview() {
         for (var i = 0; i < selectedImages.length; i++) {
             var item = selectedImages[i];
             html += '<div class="ocr-preview-card' + (i === 0 ? ' primary' : '') + '" draggable="true" data-index="' + i + '">' +
-                '<img class="ocr-preview" draggable="false"' + (isSafeWftImageDataUrl(item.dataUrl) ? ' src="' + escapeHtmlAttr(item.dataUrl) + '"' : '') + ' alt="' + escapeHtmlAttr((i === 0 ? "First selected writing sample preview" : "Selected writing sample preview " + (i + 1))) + '" data-caption="' + escapeHtmlAttr(item.name || ("Image " + (i + 1))) + '" onclick="openImageLightbox(this)" title="Click to enlarge">' +
+                '<button type="button" class="wft-image-preview-button" aria-label="Enlarge selected writing sample ' + (i + 1) + '" onclick="openImageLightbox(this.firstElementChild)"><img class="ocr-preview" draggable="false"' + (isSafeWftImageDataUrl(item.dataUrl) ? ' src="' + escapeHtmlAttr(item.dataUrl) + '"' : '') + ' alt="' + escapeHtmlAttr((i === 0 ? "First selected writing sample preview" : "Selected writing sample preview " + (i + 1))) + '" data-caption="' + escapeHtmlAttr(item.name || ("Image " + (i + 1))) + '"></button>' +
                 '<div class="ocr-preview-details">' +
                 '<div class="ocr-preview-meta"><div class="ocr-preview-order">Image ' + (i + 1) + ' of ' + selectedImages.length + '</div>' +
                 '<div>' + escapeHtml(item.name || ("image " + (i + 1))) + '</div></div>' +
@@ -1983,8 +2003,10 @@ async function extractTextFromSelectedImage(isAutomatic) {
             assertCurrentAnalysisContext(context);
             syncSelectedImageState();
             selectedImageExtractedText = selectedImages.length === 1 ? combinedText : "";
-            document.getElementById("studentWriting").value = combinedText;
-            context.input.writingText = combinedText;
+            if (!(await chooseExtractedWritingText(context, combinedText))) {
+                setOcrStatus('Current writing kept. Extraction was not inserted.', '');
+                return '';
+            }
             syncUiState();
             setOcrStatus(
                 selectedImages.length > 1
@@ -5321,6 +5343,7 @@ function getNotebookPrintCss() {
         "html { -webkit-font-smoothing: antialiased; }",
         "body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; font-size: 17.537px; color: #111111; background: #e0e0e0; line-height: 1.4; }",
         ".screen-controls { text-align: center; padding: 14.143px; font-family: 'DM Sans', 'Helvetica Neue', sans-serif; font-size: 15.557px; color: #555; }",
+        ".screen-controls h1 { font-size: 22px; color: #222; margin-bottom: 6px; } .screen-controls p { margin-bottom: 6px; } .screen-controls button { min-height: 44px; margin: 8px 4px 0; }",
         ".btn-print { display: inline-block; background: #222; color: #fff; border: none; padding: 8.486px 28.286px; border-radius: 5.657px; font-size: 15.557px; font-family: 'DM Sans', 'Helvetica Neue', sans-serif; font-weight: 600; cursor: pointer; margin-top: 8.486px; }",
         ".btn-print:hover { background: #000; }",
         ".page { width: 210mm; min-height: 297mm; background: #ffffff; margin: 11.314mm auto; padding: 11.314mm 12.729mm 12.729mm; box-shadow: 0 2.829px 16.971px rgba(0,0,0,0.18); page-break-after: always; }",
@@ -5478,28 +5501,32 @@ function writeWftPrintWindow(printWindow, printHtml) {
 
 function scheduleWftPrintWindow(printWindow) {
     try { printWindow.focus(); } catch (e) { }
-    setTimeout(function() {
-        try {
-            if (printWindow.fitNotebookPageOne) printWindow.fitNotebookPageOne();
-            printWindow.print();
-        } catch (e) { }
-    }, 700);
 }
 
-function buildNotebookPrintDocument(printContentHtml, studentName, writingTitle) {
+function buildNotebookPrintDocument(printContentHtml, studentName, writingTitle, previewContext) {
+    previewContext = previewContext || {};
+    var isSaved = previewContext.source === "saved";
+    var sourceLabel = isSaved ? "Saved portfolio entry" : previewContext.source === "current" ? "Current analysis" : "Notebook summary";
+    var returnLabel = isSaved ? "Return to portfolio" : previewContext.source === "current" ? "Return to editing" : "Close preview";
+    var grade = parseGradeLevelValue(previewContext.gradeLevel);
+    var gradeLabel = grade ? "Grade " + grade : "Grade not recorded";
     var safeName = (studentName || "").replace(/[\/\\:*?"<>|]/g, "").trim();
     var safeTitle = (writingTitle || "").replace(/[\/\\:*?"<>|]/g, "").trim();
     var docTitle = safeName && safeTitle
         ? (safeName + " - " + safeTitle)
         : (safeName || safeTitle || "Notebook Summary");
+    // Optional font loading must not block preview controls or page fitting.
     return '<!DOCTYPE html>' +
         '<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
         '<title>' + escapeHtml(docTitle) + '</title>' +
         '<link rel="preconnect" href="https://fonts.googleapis.com">' +
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
-        '<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">' +
+        "<link href=\"https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Serif+Display:ital@0;1&display=swap\" rel=\"stylesheet\" media=\"print\" onload=\"this.media='all'\">" +
         '<style>' + getNotebookPrintCss() + '</style></head><body>' +
-        '<div class="screen-controls">Writing Notebook Summary - A4 (2 pages; double-sided: flip on long edge) &nbsp;|&nbsp; <button class="btn-print" onclick="window.print()">Print / Save as PDF</button></div>' +
+        '<div class="screen-controls"><h1>Notebook preview</h1><p><strong>' + sourceLabel + '</strong> &middot; Student: ' + escapeHtml(studentName || "No student selected") +
+        ' &middot; ' + gradeLabel + ' &middot; Date: ' + escapeHtml(previewContext.date || "Date not recorded") + '</p><p>' + escapeHtml(writingTitle || "Notebook Summary") +
+        '</p><p>A4 (2 pages; double-sided: flip on long edge)</p><button type="button" class="btn-print" onclick="window.print()">Print / Save as PDF</button>' +
+        '<button type="button" class="btn-print" onclick="window.close()">' + returnLabel + '</button></div>' +
         printContentHtml + getNotebookPrintFitScript() + '</body></html>';
 }
 
@@ -5520,7 +5547,11 @@ function printNotebookSummary() {
 
     var studentName = (document.getElementById("notebookStudentName") || {}).textContent || "";
     var writingTitle = (document.getElementById("notebookTitle") || {}).textContent || "";
-    var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle);
+    var printHtml = buildNotebookPrintDocument(printDoc.innerHTML, studentName, writingTitle, {
+        source: "current", date: (document.getElementById("notebookDate") || {}).textContent || "",
+        gradeLevel: latestAnalysisData.assessmentPolicy && latestAnalysisData.assessmentPolicy.gradeProfile
+            ? latestAnalysisData.assessmentPolicy.gradeProfile.grade : latestAnalysisData.gradeLevel
+    });
     if (!writeWftPrintWindow(printWindow, printHtml)) return;
     scheduleWftPrintWindow(printWindow);
 }
@@ -5637,6 +5668,7 @@ function getPortfolioSessionReassessText(session) {
 
 function setActiveStudentForPortfolioReassessment(studentName) {
     if (!studentName) return;
+    if (!wftSwitchWritingOwner(studentName)) throw new Error('Current draft could not be preserved');
     selectedStudent = studentName;
     try { localStorage.setItem("wft_selectedStudent", selectedStudent); } catch (e) { }
     var select = document.getElementById("studentSelect");
@@ -5831,13 +5863,10 @@ async function reassessPortfolioSession(studentName, sessionId) {
         return;
     }
 
-    activePortfolioReassessmentSource = {
-        sourceStudentName: studentName,
-        sourceSessionId: sessionId
-    };
-
+    if (!wftSaveWritingDraft(true)) return;
     switchTab("tool");
     setActiveStudentForPortfolioReassessment(studentName);
+    if (!wftRememberWritingReplacement()) return;
 
     var writingEl = document.getElementById("studentWriting");
     if (writingEl) writingEl.value = reassessText;
@@ -5846,6 +5875,9 @@ async function reassessPortfolioSession(studentName, sessionId) {
     manualGenreOverrideValue = "__auto__";
     var reassessGenreSelect = document.getElementById("writingGenreSelect");
     if (reassessGenreSelect) reassessGenreSelect.value = "__auto__";
+    activePortfolioReassessmentSource = { sourceStudentName: studentName, sourceSessionId: sessionId };
+    wftFinishWritingReplacement();
+    var reassessmentDraft = wftWritingDraft, reassessmentUndo = wftWritingDraft.undo, reassessmentSnapshot = JSON.stringify(wftDraftSnapshot());
     correctedHtmlForDiff = "";
     latestAnalysisData = null;
     clearPendingPortfolioSync();
@@ -5855,6 +5887,9 @@ async function reassessPortfolioSession(studentName, sessionId) {
 
     restorePortfolioSessionImagesForReassessment(session).then(function(result) {
         if (!result) return;
+        // Automatic photo restoration completes the same replacement; newer user work must keep its Undo guard.
+        if (wftWritingDraft === reassessmentDraft && wftWritingDraft.undo === reassessmentUndo
+            && JSON.stringify(wftDraftSnapshot()) === reassessmentSnapshot) wftFinishWritingReplacement();
         var shouldUseNeatness = !!(result && result.restored > 0 && (session.neatnessAssessed || session.assessScriptQuality || session.sourceType === "typed+photo"));
         try { setNeatnessForPortfolioReassessment(shouldUseNeatness); }
         catch (e) {
@@ -5912,7 +5947,11 @@ function printPortfolioNotebookSummary(studentName, sessionId) {
         alert("Please allow pop-ups for this page to re-print the notebook summary.");
         return;
     }
-    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary");
+    var printHtml = buildNotebookPrintDocument(printContentHtml, studentName, session.title || "Notebook Summary", {
+        source: "saved", date: session.date || (session.createdAt ? new Date(session.createdAt).toLocaleDateString("en-GB") : ""),
+        gradeLevel: session.assessmentPolicy && session.assessmentPolicy.gradeProfile
+            ? session.assessmentPolicy.gradeProfile.grade : session.gradeLevel
+    });
     if (!writeWftPrintWindow(printWindow, printHtml)) return;
     scheduleWftPrintWindow(printWindow);
 }
@@ -5933,6 +5972,57 @@ function autoResizeStudentWriting() {
     if (!ta) return;
     ta.style.height = "auto";
     ta.style.height = Math.max(ta.scrollHeight, isMobileLayout() ? 280 : 380) + "px";
+}
+
+function openRosterCreation(focusInput) {
+    var roster = document.getElementById('rosterSection');
+    var toggle = document.getElementById('toggleRosterBtn');
+    roster.style.display = '';
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.textContent = 'Hide Class Roster';
+    if (focusInput !== false) {
+        switchTab('admin');
+        document.getElementById('studentNameInput').focus();
+    }
+}
+
+function openAiSetup() {
+    openSettingsDrawer();
+    document.getElementById('apiKeyInput').focus();
+}
+
+function selectNextWritingStudent() {
+    var next = students[students.indexOf(selectedStudent) + 1];
+    if (!next) return;
+    document.getElementById('studentSelect').value = next;
+    updateSelectedStudent();
+    document.getElementById('studentWriting').focus();
+}
+
+function refreshTeacherWorkflow() {
+    var context = (selectedStudent || 'Unassigned writing') + ' · Grade ' + getActiveGradeLevel()
+        + (wftStudentGradeLevelOverride ? ' assessment override' : ' class default')
+        + ' · Grammar strictness ' + document.getElementById('grammarStrictness').value + '/5';
+    document.getElementById('assessmentContext').textContent = context;
+    var pending = getPendingPortfolioSync();
+    var result = latestAnalysisData || (pending && pending.sessionData);
+    var policy = result && result.assessmentPolicy || {};
+    var grade = parseGradeLevelValue(policy.gradeProfile && policy.gradeProfile.grade || result && result.gradeLevel);
+    var resultOwner = latestAnalysisData ? latestAnalysisData.inputContext && latestAnalysisData.inputContext.studentName : pending && pending.studentName;
+    document.getElementById('resultAssessmentContext').textContent = result
+        ? (resultOwner || 'Unassigned writing') + ' · ' + (grade ? 'Grade ' + grade : 'Grade not recorded')
+            + (typeof policy.studentGradeOverride === 'boolean' ? policy.studentGradeOverride ? ' assessment override' : ' class default' : '')
+            + (policy.grammarStrictness != null ? ' · Grammar strictness ' + policy.grammarStrictness + '/5' : '')
+        : '';
+    document.getElementById('setupAiAction').hidden = !!getApiKeyInputValue();
+    document.getElementById('setupStudentAction').hidden = students.length > 0;
+    document.getElementById('reportEmptyState').hidden = !!latestAnalysisData;
+    document.getElementById('reportContent').hidden = !latestAnalysisData;
+    document.getElementById('resultActions').hidden = !(latestAnalysisData || getPendingPortfolioSync() || wftSyncState.pendingPortfolioPush);
+    document.getElementById('printNotebookBtnBottom').disabled = !latestAnalysisData;
+    document.getElementById('nextStudentBtn').hidden = !(latestAnalysisData && !getPendingPortfolioSync()
+        && !wftSyncState.pendingPortfolioPush && lastSyncedPortfolioSessionSignature === getCurrentPortfolioSessionSignature()
+        && students.indexOf(selectedStudent) >= 0 && students.indexOf(selectedStudent) < students.length - 1);
 }
 
 function syncUiState() {
@@ -6361,6 +6451,7 @@ function acceptExtractedWritingText(context, text) {
     }
     document.getElementById("studentWriting").value = text;
     context.input.writingText = text;
+    wftSaveWritingDraft(true);
     return true;
 }
 
@@ -6464,6 +6555,8 @@ function requestStopAnalysis() {
 }
 
 function clearWritingArea() {
+    if (!document.getElementById('studentWriting').value) return;
+    if (!wftRememberWritingReplacement()) return;
     activePortfolioReassessmentSource = null;
     var ta = document.getElementById("studentWriting");
     if (ta) {
@@ -6473,6 +6566,7 @@ function clearWritingArea() {
     manualGenreOverrideValue = "__auto__";
     var genreSelectClear = document.getElementById("writingGenreSelect");
     if (genreSelectClear) genreSelectClear.value = "__auto__";
+    wftFinishWritingReplacement();
     syncUiState();
     checkExpandBtnVisibility();
 }
@@ -6484,25 +6578,32 @@ var modelSelect = document.getElementById("modelSelect");
 modelSelect.value = DEFAULT_MODEL;
 loadSettingsFromLocalStorage();
 refreshApiKeyRuntimeValue();    // restore all saved settings including strictness
-// Initialize grade level feature (sets up select, applies defaults)
-try { initializeGradeLevelFeature(); } catch (e) { wftDebugWarn('Grade init:', e); }
 loadStudents();
 renderStudentList();
 populateStudentDropdown();
+// Grade initialization reads the active student, so restore the roster first.
+try { initializeGradeLevelFeature(); } catch (e) { wftDebugWarn('Grade init:', e); }
 refreshScoreWeightingDescription();
 
 studentWriting.addEventListener("input", syncUiState);
-studentWriting.addEventListener("input", updateGenreReviewBox);
 studentWriting.addEventListener("input", checkExpandBtnVisibility);
 studentWriting.addEventListener("keydown", function(e) {
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !document.getElementById("analyzeBtn").disabled) {
         document.getElementById("analyzeBtn").click();
     }
 });
-targetWordCountInput.addEventListener("input", updateMeter);
+targetWordCountInput.addEventListener("input", function() {
+    document.getElementById('preferenceSaveStatus').textContent = 'Word count changes are not yet saved. Finish editing or close Settings to save.';
+    updateMeter();
+});
+targetWordCountInput.addEventListener("change", function() {
+    saveWftPreferencesFromForm();
+    syncUiState();
+});
 if (useWordCountTargetInput) {
     useWordCountTargetInput.addEventListener("change", function() {
         targetWordCountInput.disabled = !useWordCountTargetInput.checked;
+        saveWftPreferencesFromForm();
         updateMeter();
     });
     targetWordCountInput.disabled = !useWordCountTargetInput.checked;
@@ -6519,7 +6620,11 @@ var apiKeyInput = document.getElementById("apiKeyInput");
 var toggleApiKeyBtn = document.getElementById("toggleApiKeyBtn");
 if (apiKeyInput) {
     apiKeyInput.addEventListener("input", function() {
+        apiKeyInput.removeAttribute('aria-invalid');
+        document.getElementById('apiKeyError').hidden = true;
+        document.getElementById('apiKeyError').textContent = '';
         saveWftApiKeyFromForm();
+        refreshTeacherWorkflow();
     });
 }
 var rememberApiKeyOnDeviceInput = document.getElementById("rememberApiKeyOnDevice");
@@ -6586,19 +6691,15 @@ bindDesktopImageDrop();
 
 
 window.addEventListener("resize", function() {
-    syncMobileOcrPanelState();
     syncOcrPanelTitle();
     autoResizeStudentWriting();
 });
 
 window.addEventListener("load", function() {
     var ta = document.getElementById("studentWriting");
-    // Clear any previously stored text so the box is empty on fresh load
-    ta.value = '';
-    ta.focus();
+    initializeWritingDrafts();
     ta.setSelectionRange(ta.value.length, ta.value.length);
     restoreWftOAuthDraftAfterRedirect();
-    syncMobileOcrPanelState();
     syncOcrPanelTitle();
     pendingPortfolioSync = loadPendingPortfolioSyncFromStorage();
     syncUiState();
@@ -6740,8 +6841,8 @@ updateMeter = function() {
             // Reset to corrected view
             var btnC = document.getElementById('diffBtnCorrected');
             var btnO = document.getElementById('diffBtnOriginal');
-            if (btnC) btnC.classList.add('active');
-            if (btnO) btnO.classList.remove('active');
+            if (btnC) { btnC.classList.add('active'); btnC.setAttribute('aria-pressed', 'true'); }
+            if (btnO) { btnO.classList.remove('active'); btnO.setAttribute('aria-pressed', 'false'); }
             // Trigger slide-in on results panel
             triggerResultsSlideIn();
         }

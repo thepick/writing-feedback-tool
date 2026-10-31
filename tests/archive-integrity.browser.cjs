@@ -13,7 +13,7 @@ function installArchiveFixtures() {
     globalThis.realPhotoDecode = dataUrlToBlobPromise;
     globalThis.realArchiveConfirm = wftConfirm; globalThis.realArchiveInput = wftTextInput;
     globalThis.seedArchive = (images = [], name = 'Alice') => {
-        localStorage.clear(); wftStudentChangeRecovery = null;
+        localStorage.clear(); sessionStorage.clear(); wftStudentChangeRecovery = null; wftWritingDraft = null;
         localStorage.setItem('wft_portfolio', JSON.stringify({ [name]: { sessions: [{ id: 'first', date: '12.10.2026', originalText: 'Synthetic original essay', images }] } }));
         localStorage.setItem('wft_students', JSON.stringify([name])); localStorage.setItem('wft_settings', JSON.stringify({ students: [name], unknown: 'keep' }));
         localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, '{}'); localStorage.setItem('wft_selectedStudent', name);
@@ -21,7 +21,8 @@ function installArchiveFixtures() {
         latestAnalysisData = null; activeAnalysisContext = null; selectedImages = []; selectedImageDataUrl = '';
         document.getElementById('studentWriting').value = '';
         document.getElementById('targetWordCount').value = '200';
-        renderStudentList(); populateStudentDropdown(); refreshPortfolioDropdown();
+        document.getElementById('studentSelect').value = '';
+        renderStudentList(); populateStudentDropdown(); wftLoadWritingDraft(name, false); refreshPortfolioDropdown();
         document.getElementById('portfolioStudentSelect').value = name;
         document.getElementById('archiveIncludeImages').checked = true;
         globalThis.archiveCalls = { alerts: [], uploads: 0, downloads: 0, photoDownloads: 0 };
@@ -283,6 +284,7 @@ async function checkActualArchiveDialogs(page) {
             return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
         });
         await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+        await page.evaluate(() => loadWftFeatureLibrary('zip'));
         await page.evaluate(installArchiveFixtures);
         await checkPhotoZipContents(page);
         await checkStudentFolders(page);
@@ -295,7 +297,7 @@ async function checkActualArchiveDialogs(page) {
         await checkPostcommitFailures(page);
         await checkActualArchiveDialogs(page);
         check('no unhandled browser errors', errors, []);
-        const report = { root, scope: 'Native Edge complete app/helpers/live handlers and actual app dialogs. Real JSZip 3.10.1 DEFLATE/loadAsync and actual ZIP bytes/manifest assertions. Synthetic students, intercepted Drive download/upload and browser download dispatch; all external network blocked. No live Drive or physical download verification.', cases, passed: cases.filter(x => x.pass).length, failed: cases.filter(x => !x.pass).length };
+        const report = { root, scope: 'Native Edge complete app/helpers/live handlers and actual app dialogs. Installed locked JSZip DEFLATE/loadAsync and actual ZIP bytes/manifest assertions. Synthetic students, intercepted Drive download/upload and browser download dispatch; all external network blocked. No live Drive or physical download verification.', zipTestVersion: require('jszip/package.json').version, cases, passed: cases.filter(x => x.pass).length, failed: cases.filter(x => !x.pass).length };
         if (process.env.WFT_TEST_REPORT) fs.writeFileSync(process.env.WFT_TEST_REPORT, JSON.stringify(report, null, 2));
         console.log(`Archive integrity browser cases: ${report.passed}/${cases.length} passed, ${report.failed} failed.`);
         assert.equal(report.failed, 0, cases.filter(x => !x.pass).map(x => x.name + ': ' + x.error).join('\n'));

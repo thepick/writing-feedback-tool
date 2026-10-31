@@ -728,14 +728,11 @@ function getActivePortfolioForExport() {
     return normalizePortfolioData(portfolio || {});
 }
 
-function createSchoolYearArchiveZip(schoolYear, options) {
+async function createSchoolYearArchiveZip(schoolYear, options) {
+    setWftArchiveStatus("Loading ZIP export tools...");
+    var JSZip = await loadWftFeatureLibrary("zip");
     return new Promise(function(resolve, reject) {
         try {
-            if (typeof JSZip === "undefined") {
-                reject(new Error("JSZip is not loaded."));
-                return;
-            }
-
             var portfolio = getActivePortfolioForExport();
             var studentNames = Object.keys(portfolio || {}).sort(function(a, b) { return a.localeCompare(b); });
             var zip = new JSZip();
@@ -794,14 +791,11 @@ function createSchoolYearArchiveZip(schoolYear, options) {
     });
 }
 
-function createSingleStudentArchiveZip(studentName, options) {
+async function createSingleStudentArchiveZip(studentName, options) {
+    setWftArchiveStatus("Loading ZIP export tools...");
+    var JSZip = await loadWftFeatureLibrary("zip");
     return new Promise(function(resolve, reject) {
         try {
-            if (typeof JSZip === "undefined") {
-                reject(new Error("JSZip is not loaded."));
-                return;
-            }
-
             var portfolio = getActivePortfolioForExport();
             var studentData = portfolio[studentName];
             var zip = new JSZip();
@@ -941,6 +935,14 @@ function captureWftArchiveClassState() {
     preflightWftRequiredStorage();
     getLocalPortfolioSnapshot();
     if (wftStudentChangeRecovery) throw getWftStudentChangeRecoveryError();
+    var draftKeys = [];
+    if (typeof WFT_WRITING_DRAFT_PREFIX === 'string') {
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key && key.indexOf(WFT_WRITING_DRAFT_PREFIX) === 0) draftKeys.push(key);
+        }
+    }
+    draftKeys.sort();
     return stableStringify({
         stored: ['wft_portfolio', 'wft_students', 'wft_settings', WFT_DELETIONS_STORAGE_KEY, 'wft_selectedStudent', PENDING_PORTFOLIO_SYNC_KEY].map(function(key) { return localStorage.getItem(key); }),
         settings: getLocalSettingsSnapshot(),
@@ -949,6 +951,8 @@ function captureWftArchiveClassState() {
         counters: [wftSyncState.localPortfolioCounter, wftSyncState.localSettingsCounter, wftSyncState.localDeletionsCounter],
         pending: pendingPortfolioSync,
         writing: String((document.getElementById('studentWriting') || {}).value || ''),
+        writingDraft: typeof wftDraftSnapshot === 'function' ? wftDraftSnapshot() : null,
+        storedWritingDrafts: draftKeys.map(function(key) { return [key, localStorage.getItem(key)]; }),
         images: getSessionImagePayloads(),
         reassessmentSource: activePortfolioReassessmentSource,
         analysis: latestAnalysisData,
@@ -1006,7 +1010,7 @@ async function archiveCurrentSchoolYear() {
         return;
     }
 
-    if (!(await wftConfirm("Archive current school year? The app will create a zip organized by student name, save it to Google Drive, download a copy, and then clear the active class list and portfolio after the archive is saved.", {
+    if (!(await wftConfirm("Archive current school year? The app will create a zip of saved portfolio records organized by student name, save it to Google Drive, and download a copy. After the archive is saved, the active class list, portfolio, and unsubmitted text drafts and photos will be cleared. Unsubmitted drafts and photos are not included in the archive. Save them to the portfolio or copy them before continuing.", {
         title: "Archive Current School Year",
         confirmText: "Create Archive",
         danger: true

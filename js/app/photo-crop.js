@@ -28,12 +28,16 @@ function openCropModal(imgIndex) {
     };
     _cropLastFocusedEl = document.activeElement;
     modal.classList.add("open");
-    modal.setAttribute("tabindex", "-1");
-    modal.focus();
+    if (typeof wftOpenDialog === "function") {
+        wftOpenDialog(modal, document.getElementById("cropLeft"), closeCropModal);
+    } else {
+        modal.setAttribute("tabindex", "-1");
+        modal.focus();
+    }
     var titleEl = document.getElementById("cropModalTitle");
     if (titleEl) titleEl.textContent = (selectedImages.length > 1)
-        ? "Crop Image " + (imgIndex + 1) + " of " + selectedImages.length + " — drag to select the writing area"
-        : "Crop Image — drag to select the writing area";
+        ? "Crop Image " + (imgIndex + 1) + " of " + selectedImages.length
+        : "Crop Image";
     loadCropCanvas(_cropSession);
 }
 
@@ -41,15 +45,33 @@ function loadCropCanvas(session) {
     var canvas = document.getElementById("cropCanvas");
     var overlay = document.getElementById("cropOverlay");
     var wrap = document.getElementById("cropCanvasWrap");
+    var previousWidth = canvas.width, previousHeight = canvas.height;
+    var selection = _cropRect && previousWidth && previousHeight ? {
+        x: _cropRect.x / previousWidth, y: _cropRect.y / previousHeight,
+        w: _cropRect.w / previousWidth, h: _cropRect.h / previousHeight
+    } : null;
     var request = ++session.request;
     session.ready = false;
+    _cropDragStart = null;
+    var applyButton = document.getElementById("cropApplyBtn");
+    if (applyButton) applyButton.disabled = true;
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     drawCropOverlay();
     var img = new Image();
     img.onload = function() {
         if (!isCurrentCropSession(session) || request !== session.request) return;
         var maxW = wrap.clientWidth || 600;
-        var scale = Math.min(1, maxW / img.naturalWidth);
+        var card = document.getElementById("cropModalCard");
+        var cardStyle = getComputedStyle(card);
+        var siblingsHeight = Array.from(card.children).reduce(function(height, child) {
+            if (child === wrap) return height;
+            var style = getComputedStyle(child);
+            return height + child.getBoundingClientRect().height + parseFloat(style.marginTop || 0) + parseFloat(style.marginBottom || 0);
+        }, 0);
+        var chromeHeight = siblingsHeight + parseFloat(cardStyle.paddingTop) + parseFloat(cardStyle.paddingBottom)
+            + (parseFloat(cardStyle.rowGap) || 0) * (card.children.length - 1);
+        var maxH = Math.max(1, Math.min(parseFloat(getComputedStyle(wrap).maxHeight) || innerHeight * .56, innerHeight - chromeHeight - 48));
+        var scale = Math.min(1, maxW / img.naturalWidth, maxH / img.naturalHeight);
         var w = Math.round(img.naturalWidth * scale);
         var h = Math.round(img.naturalHeight * scale);
         canvas.width = w;
@@ -62,8 +84,15 @@ function loadCropCanvas(session) {
         overlay.style.height = h + "px";
         var ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, w, h);
+        if (selection) _cropRect = { x: selection.x * w, y: selection.y * h, w: selection.w * w, h: selection.h * h };
         session.ready = true;
+        if (applyButton) applyButton.disabled = false;
         drawCropOverlay();
+    };
+    img.onerror = function() {
+        if (!isCurrentCropSession(session) || request !== session.request) return;
+        var status = document.getElementById("cropSelectionStatus");
+        if (status) status.textContent = "Image could not load. Cancel and try again.";
     };
     img.src = session.sourceDataUrl;
 }
@@ -73,6 +102,7 @@ function drawCropOverlay() {
     if (!overlay) return;
     var ctx = overlay.getContext("2d");
     ctx.clearRect(0, 0, overlay.width, overlay.height);
+    updateCropBounds();
     if (!_cropRect || Math.abs(_cropRect.w) < 2 || Math.abs(_cropRect.h) < 2) return;
 
     var x = Math.min(_cropRect.x, _cropRect.x + _cropRect.w);
@@ -91,6 +121,40 @@ function drawCropOverlay() {
     [[x, y], [x + w, y], [x, y + h], [x + w, y + h]].forEach(function(pt) {
         ctx.fillRect(pt[0] - hs / 2, pt[1] - hs / 2, hs, hs);
     });
+}
+
+function updateCropBounds() {
+    var canvas = document.getElementById("cropCanvas");
+    if (!canvas || !canvas.width || !canvas.height) return;
+    var rect = _cropRect || { x: 0, y: 0, w: canvas.width, h: canvas.height };
+    var values = [Math.min(rect.x, rect.x + rect.w) / canvas.width * 100,
+        Math.min(rect.y, rect.y + rect.h) / canvas.height * 100,
+        Math.max(rect.x, rect.x + rect.w) / canvas.width * 100,
+        Math.max(rect.y, rect.y + rect.h) / canvas.height * 100].map(function(value) { return Math.round(value * 100) / 100; });
+    ["cropLeft", "cropTop", "cropRight", "cropBottom"].forEach(function(id, index) {
+        var input = document.getElementById(id);
+        if (input) input.value = values[index];
+    });
+    var status = document.getElementById("cropSelectionStatus");
+    if (status) status.textContent = _cropRect
+        ? "Selected bounds: left " + values[0] + "%, top " + values[1] + "%, right " + values[2] + "%, bottom " + values[3] + "%."
+        : "Select the writing with the image or percentage controls.";
+}
+
+function changeCropBound(index, input) {
+    if (!isCurrentCropSession(_cropSession) || !_cropSession.ready || !Number.isFinite(input.valueAsNumber)) return;
+    var canvas = document.getElementById("cropCanvas");
+    var rect = _cropRect || { x: 0, y: 0, w: canvas.width, h: canvas.height };
+    var values = [Math.min(rect.x, rect.x + rect.w) / canvas.width * 100,
+        Math.min(rect.y, rect.y + rect.h) / canvas.height * 100,
+        Math.max(rect.x, rect.x + rect.w) / canvas.width * 100,
+        Math.max(rect.y, rect.y + rect.h) / canvas.height * 100];
+    values[index] = index < 2 ? Math.max(0, Math.min(input.valueAsNumber, values[index + 2] - 1))
+        : Math.min(100, Math.max(input.valueAsNumber, values[index - 2] + 1));
+    _cropDragStart = null;
+    _cropRect = { x: values[0] / 100 * canvas.width, y: values[1] / 100 * canvas.height,
+        w: (values[2] - values[0]) / 100 * canvas.width, h: (values[3] - values[1]) / 100 * canvas.height };
+    drawCropOverlay();
 }
 
 function getCropPos(e, el) {
@@ -168,27 +232,33 @@ function applyCrop() {
             session.photo.originalDataUrl = session.photo.dataUrl;
         }
         setWftPhotoBytes(session.photo, croppedUrl);
+        session.dataUrl = session.photo.dataUrl;
+        session.originalDataUrl = session.photo.originalDataUrl;
         session.photo.extractedText = "";
         session.photo.extractionPromise = null;
         selectedImageExtractedText = "";
         selectedImageExtractionPromise = null;
-        closeCropModal();
         syncSelectedImageState();
         updateSelectedImagePreview();
+        closeCropModal();
         setOcrStatus("Image cropped. Click \"Extract Text for Analysis\" to re-run OCR.", "success");
     };
     sourceImg.src = session.sourceDataUrl;
 }
 
 function closeCropModal() {
-    _cropSession = null;
     var modal = document.getElementById("cropModal");
-    if (modal) modal.classList.remove("open");
+    var imageIndex = _cropSession ? selectedImages.indexOf(_cropSession.photo) : -1;
+    var returnTarget = _cropLastFocusedEl;
+    if (returnTarget && !returnTarget.isConnected && imageIndex >= 0) returnTarget = document.querySelector('.ocr-preview-crop[data-index="' + imageIndex + '"]');
+    if (modal) {
+        if (typeof wftCloseDialog === "function" && wftCloseDialog(modal) === false) return;
+        modal.classList.remove("open");
+    }
+    _cropSession = null;
     _cropRect = null;
     _cropDragStart = null;
-    if (_cropLastFocusedEl && typeof _cropLastFocusedEl.focus === "function") {
-        _cropLastFocusedEl.focus();
-    }
+    if (returnTarget && returnTarget.isConnected && typeof returnTarget.focus === 'function') returnTarget.focus();
     _cropLastFocusedEl = null;
 }
 
@@ -217,6 +287,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!overlay2) return;
 
     function onDown(e) {
+        if (!isCurrentCropSession(_cropSession) || !_cropSession.ready) return;
+        if (e.type === "mousedown" && e.button !== 0) return;
         e.preventDefault();
         var pos = getCropPos(e, overlay2);
         _cropDragStart = pos;
@@ -240,6 +312,19 @@ document.addEventListener("DOMContentLoaded", function() {
     overlay2.addEventListener("touchstart", onDown, { passive: false });
     document.addEventListener("touchmove", onMove, { passive: false });
     document.addEventListener("touchend", onUp, { passive: false });
+    document.addEventListener("touchcancel", onUp, { passive: false });
+    overlay2.addEventListener("lostpointercapture", onUp);
+    window.addEventListener("blur", onUp);
+    document.addEventListener("visibilitychange", function() { if (document.hidden) onUp(); });
+    window.addEventListener("resize", function() {
+        if (isCurrentCropSession(_cropSession)) loadCropCanvas(_cropSession);
+    });
+    ["cropLeft", "cropTop", "cropRight", "cropBottom"].forEach(function(id, index) {
+        var input = document.getElementById(id);
+        if (!input) return;
+        input.addEventListener("input", function() { changeCropBound(index, input); });
+        input.addEventListener("change", updateCropBounds);
+    });
 
     var cropApplyBtn = document.getElementById("cropApplyBtn");
     var cropResetBtn = document.getElementById("cropResetBtn");
@@ -252,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (e.target === this) closeCropModal();
     });
     document.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") closeCropModal();
+        if (e.key === "Escape" && typeof wftOpenDialog !== "function") closeCropModal();
     });
 });
 // ── END Re-extract & Crop ──────────────────

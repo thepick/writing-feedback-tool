@@ -21,7 +21,7 @@ async function checkCompositionSignal(page, scenario, selector, check) {
 
 async function runArchiveWorkflow(page, scenario, key, check) {
   await page.locator('#adminTabBtn').click();
-  await page.locator('#toggleRosterBtn').click();
+  if (!(await page.locator('#rosterSection').isVisible())) await page.locator('#toggleRosterBtn').click();
   await page.getByRole('button',{name:'Archive Current School Year',exact:true}).click();
   await page.waitForFunction(()=>document.activeElement?.id==='wftTextInputField');
   check('Archive caller focuses actual name input',await page.locator('#wftTextInputField').evaluate(el=>document.activeElement===el));
@@ -145,7 +145,7 @@ async function runKeyboardScenario(browser, scenario, cases) {
       await runArchiveWorkflow(page, scenario, key, check);
     } else {
       await page.locator('#adminTabBtn').click();
-      await page.locator('#toggleRosterBtn').click();
+      if (!(await page.locator('#rosterSection').isVisible())) await page.locator('#toggleRosterBtn').click();
       await page.getByRole('button',{name:'Manage Student',exact:true}).click();
       await page.waitForFunction(()=>document.activeElement?.id==='wftManageStudentSelect');
       check('Actual chooser focuses the student select',await page.locator('#wftManageStudentSelect').evaluate(el=>document.activeElement===el));

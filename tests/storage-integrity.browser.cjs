@@ -212,7 +212,8 @@ async function runLegacyCase(page) {
             localStorage.setItem(WFT_DELETIONS_STORAGE_KEY, '{"deletedSessions":{"session:alice:s":{"deletedAt":"2026-10-01"}},"extra":"legacy"}');
             recordStudentDeletion('Carol'); results.push(getDeletionsData().extra === 'legacy');
             for (const key of ['wft_settings', 'wft_students', WFT_DELETIONS_STORAGE_KEY]) localStorage.removeItem(key);
-            students = []; selectedStudent = ''; document.getElementById('studentNameInput').value = 'Carol'; addStudent();
+            students = []; selectedStudent = ''; document.getElementById('studentSelect').value = ''; wftLoadWritingDraft('', true);
+            document.getElementById('studentNameInput').value = 'Carol'; addStudent();
             results.push(students.join() === 'Carol');
             WFT_TOMBSTONE_COMPACTION_V1 = true; recordSessionDeletion('Carol', 'old-session');
             results.push(getDeletionsData().records.some(r => r.sessionId === 'old-session'));
@@ -298,7 +299,7 @@ function initializeIntegrityFixture() {
             const file = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
             return fs.existsSync(file) ? route.fulfill({ body: fs.readFileSync(file), contentType: file.endsWith('.js') ? 'application/javascript' : 'text/html' }) : route.fulfill({ status: 404, body: '' });
         });
-        await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+        await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
         await page.evaluate(initializeIntegrityFixture);
         await runRequiredCases(page);
         await runDelayedCases(page);

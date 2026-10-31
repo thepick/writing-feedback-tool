@@ -117,7 +117,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
         if (url.pathname.endsWith('/root-folder')) return reply({ id: 'root-folder', name: 'WritingFeedbackTool', mimeType: 'application/vnd.google-apps.folder', trashed: false });
         return reply({ files: [] });
     });
-    await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
+    await page.goto('http://127.0.0.1:8765', { waitUntil: 'load' });
     await page.evaluate(async scenario => {
         stopWftSyncPolling(); scheduleWftCloudSync = () => {};
         window.originalGet = Storage.prototype.getItem; window.originalSet = Storage.prototype.setItem; window.originalRemove = Storage.prototype.removeItem;
@@ -188,6 +188,7 @@ async function runRecoveryScenario(browser, scenario, cases) {
         installScenarioFaults(scenario);
     }, scenario);
     await page.getByRole('button', { name: 'Open settings', exact: true }).click();
+    await page.locator('#advancedStorageDiagnostics > summary').click();
     const checks = [], check = (label, passed) => checks.push({ label, passed: !!passed });
     const dialogText = await performRecoveryAction(page, scenario, check);
     await waitForRecoveryCompletion(page, scenario);

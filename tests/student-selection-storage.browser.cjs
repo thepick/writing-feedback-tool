@@ -17,6 +17,7 @@ const localAppRoute = require('./support/local-app-route');
             for (const fault of [false, true]) {
                 students = ['Alice', 'Bob']; selectedStudent = 'Alice'; populateStudentDropdown();
                 const select = document.getElementById('studentSelect'); select.value = 'Alice';
+                select.dispatchEvent(new Event('change'));
                 document.getElementById('studentWriting').value = writing;
                 latestAnalysisData = { inputContext: captureCurrentWritingContext(), marker: 'Alice-only result' };
                 document.getElementById('correctedStory').textContent = 'Alice-only result';
@@ -33,7 +34,8 @@ const localAppRoute = require('./support/local-app-route');
                 const label = fault ? 'quota failure' : 'normal write';
                 check(label + ': active student switches', select.value === 'Bob' && selectedStudent === 'Bob');
                 check(label + ': previous student feedback invalidates', latestAnalysisData === null && document.getElementById('correctedStory').textContent === 'No corrected story yet.' && document.getElementById('detailedAssessment').textContent === 'Analyze the current writing for feedback.');
-                check(label + ': typed writing remains available', document.getElementById('studentWriting').value === writing);
+                check(label + ': target student does not inherit previous writing', document.getElementById('studentWriting').value === '');
+                check(label + ': previous writing remains recoverable under Alice', JSON.parse(sessionStorage.getItem(wftWritingDraftKey('Alice'))).current.text === writing);
                 check(label + ': selection persistence is truthful', localStorage.getItem('wft_selectedStudent') === (fault ? 'Alice' : 'Bob'));
                 check(label + ': pending result remains owned by Alice', localStorage.getItem(PENDING_PORTFOLIO_SYNC_KEY) === pending && getPendingPortfolioSync().studentName === 'Alice');
                 check(label + ': saved portfolio bytes remain unchanged', localStorage.getItem('wft_portfolio') === portfolio);
